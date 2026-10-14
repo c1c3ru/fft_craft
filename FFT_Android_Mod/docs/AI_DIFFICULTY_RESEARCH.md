@@ -527,10 +527,11 @@ grupo" usado como referência de dificuldade de status.
 
 Um terceiro detalhe de `BattleRoutineInit`, possivelmente relevante para o
 objetivo final do projeto (seletor de dificuldade): ele copia 2 bytes
-globais para `sb->b[0xe3a]`/`sb->b[0xe3b]`. O de `+0xe3a` foi resolvido
-por nome: vem de **`gMapX`** (1 byte) — então é dado de mapa, não de
-dificuldade; o segundo byte (destino `+0xe3b`) não foi resolvido nesta
-sessão (fila aberta).
+globais para `sb->b[0xe3a]`/`sb->b[0xe3b]`. Ambos resolvidos por nome
+(o segundo fechado na seção 12): `+0xe3a` ← **`gMapX`**, `+0xe3b` ←
+**`gMapY`** (ambos 1 byte, endereços vizinhos `0x5808f5`/`0x5808f4`) — ou
+seja, são as duas dimensões do mapa atual, dado de mapa, não de
+dificuldade.
 
 ### 9.4 Outras funções nominais da fila, desmontadas por completo
 
@@ -539,7 +540,7 @@ sessão (fila aberta).
 | `GetPanelUnderUnit(int idx, uint8_t out[4])` | `0x278440`, 64 B | `u = &unit_table[idx*0x1e6]; out[0]=u->b[0x4f]; out[2]=u->b[0x50]; out[3]=0; out[1]=u->b[0x51]>>7;` — lê X/Y/flag de altura de uma unidade pelo índice. |
 | `GetUnitOnPanel(const uint8_t panel[4])` | `0x276bb4`, 116 B | Faz o inverso: percorre até 21 slots do mesmo array (`stride 0x1e6`), pula slots com `b[1]==0xff` (vazio), compara `b[0x4f]`/`b[0x50]`/`(b[0x51]>>7)` contra `panel[0]/panel[2]/panel[1]`; retorna o índice do primeiro slot que bate, ou `21` ("não encontrado" = limite do laço). |
 | `JudgeStatus(int threshold, BWORK* unit, int status_id)` | `0x276cd4`, 164 B | Calcula `byte_idx = floor(status_id/8)` e `bit = 0x80 >> (status_id mod 8)` (idioma clássico de divisão com sinal correta via `asr`/`lsr`); testa o bit em `unit->b[0x61+byte_idx]`. Se o bit não está setado → `false`. Se setado: `status_id==5` → compara `unit->b[0x17d]` contra `threshold` (campo copiado pelas funções da seção 9.1); `status_id>23` → sempre `true`; senão testa um segundo bit em `unit->b[0x57+byte_idx]` (status "permanente") → `true` se setado; senão compara `unit->b[0x4e+status_id]` (contador de duração por status, indexado direto, sem dividir por 8) contra `threshold` → `true` se `duração >= threshold`. |
-| `BattleRoutineInit()` | `0x27a974`, 472 B | Ver seção 9.3 — troca de buffers (`BattleWork→spd_back`, `BworkBackup→spad_copy`), zera 3 flags em `sb+0x1980`/`sb+0x1800`, copia `gMapX` e um segundo byte não identificado para `sb+0xe3a`/`+0xe3b`, percorre as 21 unidades de `bwork` chamando `SetUnitParameter` e somando `halfword[0x31]`, grava a média saturada em `sb->b[0xe17]`, e por fim zera/seta mais alguns campos de estado (`sb+0x1800+{0x1c,0x20,0x24,0x28}`→`0xff`, `sb+0x1800+0xe10+4`(halfword)→`0x17f`, `sb+0xe16`→`1`). |
+| `BattleRoutineInit()` | `0x27a974`, 472 B | Ver seção 9.3 — troca de buffers (`BattleWork→spd_back`, `BworkBackup→spad_copy`), zera 3 flags em `sb+0x1980`/`sb+0x1800`, copia `gMapX`/`gMapY` para `sb+0xe3a`/`+0xe3b` (fechado na seção 12), percorre as 21 unidades de `bwork` chamando `SetUnitParameter` e somando `halfword[0x31]`, grava a média saturada em `sb->b[0xe17]`, e por fim zera/seta mais alguns campos de estado (`sb+0x1800+{0x1c,0x20,0x24,0x28}`→`0xff`, `sb+0x1800+0xe10+4`(halfword)→`0x17f`, `sb+0xe16`→`1`). |
 
 ### 9.5 O que ainda falta nesta fila (estado real, não estimado)
 
@@ -561,8 +562,6 @@ sessão (fila aberta).
   `EvaluationFunction` (`0x277b34`–`0x277d44`) então itera exatamente
   essas 21 entradas. Ainda não mapeei os 27 formatos em si (quais painéis
   cada um inclui).
-- **Segundo byte copiado para `sb->b[0xe3b]`** em `BattleRoutineInit`
-  (endereço do slot GOT ainda não resolvido para um nome).
 - **Handlers isolados / CCRYPT / parser TIM / outros motores** — não
   tocados nesta sessão (prioridade média/baixa na fila); nada mudou em
   relação ao estado anterior.
@@ -892,9 +891,110 @@ tabela de 34 bytes/job (ainda sem nome de símbolo) se algum dia for
 necessário ajustar crescimento de atributo por job; não persegui isso
 agora porque sairia do escopo do item da fila.
 
-### 11.4 Próximo da fila
+### 11.4 Próximo da fila (concluído a seguir, seção 12)
 `GetDirectionOfAutoUnit` (`0x279cc0`, 532 B) é o único item "Fase 1+"
 nomeado que ainda não foi lido. Os dois helpers sem nome descobertos
 nesta sessão (`0x279f8c`, 1072 B; `0x279ac4`, 172 B) e `GetCountToNextTurn`
 (`0x27af10`, 204 B, da seção 10) ficam como itens novos na fila, ainda
 sem leitura. Nada mudado quanto a CCRYPT/TIM/outros motores.
+
+## 12. `GetDirectionOfAutoUnit` — desmontada por completo (2026-10-14, continuação)
+
+Último item nomeado da lista original "Fase 1+". `GetDirectionOfAutoUnit()`
+(`0x279cc0`, 532 B, sem parâmetros, confirma o que a seção 1 já indicava)
+decide **para qual dos 4 lados cardeais a unidade controlada pela IA deve
+ficar de frente**, combinando alcance de movimento, obstáculos de terreno
+e para onde o alvo/aliado mais próximo está.
+
+### 12.1 Novos globais resolvidos
+
+| Nome | Endereço | Tamanho | Papel |
+|---|---|---|---|
+| `gMapY` | `0x5808f4` | 1 B | Fecha o item pendente da seção 9.3/9.5 — é o byte-irmão de `gMapX` (`0x5808f5`), copiado para `sb->b[0xe3b]` por `BattleRoutineInit`. Dimensão Y do mapa atual. |
+| `block` | `0x565db8` | 4096 B | Array de dados de terreno por painel, stride de 8 bytes → **512 entradas** (`4096/8`). Indexado como `(Y*gMapX + X)*8` — bate exatamente com o "índice de tile" clássico documentado pela comunidade de RE do FFT original (PSX) para a tabela de blocos do mapa. Campo `+2` = altura do painel; campo `+6` = flags de passabilidade (bit 0 = impassável nesta leitura). |
+| (tabela de deltas, sem símbolo próprio) | `0x3e94c0` | 8 B | 4 pares de bytes com sinal: `(0,-1) (-1,0) (0,1) (1,0)` — Norte, Oeste, Sul, Leste nessa ordem. Define os 4 candidatos de direção testados. |
+
+Chamadas confirmadas por nome: `GetPanelUnderUnit` (`0x278440`, seção
+9.4), `GetNearestUnit(int tipo)` (`0x27207c`, já citada na seção 1 — aqui
+chamada com `tipo=1` e, se o resultado coincidir com o alvo já cacheado,
+de novo com `tipo=2` — forte indício de que 1="inimigo mais próximo" e
+2="aliado mais próximo", mas o `enum` em si não foi confirmado lendo
+`GetNearestUnit`), e `GetDirectionForPanel(int8_t*, int8_t*)` (`0x271504`,
+nova — calcula a direção cardeal entre dois painéis, corpo ainda não
+lido).
+
+### 12.2 Pseudocódigo
+
+```c
+int GetDirectionOfAutoUnit(void) {
+    if (g[0x17ff] != 5) return;   // só roda numa fase/estado específico da IA
+
+    int target = g->b[0xe2e];                    // "alvo atualmente cacheado" (mesmo campo da seção 9.1/10/11)
+    GetPanelUnderUnit(target, &g->b[0xe30]);      // preenche g+0xe30 = {X, alturaFlag, Y, 0} do painel do alvo
+
+    uint8_t X = g->b[0xe30], dirFlag = g->b[0xe31], Y = g->b[0xe32];
+    uint8_t mapX = g->b[0xe3a] /*gMapX*/, mapY = g->b[0xe3b] /*gMapY*/;
+    int baseIndex = ((mapX * Y + (dirFlag << 8)) + X) << 3;   // índice (com bit de altura) dentro de `block`
+
+    int fallback = 0;                              // registrador r6: última direção válida encontrada
+    bool valid[4];
+    for (int i = 0; i < 4; i++) {
+        int8_t dx = delta[i][0], dy = delta[i][1];
+        uint8_t nx = (X + dx) & 0xff, ny = (Y + dy) & 0xff;
+        if (nx >= mapX || ny >= mapY) { valid[i] = false; continue; }   // fora do mapa
+        int idx = ny * mapX + nx;
+        if (block[idx].b[6] & 1) { valid[i] = false; continue; }         // painel impassável
+        if (abs(block[idx].b[2] - block[baseIndex/8].b[2]) > 2) { valid[i] = false; continue; } // diferença de altura > 2
+        valid[i] = true;
+        fallback = i;                                                    // guarda a última válida encontrada
+    }
+    // (efeito colateral observado, não totalmente investigado: a função
+    // também zera/inicializa ~17 bytes em g+0xca0.. e g+0xc80+0xc.. nesta
+    // mesma passada — parece reaproveitar o mesmo trecho de código para
+    // resetar algum estado de alcance/alvo auxiliar, não só direção)
+
+RETRY:                                              // 0x279ce4 é o epílogo normal (não um loop!)
+    int nearest = GetNearestUnit(1);
+    uint8_t panelBuf[4];
+    if (nearest == target) {
+        nearest = GetNearestUnit(2);
+        GetPanelUnderUnit(nearest, panelBuf);
+        dir = GetDirectionForPanel(panelBuf, &g->b[0xe30]);
+    } else {
+        GetPanelUnderUnit(nearest, panelBuf);
+        dir = GetDirectionForPanel(panelBuf, &g->b[0xe30]);
+    }
+    if (!valid[dir]) return;                        // direção calculada bate com um lado bloqueado -> aborta (retorno "indefinido")
+    g->b[0xc8d + dir] = 0;                           // zera uma flag por direção (papel exato não confirmado)
+
+    BWORK* u = *(BWORK**)(g + 0x17f8);                // ponteiro interno de g para a unidade controlada
+    int curDir = u->b[0x51] & 0xf;                    // nibble baixo do mesmo campo "+0x51" usado em GetPanelUnderUnit/GetUnitOnPanel
+    return valid[curDir] ? curDir : fallback;          // mantém a direção atual se ainda for válida; senão usa o fallback do laço de 4
+}
+```
+
+**Cobertura:** lida instrução por instrução do início ao fim. Os três
+saltos `bne/beq 0x279ce4` e o `b 0x279ce4` **não formam um laço** — todos
+caem direto no epílogo da função (`add sp,...; pop {...}; bx lr`); a
+leitura inicial de que seria um "retry loop" estava errada e foi corrigida
+antes de escrever este pseudocódigo. O efeito colateral em `g+0xca0`/
+`g+0xc8c` não foi totalmente explicado — fica como observação, não como
+fato confirmado.
+
+### 12.3 Estado da fila "Fase 1+" original
+Com esta seção, **todas as 7 funções nomeadas originalmente na fila**
+(`BattleRoutine`¹, `CheckUnitActionEffective`, `SetUnitParameter`,
+`GetUnitOnPanel`, `JudgeStatus`, `GetDirectionOfAutoUnit`,
+`BattleRoutineInit`) foram desmontadas pelo menos uma vez nesta e nas
+sessões anteriores. ¹`BattleRoutine` em si (o corpo principal, não as 3
+estáticas internas da seção 9.1) ainda não foi lida linha a linha — só
+suas 3 estáticas internas e o fato de que `sub_275e3c` mora no seu próprio
+corpo. Fica como item aberto.
+
+### 12.4 Próximo da fila
+Itens novos ainda sem leitura: `BattleRoutine` (corpo principal,
+`0x274764`–`0x275ebc`, 5848 B — grande), `sub_275e3c` (dentro dele),
+`GetCountToNextTurn` (`0x27af10`, 204 B), `GetDirectionForPanel`
+(`0x271504`, 156 B), e os dois helpers de `SetUnitParameter`
+(`0x279f8c` 1072 B, `0x279ac4` 172 B). Prioridade média/baixa (CCRYPT,
+parser TIM, outros motores) continua sem alteração.
