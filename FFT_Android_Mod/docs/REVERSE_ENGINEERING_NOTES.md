@@ -790,3 +790,80 @@ de escopo realista para uma sessão; o que segue é um levantamento
 estrutural (quem chama quem, tamanhos, papel por nome) com 2–3 funções
 centrais lidas por completo como amostra, no mesmo espírito da seção 9.4
 mas uma camada mais profunda.
+
+**Inventário:** exatamente **74 funções** `wld_*`/`wld*`, somando
+**20.672 bytes**. Achado de arquitetura confirmado por leitura real
+(não só por nome): `world_map()` (`0x25fd70`... endereço exato
+`0x25f354`+offset — função de 1004 B) é o controlador de nível mais
+alto, chamando `wldnormal_lop()` ou `wldfast_lop()` dependendo de
+alguma condição (provavelmente "botão de avanço rápido pressionado") —
+mesmo padrão de duas variantes de laço já visto no padrão `ctl*_main`
+(seção 9.5/9.6).
+
+### 11.1 `wldnormal_lop()` (`0x25f694`, 764 B) — lida por completo: é o laço de frame real, e confirma que a engine usa a biblioteca gráfica do PS1 de verdade
+
+Chamadas confirmadas por nome (25 chamadas distintas, zero ambiguidade):
+
+```
+wldpad_read()                    -- lê input
+wldpnl_calc()                    -- calcula posição/painel
+wldwalk_rute()                   -- avança a animação de "andar pela rota"
+GsClearOt() / GsSortClear()      -- limpa a Ordering Table da GPU
+wldbg_draw(ot)                   -- desenha o fundo
+wldrute_draw(ot) / rutegrow_draw(ot)  -- desenha a rota/caminho
+wldiwasaki_put(ot)               -- desenha um elemento (papel exato não identificado pelo nome)
+wldpac_draw(ot, ...)             -- desenha um "PAC" (sprite animado, ver wld_anim)
+wldday_put(ot)                   -- desenha o indicador de dia/data
+wldtname_put(ot)                 -- desenha o nome da cidade atual
+wldinfo_put(ot)                  -- desenha o painel de informação
+wldsymbol_draw() / wldtown_draw() -- desenha símbolos/cidades no mapa
+ctleeff_draw(ot)                 -- desenha efeitos de controle/UI
+pspWorldCheckFlg(...) / pspWorldBlackSpotDraw(ot, ...)  -- feature "PSP" de bloqueio de área do mapa
+SetSpadStack() / ResetSpadStack() -- pilha de scratchpad (memória rápida do PS1, emulada)
+xpLibgsAddOt(...) / GsDrawOt(ot) -- envia a Ordering Table pra GPU
+GsSwapDispBuff()                 -- troca os buffers de tela (double buffering)
+DrawSync(0) / VSync(1)           -- espera a GPU/o vsync terminar
+```
+
+Isto é, literalmente, **um laço de frame de jogo PS1 completo**: lê
+input → atualiza lógica → monta a lista de primitivas da GPU (a
+"Ordering Table", `GsOT`, estrutura real da PSYQ/PSn00bSDK) → envia pra
+GPU → espera o vsync. `GsClearOt`, `GsSortClear`, `GsDrawOt`,
+`GsSwapDispBuff`, `xpLibgsAddOt` são todos nomes de função **genuínos
+da biblioteca gráfica original do PS1** (`libgpu`/`libgs`) — confirma
+com instrução real (não só suspeita, como na seção 9.5) que esta
+engine mobile reimplementa a API gráfica do PS1 por completo
+(provavelmente em cima do `CEGL2_*`/OpenGL ES 2.0 catalogado na seção
+9.4) em vez de ter sido reescrita do zero. `SetSpadStack`/
+`ResetSpadStack` ("scratchpad") reforça isso — scratchpad é uma memória
+específica do hardware PS1 (não existe em Android), então até esse
+detalhe de baixo nível foi preservado/emulado.
+
+### 11.2 Inventário categorizado das outras 72 funções (por nome, não lidas)
+
+| Categoria | Funções |
+|---|---|
+| **Ciclo de vida/controle** | `world_map`, `wldctl_cur/active/deactive/init` (mesmo padrão `init/active/main/deactive` de `ctlnobel_*`, seção 9.6), `wldlop_chk`, `wldstart_check` |
+| **Inicialização** | `wldbg_init`, `wldscr_init`, `wldpara_init` (**a maior de todas, 1256 B**), `wlddraw_init`, `wldiwasaki_init`, `wldkey_repinit`, `wldpac_init`, `wldrute_init`, `wldsymbol_init`, `wldtown_init` |
+| **Desenho** | `wldbg_draw`, `wldiwasaki_put`, `wldpac_draw`, `wld_window`, `wldday_put`, `wldtname_put`, `wldinfo_put`, `wldrute_draw`, `wld_anim(ANMPAC*,GsOT*)` (852 B — desenha um sprite animado genérico), `wldsymbol_draw`, `wldtown_draw`, `wldtown_bright` |
+| **Janelas de UI** | `wldwintex_point`, `wldwin_set`, `wldwin_trans`, `wldwin_noropen`, `wldpicwin_set`, `wldmess_put`, `wldmess_frm` |
+| **Movimento/câmera** | `wldwalk_rute` (**1108 B**, 2ª maior — máquina de estados de "andar pela rota"), `wldrute_tblget`, `wldcenter_chk/calc/set/move`, `wldmap_scrol` |
+| **Persistência/save** | `wldbin_loadchk`, `wldbinEntry`, `wldmapEntry`, `wldscr_snapshot`, `wldCdRead` (nome com "Cd" = CD-ROM, outro resquício literal do PS1!), `wlddata_load`, `wldmes_load`, `wld_btlsect_seek`, `wld_dayread`/`wld_daywrite`, `wldday_countup` |
+| **Transição/fade** | `wldfade_set`, `wldfade_proc`, `wldfade_mask` |
+| **Estado de tela/frame** | `wlddisp_mask`, `wldframe_clr`, `wldfrm_clr`, `wldfrm_rect` |
+| **Encontros/loja/evento** | `wldencount_chk`, `wld_shop`, `wld_event` (seção 9.6), `wld_snpl` (seção 9.5) |
+| **Widget "SSD"** | `wldssd_control` (620 B), `wldssd_wait` (papel exato do acrônimo não identificado) |
+| **Áudio** | `wldmusic_change` |
+| **Tutorial** | `wld_tutomenu_reset(CTLINFO*)` |
+
+### 11.3 Estado do item 8 ao final desta sessão
+Os dois interpretadores de bytecode (seção 9.5/9.6), o formato de
+instrução e quase todos os handlers de opcode (seção 10), e agora a
+arquitetura completa + um laço de frame real do motor `wld_*` (seção
+11) estão documentados com evidência de instrução, não suposição. O que
+seria necessário para "terminar" o item 8 de verdade: ler as outras ~72
+funções `wld_*` uma a uma (a maioria pequena, mas `wldpara_init`/
+`wldwalk_rute`/`wldinfo_put`/`wld_anim` têm 850–1250 B cada e mereceriam
+atenção própria), e só depois disso passar para os motores gráfico
+(`CEGL2_*`) e de áudio (`CSOUND_IF`/`CSOUND_IF_SL`) que ainda não foram
+tocados em nenhuma leitura de código, só citados por nome na seção 9.4.
