@@ -1,0 +1,51 @@
+Manifest-Version: 1.0
+Created-By: 1.6.0_24 (Sun Microsystems Inc.)
+
+Name: res/drawable-ldpi-v4/icon.png
+SHA1-Digest: nwuE05/cLgGhxTZ/BoieAF/6z2M=
+
+Name: res/layout/main.xml
+SHA1-Digest: QBqcf0yQ8QCLuzmSh2WziqJvoYM=
+
+Name: lib/armeabi/libgl2jni.so
+SHA1-Digest: ml5JtXoJApI9oVAiLMOqIIb3LLU=
+
+Name: res/drawable-mdpi-v4/notify_panel_notification_icon_bg.png
+SHA1-Digest: CbiOmu2xHaCO/6a1W1iVByfqK/A=
+
+Name: res/layout/status_bar_ongoing_event_progress_bar.xml
+SHA1-Digest: Em/u/+E8P9+XY9LLCIW577iOOZw=
+
+Name: res/drawable-xhdpi-v4/icon.png
+SHA1-Digest: ZIKF5/VeMFmB6zLIZdSrED8Guxk=
+
+Name: AndroidManifest.xml
+SHA1-Digest: XBT1f34ekR39sDkePXXeKPpRw5A=
+
+Name: res/drawable-xxhdpi-v4/icon.png
+SHA1-Digest: PUbWXjZXXebOCKIgOHiTpHAHP70=
+
+Name: lib/x86/libgl2jni.so
+SHA1-Digest: vVnqkLqiKPcg9WcuBxAZz99u9L8=
+
+Name: res/drawable-hdpi-v4/notify_panel_notification_icon_bg.png
+SHA1-Digest: QkKvlylhRTpR1HxxoAZMe0tB4/Q=
+
+Name: resources.arsc
+SHA1-Digest: Sq/0qm97q4xH3ai5FTZxZhuCVkA=
+
+Name: res/layout/licensing.xml
+SHA1-Digest: XdxQfwBUWTxVqUOOHydaAQqcIFk=
+
+Name: res/drawable-hdpi-v4/icon.png
+SHA1-Digest: vrup142u47SfW0sgfCk1aIY1Chg=
+
+Name: classes.dex
+SHA1-Digest: K6hLwCAbl9+z2DV0kht9nyIWp8U=
+
+Name: res/drawable-xxxhdpi-v4/icon.png
+SHA1-Digest: 4bBxrRwgLFbqrDzUoHnNZoYT7WU=
+
+Name: res/drawable-mdpi-v4/icon.png
+SHA1-Digest: 0XJC497OwbusFf/NYqavaf5sIpU=
+

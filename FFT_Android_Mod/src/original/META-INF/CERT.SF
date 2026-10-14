@@ -1,0 +1,52 @@
+Signature-Version: 1.0
+Created-By: 1.0 (Android SignApk)
+SHA1-Digest-Manifest: pf5k2+aNnaXApwtMYBkmIC1qBzg=
+
+Name: res/drawable-ldpi-v4/icon.png
+SHA1-Digest: yoXoXi1q/JiJN+CKiy6690LSTQc=
+
+Name: res/layout/main.xml
+SHA1-Digest: 6L+J7zx1tsm/1+SbFBtS3fWiyWw=
+
+Name: lib/armeabi/libgl2jni.so
+SHA1-Digest: xQteCe2FqkZ3L1cJY19B/Cx5Ph0=
+
+Name: res/drawable-mdpi-v4/notify_panel_notification_icon_bg.png
+SHA1-Digest: MSdxhzIDeUT/K3Gx0LBNLQD9g/c=
+
+Name: res/layout/status_bar_ongoing_event_progress_bar.xml
+SHA1-Digest: Zk/lC6tJGyUJHvG19HEOvUaKOik=
+
+Name: res/drawable-xhdpi-v4/icon.png
+SHA1-Digest: uu2kQIUVSdtftQY3tXd07YYBhrE=
+
+Name: AndroidManifest.xml
+SHA1-Digest: f6fvK4Nko/fpTpQeZsU/HluGOhQ=
+
+Name: res/drawable-xxhdpi-v4/icon.png
+SHA1-Digest: AG/cwymjAuEBuBYN4ETEzcfoAlk=
+
+Name: lib/x86/libgl2jni.so
+SHA1-Digest: wX9mxBR9nX4x3fGuufLAsMl3mLU=
+
+Name: res/drawable-hdpi-v4/notify_panel_notification_icon_bg.png
+SHA1-Digest: pwAHSp/eLSMYEgT+uwda5MnyW20=
+
+Name: resources.arsc
+SHA1-Digest: O5XIf8H0owyTOxE8Fz873iuwqA4=
+
+Name: res/layout/licensing.xml
+SHA1-Digest: uPKs9aOVY3YHsmchii2sKelT01A=
+
+Name: res/drawable-hdpi-v4/icon.png
+SHA1-Digest: 0Me8XaAYHMClbtTkQevU0TSfJdg=
+
+Name: classes.dex
+SHA1-Digest: zsBPg7jDHncnaRg7p7O6DXu/GS8=
+
+Name: res/drawable-xxxhdpi-v4/icon.png
+SHA1-Digest: Ygdy5uHYX/Zoo+mw2gD9gFchQY8=
+
+Name: res/drawable-mdpi-v4/icon.png
+SHA1-Digest: awr1MU8d6G+OAEW6G1puPs92C2U=
+
