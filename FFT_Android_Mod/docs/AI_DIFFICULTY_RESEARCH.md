@@ -738,9 +738,163 @@ pontuação real feita em `EvaluationFunction` (seção 6.4/9.1). A tabela
 reutilizáveis para trabalho futuro (ex.: qualquer patch que precise
 indexar por habilidade usa `aa[]`, stride 14, base `0x3cfbbc`).
 
-### 10.4 Próximo da fila
+### 10.4 Próximo da fila (concluído a seguir, seção 11)
 `SetUnitParameter` (`0x27a3bc`, 1464 B) e `GetDirectionOfAutoUnit`
 (`0x279cc0`, 532 B) continuam pendentes (tamanhos/endereços já confirmados
 desde a seção 9.5). `GetCountToNextTurn` (`0x27af10`, 204 B, nova nesta
 sessão) ainda não foi lida. Nada mudado quanto a CCRYPT/TIM/outros
 motores.
+
+## 11. `SetUnitParameter` — desmontada por completo (2026-10-14, continuação)
+
+`SetUnitParameter(int unit_idx)` (`0x27a3bc`, 1464 B / ~366 instruções
+reais). É a função que calcula os **parâmetros derivados** de uma
+unidade a partir do(s) job(s) e equipamento atuais — não é "dano", é
+"preparação de dados" na mesma linha das seções 9.1/10: alimenta a mesma
+linha de 16 bytes por unidade (`row`, `g + unit_idx*16 + 0x1800+0x28`) que
+`CheckUnitActionEffective` lê depois (seção 10.2 chama essa linha `row`,
+offset `+4` relativo bate exatamente com o `+0x182c` usado lá).
+
+### 11.1 Confirmações e tabelas
+
+- **Sentinela de slot vazio confirmado de novo:** `bwork[unit_idx]->b[1]
+  == 0xff` → retorno imediato, sem fazer nada. Mesmo sentinela de "slot
+  vazio" já visto em `GetUnitOnPanel`/`GetPanelUnderUnit` (seção 9.4) e
+  nos laços de 21 (seção 9.1/9.3) — está definitivamente confirmado como
+  o padrão universal de "unidade inválida" em toda a base `bwork`.
+- **Cap de 15** (`cmp r4,#0xf; bls`, em `g[unit_idx+0x1980+0xc]`): se esse
+  byte (papel não identificado — contagem de algo por unidade) passar de
+  15, a função não faz nada.
+- **Tabela de jobs, stride 34 (`0x22`) confirmado por dois ângulos
+  independentes:** o multiplicador `mul r4,#0x22,r4` (linha `0x27a464`)
+  *e* o limite de laço `cmp sl,#0x22` (34 iterações, linhas `0x27a5fc`/
+  `0x27a628`) apontam para a mesma tabela de 34 bytes por job — não
+  resolvi o nome do símbolo desta tabela (fica dentro de `g`/`sl`, não é
+  um global GOT separado desta vez), mas o stride 34 é inequívoco.
+- `pspItemIsEmpty` (`0x2855b8`, já no `.dynsym` com esse nome exato) é
+  chamado para os dois slots de equipamento da unidade
+  (`bwork->h[0x20]` e `bwork->h[0x24]`, halfwords — prováveis IDs de arma/
+  escudo).
+- `SetTmp_UA(UnitAction*)` (`0x273378`, 1220 B, nome confirmado no
+  `.dynsym`) é chamado uma vez por slot de habilidade de job "aprendível"
+  dentro do laço de 34 — ou seja, o laço está de fato relacionado a
+  habilidades de job (reforça a leitura de "contagem/registro de
+  habilidades aprendidas").
+- Dois helpers sem nome, ambos chamados por esta função e **grandes o
+  suficiente para merecer item próprio na fila**: `0x279f8c` (1072 B,
+  logo antes do início de `SetUnitParameter` no binário — chamado quando
+  a unidade ainda não tem job secundário definido, `g->b[0x12]==0`) e
+  `0x279ac4` (172 B, logo depois do fim de `FundamentalRoutine` — chamado
+  depois de cada checagem `pspItemIsEmpty` bem-sucedida, com `r0=row,
+  r2=&contador_local`, parece acumular flags de categoria de arma/
+  equipamento).
+
+### 11.2 Pseudocódigo estrutural
+
+```c
+int SetUnitParameter(int unit_idx) {
+    BWORK* u = &bwork[unit_idx];                 // registrador ARM "sb" (r9) — não confundir com o global g
+    if (u->b[1] == 0xff) return;                 // slot vazio
+
+    uint8_t cap = g[unit_idx + 0x1980 + 0xc];     // papel exato não identificado
+    if (cap > 15) return;
+
+    row = &g[unit_idx*16 + 0x1828];               // mesma linha de 16 B usada em CheckUnitActionEffective (+4)
+    uint8_t job2 = u->b[0x12];                    // job secundário (0 = nenhum)
+
+JOB_LOOP_ENTRY:                                   // 0x27a41c
+    if (((job2 + 0x50) & 0xff) > 0x2f) goto NO_SUB_JOB;   // 0x27a68c
+
+    if (job2 == 0) {
+        r2 = SetUnitParameter_helper_0x279f8c(unit_idx);   // ainda não lido
+        goto JOB_LOOP_ENTRY2;                              // 0x27a444, reprocessa com r2 pronto
+    }
+    // job2 != 0: valida a segunda faixa (sb->b[0x13]) do mesmo jeito;
+    // se inválida, chama o MESMO helper 0x279f8c de novo (0x27a8fc)
+
+    // --- laço de 34 (0x22) entradas da tabela de job ---
+    for (sl = 0; sl < 0x22; sl++) {
+        ability_slot = &g[... + sl*0x22*4 + 0x3bc];  // endereçamento por *4 (word) dentro da tabela de job
+        if (ability_slot->b[2] == 0xff) goto NEXT;    // slot de habilidade vazio
+        if (<condições de nível/flag em sl,u->b[4],u->b[5]>) {
+            SetTmp_UA(ability_slot);                   // 0x273378
+            ability_slot->b[3] |= 2;                   // marca habilidade "registrada"
+        }
+        <contadores r3(sp+8), sb(r9), fp acumulam 1 cada
+         conforme bits 0x1/0x2/0x8 de g->b[0xe]/[0xf]>;
+        ability_slot->b[3] &= ~7;
+        if (g->b[0xf] & 0xc0) continue;    // volta pro topo do laço sem avançar sl de verdade
+        if (!(g->b[0xf] & 0x3c)) continue; // idem
+        ability_slot->b[3] |= 4;
+    }
+    // fim do laço: 3 divisões (__aeabi_idiv) escalando os 3 contadores
+    // por 4 e dividindo pelo contador `fp` -> percentuais, gravados em
+    // row->b[0xc], row->b[0xb] e numa 3ª variável local (0xff-saturada).
+    row->b[0xd] = <percentual final>;
+
+    // --- bloco de equipamento (só quando havia job2, i.e. "tem sub-job") ---
+    MemCpyB(row+4, g[unit_idx+0x188+1 ...], 5);          // copia 5 bytes de config de volta pra row+4..8
+    row->b[1] = g->b[0x189] >> 7;
+    row->b[2] = g->b[0x188];
+    row->b[3] = 0;
+    if (row->b[4] & 8) {
+        if (!(row->b[7]>>2 & 1)) {
+            if (row->b[4] & 0x40) {
+                // varre até 21 unidades de bwork (mesmo stride 0x1e6!)
+                // procurando outra unidade com b[0x180]==row->b[5]
+                // ("unidade única" já usada por outro slot?) — se achar,
+                // vai para o tratamento de duplicata (abaixo); senão,
+                // depois de varrer as 21, limpa o bit 3 de row->b[4].
+            }
+        }
+    }
+
+EQUIP_SLOTS:                                       // 0x27a82c
+    for (int slot : {0x20, 0x24}) {                 // dois halfwords de item em u
+        int item = u->h[slot];
+        if (!pspItemIsEmpty(item)) {
+            helper_0x279ac4(row, &local_counter);   // acumula flag de categoria de arma
+        }
+    }
+    switch (local_counter) {                        // 5 vias (0..4), jump table em 0x27a884
+        case 0: row->b[1] |= 1; row->b[2] |= 0x20; break;        // 0x27a8f0/0x27a8a0
+        case 1: row->b[1] |= ... ; goto 0x27a700;                // reentra no fluxo de "unidade única" acima
+        case 2: row->b[1] |= 2; row->b[2] |= 0x20; break;        // 0x27a8c4
+        case 3: goto 0x27a700;                                   // mesma reentrada do caso 1
+        default: row->b[1] |= 1; break;                          // >4 ou não resolvido -> 0x27a95c
+    }
+
+DUP_FOUND:                                          // 0x27a90c
+    row->b[5] = local_counter & 0xff;
+    if (u->b[4] & 0x10) {
+        uint8_t a = u->b[0x1de];
+        uint8_t b = bwork[other_idx]->b[0x1de];
+        u->b[0x1dd] = row->b[5];
+        row->tag = ((a ^ b) & 0x30) ? 0xc : 0xe;    // 0x21 do bloco g[idx+0x1980]
+    }
+    return;
+}
+```
+
+**Cobertura:** lido instrução por instrução do início ao fim (não há
+trecho pulado), mas — como em `CheckUnitActionEffective` — os blocos do
+laço de equipamento/duplicata (`0x27a6b4`–`0x27a95c`) têm desvios
+cruzados que não cabem num `switch` limpo sem duplicar casos; descrevi
+esses trechos em prosa onde a tradução literal ficaria ambígua. Os dois
+helpers sem nome (`0x279f8c`, `0x279ac4`) e `GetDirectionOfAutoUnit`
+continuam na fila sem leitura própria.
+
+### 11.3 Relevância para o objetivo do projeto (dificuldade)
+Nenhum patch óbvio de "dificuldade" apareceu aqui — isto é majoritariamente
+contabilidade de habilidades de job e categoria de equipamento, não
+poder de combate bruto. O candidato mais interessante continua sendo a
+tabela de 34 bytes/job (ainda sem nome de símbolo) se algum dia for
+necessário ajustar crescimento de atributo por job; não persegui isso
+agora porque sairia do escopo do item da fila.
+
+### 11.4 Próximo da fila
+`GetDirectionOfAutoUnit` (`0x279cc0`, 532 B) é o único item "Fase 1+"
+nomeado que ainda não foi lido. Os dois helpers sem nome descobertos
+nesta sessão (`0x279f8c`, 1072 B; `0x279ac4`, 172 B) e `GetCountToNextTurn`
+(`0x27af10`, 204 B, da seção 10) ficam como itens novos na fila, ainda
+sem leitura. Nada mudado quanto a CCRYPT/TIM/outros motores.
