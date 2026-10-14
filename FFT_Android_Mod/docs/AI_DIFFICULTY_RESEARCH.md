@@ -1423,24 +1423,60 @@ entre "candidato ficou marcado em algum momento" e "ainda é válido agora
 que o estado mudou" — útil para entender por que a IA às vezes parece
 "esquecer" um alvo que escolheu um instante antes.
 
-### 17.5 O que NÃO foi lido (fase 1, fase 8/"else", e vários blocos partilhados)
-- **Fase 1** (`0x27969c`–`0x279ac4`, 1064 B) — a maior de todas, **não
-  lida nesta sessão**.
-- **Fase 8 / "else"** (`0x278ff4`–`0x27938c`, 920 B) — lida só a
-  primeira ~metade (confirmado: timeout de `VSync`, gestão da flag
-  "IA ativa" `g->b[0x19b7]`, um snapshot de campos da habilidade atual
-  para `g->b[0x1d]/[0x1e]/[0x24]`, e um laço de até 20 candidatos
-  testando `JudgeStatus(g->b[1], bwork[i], 38)` — status 38 parece ser
-  um gatilho especial, destino `0x2798ac` não lido). A segunda metade
-  (a partir de `0x279134`) não foi lida.
-- Vários blocos citados como destino de salto mas não lidos:
-  `0x279378`, `0x2797f8`, `0x279244`, `0x279134`, `0x2798ac`,
-  `0x279850`, `0x279848`, `0x27985c`.
+### 17.5 Fase 8 / "else" (`0x278ff4`–`0x27938c`, 920 B) — lida por completo (2026-10-14, continuação)
 
-**Conclusão do item 5:** progresso estrutural real e honesto — a
-arquitetura de "poucos blocos grandes compartilhados + muitos
-redirecionadores pequenos" está confirmada e documentada, incluindo 2
-globais/arrays reaproveitados entre fases (`g+0xc8d..`/`g+0xca1..`,
-ambos de 21 bytes) — mas **a fase 1 e boa parte da fase 8 continuam sem
-leitura linha a linha**, então marcar este item como 100% concluído
-seria impreciso.
+Fechando o que faltava. Depois do laço de até 20 candidatos (seção 17
+original, testando `JudgeStatus(..., 38)`): chama `SetThisDestination`,
+zera `g->b[0x15]`, chama `SetBMList()` — ou seja, **esse laço inteiro
+termina committando um candidato**, igual às fases 0/6. Depois chama de
+novo `0x277570` (`RecheckFlaggedTargets`, seção 17.4); se não sobrou
+nenhum alvo válido, vai para `0x279378` (o destino final, ver abaixo).
+Senão, verifica se o alvo cacheado (`g->b[0xe2e]`) ainda está marcado em
+`g->b[0xc8d+idx]`; se não estiver, desvia para `0x279524` (dentro do
+território da fase 0/6 — mais uma convergência). Se estiver: checa a
+flag "IA ativa" de novo — se ativa, **salta direto para a Fase 2**
+(`0x279684`); se não, limpa o mesmo bit `0xcb7&~2` de sempre, copia uma
+palavra de uma tabela `g+idx*4+0xcc4` para `g->b[0x18]` (campo usado
+depois como "painel de destino X" na cauda de `BattleRoutine`, seção
+14.4), chama `CheckCrystalAndTresureBox()` — e aí, se `comtype[g->b[0]]`
+(mesma tabela da seção 10.1!) for `3`, faz uma busca de até **45
+tentativas** (laço interno de 15 × laço externo de 3) por uma habilidade
+em `aa[]` com o bit `0x40` do campo `+5` setado (via `get_ability`,
+seção 13.3) — se achar, desvia para `0x279930` (Fase 1, não lida); se
+esgotar as 45 tentativas sem achar, chama `SetThisDestination` de novo e
+**retorna 0** em `0x279378`.
+
+O bloco alternativo para `comtype!=3` (`0x27947c`, dentro do território
+da Fase 0/6) e o atalho quando `g->b[0xe]` bit 7 está setado
+(`0x279244`, um "salto rápido" que pula o laço de 20 candidatos inteiro
+e vai direto para o mesmo `CheckCrystalAndTresureBox`) também foram
+lidos.
+
+**Achado incidental, fora do escopo da IA:** `0x27922c` (o "retorno
+comum" para o qual praticamente todo bloco desta função converge) faz
+uma comparação de valor salvo em `sp+0xc` contra `*global` — é um
+**stack canary check** (padrão clássico `__stack_chk_guard`/
+`__stack_chk_fail`); se não bater, chama `0x715cc` (o mesmo import de
+PLT não identificado visto em `sub_275e3c`, seção 14.3 — agora com
+contexto mais forte de que é `__stack_chk_fail` ou equivalente). Resolve
+o porquê de `r7`/`sp+0xc` serem carregados logo no início da função
+(linhas 2–11 do início de `FundamentalRoutine`) sem relação com IA.
+
+### 17.6 O que ainda NÃO foi lido
+- **Fase 1** (`0x27969c`–`0x279ac4`, 1064 B) — a maior de todas,
+  continua sem leitura.
+- Pontos de convergência para dentro da Fase 1, agora com 4 endereços
+  catalogados (todos ainda não lidos): `0x2797f8`, `0x2798ac`,
+  `0x279930`, `0x279958`.
+- Dentro da Fase 7: os destinos de retry `0x279850`/`0x279848`/
+  `0x27985c` continuam não lidos.
+- O import de PLT `0x715cc`/`0x714b8` não foi resolvido por índice no
+  `.rel.plt` (hipótese: `__stack_chk_fail` e um memcpy/struct-copy
+  auxiliar, respectivamente — nomes não confirmados).
+
+**Conclusão do item 5:** com a Fase 8 fechada, **7 dos 8 "handlers" de
+fase (0,2,3,4,5,6,8) estão lidos por completo ou quase completo** — só
+a Fase 1 (a maior, 1064 B) e a parte não visitada da Fase 7 restam. A
+arquitetura de "poucos blocos grandes compartilhados, muitos
+redirecionadores pequenos, 2 arrays globais de 21 bytes reaproveitados
+entre fases, e um retorno comum com stack canary" está bem confirmada.
