@@ -1,0 +1,2 @@
+FFT_Android_Mod/com.square_enix.android_googleplay.FFT_en2.zip filter=lfs diff=lfs merge=lfs -text
+FFT_Android_Mod/obb-data/main.202000.com.square_enix.android_googleplay.FFT_en2.obb filter=lfs diff=lfs merge=lfs -text

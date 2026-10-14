@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <id name="status_text" />
+    <id name="check_license_button" />
+    <id name="notificationLayout" />
+    <id name="appIcon" />
+    <id name="progress_text" />
+    <id name="title" />
+    <id name="time_remaining" />
+    <id name="progress_bar_frame" />
+    <id name="progress_bar" />
+    <id name="description" />
+</resources>

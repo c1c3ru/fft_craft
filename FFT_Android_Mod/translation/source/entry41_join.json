@@ -1,0 +1,23515 @@
+{
+"entry_index": 41,
+"source_name": "join",
+"trailing_len": 1943,
+"strings": [
+[
+"0000100020003000400050006000F600まK00うs00jせ00あづ00{waitpress}で00っの00つの00えも00むゆ00{0xE887}00{E9}り00zろ00じろ00ぎ·00に'00gエ00れ{0xDE}00フ{Ramza}00a{0xF30000}ぐ{0xF9}00k{SP2}00ど{EndList}00{0xDE}110ペn10",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"ぐ{0xF9}00k{SP2}00ど{EndList}00{0xDE}110ペn10",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Squire",
+254
+],
+[
+"Squire",
+254
+],
+[
+"Squire",
+254
+],
+[
+"Squire",
+254
+],
+[
+"Holy Knight",
+254
+],
+[
+"Ark Knight",
+254
+],
+[
+"Squire",
+254
+],
+[
+"Ark Knight",
+254
+],
+[
+"Rune Knight",
+254
+],
+[
+"Duke",
+254
+],
+[
+"Duke",
+254
+],
+[
+"Princess",
+254
+],
+[
+"Sword Saint",
+254
+],
+[
+"High Confessor",
+254
+],
+[
+"Dragonkin",
+254
+],
+[
+"Celebrant",
+254
+],
+[
+"Fell Knight",
+254
+],
+[
+"Netherseer",
+254
+],
+[
+"Elder",
+254
+],
+[
+"Cleric",
+254
+],
+[
+"Astrologer",
+254
+],
+[
+"Machinist",
+254
+],
+[
+"Fell Knight",
+254
+],
+[
+"Cardinal",
+254
+],
+[
+"Skyseer",
+254
+],
+[
+"Netherseer",
+254
+],
+[
+"Ark Knight",
+254
+],
+[
+"Commoner",
+254
+],
+[
+"Grand Duke",
+254
+],
+[
+"Holy Knight",
+254
+],
+[
+"Templar",
+254
+],
+[
+"White Knight",
+254
+],
+[
+"Witch of the Coven",
+254
+],
+[
+"Machinist",
+254
+],
+[
+"Viscount",
+254
+],
+[
+"Divine Knight",
+254
+],
+[
+"Divine Knight",
+254
+],
+[
+"Nightblade",
+254
+],
+[
+"Sorcerer",
+254
+],
+[
+"White Knight",
+254
+],
+[
+"Skyseer",
+254
+],
+[
+"Divine Knight",
+254
+],
+[
+"Machinist",
+254
+],
+[
+"Cleric",
+254
+],
+[
+"Assassin",
+254
+],
+[
+"Assassin",
+254
+],
+[
+"Divine Knight",
+254
+],
+[
+"Cleric",
+254
+],
+[
+"False Saint",
+254
+],
+[
+"Soldier",
+254
+],
+[
+"Ark Knight",
+254
+],
+[
+"Holy Knight",
+254
+],
+[
+"Chemist",
+254
+],
+[
+"White Mage",
+254
+],
+[
+"Black Mage",
+254
+],
+[
+"Mystic",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Gigas",
+254
+],
+[
+"Knight",
+254
+],
+[
+"Death Seraph",
+254
+],
+[
+"Archer",
+254
+],
+[
+"Bringer of Order",
+254
+],
+[
+"High Seraph",
+254
+],
+[
+"Black Mage",
+254
+],
+[
+"The Impure",
+254
+],
+[
+"Time Mage",
+254
+],
+[
+"The Wroth",
+254
+],
+[
+"Mystic",
+254
+],
+[
+"Summoner",
+254
+],
+[
+"Holy Dragon",
+254
+],
+[
+"Arch Seraph",
+254
+],
+[
+"Squire",
+254
+],
+[
+"Chemist",
+254
+],
+[
+"Knight",
+254
+],
+[
+"Archer",
+254
+],
+[
+"Monk",
+254
+],
+[
+"White Mage",
+254
+],
+[
+"Black Mage",
+254
+],
+[
+"Time Mage",
+254
+],
+[
+"Summoner",
+254
+],
+[
+"Thief",
+254
+],
+[
+"Orator",
+254
+],
+[
+"Mystic",
+254
+],
+[
+"Geomancer",
+254
+],
+[
+"Dragoon",
+254
+],
+[
+"Samurai",
+254
+],
+[
+"Ninja",
+254
+],
+[
+"Arithmetician",
+254
+],
+[
+"Bard",
+254
+],
+[
+"Dancer",
+254
+],
+[
+"Mime",
+254
+],
+[
+"Chocobo",
+254
+],
+[
+"Black Chocobo",
+254
+],
+[
+"Red Chocobo",
+254
+],
+[
+"Goblin",
+254
+],
+[
+"Black Goblin",
+254
+],
+[
+"Gobbledygook",
+254
+],
+[
+"Bomb",
+254
+],
+[
+"Grenade",
+254
+],
+[
+"Exploder",
+254
+],
+[
+"Red Panther",
+254
+],
+[
+"Coeurl",
+254
+],
+[
+"Vampire Cat",
+254
+],
+[
+"Piscodaemon",
+254
+],
+[
+"Squidraken",
+254
+],
+[
+"Mindflayer",
+254
+],
+[
+"Skeleton",
+254
+],
+[
+"Bonesnatch",
+254
+],
+[
+"Skeletal Fiend",
+254
+],
+[
+"Ghoul",
+254
+],
+[
+"Ghast",
+254
+],
+[
+"Revenant",
+254
+],
+[
+"Floating Eye",
+254
+],
+[
+"Ahriman",
+254
+],
+[
+"Plague Horror",
+254
+],
+[
+"Jura Aevis",
+254
+],
+[
+"Steelhawk",
+254
+],
+[
+"Cockatrice",
+254
+],
+[
+"Pig",
+254
+],
+[
+"Swine",
+254
+],
+[
+"Wild Boar",
+254
+],
+[
+"Dryad",
+254
+],
+[
+"Treant",
+254
+],
+[
+"Elder Treant",
+254
+],
+[
+"Wisenkin",
+254
+],
+[
+"Minotaur",
+254
+],
+[
+"Sekhret",
+254
+],
+[
+"Malboro",
+254
+],
+[
+"Ochu",
+254
+],
+[
+"Greater Malboro",
+254
+],
+[
+"Behemoth",
+254
+],
+[
+"Behemoth King",
+254
+],
+[
+"Dark Behemoth",
+254
+],
+[
+"Dragon",
+254
+],
+[
+"Blue Dragon",
+254
+],
+[
+"Red Dragon",
+254
+],
+[
+"Hydra",
+254
+],
+[
+"Greater Hydra",
+254
+],
+[
+"Tiamat",
+254
+],
+[
+"なし",
+254
+],
+[
+"なし",
+254
+],
+[
+"Byblos",
+254
+],
+[
+"Automaton",
+254
+],
+[
+"なし",
+254
+],
+[
+"なし",
+254
+],
+[
+"なし",
+254
+],
+[
+"なし",
+254
+],
+[
+"Reaver",
+254
+],
+[
+"Serpentarius",
+254
+],
+[
+"Holy Dragon",
+254
+],
+[
+"Archaeodaemon",
+254
+],
+[
+"Ultima Demon",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Dark Knight",
+254
+],
+[
+"Onion Knight",
+254
+],
+[
+"Sky Pirate",
+254
+],
+[
+"Game Hunter",
+254
+],
+[
+"Onion Knight",
+254
+],
+[
+"Deathknight",
+254
+],
+[
+"Templar",
+254
+],
+[
+"Celebrant",
+254
+],
+[
+"Dark Dragon",
+254
+],
+[
+"",
+254
+],
+[
+"Dagger",
+254
+],
+[
+"Mythril Knife",
+254
+],
+[
+"Blind Knife",
+254
+],
+[
+"Mage Masher",
+254
+],
+[
+"Platinum Dagger",
+254
+],
+[
+"Main Gauche",
+254
+],
+[
+"Orichalcum Dirk",
+254
+],
+[
+"Assassin's Dagger",
+254
+],
+[
+"Air Knife",
+254
+],
+[
+"Zwill Straightblade",
+254
+],
+[
+"Ninja Blade",
+254
+],
+[
+"Kunai",
+254
+],
+[
+"Kodachi",
+254
+],
+[
+"Ninja Longblade",
+254
+],
+[
+"Spellbinder",
+254
+],
+[
+"Sasuke's Blade",
+254
+],
+[
+"Iga Blade",
+254
+],
+[
+"Koga Blade",
+254
+],
+[
+"Broadsword",
+254
+],
+[
+"Longsword",
+254
+],
+[
+"Iron Sword",
+254
+],
+[
+"Mythril Sword",
+254
+],
+[
+"Blood Sword",
+254
+],
+[
+"Coral Sword",
+254
+],
+[
+"Ancient Sword",
+254
+],
+[
+"Sleep Blade",
+254
+],
+[
+"Platinum Sword",
+254
+],
+[
+"Diamond Sword",
+254
+],
+[
+"Icebrand",
+254
+],
+[
+"Runeblade",
+254
+],
+[
+"Nagnarok",
+254
+],
+[
+"Materia Blade",
+254
+],
+[
+"Defender",
+254
+],
+[
+"Save the Queen",
+254
+],
+[
+"Excalibur",
+254
+],
+[
+"Ragnarok",
+254
+],
+[
+"Chaos Blade",
+254
+],
+[
+"Ashura",
+254
+],
+[
+"Kotetsu",
+254
+],
+[
+"Osafune",
+254
+],
+[
+"Murasame",
+254
+],
+[
+"Ama-no-Murakumo",
+254
+],
+[
+"Kiyomori",
+254
+],
+[
+"Muramasa",
+254
+],
+[
+"Kiku-ichimonji",
+254
+],
+[
+"Masamune",
+254
+],
+[
+"Chirijiraden",
+254
+],
+[
+"Battle Axe",
+254
+],
+[
+"Giant's Axe",
+254
+],
+[
+"Slasher",
+254
+],
+[
+"Rod",
+254
+],
+[
+"Thunder Rod",
+254
+],
+[
+"Flame Rod",
+254
+],
+[
+"Ice Rod",
+254
+],
+[
+"Poison Rod",
+254
+],
+[
+"Wizard's Rod",
+254
+],
+[
+"Dragon Rod",
+254
+],
+[
+"Rod of Faith",
+254
+],
+[
+"Oak Staff",
+254
+],
+[
+"White Staff",
+254
+],
+[
+"Healing Staff",
+254
+],
+[
+"Serpent Staff",
+254
+],
+[
+"Mage's Staff",
+254
+],
+[
+"Golden Staff",
+254
+],
+[
+"Zeus Mace",
+254
+],
+[
+"Staff of the Magi",
+254
+],
+[
+"Iron Flail",
+254
+],
+[
+"Flame Mace",
+254
+],
+[
+"Morning Star",
+254
+],
+[
+"Scorpion Tail",
+254
+],
+[
+"Romandan Pistol",
+254
+],
+[
+"Mythril Gun",
+254
+],
+[
+"Stoneshooter",
+254
+],
+[
+"Glacial Gun",
+254
+],
+[
+"Blaze Gun",
+254
+],
+[
+"Blaster",
+254
+],
+[
+"Bowgun",
+254
+],
+[
+"Knightslayer",
+254
+],
+[
+"Crossbow",
+254
+],
+[
+"Poison Bow",
+254
+],
+[
+"Hunting Bow",
+254
+],
+[
+"Gastrophetes",
+254
+],
+[
+"Longbow",
+254
+],
+[
+"Silver Bow",
+254
+],
+[
+"Ice Bow",
+254
+],
+[
+"Lightning Bow",
+254
+],
+[
+"Windslash Bow",
+254
+],
+[
+"Mythril Bow",
+254
+],
+[
+"Artemis Bow",
+254
+],
+[
+"Yoichi Bow",
+254
+],
+[
+"Perseus Bow",
+254
+],
+[
+"Lamia's Harp",
+254
+],
+[
+"Bloodstring Harp",
+254
+],
+[
+"Faerie Harp",
+254
+],
+[
+"Battle Folio",
+254
+],
+[
+"Bestiary",
+254
+],
+[
+"Papyrus Codex",
+254
+],
+[
+"Omnilex",
+254
+],
+[
+"Javelin",
+254
+],
+[
+"Spear",
+254
+],
+[
+"Mythril Spear",
+254
+],
+[
+"Partisan",
+254
+],
+[
+"Obelisk",
+254
+],
+[
+"Holy Lance",
+254
+],
+[
+"Dragon Whisker",
+254
+],
+[
+"Javelin",
+254
+],
+[
+"Cypress Pole",
+254
+],
+[
+"Battle Bamboo",
+254
+],
+[
+"Musk Pole",
+254
+],
+[
+"Iron Fan",
+254
+],
+[
+"Gokuu Pole",
+254
+],
+[
+"Ivory Pole",
+254
+],
+[
+"Eight-fluted Pole",
+254
+],
+[
+"Whale Whisker",
+254
+],
+[
+"Croakadile Bag",
+254
+],
+[
+"Fallingstar Bag",
+254
+],
+[
+"Pantherskin Bag",
+254
+],
+[
+"Hydrascale Bag",
+254
+],
+[
+"Damask Cloth",
+254
+],
+[
+"Cashmere",
+254
+],
+[
+"Wyrmweave Silk",
+254
+],
+[
+"Shuriken",
+254
+],
+[
+"Fuma Shuriken",
+254
+],
+[
+"Yagyu Darkrood",
+254
+],
+[
+"Flameburst Bomb",
+254
+],
+[
+"Snowmelt Bomb",
+254
+],
+[
+"Spark Bomb",
+254
+],
+[
+"Escutcheon",
+254
+],
+[
+"Buckler",
+254
+],
+[
+"Bronze Shield",
+254
+],
+[
+"Round Shield",
+254
+],
+[
+"Mythril Shield",
+254
+],
+[
+"Golden Shield",
+254
+],
+[
+"Ice Shield",
+254
+],
+[
+"Flame Shield",
+254
+],
+[
+"Aegis Shield",
+254
+],
+[
+"Diamond Shield",
+254
+],
+[
+"Platinum Shield",
+254
+],
+[
+"Crystal Shield",
+254
+],
+[
+"Genji Shield",
+254
+],
+[
+"Kaiser Shield",
+254
+],
+[
+"Venetian Shield",
+254
+],
+[
+"Escutcheon",
+254
+],
+[
+"Leather Helm",
+254
+],
+[
+"Bronze Helm",
+254
+],
+[
+"Iron Helm",
+254
+],
+[
+"Barbut",
+254
+],
+[
+"Mythril Helm",
+254
+],
+[
+"Golden Helm",
+254
+],
+[
+"Close Helmet",
+254
+],
+[
+"Diamond Helm",
+254
+],
+[
+"Platinum Helm",
+254
+],
+[
+"Circlet",
+254
+],
+[
+"Crystal Helm",
+254
+],
+[
+"Genji Helm",
+254
+],
+[
+"Grand Helm",
+254
+],
+[
+"Leather Cap",
+254
+],
+[
+"Plumed Hat",
+254
+],
+[
+"Red Hood",
+254
+],
+[
+"Headgear",
+254
+],
+[
+"Wizard's Hat",
+254
+],
+[
+"Green Beret",
+254
+],
+[
+"Headband",
+254
+],
+[
+"Celebrant's Miter",
+254
+],
+[
+"Black Cowl",
+254
+],
+[
+"Gold Hairpin",
+254
+],
+[
+"Lambent Hat",
+254
+],
+[
+"Thief's Cap",
+254
+],
+[
+"Cachusha",
+254
+],
+[
+"Barette",
+254
+],
+[
+"Ribbon",
+254
+],
+[
+"Leather Armor",
+254
+],
+[
+"Linen Cuirass",
+254
+],
+[
+"Bronze Armor",
+254
+],
+[
+"Chainmail",
+254
+],
+[
+"Mythril Armor",
+254
+],
+[
+"Plate Mail",
+254
+],
+[
+"Golden Armor",
+254
+],
+[
+"Diamond Armor",
+254
+],
+[
+"Platinum Armor",
+254
+],
+[
+"Carabineer Mail",
+254
+],
+[
+"Crystal Mail",
+254
+],
+[
+"Genji Armor",
+254
+],
+[
+"Mirror Mail",
+254
+],
+[
+"Maximillian",
+254
+],
+[
+"Clothing",
+254
+],
+[
+"Leather Clothing",
+254
+],
+[
+"Leather Plate",
+254
+],
+[
+"Ringmail",
+254
+],
+[
+"Mythril Vest",
+254
+],
+[
+"Adamant Vest",
+254
+],
+[
+"Wizard Clothing",
+254
+],
+[
+"Brigandine",
+254
+],
+[
+"Jujitsu Gi",
+254
+],
+[
+"Power Garb",
+254
+],
+[
+"Gaia Gear",
+254
+],
+[
+"Ninja Gear",
+254
+],
+[
+"Black Garb",
+254
+],
+[
+"Rubber Suit",
+254
+],
+[
+"Hempen Robe",
+254
+],
+[
+"Silken Robe",
+254
+],
+[
+"Wizard's Robe",
+254
+],
+[
+"Chameleon Robe",
+254
+],
+[
+"White Robe",
+254
+],
+[
+"Black Robe",
+254
+],
+[
+"Luminous Robe",
+254
+],
+[
+"Lordly Robe",
+254
+],
+[
+"Battle Boots",
+254
+],
+[
+"Spiked Boots",
+254
+],
+[
+"Germinas Boots",
+254
+],
+[
+"Rubber Boots",
+254
+],
+[
+"Winged Boots",
+254
+],
+[
+"Hermes Shoes",
+254
+],
+[
+"Red Shoes",
+254
+],
+[
+"Power Gauntlet",
+254
+],
+[
+"Genji Glove",
+254
+],
+[
+"Magepower Glove",
+254
+],
+[
+"Bracer",
+254
+],
+[
+"Reflect Ring",
+254
+],
+[
+"Protect Ring",
+254
+],
+[
+"Magick Ring",
+254
+],
+[
+"Cursed Ring",
+254
+],
+[
+"Angel Ring",
+254
+],
+[
+"Diamond Bracelet",
+254
+],
+[
+"Jade Armlet",
+254
+],
+[
+"Japa Mala",
+254
+],
+[
+"Nu Khai Armband",
+254
+],
+[
+"Guardian Bracelet",
+254
+],
+[
+"Shoulder Cape",
+254
+],
+[
+"Leather Cloak",
+254
+],
+[
+"Mage's Cloak",
+254
+],
+[
+"Elven Cloak",
+254
+],
+[
+"Vampire Cape",
+254
+],
+[
+"Featherweave Cloak",
+254
+],
+[
+"Invisibility Cloak",
+254
+],
+[
+"Chantage",
+254
+],
+[
+"Cherche",
+254
+],
+[
+"Septième",
+254
+],
+[
+"Sortilége",
+254
+],
+[
+"Potion",
+254
+],
+[
+"Hi-Potion",
+254
+],
+[
+"X-Potion",
+254
+],
+[
+"Ether",
+254
+],
+[
+"Hi-Ether",
+254
+],
+[
+"Elixir",
+254
+],
+[
+"Antidote",
+254
+],
+[
+"Eye Drops",
+254
+],
+[
+"Echo Herbs",
+254
+],
+[
+"Maiden's Kiss",
+254
+],
+[
+"Gold Needle",
+254
+],
+[
+"Holy Water",
+254
+],
+[
+"Remedy",
+254
+],
+[
+"Phoenix Down",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Chaosbringer",
+254
+],
+[
+"Deathbringer",
+254
+],
+[
+"Arondight",
+254
+],
+[
+"Balmung",
+254
+],
+[
+"Valhalla",
+254
+],
+[
+"Moonblade",
+254
+],
+[
+"Onion Sword",
+254
+],
+[
+"Ras Algethi",
+254
+],
+[
+"Fomalhaut",
+254
+],
+[
+"Francisca",
+254
+],
+[
+"Golden Axe",
+254
+],
+[
+"Orochi",
+254
+],
+[
+"Moonsilk Blade",
+254
+],
+[
+"Nirvana",
+254
+],
+[
+"Dreamwaker",
+254
+],
+[
+"Stardust Rod",
+254
+],
+[
+"Crown Scepter",
+254
+],
+[
+"Vesper",
+254
+],
+[
+"Sagittarius Bow",
+254
+],
+[
+"Durandal",
+254
+],
+[
+"Gae Bolg",
+254
+],
+[
+"Gungnir",
+254
+],
+[
+"アイテム278",
+254
+],
+[
+"アイテム279",
+254
+],
+[
+"アイテム280",
+254
+],
+[
+"アイテム281",
+254
+],
+[
+"アイテム282",
+254
+],
+[
+"アイテム283",
+254
+],
+[
+"アイテム284",
+254
+],
+[
+"アイテム285",
+254
+],
+[
+"アイテム286",
+254
+],
+[
+"アイテム287",
+254
+],
+[
+"Onion Shield",
+254
+],
+[
+"Reverie Shield",
+254
+],
+[
+"アイテム290",
+254
+],
+[
+"アイテム291",
+254
+],
+[
+"Vanguard Helm",
+254
+],
+[
+"Onion Helm",
+254
+],
+[
+"Acacia Hat",
+254
+],
+[
+"Brass Coronet",
+254
+],
+[
+"アイテム296",
+254
+],
+[
+"アイテム297",
+254
+],
+[
+"アイテム298",
+254
+],
+[
+"アイテム299",
+254
+],
+[
+"Grand Armor",
+254
+],
+[
+"Onion Armor",
+254
+],
+[
+"Minerva Bustier",
+254
+],
+[
+"Mirage Vest",
+254
+],
+[
+"Brave Suit",
+254
+],
+[
+"Sage's Robe",
+254
+],
+[
+"アイテム306",
+254
+],
+[
+"アイテム307",
+254
+],
+[
+"Gaius Caligae",
+254
+],
+[
+"Brigand's Gloves",
+254
+],
+[
+"Onion Gloves",
+254
+],
+[
+"Empyreal Armband",
+254
+],
+[
+"Tynar Rouge",
+254
+],
+[
+"Sage's Ring",
+254
+],
+[
+"アイテム314",
+254
+],
+[
+"アイテム315",
+254
+],
+[
+"",
+254
+],
+[
+"Ramza",
+254
+],
+[
+"Ramza",
+254
+],
+[
+"Ramza",
+254
+],
+[
+"Delita",
+254
+],
+[
+"Delita",
+254
+],
+[
+"Delita",
+254
+],
+[
+"Argath",
+254
+],
+[
+"Zalbaag",
+254
+],
+[
+"Dycedarg",
+254
+],
+[
+"Larg",
+254
+],
+[
+"Goltanna",
+254
+],
+[
+"Ovelia",
+254
+],
+[
+"Orlandeau",
+254
+],
+[
+"Marcel",
+254
+],
+[
+"Reis",
+254
+],
+[
+"Zalmour",
+254
+],
+[
+"Gaffgarion",
+254
+],
+[
+"Marach",
+254
+],
+[
+"Simon",
+254
+],
+[
+"Alma",
+254
+],
+[
+"Orran",
+254
+],
+[
+"Mustadio",
+254
+],
+[
+"Gaffgarion",
+254
+],
+[
+"Delacroix",
+254
+],
+[
+"Rapha",
+254
+],
+[
+"Marach",
+254
+],
+[
+"Elmdore",
+254
+],
+[
+"Tietra",
+254
+],
+[
+"Barrington",
+254
+],
+[
+"Agrias",
+254
+],
+[
+"Beowulf",
+254
+],
+[
+"Wiegraf",
+254
+],
+[
+"Valmafra",
+254
+],
+[
+"Mustadio",
+254
+],
+[
+"Ludovich",
+254
+],
+[
+"Folmarv",
+254
+],
+[
+"Loffrey",
+254
+],
+[
+"Isilud",
+254
+],
+[
+"Cletienne",
+254
+],
+[
+"Wiegraf",
+254
+],
+[
+"Rapha",
+254
+],
+[
+"Meliadoul",
+254
+],
+[
+"Barich",
+254
+],
+[
+"Alma",
+254
+],
+[
+"Celia",
+254
+],
+[
+"Lettie",
+254
+],
+[
+"Meliadoul",
+254
+],
+[
+"Alma",
+254
+],
+[
+"Ajora",
+254
+],
+[
+"Cloud",
+254
+],
+[
+"Zalbaag",
+254
+],
+[
+"Agrias",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Belias",
+254
+],
+[
+"",
+254
+],
+[
+"Zalera",
+254
+],
+[
+"",
+254
+],
+[
+"Hashmal",
+254
+],
+[
+"Ultima",
+254
+],
+[
+"",
+254
+],
+[
+"Cúchulainn",
+254
+],
+[
+"Rofocale",
+254
+],
+[
+"Adrammelech",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Reis",
+254
+],
+[
+"Ultima",
+254
+],
+[
+"Gustav",
+254
+],
+[
+"Milleuda",
+254
+],
+[
+"Gragoroth",
+254
+],
+[
+"名顔固定04",
+254
+],
+[
+"名顔固定05",
+254
+],
+[
+"名顔固定06",
+254
+],
+[
+"名顔固定07",
+254
+],
+[
+"名顔固定08",
+254
+],
+[
+"名顔固定09",
+254
+],
+[
+"名顔固定10",
+254
+],
+[
+"名顔固定11",
+254
+],
+[
+"名顔固定12",
+254
+],
+[
+"名顔固定13",
+254
+],
+[
+"名顔固定14",
+254
+],
+[
+"名顔固定15",
+254
+],
+[
+"名顔固定16",
+254
+],
+[
+"名顔固定17",
+254
+],
+[
+"名顔固定18",
+254
+],
+[
+"名顔固定19",
+254
+],
+[
+"名顔固定20",
+254
+],
+[
+"名顔固定21",
+254
+],
+[
+"名顔固定22",
+254
+],
+[
+"汎用名固定01",
+254
+],
+[
+"汎用名固定02",
+254
+],
+[
+"汎用名固定03",
+254
+],
+[
+"汎用名固定04",
+254
+],
+[
+"汎用名固定05",
+254
+],
+[
+"汎用名固定06",
+254
+],
+[
+"汎用名固定07",
+254
+],
+[
+"汎用名固定08",
+254
+],
+[
+"汎用名固定09",
+254
+],
+[
+"汎用名固定10",
+254
+],
+[
+"汎用名固定11",
+254
+],
+[
+"汎用名固定12",
+254
+],
+[
+"汎用名固定13",
+254
+],
+[
+"汎用名固定14",
+254
+],
+[
+"Construct 2",
+254
+],
+[
+"Govis",
+254
+],
+[
+"Construct 3",
+254
+],
+[
+"Protoconstruct",
+254
+],
+[
+"Teioh",
+254
+],
+[
+"Construct 7",
+254
+],
+[
+"Syneugh",
+254
+],
+[
+"Construct 8",
+254
+],
+[
+"Boco",
+254
+],
+[
+"Elidibus",
+254
+],
+[
+"Lavian",
+254
+],
+[
+"Alicia",
+254
+],
+[
+"Fuchs",
+254
+],
+[
+"Diesch",
+254
+],
+[
+"Biggs",
+254
+],
+[
+"Wezlef",
+254
+],
+[
+"Lezalas",
+254
+],
+[
+"Ladd",
+254
+],
+[
+"汎用名固定33",
+254
+],
+[
+"汎用名固定34",
+254
+],
+[
+"汎用名固定35",
+254
+],
+[
+"汎用名固定36",
+254
+],
+[
+"汎用名固定37",
+254
+],
+[
+"汎用名固定38",
+254
+],
+[
+"汎用名固定39",
+254
+],
+[
+"汎用名固定40",
+254
+],
+[
+"汎用名固定41",
+254
+],
+[
+"汎用名固定42",
+254
+],
+[
+"汎用名固定43",
+254
+],
+[
+"汎用名固定44",
+254
+],
+[
+"汎用名固定45",
+254
+],
+[
+"汎用名固定46",
+254
+],
+[
+"汎用名固定47",
+254
+],
+[
+"汎用名固定48",
+254
+],
+[
+"汎用名固定49",
+254
+],
+[
+"汎用名固定50",
+254
+],
+[
+"汎用名固定51",
+254
+],
+[
+"汎用名固定52",
+254
+],
+[
+"汎用名固定53",
+254
+],
+[
+"汎用名固定54",
+254
+],
+[
+"汎用名固定55",
+254
+],
+[
+"汎用名固定56",
+254
+],
+[
+"汎用名固定57",
+254
+],
+[
+"汎用名固定58",
+254
+],
+[
+"汎用名固定59",
+254
+],
+[
+"汎用名固定60",
+254
+],
+[
+"汎用名固定61",
+254
+],
+[
+"汎用名固定62",
+254
+],
+[
+"汎用名固定63",
+254
+],
+[
+"汎用名固定64",
+254
+],
+[
+"汎用名固定65",
+254
+],
+[
+"汎用名固定66",
+254
+],
+[
+"Balthier",
+254
+],
+[
+"Luso",
+254
+],
+[
+"汎用名固定69",
+254
+],
+[
+"Argath",
+254
+],
+[
+"Aliste",
+254
+],
+[
+"Bremondt",
+254
+],
+[
+"Bremondt",
+254
+],
+[
+"汎用名固定74",
+254
+],
+[
+"汎用名固定75",
+254
+],
+[
+"汎用名固定76",
+254
+],
+[
+"汎用名固定77",
+254
+],
+[
+"汎用名固定78",
+254
+],
+[
+"汎用名固定79",
+254
+],
+[
+"汎用名固定80",
+254
+],
+[
+"汎用名固定81",
+254
+],
+[
+"汎用名固定82",
+254
+],
+[
+"汎用名固定83",
+254
+],
+[
+"汎用名固定84",
+254
+],
+[
+"汎用名固定85",
+254
+],
+[
+"汎用名固定86",
+254
+],
+[
+"汎用名固定87",
+254
+],
+[
+"汎用名固定88",
+254
+],
+[
+"汎用名固定89",
+254
+],
+[
+"汎用名固定90",
+254
+],
+[
+"汎用名固定91",
+254
+],
+[
+"汎用名固定92",
+254
+],
+[
+"汎用名固定93",
+254
+],
+[
+"汎用名固定94",
+254
+],
+[
+"汎用名固定95",
+254
+],
+[
+"汎用名固定96",
+254
+],
+[
+"汎用名固定97",
+254
+],
+[
+"汎用名固定98",
+254
+],
+[
+"汎用名固定99",
+254
+],
+[
+"汎用名固定110",
+254
+],
+[
+"汎用名固定111",
+254
+],
+[
+"汎用名固定112",
+254
+],
+[
+"汎用名固定113",
+254
+],
+[
+"汎用名固定114",
+254
+],
+[
+"汎用名固定115",
+254
+],
+[
+"汎用名固定116",
+254
+],
+[
+"汎用名固定117",
+254
+],
+[
+"汎用名固定118",
+254
+],
+[
+"汎用名固定119",
+254
+],
+[
+"汎用名固定120",
+254
+],
+[
+"汎用名固定121",
+254
+],
+[
+"汎用名固定122",
+254
+],
+[
+"汎用名固定123",
+254
+],
+[
+"汎用名固定124",
+254
+],
+[
+"汎用名固定125",
+254
+],
+[
+"汎用名固定126",
+254
+],
+[
+"汎用名固定127",
+254
+],
+[
+"汎用名固定128",
+254
+],
+[
+"汎用名固定129",
+254
+],
+[
+"汎用名固定120",
+254
+],
+[
+"汎用名固定131",
+254
+],
+[
+"汎用名固定132",
+254
+],
+[
+"汎用名固定133",
+254
+],
+[
+"汎用名固定134",
+254
+],
+[
+"汎用名固定135",
+254
+],
+[
+"汎用名固定136",
+254
+],
+[
+"汎用名固定137",
+254
+],
+[
+"汎用名固定138",
+254
+],
+[
+"汎用名固定139",
+254
+],
+[
+"汎用名固定140",
+254
+],
+[
+"汎用名固定141",
+254
+],
+[
+"汎用名固定142",
+254
+],
+[
+"汎用名固定143",
+254
+],
+[
+"汎用名固定144",
+254
+],
+[
+"汎用名固定145",
+254
+],
+[
+"汎用名固定146",
+254
+],
+[
+"汎用名固定147",
+254
+],
+[
+"汎用名固定148",
+254
+],
+[
+"汎用名固定149",
+254
+],
+[
+"汎用名固定150",
+254
+],
+[
+"汎用名固定151",
+254
+],
+[
+"汎用名固定152",
+254
+],
+[
+"汎用名固定153",
+254
+],
+[
+"汎用名固定154",
+254
+],
+[
+"汎用名固定155",
+254
+],
+[
+"汎用名固定156",
+254
+],
+[
+"汎用名固定157",
+254
+],
+[
+"汎用名固定158",
+254
+],
+[
+"汎用名固定159",
+254
+],
+[
+"汎用名固定160",
+254
+],
+[
+"汎用名固定161",
+254
+],
+[
+"汎用名固定162",
+254
+],
+[
+"汎用名固定163",
+254
+],
+[
+"汎用名固定164",
+254
+],
+[
+"汎用名固定165",
+254
+],
+[
+"汎用名固定166",
+254
+],
+[
+"汎用名固定167",
+254
+],
+[
+"汎用名固定168",
+254
+],
+[
+"汎用名固定169",
+254
+],
+[
+"汎用名固定170",
+254
+],
+[
+"Arnald",
+254
+],
+[
+"Ivan",
+254
+],
+[
+"Isleton",
+254
+],
+[
+"Abel",
+254
+],
+[
+"Addison",
+254
+],
+[
+"Albin",
+254
+],
+[
+"Arthur",
+254
+],
+[
+"Augustine",
+254
+],
+[
+"Alistair",
+254
+],
+[
+"Hadrian",
+254
+],
+[
+"Jeger",
+254
+],
+[
+"Ingham",
+254
+],
+[
+"Ingram",
+254
+],
+[
+"Hewrey",
+254
+],
+[
+"Vannes",
+254
+],
+[
+"Wilham",
+254
+],
+[
+"Vyncent",
+254
+],
+[
+"Wilfrid",
+254
+],
+[
+"Werner",
+254
+],
+[
+"Warin",
+254
+],
+[
+"Walter",
+254
+],
+[
+"Esperaunce",
+254
+],
+[
+"Abraham",
+254
+],
+[
+"Ethelred",
+254
+],
+[
+"Ethelbert",
+254
+],
+[
+"Edmund",
+254
+],
+[
+"Eadbert",
+254
+],
+[
+"Erasmus",
+254
+],
+[
+"Esmour",
+254
+],
+[
+"Erik",
+254
+],
+[
+"Aldous",
+254
+],
+[
+"Osric",
+254
+],
+[
+"Olyver",
+254
+],
+[
+"Oswyn",
+254
+],
+[
+"Orwen",
+254
+],
+[
+"Kurtz",
+254
+],
+[
+"Coster",
+254
+],
+[
+"Carmine",
+254
+],
+[
+"Cuthbert",
+254
+],
+[
+"Gylbart",
+254
+],
+[
+"Gyles",
+254
+],
+[
+"Kain",
+254
+],
+[
+"Kenrick",
+254
+],
+[
+"Guston",
+254
+],
+[
+"Cole",
+254
+],
+[
+"Kerrich",
+254
+],
+[
+"Caplan",
+254
+],
+[
+"Caspar",
+254
+],
+[
+"Ceadda",
+254
+],
+[
+"Kinnison",
+254
+],
+[
+"Gauwyn",
+254
+],
+[
+"Cameron",
+254
+],
+[
+"Kimball",
+254
+],
+[
+"Gwayne",
+254
+],
+[
+"Godfrey",
+254
+],
+[
+"Clive",
+254
+],
+[
+"Gregory",
+254
+],
+[
+"Clifton",
+254
+],
+[
+"Claudien",
+254
+],
+[
+"Cain",
+254
+],
+[
+"Khellus",
+254
+],
+[
+"Gerhardt",
+254
+],
+[
+"Goddard",
+254
+],
+[
+"Cornell",
+254
+],
+[
+"Colson",
+254
+],
+[
+"Conphas",
+254
+],
+[
+"Ganelon",
+254
+],
+[
+"Ronald",
+254
+],
+[
+"Sevrin",
+254
+],
+[
+"Zacheus",
+254
+],
+[
+"Samson",
+254
+],
+[
+"Symon",
+254
+],
+[
+"Symond",
+254
+],
+[
+"Sigurdh",
+254
+],
+[
+"Jenlyns",
+254
+],
+[
+"Sighard",
+254
+],
+[
+"Chartain",
+254
+],
+[
+"Geoffrey",
+254
+],
+[
+"Joyce",
+254
+],
+[
+"Joseph",
+254
+],
+[
+"Jakys",
+254
+],
+[
+"Cyriac",
+254
+],
+[
+"Jonathas",
+254
+],
+[
+"Gerald",
+254
+],
+[
+"Singleton",
+254
+],
+[
+"Swift",
+254
+],
+[
+"Alaire",
+254
+],
+[
+"Stewart",
+254
+],
+[
+"Aldebrand",
+254
+],
+[
+"Aylmer",
+254
+],
+[
+"Ealdwine",
+254
+],
+[
+"Aran",
+254
+],
+[
+"Spenser",
+254
+],
+[
+"Eldred",
+254
+],
+[
+"Emerick",
+254
+],
+[
+"Eleazar",
+254
+],
+[
+"Zerig",
+254
+],
+[
+"Zell",
+254
+],
+[
+"Etgar",
+254
+],
+[
+"Gembert",
+254
+],
+[
+"Solyeuse",
+254
+],
+[
+"Thrydwulf",
+254
+],
+[
+"Donner",
+254
+],
+[
+"Gerbold",
+254
+],
+[
+"Taran",
+254
+],
+[
+"Turstin",
+254
+],
+[
+"Derwin",
+254
+],
+[
+"Danyell",
+254
+],
+[
+"Davyd",
+254
+],
+[
+"Dalmas",
+254
+],
+[
+"Charlys",
+254
+],
+[
+"Chamberlain",
+254
+],
+[
+"Grimbald",
+254
+],
+[
+"Kennard",
+254
+],
+[
+"Orrick",
+254
+],
+[
+"Owyne",
+254
+],
+[
+"Radolf",
+254
+],
+[
+"Deitrich",
+254
+],
+[
+"Daimbert",
+254
+],
+[
+"Reyner",
+254
+],
+[
+"Deryk",
+254
+],
+[
+"Timothy",
+254
+],
+[
+"Taylor",
+254
+],
+[
+"Reynfred",
+254
+],
+[
+"Theodore",
+254
+],
+[
+"Robyn",
+254
+],
+[
+"Rolfe",
+254
+],
+[
+"Ulric",
+254
+],
+[
+"Templeton",
+254
+],
+[
+"Dawson",
+254
+],
+[
+"Wymond",
+254
+],
+[
+"Drystan",
+254
+],
+[
+"Ywain",
+254
+],
+[
+"Drake",
+254
+],
+[
+"Drew",
+254
+],
+[
+"Tristan",
+254
+],
+[
+"Thomas",
+254
+],
+[
+"Gerland",
+254
+],
+[
+"Nathaniel",
+254
+],
+[
+"Navarre",
+254
+],
+[
+"Neale",
+254
+],
+[
+"Anselm",
+254
+],
+[
+"Godebert",
+254
+],
+[
+"Wadard",
+254
+],
+[
+"Abelard",
+254
+],
+[
+"Sandre",
+254
+],
+[
+"Noes",
+254
+],
+[
+"Norman",
+254
+],
+[
+"Arnott",
+254
+],
+[
+"Wymon",
+254
+],
+[
+"Baderon",
+254
+],
+[
+"Bartholomew",
+254
+],
+[
+"Parnell",
+254
+],
+[
+"Habreham",
+254
+],
+[
+"Bernard",
+254
+],
+[
+"Percival",
+254
+],
+[
+"Berndan",
+254
+],
+[
+"Heinlein",
+254
+],
+[
+"Bertrand",
+254
+],
+[
+"Baldric",
+254
+],
+[
+"Powle",
+254
+],
+[
+"Bardolf",
+254
+],
+[
+"Patrick",
+254
+],
+[
+"Halstein",
+254
+],
+[
+"Hamon",
+254
+],
+[
+"Bertram",
+254
+],
+[
+"Valentyne",
+254
+],
+[
+"Johannes",
+254
+],
+[
+"Haimirich",
+254
+],
+[
+"Humphrey",
+254
+],
+[
+"Piers",
+254
+],
+[
+"Edwyn",
+254
+],
+[
+"Peter",
+254
+],
+[
+"Simond",
+254
+],
+[
+"Rickeman",
+254
+],
+[
+"Willielmus",
+254
+],
+[
+"Philippe",
+254
+],
+[
+"Fawkes",
+254
+],
+[
+"Ricard",
+254
+],
+[
+"Fiebras",
+254
+],
+[
+"Foxe",
+254
+],
+[
+"Folke",
+254
+],
+[
+"Bran",
+254
+],
+[
+"Bryce",
+254
+],
+[
+"Blackburn",
+254
+],
+[
+"Bayard",
+254
+],
+[
+"Francis",
+254
+],
+[
+"Bouchard",
+254
+],
+[
+"Bruce",
+254
+],
+[
+"Brien",
+254
+],
+[
+"Fulke",
+254
+],
+[
+"Frederick",
+254
+],
+[
+"Flambard",
+254
+],
+[
+"Blavier",
+254
+],
+[
+"Victor",
+254
+],
+[
+"Laurentius",
+254
+],
+[
+"Benedict",
+254
+],
+[
+"Belmont",
+254
+],
+[
+"Beneger",
+254
+],
+[
+"Brice",
+254
+],
+[
+"Galfrid",
+254
+],
+[
+"Voyce",
+254
+],
+[
+"Wolfstan",
+254
+],
+[
+"Dauid",
+254
+],
+[
+"Boyle",
+254
+],
+[
+"Paul",
+254
+],
+[
+"Cutbert",
+254
+],
+[
+"Esmond",
+254
+],
+[
+"Madison",
+254
+],
+[
+"Mathye",
+254
+],
+[
+"Wauter",
+254
+],
+[
+"Myles",
+254
+],
+[
+"Gryffen",
+254
+],
+[
+"Aleyn",
+254
+],
+[
+"Frederyk",
+254
+],
+[
+"Denston",
+254
+],
+[
+"Gared",
+254
+],
+[
+"Mansel",
+254
+],
+[
+"Josias",
+254
+],
+[
+"Ancelot",
+254
+],
+[
+"Mainfroi",
+254
+],
+[
+"Morys",
+254
+],
+[
+"Morgant",
+254
+],
+[
+"Emanuel",
+254
+],
+[
+"Roundelph",
+254
+],
+[
+"Lodwicke",
+254
+],
+[
+"Lars",
+254
+],
+[
+"Lennard",
+254
+],
+[
+"Reinholdt",
+254
+],
+[
+"Leavold",
+254
+],
+[
+"Richarde",
+254
+],
+[
+"Raffe",
+254
+],
+[
+"Raulin",
+254
+],
+[
+"Radcliffe",
+254
+],
+[
+"Lefwyne",
+254
+],
+[
+"Randall",
+254
+],
+[
+"Randwulf",
+254
+],
+[
+"Lambert",
+254
+],
+[
+"Ladislas",
+254
+],
+[
+"Reeve",
+254
+],
+[
+"Ridel",
+254
+],
+[
+"Littlejohn",
+254
+],
+[
+"Laurence",
+254
+],
+[
+"Eustace",
+254
+],
+[
+"Leopold",
+254
+],
+[
+"Reginald",
+254
+],
+[
+"Redwald",
+254
+],
+[
+"Reynard",
+254
+],
+[
+"Lloyd",
+254
+],
+[
+"Lowell",
+254
+],
+[
+"Rowland",
+254
+],
+[
+"Roger",
+254
+],
+[
+"Rauffe",
+254
+],
+[
+"Robert",
+254
+],
+[
+"Wystan",
+254
+],
+[
+"Wineburg",
+254
+],
+[
+"Alyne",
+254
+],
+[
+"Adela",
+254
+],
+[
+"Amelia",
+254
+],
+[
+"Amice",
+254
+],
+[
+"Ava",
+254
+],
+[
+"Adelaide",
+254
+],
+[
+"Agnys",
+254
+],
+[
+"Avelin",
+254
+],
+[
+"Anne",
+254
+],
+[
+"Annabel",
+254
+],
+[
+"Amphelice",
+254
+],
+[
+"Arabella",
+254
+],
+[
+"Alison",
+254
+],
+[
+"Alys",
+254
+],
+[
+"Arlette",
+254
+],
+[
+"Anys",
+254
+],
+[
+"Anna",
+254
+],
+[
+"Ysabel",
+254
+],
+[
+"Eugenia",
+254
+],
+[
+"Yedythe",
+254
+],
+[
+"Isolde",
+254
+],
+[
+"Avelyn",
+254
+],
+[
+"Vrsela",
+254
+],
+[
+"Averil",
+254
+],
+[
+"Willmott",
+254
+],
+[
+"Ursula",
+254
+],
+[
+"Emeline",
+254
+],
+[
+"Eva",
+254
+],
+[
+"Esmenet",
+254
+],
+[
+"Ethelia",
+254
+],
+[
+"Emilie",
+254
+],
+[
+"Alianore",
+254
+],
+[
+"Ellie",
+254
+],
+[
+"Elyzabeth",
+254
+],
+[
+"Ele",
+254
+],
+[
+"Evelyn",
+254
+],
+[
+"Eleanor",
+254
+],
+[
+"Elynor",
+254
+],
+[
+"Elyn",
+254
+],
+[
+"Audrye",
+254
+],
+[
+"Aubrey",
+254
+],
+[
+"Admiranda",
+254
+],
+[
+"Ophellia",
+254
+],
+[
+"Aeditha",
+254
+],
+[
+"Ottilia",
+254
+],
+[
+"Aelina",
+254
+],
+[
+"Gethrude",
+254
+],
+[
+"Katrine",
+254
+],
+[
+"Carmen",
+254
+],
+[
+"Alainne",
+254
+],
+[
+"Kath",
+254
+],
+[
+"Katherine",
+254
+],
+[
+"Angelet",
+254
+],
+[
+"Anthoinette",
+254
+],
+[
+"Atilda",
+254
+],
+[
+"Casandra",
+254
+],
+[
+"Ysmeina",
+254
+],
+[
+"Ayleth",
+254
+],
+[
+"Chloe",
+254
+],
+[
+"Claudia",
+254
+],
+[
+"Clarimond",
+254
+],
+[
+"Clemence",
+254
+],
+[
+"Christabel",
+254
+],
+[
+"Crestian",
+254
+],
+[
+"Giselle",
+254
+],
+[
+"Glenda",
+254
+],
+[
+"Guinevere",
+254
+],
+[
+"Gloriana",
+254
+],
+[
+"Gaynor",
+254
+],
+[
+"Cwengyth",
+254
+],
+[
+"Katelyn",
+254
+],
+[
+"Cornelia",
+254
+],
+[
+"Cristiana",
+254
+],
+[
+"Edelinne",
+254
+],
+[
+"Elaisse",
+254
+],
+[
+"Elewys",
+254
+],
+[
+"Collys",
+254
+],
+[
+"Constance",
+254
+],
+[
+"Ellerete",
+254
+],
+[
+"Sarra",
+254
+],
+[
+"Emeny",
+254
+],
+[
+"Emeria",
+254
+],
+[
+"Emery",
+254
+],
+[
+"Emmet",
+254
+],
+[
+"Samantha",
+254
+],
+[
+"Sreda",
+254
+],
+[
+"Eschina",
+254
+],
+[
+"Eschiva",
+254
+],
+[
+"Esdeline",
+254
+],
+[
+"Estienne",
+254
+],
+[
+"Estrild",
+254
+],
+[
+"Germainne",
+254
+],
+[
+"Eustacia",
+254
+],
+[
+"Imedia",
+254
+],
+[
+"Isemeine",
+254
+],
+[
+"Cicely",
+254
+],
+[
+"Jaane",
+254
+],
+[
+"Jessamine",
+254
+],
+[
+"Jemime",
+254
+],
+[
+"Ismay",
+254
+],
+[
+"Jenyfer",
+254
+],
+[
+"Eilonwy",
+254
+],
+[
+"Jellion",
+254
+],
+[
+"Jenet",
+254
+],
+[
+"Olyffe",
+254
+],
+[
+"Margeria",
+254
+],
+[
+"Celestria",
+254
+],
+[
+"Maisenta",
+254
+],
+[
+"Emblyn",
+254
+],
+[
+"Lora",
+254
+],
+[
+"Jacquette",
+254
+],
+[
+"Gylda",
+254
+],
+[
+"Justina",
+254
+],
+[
+"Isabella",
+254
+],
+[
+"Edithe",
+254
+],
+[
+"Kinborow",
+254
+],
+[
+"Emlinie",
+254
+],
+[
+"Jeanne",
+254
+],
+[
+"June",
+254
+],
+[
+"Julyan",
+254
+],
+[
+"Juliana",
+254
+],
+[
+"Joleicia",
+254
+],
+[
+"Josiane",
+254
+],
+[
+"Joyse",
+254
+],
+[
+"Jocelyn",
+254
+],
+[
+"Josephine",
+254
+],
+[
+"Josian",
+254
+],
+[
+"Jocea",
+254
+],
+[
+"Jolline",
+254
+],
+[
+"Jillian",
+254
+],
+[
+"Systeleley",
+254
+],
+[
+"Sysley",
+254
+],
+[
+"Sylphie",
+254
+],
+[
+"Cyndra",
+254
+],
+[
+"Sybell",
+254
+],
+[
+"Cenota",
+254
+],
+[
+"Wulfhilda",
+254
+],
+[
+"Sanche",
+254
+],
+[
+"Elsebee",
+254
+],
+[
+"Scarlet",
+254
+],
+[
+"Judye",
+254
+],
+[
+"Caesaria",
+254
+],
+[
+"Judithe",
+254
+],
+[
+"Syndony",
+254
+],
+[
+"Sence",
+254
+],
+[
+"Serendipity",
+254
+],
+[
+"Cecilia",
+254
+],
+[
+"Cecily",
+254
+],
+[
+"Cynewyn",
+254
+],
+[
+"Celestine",
+254
+],
+[
+"Selphina",
+254
+],
+[
+"Celeste",
+254
+],
+[
+"Gillian",
+254
+],
+[
+"Somerhild",
+254
+],
+[
+"Dametta",
+254
+],
+[
+"Diamanda",
+254
+],
+[
+"Leofwen",
+254
+],
+[
+"Tiphina",
+254
+],
+[
+"Dyana",
+254
+],
+[
+"Theda",
+254
+],
+[
+"Thora",
+254
+],
+[
+"Dionisia",
+254
+],
+[
+"Concessa",
+254
+],
+[
+"Damaris",
+254
+],
+[
+"Denys",
+254
+],
+[
+"Temperance",
+254
+],
+[
+"Tristana",
+254
+],
+[
+"Brangwine",
+254
+],
+[
+"Deloys",
+254
+],
+[
+"Decima",
+254
+],
+[
+"Theresa",
+254
+],
+[
+"Thomasine",
+254
+],
+[
+"Dominy",
+254
+],
+[
+"Durilda",
+254
+],
+[
+"Ismenia",
+254
+],
+[
+"Dorcas",
+254
+],
+[
+"Thomasyn",
+254
+],
+[
+"Dorothe",
+254
+],
+[
+"Nesta",
+254
+],
+[
+"Bertana",
+254
+],
+[
+"Rosamund",
+254
+],
+[
+"Nicia",
+254
+],
+[
+"Nicholina",
+254
+],
+[
+"Nicolaa",
+254
+],
+[
+"Prudence",
+254
+],
+[
+"Hester",
+254
+],
+[
+"Paige",
+254
+],
+[
+"Francisca",
+254
+],
+[
+"Frances",
+254
+],
+[
+"Parnella",
+254
+],
+[
+"Braya",
+254
+],
+[
+"Meredithe",
+254
+],
+[
+"Petronilla",
+254
+],
+[
+"Bathsua",
+254
+],
+[
+"Tansa",
+254
+],
+[
+"Baterich",
+254
+],
+[
+"Purnell",
+254
+],
+[
+"Helena",
+254
+],
+[
+"Rianna",
+254
+],
+[
+"Berte",
+254
+],
+[
+"Brunhild",
+254
+],
+[
+"Hilda",
+254
+],
+[
+"Hildegard",
+254
+],
+[
+"Felice",
+254
+],
+[
+"Florens",
+254
+],
+[
+"Frideswide",
+254
+],
+[
+"Fridgia",
+254
+],
+[
+"Bryde",
+254
+],
+[
+"Pulmia",
+254
+],
+[
+"Hilith",
+254
+],
+[
+"Beatrix",
+254
+],
+[
+"Penelope",
+254
+],
+[
+"Bess",
+254
+],
+[
+"Pelinne",
+254
+],
+[
+"Bellinda",
+254
+],
+[
+"Helenor",
+254
+],
+[
+"Wenyld",
+254
+],
+[
+"Placencia",
+254
+],
+[
+"Helvynya",
+254
+],
+[
+"Martine",
+254
+],
+[
+"Margry",
+254
+],
+[
+"Mathild",
+254
+],
+[
+"Maddeline",
+254
+],
+[
+"Maria",
+254
+],
+[
+"Maerwynn",
+254
+],
+[
+"Merewyn",
+254
+],
+[
+"Margarete",
+254
+],
+[
+"Malin",
+254
+],
+[
+"Maronne",
+254
+],
+[
+"Meryell",
+254
+],
+[
+"Marsilia",
+254
+],
+[
+"Millicent",
+254
+],
+[
+"Minerva",
+254
+],
+[
+"Mirabelle",
+254
+],
+[
+"Muriel",
+254
+],
+[
+"Merilda",
+254
+],
+[
+"Melodie",
+254
+],
+[
+"Mydrede",
+254
+],
+[
+"Murienne",
+254
+],
+[
+"Morgayne",
+254
+],
+[
+"Melusine",
+254
+],
+[
+"Latisha",
+254
+],
+[
+"Leofwynn",
+254
+],
+[
+"Lauda",
+254
+],
+[
+"Richenda",
+254
+],
+[
+"Wynefreede",
+254
+],
+[
+"Roysia",
+254
+],
+[
+"Linette",
+254
+],
+[
+"Rychyld",
+254
+],
+[
+"Linyeve",
+254
+],
+[
+"Letita",
+254
+],
+[
+"Lettice",
+254
+],
+[
+"Rebeccah",
+254
+],
+[
+"Rosa",
+254
+],
+[
+"Rosalind",
+254
+],
+[
+"Rose",
+254
+],
+[
+"Acis",
+254
+],
+[
+"Aiolides",
+254
+],
+[
+"Aion",
+254
+],
+[
+"Aigis",
+254
+],
+[
+"Aegipan",
+254
+],
+[
+"Aigyptos",
+254
+],
+[
+"Aisa",
+254
+],
+[
+"Aisakos",
+254
+],
+[
+"Aithilla",
+254
+],
+[
+"Aithon",
+254
+],
+[
+"Aitne",
+254
+],
+[
+"Augeias",
+254
+],
+[
+"Auson",
+254
+],
+[
+"Achaios",
+254
+],
+[
+"Akakos",
+254
+],
+[
+"Askalabos",
+254
+],
+[
+"Atys",
+254
+],
+[
+"Adonis",
+254
+],
+[
+"Atropos",
+254
+],
+[
+"Anaxibia",
+254
+],
+[
+"Anius",
+254
+],
+[
+"Apemosyne",
+254
+],
+[
+"Ampelos",
+254
+],
+[
+"Archedios",
+254
+],
+[
+"Alkmene",
+254
+],
+[
+"Argo",
+254
+],
+[
+"Arkeisios",
+254
+],
+[
+"Antigone",
+254
+],
+[
+"Iamos",
+254
+],
+[
+"Ianthe",
+254
+],
+[
+"Iphis",
+254
+],
+[
+"Ilos",
+254
+],
+[
+"Iobes",
+254
+],
+[
+"Ischys",
+254
+],
+[
+"Inuus",
+254
+],
+[
+"Irus",
+254
+],
+[
+"Inferi",
+254
+],
+[
+"Vesta",
+254
+],
+[
+"Uranos",
+254
+],
+[
+"Eidothea",
+254
+],
+[
+"Euadne",
+254
+],
+[
+"Euenos",
+254
+],
+[
+"Euchenor",
+254
+],
+[
+"Eunomos",
+254
+],
+[
+"Eupalamos",
+254
+],
+[
+"Euphorbos",
+254
+],
+[
+"Europe",
+254
+],
+[
+"Echo",
+254
+],
+[
+"Epione",
+254
+],
+[
+"Echetlos",
+254
+],
+[
+"Enipeus",
+254
+],
+[
+"Epigonoi",
+254
+],
+[
+"Erato",
+254
+],
+[
+"Elatus",
+254
+],
+[
+"Elpenor",
+254
+],
+[
+"Erebos",
+254
+],
+[
+"Oiax",
+254
+],
+[
+"Oibalos",
+254
+],
+[
+"Ogygos",
+254
+],
+[
+"Oxylos",
+254
+],
+[
+"Ophis",
+254
+],
+[
+"Oinomaos",
+254
+],
+[
+"Orthaia",
+254
+],
+[
+"Kaukon",
+254
+],
+[
+"Kaunos",
+254
+],
+[
+"Catillus",
+254
+],
+[
+"Kapys",
+254
+],
+[
+"Kampe",
+254
+],
+[
+"Camers",
+254
+],
+[
+"Galateia",
+254
+],
+[
+"Charis",
+254
+],
+[
+"Carna",
+254
+],
+[
+"Galeos",
+254
+],
+[
+"Gygas",
+254
+],
+[
+"Gyes",
+254
+],
+[
+"Kyzikos",
+254
+],
+[
+"Kyknos",
+254
+],
+[
+"Cybele",
+254
+],
+[
+"Kilix",
+254
+],
+[
+"Glauke",
+254
+],
+[
+"Kranaos",
+254
+],
+[
+"Klaros",
+254
+],
+[
+"Chryses",
+254
+],
+[
+"Grups",
+254
+],
+[
+"Kleobis",
+254
+],
+[
+"Chesias",
+254
+],
+[
+"Kephalos",
+254
+],
+[
+"Kelmis",
+254
+],
+[
+"Satyros",
+254
+],
+[
+"Salamis",
+254
+],
+[
+"Salios",
+254
+],
+[
+"Sisyphos",
+254
+],
+[
+"Sikyon",
+254
+],
+[
+"Sithon",
+254
+],
+[
+"Sinope",
+254
+],
+[
+"Sibyl",
+254
+],
+[
+"Syme",
+254
+],
+[
+"Sybaris",
+254
+],
+[
+"Silvanus",
+254
+],
+[
+"Semele",
+254
+],
+[
+"Sol",
+254
+],
+[
+"Deimos",
+254
+],
+[
+"Tatius",
+254
+],
+[
+"Danae",
+254
+],
+[
+"Damia",
+254
+],
+[
+"Thamyris",
+254
+],
+[
+"Talaos",
+254
+],
+[
+"Dardanos",
+254
+],
+[
+"Tantalos",
+254
+],
+[
+"Deianeira",
+254
+],
+[
+"Deidameia",
+254
+],
+[
+"Dysaules",
+254
+],
+[
+"Irae",
+254
+],
+[
+"Thespis",
+254
+],
+[
+"Deimachos",
+254
+],
+[
+"Teukros",
+254
+],
+[
+"Tenes",
+254
+],
+[
+"Theophane",
+254
+],
+[
+"Dekelos",
+254
+],
+[
+"Thyia",
+254
+],
+[
+"Typhon",
+254
+],
+[
+"Tyche",
+254
+],
+[
+"Derkynos",
+254
+],
+[
+"Thelxion",
+254
+],
+[
+"Delphos",
+254
+],
+[
+"Telephassa",
+254
+],
+[
+"Thoas",
+254
+],
+[
+"Dodona",
+254
+],
+[
+"Dryope",
+254
+],
+[
+"Nausithos",
+254
+],
+[
+"Nautes",
+254
+],
+[
+"Nireus",
+254
+],
+[
+"Nyx",
+254
+],
+[
+"Neaira",
+254
+],
+[
+"Neilos",
+254
+],
+[
+"Nessos",
+254
+],
+[
+"Nemea",
+254
+],
+[
+"Nomios",
+254
+],
+[
+"Bakis",
+254
+],
+[
+"Bacchus",
+254
+],
+[
+"Pasiphae",
+254
+],
+[
+"Phanes",
+254
+],
+[
+"Halia",
+254
+],
+[
+"Pallene",
+254
+],
+[
+"Bukolos",
+254
+],
+[
+"Pieria",
+254
+],
+[
+"Pisos",
+254
+],
+[
+"Huaina",
+254
+],
+[
+"Pitane",
+254
+],
+[
+"Pittheus",
+254
+],
+[
+"Hippotes",
+254
+],
+[
+"Hylas",
+254
+],
+[
+"Philyra",
+254
+],
+[
+"Fauna",
+254
+],
+[
+"Fames",
+254
+],
+[
+"Zephyrus",
+254
+],
+[
+"Phobos",
+254
+],
+[
+"Phthonos",
+254
+],
+[
+"Phrasios",
+254
+],
+[
+"Priamos",
+254
+],
+[
+"Phrixos",
+254
+],
+[
+"Phlegrai",
+254
+],
+[
+"Prokne",
+254
+],
+[
+"Prokris",
+254
+],
+[
+"Proteus",
+254
+],
+[
+"Prothoos",
+254
+],
+[
+"Bromios",
+254
+],
+[
+"Brontes",
+254
+],
+[
+"Peirene",
+254
+],
+[
+"Pedasos",
+254
+],
+[
+"Helios",
+254
+],
+[
+"Belos",
+254
+],
+[
+"Penates",
+254
+],
+[
+"Penia",
+254
+],
+[
+"Hemithea",
+254
+],
+[
+"Pheraia",
+254
+],
+[
+"Helias",
+254
+],
+[
+"Pelias",
+254
+],
+[
+"Peripanos",
+254
+],
+[
+"Herkyna",
+254
+],
+[
+"Perseus",
+254
+],
+[
+"Persephone",
+254
+],
+[
+"Berekyntia",
+254
+],
+[
+"Penthesileia",
+254
+],
+[
+"Poine",
+254
+],
+[
+"Potitii",
+254
+],
+[
+"Bormos",
+254
+],
+[
+"Hopladamos",
+254
+],
+[
+"Polykaon",
+254
+],
+[
+"Polyxo",
+254
+],
+[
+"Polydamna",
+254
+],
+[
+"Polybos",
+254
+],
+[
+"Portheus",
+254
+],
+[
+"Mavors",
+254
+],
+[
+"Mars",
+254
+],
+[
+"Maiandros",
+254
+],
+[
+"Machaon",
+254
+],
+[
+"Makaria",
+254
+],
+[
+"Minos",
+254
+],
+[
+"Misericordia",
+254
+],
+[
+"Ogaphos",
+254
+],
+[
+"Hepaklos",
+254
+],
+[
+"Minyas",
+254
+],
+[
+"Mykenai",
+254
+],
+[
+"Myrine",
+254
+],
+[
+"Myrto",
+254
+],
+[
+"Musa",
+254
+],
+[
+"Mulciber",
+254
+],
+[
+"Metis",
+254
+],
+[
+"Megareus",
+254
+],
+[
+"Mestor",
+254
+],
+[
+"Metaneira",
+254
+],
+[
+"Metope",
+254
+],
+[
+"Menestheus",
+254
+],
+[
+"Memphis",
+254
+],
+[
+"Melaineus",
+254
+],
+[
+"Melampus",
+254
+],
+[
+"Merops",
+254
+],
+[
+"Mnestra",
+254
+],
+[
+"Morpheus",
+254
+],
+[
+"Molossos",
+254
+],
+[
+"Janus",
+254
+],
+[
+"Jupiter",
+254
+],
+[
+"Justitia",
+254
+],
+[
+"Laios",
+254
+],
+[
+"Laverna",
+254
+],
+[
+"Lausus",
+254
+],
+[
+"Laodameia",
+254
+],
+[
+"Laodike",
+254
+],
+[
+"Rhadamanthys",
+254
+],
+[
+"Rhadine",
+254
+],
+[
+"Latinos",
+254
+],
+[
+"Latona",
+254
+],
+[
+"Lapithes",
+254
+],
+[
+"Lampetos",
+254
+],
+[
+"Lityerses",
+254
+],
+[
+"Linos",
+254
+],
+[
+"Leukippe",
+254
+],
+[
+"Leipephile",
+254
+],
+[
+"Lysippe",
+254
+],
+[
+"Lykurgos",
+254
+],
+[
+"Lykeios",
+254
+],
+[
+"Lykophron",
+254
+],
+[
+"Lykomedes",
+254
+],
+[
+"Lynkos",
+254
+],
+[
+"Rhea",
+254
+],
+[
+"Leimone",
+254
+],
+[
+"Leuke",
+254
+],
+[
+"Leukon",
+254
+],
+[
+"Rhakios",
+254
+],
+[
+"Dwyvaer",
+254
+],
+[
+"Isyrion",
+254
+],
+[
+"Llawran",
+254
+],
+[
+"Remnus",
+254
+],
+[
+"Thaeox",
+254
+],
+[
+"Halisera",
+254
+],
+[
+"",
+254
+],
+[
+"Ramza",
+254
+],
+[
+"Ramza",
+254
+],
+[
+"Ramza",
+254
+],
+[
+"Delita",
+254
+],
+[
+"Delita",
+254
+],
+[
+"Delita",
+254
+],
+[
+"Argath",
+254
+],
+[
+"Zalbaag",
+254
+],
+[
+"Dycedarg",
+254
+],
+[
+"Larg",
+254
+],
+[
+"Goltanna",
+254
+],
+[
+"Ovelia",
+254
+],
+[
+"Orlandeau",
+254
+],
+[
+"Marcel",
+254
+],
+[
+"Reis",
+254
+],
+[
+"Zalmour",
+254
+],
+[
+"Gaffgarion",
+254
+],
+[
+"Marach",
+254
+],
+[
+"Simon",
+254
+],
+[
+"Alma",
+254
+],
+[
+"Orran",
+254
+],
+[
+"Mustadio",
+254
+],
+[
+"Gaffgarion",
+254
+],
+[
+"Delacroix",
+254
+],
+[
+"Rapha",
+254
+],
+[
+"Marach",
+254
+],
+[
+"Elmdore",
+254
+],
+[
+"Tietra",
+254
+],
+[
+"Barrington",
+254
+],
+[
+"Agrias",
+254
+],
+[
+"Beowulf",
+254
+],
+[
+"Wiegraf",
+254
+],
+[
+"Valmafra",
+254
+],
+[
+"Mustadio",
+254
+],
+[
+"Ludovich",
+254
+],
+[
+"Folmarv",
+254
+],
+[
+"Loffrey",
+254
+],
+[
+"Isilud",
+254
+],
+[
+"Cletienne",
+254
+],
+[
+"Wiegraf",
+254
+],
+[
+"Rapha",
+254
+],
+[
+"Meliadoul",
+254
+],
+[
+"Barich",
+254
+],
+[
+"Alma",
+254
+],
+[
+"Celia",
+254
+],
+[
+"Lettie",
+254
+],
+[
+"Meliadoul",
+254
+],
+[
+"Alma",
+254
+],
+[
+"Ajora",
+254
+],
+[
+"Cloud",
+254
+],
+[
+"Zalbaag",
+254
+],
+[
+"Agrias",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Belias",
+254
+],
+[
+"",
+254
+],
+[
+"Zalera",
+254
+],
+[
+"",
+254
+],
+[
+"Hashmal",
+254
+],
+[
+"Ultima",
+254
+],
+[
+"",
+254
+],
+[
+"Cúchulainn",
+254
+],
+[
+"Rofocale",
+254
+],
+[
+"Adrammelech",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Reis",
+254
+],
+[
+"Ultima",
+254
+],
+[
+"Gustav",
+254
+],
+[
+"Milleuda",
+254
+],
+[
+"Gragoroth",
+254
+],
+[
+"名顔固定04",
+254
+],
+[
+"名顔固定05",
+254
+],
+[
+"名顔固定06",
+254
+],
+[
+"名顔固定07",
+254
+],
+[
+"名顔固定08",
+254
+],
+[
+"名顔固定09",
+254
+],
+[
+"名顔固定10",
+254
+],
+[
+"名顔固定11",
+254
+],
+[
+"名顔固定12",
+254
+],
+[
+"名顔固定13",
+254
+],
+[
+"名顔固定14",
+254
+],
+[
+"名顔固定15",
+254
+],
+[
+"名顔固定16",
+254
+],
+[
+"名顔固定17",
+254
+],
+[
+"名顔固定18",
+254
+],
+[
+"名顔固定19",
+254
+],
+[
+"名顔固定20",
+254
+],
+[
+"名顔固定21",
+254
+],
+[
+"名顔固定22",
+254
+],
+[
+"汎用名固定01",
+254
+],
+[
+"汎用名固定02",
+254
+],
+[
+"汎用名固定03",
+254
+],
+[
+"汎用名固定04",
+254
+],
+[
+"汎用名固定05",
+254
+],
+[
+"汎用名固定06",
+254
+],
+[
+"汎用名固定07",
+254
+],
+[
+"汎用名固定08",
+254
+],
+[
+"汎用名固定09",
+254
+],
+[
+"汎用名固定10",
+254
+],
+[
+"汎用名固定11",
+254
+],
+[
+"汎用名固定12",
+254
+],
+[
+"汎用名固定13",
+254
+],
+[
+"汎用名固定14",
+254
+],
+[
+"汎用名固定15",
+254
+],
+[
+"汎用名固定16",
+254
+],
+[
+"汎用名固定17",
+254
+],
+[
+"汎用名固定18",
+254
+],
+[
+"汎用名固定19",
+254
+],
+[
+"Construct 7",
+254
+],
+[
+"Syneugh",
+254
+],
+[
+"Construct 8",
+254
+],
+[
+"Boco",
+254
+],
+[
+"Elidibus",
+254
+],
+[
+"Lavian",
+254
+],
+[
+"Alicia",
+254
+],
+[
+"Fuchs",
+254
+],
+[
+"Diesch",
+254
+],
+[
+"Biggs",
+254
+],
+[
+"Wezlef",
+254
+],
+[
+"Lezalas",
+254
+],
+[
+"Ladd",
+254
+],
+[
+"汎用名固定33",
+254
+],
+[
+"汎用名固定34",
+254
+],
+[
+"汎用名固定35",
+254
+],
+[
+"汎用名固定36",
+254
+],
+[
+"汎用名固定37",
+254
+],
+[
+"汎用名固定38",
+254
+],
+[
+"汎用名固定39",
+254
+],
+[
+"汎用名固定40",
+254
+],
+[
+"汎用名固定41",
+254
+],
+[
+"汎用名固定42",
+254
+],
+[
+"汎用名固定43",
+254
+],
+[
+"汎用名固定44",
+254
+],
+[
+"汎用名固定45",
+254
+],
+[
+"汎用名固定46",
+254
+],
+[
+"汎用名固定47",
+254
+],
+[
+"汎用名固定48",
+254
+],
+[
+"汎用名固定49",
+254
+],
+[
+"汎用名固定50",
+254
+],
+[
+"汎用名固定51",
+254
+],
+[
+"汎用名固定52",
+254
+],
+[
+"汎用名固定53",
+254
+],
+[
+"汎用名固定54",
+254
+],
+[
+"汎用名固定55",
+254
+],
+[
+"汎用名固定56",
+254
+],
+[
+"汎用名固定57",
+254
+],
+[
+"汎用名固定58",
+254
+],
+[
+"汎用名固定59",
+254
+],
+[
+"汎用名固定60",
+254
+],
+[
+"汎用名固定61",
+254
+],
+[
+"汎用名固定62",
+254
+],
+[
+"汎用名固定63",
+254
+],
+[
+"汎用名固定64",
+254
+],
+[
+"汎用名固定65",
+254
+],
+[
+"汎用名固定66",
+254
+],
+[
+"Balthier",
+254
+],
+[
+"Luso",
+254
+],
+[
+"汎用名固定69",
+254
+],
+[
+"汎用名固定70",
+254
+],
+[
+"汎用名固定71",
+254
+],
+[
+"汎用名固定72",
+254
+],
+[
+"汎用名固定73",
+254
+],
+[
+"汎用名固定74",
+254
+],
+[
+"汎用名固定75",
+254
+],
+[
+"汎用名固定76",
+254
+],
+[
+"汎用名固定77",
+254
+],
+[
+"汎用名固定78",
+254
+],
+[
+"汎用名固定79",
+254
+],
+[
+"汎用名固定80",
+254
+],
+[
+"汎用名固定81",
+254
+],
+[
+"汎用名固定82",
+254
+],
+[
+"汎用名固定83",
+254
+],
+[
+"汎用名固定84",
+254
+],
+[
+"汎用名固定85",
+254
+],
+[
+"汎用名固定86",
+254
+],
+[
+"汎用名固定87",
+254
+],
+[
+"汎用名固定88",
+254
+],
+[
+"汎用名固定89",
+254
+],
+[
+"汎用名固定90",
+254
+],
+[
+"汎用名固定91",
+254
+],
+[
+"汎用名固定92",
+254
+],
+[
+"汎用名固定93",
+254
+],
+[
+"汎用名固定94",
+254
+],
+[
+"汎用名固定95",
+254
+],
+[
+"汎用名固定96",
+254
+],
+[
+"汎用名固定97",
+254
+],
+[
+"汎用名固定98",
+254
+],
+[
+"汎用名固定99",
+254
+],
+[
+"汎用名固定110",
+254
+],
+[
+"汎用名固定111",
+254
+],
+[
+"汎用名固定112",
+254
+],
+[
+"汎用名固定113",
+254
+],
+[
+"汎用名固定114",
+254
+],
+[
+"汎用名固定115",
+254
+],
+[
+"汎用名固定116",
+254
+],
+[
+"汎用名固定117",
+254
+],
+[
+"汎用名固定118",
+254
+],
+[
+"汎用名固定119",
+254
+],
+[
+"汎用名固定120",
+254
+],
+[
+"汎用名固定121",
+254
+],
+[
+"汎用名固定122",
+254
+],
+[
+"汎用名固定123",
+254
+],
+[
+"汎用名固定124",
+254
+],
+[
+"汎用名固定125",
+254
+],
+[
+"汎用名固定126",
+254
+],
+[
+"汎用名固定127",
+254
+],
+[
+"汎用名固定128",
+254
+],
+[
+"汎用名固定129",
+254
+],
+[
+"汎用名固定120",
+254
+],
+[
+"汎用名固定131",
+254
+],
+[
+"汎用名固定132",
+254
+],
+[
+"汎用名固定133",
+254
+],
+[
+"汎用名固定134",
+254
+],
+[
+"汎用名固定135",
+254
+],
+[
+"汎用名固定136",
+254
+],
+[
+"汎用名固定137",
+254
+],
+[
+"汎用名固定138",
+254
+],
+[
+"汎用名固定139",
+254
+],
+[
+"汎用名固定140",
+254
+],
+[
+"汎用名固定141",
+254
+],
+[
+"汎用名固定142",
+254
+],
+[
+"汎用名固定143",
+254
+],
+[
+"汎用名固定144",
+254
+],
+[
+"汎用名固定145",
+254
+],
+[
+"汎用名固定146",
+254
+],
+[
+"汎用名固定147",
+254
+],
+[
+"汎用名固定148",
+254
+],
+[
+"汎用名固定149",
+254
+],
+[
+"汎用名固定150",
+254
+],
+[
+"汎用名固定151",
+254
+],
+[
+"汎用名固定152",
+254
+],
+[
+"汎用名固定153",
+254
+],
+[
+"汎用名固定154",
+254
+],
+[
+"汎用名固定155",
+254
+],
+[
+"汎用名固定156",
+254
+],
+[
+"汎用名固定157",
+254
+],
+[
+"汎用名固定158",
+254
+],
+[
+"汎用名固定159",
+254
+],
+[
+"汎用名固定160",
+254
+],
+[
+"汎用名固定161",
+254
+],
+[
+"汎用名固定162",
+254
+],
+[
+"汎用名固定163",
+254
+],
+[
+"汎用名固定164",
+254
+],
+[
+"汎用名固定165",
+254
+],
+[
+"汎用名固定166",
+254
+],
+[
+"汎用名固定167",
+254
+],
+[
+"汎用名固定168",
+254
+],
+[
+"汎用名固定169",
+254
+],
+[
+"汎用名固定170",
+254
+],
+[
+"Arnald",
+254
+],
+[
+"Ivan",
+254
+],
+[
+"Isleton",
+254
+],
+[
+"Abel",
+254
+],
+[
+"Addison",
+254
+],
+[
+"Albin",
+254
+],
+[
+"Arthur",
+254
+],
+[
+"Augustine",
+254
+],
+[
+"Alistair",
+254
+],
+[
+"Hadrian",
+254
+],
+[
+"Jeger",
+254
+],
+[
+"Ingham",
+254
+],
+[
+"Ingram",
+254
+],
+[
+"Hewrey",
+254
+],
+[
+"Vannes",
+254
+],
+[
+"Wilham",
+254
+],
+[
+"Vyncent",
+254
+],
+[
+"Wilfrid",
+254
+],
+[
+"Werner",
+254
+],
+[
+"Warin",
+254
+],
+[
+"Walter",
+254
+],
+[
+"Esperaunce",
+254
+],
+[
+"Abraham",
+254
+],
+[
+"Ethelred",
+254
+],
+[
+"Ethelbert",
+254
+],
+[
+"Edmund",
+254
+],
+[
+"Eadbert",
+254
+],
+[
+"Erasmus",
+254
+],
+[
+"Esmour",
+254
+],
+[
+"Erik",
+254
+],
+[
+"Aldous",
+254
+],
+[
+"Osric",
+254
+],
+[
+"Olyver",
+254
+],
+[
+"Oswyn",
+254
+],
+[
+"Orwen",
+254
+],
+[
+"Kurtz",
+254
+],
+[
+"Coster",
+254
+],
+[
+"Carmine",
+254
+],
+[
+"Cuthbert",
+254
+],
+[
+"Gylbart",
+254
+],
+[
+"Gyles",
+254
+],
+[
+"Kain",
+254
+],
+[
+"Kenrick",
+254
+],
+[
+"Guston",
+254
+],
+[
+"Cole",
+254
+],
+[
+"Kerrich",
+254
+],
+[
+"Caplan",
+254
+],
+[
+"Caspar",
+254
+],
+[
+"Ceadda",
+254
+],
+[
+"Kinnison",
+254
+],
+[
+"Gauwyn",
+254
+],
+[
+"Cameron",
+254
+],
+[
+"Kimball",
+254
+],
+[
+"Gwayne",
+254
+],
+[
+"Godfrey",
+254
+],
+[
+"Clive",
+254
+],
+[
+"Gregory",
+254
+],
+[
+"Clifton",
+254
+],
+[
+"Claudien",
+254
+],
+[
+"Cain",
+254
+],
+[
+"Khellus",
+254
+],
+[
+"Gerhardt",
+254
+],
+[
+"Goddard",
+254
+],
+[
+"Cornell",
+254
+],
+[
+"Colson",
+254
+],
+[
+"Conphas",
+254
+],
+[
+"Ganelon",
+254
+],
+[
+"Ronald",
+254
+],
+[
+"Sevrin",
+254
+],
+[
+"Zacheus",
+254
+],
+[
+"Samson",
+254
+],
+[
+"Symon",
+254
+],
+[
+"Symond",
+254
+],
+[
+"Sigurdh",
+254
+],
+[
+"Jenlyns",
+254
+],
+[
+"Sighard",
+254
+],
+[
+"Chartain",
+254
+],
+[
+"Geoffrey",
+254
+],
+[
+"Joyce",
+254
+],
+[
+"Joseph",
+254
+],
+[
+"Jakys",
+254
+],
+[
+"Cyriac",
+254
+],
+[
+"Jonathas",
+254
+],
+[
+"Gerald",
+254
+],
+[
+"Singleton",
+254
+],
+[
+"Swift",
+254
+],
+[
+"Alaire",
+254
+],
+[
+"Stewart",
+254
+],
+[
+"Aldebrand",
+254
+],
+[
+"Aylmer",
+254
+],
+[
+"Ealdwine",
+254
+],
+[
+"Aran",
+254
+],
+[
+"Spenser",
+254
+],
+[
+"Eldred",
+254
+],
+[
+"Emerick",
+254
+],
+[
+"Eleazar",
+254
+],
+[
+"Zerig",
+254
+],
+[
+"Zell",
+254
+],
+[
+"Etgar",
+254
+],
+[
+"Gembert",
+254
+],
+[
+"Solyeuse",
+254
+],
+[
+"Thrydwulf",
+254
+],
+[
+"Donner",
+254
+],
+[
+"Gerbold",
+254
+],
+[
+"Taran",
+254
+],
+[
+"Turstin",
+254
+],
+[
+"Derwin",
+254
+],
+[
+"Danyell",
+254
+],
+[
+"Davyd",
+254
+],
+[
+"Dalmas",
+254
+],
+[
+"Charlys",
+254
+],
+[
+"Chamberlain",
+254
+],
+[
+"Grimbald",
+254
+],
+[
+"Kennard",
+254
+],
+[
+"Orrick",
+254
+],
+[
+"Owyne",
+254
+],
+[
+"Radolf",
+254
+],
+[
+"Deitrich",
+254
+],
+[
+"Daimbert",
+254
+],
+[
+"Reyner",
+254
+],
+[
+"Deryk",
+254
+],
+[
+"Timothy",
+254
+],
+[
+"Taylor",
+254
+],
+[
+"Reynfred",
+254
+],
+[
+"Theodore",
+254
+],
+[
+"Robyn",
+254
+],
+[
+"Rolfe",
+254
+],
+[
+"Ulric",
+254
+],
+[
+"Templeton",
+254
+],
+[
+"Dawson",
+254
+],
+[
+"Wymond",
+254
+],
+[
+"Drystan",
+254
+],
+[
+"Ywain",
+254
+],
+[
+"Drake",
+254
+],
+[
+"Drew",
+254
+],
+[
+"Tristan",
+254
+],
+[
+"Thomas",
+254
+],
+[
+"Gerland",
+254
+],
+[
+"Nathaniel",
+254
+],
+[
+"Navarre",
+254
+],
+[
+"Neale",
+254
+],
+[
+"Anselm",
+254
+],
+[
+"Godebert",
+254
+],
+[
+"Wadard",
+254
+],
+[
+"Abelard",
+254
+],
+[
+"Sandre",
+254
+],
+[
+"Noes",
+254
+],
+[
+"Norman",
+254
+],
+[
+"Arnott",
+254
+],
+[
+"Wymon",
+254
+],
+[
+"Baderon",
+254
+],
+[
+"Bartholomew",
+254
+],
+[
+"Parnell",
+254
+],
+[
+"Habreham",
+254
+],
+[
+"Bernard",
+254
+],
+[
+"Percival",
+254
+],
+[
+"Berndan",
+254
+],
+[
+"Heinlein",
+254
+],
+[
+"Bertrand",
+254
+],
+[
+"Baldric",
+254
+],
+[
+"Powle",
+254
+],
+[
+"Bardolf",
+254
+],
+[
+"Patrick",
+254
+],
+[
+"Halstein",
+254
+],
+[
+"Hamon",
+254
+],
+[
+"Bertram",
+254
+],
+[
+"Valentyne",
+254
+],
+[
+"Johannes",
+254
+],
+[
+"Haimirich",
+254
+],
+[
+"Humphrey",
+254
+],
+[
+"Piers",
+254
+],
+[
+"Edwyn",
+254
+],
+[
+"Peter",
+254
+],
+[
+"Simond",
+254
+],
+[
+"Rickeman",
+254
+],
+[
+"Willielmus",
+254
+],
+[
+"Philippe",
+254
+],
+[
+"Fawkes",
+254
+],
+[
+"Ricard",
+254
+],
+[
+"Fiebras",
+254
+],
+[
+"Foxe",
+254
+],
+[
+"Folke",
+254
+],
+[
+"Bran",
+254
+],
+[
+"Bryce",
+254
+],
+[
+"Blackburn",
+254
+],
+[
+"Bayard",
+254
+],
+[
+"Francis",
+254
+],
+[
+"Bouchard",
+254
+],
+[
+"Bruce",
+254
+],
+[
+"Brien",
+254
+],
+[
+"Fulke",
+254
+],
+[
+"Frederick",
+254
+],
+[
+"Flambard",
+254
+],
+[
+"Blavier",
+254
+],
+[
+"Victor",
+254
+],
+[
+"Laurentius",
+254
+],
+[
+"Benedict",
+254
+],
+[
+"Belmont",
+254
+],
+[
+"Beneger",
+254
+],
+[
+"Brice",
+254
+],
+[
+"Galfrid",
+254
+],
+[
+"Voyce",
+254
+],
+[
+"Wolfstan",
+254
+],
+[
+"Dauid",
+254
+],
+[
+"Boyle",
+254
+],
+[
+"Paul",
+254
+],
+[
+"Cutbert",
+254
+],
+[
+"Esmond",
+254
+],
+[
+"Madison",
+254
+],
+[
+"Mathye",
+254
+],
+[
+"Wauter",
+254
+],
+[
+"Myles",
+254
+],
+[
+"Gryffen",
+254
+],
+[
+"Aleyn",
+254
+],
+[
+"Frederyk",
+254
+],
+[
+"Denston",
+254
+],
+[
+"Gared",
+254
+],
+[
+"Mansel",
+254
+],
+[
+"Josias",
+254
+],
+[
+"Ancelot",
+254
+],
+[
+"Mainfroi",
+254
+],
+[
+"Morys",
+254
+],
+[
+"Morgant",
+254
+],
+[
+"Emanuel",
+254
+],
+[
+"Roundelph",
+254
+],
+[
+"Lodwicke",
+254
+],
+[
+"Lars",
+254
+],
+[
+"Lennard",
+254
+],
+[
+"Reinholdt",
+254
+],
+[
+"Leavold",
+254
+],
+[
+"Richarde",
+254
+],
+[
+"Raffe",
+254
+],
+[
+"Raulin",
+254
+],
+[
+"Radcliffe",
+254
+],
+[
+"Lefwyne",
+254
+],
+[
+"Randall",
+254
+],
+[
+"Randwulf",
+254
+],
+[
+"Lambert",
+254
+],
+[
+"Ladislas",
+254
+],
+[
+"Reeve",
+254
+],
+[
+"Ridel",
+254
+],
+[
+"Littlejohn",
+254
+],
+[
+"Laurence",
+254
+],
+[
+"Eustace",
+254
+],
+[
+"Leopold",
+254
+],
+[
+"Reginald",
+254
+],
+[
+"Redwald",
+254
+],
+[
+"Reynard",
+254
+],
+[
+"Lloyd",
+254
+],
+[
+"Lowell",
+254
+],
+[
+"Rowland",
+254
+],
+[
+"Roger",
+254
+],
+[
+"Rauffe",
+254
+],
+[
+"Robert",
+254
+],
+[
+"Wystan",
+254
+],
+[
+"Wineburg",
+254
+],
+[
+"Alyne",
+254
+],
+[
+"Adela",
+254
+],
+[
+"Amelia",
+254
+],
+[
+"Amice",
+254
+],
+[
+"Ava",
+254
+],
+[
+"Adelaide",
+254
+],
+[
+"Agnys",
+254
+],
+[
+"Avelin",
+254
+],
+[
+"Anne",
+254
+],
+[
+"Annabel",
+254
+],
+[
+"Amphelice",
+254
+],
+[
+"Arabella",
+254
+],
+[
+"Alison",
+254
+],
+[
+"Alys",
+254
+],
+[
+"Arlette",
+254
+],
+[
+"Anys",
+254
+],
+[
+"Anna",
+254
+],
+[
+"Ysabel",
+254
+],
+[
+"Eugenia",
+254
+],
+[
+"Yedythe",
+254
+],
+[
+"Isolde",
+254
+],
+[
+"Avelyn",
+254
+],
+[
+"Vrsela",
+254
+],
+[
+"Averil",
+254
+],
+[
+"Willmott",
+254
+],
+[
+"Ursula",
+254
+],
+[
+"Emeline",
+254
+],
+[
+"Eva",
+254
+],
+[
+"Esmenet",
+254
+],
+[
+"Ethelia",
+254
+],
+[
+"Emilie",
+254
+],
+[
+"Alianore",
+254
+],
+[
+"Ellie",
+254
+],
+[
+"Elyzabeth",
+254
+],
+[
+"Ele",
+254
+],
+[
+"Evelyn",
+254
+],
+[
+"Eleanor",
+254
+],
+[
+"Elynor",
+254
+],
+[
+"Elyn",
+254
+],
+[
+"Audrye",
+254
+],
+[
+"Aubrey",
+254
+],
+[
+"Admiranda",
+254
+],
+[
+"Ophellia",
+254
+],
+[
+"Aeditha",
+254
+],
+[
+"Ottilia",
+254
+],
+[
+"Aelina",
+254
+],
+[
+"Gethrude",
+254
+],
+[
+"Katrine",
+254
+],
+[
+"Carmen",
+254
+],
+[
+"Alainne",
+254
+],
+[
+"Kath",
+254
+],
+[
+"Katherine",
+254
+],
+[
+"Angelet",
+254
+],
+[
+"Anthoinette",
+254
+],
+[
+"Atilda",
+254
+],
+[
+"Casandra",
+254
+],
+[
+"Ysmeina",
+254
+],
+[
+"Ayleth",
+254
+],
+[
+"Chloe",
+254
+],
+[
+"Claudia",
+254
+],
+[
+"Clarimond",
+254
+],
+[
+"Clemence",
+254
+],
+[
+"Christabel",
+254
+],
+[
+"Crestian",
+254
+],
+[
+"Giselle",
+254
+],
+[
+"Glenda",
+254
+],
+[
+"Guinevere",
+254
+],
+[
+"Gloriana",
+254
+],
+[
+"Gaynor",
+254
+],
+[
+"Cwengyth",
+254
+],
+[
+"Katelyn",
+254
+],
+[
+"Cornelia",
+254
+],
+[
+"Cristiana",
+254
+],
+[
+"Edelinne",
+254
+],
+[
+"Elaisse",
+254
+],
+[
+"Elewys",
+254
+],
+[
+"Collys",
+254
+],
+[
+"Constance",
+254
+],
+[
+"Ellerete",
+254
+],
+[
+"Sarra",
+254
+],
+[
+"Emeny",
+254
+],
+[
+"Emeria",
+254
+],
+[
+"Emery",
+254
+],
+[
+"Emmet",
+254
+],
+[
+"Samantha",
+254
+],
+[
+"Sreda",
+254
+],
+[
+"Eschina",
+254
+],
+[
+"Eschiva",
+254
+],
+[
+"Esdeline",
+254
+],
+[
+"Estienne",
+254
+],
+[
+"Estrild",
+254
+],
+[
+"Germainne",
+254
+],
+[
+"Eustacia",
+254
+],
+[
+"Imedia",
+254
+],
+[
+"Isemeine",
+254
+],
+[
+"Cicely",
+254
+],
+[
+"Jaane",
+254
+],
+[
+"Jessamine",
+254
+],
+[
+"Jemime",
+254
+],
+[
+"Ismay",
+254
+],
+[
+"Jenyfer",
+254
+],
+[
+"Eilonwy",
+254
+],
+[
+"Jellion",
+254
+],
+[
+"Jenet",
+254
+],
+[
+"Olyffe",
+254
+],
+[
+"Margeria",
+254
+],
+[
+"Celestria",
+254
+],
+[
+"Maisenta",
+254
+],
+[
+"Emblyn",
+254
+],
+[
+"Lora",
+254
+],
+[
+"Jacquette",
+254
+],
+[
+"Gylda",
+254
+],
+[
+"Justina",
+254
+],
+[
+"Isabella",
+254
+],
+[
+"Edithe",
+254
+],
+[
+"Kinborow",
+254
+],
+[
+"Emlinie",
+254
+],
+[
+"Jeanne",
+254
+],
+[
+"June",
+254
+],
+[
+"Julyan",
+254
+],
+[
+"Juliana",
+254
+],
+[
+"Joleicia",
+254
+],
+[
+"Josiane",
+254
+],
+[
+"Joyse",
+254
+],
+[
+"Jocelyn",
+254
+],
+[
+"Josephine",
+254
+],
+[
+"Josian",
+254
+],
+[
+"Jocea",
+254
+],
+[
+"Jolline",
+254
+],
+[
+"Jillian",
+254
+],
+[
+"Systeleley",
+254
+],
+[
+"Sysley",
+254
+],
+[
+"Sylphie",
+254
+],
+[
+"Cyndra",
+254
+],
+[
+"Sybell",
+254
+],
+[
+"Cenota",
+254
+],
+[
+"Wulfhilda",
+254
+],
+[
+"Sanche",
+254
+],
+[
+"Elsebee",
+254
+],
+[
+"Scarlet",
+254
+],
+[
+"Judye",
+254
+],
+[
+"Caesaria",
+254
+],
+[
+"Judithe",
+254
+],
+[
+"Syndony",
+254
+],
+[
+"Sence",
+254
+],
+[
+"Serendipity",
+254
+],
+[
+"Cecilia",
+254
+],
+[
+"Cecily",
+254
+],
+[
+"Cynewyn",
+254
+],
+[
+"Celestine",
+254
+],
+[
+"Selphina",
+254
+],
+[
+"Celeste",
+254
+],
+[
+"Gillian",
+254
+],
+[
+"Somerhild",
+254
+],
+[
+"Dametta",
+254
+],
+[
+"Diamanda",
+254
+],
+[
+"Leofwen",
+254
+],
+[
+"Tiphina",
+254
+],
+[
+"Dyana",
+254
+],
+[
+"Theda",
+254
+],
+[
+"Thora",
+254
+],
+[
+"Dionisia",
+254
+],
+[
+"Concessa",
+254
+],
+[
+"Damaris",
+254
+],
+[
+"Denys",
+254
+],
+[
+"Temperance",
+254
+],
+[
+"Tristana",
+254
+],
+[
+"Brangwine",
+254
+],
+[
+"Deloys",
+254
+],
+[
+"Decima",
+254
+],
+[
+"Theresa",
+254
+],
+[
+"Thomasine",
+254
+],
+[
+"Dominy",
+254
+],
+[
+"Durilda",
+254
+],
+[
+"Ismenia",
+254
+],
+[
+"Dorcas",
+254
+],
+[
+"Thomasyn",
+254
+],
+[
+"Dorothe",
+254
+],
+[
+"Nesta",
+254
+],
+[
+"Bertana",
+254
+],
+[
+"Rosamund",
+254
+],
+[
+"Nicia",
+254
+],
+[
+"Nicholina",
+254
+],
+[
+"Nicolaa",
+254
+],
+[
+"Prudence",
+254
+],
+[
+"Hester",
+254
+],
+[
+"Paige",
+254
+],
+[
+"Francisca",
+254
+],
+[
+"Frances",
+254
+],
+[
+"Parnella",
+254
+],
+[
+"Braya",
+254
+],
+[
+"Meredithe",
+254
+],
+[
+"Petronilla",
+254
+],
+[
+"Bathsua",
+254
+],
+[
+"Tansa",
+254
+],
+[
+"Baterich",
+254
+],
+[
+"Purnell",
+254
+],
+[
+"Helena",
+254
+],
+[
+"Rianna",
+254
+],
+[
+"Berte",
+254
+],
+[
+"Brunhild",
+254
+],
+[
+"Hilda",
+254
+],
+[
+"Hildegard",
+254
+],
+[
+"Felice",
+254
+],
+[
+"Florens",
+254
+],
+[
+"Frideswide",
+254
+],
+[
+"Fridgia",
+254
+],
+[
+"Bryde",
+254
+],
+[
+"Pulmia",
+254
+],
+[
+"Hilith",
+254
+],
+[
+"Beatrix",
+254
+],
+[
+"Penelope",
+254
+],
+[
+"Bess",
+254
+],
+[
+"Pelinne",
+254
+],
+[
+"Bellinda",
+254
+],
+[
+"Helenor",
+254
+],
+[
+"Wenyld",
+254
+],
+[
+"Placencia",
+254
+],
+[
+"Helvynya",
+254
+],
+[
+"Martine",
+254
+],
+[
+"Margry",
+254
+],
+[
+"Mathild",
+254
+],
+[
+"Maddeline",
+254
+],
+[
+"Maria",
+254
+],
+[
+"Maerwynn",
+254
+],
+[
+"Merewyn",
+254
+],
+[
+"Margarete",
+254
+],
+[
+"Malin",
+254
+],
+[
+"Maronne",
+254
+],
+[
+"Meryell",
+254
+],
+[
+"Marsilia",
+254
+],
+[
+"Millicent",
+254
+],
+[
+"Minerva",
+254
+],
+[
+"Mirabelle",
+254
+],
+[
+"Muriel",
+254
+],
+[
+"Merilda",
+254
+],
+[
+"Melodie",
+254
+],
+[
+"Mydrede",
+254
+],
+[
+"Murienne",
+254
+],
+[
+"Morgayne",
+254
+],
+[
+"Melusine",
+254
+],
+[
+"Latisha",
+254
+],
+[
+"Leofwynn",
+254
+],
+[
+"Lauda",
+254
+],
+[
+"Richenda",
+254
+],
+[
+"Wynefreede",
+254
+],
+[
+"Roysia",
+254
+],
+[
+"Linette",
+254
+],
+[
+"Rychyld",
+254
+],
+[
+"Linyeve",
+254
+],
+[
+"Letita",
+254
+],
+[
+"Lettice",
+254
+],
+[
+"Rebeccah",
+254
+],
+[
+"Rosa",
+254
+],
+[
+"Rosalind",
+254
+],
+[
+"Rose",
+254
+],
+[
+"Acis",
+254
+],
+[
+"Aiolides",
+254
+],
+[
+"Aion",
+254
+],
+[
+"Aigis",
+254
+],
+[
+"Aegipan",
+254
+],
+[
+"Aigyptos",
+254
+],
+[
+"Aisa",
+254
+],
+[
+"Aisakos",
+254
+],
+[
+"Aithilla",
+254
+],
+[
+"Aithon",
+254
+],
+[
+"Aitne",
+254
+],
+[
+"Augeias",
+254
+],
+[
+"Auson",
+254
+],
+[
+"Achaios",
+254
+],
+[
+"Akakos",
+254
+],
+[
+"Askalabos",
+254
+],
+[
+"Atys",
+254
+],
+[
+"Adonis",
+254
+],
+[
+"Atropos",
+254
+],
+[
+"Anaxibia",
+254
+],
+[
+"Anius",
+254
+],
+[
+"Apemosyne",
+254
+],
+[
+"Ampelos",
+254
+],
+[
+"Archedios",
+254
+],
+[
+"Alkmene",
+254
+],
+[
+"Argo",
+254
+],
+[
+"Arkeisios",
+254
+],
+[
+"Antigone",
+254
+],
+[
+"Iamos",
+254
+],
+[
+"Ianthe",
+254
+],
+[
+"Iphis",
+254
+],
+[
+"Ilos",
+254
+],
+[
+"Iobes",
+254
+],
+[
+"Ischys",
+254
+],
+[
+"Inuus",
+254
+],
+[
+"Irus",
+254
+],
+[
+"Inferi",
+254
+],
+[
+"Vesta",
+254
+],
+[
+"Uranos",
+254
+],
+[
+"Eidothea",
+254
+],
+[
+"Euadne",
+254
+],
+[
+"Euenos",
+254
+],
+[
+"Euchenor",
+254
+],
+[
+"Eunomos",
+254
+],
+[
+"Eupalamos",
+254
+],
+[
+"Euphorbos",
+254
+],
+[
+"Europe",
+254
+],
+[
+"Echo",
+254
+],
+[
+"Epione",
+254
+],
+[
+"Echetlos",
+254
+],
+[
+"Enipeus",
+254
+],
+[
+"Epigonoi",
+254
+],
+[
+"Erato",
+254
+],
+[
+"Elatus",
+254
+],
+[
+"Elpenor",
+254
+],
+[
+"Erebos",
+254
+],
+[
+"Oiax",
+254
+],
+[
+"Oibalos",
+254
+],
+[
+"Ogygos",
+254
+],
+[
+"Oxylos",
+254
+],
+[
+"Ophis",
+254
+],
+[
+"Oinomaos",
+254
+],
+[
+"Orthaia",
+254
+],
+[
+"Kaukon",
+254
+],
+[
+"Kaunos",
+254
+],
+[
+"Catillus",
+254
+],
+[
+"Kapys",
+254
+],
+[
+"Kampe",
+254
+],
+[
+"Camers",
+254
+],
+[
+"Galateia",
+254
+],
+[
+"Charis",
+254
+],
+[
+"Carna",
+254
+],
+[
+"Galeos",
+254
+],
+[
+"Gygas",
+254
+],
+[
+"Gyes",
+254
+],
+[
+"Kyzikos",
+254
+],
+[
+"Kyknos",
+254
+],
+[
+"Cybele",
+254
+],
+[
+"Kilix",
+254
+],
+[
+"Glauke",
+254
+],
+[
+"Kranaos",
+254
+],
+[
+"Klaros",
+254
+],
+[
+"Chryses",
+254
+],
+[
+"Grups",
+254
+],
+[
+"Kleobis",
+254
+],
+[
+"Chesias",
+254
+],
+[
+"Kephalos",
+254
+],
+[
+"Kelmis",
+254
+],
+[
+"Satyros",
+254
+],
+[
+"Salamis",
+254
+],
+[
+"Salios",
+254
+],
+[
+"Sisyphos",
+254
+],
+[
+"Sikyon",
+254
+],
+[
+"Sithon",
+254
+],
+[
+"Sinope",
+254
+],
+[
+"Sibyl",
+254
+],
+[
+"Syme",
+254
+],
+[
+"Sybaris",
+254
+],
+[
+"Silvanus",
+254
+],
+[
+"Semele",
+254
+],
+[
+"Sol",
+254
+],
+[
+"Deimos",
+254
+],
+[
+"Tatius",
+254
+],
+[
+"Danae",
+254
+],
+[
+"Damia",
+254
+],
+[
+"Thamyris",
+254
+],
+[
+"Talaos",
+254
+],
+[
+"Dardanos",
+254
+],
+[
+"Tantalos",
+254
+],
+[
+"Deianeira",
+254
+],
+[
+"Deidameia",
+254
+],
+[
+"Dysaules",
+254
+],
+[
+"Irae",
+254
+],
+[
+"Thespis",
+254
+],
+[
+"Deimachos",
+254
+],
+[
+"Teukros",
+254
+],
+[
+"Tenes",
+254
+],
+[
+"Theophane",
+254
+],
+[
+"Dekelos",
+254
+],
+[
+"Thyia",
+254
+],
+[
+"Typhon",
+254
+],
+[
+"Tyche",
+254
+],
+[
+"Derkynos",
+254
+],
+[
+"Thelxion",
+254
+],
+[
+"Delphos",
+254
+],
+[
+"Telephassa",
+254
+],
+[
+"Thoas",
+254
+],
+[
+"Dodona",
+254
+],
+[
+"Dryope",
+254
+],
+[
+"Nausithos",
+254
+],
+[
+"Nautes",
+254
+],
+[
+"Nireus",
+254
+],
+[
+"Nyx",
+254
+],
+[
+"Neaira",
+254
+],
+[
+"Neilos",
+254
+],
+[
+"Nessos",
+254
+],
+[
+"Nemea",
+254
+],
+[
+"Nomios",
+254
+],
+[
+"Bakis",
+254
+],
+[
+"Bacchus",
+254
+],
+[
+"Pasiphae",
+254
+],
+[
+"Phanes",
+254
+],
+[
+"Halia",
+254
+],
+[
+"Pallene",
+254
+],
+[
+"Bukolos",
+254
+],
+[
+"Pieria",
+254
+],
+[
+"Pisos",
+254
+],
+[
+"Huaina",
+254
+],
+[
+"Pitane",
+254
+],
+[
+"Pittheus",
+254
+],
+[
+"Hippotes",
+254
+],
+[
+"Hylas",
+254
+],
+[
+"Philyra",
+254
+],
+[
+"Fauna",
+254
+],
+[
+"Fames",
+254
+],
+[
+"Zephyrus",
+254
+],
+[
+"Phobos",
+254
+],
+[
+"Phthonos",
+254
+],
+[
+"Phrasios",
+254
+],
+[
+"Priamos",
+254
+],
+[
+"Phrixos",
+254
+],
+[
+"Phlegrai",
+254
+],
+[
+"Prokne",
+254
+],
+[
+"Prokris",
+254
+],
+[
+"Proteus",
+254
+],
+[
+"Prothoos",
+254
+],
+[
+"Bromios",
+254
+],
+[
+"Brontes",
+254
+],
+[
+"Peirene",
+254
+],
+[
+"Pedasos",
+254
+],
+[
+"Helios",
+254
+],
+[
+"Belos",
+254
+],
+[
+"Penates",
+254
+],
+[
+"Penia",
+254
+],
+[
+"Hemithea",
+254
+],
+[
+"Pheraia",
+254
+],
+[
+"Helias",
+254
+],
+[
+"Pelias",
+254
+],
+[
+"Peripanos",
+254
+],
+[
+"Herkyna",
+254
+],
+[
+"Perseus",
+254
+],
+[
+"Persephone",
+254
+],
+[
+"Berekyntia",
+254
+],
+[
+"Penthesileia",
+254
+],
+[
+"Poine",
+254
+],
+[
+"Potitii",
+254
+],
+[
+"Bormos",
+254
+],
+[
+"Hopladamos",
+254
+],
+[
+"Polykaon",
+254
+],
+[
+"Polyxo",
+254
+],
+[
+"Polydamna",
+254
+],
+[
+"Polybos",
+254
+],
+[
+"Portheus",
+254
+],
+[
+"Mavors",
+254
+],
+[
+"Mars",
+254
+],
+[
+"Maiandros",
+254
+],
+[
+"Machaon",
+254
+],
+[
+"Makaria",
+254
+],
+[
+"Minos",
+254
+],
+[
+"Misericordia",
+254
+],
+[
+"Ogaphos",
+254
+],
+[
+"Hepaklos",
+254
+],
+[
+"Minyas",
+254
+],
+[
+"Mykenai",
+254
+],
+[
+"Myrine",
+254
+],
+[
+"Myrto",
+254
+],
+[
+"Musa",
+254
+],
+[
+"Mulciber",
+254
+],
+[
+"Metis",
+254
+],
+[
+"Megareus",
+254
+],
+[
+"Mestor",
+254
+],
+[
+"Metaneira",
+254
+],
+[
+"Metope",
+254
+],
+[
+"Menestheus",
+254
+],
+[
+"Memphis",
+254
+],
+[
+"Melaineus",
+254
+],
+[
+"Melampus",
+254
+],
+[
+"Merops",
+254
+],
+[
+"Mnestra",
+254
+],
+[
+"Morpheus",
+254
+],
+[
+"Molossos",
+254
+],
+[
+"Janus",
+254
+],
+[
+"Jupiter",
+254
+],
+[
+"Justitia",
+254
+],
+[
+"Laios",
+254
+],
+[
+"Laverna",
+254
+],
+[
+"Lausus",
+254
+],
+[
+"Laodameia",
+254
+],
+[
+"Laodike",
+254
+],
+[
+"Rhadamanthys",
+254
+],
+[
+"Rhadine",
+254
+],
+[
+"Latinos",
+254
+],
+[
+"Latona",
+254
+],
+[
+"Lapithes",
+254
+],
+[
+"Lampetos",
+254
+],
+[
+"Lityerses",
+254
+],
+[
+"Linos",
+254
+],
+[
+"Leukippe",
+254
+],
+[
+"Leipephile",
+254
+],
+[
+"Lysippe",
+254
+],
+[
+"Lykurgos",
+254
+],
+[
+"Lykeios",
+254
+],
+[
+"Lykophron",
+254
+],
+[
+"Lykomedes",
+254
+],
+[
+"Lynkos",
+254
+],
+[
+"Rhea",
+254
+],
+[
+"Leimone",
+254
+],
+[
+"Leuke",
+254
+],
+[
+"Leukon",
+254
+],
+[
+"Rhakios",
+254
+],
+[
+"Dwyvaer",
+254
+],
+[
+"Isyrion",
+254
+],
+[
+"Llawran",
+254
+],
+[
+"Remnus",
+254
+],
+[
+"Thaeox",
+254
+],
+[
+"Halisera",
+254
+],
+[
+"{font:04}Move{br}{font:00}Act{br}Wait{br}Status{br}AI",
+255
+],
+[
+"Status{br}AI",
+255
+],
+[
+"Status",
+255
+],
+[
+"Status{br}AI{br}End Turn",
+255
+],
+[
+"Status{br}End Turn",
+255
+],
+[
+"やめる",
+255
+],
+[
+"{unitname}を仲間にしますか?",
+255
+],
+[
+"仲間にする{br}やめる{br}ステ—タスをみる",
+255
+],
+[
+"除名する{br}やめる",
+255
+],
+[
+"マニュアル",
+255
+],
+[
+"生命を借しまず戦え",
+255
+],
+[
+"仲間を援護せよ",
+255
+],
+[
+"消え行く生命を救え",
+255
+],
+[
+"脱虫のごとく逃げよ",
+255
+],
+[
+"タ—ゲットを変える{br}タ—ゲットを確認する",
+255
+],
+[
+"Move{br}Act{br}Wait{br}Status{br}AI",
+255
+],
+[
+"{font:00}{EB}{SP2}{br}{font:00}{EB}{SP2}{br}{font:00}{EB}{SP2}{br}{font:00}{EB}{SP2}{br}{font:00}{EB}{SP2}{br}{font:00}{EB}",
+255
+],
+[
+"",
+255
+],
+[
+"Yes{br}No",
+255
+],
+[
+"  1. Display Slide Control Button",
+255
+],
+[
+"  2. Multi-height Toggle Rate",
+255
+],
+[
+"  3. Menu Cursor Speed",
+255
+],
+[
+"  4. Message Speed",
+255
+],
+[
+"  5. Battle Prompts",
+255
+],
+[
+"  6. Display Ability Names",
+255
+],
+[
+"  7. Display Effect Messages",
+255
+],
+[
+"  8. Display Earned EXP/JP",
+255
+],
+[
+"  9. Target Colors",
+255
+],
+[
+"10. Display Unequippable Items",
+255
+],
+[
+"11. Optimize on Job Change",
+255
+],
+[
+"12. Simple Battle Animations",
+255
+],
+[
+"13. Restore Default Settings",
+255
+],
+[
+"Type A",
+255
+],
+[
+"Type B",
+255
+],
+[
+"Type C",
+255
+],
+[
+"Off",
+255
+],
+[
+"Fast",
+255
+],
+[
+"Normal",
+255
+],
+[
+"Slow",
+255
+],
+[
+"On",
+255
+],
+[
+"Off",
+255
+],
+[
+"Customized",
+255
+],
+[
+"Defaults",
+255
+],
+[
+"Current Setting:",
+255
+],
+[
+"Turn List{br}Unit List{br}Options{br}Params",
+255
+],
+[
+"Current Setting:",
+255
+],
+[
+"Turn List{br}Unit List{br}Options{br}Paused game{br}Return to Title Screen",
+255
+],
+[
+"",
+255
+],
+[
+"{font:08}フラグ番号{font:00}を入力",
+255
+],
+[
+"{font:08}フラグ値{font:00}を入力",
+255
+],
+[
+"{font:08}マップ番号{font:00}を入力",
+255
+],
+[
+"現在の設定{br}フラグ番号{SP2}{E4}{br}フラグ値{SP2}{SP2}{E4}{br}マップ番号{SP2}{E4}",
+255
+],
+[
+"エフェクトを実行{br}{font:08}エフェクト番号{font:00}を入力",
+255
+],
+[
+"",
+254
+],
+[
+"{font:08}SYSTEM{SP2}ERROR{font:00}{br}コ—ド{SP2}{E4}{SP2}{E4}{SP2}{E4}{br}担当者{SP2}{EB}{SP2}",
+254
+],
+[
+"むらた",
+254
+],
+[
+"おがた",
+254
+],
+[
+"すずき",
+254
+],
+[
+"むらかみ",
+254
+],
+[
+"おの",
+254
+],
+[
+"くぼ",
+254
+],
+[
+"つちだ",
+254
+],
+[
+"いわさき",
+254
+],
+[
+"Move{br}{font:04}Act{br}{font:00}Wait{br}Status{br}AI",
+255
+],
+[
+"{font:04}Move{br}ct{br}{font:00}Wait{br}Status{br}AI",
+255
+],
+[
+"SEをならします{br}{font:08}SE番号{font:00}を入力",
+255
+],
+[
+"マップロ—ド",
+255
+],
+[
+"マップチェンジ",
+255
+],
+[
+"フラグ番号設定",
+255
+],
+[
+"フラグ値設定",
+255
+],
+[
+"マップ番号設定",
+255
+],
+[
+"現在の設定確認",
+255
+],
+[
+"エフェクト実行",
+255
+],
+[
+"SEテスト",
+255
+],
+[
+"環境音テスト",
+255
+],
+[
+"曲テスト",
+255
+],
+[
+"アニメテスト",
+255
+],
+[
+"座標をひろう",
+255
+],
+[
+"ワ—ルドマップ",
+255
+],
+[
+"MDLアニメ",
+255
+],
+[
+"TXTアニメ",
+255
+],
+[
+"キ—の設定",
+255
+],
+[
+"エントリテスト",
+255
+],
+[
+"",
+255
+],
+[
+"",
+255
+],
+[
+"12. Button Layout",
+255
+],
+[
+"Unit{br}Tile{br}Cancel",
+255
+],
+[
+"",
+255
+],
+[
+"Perform{br}Cancel",
+255
+],
+[
+"",
+255
+],
+[
+"",
+255
+],
+[
+"マップX{SP2}{E4}{br}マップZ{SP2}{E4}{br}マップY{SP2}{E4}",
+255
+],
+[
+"",
+255
+],
+[
+"",
+255
+],
+[
+"{font:04}————————",
+255
+],
+[
+"モデル{br}トラック{br}{font:08}実行",
+255
+],
+[
+"曲をならします{br}{font:08}曲番号{font:00}を入力してください",
+255
+],
+[
+"Perform{br}Cancel",
+255
+],
+[
+"{EB}",
+255
+],
+[
+"ID{br}トラック{br}{font:08}実行",
+255
+],
+[
+"マップ番号{br}エントリ番号{br}{font:08}実行",
+255
+],
+[
+"",
+255
+],
+[
+"Move{br}Wait{br}Status",
+255
+],
+[
+"{font:04}Move{br}{font:00}Wait{br}Status",
+255
+],
+[
+"Cデ虫レイ{br}Cピッチ{br}LRピッチ{br}Sデ虫レイ{br}Sスピ—ド1{br}Sスピ—ド2{br}{font:08}設定",
+255
+],
+[
+"シェイプ番号{br}アニメ番号{br}{font:08}実行",
+255
+],
+[
+"1",
+255
+],
+[
+"2",
+255
+],
+[
+"4",
+255
+],
+[
+"8",
+255
+],
+[
+"Attack{br}Cancel",
+255
+],
+[
+"Defend{br}Cancel",
+255
+],
+[
+"Fastest",
+255
+],
+[
+"Faster",
+255
+],
+[
+"Fast",
+255
+],
+[
+"Normal",
+255
+],
+[
+"Slow",
+255
+],
+[
+"Slower",
+255
+],
+[
+"Slowest",
+255
+],
+[
+"Fast",
+255
+],
+[
+"Normal",
+255
+],
+[
+"Slow",
+255
+],
+[
+"Off",
+255
+],
+[
+"Mono",
+255
+],
+[
+"Stereo",
+255
+],
+[
+"Surround",
+255
+],
+[
+"Acquire{br}Cancel",
+255
+],
+[
+"Acquire Abilities{br}Restore HP/MP",
+255
+],
+[
+"{E4}{EB}",
+255
+],
+[
+"{E4}({EB}){EB}",
+255
+],
+[
+"Move{br}Dismount{br}Act{br}Wait{br}Status{br}AI",
+255
+],
+[
+"{font:04}Move{br}{font:04}Dismount{br}{font:00}Act{br}Wait{br}Status{br}AI",
+255
+],
+[
+"Move{br}Dismount{br}{font:04}Act{br}{font:00}Wait{br}Status{br}AI",
+255
+],
+[
+"{font:04}Move{br}{font:04}Dismount{br}{font:04}Act{br}{font:00}Wait{br}Status{br}AI",
+255
+],
+[
+"Move{br}Dismount{br}Wait{br}Status{br}AI",
+255
+],
+[
+"{font:04}Move{br}{font:04}Dismount{br}{font:00}Wait{br}Status{br}AI",
+255
+],
+[
+"☇",
+255
+],
+[
+"{EB} {EB} {EB}",
+255
+],
+[
+"Allow{br}Refuse",
+255
+],
+[
+"{font:04}Status",
+255
+],
+[
+"{unitname}'s {EB} increased by {E4}!",
+255
+],
+[
+"{unitname}'s {EB} decreased by {E4}!",
+255
+],
+[
+"Gained {E4} EXP!",
+255
+],
+[
+"Obtained {E4} gil!",
+255
+],
+[
+"Obtained {EB}!",
+255
+],
+[
+"Destroyed {EB}!",
+255
+],
+[
+"CT",
+255
+],
+[
+"Speed",
+255
+],
+[
+"Bravery",
+255
+],
+[
+"Faith",
+255
+],
+[
+"Attack",
+255
+],
+[
+"Magick",
+255
+],
+[
+"Level",
+255
+],
+[
+"{unitname}'s CT reduced to 0!",
+255
+],
+[
+"{unitname}'s CT set to 100!",
+255
+],
+[
+"{EB} shattered!",
+255
+],
+[
+"Commence battle?",
+255
+],
+[
+"∞",
+255
+],
+[
+"  1. Map Selection",
+255
+],
+[
+"  2. Time Limit",
+255
+],
+[
+"  3. Action Limit",
+255
+],
+[
+"  4. Special Controls",
+255
+],
+[
+"  5. Trap Placement",
+255
+],
+[
+"  6. Number of Traps",
+255
+],
+[
+"  7. Arithmeticks",
+255
+],
+[
+"  8. Restore Default Settings",
+255
+],
+[
+"Random",
+255
+],
+[
+"Manual",
+255
+],
+[
+"No Limit",
+255
+],
+[
+"15 Min.",
+255
+],
+[
+"10 Min.",
+255
+],
+[
+"  5 Min.",
+255
+],
+[
+"None",
+255
+],
+[
+"60",
+255
+],
+[
+"40",
+255
+],
+[
+"20",
+255
+],
+[
+"On",
+255
+],
+[
+"Off",
+255
+],
+[
+"Random",
+255
+],
+[
+"Manual",
+255
+],
+[
+"None",
+255
+],
+[
+"10",
+255
+],
+[
+"  5",
+255
+],
+[
+"  2",
+255
+],
+[
+"Allow",
+255
+],
+[
+"Disallow",
+255
+],
+[
+"Customized",
+255
+],
+[
+"Defaults",
+255
+],
+[
+"13. Display guide cursor",
+255
+],
+[
+"12. Touch-Activated Menu Items",
+255
+],
+[
+"{SP2}To move to a location on the map, {br}tap its corresponding marker.{br}{br}{br}{SP2}When at a city or castle, selecting its symbol and{br}tapping the OK button will open a menu displaying{br}the various establishments at that location.{br}{br}{SP2}If you are unsure what a particular menu option is{br}for, tap the Help button to view more information{br} about it.{br}{br}{SP2}Tapping the Menu button while on the world map{br}opens the main menu, from which you can access your{br}party roster or save the game.{br}{br}{SP2}The game's various tutorials can also be accessed{br}from the main menu. These tutorials provide in-depth{br}explanations of various aspects of the game. Consult{br}them if you have questions about how to play the game.{0xF566}{0xF60A}{0xF509}{0xF601}",
+254
+],
+[
+"ダミ—2",
+254
+],
+[
+"The Salvage of the Highwind",
+254
+],
+[
+"Salvage Expedition",
+254
+],
+[
+"Diving Expedition",
+254
+],
+[
+"The Enterprise",
+254
+],
+[
+"Drudge Work",
+254
+],
+[
+"Raising the Hindenburg",
+254
+],
+[
+"The Foundered Falcon",
+254
+],
+[
+"The Hero-King of Legend",
+254
+],
+[
+"The Salvage of the Durga",
+254
+],
+[
+"The Lionel Emissary",
+254
+],
+[
+"The Sea's Bounty",
+254
+],
+[
+"Swallowed by the Sea",
+254
+],
+[
+"False Advertising",
+254
+],
+[
+"Gleddia Isle Shoals",
+254
+],
+[
+"Merchant Ship",
+254
+],
+[
+"Salvage of the Dawn Queen",
+254
+],
+[
+"Abandoned Mine",
+254
+],
+[
+"Coal Mining Expedition",
+254
+],
+[
+"Will Hunting",
+254
+],
+[
+"Back to the Mines",
+254
+],
+[
+"Obstacle to Success",
+254
+],
+[
+"Orra Mine",
+254
+],
+[
+"Coal Miners' Holiday",
+254
+],
+[
+"Molten Maiden",
+254
+],
+[
+"There and Back Again",
+254
+],
+[
+"Beyond the Cliffs",
+254
+],
+[
+"Divine Encounter",
+254
+],
+[
+"Past Glory",
+254
+],
+[
+"Miner Difficulties",
+254
+],
+[
+"Ghost of the Mine",
+254
+],
+[
+"Miner's Tears",
+254
+],
+[
+"The Sable Swords",
+254
+],
+[
+"Frontier Marathon",
+254
+],
+[
+"Lake Monster",
+254
+],
+[
+"Second Frontier Marathon",
+254
+],
+[
+"Upon the Plateau",
+254
+],
+[
+"Third Frontier Marathon",
+254
+],
+[
+"Wealden",
+254
+],
+[
+"Son of a Sandworm",
+254
+],
+[
+"The Desert Explorer",
+254
+],
+[
+"Beyond the Pass",
+254
+],
+[
+"Frontier Expedition",
+254
+],
+[
+"Blossoming Hope",
+254
+],
+[
+"Ancient Labyrinth",
+254
+],
+[
+"The Vaschons",
+254
+],
+[
+"Honest Eke",
+254
+],
+[
+"Merchant's Regret",
+254
+],
+[
+"Amidst the Mists",
+254
+],
+[
+"The Wyverns",
+254
+],
+[
+"Wild Kingdom",
+254
+],
+[
+"Lilith's Libation",
+254
+],
+[
+"Father and Son",
+254
+],
+[
+"Whisperweed Blossom",
+254
+],
+[
+"The Typhoon",
+254
+],
+[
+"Criminal Count",
+254
+],
+[
+"The Cave Mimic",
+254
+],
+[
+"Left Behind",
+254
+],
+[
+"Zerro's Mark",
+254
+],
+[
+"Zerro's Return",
+254
+],
+[
+"Zerro Strikes Again",
+254
+],
+[
+"The Mask of Zerro",
+254
+],
+[
+"Hilltop Estate",
+254
+],
+[
+"Pitiable Monster",
+254
+],
+[
+"A Wish Come True",
+254
+],
+[
+"Eternal Youth",
+254
+],
+[
+"Cornelia's Rescue",
+254
+],
+[
+"The Rescue of Young Lord Pappal",
+254
+],
+[
+"Call of the Wild",
+254
+],
+[
+"Doll's Lament",
+254
+],
+[
+"Message in a Bottle",
+254
+],
+[
+"The Mudman",
+254
+],
+[
+"Umbral Prison",
+254
+],
+[
+"The Golem",
+254
+],
+[
+"Final Protest",
+254
+],
+[
+"The Informant",
+254
+],
+[
+"Revaluation",
+254
+],
+[
+"The Spoony Bard",
+254
+],
+[
+"Stuffed to the Gil",
+254
+],
+[
+"Raffleshiva",
+254
+],
+[
+"Ode to Joy",
+254
+],
+[
+"Chat-tedona",
+254
+],
+[
+"Brave Little Dorman",
+254
+],
+[
+"Revived Talent",
+254
+],
+[
+"Easy Come, Easy Go",
+254
+],
+[
+"The Clockwork Faire",
+254
+],
+[
+"Mameco's Sendoff",
+254
+],
+[
+"Gysahl Greens",
+254
+],
+[
+"The Blackjack",
+254
+],
+[
+"A Storm of Sevens",
+254
+],
+[
+"Larcam Mercantile",
+254
+],
+[
+"A Mother's Love",
+254
+],
+[
+"A Perfect Score",
+254
+],
+[
+"The Yardrow Melee",
+254
+],
+[
+"The Zaland Melee",
+254
+],
+[
+"The Gariland Magick Melee",
+254
+],
+[
+"The Arteficers' Contest",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Cure",
+254
+],
+[
+"Cura",
+254
+],
+[
+"Curaga",
+254
+],
+[
+"Curaja",
+254
+],
+[
+"Raise",
+254
+],
+[
+"Arise",
+254
+],
+[
+"Reraise",
+254
+],
+[
+"Regen",
+254
+],
+[
+"Protect",
+254
+],
+[
+"Protectja",
+254
+],
+[
+"Shell",
+254
+],
+[
+"Shellja",
+254
+],
+[
+"Wall",
+254
+],
+[
+"Esuna",
+254
+],
+[
+"Holy",
+254
+],
+[
+"Fire",
+254
+],
+[
+"Fira",
+254
+],
+[
+"Firaga",
+254
+],
+[
+"Firaja",
+254
+],
+[
+"Thunder",
+254
+],
+[
+"Thundara",
+254
+],
+[
+"Thundaga",
+254
+],
+[
+"Thundaja",
+254
+],
+[
+"Blizzard",
+254
+],
+[
+"Blizzara",
+254
+],
+[
+"Blizzaga",
+254
+],
+[
+"Blizzaja",
+254
+],
+[
+"Poison",
+254
+],
+[
+"Toad",
+254
+],
+[
+"Death",
+254
+],
+[
+"Flare",
+254
+],
+[
+"Haste",
+254
+],
+[
+"Hasteja",
+254
+],
+[
+"Slow",
+254
+],
+[
+"Slowja",
+254
+],
+[
+"Stop",
+254
+],
+[
+"Immobilize",
+254
+],
+[
+"Float",
+254
+],
+[
+"Reflect",
+254
+],
+[
+"",
+254
+],
+[
+"Quick",
+254
+],
+[
+"Gravity",
+254
+],
+[
+"Graviga",
+254
+],
+[
+"Meteor",
+254
+],
+[
+"Sanguine Sword",
+254
+],
+[
+"Umbra",
+254
+],
+[
+"Empowerment",
+254
+],
+[
+"Invigoration",
+254
+],
+[
+"Belief",
+254
+],
+[
+"Disbelief",
+254
+],
+[
+"Corruption",
+254
+],
+[
+"Quiescence",
+254
+],
+[
+"Fervor",
+254
+],
+[
+"Trepidation",
+254
+],
+[
+"Delirium",
+254
+],
+[
+"Harmony",
+254
+],
+[
+"Hesitation",
+254
+],
+[
+"Repose",
+254
+],
+[
+"Induration",
+254
+],
+[
+"Moogle",
+254
+],
+[
+"Shiva",
+254
+],
+[
+"Ramuh",
+254
+],
+[
+"Ifrit",
+254
+],
+[
+"Titan",
+254
+],
+[
+"Golem",
+254
+],
+[
+"Carbuncle",
+254
+],
+[
+"Bahamut",
+254
+],
+[
+"Odin",
+254
+],
+[
+"Leviathan",
+254
+],
+[
+"Salamander",
+254
+],
+[
+"Sylph",
+254
+],
+[
+"Faerie",
+254
+],
+[
+"Lich",
+254
+],
+[
+"Cyclops",
+254
+],
+[
+"Zodiark",
+254
+],
+[
+"Ashura",
+254
+],
+[
+"Kotetsu",
+254
+],
+[
+"Osafune",
+254
+],
+[
+"Murasame",
+254
+],
+[
+"Ama-no-Murakumo",
+254
+],
+[
+"Kiyomori",
+254
+],
+[
+"Muramasa",
+254
+],
+[
+"Kiku-ichimonji",
+254
+],
+[
+"Masamune",
+254
+],
+[
+"Chirijiraden",
+254
+],
+[
+"Seraph Song",
+254
+],
+[
+"Life's Anthem",
+254
+],
+[
+"Rousing Melody",
+254
+],
+[
+"Battle Chant",
+254
+],
+[
+"Magickal Refrain",
+254
+],
+[
+"Nameless Song",
+254
+],
+[
+"Finale",
+254
+],
+[
+"Witch Hunt",
+254
+],
+[
+"Mincing Minuet",
+254
+],
+[
+"Slow Dance",
+254
+],
+[
+"Polka",
+254
+],
+[
+"Heathen Frolic",
+254
+],
+[
+"Forbidden Dance",
+254
+],
+[
+"Last Waltz",
+254
+],
+[
+"Cyclone",
+254
+],
+[
+"Pummel",
+254
+],
+[
+"Aurablast",
+254
+],
+[
+"Shockwave",
+254
+],
+[
+"Doom Fist",
+254
+],
+[
+"Purification",
+254
+],
+[
+"Chakra",
+254
+],
+[
+"Revive",
+254
+],
+[
+"Steal Gil",
+254
+],
+[
+"Steal Heart",
+254
+],
+[
+"Steal Helm",
+254
+],
+[
+"Steal Armor",
+254
+],
+[
+"Steal Shield",
+254
+],
+[
+"Steal Weapon",
+254
+],
+[
+"Steal Accessory",
+254
+],
+[
+"Steal EXP",
+254
+],
+[
+"Entice",
+254
+],
+[
+"Stall",
+254
+],
+[
+"Praise",
+254
+],
+[
+"Intimidate",
+254
+],
+[
+"Preach",
+254
+],
+[
+"Enlighten",
+254
+],
+[
+"Condemn",
+254
+],
+[
+"Beg",
+254
+],
+[
+"Insult",
+254
+],
+[
+"Mimic Darlavon",
+254
+],
+[
+"Sinkhole",
+254
+],
+[
+"Torrent",
+254
+],
+[
+"Tanglevine",
+254
+],
+[
+"Contortion",
+254
+],
+[
+"Tremor",
+254
+],
+[
+"Wind Slash",
+254
+],
+[
+"Will-o'-the-Wisp",
+254
+],
+[
+"Quicksand",
+254
+],
+[
+"Sandstorm",
+254
+],
+[
+"Snowstorm",
+254
+],
+[
+"Wind Blast",
+254
+],
+[
+"Magma Surge",
+254
+],
+[
+"Rend Helm",
+254
+],
+[
+"Rend Armor",
+254
+],
+[
+"Rend Shield",
+254
+],
+[
+"Rend Weapon",
+254
+],
+[
+"Rend MP",
+254
+],
+[
+"Rend Speed",
+254
+],
+[
+"Rend Power",
+254
+],
+[
+"Rend Magick",
+254
+],
+[
+"Focus",
+254
+],
+[
+"Rush",
+254
+],
+[
+"Stone",
+254
+],
+[
+"Salve",
+254
+],
+[
+"Tailwind",
+254
+],
+[
+"Steel",
+254
+],
+[
+"Chant",
+254
+],
+[
+"Shout",
+254
+],
+[
+"Ultima",
+254
+],
+[
+"Judgment Blade",
+254
+],
+[
+"Cleansing Strike",
+254
+],
+[
+"Northswain's Strike",
+254
+],
+[
+"Hallowed Bolt",
+254
+],
+[
+"Divine Ruination",
+254
+],
+[
+"Crush Armor",
+254
+],
+[
+"Crush Helm",
+254
+],
+[
+"Crush Weapon",
+254
+],
+[
+"Crush Accessory",
+254
+],
+[
+"Duskblade",
+254
+],
+[
+"Shadowblade",
+254
+],
+[
+"Unholy Darkness",
+254
+],
+[
+"Dispelna",
+254
+],
+[
+"Celestial Stasis",
+254
+],
+[
+"Heaven's Wrath",
+254
+],
+[
+"Ashura",
+254
+],
+[
+"Adamantine Blade",
+254
+],
+[
+"Maelstrom",
+254
+],
+[
+"Celestial Void",
+254
+],
+[
+"Divinity",
+254
+],
+[
+"Hell's Wrath",
+254
+],
+[
+"Nether Ashura",
+254
+],
+[
+"Nether Blade",
+254
+],
+[
+"Nether Maelstrom",
+254
+],
+[
+"Corporeal Void",
+254
+],
+[
+"Impiety",
+254
+],
+[
+"Petrify",
+254
+],
+[
+"Shadowbind",
+254
+],
+[
+"Suffocate",
+254
+],
+[
+"Infernal Strike",
+254
+],
+[
+"Vengeance",
+254
+],
+[
+"Manaburn",
+254
+],
+[
+"Petrify",
+254
+],
+[
+"Fowlheart",
+254
+],
+[
+"Embrace",
+254
+],
+[
+"Darkness",
+254
+],
+[
+"Aphony",
+254
+],
+[
+"Befuddle",
+254
+],
+[
+"Bind",
+254
+],
+[
+"Nightmare",
+254
+],
+[
+"Ague",
+254
+],
+[
+"Magicksap",
+254
+],
+[
+"Speedsap",
+254
+],
+[
+"Powersap",
+254
+],
+[
+"Mindsap",
+254
+],
+[
+"Vampire",
+254
+],
+[
+"Charm",
+254
+],
+[
+"Bio",
+254
+],
+[
+"Bio",
+254
+],
+[
+"Bio",
+254
+],
+[
+"Biora",
+254
+],
+[
+"Biora",
+254
+],
+[
+"Biora",
+254
+],
+[
+"Biora",
+254
+],
+[
+"Bioga",
+254
+],
+[
+"Bioga",
+254
+],
+[
+"Bioga",
+254
+],
+[
+"Aegis",
+254
+],
+[
+"Leg Shot",
+254
+],
+[
+"Arm Shot",
+254
+],
+[
+"Seal Evil",
+254
+],
+[
+"Meltdown",
+254
+],
+[
+"Tornado",
+254
+],
+[
+"Quake",
+254
+],
+[
+"Crushing Blow",
+254
+],
+[
+"Abyssal Blade",
+254
+],
+[
+"Toadja",
+254
+],
+[
+"Gravija",
+254
+],
+[
+"Flareja",
+254
+],
+[
+"Blindja",
+254
+],
+[
+"Bomblet",
+254
+],
+[
+"Bomblet",
+254
+],
+[
+"Confuseja",
+254
+],
+[
+"Sleepja",
+254
+],
+[
+"Ultima",
+254
+],
+[
+"Divine Ultima",
+254
+],
+[
+"Disempower",
+254
+],
+[
+"Dispelja",
+254
+],
+[
+"Return",
+254
+],
+[
+"Blind",
+254
+],
+[
+"Syphon",
+254
+],
+[
+"Drain",
+254
+],
+[
+"Faith",
+254
+],
+[
+"Doubt",
+254
+],
+[
+"Zombie",
+254
+],
+[
+"Silence",
+254
+],
+[
+"Berserk",
+254
+],
+[
+"Chicken",
+254
+],
+[
+"Confuse",
+254
+],
+[
+"Dispel",
+254
+],
+[
+"Disable",
+254
+],
+[
+"Sleep",
+254
+],
+[
+"Break",
+254
+],
+[
+"Ice Breath",
+254
+],
+[
+"Fire Breath",
+254
+],
+[
+"Thunder Breath",
+254
+],
+[
+"Dragon's Charm",
+254
+],
+[
+"Dragon's Gift",
+254
+],
+[
+"Dragon's Might",
+254
+],
+[
+"Dragon's Speed",
+254
+],
+[
+"Holy Breath",
+254
+],
+[
+"Vengeance",
+254
+],
+[
+"Brave Slash",
+254
+],
+[
+"Cross Slash",
+254
+],
+[
+"Blade Beam",
+254
+],
+[
+"Climhazzard",
+254
+],
+[
+"Meteorain",
+254
+],
+[
+"Finishing Touch",
+254
+],
+[
+"Omnislash",
+254
+],
+[
+"Cherry Blossom",
+254
+],
+[
+"Choco Beak",
+254
+],
+[
+"Choco Pellets",
+254
+],
+[
+"Choco Meteor",
+254
+],
+[
+"Choco Esuna",
+254
+],
+[
+"Choco Cure",
+254
+],
+[
+"Tackle",
+254
+],
+[
+"Goblin Punch",
+254
+],
+[
+"Spin Punch",
+254
+],
+[
+"Eye Gouge",
+254
+],
+[
+"Bloodfeast",
+254
+],
+[
+"Bite",
+254
+],
+[
+"Bomblet",
+254
+],
+[
+"Self-Destruct",
+254
+],
+[
+"Flame Attack",
+254
+],
+[
+"Spark",
+254
+],
+[
+"Claw",
+254
+],
+[
+"Cat Scratch",
+254
+],
+[
+"Blaster",
+254
+],
+[
+"Venom Fang",
+254
+],
+[
+"Vampire",
+254
+],
+[
+"Tentacles",
+254
+],
+[
+"Ink",
+254
+],
+[
+"Dischord",
+254
+],
+[
+"Mind Blast",
+254
+],
+[
+"Level Drain",
+254
+],
+[
+"Chop",
+254
+],
+[
+"Thunder Anima",
+254
+],
+[
+"Water Anima",
+254
+],
+[
+"Ice Anima",
+254
+],
+[
+"Wind Anima",
+254
+],
+[
+"Ectoplasm",
+254
+],
+[
+"Zombie Touch",
+254
+],
+[
+"Sleep Touch",
+254
+],
+[
+"Drain Touch",
+254
+],
+[
+"Oily Touch",
+254
+],
+[
+"Wing Buffet",
+254
+],
+[
+"Bewitching Gaze",
+254
+],
+[
+"Dread Gaze",
+254
+],
+[
+"Beam",
+254
+],
+[
+"Doom",
+254
+],
+[
+"Talon Dive",
+254
+],
+[
+"Beak",
+254
+],
+[
+"Glitterlust",
+254
+],
+[
+"Featherbomb",
+254
+],
+[
+"Peck",
+254
+],
+[
+"Reckless Charge",
+254
+],
+[
+"Snort",
+254
+],
+[
+"Squeal",
+254
+],
+[
+"Toot",
+254
+],
+[
+"Bequeath Bacon",
+254
+],
+[
+"Leaf Rain",
+254
+],
+[
+"Guardian Nymph",
+254
+],
+[
+"Shell Nymph",
+254
+],
+[
+"Life Nymph",
+254
+],
+[
+"Magick Nymph",
+254
+],
+[
+"Pickaxe",
+254
+],
+[
+"Feral Spin",
+254
+],
+[
+"Earthsplitter",
+254
+],
+[
+"Beef Up",
+254
+],
+[
+"Breathe Fire",
+254
+],
+[
+"Tentacles",
+254
+],
+[
+"Lick",
+254
+],
+[
+"Goo",
+254
+],
+[
+"Bad Breath",
+254
+],
+[
+"Malboro Spores",
+254
+],
+[
+"Gore",
+254
+],
+[
+"Heave",
+254
+],
+[
+"Twister",
+254
+],
+[
+"Almagest",
+254
+],
+[
+"Gigaflare",
+254
+],
+[
+"Charge",
+254
+],
+[
+"Tail Sweep",
+254
+],
+[
+"Ice Breath",
+254
+],
+[
+"Fire Breath",
+254
+],
+[
+"Thunder Breath",
+254
+],
+[
+"Tri-Attack",
+254
+],
+[
+"Tri-Breath",
+254
+],
+[
+"Tri-Thunder",
+254
+],
+[
+"Tri-Flame",
+254
+],
+[
+"Dark Whisper",
+254
+],
+[
+"Snakecharm",
+254
+],
+[
+"Poisonous Frog",
+254
+],
+[
+"Midgardsormr",
+254
+],
+[
+"Karma",
+254
+],
+[
+"Nanoflare",
+254
+],
+[
+"Grand Cross",
+254
+],
+[
+"Destroy",
+254
+],
+[
+"Compress",
+254
+],
+[
+"Dispose",
+254
+],
+[
+"Pulverize",
+254
+],
+[
+"Energize",
+254
+],
+[
+"Parasite",
+254
+],
+[
+"Unholy Sacrifice",
+254
+],
+[
+"Barrage",
+254
+],
+[
+"Plunder Gil",
+254
+],
+[
+"Plunder Heart",
+254
+],
+[
+"Plunder Helm",
+254
+],
+[
+"Plunder Armor",
+254
+],
+[
+"Plunder Shield",
+254
+],
+[
+"Plunder Weapon",
+254
+],
+[
+"Plunder Accessory",
+254
+],
+[
+"Plunder EXP",
+254
+],
+[
+"Attack",
+254
+],
+[
+"Potion",
+254
+],
+[
+"Hi-Potion",
+254
+],
+[
+"X-Potion",
+254
+],
+[
+"Ether",
+254
+],
+[
+"Hi-Ether",
+254
+],
+[
+"Elixir",
+254
+],
+[
+"Antidote",
+254
+],
+[
+"Eye Drops",
+254
+],
+[
+"Echo Herbs",
+254
+],
+[
+"Maiden's Kiss",
+254
+],
+[
+"Gold Needle",
+254
+],
+[
+"Holy Water",
+254
+],
+[
+"Remedy",
+254
+],
+[
+"Phoenix Down",
+254
+],
+[
+"Shuriken",
+254
+],
+[
+"Knife",
+254
+],
+[
+"Sword",
+254
+],
+[
+"Flail",
+254
+],
+[
+"Katana",
+254
+],
+[
+"Ninja Blade",
+254
+],
+[
+"Axe",
+254
+],
+[
+"Polearm",
+254
+],
+[
+"Pole",
+254
+],
+[
+"Knight's Sword",
+254
+],
+[
+"Book",
+254
+],
+[
+"Bomb",
+254
+],
+[
+"Horizontal Jump 2",
+254
+],
+[
+"Horizontal Jump 3",
+254
+],
+[
+"Horizontal Jump 4",
+254
+],
+[
+"Horizontal Jump 5",
+254
+],
+[
+"Horizontal Jump 8",
+254
+],
+[
+"Vertical Jump 2",
+254
+],
+[
+"Vertical Jump 3",
+254
+],
+[
+"Vertical Jump 4",
+254
+],
+[
+"Vertical Jump 5",
+254
+],
+[
+"Vertical Jump 6",
+254
+],
+[
+"Vertical Jump 7",
+254
+],
+[
+"Vertical Jump 8",
+254
+],
+[
+"Aim +1",
+254
+],
+[
+"Aim +2",
+254
+],
+[
+"Aim +3",
+254
+],
+[
+"Aim +4",
+254
+],
+[
+"Aim +5",
+254
+],
+[
+"Aim +7",
+254
+],
+[
+"Aim +10",
+254
+],
+[
+"Aim +20",
+254
+],
+[
+"CT",
+254
+],
+[
+"Level",
+254
+],
+[
+"EXP",
+254
+],
+[
+"Height",
+254
+],
+[
+"Prime",
+254
+],
+[
+"Multiple of 5",
+254
+],
+[
+"Multiple of 4",
+254
+],
+[
+"Multiple of 3",
+254
+],
+[
+"Fury",
+254
+],
+[
+"Magick Boost",
+254
+],
+[
+"Adrenaline Rush",
+254
+],
+[
+"Vanish",
+254
+],
+[
+"Vigilance",
+254
+],
+[
+"Dragonheart",
+254
+],
+[
+"Regenerate",
+254
+],
+[
+"Bravery Boost",
+254
+],
+[
+"Faith Boost",
+254
+],
+[
+"Critical: Recover HP",
+254
+],
+[
+"Critical: Recover MP",
+254
+],
+[
+"Critical: Quick",
+254
+],
+[
+"Bonecrusher",
+254
+],
+[
+"Magick Counter",
+254
+],
+[
+"Counter Tackle",
+254
+],
+[
+"Nature's Wrath",
+254
+],
+[
+"Absorb MP",
+254
+],
+[
+"Gil Snapper",
+254
+],
+[
+"Reflect",
+254
+],
+[
+"Auto-Potion",
+254
+],
+[
+"Counter",
+254
+],
+[
+"",
+254
+],
+[
+"Cup of Life",
+254
+],
+[
+"Mana Shield",
+254
+],
+[
+"Soulbind",
+254
+],
+[
+"Parry",
+254
+],
+[
+"Earplug",
+254
+],
+[
+"Reflexes",
+254
+],
+[
+"Sticky Fingers",
+254
+],
+[
+"Shirahadori",
+254
+],
+[
+"Archer's Bane",
+254
+],
+[
+"First Strike",
+254
+],
+[
+"Equip Heavy Armor",
+254
+],
+[
+"Equip Shields",
+254
+],
+[
+"Equip Swords",
+254
+],
+[
+"Equip Katana",
+254
+],
+[
+"Equip Crossbows",
+254
+],
+[
+"Equip Polearms",
+254
+],
+[
+"Equip Axes",
+254
+],
+[
+"Equip Guns",
+254
+],
+[
+"Halve MP",
+254
+],
+[
+"JP Boost",
+254
+],
+[
+"EXP Boost",
+254
+],
+[
+"Attack Boost",
+254
+],
+[
+"Defense Boost",
+254
+],
+[
+"Arcane Strength",
+254
+],
+[
+"Arcane Defense",
+254
+],
+[
+"Concentration",
+254
+],
+[
+"Tame",
+254
+],
+[
+"Poach",
+254
+],
+[
+"Brawler",
+254
+],
+[
+"Beast Tongue",
+254
+],
+[
+"Throw Items",
+254
+],
+[
+"Safeguard",
+254
+],
+[
+"Doublehand",
+254
+],
+[
+"Dual Wield",
+254
+],
+[
+"Beastmaster",
+254
+],
+[
+"Defend",
+254
+],
+[
+"Reequip",
+254
+],
+[
+"",
+254
+],
+[
+"Swiftness",
+254
+],
+[
+"CT 0",
+254
+],
+[
+"HP Boost",
+254
+],
+[
+"Vehemence",
+254
+],
+[
+"Move +1",
+254
+],
+[
+"Move +2",
+254
+],
+[
+"Move +3",
+254
+],
+[
+"Jump +1",
+254
+],
+[
+"Jump +2",
+254
+],
+[
+"Jump +3",
+254
+],
+[
+"Ignore Elevation",
+254
+],
+[
+"Lifefont",
+254
+],
+[
+"Manafont",
+254
+],
+[
+"Accrue EXP",
+254
+],
+[
+"Accrue JP",
+254
+],
+[
+"",
+254
+],
+[
+"Teleport",
+254
+],
+[
+"Master Teleportation",
+254
+],
+[
+"Ignore Weather",
+254
+],
+[
+"Ignore Terrain",
+254
+],
+[
+"Waterwalking",
+254
+],
+[
+"Swim",
+254
+],
+[
+"Lavawalking",
+254
+],
+[
+"Waterbreathing",
+254
+],
+[
+"Levitate",
+254
+],
+[
+"Fly",
+254
+],
+[
+"Stealth",
+254
+],
+[
+"Treasure Hunter",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Gil",
+254
+],
+[
+"Gil",
+254
+],
+[
+"Gil",
+254
+],
+[
+"Iron ore profits",
+254
+],
+[
+"Mythril ore profits",
+254
+],
+[
+"Adamantite profits",
+254
+],
+[
+"None",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Gil",
+254
+],
+[
+"Gil",
+254
+],
+[
+"Gil",
+254
+],
+[
+"Reward money",
+254
+],
+[
+"Reward money",
+254
+],
+[
+"Reward money",
+254
+],
+[
+"Reward money",
+254
+],
+[
+"Reward money",
+254
+],
+[
+"Reward money",
+254
+],
+[
+"Gil",
+254
+],
+[
+"Gil",
+254
+],
+[
+"Gil",
+254
+],
+[
+"Prize money",
+254
+],
+[
+"Prize money",
+254
+],
+[
+"Prize money",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Discovered Shrine of Chaos",
+254
+],
+[
+"Discovered Eureka, the Forbidden Land",
+254
+],
+[
+"Discovered Pandaemonium",
+254
+],
+[
+"Discovered Mirage Tower",
+254
+],
+[
+"Discovered Floating Castle",
+254
+],
+[
+"Discovered Matoya's Cave",
+254
+],
+[
+"Discovered Crystal Tower",
+254
+],
+[
+"Discovered Floating Continent",
+254
+],
+[
+"Discovered Fortress of Trials",
+254
+],
+[
+"Discovered Tower of Babel",
+254
+],
+[
+"Discovered Ronkan Ruins",
+254
+],
+[
+"Discovered Falgabard",
+254
+],
+[
+"Discovered Phantom Train",
+254
+],
+[
+"Discovered Tozus Village",
+254
+],
+[
+"Discovered Chocobo Forest",
+254
+],
+[
+"Discovered Semitt Falls",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Four-Deity Plate",
+254
+],
+[
+"Statuette of Lilith",
+254
+],
+[
+"Scarab Charm",
+254
+],
+[
+"Tobacco Pipe",
+254
+],
+[
+"Coin Blade",
+254
+],
+[
+"Black Cat",
+254
+],
+[
+"Hanya Mask",
+254
+],
+[
+"Parade Helm",
+254
+],
+[
+"Moppet Bread",
+254
+],
+[
+"Goliath Bread",
+254
+],
+[
+"Calcobrena",
+254
+],
+[
+"Lugae",
+254
+],
+[
+"Red Materia",
+254
+],
+[
+"Blue Materia",
+254
+],
+[
+"Black Materia",
+254
+],
+[
+"White Materia",
+254
+],
+[
+"Rat Tail",
+254
+],
+[
+"Mesa's Musings",
+254
+],
+[
+"Nanai's Histories",
+254
+],
+[
+"Veil of Wiyu",
+254
+],
+[
+"Enavia Chronicles",
+254
+],
+[
+"Enchanted Pistol",
+254
+],
+[
+"Enchanted Machinegun",
+254
+],
+[
+"Zanmato",
+254
+],
+[
+"Orb of Minwu",
+254
+],
+[
+"Tarot de Bennstat",
+254
+],
+[
+"Excalipoor",
+254
+],
+[
+"Yggdrasil Mistletoe",
+254
+],
+[
+"Lance of Longibunne",
+254
+],
+[
+"Chocobo Cannon",
+254
+],
+[
+"Saint Elmo's Fire",
+254
+],
+[
+"  1. The Ivalician Calendar",
+254
+],
+[
+"  2. Zodiac Sign Compatibility",
+254
+],
+[
+"  3. Compatibility List",
+254
+],
+[
+"  4. Charge Time",
+254
+],
+[
+"  5. Turn Order",
+254
+],
+[
+"  6. Casting Time",
+254
+],
+[
+"  7. Range",
+254
+],
+[
+"  8. Effect Radius",
+254
+],
+[
+"  9. Moving and Acting",
+254
+],
+[
+"10. Predicted Effect",
+254
+],
+[
+"11. Target Selection",
+254
+],
+[
+"12. Arithmeticks",
+254
+],
+[
+"13. Geomancy",
+254
+],
+[
+"14. Item-dependent Abilities",
+254
+],
+[
+"15. Thrown and Fired Weapons",
+254
+],
+[
+"16. Jumping",
+254
+],
+[
+"17. Water",
+254
+],
+[
+"18. Weather",
+254
+],
+[
+"19. Reflect",
+254
+],
+[
+"20. Traps",
+254
+],
+[
+"21. Hidden Items",
+254
+],
+[
+"22. Spoils of the Fallen",
+254
+],
+[
+"23. Faith",
+254
+],
+[
+"24. Bravery",
+254
+],
+[
+"25. Status Effects",
+254
+],
+[
+"26. KO Countdown",
+254
+],
+[
+"27. Elements",
+254
+],
+[
+"28. Equipment",
+254
+],
+[
+"29. Changing Jobs",
+254
+],
+[
+"30. Inherent Job Abilities",
+254
+],
+[
+"31. Earning Job Points",
+254
+],
+[
+"32. Ability Types",
+254
+],
+[
+"33. Assigning Abilities",
+254
+],
+[
+"34. Reaction Abilities",
+254
+],
+[
+"35. Blocking",
+254
+],
+[
+"36. Ability Help",
+254
+],
+[
+"37. Item Help",
+254
+],
+[
+"38. Monster Eggs",
+254
+],
+[
+"39. Taverns",
+254
+],
+[
+"40. Outfitters",
+254
+],
+[
+"41. Warriors' Guilds",
+254
+],
+[
+"42. Poachers' Dens",
+254
+],
+[
+"43. Scanning with □",
+254
+],
+[
+"44.ダミ—",
+254
+],
+[
+"45.ダミ—",
+254
+],
+[
+"46.ダミ—",
+254
+],
+[
+"47.ダミ—",
+254
+],
+[
+"48.ダミ—",
+254
+],
+[
+"1. Participating in Melee",
+254
+],
+[
+"2. Melee Rules",
+254
+],
+[
+"3. Determining the Winner",
+254
+],
+[
+"4. After the Battle",
+254
+],
+[
+"5. Special Controls",
+254
+],
+[
+"6. Traps",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"1. Participating in Missions",
+254
+],
+[
+"2. Types of Missions",
+254
+],
+[
+"3. Cooperative Battle Rules",
+254
+],
+[
+"4. After the Battle",
+254
+],
+[
+"5. Fallen Characters",
+254
+],
+[
+"6. Items",
+254
+],
+[
+"7. Gil",
+254
+],
+[
+"8. Rewards",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Wireless Play",
+254
+],
+[
+"Melee",
+254
+],
+[
+"Rendezvous",
+254
+],
+[
+"Back",
+254
+],
+[
+"",
+254
+],
+[
+"Lesalia",
+254
+],
+[
+"Riovanes Castle",
+254
+],
+[
+"Eagrose Castle",
+254
+],
+[
+"Lionel Castle",
+254
+],
+[
+"Limberry Castle",
+254
+],
+[
+"Zeltennia Castle",
+254
+],
+[
+"Gariland",
+254
+],
+[
+"Yardrow",
+254
+],
+[
+"Gollund",
+254
+],
+[
+"Dorter",
+254
+],
+[
+"Zaland",
+254
+],
+[
+"Goug",
+254
+],
+[
+"Warjilis",
+254
+],
+[
+"Bervenia",
+254
+],
+[
+"Sal Ghidos",
+254
+],
+[
+"Ziekden Fortress",
+254
+],
+[
+"Mullonde",
+254
+],
+[
+"Brigands' Den",
+254
+],
+[
+"Orbonne Monastery",
+254
+],
+[
+"Golgollada Gallows",
+254
+],
+[
+"The Necrohol of Mullonde",
+254
+],
+[
+"Fort Besselat",
+254
+],
+[
+"Midlight's Deep",
+254
+],
+[
+"Nelveska Temple",
+254
+],
+[
+"Mandalia Plain",
+254
+],
+[
+"Fovoham Windflats",
+254
+],
+[
+"The Siedge Weald",
+254
+],
+[
+"Mount Bervenia",
+254
+],
+[
+"Zeklaus Desert",
+254
+],
+[
+"Lenalian Plateau",
+254
+],
+[
+"Tchigolith Fenlands",
+254
+],
+[
+"The Yuguewood",
+254
+],
+[
+"Araguay Woods",
+254
+],
+[
+"Grogh Heights",
+254
+],
+[
+"Beddha Sandwaste",
+254
+],
+[
+"Zeirchele Falls",
+254
+],
+[
+"Dorvauldar Marsh",
+254
+],
+[
+"Balias Tor",
+254
+],
+[
+"Dugeura Pass",
+254
+],
+[
+"Balias Swale",
+254
+],
+[
+"Finnath Creek",
+254
+],
+[
+"Lake Poescas",
+254
+],
+[
+"Mount Germinas",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Aries",
+255
+],
+[
+"Taurus",
+255
+],
+[
+"Gemini",
+255
+],
+[
+"Cancer",
+255
+],
+[
+"Leo",
+255
+],
+[
+"Virgo",
+255
+],
+[
+"Libra",
+255
+],
+[
+"Scorpio",
+255
+],
+[
+"Sagittarius",
+255
+],
+[
+"Capricorn",
+255
+],
+[
+"Aquarius",
+255
+],
+[
+"Pisces",
+255
+],
+[
+"{0xE808}{E4} gil",
+255
+],
+[
+"{EB}",
+255
+],
+[
+"{0xE802}{E4} {EB}",
+255
+],
+[
+"Move{br}Party Roster{br}Chronicle{br}Tutorial{br}Data{br}Options{br}Debug{br}Flags{br}Party",
+255
+],
+[
+"Move{br}Party Roster{br}Chronicle{br}Tutorial{br}Data{br}Options{br}Return to Title Screen",
+255
+],
+[
+"Eagrose Castle Gate",
+254
+],
+[
+"Lesalia Castle Postern",
+254
+],
+[
+"Mullonde Cathedral Nave",
+254
+],
+[
+"Lesalia Castle Study",
+254
+],
+[
+"Riovanes Castle Roof",
+254
+],
+[
+"Riovanes Castle Gate",
+254
+],
+[
+"Riovanes Castle Keep",
+254
+],
+[
+"Riovanes Castle",
+254
+],
+[
+"Eagrose Castle Solar",
+254
+],
+[
+"Eagrose Castle Keep",
+254
+],
+[
+"Eagrose Castle Solar",
+254
+],
+[
+"Lionel Castle Gate",
+254
+],
+[
+"Lionel Castle Oratory",
+254
+],
+[
+"Lionel Castle Parlor",
+254
+],
+[
+"Limberry Castle Gate",
+254
+],
+[
+"Limberry Castle Keep",
+254
+],
+[
+"Limberry Castle Undercroft",
+254
+],
+[
+"Limberry Castle Parlor",
+254
+],
+[
+"Limberry Castle Gate",
+254
+],
+[
+"Zeltennia Castle Keep",
+254
+],
+[
+"Zeltennia Castle",
+254
+],
+[
+"Gariland",
+254
+],
+[
+"The Beoulve Manse",
+254
+],
+[
+"The Royal Military Akademy",
+254
+],
+[
+"Yardrow",
+254
+],
+[
+"Yardrow Armory",
+254
+],
+[
+"Gollund",
+254
+],
+[
+"Gollund Colliery Ridge",
+254
+],
+[
+"Gollund Colliery Slope",
+254
+],
+[
+"Gollund Colliery Floor",
+254
+],
+[
+"Dorter",
+254
+],
+[
+"Dorter Slums",
+254
+],
+[
+"Slum Infirmary",
+254
+],
+[
+"The Sand Rat's Sietch",
+254
+],
+[
+"Zaland",
+254
+],
+[
+"Outlying Church",
+254
+],
+[
+"Zaland Outskirts",
+254
+],
+[
+"Goug",
+254
+],
+[
+"Gollund Coal Shaft",
+254
+],
+[
+"Goug Lowtown",
+254
+],
+[
+"Bunansa Residence",
+254
+],
+[
+"Warjilis",
+254
+],
+[
+"Warjilis Harbor",
+254
+],
+[
+"Bervenia",
+254
+],
+[
+"Zeltennia Castle - Chapel Ruins",
+254
+],
+[
+"The Tomb of Barbaneth Beoulve",
+254
+],
+[
+"Sal Ghidos",
+254
+],
+[
+"Sal Ghidos Slumtown",
+254
+],
+[
+"Ziekden Fortress",
+254
+],
+[
+"Mullonde Cathedral",
+254
+],
+[
+"Mullonde Cathedral",
+254
+],
+[
+"Mullonde Cathedral Sanctuary",
+254
+],
+[
+"The Necrohol Gate",
+254
+],
+[
+"Lost Halidom",
+254
+],
+[
+"Airship Graveyard",
+254
+],
+[
+"Orbonne Monastery",
+254
+],
+[
+"Monastery Vaults - First Level",
+254
+],
+[
+"Monastery Vaults - Second Level",
+254
+],
+[
+"Monastery Vaults - Third Level",
+254
+],
+[
+"Monastery Vaults - Fourth Level",
+254
+],
+[
+"Monastery Vaults - Fifth Level",
+254
+],
+[
+"Orbonne Monastery",
+254
+],
+[
+"Golgollada Gallows",
+254
+],
+[
+"Fort Besselat Sluice",
+254
+],
+[
+"Fort Besselat Granary",
+254
+],
+[
+"Fort Besselat - South Wall",
+254
+],
+[
+"Fort Besselat - North Wall",
+254
+],
+[
+"Fort Besselat",
+254
+],
+[
+"The Necrohol of Mullonde",
+254
+],
+[
+"Nelveska Temple",
+254
+],
+[
+"Dorvauldar Marsh",
+254
+],
+[
+"Fovoham Windflats",
+254
+],
+[
+"Mill Interior",
+254
+],
+[
+"The Siedge Weald",
+254
+],
+[
+"Mount Bervenia",
+254
+],
+[
+"Zeklaus Desert",
+254
+],
+[
+"Lenalian Plateau",
+254
+],
+[
+"Tchigolith Fenlands",
+254
+],
+[
+"The Yuguewood",
+254
+],
+[
+"Araguay Woods",
+254
+],
+[
+"Grogh Heights",
+254
+],
+[
+"Beddha Sandwaste",
+254
+],
+[
+"Zeirchele Falls",
+254
+],
+[
+"Balias Tor",
+254
+],
+[
+"Mandalia Plain",
+254
+],
+[
+"Dugeura Pass",
+254
+],
+[
+"Balias Swale",
+254
+],
+[
+"Finnath Creek",
+254
+],
+[
+"Lake Poescas",
+254
+],
+[
+"Mount Germinas",
+254
+],
+[
+"Brigands' Den",
+254
+],
+[
+"Eagrose - The Beoulve Manse",
+254
+],
+[
+"Rooftops - Wood",
+254
+],
+[
+"Rooftops - Stone",
+254
+],
+[
+"Church",
+254
+],
+[
+"Tavern",
+254
+],
+[
+"Lesalia Castle - Inner Court",
+254
+],
+[
+"Lesalia Castle Perimeter",
+254
+],
+[
+"Lesalia Thoroughfare",
+254
+],
+[
+"Cemetery",
+254
+],
+[
+"Tutorial - Part 1",
+254
+],
+[
+"Tutorial - Part 2",
+254
+],
+[
+"Windflat Mill",
+254
+],
+[
+"The Beoulve Manse",
+254
+],
+[
+"The Stair",
+254
+],
+[
+"The Hollow",
+254
+],
+[
+"The Crevasse",
+254
+],
+[
+"The Switchback",
+254
+],
+[
+"The Crossing",
+254
+],
+[
+"The Catacombs",
+254
+],
+[
+"The Oubliette",
+254
+],
+[
+"The Palings",
+254
+],
+[
+"The Interstice",
+254
+],
+[
+"Terminus",
+254
+],
+[
+"Abandoned Watchtower",
+254
+],
+[
+"",
+254
+],
+[
+"Attack",
+254
+],
+[
+"Defend",
+254
+],
+[
+"Reequip",
+254
+],
+[
+"Flee",
+254
+],
+[
+"Fundaments",
+254
+],
+[
+"Items",
+254
+],
+[
+"Arts of War",
+254
+],
+[
+"Aim",
+254
+],
+[
+"Martial Arts",
+254
+],
+[
+"White Magicks",
+254
+],
+[
+"Black Magicks",
+254
+],
+[
+"Time Magicks",
+254
+],
+[
+"Summon",
+254
+],
+[
+"Steal",
+254
+],
+[
+"Speechcraft",
+254
+],
+[
+"Mystic Arts",
+254
+],
+[
+"Geomancy",
+254
+],
+[
+"Jump",
+254
+],
+[
+"Iaido",
+254
+],
+[
+"Throw",
+254
+],
+[
+"Arithmeticks",
+254
+],
+[
+"Bardsong",
+254
+],
+[
+"Dance",
+254
+],
+[
+"Mimic",
+254
+],
+[
+"Mettle",
+254
+],
+[
+"Mettle",
+254
+],
+[
+"Mettle",
+254
+],
+[
+"Mettle",
+254
+],
+[
+"Holy Sword",
+254
+],
+[
+"Unyielding Blade",
+254
+],
+[
+"Fundaments",
+254
+],
+[
+"Fell Sword",
+254
+],
+[
+"Holy Sword",
+254
+],
+[
+"Holy Sword",
+254
+],
+[
+"Magicks",
+254
+],
+[
+"Holy Magicks",
+254
+],
+[
+"Aimed Shot",
+254
+],
+[
+"Aimed Shot",
+254
+],
+[
+"Fell Sword",
+254
+],
+[
+"Holy Sword",
+254
+],
+[
+"Limit",
+254
+],
+[
+"Priest Magicks",
+254
+],
+[
+"Dragon",
+254
+],
+[
+"Breath",
+254
+],
+[
+"Sky Mantra",
+254
+],
+[
+"Nether Mantra",
+254
+],
+[
+"Astrology",
+254
+],
+[
+"Holy Sword",
+254
+],
+[
+"Holy Magicks",
+254
+],
+[
+"Sky Mantra",
+254
+],
+[
+"Arts of War",
+254
+],
+[
+"Jump",
+254
+],
+[
+"Martial Arts",
+254
+],
+[
+"Subdual Arts",
+254
+],
+[
+"Subdual Arts",
+254
+],
+[
+"Throw",
+254
+],
+[
+"Throw",
+254
+],
+[
+"Holy Sword",
+254
+],
+[
+"Sword Spirit",
+254
+],
+[
+"Unyielding Blade",
+254
+],
+[
+"Magicks",
+254
+],
+[
+"Sword Spirit",
+254
+],
+[
+"Vampire",
+254
+],
+[
+"Unyielding Blade",
+254
+],
+[
+"Magicks",
+254
+],
+[
+"Unyielding Blade",
+254
+],
+[
+"Unyielding Blade",
+254
+],
+[
+"Aimed Shot",
+254
+],
+[
+"Spellblade",
+254
+],
+[
+"Swordplay",
+254
+],
+[
+"Magicks",
+254
+],
+[
+"Magicks",
+254
+],
+[
+"Esper",
+254
+],
+[
+"Swordplay",
+254
+],
+[
+"Blade of Ruin",
+254
+],
+[
+"Holy Magicks",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Dread",
+254
+],
+[
+"Summon Gigas",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Dread",
+254
+],
+[
+"Ja-Magicks",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Dread",
+254
+],
+[
+"Planar Magicks",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Dread",
+254
+],
+[
+"Befoul",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Dread",
+254
+],
+[
+"Magicks",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Arcane Magicks",
+254
+],
+[
+"Chaos",
+254
+],
+[
+"Divine Magicks",
+254
+],
+[
+"Divine Providence",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Swordplay",
+254
+],
+[
+"Aim",
+254
+],
+[
+"Black Magicks",
+254
+],
+[
+"Time Magicks",
+254
+],
+[
+"Mystic Arts",
+254
+],
+[
+"Summon",
+254
+],
+[
+"Items",
+254
+],
+[
+"White Magicks",
+254
+],
+[
+"Black Magicks",
+254
+],
+[
+"Mystic Arts",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Byblos",
+254
+],
+[
+"Tasks",
+254
+],
+[
+"Bio",
+254
+],
+[
+"The Dark",
+254
+],
+[
+"Dark Arts",
+254
+],
+[
+"Demon Magicks",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"All Skills",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Darkness",
+254
+],
+[
+"Piracy",
+254
+],
+[
+"Huntcraft",
+254
+],
+[
+"Rumors",
+254
+],
+[
+"Errands",
+254
+],
+[
+"Reports",
+254
+],
+[
+"Recall Units",
+254
+],
+[
+"Exit",
+254
+],
+[
+"Okay{br}Cancel",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Come on in, then! Make yourself welcome.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Thanks for dropping in. Do come again.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Here's what all the locals have been going on{br}about.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}That, eh? Here's what I've heard.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}There've been no interesting rumors{br}in recent days.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I know of a thing or two you might be able to{br}do.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}That, eh? Here's the bill.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Beg pardons, my lord, I've not heard of any{br}work as of late.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}You can't take on any more work at present.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}You want to take on the job?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}{EB} and other expenses come{br}to {E4} gil. That all right?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}It seems you're a little short on the gil,{br}my lord.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Well enough, then. Who's to be sent on the{br}task?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I'd wager the job will take {E4} to {E4} days.{br}How many days will you give 'em?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Those are the terms, then.{br}Have we got a deal?",
+254
+],
+[
+"Finder's fee, supplies,",
+254
+],
+[
+"Finder's fee",
+254
+],
+[
+"Supplies",
+254
+],
+[
+"The tavern is closed.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}You've got some people back from their tasks.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Want to hear the report on that, eh?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Here's what's underway at the moment.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I've arranged for their return first thing on{br}the morrow.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}All their efforts will have been for naught.{br}Are you certain about this?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Right, then. I'll have 'em back on the morrow.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Thanks for dropping in. Do come again.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}You can't take on any more work at present.",
+254
+],
+[
+"Days:{Tab 2C}{E4}/{E4}{br}Departing:{Tab 2C}{EB}{br}Units:",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I'm afraid you've no one to send.",
+254
+],
+[
+"Days given: ",
+254
+],
+[
+"FLAG{SP2}{0xE804}{E4}({0xE804}{E4})",
+254
+],
+[
+"FLAG{SP2}{0xE804}{E4}{SP2}ERROR",
+254
+],
+[
+"パ—テ虫—番号:",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Bonus: {Tab 2C}{EB}{br}Reward: {Tab 2C}{E4} gil{br}JP:",
+254
+],
+[
+"{0xE804}{E4}",
+254
+],
+[
+"{EB}{br}Here's the report on that errand.",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Exit{br}Continue",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Histories",
+254
+],
+[
+"Events",
+254
+],
+[
+"Personae",
+254
+],
+[
+"Feats",
+254
+],
+[
+"Wonders",
+254
+],
+[
+"Artefacts",
+254
+],
+[
+"Exit",
+254
+],
+[
+"Kills: {Tab 2A} {0xE804}{E4}{br}Casualties: {0xE804}{E4}",
+254
+],
+[
+"",
+254
+],
+[
+"{0xEC77}{font:08}Arazlam{br}{font:00}Careful study of these works will no doubt shed{br}light on the secrets behind the War of the Lions.",
+254
+],
+[
+"{0xEC77}{font:08}Arazlam{br}{font:00}Here is all we know.",
+254
+],
+[
+"{0xEC77}{font:08}Arazlam{br}{font:00}I will offer my humble assistance whenever it{br}is needed on your quest to discover the truth.",
+254
+],
+[
+"Resume reading from{br}where you left off?{br}{br}{SP2}{SP2}Resume{br}{SP2}{SP2}Restart",
+254
+],
+[
+"{EB}",
+254
+],
+[
+"",
+254
+],
+[
+"Task:",
+254
+],
+[
+"Feats",
+254
+],
+[
+"Aries",
+254
+],
+[
+"Taurus",
+254
+],
+[
+"Gemini",
+254
+],
+[
+"Cancer",
+254
+],
+[
+"Leo",
+254
+],
+[
+"Virgo",
+254
+],
+[
+"Libra",
+254
+],
+[
+"Scorpio",
+254
+],
+[
+"Sagittarius",
+254
+],
+[
+"Capricorn",
+254
+],
+[
+"Aquarius",
+254
+],
+[
+"Pisces",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I think I mentioned this once before.",
+254
+],
+[
+"Tavern",
+254
+],
+[
+"Outfitter",
+254
+],
+[
+"Warriors' Guild",
+254
+],
+[
+"Poachers' Den",
+254
+],
+[
+"",
+254
+],
+[
+"エンカウントバトル{br}エントリ—ナンバ—{SP2}{E4}{br}エントリ—エリア{SP2}{SP2}{E4}",
+254
+],
+[
+"Self",
+254
+],
+[
+"Present",
+254
+],
+[
+"Past",
+254
+],
+[
+"{E4}",
+254
+],
+[
+"{0xE802}{E4}",
+254
+],
+[
+"{0xEC77}{font:08}Arazlam{br}{font:00}Here is all we know.",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}The winds in that area can be fierce.{br}Watch yourself.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I'd not get my hopes up about finding treasure.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Divers need strength and endurance.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Beware the strait's rocky shoals.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}It takes raw strength to be a diver.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}The Bay of Obell is known for strong winds.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}The West Bugross Sea is deep.{br}It'll take muscle to raise that ship.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I've always loved the legend of King Mesa.{br}But it's naught more than legend, is it?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Sahagin lurk in those waters. Be careful.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I can never understand the goings-on at the{br}castle.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I hear the embassy's treasures are priceless.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I graduated from the Akademy for the{br}Magickal Arts, you know. For true, I did!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}The guild's fees are outrageous, but they know{br}their trade.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}You'll need intimate knowledge of Mother{br}Nature and the seas to navigate those currents.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}You'll need intimate knowledge of Mother{br}Nature and the seas to navigate those currents.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Take care that none of those whirlpools claim{br}you as their prize!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I fear any treasure in that mine was long ago{br}discovered. All you'll turn up is dust.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Real men's work...?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Abandoned mines swarm with monsters.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I can't understand why these expeditions are so{br}popular.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}That mine's famous for its veins of silver.{br}You just might stumble onto one!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}That was a terrible accident, but it seems{br}they're back in business.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Coal miners need a strong arm. Mining's not{br}easy work.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Keep one eye out for the color, but you'd best{br}keep t'other out for beasts!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}People always tell stories about places like that.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}People always tell stories about places like that.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}People always tell stories about places like that.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Like as not, those rumors are true. But there's{br}also talk of a dragon in that mine.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Coal miners need a strong arm.{br}Mining's not easy work.",
+254
+],
+[
+"{0xEC75}Tavernmaster—{br}I hear there's naught but iron in that mine.{br}Too bad for the miners.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}The real treasure in that mountain is coal. It's{br}not worth much, but there's an awful lot of it.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}People always tell stories about places like that.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}You truly think there are lost wonders out{br}there? That Cataclysm talk is naught but myth.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}There's rough terrain around that lake.{br}Best send someone light on their feet.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}You won the last one of these, didn't you?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}There are bats there that'll suck the lifeblood{br}right out of you!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}At it again, eh? Well, good luck.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}They were enormous ruins—no doubt some{br}wonder of the ancients!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}It disappeared as soon as she saw them?{br}Sounds like lost ruins!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}They could be ruins, but I'd wager he saw a{br}mirage.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Ancient ruins have been known to elude the eye.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}You're not like to find much more than{br}snakebites on an expedition like this.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Master Mog lives in those fens. He's a chatty{br}one—good luck prying yourself away from him.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I hear the marquis has been adding to his estate{br}again. Looks like he has a dungeon now, too.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}An amateur should be fine.{br}The Vaschons have a soft spot for beginners.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Does that mean an ancient civilization once lived{br}in these hinterlands?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I've seen them too.{br}They're beautiful. Really!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}It gets quite slippery there.{br}Send someone who's light on their feet.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Best take a thief to deal with their traps.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Best send a skilled fighter for this one.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Summon one monster, and most bandits will turn{br}tail and run.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}The young lord's got a touch of his father's{br}greed—not that you heard that from me.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}You'll might want to bring a healer—just in{br}case.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}So, the Typhoon is in town, eh?{br}They say he's a formidable swordsman.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Fighting monsters is right up your alley, eh?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Try using magick to finish it off quickly.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I've heard tell of Zerro.{br}He's quite skilled with a blade.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I've heard tell of Zerro.{br}He's quite skilled with a blade.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I've heard tell of Zerro.{br}He's quite skilled with a blade.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I've heard tell of Zerro.{br}He's quite skilled with a blade.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I've heard tell of Zerro.{br}He's quite skilled with a blade.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I've heard tell a chimera's flames can melt{br}wrought iron. You'd best take care.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I've not heard of pets turning into monsters{br}before.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}What are the adults doing that a child must{br}ask for help?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}That boy's in trouble, no doubt.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}What kind of craven blackguard would kidnap a{br}child?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}What kind of scum would kidnap a little girl?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}A malboro for a pet!? I'll never understand{br}nobility.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Please look into this, for the sake of the{br}townspeople!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Please solve this as quickly as possible, for the{br}town's sake.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Please look into this, for the sake of the{br}townspeople!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Please look into this, for the sake of the{br}townspeople!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Please look into this, for the sake of the{br}townspeople!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}No doubt it's just children having fun.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}You'll want someone light on their feet for this{br}task.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}You'll want someone who knows about items for{br}that.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I soften up whenever I hear about romance like{br}this. Don't you dare tell a soul.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Thieves are usually best at this kind of work.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}It's not just monsters. The winds there are{br}quite strong as well. Be careful.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Ah, young love. I was young once, too.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}A linguist would no doubt be appropriate for a{br}task like this.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Sounds like a task for someone with smarts.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Could the problem be the way he talks?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Thieves are usually best at this kind of work.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}This is a job for a chemist, I'd wager!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}We need skilled dancers for Mameco's farewell{br}performance!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}That sort of work takes stamina.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Play it right, and you could be swimming in gil.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Play it right, and you could be swimming in gil.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Offensive magick should vanquish those{br}monsters in a trice.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I love chocobo myself.{br}There's naught better than a good fried wing.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Best send a learned person to do the tutoring.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Best choose someone familiar with the ways of{br}battle.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Best choose someone familiar with the ways of{br}battle.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}You'll want magick users for this.{br}But you knew that, right?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Best send someone who's skilled at using items.",
+254
+],
+[
+"Party Roster",
+254
+],
+[
+"Battle",
+254
+],
+[
+"Miscellany",
+254
+],
+[
+"Exit",
+254
+],
+[
+"{0xEC71}{0xF566}{0xF666}{0xF501}{0xF601}{font:08}Master Darlavon{br}{font:00}Wars are fought with wits and wisdom. Learn{br}all you can here to prepare for what lies ahead.",
+254
+],
+[
+"{0xEC71}{font:08}Master Darlavon{br}{font:00}Arm yourself with knowledge, and it will steel{br}you for whatever you may encounter.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Press ○ to select or unselect units.{br}Press START to accept. You can send up to 3.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Terribly sorry, my lord. These jobs are only{br}open to humans without prior engagements.",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"オレ",
+254
+],
+[
+"僕",
+254
+],
+[
+"私",
+254
+],
+[
+"アタシ",
+254
+],
+[
+"私",
+254
+],
+[
+"私",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"The Crevasse",
+254
+],
+[
+"The Stair",
+254
+],
+[
+"The Hollow",
+254
+],
+[
+"The Catacombs",
+254
+],
+[
+"The Oubliette",
+254
+],
+[
+"The Palings",
+254
+],
+[
+"The Crossing",
+254
+],
+[
+"The Switchback",
+254
+],
+[
+"The Interstice",
+254
+],
+[
+"Terminus",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}That's quite a find you've got there.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}It's a treasure, all right, and worth quite a{br}bundle.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I think you can now consider yourself a treasure{br}hunter!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}From this day forth, you're a level 1 treasure{br}hunter!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}From this day forth, you're a level 2 treasure{br}hunter!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}From this day forth, you're a level 3 treasure{br}hunter!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}From this day forth, you're a level 4 treasure{br}hunter!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}From this day forth, you're a level 5 treasure{br}hunter!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}From this day forth, you're a level 6 treasure{br}hunter!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}From this day forth, you're a level 7 treasure{br}hunter!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Fantastic! You've just earned the title of{br}Master Treasure Hunter!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}That's a great find!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}It's a true ancient wonder—a remnant of the{br}days of old!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}If a find like that doesn't make you an{br}adventurer, I don't know what does!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}From this day forth, you're a level 1{br}adventurer!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}From this day forth, you're a level 2{br}adventurer!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}From this day forth, you're a level 3{br}adventurer!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}From this day forth, you're a level 4{br}adventurer!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}From this day forth, you're a level 5{br}adventurer!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}From this day forth, you're a level 6{br}adventurer!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}From this day forth, you're a level 7{br}adventurer!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Nicely done! You've just earned the rank of{br}Master Adventurer!",
+254
+],
+[
+"",
+254
+],
+[
+"Melee",
+254
+],
+[
+"Rendezvous",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}It costs {E4} gil to participate.{br}That all right?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}It seems you're a little short on the gil.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Do you want to host a battle or join one?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Beg pardons, there seem not to be any takers.{br}Let me return your {E4} gil.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}It seems your battle was interrupted.{br}I'll return your {E4} gil, then.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Hosting, then? Let's see if we can't find you{br}an opponent.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Joining a battle, then?{br}Just a moment.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Changed your mind?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Couldn't find an opponent for you, I'm afraid.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Excellent. I've found an opponent for you.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}All right then, choose the rules for your battle.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}You won't be able to make changes later.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Very well, then. I'll inform your opponent of the{br}rules. Just a moment, my lord.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Your opponent's choosing the melee rules.{br}Won't be but a moment, my lord.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}All right, it seems your opponent has decided{br}on the rules.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Are you finished checking the rules?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Now, select a location for the battle.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Are you sure this is where you want to fight?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I'll inform your opponent. Won't be but a{br}moment.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Your opponent's selecting a location for the{br}melee. Wait just a moment.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}All right, then. It seems your opponent has{br}settled on a location.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Here are the missions I've got for you.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}{EB}, eh?{br}Here's the bill.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}You want to try this one?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}You want to take on a mission, eh?{br}Mayhap I could show you the list?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}You want to host a mission, or join one?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Hosting one, then? Wait just a moment.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Joining one, then? Wait just a moment.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Changed your mind. eh?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Beg pardons, my lord. I couldn't find a partner{br}for you.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Excellent. I've found you a partner.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}{EB}, then, eh?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Very well, then. I'll inform your partner.{br}Wait just a moment.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Your partner's choosing a mission.{br}Wait just a moment.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Seems even chocobos have fallen on hard times.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I've heard tell that spirits of the deceased oft{br}appear in those parts.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}It seems something of great import was{br}lost.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Who wouldn't want to try their hand against{br}the strongest chocobo in the world?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Count Thanes is famed for his riches.{br}You'll get a fine reward for this, I wager.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}A dancer's fete? Sounds exciting.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}As I hear it, there are three kinds of bombs.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}You'd best catch what comes your way,{br}and throw it straight back!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Spirits attached to the world of the living...{br}I wonder about their disposition.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}So, you want to test your skills?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}You're the spitting images of those fugitives!{br}Surely it's not but a mere semblance...",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Those spirits aren't to be trifled with. I've{br}heard tell that magick has no effect on them.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}It seems the lad dreams of being attacked by{br}demons. Truth be told, I'd wet the bed myself.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Show us your courage!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I've a bad feeling about this one.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Here's the bill.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Here's the bill.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Here's the bill.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Here's the bill.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Here's the bill.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Here's the bill.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Here's the bill.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Here's the bill.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Here's the bill.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Here's the bill.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Here's the bill.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Here's the bill.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Here's the bill.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Here's the bill.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Here's the bill.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I hear you succeeded in protecting those{br}chocobos. That's a relief.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}You've got some pith.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}The members of the caravan send you{br}their gratitude.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Across the land, hunters speak your name!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I hear you succeeded in retrieving the treasure.{br}Excellent work.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Did you enjoy the fete?{br}Hm? ...You've had enough!?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Now business will thrive, and the economy{br}is certain to recover!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I'm glad you caught 'em!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I see... So the spirits were acquaintances{br}of yours, were they?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}So you're now a Knight Templar, eh?{br}What? You're not joining them!?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Thank the gods. This clears your name, aye?",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I'd wager you're the only ones who could've{br}bested those things!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}I'm sure that's a load off the lad's mind.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}Never have you shone as brightly as you{br}do now!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}There's nothing more frightening than human{br}hatred.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}You need to try a little harder, my lord.{br}You can't disappoint people like that.",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}From this day forth, you're a level 1{br}{EB}!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}From this day forth, you're a level 2{br}{EB}!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}From this day forth, you're a level 3{br}{EB}!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}From this day forth, you're a level 4{br}{EB}!",
+254
+],
+[
+"{0xEC75}{font:08}Tavernmaster{br}{font:00}From this day forth, you're a level 5{br}{EB}!",
+254
+],
+[
+"Defender of the Wild",
+254
+],
+[
+"Lionheart",
+254
+],
+[
+"Retriever",
+254
+],
+[
+"Chocobo Hunter",
+254
+],
+[
+"Count's Guard",
+254
+],
+[
+"Lord of the Night",
+254
+],
+[
+"Bombslayer",
+254
+],
+[
+"Gatherer",
+254
+],
+[
+"Exorcist",
+254
+],
+[
+"Templar's Apprentice",
+254
+],
+[
+"Performer",
+254
+],
+[
+"Construct",
+254
+],
+[
+"Dreamcatcher",
+254
+],
+[
+"Hero",
+254
+],
+[
+"Riskbreaker",
+254
+],
+[
+"1. The Party Roster",
+254
+],
+[
+"2. The Status Screen",
+254
+],
+[
+"3. Equipping Items",
+254
+],
+[
+"4. Job Advancement",
+254
+],
+[
+"5. Learning Abilities",
+254
+],
+[
+"6. Friendly Monsters",
+254
+],
+[
+"7. Quick Help",
+254
+],
+[
+"1. Battlefield Controls",
+254
+],
+[
+"2. Battle Overview",
+254
+],
+[
+"3. Movements and Actions",
+254
+],
+[
+"4. The CT Gauge",
+254
+],
+[
+"5. Magick",
+254
+],
+[
+"6. Status Effects",
+254
+],
+[
+"7. Quick Help",
+254
+],
+[
+"8. Options",
+254
+],
+[
+"編成編項目のダミ—16",
+254
+],
+[
+"1. Battlefield Controls",
+254
+],
+[
+"2. Battle Overview",
+254
+],
+[
+"3. Movements and Actions",
+254
+],
+[
+"4. The CT Gauge",
+254
+],
+[
+"5. Magick",
+254
+],
+[
+"6. Status Effects",
+254
+],
+[
+"7. Quick Help",
+254
+],
+[
+"8. Options",
+254
+],
+[
+"戦闘編項目のダミ—09",
+254
+],
+[
+"戦闘編項目のダミ—10",
+254
+],
+[
+"戦闘編項目のダミ—11",
+254
+],
+[
+"戦闘編項目のダミ—12",
+254
+],
+[
+"戦闘編項目のダミ—13",
+254
+],
+[
+"戦闘編項目のダミ—14",
+254
+],
+[
+"戦闘編項目のダミ—15",
+254
+],
+[
+"戦闘編項目のダミ—16",
+254
+],
+[
+"The Corpse Brigade",
+254
+],
+[
+"King Ondoria III",
+254
+],
+[
+"The Fifty Years' War",
+254
+],
+[
+"King Ondoria III's Condition",
+254
+],
+[
+"The Corpse Brigade Destroyed",
+254
+],
+[
+"Assassination Attempt",
+254
+],
+[
+"In the Wake of the King's Demise",
+254
+],
+[
+"The Dukes Larg and Goltanna",
+254
+],
+[
+"Widespread Peasant Revolt",
+254
+],
+[
+"Princess Ovelia Kidnapped",
+254
+],
+[
+"The Legend of the Zodiac Braves",
+254
+],
+[
+"Zodiac Stones",
+254
+],
+[
+"The Baert Trading Company",
+254
+],
+[
+"A Stalemate",
+254
+],
+[
+"Princess Ovelia Saved",
+254
+],
+[
+"The Death of Cardinal Delacroix",
+254
+],
+[
+"Drought and Flood",
+254
+],
+[
+"Marquis Elmdore Slain",
+254
+],
+[
+"A Turning Point",
+254
+],
+[
+"The Horror of Riovanes",
+254
+],
+[
+"The Haunted Mine",
+254
+],
+[
+"The Cursed Isle of Nelveska",
+254
+],
+[
+"Rash of Thefts",
+254
+],
+[
+"A Call for Guards",
+254
+],
+[
+"Disorder in the Order",
+254
+],
+[
+"Lionel's New Liege Lord",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Host Melee Battle{br}Join Melee Battle",
+255
+],
+[
+"Host Mission{br}Join Mission",
+255
+],
+[
+"Start a Mission{br}View Available Missions",
+255
+],
+[
+"Orbonne Monastery",
+254
+],
+[
+"Gariland",
+254
+],
+[
+"Mandalia Plain",
+254
+],
+[
+"The Siedge Weald",
+254
+],
+[
+"Dorter Slums",
+254
+],
+[
+"The Sand Rat's Sietch",
+254
+],
+[
+"Brigands' Den",
+254
+],
+[
+"Lenalian Plateau",
+254
+],
+[
+"Windflat Mill",
+254
+],
+[
+"Ziekden Fortress",
+254
+],
+[
+"Dorter",
+254
+],
+[
+"Araguay Woods",
+254
+],
+[
+"Zeirchele Falls",
+254
+],
+[
+"Zaland",
+254
+],
+[
+"Balias Tor",
+254
+],
+[
+"Tchigolith Fenlands",
+254
+],
+[
+"Goug Lowtown",
+254
+],
+[
+"Balias Swale",
+254
+],
+[
+"Golgollada Gallows",
+254
+],
+[
+"Lionel Castle Gate",
+254
+],
+[
+"Lionel Castle Oratory",
+254
+],
+[
+"Gollund",
+254
+],
+[
+"Lesalia Castle Postern",
+254
+],
+[
+"Monastery Vaults - 2nd Level",
+254
+],
+[
+"Monastery Vaults - 3rd Level",
+254
+],
+[
+"Monastery Vaults - 1st Level",
+254
+],
+[
+"Grogh Heights",
+254
+],
+[
+"Yardrow",
+254
+],
+[
+"The Yuguewood",
+254
+],
+[
+"Riovanes Castle Gate",
+254
+],
+[
+"Riovanes Castle Keep",
+254
+],
+[
+"Riovanes Castle Roof",
+254
+],
+[
+"Dugeura Pass",
+254
+],
+[
+"Bervenia",
+254
+],
+[
+"Finnath Creek",
+254
+],
+[
+"Outlying Church",
+254
+],
+[
+"Beddha Sandwaste",
+254
+],
+[
+"Fort Besselat - South Wall",
+254
+],
+[
+"Fort Besselat - North Wall",
+254
+],
+[
+"Fort Besselat Sluice",
+254
+],
+[
+"Mount Germinas",
+254
+],
+[
+"Lake Poescas",
+254
+],
+[
+"Limberry Castle Gate",
+254
+],
+[
+"Limberry Castle Keep",
+254
+],
+[
+"Limberry Castle Inner Court",
+254
+],
+[
+"Limberry Castle Undercroft",
+254
+],
+[
+"Eagrose Castle Keep",
+254
+],
+[
+"Mullonde Cathedral",
+254
+],
+[
+"Mullonde Cathedral Nave",
+254
+],
+[
+"Mullonde Cathedral Sanctuary",
+254
+],
+[
+"Gollund Colliery Floor",
+254
+],
+[
+"Gollund Colliery Slope",
+254
+],
+[
+"Gollund Colliery Ridge",
+254
+],
+[
+"Gollund Coal Shaft",
+254
+],
+[
+"Nelveska Temple",
+254
+],
+[
+"Sal Ghidos",
+254
+],
+[
+"Zeklaus Desert",
+254
+],
+[
+"Fovoham Windflats",
+254
+],
+[
+"Dorvauldar Marsh",
+254
+],
+[
+"Mount Bervenia",
+254
+],
+[
+"The Crevasse",
+254
+],
+[
+"The Stair",
+254
+],
+[
+"The Hollow",
+254
+],
+[
+"The Catacombs",
+254
+],
+[
+"The Oubliette",
+254
+],
+[
+"The Palings",
+254
+],
+[
+"The Crossing",
+254
+],
+[
+"The Switchback",
+254
+],
+[
+"The Interstice",
+254
+],
+[
+"Terminus",
+254
+],
+[
+"Please wait while your opponent{br}sets the melee rules.{0xED}",
+254
+],
+[
+"Melee rules set.",
+254
+],
+[
+"Are you finished viewing the rules?",
+254
+],
+[
+"Are you finished setting the rules?",
+254
+],
+[
+"Please wait while your opponent{br}views the battle rules.{0xED}",
+254
+],
+[
+"Please wait while your opponent{br}selects a map.{0xED}",
+254
+],
+[
+"Map selected: {EB}",
+254
+],
+[
+"Proceed to battle?",
+254
+],
+[
+"Map selected: {EB}",
+254
+],
+[
+"Please wait while your opponent{br}checks the selected map.{0xED}",
+254
+],
+[
+"Are you finished setting traps?",
+254
+],
+[
+"Please wait while your opponent{br}finishes setting traps.{0xED}",
+254
+],
+[
+"Commence battle?{br}Your opponent is still preparing.",
+254
+],
+[
+"Please wait.{0xED}",
+254
+],
+[
+"Obtained (獲得アイテム)!",
+254
+],
+[
+"Opponent obtained (獲得アイテム).",
+254
+],
+[
+"Opponent found.",
+254
+],
+[
+"Partner found.",
+254
+],
+[
+"Please set the melee rules.",
+254
+],
+[
+"Please select a map.",
+254
+],
+[
+"A map will be selected at random.",
+254
+],
+[
+"Searching for an opponent.{br}Press ○ to cancel.{0xED}",
+254
+],
+[
+"Searching for a partner.{br}Press ○ to cancel.{0xED}",
+254
+],
+[
+"The WLAN switch is OFF.{br}Please turn the WLAN switch ON.",
+254
+],
+[
+"Connection error.{br}Exiting melee.",
+254
+],
+[
+"Connection error.{br}Exiting battle.",
+254
+],
+[
+"Opponent search canceled.",
+254
+],
+[
+"Partner search canceled.",
+254
+],
+[
+"No opponent found.",
+254
+],
+[
+"No partner found.",
+254
+],
+[
+"{SP2}Melee battles allow you to fight another player using Ad{br}Hoc Mode. The only unit attribute that that will change{br}permanently as a result of these battles is JP. Any items{br}or units lost will be restored at the battle's end.",
+254
+],
+[
+"{SP2}Rendezvousing with another player allows you to team up{br}in order to complete cooperative missions. You may keep{br}any items you obtain during battle in this mode, including{br}any items that you steal or catch. Any items that you lose{br}during battle will be restored at the battle's end. Should{br}any of your equipment be stolen or rent in the course of{br}combat, it will also be restored afterwards.{br}{br}{SP2}Arithmeticks may not be used in cooperative missions,{br}and using the Poach ability on monsters will not produce{br}any items. Any units whose KO countdowns expire will be{br}removed from the battle for its remaining duration. They{br}are not lost, however, and will be restored to your party{br}at the battle's end.{br}{br}{br}{SP2}Enemy units who are charmed by means of the Entice{br}ability will temporarily fight for you, but will not become{br}permanent members of your party.{br}{br}{br}{br}{br}{br}{SP2}Upon finishing a mission, you will be evaluated on a{br}scale of one to five stars. Defeating more enemies or{br}using a smaller number of units will earn you a higher{br}evaluation and greater rewards. You may repeat a{br}particular mission any number of times, allowing you to{br}continue trying for a better evaluation.",
+254
+],
+[
+"Chocobo Defense",
+254
+],
+[
+"Chicken Race",
+254
+],
+[
+"Treasure Hunt",
+254
+],
+[
+"Teioh",
+254
+],
+[
+"Lost Heirloom",
+254
+],
+[
+"The Fete",
+254
+],
+[
+"Desert Minefield",
+254
+],
+[
+"Littering",
+254
+],
+[
+"Shades of the Past",
+254
+],
+[
+"The Knights Templar",
+254
+],
+[
+"All-Star Melee",
+254
+],
+[
+"The Guarded Temple",
+254
+],
+[
+"Nightmares",
+254
+],
+[
+"Brave Story",
+254
+],
+[
+"An Ill Wind",
+254
+],
+[
+"Mission selected.",
+254
+],
+[
+"Please wait while your partner reviews{br}the mission description.{0xED}",
+254
+],
+[
+"Are you finished reading{br}the mission description?",
+254
+],
+[
+"Please wait while your partner{br}selects a mission.{0xED}",
+254
+],
+[
+"The Highwind",
+254
+],
+[
+"Salvage Expedition",
+254
+],
+[
+"Diving Expedition",
+254
+],
+[
+"Rhana Strait",
+254
+],
+[
+"Dredge Work",
+254
+],
+[
+"The Hindenburg",
+254
+],
+[
+"The Falcon",
+254
+],
+[
+"Mesa's Legacy",
+254
+],
+[
+"The Durga",
+254
+],
+[
+"Lionel Emissary",
+254
+],
+[
+"Zaland Embassy Antiques",
+254
+],
+[
+"Stolen Tomes",
+254
+],
+[
+"Salvage Work",
+254
+],
+[
+"Gleddia Isle",
+254
+],
+[
+"Foundered Vessel",
+254
+],
+[
+"The Dawn Queen",
+254
+],
+[
+"Abandoned Mine",
+254
+],
+[
+"Coal Mining Expedition",
+254
+],
+[
+"Old Toppa's Will",
+254
+],
+[
+"Second Coal Mining Expedition",
+254
+],
+[
+"Miner's Dream",
+254
+],
+[
+"Miner Shortage",
+254
+],
+[
+"Coal Miners Wanted",
+254
+],
+[
+"Mount Gulg Mother Lode",
+254
+],
+[
+"Endless Caverns",
+254
+],
+[
+"Himca Cliffs",
+254
+],
+[
+"Ore of the Gods",
+254
+],
+[
+"Past Glory",
+254
+],
+[
+"More Coal Miners Wanted",
+254
+],
+[
+"Lorraide Mine",
+254
+],
+[
+"Miner's Tale",
+254
+],
+[
+"Death's Gorge",
+254
+],
+[
+"Frontier Marathon",
+254
+],
+[
+"Lake Poescas Depths",
+254
+],
+[
+"Second Frontier Marathon",
+254
+],
+[
+"Ancient Wonder",
+254
+],
+[
+"Third Frontier Marathon",
+254
+],
+[
+"The Siedge Weald",
+254
+],
+[
+"Beddha Sandwaste",
+254
+],
+[
+"Lamzen the Adventurer",
+254
+],
+[
+"Trick of the Light",
+254
+],
+[
+"Frontier Expedition",
+254
+],
+[
+"Fenland Mystery",
+254
+],
+[
+"Cellar Dungeon",
+254
+],
+[
+"Adventurers Wanted",
+254
+],
+[
+"Shadows from the Past",
+254
+],
+[
+"Merchant's Regret",
+254
+],
+[
+"Rain-Swept Slopes",
+254
+],
+[
+"Twilight Gustkov",
+254
+],
+[
+"The Behemoth",
+254
+],
+[
+"Bandits",
+254
+],
+[
+"Young Lord Pappal",
+254
+],
+[
+"In the Darkness",
+254
+],
+[
+"The Typhoon",
+254
+],
+[
+"Count Minimas",
+254
+],
+[
+"Terror's Maw",
+254
+],
+[
+"Zerro's Challenge",
+254
+],
+[
+"Zerro Strikes",
+254
+],
+[
+"Zerro's Return",
+254
+],
+[
+"Zerro Strikes Again",
+254
+],
+[
+"Zerro's Final Heist",
+254
+],
+[
+"Hellspawned Beast",
+254
+],
+[
+"Metamorphosed Misery",
+254
+],
+[
+"Fia's Wish",
+254
+],
+[
+"Missing Boy",
+254
+],
+[
+"Father's Nightmare",
+254
+],
+[
+"Ducal Disaster",
+254
+],
+[
+"My Little Carrot",
+254
+],
+[
+"Cries in the Dark",
+254
+],
+[
+"Shoreline Defense",
+254
+],
+[
+"Devil in the Dark",
+254
+],
+[
+"Nightwalker",
+254
+],
+[
+"Uninvited Guests",
+254
+],
+[
+"Historic Revolt",
+254
+],
+[
+"Secret Society",
+254
+],
+[
+"Appraisal",
+254
+],
+[
+"Lettre d'amour",
+254
+],
+[
+"Count Minimas",
+254
+],
+[
+"Beastly Trail",
+254
+],
+[
+"True Romance",
+254
+],
+[
+"Cattedona",
+254
+],
+[
+"Arithmeticks Tutor Wanted",
+254
+],
+[
+"Minstrel in Distress",
+254
+],
+[
+"Count Minimas",
+254
+],
+[
+"Clockwork Faire",
+254
+],
+[
+"Mameco the Minstrel",
+254
+],
+[
+"Gysahl Greens",
+254
+],
+[
+"Wandering Gambler",
+254
+],
+[
+"Wandering Gambler",
+254
+],
+[
+"Guard Duty",
+254
+],
+[
+"Memories",
+254
+],
+[
+"Tutoring",
+254
+],
+[
+"The Yardrow Melee",
+254
+],
+[
+"The Zaland Melee",
+254
+],
+[
+"The Gariland Magick Melee",
+254
+],
+[
+"Arteficers' Contest",
+254
+],
+[
+"Shrine of Chaos",
+254
+],
+[
+"Eureka",
+254
+],
+[
+"Pandaemonium",
+254
+],
+[
+"Mirage Tower",
+254
+],
+[
+"Floating Castle",
+254
+],
+[
+"Matoya's Cave",
+254
+],
+[
+"Crystal Tower",
+254
+],
+[
+"Floating Continent",
+254
+],
+[
+"Fortress of Trials",
+254
+],
+[
+"Tower of Babel",
+254
+],
+[
+"Ronkan Ruins",
+254
+],
+[
+"Falgabard",
+254
+],
+[
+"Phantom Train",
+254
+],
+[
+"Tozus Village",
+254
+],
+[
+"Chocobo Forest",
+254
+],
+[
+"Semitt Falls",
+254
+],
+[
+"Four-Deity Plate",
+254
+],
+[
+"Statuette of Lilith",
+254
+],
+[
+"Scarab Charm",
+254
+],
+[
+"Tobacco Pipe",
+254
+],
+[
+"Coin Blade",
+254
+],
+[
+"Black Cat",
+254
+],
+[
+"Hanya Mask",
+254
+],
+[
+"Parade Helm",
+254
+],
+[
+"Moppet Bread",
+254
+],
+[
+"Goliath Bread",
+254
+],
+[
+"Calcobrena",
+254
+],
+[
+"Lugae",
+254
+],
+[
+"Red Materia",
+254
+],
+[
+"Blue Materia",
+254
+],
+[
+"Black Materia",
+254
+],
+[
+"White Materia",
+254
+],
+[
+"Rat Tail",
+254
+],
+[
+"Mesa's Musings",
+254
+],
+[
+"Nanai's Histories",
+254
+],
+[
+"Veil of Wiyu",
+254
+],
+[
+"Enavia Chronicles",
+254
+],
+[
+"Enchanted Pistol",
+254
+],
+[
+"Enchanted Machinegun",
+254
+],
+[
+"Zanmato",
+254
+],
+[
+"Orb of Minwu",
+254
+],
+[
+"Tarot de Bennstat",
+254
+],
+[
+"Excalipoor",
+254
+],
+[
+"Yggdrasil Mistletoe",
+254
+],
+[
+"Lance of Longibunne",
+254
+],
+[
+"Chocobo Cannon",
+254
+],
+[
+"Saint Elmo's Fire",
+254
+],
+[
+"The Scriptures",
+254
+],
+[
+"欠番1",
+254
+],
+[
+"欠番2",
+254
+],
+[
+"Aries",
+254
+],
+[
+"Taurus",
+254
+],
+[
+"Gemini",
+254
+],
+[
+"Cancer",
+254
+],
+[
+"Leo",
+254
+],
+[
+"Virgo",
+254
+],
+[
+"Libra",
+254
+],
+[
+"Scorpio",
+254
+],
+[
+"Sagittarius",
+254
+],
+[
+"Capricorn",
+254
+],
+[
+"Aquarius",
+254
+],
+[
+"Pisces",
+254
+],
+[
+"Serpentarius",
+254
+],
+[
+"The Knights Apprentice",
+254
+],
+[
+"Father's Passing",
+254
+],
+[
+"Argath's Rescue",
+254
+],
+[
+"Reunion with Dycedarg",
+254
+],
+[
+"At Eagrose Castle",
+254
+],
+[
+"In Pursuit of Gustav",
+254
+],
+[
+"Marquis Elmdore's Rescue",
+254
+],
+[
+"Liege Lord of Gallionne",
+254
+],
+[
+"Swordmaiden of the Corpse Brigade",
+254
+],
+[
+"Corpse Brigade Assault",
+254
+],
+[
+"Delita's Fury",
+254
+],
+[
+"Blades of Grass",
+254
+],
+[
+"Grief and Hatred",
+254
+],
+[
+"Partings",
+254
+],
+[
+"Ovelia's Prayer",
+254
+],
+[
+"In Pursuit of the Princess",
+254
+],
+[
+"Reunion with Delita",
+254
+],
+[
+"The Machinist",
+254
+],
+[
+"Ovelia's Misgivings",
+254
+],
+[
+"Dycedarg's Scheming",
+254
+],
+[
+"The Cardinal and the Stone",
+254
+],
+[
+"Seekers of the Stone",
+254
+],
+[
+"Besrudio's Rescue",
+254
+],
+[
+"Delita's Warning",
+254
+],
+[
+"The Cardinal's Wrath",
+254
+],
+[
+"The Manipulative and the Subservient",
+254
+],
+[
+"The War of the Lions",
+254
+],
+[
+"The Thunder God",
+254
+],
+[
+"Orran",
+254
+],
+[
+"Reunion with Zalbaag",
+254
+],
+[
+"The Heretic's Brand",
+254
+],
+[
+"Elder's Confession",
+254
+],
+[
+"Belias, the Gigas",
+254
+],
+[
+"Ovelia and Delita",
+254
+],
+[
+"The Thunder God's Son",
+254
+],
+[
+"Rapha",
+254
+],
+[
+"The Grand Duke's Ambitions",
+254
+],
+[
+"Alma's Escape",
+254
+],
+[
+"Tragedy's Mark",
+254
+],
+[
+"A Different Power",
+254
+],
+[
+"A Pure Heart",
+254
+],
+[
+"In the Shadows",
+254
+],
+[
+"Keeper of the Stone",
+254
+],
+[
+"Delita's Will",
+254
+],
+[
+"Gears in Motion",
+254
+],
+[
+"Thunder God in Chains",
+254
+],
+[
+"Duke Larg's Assassination",
+254
+],
+[
+"Freeing the Count",
+254
+],
+[
+"The Black Lion Slain",
+254
+],
+[
+"Dycedarg's Ambition",
+254
+],
+[
+"Earthly Vessels",
+254
+],
+[
+"The Enigmatic Lucavi",
+254
+],
+[
+"Delita's Betrayal",
+254
+],
+[
+"Mossfungus",
+254
+],
+[
+"The High Confessor's Demise",
+254
+],
+[
+"Requiem",
+254
+],
+[
+"The Metallic Sphere",
+254
+],
+[
+"The Automaton",
+254
+],
+[
+"The Orrery",
+254
+],
+[
+"Cloud",
+254
+],
+[
+"The Curse",
+254
+],
+[
+"The Necrohol Gate",
+254
+],
+[
+"Good-byes",
+254
+],
+[
+"The Fruits of Endeavor",
+254
+],
+[
+"To Orbonne",
+254
+],
+[
+"Ovelia's Kidnapping",
+254
+],
+[
+"Vow for Vengeance",
+254
+],
+[
+"At Lesalia",
+254
+],
+[
+"A Common Chord",
+254
+],
+[
+"Reunion with Ovelia",
+254
+],
+[
+"Reunion with Ovelia",
+254
+],
+[
+"Stampede",
+254
+],
+[
+"The Hunter",
+254
+],
+[
+"The Godless Thief",
+254
+],
+[
+"The Sky Pirate",
+254
+],
+[
+"A Voice From the Past",
+254
+],
+[
+"Reis's Rescue",
+254
+],
+[
+"Gift of the Magi",
+254
+],
+[
+"",
+254
+],
+[
+"{Ramza}",
+254
+],
+[
+"{Ramza}",
+254
+],
+[
+"{Ramza}",
+254
+],
+[
+"{Ramza}",
+254
+],
+[
+"{Ramza}",
+254
+],
+[
+"{Ramza}",
+254
+],
+[
+"{Ramza}",
+254
+],
+[
+"{Ramza}",
+254
+],
+[
+"{Ramza}",
+254
+],
+[
+"{Ramza}",
+254
+],
+[
+"{Ramza}",
+254
+],
+[
+"{Ramza}",
+254
+],
+[
+"{Ramza}",
+254
+],
+[
+"{Ramza}",
+254
+],
+[
+"{Ramza}",
+254
+],
+[
+"",
+254
+],
+[
+"Delita Heiral",
+254
+],
+[
+"Delita Heiral",
+254
+],
+[
+"Delita Heiral",
+254
+],
+[
+"Delita Heiral",
+254
+],
+[
+"Delita Heiral",
+254
+],
+[
+"Delita Heiral",
+254
+],
+[
+"Delita Heiral",
+254
+],
+[
+"Delita Heiral",
+254
+],
+[
+"Delita Heiral",
+254
+],
+[
+"Delita Heiral",
+254
+],
+[
+"Delita Heiral",
+254
+],
+[
+"Delita Heiral",
+254
+],
+[
+"Delita Heiral",
+254
+],
+[
+"Delita Heiral",
+254
+],
+[
+"Delita Heiral",
+254
+],
+[
+"",
+254
+],
+[
+"Princess Ovelia",
+254
+],
+[
+"Princess Ovelia",
+254
+],
+[
+"Princess Ovelia",
+254
+],
+[
+"Princess Ovelia",
+254
+],
+[
+"Princess Ovelia",
+254
+],
+[
+"Princess Ovelia",
+254
+],
+[
+"Princess Ovelia",
+254
+],
+[
+"Princess Ovelia",
+254
+],
+[
+"Princess Ovelia",
+254
+],
+[
+"Princess Ovelia",
+254
+],
+[
+"Princess Ovelia",
+254
+],
+[
+"Princess Ovelia",
+254
+],
+[
+"Princess Ovelia",
+254
+],
+[
+"Princess Ovelia",
+254
+],
+[
+"Princess Ovelia",
+254
+],
+[
+"",
+254
+],
+[
+"Alma Beoulve",
+254
+],
+[
+"Alma Beoulve",
+254
+],
+[
+"Alma Beoulve",
+254
+],
+[
+"Alma Beoulve",
+254
+],
+[
+"Alma Beoulve",
+254
+],
+[
+"Alma Beoulve",
+254
+],
+[
+"Alma Beoulve",
+254
+],
+[
+"Alma Beoulve",
+254
+],
+[
+"Alma Beoulve",
+254
+],
+[
+"Alma Beoulve",
+254
+],
+[
+"Alma Beoulve",
+254
+],
+[
+"Alma Beoulve",
+254
+],
+[
+"Alma Beoulve",
+254
+],
+[
+"Alma Beoulve",
+254
+],
+[
+"Alma Beoulve",
+254
+],
+[
+"",
+254
+],
+[
+"Lord Zalbaag",
+254
+],
+[
+"Lord Zalbaag",
+254
+],
+[
+"Lord Zalbaag",
+254
+],
+[
+"Lord Zalbaag",
+254
+],
+[
+"Lord Zalbaag",
+254
+],
+[
+"Lord Zalbaag",
+254
+],
+[
+"Lord Zalbaag",
+254
+],
+[
+"Lord Zalbaag",
+254
+],
+[
+"Lord Zalbaag",
+254
+],
+[
+"Lord Zalbaag",
+254
+],
+[
+"Lord Zalbaag",
+254
+],
+[
+"Lord Zalbaag",
+254
+],
+[
+"Lord Zalbaag",
+254
+],
+[
+"Lord Zalbaag",
+254
+],
+[
+"Lord Zalbaag",
+254
+],
+[
+"",
+254
+],
+[
+"Lord Dycedarg",
+254
+],
+[
+"Lord Dycedarg",
+254
+],
+[
+"Lord Dycedarg",
+254
+],
+[
+"Lord Dycedarg",
+254
+],
+[
+"Lord Dycedarg",
+254
+],
+[
+"Lord Dycedarg",
+254
+],
+[
+"Lord Dycedarg",
+254
+],
+[
+"Lord Dycedarg",
+254
+],
+[
+"Lord Dycedarg",
+254
+],
+[
+"Lord Dycedarg",
+254
+],
+[
+"Lord Dycedarg",
+254
+],
+[
+"Lord Dycedarg",
+254
+],
+[
+"Lord Dycedarg",
+254
+],
+[
+"Lord Dycedarg",
+254
+],
+[
+"Lord Dycedarg",
+254
+],
+[
+"",
+254
+],
+[
+"Duke Larg",
+254
+],
+[
+"Duke Larg",
+254
+],
+[
+"Duke Larg",
+254
+],
+[
+"Duke Larg",
+254
+],
+[
+"Duke Larg",
+254
+],
+[
+"Duke Larg",
+254
+],
+[
+"Duke Larg",
+254
+],
+[
+"Duke Larg",
+254
+],
+[
+"Duke Larg",
+254
+],
+[
+"Duke Larg",
+254
+],
+[
+"Duke Larg",
+254
+],
+[
+"Duke Larg",
+254
+],
+[
+"Duke Larg",
+254
+],
+[
+"Duke Larg",
+254
+],
+[
+"Duke Larg",
+254
+],
+[
+"",
+254
+],
+[
+"Duke Goltanna",
+254
+],
+[
+"Duke Goltanna",
+254
+],
+[
+"Duke Goltanna",
+254
+],
+[
+"Duke Goltanna",
+254
+],
+[
+"Duke Goltanna",
+254
+],
+[
+"Duke Goltanna",
+254
+],
+[
+"Duke Goltanna",
+254
+],
+[
+"Duke Goltanna",
+254
+],
+[
+"Duke Goltanna",
+254
+],
+[
+"Duke Goltanna",
+254
+],
+[
+"Duke Goltanna",
+254
+],
+[
+"Duke Goltanna",
+254
+],
+[
+"Duke Goltanna",
+254
+],
+[
+"Duke Goltanna",
+254
+],
+[
+"Duke Goltanna",
+254
+],
+[
+"",
+254
+],
+[
+"Prince Orinus",
+254
+],
+[
+"Prince Orinus",
+254
+],
+[
+"Prince Orinus",
+254
+],
+[
+"Prince Orinus",
+254
+],
+[
+"Prince Orinus",
+254
+],
+[
+"Prince Orinus",
+254
+],
+[
+"Prince Orinus",
+254
+],
+[
+"Prince Orinus",
+254
+],
+[
+"Prince Orinus",
+254
+],
+[
+"Prince Orinus",
+254
+],
+[
+"Prince Orinus",
+254
+],
+[
+"Prince Orinus",
+254
+],
+[
+"Prince Orinus",
+254
+],
+[
+"Prince Orinus",
+254
+],
+[
+"Prince Orinus",
+254
+],
+[
+"",
+254
+],
+[
+"Queen Louveria",
+254
+],
+[
+"Queen Louveria",
+254
+],
+[
+"Queen Louveria",
+254
+],
+[
+"Queen Louveria",
+254
+],
+[
+"Queen Louveria",
+254
+],
+[
+"Queen Louveria",
+254
+],
+[
+"Queen Louveria",
+254
+],
+[
+"Queen Louveria",
+254
+],
+[
+"Queen Louveria",
+254
+],
+[
+"Queen Louveria",
+254
+],
+[
+"Queen Louveria",
+254
+],
+[
+"Queen Louveria",
+254
+],
+[
+"Queen Louveria",
+254
+],
+[
+"Queen Louveria",
+254
+],
+[
+"Queen Louveria",
+254
+],
+[
+"",
+254
+],
+[
+"Ondoria III",
+254
+],
+[
+"Ondoria III",
+254
+],
+[
+"Ondoria III",
+254
+],
+[
+"Ondoria III",
+254
+],
+[
+"Ondoria III",
+254
+],
+[
+"Ondoria III",
+254
+],
+[
+"Ondoria III",
+254
+],
+[
+"Ondoria III",
+254
+],
+[
+"Ondoria III",
+254
+],
+[
+"Ondoria III",
+254
+],
+[
+"Ondoria III",
+254
+],
+[
+"Ondoria III",
+254
+],
+[
+"Ondoria III",
+254
+],
+[
+"Ondoria III",
+254
+],
+[
+"Ondoria III",
+254
+],
+[
+"",
+254
+],
+[
+"High Confessor Marcel",
+254
+],
+[
+"High Confessor Marcel",
+254
+],
+[
+"High Confessor Marcel",
+254
+],
+[
+"High Confessor Marcel",
+254
+],
+[
+"High Confessor Marcel",
+254
+],
+[
+"High Confessor Marcel",
+254
+],
+[
+"High Confessor Marcel",
+254
+],
+[
+"High Confessor Marcel",
+254
+],
+[
+"High Confessor Marcel",
+254
+],
+[
+"High Confessor Marcel",
+254
+],
+[
+"High Confessor Marcel",
+254
+],
+[
+"High Confessor Marcel",
+254
+],
+[
+"High Confessor Marcel",
+254
+],
+[
+"High Confessor Marcel",
+254
+],
+[
+"High Confessor Marcel",
+254
+],
+[
+"",
+254
+],
+[
+"Argath Thadalfus",
+254
+],
+[
+"Argath Thadalfus",
+254
+],
+[
+"Argath Thadalfus",
+254
+],
+[
+"Argath Thadalfus",
+254
+],
+[
+"Argath Thadalfus",
+254
+],
+[
+"Argath Thadalfus",
+254
+],
+[
+"Argath Thadalfus",
+254
+],
+[
+"Argath Thadalfus",
+254
+],
+[
+"Argath Thadalfus",
+254
+],
+[
+"Argath Thadalfus",
+254
+],
+[
+"Argath Thadalfus",
+254
+],
+[
+"Argath Thadalfus",
+254
+],
+[
+"Argath Thadalfus",
+254
+],
+[
+"Argath Thadalfus",
+254
+],
+[
+"Argath Thadalfus",
+254
+],
+[
+"",
+254
+],
+[
+"Ser Gaffgarion",
+254
+],
+[
+"Ser Gaffgarion",
+254
+],
+[
+"Ser Gaffgarion",
+254
+],
+[
+"Ser Gaffgarion",
+254
+],
+[
+"Ser Gaffgarion",
+254
+],
+[
+"Ser Gaffgarion",
+254
+],
+[
+"Ser Gaffgarion",
+254
+],
+[
+"Ser Gaffgarion",
+254
+],
+[
+"Ser Gaffgarion",
+254
+],
+[
+"Ser Gaffgarion",
+254
+],
+[
+"Ser Gaffgarion",
+254
+],
+[
+"Ser Gaffgarion",
+254
+],
+[
+"Ser Gaffgarion",
+254
+],
+[
+"Ser Gaffgarion",
+254
+],
+[
+"Ser Gaffgarion",
+254
+],
+[
+"",
+254
+],
+[
+"Lady Agrias",
+254
+],
+[
+"Lady Agrias",
+254
+],
+[
+"Lady Agrias",
+254
+],
+[
+"Lady Agrias",
+254
+],
+[
+"Lady Agrias",
+254
+],
+[
+"Lady Agrias",
+254
+],
+[
+"Lady Agrias",
+254
+],
+[
+"Lady Agrias",
+254
+],
+[
+"Lady Agrias",
+254
+],
+[
+"Lady Agrias",
+254
+],
+[
+"Lady Agrias",
+254
+],
+[
+"Lady Agrias",
+254
+],
+[
+"Lady Agrias",
+254
+],
+[
+"Lady Agrias",
+254
+],
+[
+"Lady Agrias",
+254
+],
+[
+"",
+254
+],
+[
+"Count Orlandeau",
+254
+],
+[
+"Count Orlandeau",
+254
+],
+[
+"Count Orlandeau",
+254
+],
+[
+"Count Orlandeau",
+254
+],
+[
+"Count Orlandeau",
+254
+],
+[
+"Count Orlandeau",
+254
+],
+[
+"Count Orlandeau",
+254
+],
+[
+"Count Orlandeau",
+254
+],
+[
+"Count Orlandeau",
+254
+],
+[
+"Count Orlandeau",
+254
+],
+[
+"Count Orlandeau",
+254
+],
+[
+"Count Orlandeau",
+254
+],
+[
+"Count Orlandeau",
+254
+],
+[
+"Count Orlandeau",
+254
+],
+[
+"Count Orlandeau",
+254
+],
+[
+"",
+254
+],
+[
+"Orran Durai",
+254
+],
+[
+"Orran Durai",
+254
+],
+[
+"Orran Durai",
+254
+],
+[
+"Orran Durai",
+254
+],
+[
+"Orran Durai",
+254
+],
+[
+"Orran Durai",
+254
+],
+[
+"Orran Durai",
+254
+],
+[
+"Orran Durai",
+254
+],
+[
+"Orran Durai",
+254
+],
+[
+"Orran Durai",
+254
+],
+[
+"Orran Durai",
+254
+],
+[
+"Orran Durai",
+254
+],
+[
+"Orran Durai",
+254
+],
+[
+"Orran Durai",
+254
+],
+[
+"Orran Durai",
+254
+],
+[
+"",
+254
+],
+[
+"Confessor Zalmour",
+254
+],
+[
+"Confessor Zalmour",
+254
+],
+[
+"Confessor Zalmour",
+254
+],
+[
+"Confessor Zalmour",
+254
+],
+[
+"Confessor Zalmour",
+254
+],
+[
+"Confessor Zalmour",
+254
+],
+[
+"Confessor Zalmour",
+254
+],
+[
+"Confessor Zalmour",
+254
+],
+[
+"Confessor Zalmour",
+254
+],
+[
+"Confessor Zalmour",
+254
+],
+[
+"Confessor Zalmour",
+254
+],
+[
+"Confessor Zalmour",
+254
+],
+[
+"Confessor Zalmour",
+254
+],
+[
+"Confessor Zalmour",
+254
+],
+[
+"Confessor Zalmour",
+254
+],
+[
+"",
+254
+],
+[
+"Celebrant Bremondt",
+254
+],
+[
+"Celebrant Bremondt",
+254
+],
+[
+"Celebrant Bremondt",
+254
+],
+[
+"Celebrant Bremondt",
+254
+],
+[
+"Celebrant Bremondt",
+254
+],
+[
+"Celebrant Bremondt",
+254
+],
+[
+"Celebrant Bremondt",
+254
+],
+[
+"Celebrant Bremondt",
+254
+],
+[
+"Celebrant Bremondt",
+254
+],
+[
+"Celebrant Bremondt",
+254
+],
+[
+"Celebrant Bremondt",
+254
+],
+[
+"Celebrant Bremondt",
+254
+],
+[
+"Celebrant Bremondt",
+254
+],
+[
+"Celebrant Bremondt",
+254
+],
+[
+"Celebrant Bremondt",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Elder Simon",
+254
+],
+[
+"Elder Simon",
+254
+],
+[
+"Elder Simon",
+254
+],
+[
+"Elder Simon",
+254
+],
+[
+"Elder Simon",
+254
+],
+[
+"Elder Simon",
+254
+],
+[
+"Elder Simon",
+254
+],
+[
+"Elder Simon",
+254
+],
+[
+"Elder Simon",
+254
+],
+[
+"Elder Simon",
+254
+],
+[
+"Elder Simon",
+254
+],
+[
+"Elder Simon",
+254
+],
+[
+"Elder Simon",
+254
+],
+[
+"Elder Simon",
+254
+],
+[
+"Elder Simon",
+254
+],
+[
+"",
+254
+],
+[
+"Aliste Rosenheim",
+254
+],
+[
+"Aliste Rosenheim",
+254
+],
+[
+"Aliste Rosenheim",
+254
+],
+[
+"Aliste Rosenheim",
+254
+],
+[
+"Aliste Rosenheim",
+254
+],
+[
+"Aliste Rosenheim",
+254
+],
+[
+"Aliste Rosenheim",
+254
+],
+[
+"Aliste Rosenheim",
+254
+],
+[
+"Aliste Rosenheim",
+254
+],
+[
+"Aliste Rosenheim",
+254
+],
+[
+"Aliste Rosenheim",
+254
+],
+[
+"Aliste Rosenheim",
+254
+],
+[
+"Aliste Rosenheim",
+254
+],
+[
+"Aliste Rosenheim",
+254
+],
+[
+"Aliste Rosenheim",
+254
+],
+[
+"",
+254
+],
+[
+"Beowulf Cadmus",
+254
+],
+[
+"Beowulf Cadmus",
+254
+],
+[
+"Beowulf Cadmus",
+254
+],
+[
+"Beowulf Cadmus",
+254
+],
+[
+"Beowulf Cadmus",
+254
+],
+[
+"Beowulf Cadmus",
+254
+],
+[
+"Beowulf Cadmus",
+254
+],
+[
+"Beowulf Cadmus",
+254
+],
+[
+"Beowulf Cadmus",
+254
+],
+[
+"Beowulf Cadmus",
+254
+],
+[
+"Beowulf Cadmus",
+254
+],
+[
+"Beowulf Cadmus",
+254
+],
+[
+"Beowulf Cadmus",
+254
+],
+[
+"Beowulf Cadmus",
+254
+],
+[
+"Beowulf Cadmus",
+254
+],
+[
+"",
+254
+],
+[
+"Wiegraf Folles",
+254
+],
+[
+"Wiegraf Folles",
+254
+],
+[
+"Wiegraf Folles",
+254
+],
+[
+"Wiegraf Folles",
+254
+],
+[
+"Wiegraf Folles",
+254
+],
+[
+"Wiegraf Folles",
+254
+],
+[
+"Wiegraf Folles",
+254
+],
+[
+"Wiegraf Folles",
+254
+],
+[
+"Wiegraf Folles",
+254
+],
+[
+"Wiegraf Folles",
+254
+],
+[
+"Wiegraf Folles",
+254
+],
+[
+"Wiegraf Folles",
+254
+],
+[
+"Wiegraf Folles",
+254
+],
+[
+"Wiegraf Folles",
+254
+],
+[
+"Wiegraf Folles",
+254
+],
+[
+"",
+254
+],
+[
+"Reis Duelar",
+254
+],
+[
+"Reis Duelar",
+254
+],
+[
+"Reis Duelar",
+254
+],
+[
+"Reis Duelar",
+254
+],
+[
+"Reis Duelar",
+254
+],
+[
+"Reis Duelar",
+254
+],
+[
+"Reis Duelar",
+254
+],
+[
+"Reis Duelar",
+254
+],
+[
+"Reis Duelar",
+254
+],
+[
+"Reis Duelar",
+254
+],
+[
+"Reis Duelar",
+254
+],
+[
+"Reis Duelar",
+254
+],
+[
+"Reis Duelar",
+254
+],
+[
+"Reis Duelar",
+254
+],
+[
+"Reis Duelar",
+254
+],
+[
+"",
+254
+],
+[
+"Valmafra Lenande",
+254
+],
+[
+"Valmafra Lenande",
+254
+],
+[
+"Valmafra Lenande",
+254
+],
+[
+"Valmafra Lenande",
+254
+],
+[
+"Valmafra Lenande",
+254
+],
+[
+"Valmafra Lenande",
+254
+],
+[
+"Valmafra Lenande",
+254
+],
+[
+"Valmafra Lenande",
+254
+],
+[
+"Valmafra Lenande",
+254
+],
+[
+"Valmafra Lenande",
+254
+],
+[
+"Valmafra Lenande",
+254
+],
+[
+"Valmafra Lenande",
+254
+],
+[
+"Valmafra Lenande",
+254
+],
+[
+"Valmafra Lenande",
+254
+],
+[
+"Valmafra Lenande",
+254
+],
+[
+"",
+254
+],
+[
+"Cardinal Delacroix",
+254
+],
+[
+"Cardinal Delacroix",
+254
+],
+[
+"Cardinal Delacroix",
+254
+],
+[
+"Cardinal Delacroix",
+254
+],
+[
+"Cardinal Delacroix",
+254
+],
+[
+"Cardinal Delacroix",
+254
+],
+[
+"Cardinal Delacroix",
+254
+],
+[
+"Cardinal Delacroix",
+254
+],
+[
+"Cardinal Delacroix",
+254
+],
+[
+"Cardinal Delacroix",
+254
+],
+[
+"Cardinal Delacroix",
+254
+],
+[
+"Cardinal Delacroix",
+254
+],
+[
+"Cardinal Delacroix",
+254
+],
+[
+"Cardinal Delacroix",
+254
+],
+[
+"Cardinal Delacroix",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Rapha Galthena",
+254
+],
+[
+"Rapha Galthena",
+254
+],
+[
+"Rapha Galthena",
+254
+],
+[
+"Rapha Galthena",
+254
+],
+[
+"Rapha Galthena",
+254
+],
+[
+"Rapha Galthena",
+254
+],
+[
+"Rapha Galthena",
+254
+],
+[
+"Rapha Galthena",
+254
+],
+[
+"Rapha Galthena",
+254
+],
+[
+"Rapha Galthena",
+254
+],
+[
+"Rapha Galthena",
+254
+],
+[
+"Rapha Galthena",
+254
+],
+[
+"Rapha Galthena",
+254
+],
+[
+"Rapha Galthena",
+254
+],
+[
+"Rapha Galthena",
+254
+],
+[
+"",
+254
+],
+[
+"Marach Galthena",
+254
+],
+[
+"Marach Galthena",
+254
+],
+[
+"Marach Galthena",
+254
+],
+[
+"Marach Galthena",
+254
+],
+[
+"Marach Galthena",
+254
+],
+[
+"Marach Galthena",
+254
+],
+[
+"Marach Galthena",
+254
+],
+[
+"Marach Galthena",
+254
+],
+[
+"Marach Galthena",
+254
+],
+[
+"Marach Galthena",
+254
+],
+[
+"Marach Galthena",
+254
+],
+[
+"Marach Galthena",
+254
+],
+[
+"Marach Galthena",
+254
+],
+[
+"Marach Galthena",
+254
+],
+[
+"Marach Galthena",
+254
+],
+[
+"",
+254
+],
+[
+"Marquis Elmdore",
+254
+],
+[
+"Marquis Elmdore",
+254
+],
+[
+"Marquis Elmdore",
+254
+],
+[
+"Marquis Elmdore",
+254
+],
+[
+"Marquis Elmdore",
+254
+],
+[
+"Marquis Elmdore",
+254
+],
+[
+"Marquis Elmdore",
+254
+],
+[
+"Marquis Elmdore",
+254
+],
+[
+"Marquis Elmdore",
+254
+],
+[
+"Marquis Elmdore",
+254
+],
+[
+"Marquis Elmdore",
+254
+],
+[
+"Marquis Elmdore",
+254
+],
+[
+"Marquis Elmdore",
+254
+],
+[
+"Marquis Elmdore",
+254
+],
+[
+"Marquis Elmdore",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Grand Duke Barrington",
+254
+],
+[
+"Grand Duke Barrington",
+254
+],
+[
+"Grand Duke Barrington",
+254
+],
+[
+"Grand Duke Barrington",
+254
+],
+[
+"Grand Duke Barrington",
+254
+],
+[
+"Grand Duke Barrington",
+254
+],
+[
+"Grand Duke Barrington",
+254
+],
+[
+"Grand Duke Barrington",
+254
+],
+[
+"Grand Duke Barrington",
+254
+],
+[
+"Grand Duke Barrington",
+254
+],
+[
+"Grand Duke Barrington",
+254
+],
+[
+"Grand Duke Barrington",
+254
+],
+[
+"Grand Duke Barrington",
+254
+],
+[
+"Grand Duke Barrington",
+254
+],
+[
+"Grand Duke Barrington",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Mustadio Bunansa",
+254
+],
+[
+"Mustadio Bunansa",
+254
+],
+[
+"Mustadio Bunansa",
+254
+],
+[
+"Mustadio Bunansa",
+254
+],
+[
+"Mustadio Bunansa",
+254
+],
+[
+"Mustadio Bunansa",
+254
+],
+[
+"Mustadio Bunansa",
+254
+],
+[
+"Mustadio Bunansa",
+254
+],
+[
+"Mustadio Bunansa",
+254
+],
+[
+"Mustadio Bunansa",
+254
+],
+[
+"Mustadio Bunansa",
+254
+],
+[
+"Mustadio Bunansa",
+254
+],
+[
+"Mustadio Bunansa",
+254
+],
+[
+"Mustadio Bunansa",
+254
+],
+[
+"Mustadio Bunansa",
+254
+],
+[
+"",
+254
+],
+[
+"Besrudio Bunansa",
+254
+],
+[
+"Besrudio Bunansa",
+254
+],
+[
+"Besrudio Bunansa",
+254
+],
+[
+"Besrudio Bunansa",
+254
+],
+[
+"Besrudio Bunansa",
+254
+],
+[
+"Besrudio Bunansa",
+254
+],
+[
+"Besrudio Bunansa",
+254
+],
+[
+"Besrudio Bunansa",
+254
+],
+[
+"Besrudio Bunansa",
+254
+],
+[
+"Besrudio Bunansa",
+254
+],
+[
+"Besrudio Bunansa",
+254
+],
+[
+"Besrudio Bunansa",
+254
+],
+[
+"Besrudio Bunansa",
+254
+],
+[
+"Besrudio Bunansa",
+254
+],
+[
+"Besrudio Bunansa",
+254
+],
+[
+"",
+254
+],
+[
+"Ludovich Baert",
+254
+],
+[
+"Ludovich Baert",
+254
+],
+[
+"Ludovich Baert",
+254
+],
+[
+"Ludovich Baert",
+254
+],
+[
+"Ludovich Baert",
+254
+],
+[
+"Ludovich Baert",
+254
+],
+[
+"Ludovich Baert",
+254
+],
+[
+"Ludovich Baert",
+254
+],
+[
+"Ludovich Baert",
+254
+],
+[
+"Ludovich Baert",
+254
+],
+[
+"Ludovich Baert",
+254
+],
+[
+"Ludovich Baert",
+254
+],
+[
+"Ludovich Baert",
+254
+],
+[
+"Ludovich Baert",
+254
+],
+[
+"Ludovich Baert",
+254
+],
+[
+"",
+254
+],
+[
+"Celia",
+254
+],
+[
+"Celia",
+254
+],
+[
+"Celia",
+254
+],
+[
+"Celia",
+254
+],
+[
+"Celia",
+254
+],
+[
+"Celia",
+254
+],
+[
+"Celia",
+254
+],
+[
+"Celia",
+254
+],
+[
+"Celia",
+254
+],
+[
+"Celia",
+254
+],
+[
+"Celia",
+254
+],
+[
+"Celia",
+254
+],
+[
+"Celia",
+254
+],
+[
+"Celia",
+254
+],
+[
+"Celia",
+254
+],
+[
+"",
+254
+],
+[
+"Lettie",
+254
+],
+[
+"Lettie",
+254
+],
+[
+"Lettie",
+254
+],
+[
+"Lettie",
+254
+],
+[
+"Lettie",
+254
+],
+[
+"Lettie",
+254
+],
+[
+"Lettie",
+254
+],
+[
+"Lettie",
+254
+],
+[
+"Lettie",
+254
+],
+[
+"Lettie",
+254
+],
+[
+"Lettie",
+254
+],
+[
+"Lettie",
+254
+],
+[
+"Lettie",
+254
+],
+[
+"Lettie",
+254
+],
+[
+"Lettie",
+254
+],
+[
+"",
+254
+],
+[
+"Saint Ajora",
+254
+],
+[
+"Saint Ajora",
+254
+],
+[
+"Saint Ajora",
+254
+],
+[
+"Saint Ajora",
+254
+],
+[
+"Saint Ajora",
+254
+],
+[
+"Saint Ajora",
+254
+],
+[
+"Saint Ajora",
+254
+],
+[
+"Saint Ajora",
+254
+],
+[
+"Saint Ajora",
+254
+],
+[
+"Saint Ajora",
+254
+],
+[
+"Saint Ajora",
+254
+],
+[
+"Saint Ajora",
+254
+],
+[
+"Saint Ajora",
+254
+],
+[
+"Saint Ajora",
+254
+],
+[
+"Saint Ajora",
+254
+],
+[
+"",
+254
+],
+[
+"Folmarv Tengille",
+254
+],
+[
+"Knight Templar Folmarv",
+254
+],
+[
+"Knight Templar Folmarv",
+254
+],
+[
+"Knight Templar Folmarv",
+254
+],
+[
+"Knight Templar Folmarv",
+254
+],
+[
+"Knight Templar Folmarv",
+254
+],
+[
+"Knight Templar Folmarv",
+254
+],
+[
+"Knight Templar Folmarv",
+254
+],
+[
+"Knight Templar Folmarv",
+254
+],
+[
+"Knight Templar Folmarv",
+254
+],
+[
+"Knight Templar Folmarv",
+254
+],
+[
+"Knight Templar Folmarv",
+254
+],
+[
+"Knight Templar Folmarv",
+254
+],
+[
+"Knight Templar Folmarv",
+254
+],
+[
+"Knight Templar Folmarv",
+254
+],
+[
+"",
+254
+],
+[
+"Knight Templar Loffrey",
+254
+],
+[
+"Knight Templar Loffrey",
+254
+],
+[
+"Knight Templar Loffrey",
+254
+],
+[
+"Knight Templar Loffrey",
+254
+],
+[
+"Knight Templar Loffrey",
+254
+],
+[
+"Knight Templar Loffrey",
+254
+],
+[
+"Knight Templar Loffrey",
+254
+],
+[
+"Knight Templar Loffrey",
+254
+],
+[
+"Knight Templar Loffrey",
+254
+],
+[
+"Knight Templar Loffrey",
+254
+],
+[
+"Knight Templar Loffrey",
+254
+],
+[
+"Knight Templar Loffrey",
+254
+],
+[
+"Knight Templar Loffrey",
+254
+],
+[
+"Knight Templar Loffrey",
+254
+],
+[
+"Knight Templar Loffrey",
+254
+],
+[
+"",
+254
+],
+[
+"Knight Templar Isilud",
+254
+],
+[
+"Knight Templar Isilud",
+254
+],
+[
+"Knight Templar Isilud",
+254
+],
+[
+"Knight Templar Isilud",
+254
+],
+[
+"Knight Templar Isilud",
+254
+],
+[
+"Knight Templar Isilud",
+254
+],
+[
+"Knight Templar Isilud",
+254
+],
+[
+"Knight Templar Isilud",
+254
+],
+[
+"Knight Templar Isilud",
+254
+],
+[
+"Knight Templar Isilud",
+254
+],
+[
+"Knight Templar Isilud",
+254
+],
+[
+"Knight Templar Isilud",
+254
+],
+[
+"Knight Templar Isilud",
+254
+],
+[
+"Knight Templar Isilud",
+254
+],
+[
+"Knight Templar Isilud",
+254
+],
+[
+"",
+254
+],
+[
+"Knight Templar Cletienne",
+254
+],
+[
+"Knight Templar Cletienne",
+254
+],
+[
+"Knight Templar Cletienne",
+254
+],
+[
+"Knight Templar Cletienne",
+254
+],
+[
+"Knight Templar Cletienne",
+254
+],
+[
+"Knight Templar Cletienne",
+254
+],
+[
+"Knight Templar Cletienne",
+254
+],
+[
+"Knight Templar Cletienne",
+254
+],
+[
+"Knight Templar Cletienne",
+254
+],
+[
+"Knight Templar Cletienne",
+254
+],
+[
+"Knight Templar Cletienne",
+254
+],
+[
+"Knight Templar Cletienne",
+254
+],
+[
+"Knight Templar Cletienne",
+254
+],
+[
+"Knight Templar Cletienne",
+254
+],
+[
+"Knight Templar Cletienne",
+254
+],
+[
+"",
+254
+],
+[
+"Knight Templar Barich",
+254
+],
+[
+"Knight Templar Barich",
+254
+],
+[
+"Knight Templar Barich",
+254
+],
+[
+"Knight Templar Barich",
+254
+],
+[
+"Knight Templar Barich",
+254
+],
+[
+"Knight Templar Barich",
+254
+],
+[
+"Knight Templar Barich",
+254
+],
+[
+"Knight Templar Barich",
+254
+],
+[
+"Knight Templar Barich",
+254
+],
+[
+"Knight Templar Barich",
+254
+],
+[
+"Knight Templar Barich",
+254
+],
+[
+"Knight Templar Barich",
+254
+],
+[
+"Knight Templar Barich",
+254
+],
+[
+"Knight Templar Barich",
+254
+],
+[
+"Knight Templar Barich",
+254
+],
+[
+"",
+254
+],
+[
+"Knight Templar Meliadoul",
+254
+],
+[
+"Knight Templar Meliadoul",
+254
+],
+[
+"Knight Templar Meliadoul",
+254
+],
+[
+"Knight Templar Meliadoul",
+254
+],
+[
+"Knight Templar Meliadoul",
+254
+],
+[
+"Knight Templar Meliadoul",
+254
+],
+[
+"Knight Templar Meliadoul",
+254
+],
+[
+"Knight Templar Meliadoul",
+254
+],
+[
+"Knight Templar Meliadoul",
+254
+],
+[
+"Knight Templar Meliadoul",
+254
+],
+[
+"Knight Templar Meliadoul",
+254
+],
+[
+"Knight Templar Meliadoul",
+254
+],
+[
+"Knight Templar Meliadoul",
+254
+],
+[
+"Knight Templar Meliadoul",
+254
+],
+[
+"Knight Templar Meliadoul",
+254
+],
+[
+"",
+254
+],
+[
+"Cloud Strife",
+254
+],
+[
+"Cloud Strife",
+254
+],
+[
+"Cloud Strife",
+254
+],
+[
+"Cloud Strife",
+254
+],
+[
+"Cloud Strife",
+254
+],
+[
+"Cloud Strife",
+254
+],
+[
+"Cloud Strife",
+254
+],
+[
+"Cloud Strife",
+254
+],
+[
+"Cloud Strife",
+254
+],
+[
+"Cloud Strife",
+254
+],
+[
+"Cloud Strife",
+254
+],
+[
+"Cloud Strife",
+254
+],
+[
+"Cloud Strife",
+254
+],
+[
+"Cloud Strife",
+254
+],
+[
+"Cloud Strife",
+254
+],
+[
+"",
+254
+],
+[
+"Tietra Heiral",
+254
+],
+[
+"Tietra Heiral",
+254
+],
+[
+"Tietra Heiral",
+254
+],
+[
+"Tietra Heiral",
+254
+],
+[
+"Tietra Heiral",
+254
+],
+[
+"Tietra Heiral",
+254
+],
+[
+"Tietra Heiral",
+254
+],
+[
+"Tietra Heiral",
+254
+],
+[
+"Tietra Heiral",
+254
+],
+[
+"Tietra Heiral",
+254
+],
+[
+"Tietra Heiral",
+254
+],
+[
+"Tietra Heiral",
+254
+],
+[
+"Tietra Heiral",
+254
+],
+[
+"Tietra Heiral",
+254
+],
+[
+"Tietra Heiral",
+254
+],
+[
+"",
+254
+],
+[
+"Lord Barbaneth",
+254
+],
+[
+"Lord Barbaneth",
+254
+],
+[
+"Lord Barbaneth",
+254
+],
+[
+"Lord Barbaneth",
+254
+],
+[
+"Lord Barbaneth",
+254
+],
+[
+"Lord Barbaneth",
+254
+],
+[
+"Lord Barbaneth",
+254
+],
+[
+"Lord Barbaneth",
+254
+],
+[
+"Lord Barbaneth",
+254
+],
+[
+"Lord Barbaneth",
+254
+],
+[
+"Lord Barbaneth",
+254
+],
+[
+"Lord Barbaneth",
+254
+],
+[
+"Lord Barbaneth",
+254
+],
+[
+"Lord Barbaneth",
+254
+],
+[
+"Lord Barbaneth",
+254
+],
+[
+"",
+254
+],
+[
+"Gustav Margriff",
+254
+],
+[
+"Gustav Margriff",
+254
+],
+[
+"Gustav Margriff",
+254
+],
+[
+"Gustav Margriff",
+254
+],
+[
+"Gustav Margriff",
+254
+],
+[
+"Gustav Margriff",
+254
+],
+[
+"Gustav Margriff",
+254
+],
+[
+"Gustav Margriff",
+254
+],
+[
+"Gustav Margriff",
+254
+],
+[
+"Gustav Margriff",
+254
+],
+[
+"Gustav Margriff",
+254
+],
+[
+"Gustav Margriff",
+254
+],
+[
+"Gustav Margriff",
+254
+],
+[
+"Gustav Margriff",
+254
+],
+[
+"Gustav Margriff",
+254
+],
+[
+"",
+254
+],
+[
+"Milleuda Folles",
+254
+],
+[
+"Milleuda Folles",
+254
+],
+[
+"Milleuda Folles",
+254
+],
+[
+"Milleuda Folles",
+254
+],
+[
+"Milleuda Folles",
+254
+],
+[
+"Milleuda Folles",
+254
+],
+[
+"Milleuda Folles",
+254
+],
+[
+"Milleuda Folles",
+254
+],
+[
+"Milleuda Folles",
+254
+],
+[
+"Milleuda Folles",
+254
+],
+[
+"Milleuda Folles",
+254
+],
+[
+"Milleuda Folles",
+254
+],
+[
+"Milleuda Folles",
+254
+],
+[
+"Milleuda Folles",
+254
+],
+[
+"Milleuda Folles",
+254
+],
+[
+"",
+254
+],
+[
+"Gragoroth Levigne",
+254
+],
+[
+"Gragoroth Levigne",
+254
+],
+[
+"Gragoroth Levigne",
+254
+],
+[
+"Gragoroth Levigne",
+254
+],
+[
+"Gragoroth Levigne",
+254
+],
+[
+"Gragoroth Levigne",
+254
+],
+[
+"Gragoroth Levigne",
+254
+],
+[
+"Gragoroth Levigne",
+254
+],
+[
+"Gragoroth Levigne",
+254
+],
+[
+"Gragoroth Levigne",
+254
+],
+[
+"Gragoroth Levigne",
+254
+],
+[
+"Gragoroth Levigne",
+254
+],
+[
+"Gragoroth Levigne",
+254
+],
+[
+"Gragoroth Levigne",
+254
+],
+[
+"Gragoroth Levigne",
+254
+],
+[
+"",
+254
+],
+[
+"Luso",
+254
+],
+[
+"Luso",
+254
+],
+[
+"Luso",
+254
+],
+[
+"Luso",
+254
+],
+[
+"Luso",
+254
+],
+[
+"Luso",
+254
+],
+[
+"Luso",
+254
+],
+[
+"Luso",
+254
+],
+[
+"Luso",
+254
+],
+[
+"Luso",
+254
+],
+[
+"Luso",
+254
+],
+[
+"Luso",
+254
+],
+[
+"Luso",
+254
+],
+[
+"Luso",
+254
+],
+[
+"Luso",
+254
+],
+[
+"",
+254
+],
+[
+"Balthier",
+254
+],
+[
+"Balthier",
+254
+],
+[
+"Balthier",
+254
+],
+[
+"Balthier",
+254
+],
+[
+"Balthier",
+254
+],
+[
+"Balthier",
+254
+],
+[
+"Balthier",
+254
+],
+[
+"Balthier",
+254
+],
+[
+"Balthier",
+254
+],
+[
+"Balthier",
+254
+],
+[
+"Balthier",
+254
+],
+[
+"Balthier",
+254
+],
+[
+"Balthier",
+254
+],
+[
+"Balthier",
+254
+],
+[
+"Balthier",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"",
+254
+],
+[
+"Master Darlavon",
+254
+],
+[
+"Master Darlavon",
+254
+],
+[
+"Master Darlavon",
+254
+],
+[
+"Master Darlavon",
+254
+],
+[
+"Master Darlavon",
+254
+],
+[
+"Master Darlavon",
+254
+],
+[
+"Master Darlavon",
+254
+],
+[
+"Master Darlavon",
+254
+],
+[
+"Master Darlavon",
+254
+],
+[
+"Master Darlavon",
+254
+],
+[
+"Master Darlavon",
+254
+],
+[
+"Master Darlavon",
+254
+],
+[
+"Master Darlavon",
+254
+],
+[
+"Master Darlavon",
+254
+],
+[
+"Master Darlavon",
+254
+],
+[
+"",
+254
+],
+[
+"Elidibus",
+254
+],
+[
+"Elidibus",
+254
+],
+[
+"Elidibus",
+254
+],
+[
+"Elidibus",
+254
+],
+[
+"Elidibus",
+254
+],
+[
+"Elidibus",
+254
+],
+[
+"Elidibus",
+254
+],
+[
+"Elidibus",
+254
+],
+[
+"Elidibus",
+254
+],
+[
+"Elidibus",
+254
+],
+[
+"Elidibus",
+254
+],
+[
+"Elidibus",
+254
+],
+[
+"Elidibus",
+254
+],
+[
+"Elidibus",
+254
+],
+[
+"Elidibus",
+254
+],
+[
+"",
+254
+],
+[
+"Arazlam Durai",
+254
+],
+[
+"Arazlam Durai",
+254
+],
+[
+"Arazlam Durai",
+254
+],
+[
+"Arazlam Durai",
+254
+],
+[
+"Arazlam Durai",
+254
+],
+[
+"Arazlam Durai",
+254
+],
+[
+"Arazlam Durai",
+254
+],
+[
+"Arazlam Durai",
+254
+],
+[
+"Arazlam Durai",
+254
+],
+[
+"Arazlam Durai",
+254
+],
+[
+"Arazlam Durai",
+254
+],
+[
+"Arazlam Durai",
+254
+],
+[
+"Arazlam Durai",
+254
+],
+[
+"Arazlam Durai",
+254
+],
+[
+"Arazlam Durai",
+254
+],
+[
+"Raise the merchant ship Highwind from{br}Warjilis Harbor.",
+254
+],
+[
+"Try your hand at sunken ship salvage.",
+254
+],
+[
+"Go on a diving expedition.",
+254
+],
+[
+"Raise the Enterprise from the depths of{br}the Rhana Strait.",
+254
+],
+[
+"Help raise a sunken ship.",
+254
+],
+[
+"Raise the trade ship Hindenburg from the{br}Bay of Obell.",
+254
+],
+[
+"Raise the Falcon from the West Bugross{br}Sea.",
+254
+],
+[
+"Raise King Mesa's ship.",
+254
+],
+[
+"Raise the Durga from the bottom of{br}the Gulf of Carnen.",
+254
+],
+[
+"Raise the emissary's ship.",
+254
+],
+[
+"Salvage the foundered ship.",
+254
+],
+[
+"Raise the ship containing the ancient tomes.",
+254
+],
+[
+"Salvage a sunken vessel.",
+254
+],
+[
+"Raise a sunken ship near Gleddia Isle.",
+254
+],
+[
+"Raise Eastgable Merchantry's vessel.",
+254
+],
+[
+"Raise the Dawn Queen from its watery{br}grave.",
+254
+],
+[
+"Explore an abandoned mine.",
+254
+],
+[
+"Go on a coal mining expedition.",
+254
+],
+[
+"Find the hidden vein of ore in{br}the Coldmann Mine.",
+254
+],
+[
+"Go on a coal mining expedition.",
+254
+],
+[
+"Try your hand at coal mining.",
+254
+],
+[
+"Mine for ore.",
+254
+],
+[
+"Try your hand at coal mining.",
+254
+],
+[
+"Find the gold vein at Mount Gulg.",
+254
+],
+[
+"Look for gold in the Endless Caverns.",
+254
+],
+[
+"Look for a vein of gold in the Himca Cliffs.",
+254
+],
+[
+"Find the vein of ore in the Godsvale.",
+254
+],
+[
+"Look for the hidden gold in Balvack Mine.",
+254
+],
+[
+"Try your hand at coal mining.",
+254
+],
+[
+"Search for ore in the abandoned mine.",
+254
+],
+[
+"Find gold in Mount Ourobos.",
+254
+],
+[
+"Dig for ore in Death's Gorge.",
+254
+],
+[
+"Take part in the frontier marathon.",
+254
+],
+[
+"Find the ruins beneath Lake Poescas.",
+254
+],
+[
+"Take part in the second frontier marathon.",
+254
+],
+[
+"Help find the ruins on the Lenalian Plateau.",
+254
+],
+[
+"Take part in the third frontier marathon.",
+254
+],
+[
+"Find the ruins in the Siedge Weald.",
+254
+],
+[
+"Find the lost ruins in the Beddha Sandwaste.",
+254
+],
+[
+"Find the ruins in the Zeklaus Desert.",
+254
+],
+[
+"Find the ruins in Dugeura Pass.",
+254
+],
+[
+"Search for lost ruins.",
+254
+],
+[
+"Find the ruins in the Tchigolith Fenlands.",
+254
+],
+[
+"Explore the cellar dungeon.",
+254
+],
+[
+"Join the party of adventurers and search{br}for lost ruins.",
+254
+],
+[
+"Find the ruins on the mountain.",
+254
+],
+[
+"Find the lost ruins along the trade route.",
+254
+],
+[
+"Find the ruins on Mount Vector.",
+254
+],
+[
+"Defeat Twilight Gustkov and his men on{br}Mount Kasco.",
+254
+],
+[
+"Defeat the behemoth in the mountains.",
+254
+],
+[
+"Defeat the bandits on the trade route.",
+254
+],
+[
+"Find a dragon's tooth.",
+254
+],
+[
+"Defeat the monsters in the cave.",
+254
+],
+[
+"Defeat Typhoon Karzst.",
+254
+],
+[
+"Defeat the door mimic.",
+254
+],
+[
+"Defeat the cave mimic at the Ural Mine.",
+254
+],
+[
+"Protect the viscount's treasure from Zerro.",
+254
+],
+[
+"Protect the baron's valuables from Zerro.",
+254
+],
+[
+"Protect the baron's valuables from Zerro.",
+254
+],
+[
+"Protect the magister's valuables from{br}Zerro.",
+254
+],
+[
+"Protect young Focara from Zerro.",
+254
+],
+[
+"Defeat the chimera and bring peace to the{br}town.",
+254
+],
+[
+"Defeat the pet turned monster.",
+254
+],
+[
+"Defeat the Braana pirates.",
+254
+],
+[
+"Find the missing boy.",
+254
+],
+[
+"Rescue Cornelia.",
+254
+],
+[
+"Save Duke McEnroe's son.",
+254
+],
+[
+"Find Carrot.",
+254
+],
+[
+"Investigate the old house and solve the{br}mystery.",
+254
+],
+[
+"Examine and identify the objects on the{br}shore.",
+254
+],
+[
+"Investigate the old well and solve the{br}mystery.",
+254
+],
+[
+"Explore the city at night and identify{br}the mysterious figure.",
+254
+],
+[
+"Investigate the empty house to see who is{br}living within.",
+254
+],
+[
+"Explore the mountains on the town outskirts{br}and discover what the children are up to.",
+254
+],
+[
+"Follow the suspects to determine who is the{br}spy.",
+254
+],
+[
+"Research the viscount's family treasure and{br}determine its authenticity.",
+254
+],
+[
+"Deliver a letter to the client's girlfriend in{br}Warjilis.",
+254
+],
+[
+"Open the count's vault.",
+254
+],
+[
+"Find the new species of plant in{br}Germinas Forest.",
+254
+],
+[
+"Deliver a letter to Anna's boyfriend at{br}Riovanes.",
+254
+],
+[
+"Teach the bashful girl about conversation.",
+254
+],
+[
+"Teach math to the young boy.",
+254
+],
+[
+"Help the troubled entertainer.",
+254
+],
+[
+"Open the count's door.",
+254
+],
+[
+"Help prepare a submission for the{br}Clockwork Faire.",
+254
+],
+[
+"Dance in a minstrel's farewell show.",
+254
+],
+[
+"Work at the Gysahl Greens Chocobistro.",
+254
+],
+[
+"Earn riches on the casino ship.",
+254
+],
+[
+"Earn riches on the casino ship.",
+254
+],
+[
+"Guard the wains.",
+254
+],
+[
+"Deliver food to the client's son in Dorter.",
+254
+],
+[
+"Help a young man study for his magick exam.",
+254
+],
+[
+"Win the Yardrow Melee.",
+254
+],
+[
+"Win the Zaland Melee.",
+254
+],
+[
+"Win the Gariland Magick Melee.",
+254
+],
+[
+"Win the Arteficers' Contest.",
+254
+]
+]
+}

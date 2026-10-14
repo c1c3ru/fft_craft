@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_download_complete">Download complete</string>
+    <string name="notification_download_failed">Download unsuccessful</string>
+    <string name="state_unknown">Starting...</string>
+    <string name="state_idle">Waiting for download to start</string>
+    <string name="state_fetching_url">Looking for resources to download</string>
+    <string name="state_connecting">Connecting to the download server</string>
+    <string name="state_downloading">Downloading resources</string>
+    <string name="state_completed">Download finished</string>
+    <string name="state_paused_network_unavailable">Download paused because no network is available</string>
+    <string name="state_paused_network_setup_failure">Download paused. Test a website in browser</string>
+    <string name="state_paused_by_request">Download paused</string>
+    <string name="state_paused_wifi_unavailable">Download paused because wifi is unavailable</string>
+    <string name="state_paused_wifi_disabled">Download paused because wifi is disabled</string>
+    <string name="state_paused_roaming">Download paused because you are roaming</string>
+    <string name="state_paused_sdcard_unavailable">Download paused because the external storage is unavailable</string>
+    <string name="state_failed_unlicensed">Download failed because you may not have purchased this app</string>
+    <string name="state_failed_fetching_url">Download failed because the resources could not be found</string>
+    <string name="state_failed_sdcard_full">Download failed because the external storage is full</string>
+    <string name="state_failed_cancelled">Download cancelled</string>
+    <string name="state_failed">Download failed</string>
+    <string name="kilobytes_per_second">%1$s KB/s</string>
+    <string name="time_remaining">Time remaining: %1$s</string>
+    <string name="time_remaining_notification">%1$s left</string>
+    <string name="app_name">FFT WotL</string>
+    <string name="app_btn_ok">OK</string>
+    <string name="app_btn_cancel">Cancel</string>
+    <string name="app_quit_alert_title">Confirmation</string>
+    <string name="app_quit_alert_msg">"Quit this application.
+Proceed?"</string>
+    <string name="app_obb_alert_title">Data error</string>
+    <string name="app_obb_alert_msg_could_not_mount">"Mount data file failed.
+
+Please reboot your unit and restart application."</string>
+    <string name="app_obb_alert_msg_unknown">Please reboot your unit and restart application.</string>
+    <string name="check_license">Check license</string>
+    <string name="checking_license">Checking license...</string>
+    <string name="dont_allow">"Don't allow the user access"</string>
+    <string name="allow">Allow the user access</string>
+    <string name="application_error">Application error: %1$s</string>
+    <string name="unlicensed_dialog_title">Application not licensed</string>
+    <string name="unlicensed_dialog_body">This application is not licensed. Please purchase it from Android Market.</string>
+    <string name="unlicensed_dialog_retry_body">Unable to validate license. Check to see if a network connection is available.</string>
+    <string name="buy_button">Buy app</string>
+    <string name="retry_button">Retry</string>
+    <string name="quit_button">Exit</string>
+    <string name="lvl_alert_title">Error</string>
+    <string name="lvl_alert_msg_dont_allow">"This application is not licensed.
+
+Please ensure that network connection is available and restart application."</string>
+    <string name="lvl_alert_msg_application_error">This application is not licensed.</string>
+    <string name="progress_download_msg">Downloading (Unit: KB)</string>
+    <string name="download_failed_msg">Download failed.</string>
+</resources>
