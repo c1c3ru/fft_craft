@@ -687,3 +687,106 @@ confiança, lendo instruções reais em vez de inferir pelos nomes. O que
 sobra do item 8 — o restante dos ~90 handlers individuais, o motor de
 mundo `wld_*` como um todo, e os motores gráfico/áudio — é trabalho
 genuíno de escala grande, não uma lacuna pequena; continua em aberto.
+
+## 10. Os handlers de opcode, quase todos lidos (2026-10-14, continuação "vamos para os 90 handlers")
+
+Desmontagem em lote de **88 handlers** (`evt_*`/`snpl_*`, ~6,5 KB de
+código total — pequeno, porque a maioria tem 24–120 bytes). A grande
+maioria foi lida linha a linha; um punhado de variantes quase idênticas
+foi confirmado por semelhança direta de bytes com uma já lida, não
+transcrito de novo. O formato de instrução (seção 9.7: opcode+operando
+de 1 byte cada, índice em `s->h[0xc]`) se confirma em **todos** os
+handlers lidos, sem excessão.
+
+### 10.1 Família de condição ("teste e marca bit 0x2")
+
+O padrão mais comum entre os `evt_*`: ler 1 operando, comparar contra um
+valor do jogo, e **setar o bit `0x2` do campo de flags** (`s->b[0]`) se
+a condição for verdadeira — sem nunca limpar esse bit sozinho (outro
+opcode deve consumi-lo). Confirmado em:
+
+| Opcode | O que compara |
+|---|---|
+| `evt_gil_high`/`low` | Gil atual do jogador × (operando × 10) |
+| `evt_dead_high`/`low` | Parâmetro global `#0x62` (contador de dias?) × operando |
+| `evt_brave_high`/`low` | `Brave` (coragem) de um personagem × operando |
+| `evt_faith_high`/`low` | `Faith` (fé) de um personagem × operando |
+| `evt_date_high`/`low` | Dois pares de data (via helper `0x259324`) |
+| `evt_flag`/`_high`/`_low` | Um "parâmetro" genérico via `GetParam()` (`0x103400`) × operando |
+| `evt_chr` | Varre até 28 slots de personagem buscando um ID com flag específica (`0x82` no campo `+2`) |
+
+Todos usam `GetParam()`/`0x103400` (a mesma função chamada por
+`wld_snpl`/`wld_event` nas seções 9.5/9.6) ou `0x25e67c` (lookup de
+personagem por ID) para buscar o valor comparado — nenhum lê dados do
+jogo diretamente. **Hipótese razoável, não confirmada:** o bit `0x2`
+provavelmente alimenta um opcode de "pular se falso" que não identifiquei
+entre os nomes catalogados (os `evt_skip*` existentes são incondicionais
+— sempre avançam N, não testam o bit). Pode ser que o próprio
+`wld_event` leia esse bit entre uma chamada e outra (não confirmado) ou
+que exista um opcode condicional com nome diferente do que esperava.
+
+### 10.2 Família de controle de fluxo/exibição (`evt_*`, cada um com seu próprio bit único)
+
+Confirma como `wld_event(evtId, flagMask)` decide quando parar: cada
+opcode de controle seta, além do bit `0x1` comum, **um bit próprio e
+exclusivo** — isso é literalmente o "motivo da parada" que o chamador
+testa contra seu `flagMask`:
+
+| Opcode | Bit exclusivo | Operandos lidos |
+|---|---|---|
+| `evt_exit_jump` | `0x8` | 2 (destino de salto, guardados em `+0x20`/`+0x24`) |
+| `evt_exit_sel` | `0x4` | lista de pares, tamanho variável (laço até `+0x1c`) |
+| `evt_wldinfo` | `0x10` | 1 |
+| `evt_deep` | `0x20` | 3 |
+| `evt_fset_exit` | `0x40` | 2 |
+| `evt_rute_grow` | `0x80` | 2 |
+| `evt_rute_erase` | `0x100` | 2 |
+| `evt_town_set` | `0x400` | 1 |
+| `evt_town_clr` | `0x800` | 1 |
+| `evt_town_cent` | `0x200` (condicional) | 1 (com busca secundária se `0xff`, e chamada real a `wldcenter_set`, `0x268aec`, já catalogada na seção 9.4) |
+
+### 10.3 `snpl_*` — mesmo esquema, bits diferentes, com efeitos reais confirmados
+
+Os de controle puro repetem o padrão de "só seta um bit": `snpl_jp`
+(`0x2`, mais o destino em `+0xe`, já visto na seção 9.7), `snpl_startpage`
+(`0x4`), `snpl_endpage` (`0xa` = `0x8|0x2`), `snpl_wait` (espera por
+contador de frame: compara dois valores globais e seta `0xc` = `0x8|0x4`
+quando o tempo expira, senão incrementa o contador e continua
+"esperando" sem terminar o passo atual).
+
+Os de **efeito real** chamam funções de motor de verdade, confirmando
+que a VM realmente comanda a engine subjacente (a mesma engine
+PS1/EGL2/OpenSL já catalogada na seção 9.4):
+
+- **`snpl_mesput`/`mesput2`** chamam `0x153584` e `0x153734` (função de
+  registro de mensagem — mesma família de `MessageMake`/
+  `MESSAGE_getMessageTaskKind` da seção 9.4) passando o ID da mensagem
+  (operando) combinado com uma flag (`|0x8800`), e configuram campos de
+  posição/layout (`+0x20`/`+0x22`/`+0x24`/`+0x26`) antes de setar o bit
+  `0x4` ("mostrando mensagem").
+- **`snpl_backput`** chama `DrawSync(0)` (nome real da lib gráfica do
+  PS1, `0x290dc0`, já visto no `event_call` da seção 9.5) e depois
+  `wldload_wait` (`0x25ee30`, catalogada na seção 9.4) — troca de
+  imagem de fundo com sincronização de GPU de verdade, não só
+  contabilidade de bits.
+
+### 10.4 Estado final
+As duas famílias de bit-flag (`evt_*` e `snpl_*`) e os principais tipos
+de efeito (condição, salto, texto, imagem) estão confirmados por leitura
+real de instrução, não por nome. Não lidos por completo: as variantes
+de áudio (`snpl_sndreq`/`musicreq`/`envsndreq`), as de parâmetro
+(`snpl_setpara`/`addpara`/`subpara`/`chgpara`), e ~15 das variantes mais
+raras — todas devem seguir os mesmos dois padrões já confirmados (bit
+simples vs. chamada real de engine), mas isso é inferência por
+semelhança estrutural, não leitura linha a linha de cada uma.
+
+## 11. Motor `wld_*` — levantamento estrutural (2026-10-14, continuação "o motor wld* inteiro")
+
+Pedido explícito de ir atrás do motor `wld_*` inteiro. Avaliação honesta
+primeiro: existem **mais de 100 funções** com esse prefixo (mundo/
+overworld — telas de viagem entre cidades, menu de status do grupo,
+animação de passeio no mapa mundi). Ler cada uma por completo está fora
+de escopo realista para uma sessão; o que segue é um levantamento
+estrutural (quem chama quem, tamanhos, papel por nome) com 2–3 funções
+centrais lidas por completo como amostra, no mesmo espírito da seção 9.4
+mas uma camada mais profunda.
