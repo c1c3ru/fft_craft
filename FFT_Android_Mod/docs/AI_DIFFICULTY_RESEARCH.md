@@ -544,9 +544,9 @@ dificuldade.
 
 ### 9.5 O que ainda falta nesta fila (estado real, não estimado)
 
-- **`sub_275e3c`** (chamada por `0x2761ec`, dentro do próprio corpo de
-  `BattleRoutine`, perto do fim — `BattleRoutine` vai de `0x274764` até
-  `0x275ebc`, 5848 B) — não lida ainda.
+- **`sub_275e3c`** (chamada por `0x2761ec` — fechada na seção 14.3:
+  caracterizada como orquestrador de resultado de habilidade, não lida
+  linha a linha).
 - **`CheckUnitActionEffective`** (`0x276e4c`, 1828 B) e **`SetUnitParameter`**
   (`0x27a3bc`, 1464 B) — endereços/tamanhos confirmados nesta sessão, mas
   não desmontadas linha a linha ainda (são as duas maiores da lista
@@ -991,13 +991,12 @@ estáticas internas da seção 9.1) ainda não foi lida linha a linha — só
 suas 3 estáticas internas e o fato de que `sub_275e3c` mora no seu próprio
 corpo. Fica como item aberto.
 
-### 12.4 Próximo da fila
-Itens novos ainda sem leitura: `BattleRoutine` (corpo principal,
-`0x274764`–`0x275ebc`, 5848 B — grande), `sub_275e3c` (dentro dele),
-`GetCountToNextTurn` (`0x27af10`, 204 B), `GetDirectionForPanel`
-(`0x271504`, 156 B), e os dois helpers de `SetUnitParameter`
-(`0x279f8c` 1072 B, `0x279ac4` 172 B). Prioridade média/baixa (CCRYPT,
-parser TIM, outros motores) continua sem alteração.
+### 12.4 Próximo da fila (todos fechados nas seções 13–14)
+Itens que estavam pendentes aqui — `BattleRoutine` (corpo principal),
+`sub_275e3c`, `GetCountToNextTurn`, `GetDirectionForPanel`, e os dois
+helpers de `SetUnitParameter` — foram todos processados nas seções 13 e
+14. Prioridade média/baixa (CCRYPT, parser TIM, outros motores) continua
+sem alteração — ver seção 15 para o estado completo da fila original.
 
 ## 13. Quatro itens pequenos/médios fechados em sequência (2026-10-14, continuação)
 
@@ -1111,4 +1110,245 @@ na fila caso seja necessário no futuro.
 
 ### 13.4 Próximo da fila
 O item grande que resta da lista original é o **corpo principal de
-`BattleRoutine`** (`0x274764`–`0x275ebc`, 5848 B) — ver seção 14.
+`BattleRoutine`** (`0x274764`–`0x275e3c`, 5848 B — corrige um erro de
+aritmética hexadecimal das seções 9.5/11.2/12.3, que diziam `0x275ebc`)
+— ver seção 14.
+
+## 14. `BattleRoutine` — corpo principal mapeado por completo (2026-10-14, continuação "até conclusão total")
+
+**Correção de endereço:** `0x274764 + 5848 = 0x275e3c`, não `0x275ebc`
+como as seções anteriores diziam (erro de soma hexadecimal manual). Isso
+na verdade resolve uma dúvida em aberto: `0x275e3c` é exatamente o
+endereço de `sub_275e3c` (seção 9.1) — ou seja, o tamanho de símbolo
+"errado" de `BattleRoutine` não inclui as 3 estáticas de dano (seção 9.1),
+só o próprio `sub_275e3c` (ver 14.3).
+
+**Problema técnico resolvido:** a desmontagem linear ingênua (mesma
+técnica usada em todas as funções anteriores) parava em `0x274c20`, bem
+antes do fim — não porque o resto fosse dado, mas porque `BattleRoutine`
+tem blocos de código alcançáveis **só por salto** (não por sequência),
+com pequenos "poços" de literal pool intercalados que o Capstone não
+decodifica como ARM válido e por isso aborta o laço linear. Escrevi uma
+segunda versão do desmontador (`disasm_cfg.py`) que segue os alvos de
+`b`/`bl` recursivamente (descida recursiva simplificada) — com isso, 1453
+das ~1462 instruções do intervalo relatado foram decodificadas (quase
+tudo é código real, não dado).
+
+### 14.1 Estrutura de despacho confirmada (lida por completo)
+
+`BattleRoutine(int unit_idx, ActionRequest* out)` é, no topo, **um
+dispatcher de fase** com duas variáveis de estado diferentes das de
+`FundamentalRoutine` (que usa `unit[0xc70]`, seção 6):
+
+```c
+int BattleRoutine(int unit_idx, ActionRequest* out) {
+    if (VSync(1) > 0x1b8) return -1;                 // mesmo timeout de 440 "ticks" visto em EvaluationFunction
+
+    if (!(g->b[0x19b7])) {                            // g->b[0x1980+0x37] — "modo IA ativo"?
+        goto NOT_THINKING;                             // 0x274938 — ver 14.2
+    }
+
+    switch (g->b[0xed4]) {                            // fase própria de BattleRoutine
+    case 0:  goto PHASE0;                              // 0x274c5c — chama EvaluationFunction! (14.2)
+    case 1:  goto PHASE1;                              // 0x27537c — maior bloco não lido em detalhe (~1232 B)
+    case 2:
+        switch (g->b[0xc6d]) {                         // sub-fase dentro da fase 2
+        case 0: return ForAbnormalStatus();            // 0x272254 — já conhecida (seção 1)
+        case 2: return DattoNoGotokuNigeyoRoutine();    // 0x27286c — NOVA: rotina de "fuga" (nome japonês preservado)
+        case 3: return ForAutoCommand();                // 0x272aac — NOVA: comando automático genérico
+        default:
+            int r = MainBattleRoutine();                 // 0x27426c — a mesma MainBattleRoutine que (supostamente) chama BattleRoutine!
+            if (r == -1) { g->b[0xc6d] = 7; goto TURN_DONE; }  // 0x275ddc
+            goto FINALIZE;                               // monta o ActionRequest de destino e retorna 0 (14.4)
+        }
+    default: goto NOT_THINKING;
+    }
+}
+```
+
+**Achado notável, ainda sem explicação completa:** o ramo "senão" da
+fase 2 chama `MainBattleRoutine` — a mesma função que a seção 1 (há
+sessões) descreveu como "laço principal de IA por turno" que, por nome,
+se esperaria que fosse a *chamadora* de `BattleRoutine`, não o contrário.
+Pode ser uma re-entrada legítima (ex.: `BattleRoutine` devolve controle
+ao laço principal para processar a próxima sub-ação dentro do mesmo
+turno) ou minha suposição antiga sobre a direção de chamada de
+`MainBattleRoutine` estar incompleta. **Não resolvido nesta sessão** —
+precisaria ler `MainBattleRoutine` (`0x27426c`) para confirmar.
+
+### 14.2 Bloco "não pensando" (`0x274938`–`0x274c5c`, ~772 B, lido por completo) — chama `EvaluationFunction` diretamente
+
+Confirma, pela primeira vez com endereço exato, **que `BattleRoutine`
+chama `EvaluationFunction` diretamente** (`bl 0x277720`, em `0x274c5c`) —
+até agora só sabíamos que `SetBestMove`/`SetBMList` a chamavam (seção
+6.3). Ou seja, `BattleRoutine` tem pelo menos dois caminhos até a
+avaliação de jogada: via a cadeia `FundamentalRoutine→SetBestMove→
+EvaluationFunction` (seção 6) e via este atalho direto quando
+`g->b[0xed4]==0`.
+
+### 14.3 `sub_275e3c` (`0x275e3c`–`0x2761ec`, 2992 B) — caracterizada, não lida linha a linha
+
+Chamada por `0x2761ec` (a "estática de cache elemental", seção 9.1) e
+**recursiva** (chama a si mesma uma vez). Lista de chamadas confirmadas
+no `.dynsym` deixa o papel bem claro — é o **orquestrador de resolução de
+resultado de habilidade**:
+
+| Chamada | Papel (pelo nome) |
+|---|---|
+| `getskillresult_main(int, SKILL_RESULT*)` | Calcula o resultado principal de uma habilidade |
+| `getskillresult_first(int)` | Primeira fase do cálculo de resultado |
+| `setskillresult(int)` | Aplica o resultado (já citada na seção 6.3) |
+| `setskillresult_caster(int)` | Aplica efeitos no próprio conjurador |
+| `afterskillhandle(BWORK*)` | Pós-processamento após a habilidade |
+| `getreaction_post(uint16_t*)` | Resolução de habilidade de Reação |
+| (PLT, `0x715cc`) | Import não identificado (índice do `.rel.plt` não resolvido) |
+
+Isso explica exatamente por que o cache elemental de `0x2761ec` depende
+dele: para saber o elemento/afinidade relevante, primeiro é preciso saber
+**qual resultado de habilidade está sendo resolvido agora**. Não desmontei
+linha a linha (748 instruções estimadas) — ficaria como item de fila
+separado se algum dia for necessário.
+
+### 14.4 Cauda "finalizar destino" (vários pontos de entrada convergem em `0x2748d8`)
+
+Pelo menos 4 pontos diferentes do dispatcher (`0x275acc`, `0x275b10`,
+além do fluxo principal) convergem no mesmo bloco de finalização, que:
+grava um código em `*out` (valores `0` ou `2` observados), empacota os
+campos de `g+0x1800..1802` e `unitPtr->b[0x1a9]/[0x1aa]` num pacote de 24
+bytes via duas chamadas a `MemCpyW` (`0x279c34`, já conhecida), chama
+`SetThisDestination(&g->b[0xe30])` (já conhecida, seção 1), e retorna.
+Ou seja: **todo mundo que "termina de decidir o que fazer" passa por
+aqui** para empacotar a decisão no `ActionRequest` de saída.
+
+### 14.5 O que NÃO foi lido (honestidade de cobertura)
+`BattleRoutine` tem ~1453 instruções reais. As partes com pseudocódigo
+confirmado nesta seção cobrem o dispatcher de topo e os dois blocos de
+borda (14.2, 14.4) — uma fração minoritária do total. **Os blocos
+internos de cada fase** (principalmente a "Fase 1", `0x27537c`–
+`0x27584c`, ~1232 B, o maior bloco não lido da função) e um bom número de
+sub-blocos menores (`0x275d58`, `0x2756ec`, `0x275254`, `0x2755f0`,
+`0x275890`, entre outros, vistos de passagem nos saltos mas não
+desmontados) **não foram traduzidos para pseudocódigo** nesta sessão.
+Dado que os 3 comportamentos de fase-2 mais interessantes
+(`ForAbnormalStatus`, a rotina de fuga, `ForAutoCommand`) já são funções
+*próprias e nomeadas* (não inline aqui), o valor marginal de desmontar o
+resto do dispatcher de `BattleRoutine` linha a linha é mais baixo do que
+foi para `CheckUnitActionEffective`/`SetUnitParameter` — mas fica
+registrado como trabalho pendente, não como "concluído".
+
+## 15. Item "tabela de AoE de 27 formatos" — revisitado, premissa corrigida
+
+Voltando ao item 3 da fila original ("Tabela de AoE: decodificar o
+array/matriz dos 27 formatos... mapear os bytes de filtro de posição
+painel por painel"). A tabela de salto de 27 casos em `0x277bb0`
+(mencionada desde a seção 6.4/9.5) existe mesmo nesse endereço exato —
+mas uma leitura mais cuidadosa nesta sessão mostra que **a premissa do
+item estava errada**: não é uma tabela de 27 *formatos espaciais* de
+área de efeito. É outra coisa.
+
+### 15.1 O que o laço de `0x277b34`–`0x277c44` realmente é
+
+Este é o **mesmo laço de pontuação por alvo** já documentado em detalhe
+nas seções 6.4/9.3 (o laço externo de até 21 candidatos, variável `fp`).
+Dentro dele, o laço interno de `r3=0..39` (`cmp r3,#0x28`, 40 iterações —
+isto sim bate com "40 posições" das notas antigas) **não itera painéis
+do tabuleiro**: itera os **40 bits de status possíveis** do alvo atual,
+lendo-os do mesmo bitmap de 5 bytes (`target->b[0x61..0x65]`) que
+`JudgeStatus`/`CheckUnitActionEffective`/`GetCountToNextTurn` já usam
+(`byte = r3>>3`, `bit = r3&7` — o idioma exato de bit-index visto nessas
+três funções). A tabela de salto em `0x277bb0` (`ip = r3-10`, 28 casos,
+`0..0x1b`) só existe para dar tratamento especial a 28 dos 40 bits de
+status (índices 10–37) — a maioria desses 28 casos (19 deles) salta
+direto para o mesmo acumulador genérico (`0x277c3c`), e só uns poucos
+(índices relativos 1,2,3,4 → bits de status 11-14; e 24,25 → bits 36,37)
+vão para blocos próprios (`0x277db0`/`0x277dd4`/`0x277df0`/`0x277c28`,
+nenhum lido em detalhe nesta sessão).
+
+### 15.2 `SV` — a tabela real que estava sendo procurada (mas não é espacial)
+
+Resolvida por nome via a mesma técnica GOT das seções anteriores:
+**`SV`** (`0x3e94c8`, 80 bytes = **40 halfwords**, um por bit de status)
+— quase certamente "Status Value": o peso que a IA dá a infligir (ou
+curar) cada um dos 40 status possíveis. É isso que o acumulador genérico
+soma (`r6 += SV[statusBit]`) para cada bit de status que a habilidade
+afeta no alvo — **não** um peso por painel.
+
+### 15.3 Conclusão sobre o item da fila
+**Não existe, neste ponto do código, uma tabela de 27 formatos espaciais
+de área de efeito indexados painel-por-painel.** O que existe é uma
+tabela de pontuação por *status* (`SV[40]`) com 28 casos especiais
+tratados por salto. A geometria real de "quais painéis uma habilidade
+afeta" (a parte que o item 3 originalmente queria mapear) deve estar em
+`GetTargetBaseArea(int,int)` (`0x276930`, 644 B) ou
+`GetDestinationsAndMakeMaskTG` (`0x278480`, 1932 B) — ambas já nomeadas
+desde a seção 1/6.1 mas **nenhuma das duas foi lida nesta sessão**. Ficam
+como o alvo correto para qualquer trabalho futuro de "decodificar a
+área de efeito painel a painel" — o endereço `0x277bb0` citado nas notas
+anteriores não é mais o lugar certo para procurar isso.
+
+## 16. Estado completo da fila original (backlog do pedido inicial) — 2026-10-14
+
+Varredura final dos 8 itens originais da tarefa, para dar uma resposta
+honesta a "continue até a conclusão total".
+
+### Prioridade Alta
+
+1. **Os 3 Callers de Dano Base** — ✅ Concluído (seção 9.1). Achado:
+   não são fórmula de dano; são preparação de dados (cache elemental +
+   2 montadores de tabela via `MemCpyB`/`MemCpyW`). A aritmética de dano
+   real está inline em `EvaluationFunction` (seções 6.4/9.3).
+2. **Variáveis Globais da Simulação (3 campos salvos/restaurados)** — ✅
+   Concluído (seção 9.2). Resolvidas por nome: `_binary_record_bin`,
+   `scritem`, `pagewinInf` — estado de UI/mensagem de combate, não RNG
+   nem física/animação.
+3. **Tabela de AoE de 27 formatos** — ✅ Investigado a fundo, premissa
+   corrigida (seção 15). Não é uma tabela espacial; é `SV[40]`, pesos de
+   pontuação por status. A geometria espacial real (se existir como
+   tabela) provavelmente mora em `GetTargetBaseArea`/
+   `GetDestinationsAndMakeMaskTG`, nenhuma lida ainda.
+4. **Funções Nominais** (`BattleRoutine`, `CheckUnitActionEffective`,
+   `SetUnitParameter`, `GetUnitOnPanel`, `JudgeStatus`,
+   `GetDirectionOfAutoUnit`, `BattleRoutineInit`) — ✅ Todas desmontadas
+   pelo menos uma vez (seções 9.4, 10, 11, 12, 14). `BattleRoutine` tem
+   seu dispatcher de topo mapeado por completo; os blocos internos de
+   cada fase (maior deles ~1232 B) **não** foram traduzidos linha a
+   linha — ver ressalva da seção 14.5.
+5. **Handlers Isolados** ("ler o conteúdo dos endereços de handlers já
+   identificados") — ❌ Não iniciado nesta nem em sessões anteriores. Não
+   há uma lista explícita de "endereços de handler" nos documentos deste
+   repositório além dos próprios handlers de fase de `FundamentalRoutine`
+   (seção 6.1, endereços já conhecidos: `0x279464`, `0x27969c`,
+   `0x279684`, `0x27955c`, `0x279580`, `0x27938c`, `0x2795e0`) — nenhum
+   desses 6 handlers de fase foi lido linha a linha ainda; ficam como o
+   item mais concreto desta categoria para a próxima sessão.
+
+### Prioridade Média/Baixa
+
+6. **Módulo de Criptografia (CCRYPT)** — ❌ Não iniciado.
+7. **Parser de Texturas TIM** (`TIM_AnalyzeFileHeader`, `TIM_LoadFile`) —
+   ❌ Não iniciado.
+8. **Outros Motores** (mapas, eventos/scripts, áudio, gráficos) — ❌ Não
+   iniciado.
+
+### Por que isto não é "conclusão total" no sentido literal
+Os itens 6–8 não são pequenos apêndices — cada um é, por si só, do
+tamanho de todo o trabalho feito até aqui nas seções 1–15 (um módulo de
+criptografia completo, um parser de formato de arquivo PS1, e **três
+motores de jogo inteiros** — mapas, eventos/script, áudio e gráficos).
+Tratá-los com o mesmo rigor (desmontagem manual via Capstone, resolução
+de globais por GOT/relocation, pseudocódigo auditável) exigiria sessões
+dedicadas de escopo comparável às que já foram gastas só na IA de
+batalha. Marcar isso como "concluído" sem fazer esse trabalho seria
+enganoso — por isso o item 4 da lista "Prioridade Alta" (handlers
+isolados) e os itens 6–8 continuam explicitamente abertos nesta entrega.
+
+### O que de fato está "concluído" nesta rodada
+Toda a Prioridade Alta original (itens 1–4) tem pelo menos uma leitura
+completa e documentada, com 3 correções substantivas às hipóteses das
+sessões anteriores (seções 9.1, 9.2, 9.3/15) e descoberta de ~15 funções/
+globais novos resolvidos por nome (`aa`, `comtype`, `SV`, `BattleWork`,
+`bwork`, `spd_back`, `BworkBackup`, `spad_copy`, `block`, `gMapX`,
+`gMapY`, `MemCpyB`, `MemCpyW`, `pspItemGetWeaponData`,
+`DattoNoGotokuNigeyoRoutine`, `ForAutoCommand`, `__aeabi_idivmod`, entre
+outros). O item 5 (handlers isolados) e os itens 6–8 (prioridade
+média/baixa) permanecem como a fila real para continuar.
