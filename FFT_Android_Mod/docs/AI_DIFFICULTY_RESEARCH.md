@@ -572,3 +572,175 @@ Nenhum patch novo foi aplicado nesta sessão — tudo acima é só leitura
 `worktree-fft-ai-difficulty` usada nas sessões anteriores). O script de
 desmontagem (`disasm.py`, agora usando `pyelftools` para mapear seções) e
 o venv do capstone ficam em `/tmp`/scratch da sessão, fora do repositório.
+
+## 10. `CheckUnitActionEffective` — desmontada por completo (2026-10-14, continuação)
+
+Próximo item da fila. `CheckUnitActionEffective(int target_idx, int mode)`
+(`0x276e4c`, 1828 B / ~452 instruções reais) é, de longe, a função mais
+densa lida até agora — um "gabarito" de ~15 checagens de imunidade/
+elemento/status que decidem se aplicar a habilidade atual no alvo
+`target_idx` teria algum efeito. Lida por completo via Capstone; a seguir
+o glossário de campos resolvidos e depois o pseudocódigo estrutural.
+
+### 10.1 Novos globais/tabelas resolvidos (mesma técnica GOT da seção 9.2)
+
+| Nome resolvido | Endereço | Tamanho | Papel observado no código |
+|---|---|---|---|
+| `aa` | `0x3cfbbc` | 5152 B | **Tabela mestra de habilidades**, stride de 14 bytes → **368 entradas exatas** (`5152/14=368`). Confirmado duas vezes de forma independente: pelo tamanho/stride do símbolo *e* por um guard explícito no código (`cmp r3,#0x170; bge ...` — `0x170=368`) antes de indexar a tabela. Nome curto ("ability array"?) — não vem de C++ mangling, então é nome C simples preservado no `.dynsym`. |
+| `comtype` | `0x3cd9b8` | 256 B | Tabela de 1 byte por entrada (256 entradas), indexada por `g->b[0]` (primeiro byte do struct global de ação/habilidade, `g` = `*BattleWork`, ver seção 9.3). Comparada contra `0xa` (10) para decidir se um bloco extra de checagem elemental é pulado. Papel exato do valor 10 não confirmado. |
+| (confirmação) `BattleWork`/`bwork` | — | — | Esta função lê os bytes do "ator/habilidade atual" a partir de `g = *BattleWork` (atualmente = `spd_back`, a cópia de trabalho da seção 9.3), mas lê os **dados do alvo diretamente de `bwork[target_idx]`** (o array real, não a cópia) — ou seja, o "autor da ação" é lido do buffer trocado, mas o "alvo" é lido do estado real. |
+
+Chamadas confirmadas por nome (resolvidas no `.dynsym`): `JudgeStatus`
+(`0x276cd4`, já desmontada na seção 9.4 — chamada aqui para os status
+**5, 31(0x1f), 33(0x21), 34(0x22), 35(0x23) e 38(0x26)**, sempre com
+`g->b[1]` como limiar), `GetCountToNextTurn(BWORK*)` (`0x27af10`, nova —
+endereço/papel confirmados agora, corpo ainda não lido), `GetCountToDeath`
+(`0x27b240`, já conhecida da seção 1) e `ps_rand()` (`0x28612c`, já
+conhecida — usada aqui só uma vez, com um teste de 1 bit, então é um
+sorteio efetivamente de 50%).
+
+### 10.2 Pseudocódigo estrutural (fiel à lógica, com rótulos = endereços reais)
+
+Convenção: `g` = `*BattleWork` (struct global do "ator/ação atual"); `t` =
+`&bwork[target_idx]` (unidade alvo real); `row` = `g + target_idx*16 +
+0x182c` (uma linha de 16 bytes por unidade, dentro do bloco `g+0x1800`);
+`res` = o valor que a função devolve (o código usa o registrador ARM
+`sb`/r9 como acumulador local de 2 bits — **não é o mesmo `sb` que uso nas
+seções 1–9 para o ponteiro global**; troquei o nome aqui por `res` para
+não confundir).
+
+```c
+int CheckUnitActionEffective(int target_idx, int mode) {
+    if ((g->b[0x10] & 0x20) && row->b[8] == 0)      goto FALSE;
+    if ((g->b[0x10] & 0x40) && row->b[8] != 0)       goto FALSE;
+    if (g->b[0xe2e] == target_idx)                   goto SAME_TARGET;   // 0x277058
+
+    if (mode != 0) goto MODE_NONZERO;                // 0x277030
+
+MODE_ZERO:                                           // 0x276ecc
+    if ((g->b[0xe] & 4) && JudgeStatus(g->b[1], t, 33)) goto FALSE;
+    res = JudgeStatus(g->b[1], t, 5);
+    if (res != 0) goto FALSE;
+
+TURN_DISPATCH:                                       // 0x276f08
+    int flagsByte = row->b[7];
+    if (g->b[0xd] & 0x20) res = g->b[8];             // reaproveita g->b[8] (não row->b[8]!)
+    else                  res = (res >> 5) & 1;
+    if (flagsByte & 0x40) goto TURN_CHECK_A;          // 0x277084
+    if (flagsByte & 0x20) goto TURN_CHECK_B;          // 0x2770a8
+
+ELEM_GUARD:                                          // 0x276f34
+    if ((int8_t)t->b[0x62] < 0) goto ELEM_GUARD_NEG;  // 0x277008
+    if (JudgeStatus(g->b[1], t, 31)) goto FALSE;      // (sem exceção aqui, diferente da suposição inicial)
+
+    if (g->b[0xd] & 0x20) {
+        if (!(g->b[0xb] & 1)) goto FALSE;
+    } else goto FALSE;                                // (replica o 'bne 0x277020' logo após o JudgeStatus(31))
+
+    if (g->b[0x11] != 0) {
+        int bits = g->b[0x11] & ~t->b[0x77];
+        if (bits == 0) goto FALSE;
+        if (g->b[0x11] == 8 && (t->b[0x63] & 0x40)) goto FALSE;
+    }
+
+ELEM_MAIN:                                           // 0x276f9c
+    if (g->b[0xd] & 2) goto ELEM_BLOCK;               // 0x2770c8
+    if (!(g->b[0xe] & 0x20)) goto ELEM_ALT;           // 0x27734c
+    if (row->b[8] == 0) {
+        if (t->b[0x61] & 0x10) goto TURN_CHECK_RESULT2;  // 0x2770f8 (res=2)
+    } else {
+        goto ALREADY_AFFECTED;                        // 0x277000: res=1, return
+    }
+
+    // (os blocos ELEM_BLOCK/ELEM_ALT/ELEM_GUARD_NEG/TURN_CHECK_RESULT2 se
+    // interligam por mais ~12 saltos cruzados — ver tabela 10.3 para os
+    // 4+4 ramos elementares/innate que eles cobrem; não reescrevi cada um
+    // em C aqui porque o controle de fluxo real tem muito mais arestas
+    // compartilhadas do que um `if/else` linear consegue representar sem
+    // duplicar blocos)
+
+    // Gabarito elemental principal (0x277148-0x2771c4): 5 iterações
+    // (i=0..4) sobre g->b[7+i], cada uma testando
+    // (g->b[7+i] & ~t->b[0x61]) e (g->b[7+i] & ~t->b[0x5c]); se alguma das
+    // duas vira zero, salta para uma de 4 rotinas via jump table em
+    // 0x277184 (índice = categoria-1, 0..3) que ajustam bits individuais
+    // de uma máscara de trabalho (`r1`/mode) usando row->b[7]/b[0xc]/b[0xd]
+    // e t->b[0x64]/b[0x65] — isto é o sistema clássico de afinidade
+    // elemental de 4 estados (Absorve/Anula/Resiste/Fraco) sendo resolvido
+    // elemento a elemento; eu não nomearia cada estado com certeza sem
+    // cruzar com o layout de `aa[]`.
+
+    // Segundo gabarito (0x2771f8-0x277264): outra iteração de 5 (i=0..4)
+    // sobre g->b[7+i] contra t->b[0x61] (bits "ativos") e t->b[0x57]
+    // (bits "permanentes" — os MESMOS dois arrays que `JudgeStatus` testa
+    // em +0x61/+0x57!), com um dispatch de 3 vias por índice (0,1,>=2)
+    // que vai acumulando/invertendo bits de `res`. É, na prática, o mesmo
+    // tipo de checagem de status feita por `JudgeStatus`, mas iterando os
+    // 5 bytes de categoria da habilidade em vez de um status_id único.
+
+FINAL_DECISION:                                       // 0x277264/0x277294
+    if (g->b[0xd] & 8) {
+        uint16_t abilityId = g->h[2];                  // signed halfword em g+2
+        if ((abilityId & ~4) != 0x76 && (abilityId & ~4) != 0x92) ; // bic/cmp combinados
+        else if (!(ps_rand() & 1)) goto FALSE;          // ~50%: só para 2 IDs específicos (0x76=118, 0x92=146)
+    }
+    res = (g->b[0xd] >> 2) & 1;
+    goto RETURN;                                        // 0x277024
+
+TURN_CHECK_A:                                           // 0x277084
+    if (g->b[1] < GetCountToNextTurn(t)) goto FALSE;
+    if (res != 0) goto FALSE;
+    goto TURN_DISPATCH_RETRY;                            // volta por row->b[7], 0x276f2c
+
+TURN_CHECK_B:                                           // 0x2770a8
+    if (g->b[1] > GetCountToDeath(t)) goto FALSE;
+    if (res != 0) goto FALSE;
+    goto ELEM_GUARD;                                     // 0x276f34
+
+MODE_NONZERO:                                           // 0x277030
+    if ((g->b[0xe] & 0x40) && JudgeStatus(g->b[1], t, 38)) goto FALSE;
+    goto MODE_ZERO;                                      // 0x276ecc (reprocessa com mode "consumido")
+
+SAME_TARGET:                                            // 0x277058
+    {
+        int16_t abilityId = g->h[2];                     // signed
+        if (abilityId < 0x170 && (aa[abilityId].b[4] & 1))
+            goto MODE_ZERO_ENTRY;                         // 0x276eb0 (reentra no fluxo normal)
+        goto FALSE;                                       // ability fora da tabela aa[] OU bit não setado
+    }
+
+ALREADY_AFFECTED:  res = 1; goto RETURN;                 // 0x277000 (reaproveitado por ~15 saltos diferentes)
+TURN_CHECK_RESULT2: res = 2; goto RETURN;                // 0x2770f8
+FALSE: res = 0;                                          // 0x277020
+RETURN: return res;                                      // 0x277024
+}
+```
+
+**Honestidade sobre a cobertura:** os blocos `ELEM_BLOCK`/`ELEM_ALT`/
+`ELEM_GUARD_NEG` (endereços `0x2770c8`, `0x27734c`, `0x277008`,
+`0x277398`, `0x2773a4`) e os dois gabaritos de 5 iterações foram lidos
+instrução por instrução (nenhum foi pulado), mas o grafo de desvios reais
+tem mais arestas compartilhadas do que um `if/else` em C consegue
+representar sem duplicar código — por isso optei por descrever esses
+trechos em prosa (acima) em vez de forçar uma tradução C ambígua. Qualquer
+revisão futura pode ir direto aos endereços citados.
+
+### 10.3 Leitura de conjunto
+
+Reforça o que a seção 9 já vinha mostrando: a "inteligência" da IA de FFT
+não é uma fórmula única — é uma sequência de *gates* independentes
+(imunidade a status, afinidade elemental de 4 estados, limiar de turnos
+até a próxima ação do alvo, limiar de turnos até a morte do alvo, e um
+sorteio de 50% só para 2 habilidades específicas) que, juntos, decidem se
+vale a pena nem considerar aplicar a habilidade — antes mesmo de chegar à
+pontuação real feita em `EvaluationFunction` (seção 6.4/9.1). A tabela
+`aa[368]` (habilidades) e `comtype[256]` são os dois achados novos mais
+reutilizáveis para trabalho futuro (ex.: qualquer patch que precise
+indexar por habilidade usa `aa[]`, stride 14, base `0x3cfbbc`).
+
+### 10.4 Próximo da fila
+`SetUnitParameter` (`0x27a3bc`, 1464 B) e `GetDirectionOfAutoUnit`
+(`0x279cc0`, 532 B) continuam pendentes (tamanhos/endereços já confirmados
+desde a seção 9.5). `GetCountToNextTurn` (`0x27af10`, 204 B, nova nesta
+sessão) ainda não foi lida. Nada mudado quanto a CCRYPT/TIM/outros
+motores.
