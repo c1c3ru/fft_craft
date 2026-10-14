@@ -1352,3 +1352,95 @@ globais novos resolvidos por nome (`aa`, `comtype`, `SV`, `BattleWork`,
 `DattoNoGotokuNigeyoRoutine`, `ForAutoCommand`, `__aeabi_idivmod`, entre
 outros). O item 5 (handlers isolados) e os itens 6–8 (prioridade
 média/baixa) permanecem como a fila real para continuar.
+
+## 17. Item 5 ("Handlers Isolados") — os 8 handlers de fase de `FundamentalRoutine`
+
+Único candidato concreto para este item: os endereços de handler de fase
+já catalogados na seção 6.1 (`unit[0xc70]`/`g->b[0xc70]` = fase 0–8,
+tabela de salto dentro do próprio `FundamentalRoutine`, `0x278f84`–
+`0x279ac4`, 2880 B). Corrigindo um detalhe da seção 6.1: a variável de
+fase não é por-unidade — é o mesmo `g` (`BattleWork`/`spd_back`) global
+usado em todo o resto da investigação.
+
+**Achado estrutural principal:** os 8 handlers **não são 8 comportamentos
+independentes** — a maioria é um redirecionamento curto que cai em um de
+~5 blocos grandes *compartilhados*. Usei o `disasm_cfg.py` (seção 14)
+para atravessar os desvios e consegui decodificar 684 das ~720
+instruções do corpo completo.
+
+### 17.1 Handlers pequenos, lidos por completo
+
+| Fase | Endereço/tamanho | Pseudocódigo confirmado |
+|---|---|---|
+| 0 e 6 (mesmo handler) | `0x279464`, só 24 B reais | `r = helper_0x278c0c(); if (r==-1) { g->b[0xc70]=5; return; } SetBMList(); return 0;` — "finaliza o candidato atual." |
+| 2 | `0x279684`, 24 B | `if (*algum_global+0x10 != 0) goto 0x2794f4 /* dentro da fase 0/6 */; else goto 0x2791cc /* dentro da fase 5 */;` — só um desvio condicional, sem lógica própria. |
+| 3 | `0x27955c`, 36 B | `r = helper_0x278c0c(); if (r==-1) { g->b[0xc70]=2; return; } g->b[0xcb7] \|= 2; goto 0x2793c0 /* dentro da fase 5 */;` |
+| 4 | `0x279580`, 96 B | `r = helper_0x278c0c(); if (r==-1) { g->b[0xc70]=3; return; }` depois percorre 21 slots de `g+0xca1..0xcb5`, chama `JudgeMovable(i)` por slot não-vazio e grava o resultado (0/1) num array paralelo 21 bytes antes; ao final, `goto 0x279380` (dentro da fase 5). |
+
+`helper_0x278c0c` é a "estática dentro de `GetDestinationsAndMakeMaskTG`
+(+0x78c)" já catalogada na seção 6.1 — não lida ainda, mas agora
+confirmada como **o guardião comum de todas as 4 fases acima**: todas
+chamam exatamente a mesma função no início e tratam `-1` como "ainda não
+pronto, avance a fase e volte depois."
+
+### 17.2 Fase 5 (`0x27938c`, 216 B) — lida por completo, é o "hub"
+
+Chamada direta ou por redirecionamento das fases 2/3/4. Primeiro repete
+o padrão guardião (`helper_0x278c0c`, `-1`→fase 4). Depois: copia 21
+bytes de `g+0xca1..0xcb6` para `g+0xc8c..0xca1` (desloca o array que a
+fase 4 preencheu). Se `g->b[5]==0`, salta direto para `0x27949c` (dentro
+da fase 0/6 — "finaliza com `SetBMList`"). Senão, percorre os 21 slots
+de `g+0xc8d..` (o mesmo array que o handler `0x277570`/seção 17.4 também
+usa!), e para cada slot marcado testa `g->b[0xd]&2`, um campo da `row`
+de 16 bytes (`row->b[0x34]`, outro offset dessa mesma estrutura das
+seções 10/11), e `JudgeMovable(i)` — zera o slot em qualquer falha. Se
+achar pelo menos um slot que passe tudo, marca `g->b[0x26]=5` e (se
+`g->b[0x10]&1`) seta o mesmo bit `0xcb7|=2` que a fase 3 também seta —
+confirma que essa flag é um sinal compartilhado entre várias fases, não
+exclusivo de uma. Termina indo para `0x27949c` de qualquer forma.
+
+### 17.3 Fase 7 (`0x2795e0`, 164 B) — lida parcialmente
+
+Chama um import de PLT (`0x714b8`, não identificado — assinatura
+`(buf, pc_relativo, 10)` sugere `memset`-like) e depois `SetBestMove()`
+diretamente (`0x277f1c`, seção 6.3). Se retornar `-1` → vai para
+`0x279850` (não lido). Senão, incrementa um contador de tentativas
+(`g->b[0xedf]`, até 7) e, se exceder, um segundo contador
+(`g->b[0xede]`, até 3) — um padrão clássico de "tente de novo N vezes,
+depois desista de um jeito diferente" (destinos de `0x279848`/`0x27985c`
+não lidos).
+
+### 17.4 Helper `0x277570` (108 B) — `RecheckFlaggedTargets`, lido por completo
+
+Chamado repetidamente de dentro de `FundamentalRoutine` (não é um dos 8
+handlers, mas é central o bastante para registrar aqui). Percorre o
+array de 21 bytes em `g->b[0xc8d..0xca1]` (preenchido por
+`GetDirectionOfAutoUnit`, seção 12, e pela fase 5); para cada slot
+marcado, chama `CheckUnitActionEffective(idx, 1)` de novo — se não der
+`1`, zera o slot (já não é mais um candidato válido); devolve `true` se
+sobrou pelo menos um slot válido. Ou seja, é a camada de **revalidação**
+entre "candidato ficou marcado em algum momento" e "ainda é válido agora
+que o estado mudou" — útil para entender por que a IA às vezes parece
+"esquecer" um alvo que escolheu um instante antes.
+
+### 17.5 O que NÃO foi lido (fase 1, fase 8/"else", e vários blocos partilhados)
+- **Fase 1** (`0x27969c`–`0x279ac4`, 1064 B) — a maior de todas, **não
+  lida nesta sessão**.
+- **Fase 8 / "else"** (`0x278ff4`–`0x27938c`, 920 B) — lida só a
+  primeira ~metade (confirmado: timeout de `VSync`, gestão da flag
+  "IA ativa" `g->b[0x19b7]`, um snapshot de campos da habilidade atual
+  para `g->b[0x1d]/[0x1e]/[0x24]`, e um laço de até 20 candidatos
+  testando `JudgeStatus(g->b[1], bwork[i], 38)` — status 38 parece ser
+  um gatilho especial, destino `0x2798ac` não lido). A segunda metade
+  (a partir de `0x279134`) não foi lida.
+- Vários blocos citados como destino de salto mas não lidos:
+  `0x279378`, `0x2797f8`, `0x279244`, `0x279134`, `0x2798ac`,
+  `0x279850`, `0x279848`, `0x27985c`.
+
+**Conclusão do item 5:** progresso estrutural real e honesto — a
+arquitetura de "poucos blocos grandes compartilhados + muitos
+redirecionadores pequenos" está confirmada e documentada, incluindo 2
+globais/arrays reaproveitados entre fases (`g+0xc8d..`/`g+0xca1..`,
+ambos de 21 bytes) — mas **a fase 1 e boa parte da fase 8 continuam sem
+leitura linha a linha**, então marcar este item como 100% concluído
+seria impreciso.
