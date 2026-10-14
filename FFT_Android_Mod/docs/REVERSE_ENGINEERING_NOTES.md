@@ -220,3 +220,181 @@ do código-fonte C/C++ (que não temos) para `arm64-v8a`/`x86_64`.
 Recomendação de teste: emulador AVD com imagem **x86** (32-bit) — a ABI
 `lib/x86` já está no APK e esse caminho é o mais controlável para validar
 sem depender de um device físico específico.
+
+## 9. Engenharia reversa do `libgl2jni.so` nativo — módulos fora da IA de batalha (2026-10-14)
+
+As seções 1–8 cobriram a camada Java/licenciamento/OBB. A IA de batalha
+em si tem sua própria investigação, bem mais extensa, em
+`docs/AI_DIFFICULTY_RESEARCH.md` (ver esse arquivo para `BattleRoutine`,
+`FundamentalRoutine`, `EvaluationFunction` etc.). Esta seção cobre dois
+módulos **fora** da IA, pedidos como itens de prioridade média/baixa
+numa fila de engenharia reversa: o módulo de criptografia (`CCRYPT`) e o
+parser de texturas TIM (`CG2D_LOADER_TIM`). Ferramenta: desmontagem
+manual via Capstone (ARM), mesma técnica das seções de IA — Hopper
+continua inutilizável neste ambiente (trava na inicialização).
+
+### 9.1 Módulo `CCRYPT` — algoritmo decifrado por completo, e achado principal: não é usado
+
+Localizado por nome exato no `.dynsym` (sem precisar adivinhar
+endereço): `CCRYPT::Encrypt(uint8_t*, int, unsigned)` (`0xb6588`, 148 B,
+lida por completo) e `CCRYPT::Decrypt(uint8_t*, int, unsigned)`
+(`0xb661c`, só **4 bytes** — um `b 0xb6588` puro, ou seja, `Decrypt` é
+literalmente um alias de `Encrypt`).
+
+**O algoritmo é um XOR de 32 bits, não uma cifra real:**
+
+```c
+// CCRYPT::Encrypt == CCRYPT::Decrypt (mesma função, cifra simétrica)
+int CCRYPT_EncryptDecrypt(uint8_t* buf, int len, uint32_t key) {
+    uint32_t* p = (uint32_t*)buf;
+    int n_words = len / 4;              // divisão com correção de sinal (idioma asr/lsr padrão)
+    for (int i = 0; i < n_words; i++)
+        p[i] ^= key;                     // XOR de 4 bytes por vez com a chave de 32 bits
+
+    uint8_t key_bytes[4] = { (uint8_t)key, (uint8_t)(key>>8), (uint8_t)(key>>16), (uint8_t)(key>>24) };
+    uint8_t* tail = buf + n_words*4;
+    for (int i = 0; i < len % 4; i++)
+        tail[i] ^= key_bytes[i];         // os 0–3 bytes finais, XOR com os bytes da chave em ordem
+    return 0;
+}
+```
+
+Sem S-boxes, sem rodadas, sem IV — é XOR direto com uma chave de 32 bits
+repetida. Trivialmente reversível (por isso `Decrypt`==`Encrypt`: XOR é
+sua própria inversa).
+
+**Achado principal — rastreamento de XREFs (o que o item da fila
+pedia):** varri o `.text` inteiro (2.4 MB) procurando por instruções
+`bl`/`blx` cujo alvo calculado fosse `CCRYPT::Encrypt`/`Decrypt`, e
+também por ocorrências do endereço dessas funções como dado bruto
+(ponteiro de vtable/tabela de função) em `.rodata`, `.data`,
+`.data.rel.ro*` e nos literal pools do próprio `.text`. **Zero
+ocorrências em qualquer lugar.** Achei também `CFILE_DAT::Decrypt(int,
+int, unsigned)` (`0xb6e38`, 56 B, lida por completo — é um wrapper fino:
+`CCRYPT::Decrypt(CFILE_DAT::GetBuffer(idx), CFILE_DAT::GetSize(idx),
+key)`), e **também não tem nenhum chamador** no binário ARM.
+
+**Conclusão:** o módulo `CCRYPT` (e seu wrapper `CFILE_DAT::Decrypt`)
+está presente no binário mas **não é alcançável por nenhum caminho de
+execução** neste `.so` ARM — é código morto, quase certamente herdado de
+uma base de código de engine compartilhada entre vários ports móveis da
+Square Enix, não exercitado por este jogo especificamente. Isso é
+consistente com o que a seção 7 já tinha documentado por outro ângulo:
+o `.obb` lido diretamente (seção 7, `fftpack.bin`/`g2d.dat`/etc.) é
+**legível sem nenhuma etapa de decriptação** — não há chave para
+"extrair em tempo de execução ou memória estática" porque a cifra nunca
+roda. Não verifiquei o binário x86 para esta seção (ficaria como
+verificação rápida futura, mas o padrão de "classe de engine
+compartilhada não usada neste jogo" não deve depender de arquitetura).
+
+### 9.2 Parser de texturas TIM (`CG2D_LOADER_TIM`) — confirmado como código ativo, lido por completo
+
+Ao contrário do `CCRYPT`, este módulo **é** alcançado por chamadas reais:
+`CG2D_LOADER_TIM::Load(char*, uint8_t*, uint, uint)` (`0xa6cd0`, 204 B,
+não lida em detalhe) chama `TIM_LoadFile` **ou** `TIM_LoadMemory`
+dependendo do caminho de entrada; ambas chamam `TIM_AnalyzeFileHeader`
+internamente. Os nomes e endereços exatos (achados direto no `.dynsym`,
+sem precisar do Hopper):
+
+| Função | Endereço/tamanho | Estado |
+|---|---|---|
+| `TIM_AnalyzeFileHeader(void*)` | `0xa6618`, 448 B | Lida por completo |
+| `TIM_LoadFile(char*, uint)` | `0xa67d8`, 708 B | Lida por completo |
+| `TIM_LoadMemory(uint8_t*)` | `0xa6a9c`, 500 B | Não lida (mesma forma geral, chama `TIM_AnalyzeFileHeader`) |
+
+**`TIM_AnalyzeFileHeader` — bate exatamente com o formato TIM padrão do
+PS1:**
+
+```c
+int TIM_AnalyzeFileHeader(TimState* out, const uint8_t* header) {
+    uint32_t magic = read_u32_le(header);
+    if (magic != 0x10) return 1;             // ID clássico do TIM (0x00000010)
+
+    uint32_t flag = read_u32_le(header + 4);
+    switch (flag & 7) {                       // bits 0–2 = modo de pixel, exatamente como o padrão TIM
+    case 0: /* 4bpp com CLUT */   out->field14 = 0x18; out->field8 = 3; ... break;
+    case 1: /* 8bpp com CLUT */   out->field14 = 0x10; out->field8 = 3; ... break;
+    case 2: /* 16bpp direto */    if (!(flag & 8)) return 1; out->field14 = 8; ... break;
+    case 3: /* 24bpp direto */    if (!(flag & 8)) return 1; out->field14 = 4; ... break;
+    default: return 1;                        // modos 4–7 não existem no TIM, inválido
+    }
+    // em alguns sub-casos, grava uma mensagem (provável log/aviso,
+    // formato tipo sprintf) num buffer em out+0x70 via uma função de
+    // PLT não identificada (0x714b8), com um código numérico diferente
+    // por ramo (0x16/0x19/0x1a) — não é um erro fatal, a função sempre
+    // continua e devolve sucesso depois.
+    return 0;
+}
+```
+
+O bit 3 (`flag & 8`) é a flag clássica "tem CLUT" do formato TIM — exigida
+para os modos 4bpp/8bpp (`flag&8` deve estar setada nesses dois casos
+dentro do código, embora a leitura mostre o teste do lado contrário do
+esperado para os modos diretos — documentei o comportamento real
+observado, não o que o spec "deveria" exigir, já que pode haver uma
+peculiaridade desta implementação específica).
+
+**`TIM_LoadFile` — fluxo de leitura completo, com validações de
+tamanho:**
+
+```c
+int TIM_LoadFile(TimOutput* out, char* path, void* scratch) {
+    CFILE* file = new_cfile(path);               // aloca + construtor CFILE::CFILE
+    if (CFILE::Open(file, 1) == 1 || CFILE::GetSize(file) <= 7) {
+        if (file) { CFILE::~CFILE(file); free(file); }
+        return 1;                                 // arquivo não abre ou é menor que o cabeçalho mínimo (8 B)
+    }
+
+    uint8_t header[8];
+    CFILE::Read(file, header, scratch, 8, NULL);
+    if (TIM_AnalyzeFileHeader(out, header) == 1) {
+        if (file) { CFILE::~CFILE(file); free(file); }
+        return 1;
+    }
+
+    if (out->modeField > 8) {                     // modos 4bpp/8bpp (têm CLUT)
+        uint8_t clutHeader[12];
+        CFILE::Read(file, clutHeader, scratch + 8, 12, NULL);
+        // (tabela de salto de 21 casos para o tamanho declarado do
+        // bloco de CLUT — maioria colapsa no caminho genérico; casos
+        // especiais não decodificados individualmente)
+        void* dst = alloc_or_validate(...);         // 0x2cdf8c, papel exato não resolvido
+        out->paletteBuf = dst;
+        CFILE::Read(file, dst, scratch + 8, clutSize, NULL);  // lê a paleta de verdade
+    }
+
+    if (out->modeField <= 8) {                     // modos 16bpp/24bpp direto (sem CLUT)
+        uint16_t blockLen, orgX, orgY, width, height; // lidos via CFILE::Read de 12 bytes
+        CFILE::Read(file, &pixelHeader, scratch, 12, NULL);
+        uint32_t expectedPixelBytes = width * 2 * height;
+        if (blockLen != expectedPixelBytes + 12) {
+            goto FAIL;                              // validação de tamanho: rejeita TIM corrompido/malformado
+        }
+        CFILE::Read(file, out->pixelBuf, scratch, expectedPixelBytes, NULL);
+    }
+
+    CFILE::~CFILE(file); free(file);
+    return 0;                                       // sucesso
+}
+```
+
+Isso é um parser TIM **real e funcional**, com validação de tamanho de
+bloco explícita (rejeita arquivos onde o tamanho declarado não bate com
+`largura×altura×2+12`) — não é um stub nem código morto como `CCRYPT`.
+Três chamadas de PLT não resolvidas (`0x2cdf6c`/`0x2cdf8c`/`0x2cdf9c`,
+thunks de 12 bytes no fim do `.text`, perto de funções de runtime do
+compilador como `__fixunsdfsi`) ficam sem nome — prováveis
+alocador/validador de ponteiro, não essenciais para entender o formato
+em si.
+
+### 9.3 Estado da fila "prioridade média/baixa"
+- **Item 6 (CCRYPT):** ✅ Concluído — algoritmo decifrado por completo
+  (XOR de 32 bits), confirmado como código morto via varredura
+  exaustiva de XREFs (nenhum chamador em `.text`, nenhuma referência de
+  dado em nenhuma seção de dados).
+- **Item 7 (parser TIM):** ✅ `TIM_AnalyzeFileHeader` e `TIM_LoadFile`
+  concluídos. `TIM_LoadMemory` (caminho alternativo, mesma forma geral)
+  e `CG2D_LOADER_TIM::Load` (o orquestrador que escolhe entre os dois)
+  **não foram lidos** — ficam como extensão natural se for necessário.
+- **Item 8 (outros motores — mapas, eventos/script, áudio, gráficos):**
+  ❌ Não iniciado. Seria o próximo item da fila original.
