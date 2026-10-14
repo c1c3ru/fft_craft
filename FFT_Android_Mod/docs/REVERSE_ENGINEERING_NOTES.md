@@ -466,3 +466,116 @@ each, por si só, do tamanho de um motor de jogo completo. **Não é
 razoável declarar o item 8 "concluído"** com o trabalho feito aqui — o
 que existe é um mapa de onde cada peça mora, para quem quiser continuar
 a partir de um ponto concreto em vez de do zero.
+
+### 9.5 O interpretador de bytecode do motor de eventos/diálogo — achado e confirmado (2026-10-14, continuação)
+
+Pedido explícito de continuação do item 8: achar o interpretador de
+bytecode da VM de eventos. Processo de busca (documentado porque não é
+óbvio e pode servir de referência para achar outras VMs no mesmo
+binário): a primeira hipótese (`event_call`, a maior função da família
+com 5456 B) **estava errada** — lendo-a por completo, ela não faz
+busca/despacho de opcode nenhuma; é a função de **tick por frame** que
+liga/desliga animações, música e vídeo ativos (um monte de `if
+(slot>=0) call handler()` para cada tipo de recurso: animação de
+modelo, animação VRAM, animação comprimida, música, filme). Isso por si
+só é um achado útil, só que não é o que foi pedido.
+
+**A busca real que funcionou:** nenhuma das 4 funções de opcode
+testadas (`evt_item`, `evt_eqp`, `evt_town_set`, `evt_dead_high`) tem
+**qualquer chamador direto** (`bl`) no binário — confirmando que são
+chamadas indiretamente. Busquei os endereços dessas 4 funções como
+**valor bruto de 4 bytes** em todas as seções de dado (`.rodata`,
+`.data.rel.ro*`, `.data`) e achei os 4 juntos, lado a lado, em
+`.data.rel.ro` a partir de `0x3455e4` — uma **tabela de ponteiros de
+função**. Resolvendo as primeiras ~140 entradas (nome de cada endereço
+via o `.dynsym`), a tabela tem exatamente **83 entradas válidas** (índices
+0–82) antes de virar dado de outra natureza (vtables de
+`pspSaveBase`/`pspSaveList`/tabela de unwind):
+
+- **Índices 0–28 (29 opcodes `evt_*`):** `evt_item`, `evt_eqp`,
+  `evt_gil_high/low`, `evt_date_high/low`, `evt_dead_high/low`,
+  `evt_skip0..4`, `evt_exit_jump`, `evt_exit_sel`, `evt_flagset`,
+  `evt_wldinfo`, `evt_deep`, `evt_fset_exit`, `evt_rute_grow/erase`,
+  `evt_town_set/clr/cent`, `evt_brave_high/low`, `evt_faith_high/low`.
+- **Índices 29–82 (54 opcodes `snpl_*`):** uma VM de script de
+  **diálogo/novela visual** completa — saltos incondicionais/
+  condicionais (`snpl_jp`, `snpl_je`/`jne`, `snpl_rndjp`,
+  `snpl_jpageflg`/`jnpageflg`, `snpl_jstatflg`/`jnstatflg`,
+  `snpl_jlocalflg`/`jnlocalflg`, `snpl_jparae`/`jparane`/`jparabig`/
+  `jparasmall`), variáveis (`snpl_setpara`/`addpara`/`subpara`/
+  `putpara`/`hidepara`/`chgpara`), flags (`snpl_setstat`/`clrstat`/
+  `setlocal`/`clrlocal`), texto (`snpl_mesput`/`mesput2`/`mesput3`,
+  `snpl_meswait`, `snpl_startpage`/`endpage`, `snpl_wordcol`),
+  imagem (`snpl_picput`/`picclr`/`backput`), áudio
+  (`snpl_sndreq`/`musicreq`/`sndstop`/`musicstop`/`envsndreq`/
+  `volchg`), fade (`snpl_fadein`/`fadeout`/`mfadein`/`mfadeout`/
+  `fadewait`), e controle (`snpl_wait`, `snpl_keywait`, `snpl_timeset`,
+  `snpl_exit`, `snpl_scrdisp`, `snpl_effmode`, `snpl_selparacalc`).
+
+**O dispatcher real: `wld_snpl()` (`0x26b0f4`, 456 B, lida por
+completo).** Confirmado via um `blx r3` explícito em `0x26b12c`
+(chamada indireta de verdade — o único jeito de ter certeza sem um
+depurador rodando é achar a instrução `blx`/`bx` com registrador, o que
+fiz varrendo o `.text` inteiro por esse padrão). O ponteiro base da
+tabela usado aqui (`r8`, resolvido numericamente via a mesma cadeia
+PC-relativa usada em toda a IA de batalha) é **`0x345658`, que é
+exatamente `0x3455e4 + 29*4`** — ou seja, `wld_snpl` despacha só a
+sub-tabela dos 54 opcodes `snpl_*` (a VM de diálogo), **não** os 29
+`evt_*` (que devem ter um dispatcher próprio, ainda não localizado).
+
+```c
+// wld_snpl() — um "passo" do interpretador de script de diálogo
+int wld_snpl(void) {
+    SNPLINFO* s = g_currentScript;      // struct de estado do script atual
+    void** opTable = (void**)0x345658;   // sub-tabela dos 54 opcodes snpl_*
+
+DECODE:
+    int opcode = s->b[8];                // opcode atual, 1 byte
+    validate_or_log(opcode);             // 0x26b0e0, papel exato não resolvido
+    opcode = s->b[8];
+    ((void(*)())opTable[opcode])();      // *** blx r3 — A CHAMADA INDIRETA ***
+
+    uint16_t flags = s->h[0xc] & ~0x10;
+    if (flags & 0x28) { s->h[0xc] = flags; goto END; }
+    s->h[0xc] = flags;
+
+    // ... 3 leituras de parâmetro (0x103400) + snpl_effcheck + outro
+    // helper (0x26abac) — contabilidade por frame, não ligada ao opcode em si
+
+    uint16_t ip = s->h[0xc];
+    if (ip & 2)  goto WAIT_OR_CALL;        // opcode pediu "espera" ou "chamada de sub-rotina"
+    if (!(ip & 4)) goto DECODE;            // nada pendente -> busca o PRÓXIMO opcode já neste frame
+    // ip&4: avança o ponteiro de dados do script para a próxima instrução
+    // (lê uma palavra de uma tabela de dados do próprio script, grava em
+    // s->b[8] como o novo opcode) e volta para DECODE sem passar por
+    // validate_or_log() de novo.
+
+WAIT_OR_CALL:   // ip&2 setado
+    // se um contador de frames (via um global de "tempo") for > 4:
+    //   copia um registro de 56 bytes (LDM/STM de 4+4+4+2 words) do
+    //   estado atual do script para uma PILHA de chamadas indexada por
+    //   esse contador -- GOSUB de sub-rotina de script, com pilha de
+    //   retorno própria, não a pilha de chamadas C normal.
+    // senão: recalcula o próximo ponteiro de instrução somando um
+    // deslocamento lido dos dados do script a um "viés de carga"
+    // (bias de PIC) reconstruído em tempo de execução -- confirma que
+    // os PONTEIROS DENTRO DOS DADOS DO SCRIPT são relativos, não
+    // absolutos (o script precisa ser "relocado" ao ser carregado).
+
+END:
+    ip &= ~0x18;
+    s->h[0xc] = ip;
+    return ((ip >> 5) ^ 1) & 1;    // 0 ou 1 -- provável "script ainda rodando?" ou "opcode pediu saída?"
+}
+```
+
+**Conclusão:** o pedido específico de "achar o interpretador de
+bytecode" está respondido com alta confiança para a VM de diálogo/novela
+(`snpl_*`, 54 opcodes, dispatcher `wld_snpl`) — endereço exato, mecanismo
+de despacho confirmado por instrução real (`blx r3`), tabela confirmada
+por valor numérico exato. **Não resolvido:** o dispatcher da outra
+metade da tabela (os 29 opcodes `evt_*`, índices 0–28) — ninguém chama
+essas 4 funções testadas via `bl` direto, então também devem passar por
+chamada indireta, só que não encontrei a instrução `blx`/`bx` específica
+que usa a sub-tabela em `0x3455e4` (índices 0–28) nesta passada; fica
+como próximo passo natural dentro do próprio item 8.
