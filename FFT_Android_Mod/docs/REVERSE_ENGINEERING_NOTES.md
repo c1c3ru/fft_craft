@@ -635,3 +635,55 @@ por completo (só os nomes, que já são bastante autoexplicativos); o
 restante do motor de mundo (`wld_*`, dezenas de funções de desenho/
 UI/câmera do overworld) e os motores gráfico/áudio continuam como
 levantamento de superfície (seção 9.4), não investigação.
+
+### 9.7 Formato real da instrução — confirmado lendo 5 handlers pequenos (2026-10-14, continuação)
+
+Para não parar só nos nomes, li por completo 5 dos handlers mais
+simples (escolhidos por tamanho pequeno, para serem uma amostra rápida
+e representativa): `evt_item`/`evt_eqp` (24 B cada), `snpl_jp` (32 B),
+`snpl_je` (8 B) e `snpl_exit` (36 B). Isso é suficiente para confirmar
+o **formato real da instrução** e o significado de vários bits do campo
+de flags (`s->h[0xc]`) que `wld_snpl`/`wld_event` só tinham exposto por
+fora (seção 9.5/9.6):
+
+- **Instrução de 2 bytes:** opcode (1 byte, em `s->b[8]`) + 1 operando
+  (1 byte, em `s->b[9]` — literalmente o byte seguinte no mesmo stream).
+  `snpl_jp` lê `s->b[9]` como o índice de destino do salto e grava em
+  `s->h[0xe]` (o mesmo campo que `wld_snpl` usa internamente como
+  "próximo índice de dado a ler") — confirma que os saltos desta VM são
+  por **índice de instrução**, não por endereço/offset de bytes.
+- **Bit `0x20` de `s->h[0xc]` = "script terminou".** `snpl_exit` seta
+  exatamente esse bit — e isso fecha o ciclo com o que `wld_snpl` testa
+  depois de cada chamada de opcode (`flags & 0x28`, onde `0x28 =
+  0x20|0x8`): é literalmente o jeito do opcode `exit` dizer ao
+  interpretador "pare de rodar". `snpl_exit` também chama
+  `0x28b034` (des-registro/limpeza, não identificado por nome) e
+  termina com `mov r0,#4; b 0x153614` — um retorno para a família de
+  funções de tarefa/thread vista no `event_call` (`asmTaskEntry`,
+  `Wtask_status`), sugerindo que o script se desregistra do sistema de
+  tarefas geral ao terminar.
+- **Bit `0x2` de `s->h[0xc]` = "salto pendente"** (confirmado por
+  `snpl_jp`, que seta esse bit depois de gravar o destino) — bate
+  exatamente com o teste `if (ip & 2) goto WAIT_OR_CALL` já visto no
+  pseudocódigo de `wld_snpl`.
+- **Padrão "`_sub`" confirmado como helper compartilhado de verdade:**
+  `snpl_je` é literalmente `{ mov r0,#1; b snpl_je_sub; }` (um
+  tail-call de 8 bytes) — passa `r0=1` como "modo" para a implementação
+  real em `snpl_je_sub` (`0x26ad5c`, 84 B, não lida). Por simetria quase
+  certa, `snpl_jne` deve ser o mesmo tail-call com `r0=0`. O mesmo
+  padrão deve valer para os outros 5 pares `_sub` já catalogados
+  (`jpageflg`/`jnpageflg`, `jstatflg`/`jnstatflg`, `jlocalflg`/
+  `jnlocalflg`).
+- **Achado negativo, mas honesto:** `evt_item` e `evt_eqp` (ambos
+  idênticos) só fazem `s->h[0xc] += 1` — não leem nenhum operando, não
+  chamam nada. Isso pode significar que (a) são opcodes "marcador"
+  cujo efeito real acontece em outro lugar lendo esse contador, ou (b)
+  são vestigiais/nunca totalmente implementados nesta versão mobile.
+  Não cheguei a uma conclusão definitiva com só esses dois exemplos.
+
+**Estado final desta rodada:** os dois interpretadores (seção 9.5/9.6) e
+o formato de instrução básico (esta seção) estão confirmados com alta
+confiança, lendo instruções reais em vez de inferir pelos nomes. O que
+sobra do item 8 — o restante dos ~90 handlers individuais, o motor de
+mundo `wld_*` como um todo, e os motores gráfico/áudio — é trabalho
+genuíno de escala grande, não uma lacuna pequena; continua em aberto.
