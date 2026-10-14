@@ -488,16 +488,27 @@ chamadas indiretamente. Busquei os endereços dessas 4 funções como
 `.data.rel.ro*`, `.data`) e achei os 4 juntos, lado a lado, em
 `.data.rel.ro` a partir de `0x3455e4` — uma **tabela de ponteiros de
 função**. Resolvendo as primeiras ~140 entradas (nome de cada endereço
-via o `.dynsym`), a tabela tem exatamente **83 entradas válidas** (índices
-0–82) antes de virar dado de outra natureza (vtables de
-`pspSaveBase`/`pspSaveList`/tabela de unwind):
+via o `.dynsym`), a tabela tem exatamente **83 entradas válidas** a
+partir desse ponto (índices "0–82" na numeração inicial) antes de virar
+dado de outra natureza (vtables de `pspSaveBase`/`pspSaveList`/tabela de
+unwind).
 
-- **Índices 0–28 (29 opcodes `evt_*`):** `evt_item`, `evt_eqp`,
+**Correção feita na continuação desta seção (ver `wld_event` abaixo):**
+`0x3455e4` não é o início real da tabela — o dispatcher de verdade usa
+uma base 12 entradas **antes** disso, em `0x3455b4`. A tabela completa
+tem **95 entradas** (índices 0–94 a partir de `0x3455b4`):
+
+- **Índices 0–4:** `evt_skip0`, `evt_flag`, `evt_flag_high`,
+  `evt_flag_low`, `evt_chr` — 5 opcodes que a primeira varredura (a
+  partir de `0x3455e4`) tinha perdido.
+- **Índices 5–11:** 7 cópias repetidas de `evt_skip2` — slots de opcode
+  reservados/não usados, todos apontando para o mesmo handler "no-op".
+- **Índices 12–40 (29 opcodes `evt_*`):** `evt_item`, `evt_eqp`,
   `evt_gil_high/low`, `evt_date_high/low`, `evt_dead_high/low`,
-  `evt_skip0..4`, `evt_exit_jump`, `evt_exit_sel`, `evt_flagset`,
+  `evt_skip1/3/4`, `evt_exit_jump`, `evt_exit_sel`, `evt_flagset`,
   `evt_wldinfo`, `evt_deep`, `evt_fset_exit`, `evt_rute_grow/erase`,
   `evt_town_set/clr/cent`, `evt_brave_high/low`, `evt_faith_high/low`.
-- **Índices 29–82 (54 opcodes `snpl_*`):** uma VM de script de
+- **Índices 41–94 (54 opcodes `snpl_*`):** uma VM de script de
   **diálogo/novela visual** completa — saltos incondicionais/
   condicionais (`snpl_jp`, `snpl_je`/`jne`, `snpl_rndjp`,
   `snpl_jpageflg`/`jnpageflg`, `snpl_jstatflg`/`jnstatflg`,
@@ -519,7 +530,7 @@ depurador rodando é achar a instrução `blx`/`bx` com registrador, o que
 fiz varrendo o `.text` inteiro por esse padrão). O ponteiro base da
 tabela usado aqui (`r8`, resolvido numericamente via a mesma cadeia
 PC-relativa usada em toda a IA de batalha) é **`0x345658`, que é
-exatamente `0x3455e4 + 29*4`** — ou seja, `wld_snpl` despacha só a
+exatamente `0x3455b4 + 41*4`** — ou seja, `wld_snpl` despacha só a
 sub-tabela dos 54 opcodes `snpl_*` (a VM de diálogo), **não** os 29
 `evt_*` (que devem ter um dispatcher próprio, ainda não localizado).
 
@@ -569,13 +580,58 @@ END:
 }
 ```
 
-**Conclusão:** o pedido específico de "achar o interpretador de
-bytecode" está respondido com alta confiança para a VM de diálogo/novela
-(`snpl_*`, 54 opcodes, dispatcher `wld_snpl`) — endereço exato, mecanismo
-de despacho confirmado por instrução real (`blx r3`), tabela confirmada
-por valor numérico exato. **Não resolvido:** o dispatcher da outra
-metade da tabela (os 29 opcodes `evt_*`, índices 0–28) — ninguém chama
-essas 4 funções testadas via `bl` direto, então também devem passar por
-chamada indireta, só que não encontrei a instrução `blx`/`bx` específica
-que usa a sub-tabela em `0x3455e4` (índices 0–28) nesta passada; fica
-como próximo passo natural dentro do próprio item 8.
+### 9.6 O segundo dispatcher — `wld_event` (os 29 opcodes `evt_*`), fechando o item
+
+Continuação direta do pedido ("continue com o que ainda falta"). Por
+analogia de nome com `wld_snpl`, testei `wld_event(int, int)`
+(`0x2590e8`, 236 B) — **achado de primeira**: tem um `blx r3` em
+`0x259174`, mesmo padrão exato.
+
+```c
+// wld_event(int evtId, int flagMask) — um "passo" do interpretador evt_*
+int wld_event(int evtId, int flagMask) {
+    uint16_t* data = *g_eventDataBase;              // ponteiro global (dupla indireção GOT)
+    uint16_t headerOff = data[evtId] & ~1;           // tabela de cabeçalho: 1 halfword por evtId
+    uint16_t len = data[headerOff / 2];              // comprimento do bloco de instruções
+    s->ptr[1] = (uint16_t*)data + headerOff/2;        // ponteiro pro bloco de instruções
+    if (len == 0) return 0;                           // bloco vazio -> nada a fazer
+
+    void** opTable = (void**)0x3455b4;                // a MESMA tabela, começando no índice 0 de verdade
+    s->h[0xc] = 0; s->b[0] = 0;
+    uint16_t* end = data + headerOff/2 + (len>>1)... ; // ponteiro de fim do bloco (aproximado)
+    s->b[8] = end;                                      // (campo reaproveitado, papel exato não 100% isolado)
+    int idx = 0;
+
+DECODE:
+    uint16_t opcode = instrBlock[idx++];
+    ((void(*)())opTable[opcode])();                    // *** blx r3 — despacho real ***
+
+    uint32_t flags = s->b[0];
+    if ((flags & 3) == 0) goto DECODE;                  // continua lendo opcodes no mesmo passo
+    if ((flags & 1) && (flags & flagMask)) return 1;     // opcode pediu parada "condicional ao chamador"
+    // senão, avança para o próximo evtId na sequência (idx de evento, não de opcode) e repete
+    ...
+    return 0;
+}
+```
+
+Confirmação numérica da tabela: `r5` (base usada no `blx`) resolve para
+**`0x3455b4`** — a base REAL da tabela completa (corrigindo a seção 9.5:
+o endereço `0x3455e4` usado ali era só onde a varredura inicial começou
+a achar nomes conhecidos, não o início verdadeiro da tabela). Ou seja:
+**`wld_event` usa a tabela completa desde o índice 0** (incluindo os 5
+opcodes "novos" e os 7 `evt_skip2` de preenchimento), enquanto
+`wld_snpl` usa só a sub-tabela a partir do índice 41. Isso é consistente
+com os dois serem motores relacionados mas com numeração de opcode
+independente dentro da mesma tabela física.
+
+**Conclusão do item 8 (bytecode):** os dois interpretadores pedidos
+estão achados e confirmados por instrução real (`blx r3`, não inferência):
+`wld_snpl` (`0x26b0f4`) para o script de diálogo/novela visual e
+`wld_event` (`0x2590e8`) para os eventos de mapa/mundo. A tabela de 95
+opcodes está completamente resolvida por nome. O que resta do item 8 de
+forma honesta: nenhum dos ~83 handlers de opcode individuais foi lido
+por completo (só os nomes, que já são bastante autoexplicativos); o
+restante do motor de mundo (`wld_*`, dezenas de funções de desenho/
+UI/câmera do overworld) e os motores gráfico/áudio continuam como
+levantamento de superfície (seção 9.4), não investigação.
