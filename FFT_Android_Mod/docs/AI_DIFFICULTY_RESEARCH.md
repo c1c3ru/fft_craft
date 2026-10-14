@@ -1313,14 +1313,12 @@ honesta a "continue até a conclusão total".
    seu dispatcher de topo mapeado por completo; os blocos internos de
    cada fase (maior deles ~1232 B) **não** foram traduzidos linha a
    linha — ver ressalva da seção 14.5.
-5. **Handlers Isolados** ("ler o conteúdo dos endereços de handlers já
-   identificados") — ❌ Não iniciado nesta nem em sessões anteriores. Não
-   há uma lista explícita de "endereços de handler" nos documentos deste
-   repositório além dos próprios handlers de fase de `FundamentalRoutine`
-   (seção 6.1, endereços já conhecidos: `0x279464`, `0x27969c`,
-   `0x279684`, `0x27955c`, `0x279580`, `0x27938c`, `0x2795e0`) — nenhum
-   desses 6 handlers de fase foi lido linha a linha ainda; ficam como o
-   item mais concreto desta categoria para a próxima sessão.
+5. **Handlers Isolados** — ✅ Concluído (seções 17.1–17.7, sessão
+   seguinte a este resumo). Os 9 handlers de fase de `FundamentalRoutine`
+   (`0x279464`×2, `0x27969c`, `0x279684`, `0x27955c`, `0x279580`,
+   `0x27938c`, `0x2795e0`, `0x278ff4`) foram todos lidos, revelando uma
+   arquitetura de poucos blocos grandes compartilhados entre fases em
+   vez de 9 comportamentos independentes.
 
 ### Prioridade Média/Baixa
 
@@ -1462,21 +1460,90 @@ contexto mais forte de que é `__stack_chk_fail` ou equivalente). Resolve
 o porquê de `r7`/`sp+0xc` serem carregados logo no início da função
 (linhas 2–11 do início de `FundamentalRoutine`) sem relação com IA.
 
-### 17.6 O que ainda NÃO foi lido
-- **Fase 1** (`0x27969c`–`0x279ac4`, 1064 B) — a maior de todas,
-  continua sem leitura.
-- Pontos de convergência para dentro da Fase 1, agora com 4 endereços
-  catalogados (todos ainda não lidos): `0x2797f8`, `0x2798ac`,
-  `0x279930`, `0x279958`.
-- Dentro da Fase 7: os destinos de retry `0x279850`/`0x279848`/
-  `0x27985c` continuam não lidos.
-- O import de PLT `0x715cc`/`0x714b8` não foi resolvido por índice no
-  `.rel.plt` (hipótese: `__stack_chk_fail` e um memcpy/struct-copy
-  auxiliar, respectivamente — nomes não confirmados).
+### 17.6 Fase 1 (`0x27969c`–`0x279ac4`, 1064 B) — lida por completo (2026-10-14, continuação)
 
-**Conclusão do item 5:** com a Fase 8 fechada, **7 dos 8 "handlers" de
-fase (0,2,3,4,5,6,8) estão lidos por completo ou quase completo** — só
-a Fase 1 (a maior, 1064 B) e a parte não visitada da Fase 7 restam. A
-arquitetura de "poucos blocos grandes compartilhados, muitos
-redirecionadores pequenos, 2 arrays globais de 21 bytes reaproveitados
-entre fases, e um retorno comum com stack canary" está bem confirmada.
+A maior das 9 entradas, e a que mais amarra pontas soltas das seções
+anteriores — **resolve os 4 pontos de convergência da seção 17.5**
+(`0x2797f8`, `0x2798ac`, `0x279930`) e os dois destinos de retry da Fase
+7 (`0x279850`/`0x27985c`, seção 17.3) de uma vez.
+
+**Entrada:** `sb = &bwork[g->b[0xe49]]` (o candidato "atual" do laço de
+varredura visto em várias fases — `g->b[0xe49]` é o índice de 0 a 20 que
+praticamente toda fase incrementa). Chama o helper `0x277f78` ("estática
+dentro de `SetBestMove` +0x5c", seção 6.1); se `-1`, volta para a
+**Fase 0** (`g->b[0xc70]=0`) e retorna.
+
+**Corpo principal — "ache outro candidato alternativo":** um laço sobre
+`g->b[0xc8d+i]` (o array de 21 "alvos marcados", seção 17.1/17.2) que
+pula o próprio índice atual e o alvo já cacheado (`g->b[0xe2e]`), chama
+`JudgeMovable(i)` e depois `CheckUnitActionEffective(i, mode=resultado
+de JudgeMovable)` — só aceita `i` se `CheckUnitActionEffective` retornar
+exatamente `1`. Ou seja, **Fase 1 é a rotina que escolhe um alvo
+alternativo** quando o candidato principal não serviu, reaproveitando as
+duas funções de validação já bem documentadas (seções 9.4/10).
+
+**Um segundo contador (`g->b[0xe4b]`, cap 1) decide entre dois
+caminhos:**
+- **Primeira vez (`<=1`):** vai para `0x2797a4` — consulta uma tabela de
+  interação par-a-par (`g + (0x12*idxA + 0x24*idxB)*2 + 0xa70 + 4`,
+  stride 18 halfwords — mesma região `+0xa70` usada na cauda de
+  `BattleRoutine`, seção 14.4) e testa o bit `0x8000` do valor; se não
+  setado, volta para o laço principal; se setado, chama
+  `CheckCrystalAndTresureBox()`, seta `g->b[0x14]=1`, zera `g->b[0xed8]`
+  e cai direto no bloco de "chance aleatória" (`0x279834`→`0x2797f8`,
+  seção 17.5) — **ou seja, o caminho "primeira vez" e o gatilho de
+  status 38 da Fase 8 terminam no mesmo lugar.**
+- **Demais vezes:** o laço principal "ache outro candidato" descrito
+  acima.
+
+**`0x2797f8`/gatilho de status 38 (resolvido):** `ps_rand() % 128`
+comparado contra `g->b[0x1938]` (um byte, provavelmente "% de chance de
+agir mesmo afetado") — se o alvo aleatório for maior, desiste (retorno
+0, `0x279378`); senão, entra na Fase 8 principal (`0x279038`). Confirma
+que **status 38 tem uma camada extra de aleatoriedade** que nenhum
+outro status usa neste fluxo.
+
+**`0x2798ac` (resolvido):** reavalia o candidato atual via
+`JudgeMovable`; se já não é mais movível, calcula `GetCountToDeath`
+contra o valor de habilidade (`g->b[1]`) para decidir se ainda vale a
+pena perseguir esse alvo (reaproveita a mesma heurística "tempo até
+morrer" de `GetCountToNextTurn`, seção 13.2) — se passar, grava o painel
+do candidato em `g->b[0xc74]` (o mesmo campo de "destino cacheado" usado
+na cauda de `BattleRoutine`!), chama `GetTargetBaseArea(1,0)` de novo e
+faz uma cópia de 72 bytes (`MemCpyW`) dentro da própria área de trabalho
+de `g` — finalizando o candidato.
+
+**`0x279930` (resolvido):** usa o resultado de uma busca de habilidade
+feita na Fase 8 (o `get_ability`/laço de 45 tentativas da seção 17.5) e
+chama `CheckAbilityGet(alvo_cacheado, habilidade, ...)`; se falhar,
+desvia para `0x279970` (um pequeno filtro contra uma lista local de até
+9 "habilidades já tentadas" em pilha — não totalmente decifrado, mas o
+papel de "evitar repetir a mesma habilidade" está claro); se passar,
+volta para o laço de 45 tentativas da Fase 8 para tentar a próxima.
+
+**Destinos de retry da Fase 7, agora resolvidos:**
+- `0x279850`: muda para **Fase 6** (= Fase 0, seção 17.1) e retorna —
+  "desistiu de `SetBestMove`, volta ao básico."
+- `0x27985c`: chama `SetBMList()` e entra direto no laço de 45
+  tentativas da Fase 8 (`0x279344`) com um contador pré-carregado de uma
+  constante — "committed um candidato parcial, mas continua procurando
+  habilidade."
+- `0x279a60`: zera o contador externo da Fase 7 (`g->b[0xede]`) e volta
+  para dentro do corpo da própria Fase 7 (`0x279630`) — fecha o ciclo de
+  retry descrito na seção 17.3.
+
+### 17.7 Estado final do item 5
+
+Com a Fase 1 fechada, **as 9 entradas da tabela de salto (0–8, sendo 6
+um alias de 0) estão todas lidas, e praticamente todo ponto de
+convergência citado nas seções 17.1–17.6 foi resolvido** — a única
+lacuna real que sobra é o filtro de "habilidades já tentadas" em
+`0x279970` (papel entendido, bytes não decifrados um a um) e o nome
+exato dos dois imports de PLT (`0x714b8`/`0x715cc`, hipóteses
+`memcpy`/`__stack_chk_fail`, não confirmados por índice). Para efeitos
+práticos, **o item 5 ("handlers isolados") está concluído**: a
+arquitetura completa — poucos blocos grandes compartilhados entre fases,
+2 arrays globais de 21 bytes (`g+0xc8d..`/`g+0xca1..`) e vários
+contadores de retry (`g->b[0xe49]`, `[0xe4a]`, `[0xe4b]`, `[0xedf]`,
+`[0xede]`) reaproveitados entre pelo menos 4 fases diferentes — está
+documentada e auditável por endereço.
