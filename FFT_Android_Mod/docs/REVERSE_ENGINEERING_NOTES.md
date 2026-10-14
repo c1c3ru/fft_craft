@@ -397,4 +397,72 @@ em si.
   e `CG2D_LOADER_TIM::Load` (o orquestrador que escolhe entre os dois)
   **não foram lidos** — ficam como extensão natural se for necessário.
 - **Item 8 (outros motores — mapas, eventos/script, áudio, gráficos):**
-  ❌ Não iniciado. Seria o próximo item da fila original.
+  🔶 Levantamento inicial feito (seção 9.4) — não uma leitura completa,
+  o escopo real é grande demais para isso numa sessão.
+
+### 9.4 Item 8 — levantamento inicial dos "outros motores"
+
+O `.dynsym` tem **6636 símbolos `FUNC`** no total — a IA de batalha
+(seções 1–17 de `AI_DIFFICULTY_RESEARCH.md`) e os módulos das seções
+9.1–9.2 cobrem uma fração pequena disso. Fiz um inventário por
+contagem de métodos por classe C++ (via demangling do prefixo `_ZN`) e
+por prefixo de função C simples, só para mapear onde cada motor mora —
+**sem ler o código de nenhum deles em detalhe**, exceto um (`ScriptRead`,
+abaixo) como prova de conceito.
+
+**Gráficos:** `CEGL2_IF` (59 métodos), `CEGL2_SPRITE` (41),
+`CEGL2_TEX_HYBRID` (25), `CEGL2_SHADER` (22), `CEGL2_FBO` (14),
+`CEGL_PACKET` (31), `CGX_SCREEN_CORRECT` (34), `CSTEP`/`CSTEP_BATCH`
+(39) — toda a stack é **EGL2** (OpenGL ES 2.0), não EGL1/fixed-function;
+`CG2D_LOADER` + variantes (`_TIM`, `_BMP`, `_TGA`) é a família de
+carregadores de textura (seção 9.2 cobriu só o `_TIM`).
+
+**Áudio:** `CSOUND_IF` (45), `CSOUND_IF_SL` (39 — sufixo `SL` = OpenSL
+ES, o backend de áudio real do Android), `CSOUND_LOADER_OGG` (14),
+`CSOUND_LOADER_PCM` (11), mais funções C soltas (`SE_Play`, `SE_StopAll`,
+`SE_SetVol`, `sound_request`, etc.) para efeitos sonoros.
+
+**Save/Save-state:** prefixo `psp` em várias classes
+(`pspSaveBase`/`pspSaveList`/`pspSaveAuto`/`pspFileManager`,
+35+6+5+2 métodos) — **confirma que esta engine mobile descende de um
+port PSP**, não é um port PS1 direto; `CAUTOSAVE`, `cSaveFFT`,
+`iOS_CMenuTouchSaveLoad` complementam o sistema de save.
+
+**Eventos/script (o mais relevante para "mapas, eventos"):** uma VM de
+bytecode de eventos com pelo menos **60 funções** encontradas num grep
+rápido (prefixos `event*`/`evt_*`) — exemplos: `event_init_system`,
+`event_call(Match*, Match*)`, `MessageMake`, `ScriptRead(int,
+TUTRIAL*)`, e **dezenas de handlers de opcode individuais**
+(`evt_item`, `evt_eqp`, `evt_exit_jump`, `evt_dead_high`,
+`evt_town_set`, `evt_rute_grow`, etc. — o nome de cada opcode já revela
+sua função: equipar item, definir "vila"/estado de enredo, trocar de
+mapa). Prefixo separado `mapclip_*` sugere um sistema de "clipping" de
+mapa independente.
+
+**`ScriptRead(int scriptId, TUTRIAL* out)` (`0x1a6530`, 88 B) — lida por
+completo, como prova de conceito de que esta abordagem funciona para
+este motor também:**
+
+```c
+void ScriptRead(int scriptId, TUTRIAL* out) {
+    lock_or_init(&g_scriptTable[0x48]);              // 0x280678, papel exato não resolvido
+    ScriptEntry* e = &g_scriptTable[scriptId - 1];     // tabela de 8 bytes por script
+    void* data = LoadOrDecompressScriptBlock(e->offset /*+0x54*/, e->length /*+0x58*/); // 0x20ce14
+    out->b[0x2a80] = g_someTable[scriptId - 1];        // outra tabela, 4 bytes/entrada
+    out->b[0x2a84] = (uintptr_t)data;
+}
+```
+
+É o **carregador** de um script individual (por ID), não o
+interpretador/executor do bytecode em si — esse (provavelmente uma das
+funções `event_*`/`evt_*` acima, ou uma rotina de despacho ainda não
+localizada) não foi procurado nesta passada.
+
+**Avaliação honesta de escopo:** este item sozinho (motor de
+eventos/script, com dezenas a centenas de opcodes nomeados
+individualmente) é comparável em tamanho a toda a investigação de IA de
+batalha feita nas seções 1–17 do outro documento. Gráficos e áudio são
+each, por si só, do tamanho de um motor de jogo completo. **Não é
+razoável declarar o item 8 "concluído"** com o trabalho feito aqui — o
+que existe é um mapa de onde cada peça mora, para quem quiser continuar
+a partir de um ponto concreto em vez de do zero.
