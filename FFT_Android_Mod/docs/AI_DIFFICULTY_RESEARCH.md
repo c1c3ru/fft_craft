@@ -998,3 +998,117 @@ Itens novos ainda sem leitura: `BattleRoutine` (corpo principal,
 (`0x271504`, 156 B), e os dois helpers de `SetUnitParameter`
 (`0x279f8c` 1072 B, `0x279ac4` 172 B). Prioridade média/baixa (CCRYPT,
 parser TIM, outros motores) continua sem alteração.
+
+## 13. Quatro itens pequenos/médios fechados em sequência (2026-10-14, continuação)
+
+Sessão disparada por "continua até a conclusão total" — varrendo o resto
+da fila que ainda tinha endereço conhecido antes de atacar o corpo
+principal de `BattleRoutine` (maior peça que falta).
+
+### 13.1 `GetDirectionForPanel(int8_t* a, int8_t* b)` — `0x271504`, 156 B, completa
+
+Calcula a direção cardeal de `b` em relação a `a`, usando os bytes `[0]`
+(X) e `[2]`(Y) de cada painel. Com `dx = Xb-Xa`, `dy = Yb-Ya`, calcula
+`r2 = dx-dy` e `r3 = -(dx+dy)` (rotação de 45° clássica para achar
+quadrante) e devolve:
+
+| Condição | Retorno |
+|---|---|
+| `r2<=0 && r3<0` | `0` (Norte — bate com a tabela de deltas `(0,-1)` da seção 12.1) |
+| `r2<=0`, senão | `1` (Oeste, `(-1,0)`) |
+| `r2>0 && r3<=0`, fora de um caso-limite | `2` (Sul, `(0,1)`) |
+| caso-limite (`r2>0 && r3>0`, ambos "zero-ish") | `3` ou `4`, dependendo do sinal residual de `r2`/`r3` |
+
+**Achado curioso, não totalmente explicado:** existe um 5º valor de
+retorno (`4`) para o caso-limite. Em `GetDirectionOfAutoUnit` (seção
+12.2) esse valor acaba indexando `sp+0x14+4 = sp+0x18`, que é exatamente
+o byte seguinte ao array de 4 validades (`valid[0..3]`) — ou seja, lê
+"lixo" de pilha (na prática, o primeiro byte do buffer de painel reusado)
+em vez de um 5º slot de validade real. Não sei se isso é intencional no
+código original (ex.: o código-fonte original também só previa 4
+direções e o `case 4` nunca ocorre na prática por construção dos dois
+pontos de entrada) ou um artefato de como o compilador layoutou a pilha.
+Fica como observação, não como bug confirmado.
+
+### 13.2 `GetCountToNextTurn(BWORK* u)` — `0x27af10`, 204 B, completa
+
+Implementa a fórmula clássica de **tempo até a próxima ação** (CT/Charge
+Time) do FFT original: `ceil((100 - u->b[0x41]) / u->b[0x40])`, com vários
+*gates* de status que a tornam "infinita" (retorna `INT_MAX`):
+
+```c
+int GetCountToNextTurn(BWORK* u) {
+    if (u->b[0x40] == 0) return INT_MAX;                 // velocidade zero -> nunca age
+    if (u->h[0x61] & 0x8140) return INT_MAX;              // status que impedem agir (bits 0x40/0x8000 combinados)
+    row = &g[u->b[1]*16 + 0x1828];                         // u->b[1] = índice da própria unidade (auto-referência!)
+    if (row->b[0xb] & 0x20) return INT_MAX;                // flag calculada por SetUnitParameter (seção 11)
+
+    r6 = (u->b[0x64] & 2) ? u->b[0x6c] : u->b[0x64];        // "velocidade efetiva" alternativa quando uma flag está setada
+    if (u->b[0x41] <= 0x63) {
+        int rem = 0x64 - u->b[0x41];                        // 100 - CT_atual
+        r6 += rem / u->b[0x40];                              // __aeabi_idiv
+        if (rem % u->b[0x40] != 0) r6 += 1;                  // __aeabi_idivmod -> arredonda para cima
+    }
+    if (u->b[0x61] & 0x20) return r6;
+    if (u->b[0x65] & 0x10) return max(u->b[0x71], r6);       // status impõe um mínimo de turnos de espera
+    return r6;
+}
+```
+
+Confirma — com fórmula explícita, não só por nome — que `JudgeStatus`/
+`CheckUnitActionEffective` (seções 9.4/10) e esta função compartilham os
+mesmos dois arrays de flags de status (`+0x61`/`+0x65` nesta função, que
+correspondem a `t->b[0x61]`/`t->b[0x65]` lá). `__aeabi_idivmod`
+(`0x2ca878`, nome confirmado no `.dynsym`) é a mesma rotina de divisão
+usada em quase toda a aritmética de dano/pontuação já vista — aqui, pela
+primeira vez, usada explicitamente para obter o **resto** (arredondamento
+para cima).
+
+### 13.3 Os dois helpers de `SetUnitParameter`
+
+**`0x279ac4` (172 B) — completa, achado forte:** `ClassifyWeaponCategory
+(row, itemId, int* counterFlags)`. Chama `pspItemGetWeaponData` (nome
+exato confirmado no `.dynsym` — fecha de vez a suspeita da seção 11.2
+sobre "categoria de arma"). Se o item não é arma (bits `0x10`/`0x20` do
+byte `+1` dos dados da arma ambos zero) — não faz nada. Senão marca
+`row->b[3]` (bit `0x80` ou `0x40`, dependendo de qual dos dois bits) e
+acumula em `*counterFlags` um de `{1,2,4}` conforme o campo `+2` dos dados
+da arma vale `{outro,6,7}` — e grava `row->h[4]=itemId`, `row->b[0]=
+arma->b[0]`, `row->b[6] |= arma->b[6]`. É exatamente a tabela que
+`SetUnitParameter` consome no `switch` de 5 vias da seção 11.2.
+
+**`0x279f8c` (1072 B) — lida, estrutura confirmada, 3 ramos de categoria
+não desmontados linha a linha:** `ResolveDefaultJobAbilities(int
+unit_idx, int job_or_group_id, int* out)`, chamada por `SetUnitParameter`
+só quando a unidade **não tem job secundário** (`g->b[0x12]==0`, seção
+11.2). Fluxo confirmado:
+1. `get_ability(job_or_group_id, 1)` (`0x1d82a8`, nome confirmado)
+   devolve um ponteiro para uma lista de até **16** IDs de habilidade
+   (halfwords, terminada por `0`).
+2. Lê um byte de categoria indexado por `job_or_group_id` numa tabela
+   ainda não nomeada e despacha para um de 3 ramos
+   (`categoria==2→0x27a240`, `==3→0x27a348`, `==10→0x27a384`) ou segue no
+   fluxo principal para qualquer outro valor.
+3. No fluxo principal: para cada uma das 16 entradas da lista, testa o
+   bit 7 do campo `+7` de `aa[ability_id]` (tabela mestra de habilidades,
+   seção 10.1); se setado e `ability_id<=367` (limite de `aa[]`, igual ao
+   visto na seção 10), compara `aa[ability_id].b[0xd]` (às vezes
+   dividido por 2) contra um campo da própria unidade (`u->h[0x36]`) e
+   contra duas flags adicionais (`g->b[0xe]&4`, `u->b[0x5b]&0x40` /
+   `aa[ability_id].b[6]&8`+`u->b[0x1a6]&8`) — quando tudo bate, chama
+   `CheckAbilityGet(unit_idx, ability_slot, loop_index)` (`0x279b70`,
+   nome confirmado, corpo ainda não lido).
+4. Devolve `*out` inalterado nos casos simples, ou um valor derivado de
+   `loop_index`/da condição `categoria==9` num dos desvios finais —
+   **esse detalhe final não foi confirmado com certeza**.
+
+Os 3 ramos de categoria (`0x27a240`/`0x27a348`/`0x27a384`) **não foram
+lidos** — cada um é uma variação do mesmo padrão de "percorrer a lista de
+16 e chamar `CheckAbilityGet`", mas com condições de entrada diferentes;
+dado que esta função já é claramente contabilidade de habilidades padrão
+(não combate), não persegui os 3 ramos até o fim nesta passada — ficam
+na fila caso seja necessário no futuro.
+
+### 13.4 Próximo da fila
+O item grande que resta da lista original é o **corpo principal de
+`BattleRoutine`** (`0x274764`–`0x275ebc`, 5848 B) — ver seção 14.
