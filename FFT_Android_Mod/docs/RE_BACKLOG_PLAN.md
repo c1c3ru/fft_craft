@@ -82,8 +82,16 @@ documentado. Os dois documentos de resultado são:
 
 ## 🟠 Prioridade média — fecha os parsers/motores já começados
 
-- [ ] `TIM_LoadMemory` (`0xa6a9c`, 500 B) — mesma forma geral de
-  `TIM_LoadFile` já lida (seção 9.2 do `REVERSE_ENGINEERING_NOTES.md`).
+- [x] `TIM_LoadMemory` (`0xa6a9c`, 500 B) — lida por completo, incluindo
+  a tabela de salto computada de 21 entradas (extraída lendo os words
+  crus), ver `REVERSE_ENGINEERING_NOTES.md` seção 9.8. Achado: o campo
+  `field14` que ela lê é o mesmo que `TIM_AnalyzeFileHeader` grava
+  (seção 9.2) com os valores `0x18/0x10/8/4` por modo de pixel TIM
+  (4bpp CLUT/8bpp CLUT/16bpp direto/24bpp direto) — os 4 casos "reais"
+  da tabela de salto (`20/12/4/0`) batem exatamente com esses modos,
+  na mesma ordem. Confirmado também, por extração do literal pool
+  (`0x55555556`), que o caso 4bpp usa o idioma clássico de compilador
+  pra "divisão por 3".
 - [ ] `CG2D_LOADER_TIM::Load` (`0xa6cd0`, 204 B) — orquestrador que
   escolhe entre `TIM_LoadFile`/`TIM_LoadMemory`.
 - [ ] Opcodes de áudio/parâmetro do motor de eventos ainda não lidos

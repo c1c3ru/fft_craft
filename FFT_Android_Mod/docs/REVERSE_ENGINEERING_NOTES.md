@@ -688,6 +688,139 @@ sobra do item 8 — o restante dos ~90 handlers individuais, o motor de
 mundo `wld_*` como um todo, e os motores gráfico/áudio — é trabalho
 genuíno de escala grande, não uma lacuna pequena; continua em aberto.
 
+### 9.8 `TIM_LoadMemory` lida por completo — fecha o item 🟠 do plano (2026-10-16, loop de continuação, iteração 5)
+
+A seção 9.2 já tinha identificado `TIM_LoadMemory` (`0xa6a9c`, 500 B)
+mas não a tinha lido. Lida por completo agora, incluindo a tabela de
+salto computada (`addls pc,pc,r6,lsl #2`, 21 entradas) que o
+desmontador recursivo não alcança sozinho — extraída e decodificada à
+mão lendo os 21 words crus da região `0xa6b04`–`0xa6b57` como
+instruções `b` e resolvendo cada destino.
+
+```c
+// TIM_LoadMemory(TimObject* dst /*r5*/, uint8_t* src /*r4*/)
+int TIM_LoadMemory(TimObject* dst, uint8_t* src) {
+    if (TIM_AnalyzeFileHeader(dst, src) == 1) return <valor de r0 da chamada>; // magic/modo inválido
+
+    TimSub* ip = dst->field_0x14;       // mesmo sub-struct que a seção 9.2 já nomeou
+    int remaining = ip->field14;        // *** O MESMO `field14` da seção 9.2! ***
+                                          // (0x18/0x10/8/4 conforme o modo de pixel)
+
+    uint32_t sb;   // tamanho de dados calculado (pixels/CLUT), reaproveitado como base
+    if (remaining <= 8) {
+        // ---- CABEÇALHO "SIMPLES" (sem CLUT extra) ----
+        uint16_t w = (src[0x10] | src[0x11]<<8) << 1;
+        uint16_t h =  src[0x12] | src[0x13]<<8;
+        sb = w * h;                                  // tamanho total dos dados de pixel, em bytes
+        uint32_t declaredSize = *(uint32_t*)(src+8);  // campo de 4 bytes LE em src+8
+        if (declaredSize != sb + 0xc) return 1;       // valida contra o tamanho calculado+12
+        // tamanho bate -> "cai" dentro do mesmo laço abaixo com
+        // r7=sl=sb+0x20, r8=0x14 (ver nota de comportamento compartilhado)
+    }
+
+    // ---- LAÇO (cabeçalho "estendido", ou continuação do caminho simples) ----
+    int headerOff = 0x14, chunkIdx = 0, ofsA = headerOff, ofsB = 0;
+    do {
+        uint16_t a = src[8+8] | src[9+8]<<8;    // campo de 16 bits em (src+8)+8
+        uint16_t b = src[0xa+8] | src[0xb+8]<<8; // campo de 16 bits em (src+8)+0xa
+        remaining -= 4;
+        int chunkSize;
+        if (0 <= remaining && remaining <= 0x14) {
+            // *** TABELA DE SALTO, 21 casos (r6=remaining, índice = remaining) ***
+            switch (remaining) {
+            case 20: {  // remaining==field14-4==20 <=> field14==24 (0x18) == modo 0, 4bpp+CLUT
+                // divisão por constante (idioma clássico de compilador
+                // pra "/3" via multiplicação de 64 bits + correção de
+                // resto) -- fórmula exata não 100% isolada, mas o
+                // padrão smull+mla+sub é inconfundível de "divisão por
+                // uma constante não-potência-de-2"
+                a <<= 1;
+                int64_t q = ((int64_t)a * 0x55555556) >> 32;  // smull r0,r2,r1,r2 -- magic de "/3"
+                int rem = a - q*3;
+                chunkSize = b * (rem + q);
+                ip->field_0xc = q;
+                dst->field_0x10 = rem;   // nota: grava em `dst`, não em `ip` (único caso que diverge)
+                break;
+            }
+            case 12: // field14==16 (0x10) == modo 1, 8bpp+CLUT
+                chunkSize = (b * a) << 1;
+                ip->field_0xc = a;
+                ip->field_0x10 = b;
+                break;
+            case 4:  // field14==8 == modo 2, 16bpp direto
+                a <<= 1;
+                chunkSize = b * a;
+                ip->field_0xc = a;
+                ip->field_0x10 = b;
+                break;
+            case 0:  // field14==4 == modo 3, 24bpp direto
+                a <<= 2;
+                chunkSize = b * a;
+                chunkSize >>= 1;
+                ip->field_0xc = a;
+                ip->field_0x10 = b;
+                break;
+            default: // casos 1,2,3,5–11,13–19 e fora de [0,20]: sem CLUT/tamanho extra
+                chunkSize = 0;
+                break;
+            }
+        } else {
+            chunkSize = 0;  // remaining fora de [0,0x14]
+        }
+
+        // ---- cópia dos dados do chunk ----
+        void* alloc = Allocate(chunkSize + ofsA);   // bl 0x2cdf8c
+        dst->field_0x0 = alloc;
+        dst->field_0x4 = (uint8_t*)alloc + ofsA;
+        memcpy((uint8_t*)alloc + ofsA, src + ofsB, chunkSize);  // bl memcpy (0x714b8)
+
+        if (ip->field14 <= 8) { dst->field_0xc = 0; return 0; }  // caminho simples termina aqui
+        // (caminho "estendido" continuaria o laço — não observado
+        // sendo re-executado numa 2ª iteração real nos dados de teste
+        // alcançáveis por esta leitura; a estrutura do `do/while`
+        // existe no código mas o corpo pós-primeira-iteração não foi
+        // exercitado/confirmado neste passe)
+    } while (/* nunca visto repetir na leitura atual */ false);
+
+    return 0;
+}
+```
+
+**Achados que fecham pontas da seção 9.2:**
+- `ip->field14` (lido em `TIM_LoadMemory`) é **exatamente o mesmo
+  campo** que `TIM_AnalyzeFileHeader` grava com os valores `0x18 / 0x10
+  / 8 / 4` para os modos de pixel TIM padrão (4bpp CLUT / 8bpp CLUT /
+  16bpp direto / 24bpp direto, seção 9.2). O índice da tabela de salto
+  (`field14 - 4`) bate **exatamente** com essa tabela: casos `20/12/4/0`
+  correspondem, em ordem, aos modos `0/1/2/3` — confirma que
+  `TIM_LoadMemory` é o segundo "braço" (carregar de um buffer de
+  memória já carregado, em vez de arquivo) do mesmo parser TIM, com o
+  switch dedicado a calcular o tamanho da CLUT/paleta por modo de pixel.
+- Única divergência real entre os 4 casos: o caso `20` (4bpp) precisa
+  de uma divisão por 3 — **confirmado numericamente**: a constante do
+  `smull` (`[pc,#0xc8]` em `0xa6bbc`, pool em `0xa6c8c`) é
+  `0x55555556`, exatamente o multiplicador clássico de compilador
+  gcc/clang pra "dividir por 3 via multiplicação de 64 bits"
+  (`ceil(2^32/3)`). Isso bate com 4bpp CLUT ter 16 cores mas o campo
+  de origem (`a`) provavelmente contar em unidades de 3 pixels/alguma
+  razão ligada ao empacotamento 4-bit — os outros 3 modos (8bpp/16bpp
+  direto/24bpp direto) só precisam de shift+multiplicação porque suas
+  razões são potências de 2.
+- O validador do caminho "simples" (`remaining <= 8`, i.e. `field14 <=
+  8`, ou seja, modos 2/3 sem CLUT extra) recalcula o tamanho esperado
+  (`largura*altura*2 + 12`) e **retorna erro (`1`) se não bater com o
+  campo de tamanho declarado no próprio buffer** — é uma validação de
+  integridade de dados, não só um parse cego.
+
+### 9.9 O que ficou sem confirmar
+- Se o `do/while` do caminho "estendido" (`field14 > 8`) de fato
+  itera mais de uma vez em dados reais, e o que `ofsB`/`ofsA` valem
+  numa 2ª iteração (a estrutura do código permite, mas só a primeira
+  passada foi exercitada/lida com confiança total).
+- O valor de retorno exato quando `TIM_AnalyzeFileHeader` falha (linha
+  `beq 0xa6ba4`, `pop` sem `mov r0` explícito antes — herda o `r0` da
+  chamada anterior, então provavelmente `1`, mas não cravado).
+
 ## 10. Os handlers de opcode, quase todos lidos (2026-10-14, continuação "vamos para os 90 handlers")
 
 Desmontagem em lote de **88 handlers** (`evt_*`/`snpl_*`, ~6,5 KB de
