@@ -134,9 +134,15 @@ documentado. Os dois documentos de resultado são:
   novos resolvidos). Achado: `field_0x0` tem papel duplo (guarda o FBO
   anterior durante a criação, depois vira sentinela `-1`).
   `RenderToFBO`/`RenderFromFBO` continuam não lidos por dentro.
-- [ ] `CEGL2_SHADER` — cache de shader via `std::map` (`Load` 596/384 B,
-  `Begin`/`SetTexture`/`SetMatrix4` já usados por outras funções lidas,
-  mas não lidos por dentro).
+- [x] `CEGL2_SHADER` — função-central (`Load`, sobrecarga de buffer,
+  `0xac850`, 596 B) lida por completo, ver
+  `REVERSE_ENGINEERING_NOTES.md` seção 13.6. Confirma a sequência real
+  de compilação+link de shader (8 imports GL novos) e o cache via
+  árvore rubro-negra do STLport (27 slots de uniform por shader).
+  **Achado preocupante:** falha de link (`glGetProgramiv`
+  `GL_LINK_STATUS`==0) cai num laço infinito sem tratamento, diferente
+  de falha de compilação (que retorna erro graciosamente). `Begin`/
+  `SetTexture`/`SetMatrix4` continuam não lidos por dentro.
 - [ ] `CEGL2_TEX_HYBRID` — decodificação/upload de textura
   (`GL_IsUpdate` 684 B, `DecodeTexture` 468 B, `GL_Load` 392 B) — **
   conecta direto com o parser TIM** (provável ponto de conversão do

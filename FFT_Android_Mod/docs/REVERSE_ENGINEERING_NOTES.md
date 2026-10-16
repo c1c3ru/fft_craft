@@ -1518,7 +1518,87 @@ int CEGL2_FBO::Create(CEGL2_FBO* this, int p1, int width, int height, int wantLi
   ambos controlados por parâmetros simples (`wantLinearFilter`/
   `wantDepth`), não por estado implícito.
 
-## 14. `DrawTile4` e `Add3D` lidas por completo — e um bônus: resolvidos vários mistérios de PLT antigos (2026-10-16)
+### 13.6 `CEGL2_SHADER::Load` lida por completo — terceiro item 🟡, e um achado preocupante (2026-10-16, loop de continuação, iteração 10)
+
+Das duas sobrecargas de `Load` (`0xab674`, 384 B, por string; e
+`0xac850`, **596 B**, por buffer — a que o plano apontava), escolhi a
+de 596 B porque é ela que de fato interage com o cache `std::map`
+citado no plano (confirmado: usa a árvore rubro-negra manual do
+STLport, `_Rb_tree::insert_unique`, `0xac540`, símbolo já catalogado
+por nome). Cobertura total: 149 instruções pra 149 esperadas.
+
+```c
+// CEGL2_SHADER::Load(this, int key, void* vertSrc, uint vertLen, void* fragSrc, uint fragLen)
+int CEGL2_SHADER::Load(CEGL2_SHADER* this, int key, void* vertSrc, uint vertLen,
+                        void* fragSrc, uint fragLen) {
+    // busca 'key' na árvore do cache (this->field_0x10); se já existe uma
+    // entrada com a MESMA key, chama uma função virtual (vtable slot #6,
+    // this->vtbl[0x18]) antes de recriar — quase certamente libera os
+    // recursos GL do shader anterior daquela chave.
+    ...
+
+    GLuint vs = glCreateShader(GL_VERTEX_SHADER /*0x8b31*/);
+    GLuint fs = glCreateShader(GL_FRAGMENT_SHADER /*0x8b30*/);
+    if (CompileShader(&vs, vertSrc, vertLen) != 0) goto FAIL;   // 0xabb28, já catalogada
+    if (CompileShader(&fs, fragSrc, fragLen) != 0) goto FAIL;
+
+    GLuint prog = glCreateProgram();
+    glAttachShader(prog, vs);
+    glAttachShader(prog, fs);
+    for (i = 0; i < 7; i++)                                       // 7 atributos fixos
+        glBindAttribLocation(prog, i, attribNameTable[i]);
+    glLinkProgram(prog);
+
+    int linkStatus;
+    glGetProgramiv(prog, GL_LINK_STATUS /*0x8b82*/, &linkStatus);
+    if (linkStatus == 0) { for(;;); }   // *** TRAP — ver achado abaixo ***
+
+    for (j = 0; j < 27; j++)                                       // 0x6c/4 = 27 uniforms!
+        cacheEntry.uniformLoc[j] = glGetUniformLocation(prog, uniformNameTable[j]);
+
+    glDeleteShader(vs);
+    glDeleteShader(fs);
+
+    // monta um DATA_SHADER{key, program, 27 uniformLoc...} (0x74 B) e
+    // insere/atualiza na árvore do cache (memcpy final de 0x74 B pro nó)
+    return 0;
+
+FAIL:
+    glDeleteShader(vs);
+    glDeleteShader(fs);
+    return 1;
+}
+```
+
+Confirmado por nome real via GOT/`.rel.plt` (8 imports GL novos):
+`glCreateShader`, `glCreateProgram`, `glAttachShader`,
+`glBindAttribLocation`, `glLinkProgram`, `glGetProgramiv`,
+`glGetUniformLocation`, `glDeleteShader`.
+
+**Achado principal, e um pouco preocupante:** falha de **compilação**
+de shader (`CompileShader` retornando != 0) é tratada graciosamente —
+limpa os dois shaders e retorna `1`. Mas falha de **link**
+(`glGetProgramiv(GL_LINK_STATUS)` retornando `0`) **não tem tratamento
+algum** — o código salta pra `b #0xaca7c`, um laço infinito de 1
+instrução que se referencia a si mesmo (`feffffea`, confirmado byte a
+byte, não é erro de desmontagem). Ou seja: nesta build, **um shader
+que compila mas falha ao linkar trava o app pra sempre**, em vez de
+devolver um código de erro como no caso de compilação. Pode ser um
+`assert`/trap intencional de debug que nunca deveria disparar em
+produção (os shaders são todos embutidos/fixos, não vêm de conteúdo
+externo), mas é uma rota de código real, não hipotética.
+
+**Outros achados:** confirma que o cache usa `27` slots de uniform por
+shader (`0x6c` bytes / 4) — um shader "genérico" com bastante
+parametrização (matrizes, cores, texturas, etc.), consistente com ser
+o mesmo shader usado por `CEGL2_IF::DrawPacket` (seção 13.1,
+`shader->Begin(matrix,...)`). Os **7 atributos fixos** ligados via
+`glBindAttribLocation` provavelmente incluem os índices `0`/`2`/`3`
+já confirmados (posição/cor/UV, seções 13.1 e 13.4) mais 4 outros não
+identificados (os nomes de string exatos ficam em `.rodata`, não
+lidos nesta passada).
+
+### 14. `DrawTile4` e `Add3D` lidas por completo — e um bônus: resolvidos vários mistérios de PLT antigos (2026-10-16)
 
 Continuação pedida explicitamente: as duas maiores funções do `CEGL2_IF`
 encontradas na seção 13.
