@@ -128,8 +128,12 @@ documentado. Os dois documentos de resultado são:
   gated por `GetMultiTextureHandle()`. `AddPacketPartial`/`DrawPartial`/
   `Draw8` continuam não lidos por dentro (critério de "zerado" pede só
   a função-central por item 🟡/⚪, não a família inteira).
-- [ ] `CEGL2_FBO` — render-to-texture (`RenderToFBO` 868 B,
-  `RenderFromFBO` 732 B, `Create` 472 B).
+- [x] `CEGL2_FBO` — função-central (`Create`, `0xaa980`, 472 B) lida
+  por completo, ver `REVERSE_ENGINEERING_NOTES.md` seção 13.5. Confirma
+  a sequência real de criação de FBO da OpenGL ES 2.0 (13 imports GL
+  novos resolvidos). Achado: `field_0x0` tem papel duplo (guarda o FBO
+  anterior durante a criação, depois vira sentinela `-1`).
+  `RenderToFBO`/`RenderFromFBO` continuam não lidos por dentro.
 - [ ] `CEGL2_SHADER` — cache de shader via `std::map` (`Load` 596/384 B,
   `Begin`/`SetTexture`/`SetMatrix4` já usados por outras funções lidas,
   mas não lidos por dentro).

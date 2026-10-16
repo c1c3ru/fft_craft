@@ -1438,6 +1438,86 @@ precisa. O papel exato de `GetMultiTextureHandle()`/do 2º quad
 multi-handle está em uso"?) também não foi cravado — mecanismo
 estrutural confirmado, semântica de produto não.
 
+### 13.5 `CEGL2_FBO::Create` lida por completo — segundo item 🟡 (2026-10-16, loop de continuação, iteração 9)
+
+`CEGL2_FBO::Create(int,int,int,int,int)` (`0xaa980`, 472 B, cobertura
+total: 118 instruções pra 118 esperadas) escolhida como função-central
+da classe (em vez de `RenderToFBO`/`RenderFromFBO`, maiores mas que só
+*usam* o FBO já criado). **É literalmente o "render-to-texture" de
+verdade da OpenGL ES 2.0**, sequência de API real confirmada passo a
+passo via GOT/`.rel.plt` (13 imports novos resolvidos nesta leitura:
+`glGetIntegerv`, `glGenFramebuffers`, `glBindFramebuffer`,
+`glGenTextures`, `glTexParameteri`, `glPixelStorei`, `glTexImage2D`,
+`glFramebufferTexture2D`, `glGenRenderbuffers`, `glBindRenderbuffer`,
+`glRenderbufferStorage`, `glFramebufferRenderbuffer`,
+`glCheckFramebufferStatus` — junto com `glBindTexture` já conhecido).
+
+```c
+// CEGL2_FBO::Create(this, p1, width /*p2*/, height /*p3*/, wantLinearFilter /*p4*/, wantDepth /*p5*/)
+int CEGL2_FBO::Create(CEGL2_FBO* this, int p1, int width, int height, int wantLinearFilter, int wantDepth) {
+    this->field_0x18 = p1;        // papel não usado dentro desta função
+    this->field_0x10 = width;
+    this->field_0x14 = height;
+    this->Delete();                // 0xaa8f8 — limpa um FBO/textura anterior, se houver
+
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING /*0x8ca6*/, &this->field_0x0);  // *** salva o FBO atualmente ligado ***
+    glGenFramebuffers(1, &this->field_0x4);
+    glBindFramebuffer(GL_FRAMEBUFFER /*0x8d40*/, this->field_0x4);
+    glGenTextures(1, &this->field_0x8);
+    glBindTexture(GL_TEXTURE_2D /*0xde1*/, this->field_0x8);
+
+    if (!wantLinearFilter) {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER /*0x2800*/, GL_NEAREST /*0x2600*/);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER /*0x2801*/, GL_NEAREST);
+    } else {
+        // só troca o MIN_FILTER pra LINEAR — MAG_FILTER fica no default da
+        // GL (que já é GL_LINEAR), então na prática os dois ficam LINEAR
+        // de qualquer forma; não é um bug, é confiar no default.
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR /*0x2601*/);
+    }
+
+    glPixelStorei(GL_UNPACK_ALIGNMENT /*0xcf5*/, 4);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA /*0x1908*/, width, height, 0,
+                 GL_RGBA, GL_UNSIGNED_BYTE /*0x1401*/, NULL);   // aloca a textura, sem subir pixels
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 /*0x8ce0*/,
+                            GL_TEXTURE_2D, this->field_0x8, 0);   // anexa a textura como alvo de cor
+
+    if (wantDepth) {
+        glGenRenderbuffers(1, &this->field_0xc);
+        glBindRenderbuffer(GL_RENDERBUFFER /*0x8d41*/, this->field_0xc);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16 /*0x81a5*/, width, height);
+        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT /*0x8d00*/,
+                                   GL_RENDERBUFFER, this->field_0xc);
+    }
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glCheckFramebufferStatus(GL_FRAMEBUFFER);   // *** resultado nunca checado/usado ***
+    glBindFramebuffer(GL_FRAMEBUFFER, this->field_0x0);  // restaura o FBO que estava ligado antes
+
+    this->field_0x0 = -1;   // *** campo reaproveitado: era "FBO anterior", agora sentinela ***
+    return 0;
+}
+```
+
+**Achados:**
+- `this->field_0x0` tem **papel duplo confirmado por leitura real**:
+  durante a própria `Create`, guarda temporariamente o FBO que estava
+  ligado antes (pra restaurar no fim); depois de restaurado, é
+  sobrescrito com `-1` como sentinela — quase certamente "nenhuma
+  sessão de render-to-texture em andamento", consumido por
+  `Begin`/`End` (`0xaad68`/`0xaadb8`, não lidas, mas agora com uma
+  hipótese concreta e testável pra uma leitura futura).
+- `glCheckFramebufferStatus` é chamado mas **seu retorno nunca é
+  comparado nem armazenado** — a verificação de erro, se existe, não
+  está nesta função (possivelmente só em `ErrorGL`, `0xab4b0`, não
+  lida).
+- Confirma os dois caminhos de filtro de textura (`GL_NEAREST` vs
+  `GL_LINEAR`) e o anexo opcional de depth-buffer via renderbuffer —
+  ambos controlados por parâmetros simples (`wantLinearFilter`/
+  `wantDepth`), não por estado implícito.
+
 ## 14. `DrawTile4` e `Add3D` lidas por completo — e um bônus: resolvidos vários mistérios de PLT antigos (2026-10-16)
 
 Continuação pedida explicitamente: as duas maiores funções do `CEGL2_IF`
