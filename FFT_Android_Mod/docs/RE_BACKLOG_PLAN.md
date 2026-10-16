@@ -152,9 +152,13 @@ documentado. Os dois documentos de resultado são:
   infinito" (1ª foi `CEGL2_SHADER::Load`, seção 13.6) — convenção real
   do código, não caso isolado. `GL_IsUpdate`/`GL_Load` continuam não
   lidos por dentro.
-- [ ] `CSOUND_IF_SL::Stream_CreatePlayer`/`Stream_Load` (560/216 B) — o
-  lado streaming que ficou só inferido por contraste com o estático
-  (seção 17.4).
+- [x] `CSOUND_IF_SL::Stream_CreatePlayer` (`0xbc2bc`, 560 B) lida por
+  completo, ver `REVERSE_ENGINEERING_NOTES.md` seção 17.6. Confirma
+  por leitura real a previsão da seção 17.4
+  (`RegisterCallback(bufferQueueItf, CB_for_Stream, canal)`). Achado
+  bônus: o objeto por canal em `+0x10` é um `CSOUND_LOADER_OGG` de
+  verdade, construído via placement-new aqui mesmo — o streaming é Ogg
+  exclusivamente, nunca PCM. `Stream_Load` continua não lida por dentro.
 - [ ] `CSOUND_LOADER_OGG`/`CSOUND_LOADER_PCM` por dentro (`Decode` 540 B,
   `Open` 460/608 B) — hoje só sabemos a assinatura e o papel pelo
   contexto de quem chama.

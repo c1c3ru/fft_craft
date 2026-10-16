@@ -2062,3 +2062,78 @@ por leitura real de 4 funções centrais, incluindo a chamada OpenSL ES
 que efetivamente inicia a reprodução. As ~125 funções restantes
 (`Stream_*`, `Static_Delete*`, `EngineUninit`, `CSOUND_LOADER_OGG`/
 `PCM` por dentro) seguem no inventário por nome das seções 13/16.
+
+### 17.6 `CSOUND_IF_SL::Stream_CreatePlayer` lida por completo — quinto item 🟡, confirma a previsão da seção 17.4 (2026-10-16, loop de continuação, iteração 12)
+
+`CSOUND_IF_SL::Stream_CreatePlayer(int ch, int numCh, int fmtCode)`
+(`0xbc2bc`, 560 B, cobertura total: 134 instruções reais + pool de
+literais, confirmado byte a byte que não falta nenhuma). Escolhida
+sobre `Stream_Load` (216 B) porque é a que de fato monta o player
+OpenSL ES de streaming do zero — simétrica a `Static_CreatePlayer`
+(seção 17.2), mas pro caminho de música/Ogg.
+
+```c
+int CSOUND_IF_SL::Stream_CreatePlayer(CSOUND_IF_SL* this, int ch, int numCh, int fmtCode) {
+    Channel* c = &this->channelTable[ch];   // stride 0x88 (136 B) por canal — confirma o valor
+                                              // só inferido na seção 17.2 (channelData[ch])
+    c->field_0x18 = c->field_0x1c = 0;   // strd, zera 8 B
+    c->field_0x20 = c->field_0x24 = 0;   // strd, zera outros 8 B
+    c->field_0x54 = 0;
+
+    if (c->field_0x10 == NULL) {                          // 1ª vez neste canal?
+        c->field_0x10 = operator_new(0xb08 /*2824 B*/);     // 0x2cdf6c
+        new (c->field_0x10) CSOUND_LOADER_OGG();             // *** 0xbd538 — construtor real! ***
+        goto retry;   // volta pro topo agora que o objeto existe
+    }
+
+    SLDataFormat_PCM fmt = <template fixo copiado via ldm/stm>;   // sp+0x4c
+    SLDataLocator_AndroidSimpleBufferQueue bq = { <tipo>, numBuffers: 2 };
+    CSOUND_IF_SL::SetSLDataFormat(numCh, fmtCode, &fmt);           // 0xbbb6c, nome real confirmado
+
+    // monta SLDataSource{&bq,&fmt} e SLDataSink{...} com os SL_IID_*
+    // reais (resolvidos via GOT, mesma tabela de constantes de
+    // interface já vista na seção 17.1) e chama de verdade:
+    if ((*engineItf)->CreateAudioPlayer(engineItf, &c->field_0x74 /*playerObj*/,
+                                          &dataSource, &dataSink, 3, iids, reqs) != 0)
+        return 1;
+
+    if ((*c->field_0x74)->Realize(c->field_0x74, false) != 0) return 1;
+    if ((*c->field_0x74)->GetInterface(c->field_0x74, SL_IID_PLAY,        &c->field_0x78) != 0) return 1;
+    if ((*c->field_0x74)->GetInterface(c->field_0x74, SL_IID_BUFFERQUEUE, &c->field_0x7c) != 0) return 1;
+    if ((*c->field_0x74)->GetInterface(c->field_0x74, SL_IID_VOLUME,      &c->field_0x80) != 0) return 1;
+
+    // *** fecha exatamente a previsão da seção 17.4 ***
+    if ((*c->field_0x7c)->RegisterCallback(c->field_0x7c, CSOUND_IF_SL::CB_for_Stream, c) != 0)
+        return 1;
+
+    c->field_0x6c = numCh;
+    c->field_0x70 = fmtCode;
+    return 0;
+}
+```
+
+**Achados:**
+- **Confirma por leitura real** a previsão que a seção 17.4 só tinha
+  por contraste: `RegisterCallback(bufferQueueItf, CB_for_Stream,
+  canal)` é chamado aqui mesmo, de verdade — fecha o ciclo "quem liga
+  o callback de streaming" que ficava implícito.
+- **Achado novo e concreto**: o objeto por canal em `+0x10` (alocado
+  com `operator new(2824)` na primeira chamada) é **literalmente um
+  `CSOUND_LOADER_OGG`**, construído via `placement new` (chamada direta
+  ao construtor, `0xbd538`, nome confirmado no `.dynsym`) — ou seja,
+  **o streaming deste motor é Ogg Vorbis exclusivamente**, nunca PCM
+  (`CSOUND_LOADER_PCM` só aparece no caminho estático, seção 17.2).
+  Isso também é um ponto de partida direto e testável pra uma leitura
+  futura de `CSOUND_LOADER_OGG` por dentro (item ⚪ do plano).
+- Confirma `channelTable` com stride **0x88 (136 B)** por canal — valor
+  que a seção 17.2 só tinha inferido pelo nome `channelData[ch]`, agora
+  com a aritmética de endereço real (`mla r6,r1,#0x88,ip`).
+- Usa uma fila de buffers do Android (`SLDataLocator_AndroidSimpleBufferQueue`)
+  com **2 buffers** — o "duplo-buffer" clássico de streaming de áudio
+  (enquanto um toca, o outro é preenchido pelo callback).
+
+**O que ficou sem confirmar:** o conteúdo exato da estrutura
+`SLDataFormat_PCM` copiada do template fixo (os 28 bytes de
+`ldm`/`stm`) e os valores exatos das constantes `SL_IID_*` lidas via
+GOT (resolvidas estruturalmente como "uma tabela de IDs de interface",
+não cruzadas uma a uma com o header do NDK nesta passada).
