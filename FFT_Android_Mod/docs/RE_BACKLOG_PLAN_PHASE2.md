@@ -119,10 +119,16 @@ continuam os mesmos:
   primeiro preenchimento de buffer antes do callback assumir.
   Achado bônus: os dois pares de loop-point começam zerados pra
   `-1` (sem loop configurado ao iniciar o streaming).
-- [ ] `CSOUND_LOADER_OGG::Open` (`0xbd56c`, 460 B) e
-  `CSOUND_LOADER_PCM::Open` (`0xbced4`, 608 B) — os pontos de entrada
-  reais de parsing de arquivo de ambos os decoders (seção 17.7 só leu
-  `Decode`, que já pressupõe o arquivo aberto).
+- [x] `CSOUND_LOADER_OGG::Open` (`0xbd56c`, 460 B) — lida, ver
+  `REVERSE_ENGINEERING_NOTES.md` seção 17.9. Confirma mais 4 funções
+  reais da `libvorbisfile` e revela uma classe nova,
+  `COggMemMapFile` (wrapper de arquivo mapeado em memória). **Achado
+  possivelmente preocupante**: o caminho "buffer de memória pronto"
+  (`buf!=NULL`) só seta uma flag e retorna sucesso, sem nunca chamar
+  `ov_open_callbacks` — parece incompleto, não cravado como bug sem
+  confirmar se algum chamador usa esse caminho de verdade. Fluxo de
+  controle do caminho "arquivo" não 100% decomposto (escalonado).
+  `CSOUND_LOADER_PCM::Open` (`0xbced4`, 608 B) continua não lida.
 - [ ] `CCOMP_Z_ENC::Encode(uchar*,uchar*,int,int)` (`0xb63d0`, 432 B) —
   contraparte de `CCOMP_Z_DEC::Decode` (seção 18); confirma se usa
   `deflate`/`deflateInit_` reais (mesmo padrão esperado).

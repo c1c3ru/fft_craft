@@ -2587,6 +2587,105 @@ slots `0`/`1`) — prováveis wrappers C++ sobre as interfaces OpenSL ES
 (`SLAndroidSimpleBufferQueueItf`), mas os nomes reais dos métodos não
 foram cruzados.
 
+### 17.9 `CSOUND_LOADER_OGG::Open` lida — sexto item 🟠 da Fase 2, revela uma classe nova e um caminho possivelmente incompleto (2026-10-16, Fase 2, iteração 11)
+
+`CSOUND_LOADER_OGG::Open(char* path, uchar* buf, uint size, uint off)`
+(`0xbd56c`, 460 B, cobertura total: 115 instruções pra 115 esperadas).
+Resolvendo os `bl` por nome real, aparecem mais 4 funções genuínas da
+`libvorbisfile` (`ov_open_callbacks`, `ov_seekable`, `ov_pcm_total`,
+`ov_info`) **e uma classe auxiliar nova**: `COggMemMapFile`
+(`Open`/`Close`/`GetBuffer`/`GetSize`, `0xbd3b4`-`0xbd530`) — um
+wrapper de arquivo mapeado em memória dedicado a arquivos Ogg.
+
+```c
+int CSOUND_LOADER_OGG::Open(CSOUND_LOADER_OGG* this, char* path,
+                              uchar* buf, uint size, uint off) {
+    if (buf != NULL) {
+        this->field_0x4 = 1;    // *** marca "modo buffer de memória" ***
+        return 0;                 // *** e só isso — ver achado abaixo ***
+    }
+
+    // caminho por arquivo (`path`):
+    // ... uma chamada virtual inicial em `this->field_0x0->vtbl[3](path)`
+    // cujo papel exato não ficou claro (ver 17.9.2) ...
+
+    COggMemMapFile* mmf = &this->field_0x8;
+    if (!mmf->Open(path, off, size)) { /* falhou -> retorna/loop, ver 17.9.2 */ }
+
+    uchar* fileBuf = (size == 0) ? mmf->GetBuffer() + off : mmf->GetBuffer();
+    uint   fileSize = mmf->GetSize();
+    this->field_0x18 = fileSize;
+    this->field_0x14 = fileBuf;
+
+    // monta os 4 "callbacks" de leitura pro vorbis (literal pool
+    // copiado via `ldm`/`stm` — provavelmente os 4 ponteiros de função
+    // `read`/`seek`/`close`/`tell` que operam direto sobre o buffer
+    // mapeado, já que não há I/O real de arquivo aqui)
+    if (ov_open_callbacks(&this->field_0x14, &callbacks, NULL, 0) < 0) {
+        mmf->Close();          // falha ao abrir -> fecha o mapeamento
+        continue_loop;
+    }
+    if (!ov_seekable(&this->field_0x14)) {
+        ov_clear(&this->field_0x14);    // não dá pra buscar (seek) -> descarta
+        continue_loop;
+    }
+
+    memcpy(this->+0x820, ov_info(&this->field_0x14, -1), 0x2d0 /*720 B*/);  // copia o vorbis_info inteiro!
+    vorbis_info* info = ov_info(&this->field_0x14, -1);
+    int channels = info->channels, rate = info->rate;    // +4/+8 do vorbis_info real
+
+    // monta um "formato" compacto a partir de channels/rate, salvo em
+    // this->+0xaf0..+0xafc (campos de 16/32 bits, formato PCM-like:
+    // sampleSize=1, channels, rate, blockAlign=channels*2,
+    // bitsPerSample=0x10) — provável struct no estilo WAVEFORMAT do
+    // Windows, igual ao padrão PSP-SDK já visto nas seções 19/20/21
+    this->field_0xb00 = ov_pcm_total(&this->field_0x14, -1);   // total de amostras
+    this->field_0xb04 = 0;
+    return 0;
+}
+```
+
+### 17.9.1 Achado principal: confirma a biblioteca real, de novo, e uma classe nova (`COggMemMapFile`)
+
+Mesmo padrão das seções 17.7/18: resolver os `bl` por nome antes de
+ler revela, de cara, a API genuína da `libvorbisfile`/Tremor. Fecha
+de vez como o arquivo Ogg chega até o decodificador: **mapeado em
+memória** via `COggMemMapFile` (não lida por dentro, mas os 4 métodos
+já dão o contrato completo: `Open(path,off,size)`/`Close()`/
+`GetBuffer()`/`GetSize()`), com os callbacks do `ov_open_callbacks`
+montados pra ler diretamente desse mapeamento — **não há I/O de
+arquivo real feito pela libvorbisfile aqui**, é tudo ponteiro.
+
+### 17.9.2 Achado possivelmente preocupante: o caminho "buffer de memória" parece incompleto
+
+Quando `buf != NULL` (chamador já tem os dados em memória, sem
+caminho de arquivo), a função **só seta uma flag e retorna sucesso
+— nunca chama `ov_open_callbacks`, nunca inicializa o estado real do
+vorbis**. Como `CSOUND_LOADER_OGG::Decode` (seção 17.7) assume que
+`this` já é um `OggVorbis_File` válido (chama `ov_read` direto nele),
+isso sugere que **o caminho de carregar OGG a partir de um buffer de
+memória pronto está incompleto ou nunca é exercitado de verdade** —
+mesma categoria de achado que os "laços infinitos de condição
+impossível" já catalogados (código presente, mas não funcional pra
+esse caso específico), só que aqui o sintoma seria crash/estado
+inválido em vez de travamento. **Não cravado como bug real** sem
+confirmar se algum chamador de fato usa esse caminho — fica como
+pista pra investigação futura.
+
+### 17.9.3 O que ficou sem confirmar
+- O papel exato da chamada virtual inicial (`this->field_0x0->vtbl[3]`)
+  e a estrutura de laço de novas tentativas em torno de
+  `COggMemMapFile::Open`/`ov_open_callbacks`/`ov_seekable` — o fluxo
+  de controle real (quando tenta de novo vs. quando desiste) não foi
+  totalmente decomposto; o valor de retorno da função nem sempre
+  parece seguir uma convenção simples "0=sucesso".
+- O layout exato dos 4 ponteiros de callback montados via `ldm`/`stm`
+  pro `ov_open_callbacks` (prováveis `read`/`seek`/`close`/`tell`
+  sobre o buffer mapeado, não lidos por endereço).
+- O formato compacto gravado em `this->+0xaf0..+0xafc` — confirmado
+  QUE vem de `channels`/`rate` do `vorbis_info`, não a fórmula exata
+  de cada campo.
+
 ## 18. `CCOMP_Z_DEC::Decode` lida por completo — primeiro item ⚪, e confirma a biblioteca real de compressão (2026-10-16, loop de continuação, iteração 14)
 
 Primeiro item da camada ⚪ (sistemas nunca tocados). `CCOMP_Z_DEC::Decode(uchar*
