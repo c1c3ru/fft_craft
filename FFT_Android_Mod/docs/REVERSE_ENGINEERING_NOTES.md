@@ -1081,3 +1081,91 @@ por nome/assinatura/import**, não por leitura individual. Essa última
 camada — ler as ~300 funções `CEGL2_*`/`CSOUND_*` uma a uma — é o que
 ficaria para uma eventual continuação futura, mas não é razoável tratar
 isso como pendência pequena.
+
+## 14. `DrawTile4` e `Add3D` lidas por completo — e um bônus: resolvidos vários mistérios de PLT antigos (2026-10-16)
+
+Continuação pedida explicitamente: as duas maiores funções do `CEGL2_IF`
+encontradas na seção 13.
+
+### 14.1 Achado colateral importante: a técnica de resolver GOT de stub de `.plt` fecha 5 mistérios de sessões anteriores
+
+Para resolver as chamadas de `bl` que caem dentro do `.plt` (stubs de 12
+bytes: `add ip,pc,#alto; add ip,ip,#baixo; ldr pc,[ip,#offset]!`),
+bastou somar os dois `add` ao PC e ler o nome em `.rel.plt` no offset
+resultante. Rodando isso para os stubs usados aqui, **fechei de vez 5
+endereços que ficaram sem nome em seções bem anteriores desta mesma
+investigação** (não só na IA de batalha — em todo o binário):
+
+| Endereço de stub | Resolvido para | Onde apareceu antes, sem nome |
+|---|---|---|
+| `0x714b8` | **`memcpy`** | `TIM_LoadFile` (seção 9.2), `wldscr_init` (seção 11), e repetidamente no inventário de chamadas da seção 12 |
+| `0x714c4` | **`memset`** | `DrawTile4` (nesta seção) |
+| `0x715cc` | **`__stack_chk_fail`** | `sub_275e3c` e o retorno comum de `FundamentalRoutine` (seções 14.3/17.5 do `AI_DIFFICULTY_RESEARCH.md`) — confirma a hipótese de "stack canary" que já tinha sido levantada lá, agora com nome exato |
+| `0x717d0` | **`sinf`** | (novo) |
+| `0x717dc` | **`cosf`** | (novo) |
+
+Esses dois últimos (`sinf`/`cosf`) confirmam que a plataforma usa
+**funções de `libm` de verdade** para trigonometria, não uma tabela PS1
+(`rsin`/`rcos`) emulada — mistura de fidelidade "API PS1" (seção 11.1)
+com atalhos modernos onde não importa (trigonometria comum).
+
+### 14.2 `CEGL2_IF::DrawTile4(float,float,float,float,float,Pj,float)` (`0xa98c8`, 2248 B) — lida por completo
+
+A maior parte do corpo (~350 das ~560 instruções) é **aritmética de
+ponto flutuante via software** (`__addsf3`/`__subsf3`/`__mulsf3`/
+`__divsf3`) — confirma de vez que este alvo ARMv5 **não tem FPU de
+hardware** (bate com a observação já feita na seção 8 sobre a ABI
+"genérica ARMv5" ser obsoleta). O cálculo é geometria 2D clássica de
+quad rotacionado:
+
+```c
+void CEGL2_IF::DrawTile4(float cx, float cy, float halfW, float halfH,
+                          float angle, uint32_t color, float z) {
+    float s = sinf(angle), c = cosf(angle);
+    // 4 cantos = centro ± (halfW*c ∓ halfH*s, halfW*s ± halfH*c), tudo em soft-float
+    Vertex corners[4];
+    for (i = 0; i < 4; i++) {
+        corners[i].pos = computedCorner[i];      // ponto flutuante
+        corners[i].color = color;                 // RGBA8 empacotado, 4 bytes
+    }
+    shader->Begin(matrix, 1000, 0);
+    glUniformMatrix4fv(1, false, matrix+0x98);
+    glEnableVertexAttribArray(0);  glEnableVertexAttribArray(2);
+    glBindTexture(GL_TEXTURE_2D, texId);
+    glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, &corners[0].pos);
+    glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, true, 0, &corners[0].color);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);          // desenha o tile imediatamente
+}
+```
+
+Esta é a rotina de **desenho imediato de 1 tile/sprite rotacionado**
+(em contraste com `DrawPacket`, seção 13.1, que desenha um **lote**
+pré-montado em VBO) — mesma ponte PS1→GLES2 confirmada de novo, desta
+vez para o caminho "um sprite por vez".
+
+### 14.3 `CEGL2_IF::Add3D(int, _EGL_PACKET_SPR*, short)` (`0xa872c`, 1944 B) — lida por completo
+
+Também majoritariamente repetitivo, mas por um motivo diferente:
+**reconstrução de campos de 4 bytes byte-a-byte** (lê 4 bytes
+individuais do struct de origem `_EGL_PACKET_SPR*` e remonta via
+`orr`/`lsl`, depois grava de volta byte a byte no destino) — um padrão
+clássico de **evitar acesso desalinhado**, não de troca de endianness
+(ambos ARM e a origem são little-endian; a origem simplesmente não está
+garantidamente alinhada a 4 bytes). Mapeia campos da origem (`+4,+8,
++0xc,+0x4c,+0x50,+0x10,+0x14,+0x18,+0x54,+0x58...`) para um registro de
+vértice no buffer do `CEGL_PACKET` atual (via `GetVBOBufferCurrent`),
+com um `memcpy(dest+0xc, src+0x7c, 4)` no meio para um campo extra.
+Também chama `SetDefaultBlendMode`/`SetTypeCurrent`/
+`SetBlendModeCurrent`/`SetTextureCurrent`/`SetExtraCurrent` (métodos do
+`CEGL_PACKET` já catalogados na seção 13.1).
+
+**Papel confirmado:** `Add3D` é o **caminho de lote** (ao contrário do
+desenho imediato de `DrawTile4`) — converte um primitivo de sprite
+posicionado em 3D (`_EGL_PACKET_SPR`, provável "billboard"/partícula)
+do formato de origem do jogo para o formato de vértice do VBO, e o
+anexa ao `CEGL_PACKET` atual para ser desenhado depois, em lote, por
+`DrawPacket`. Isso fecha o ciclo completo do pipeline gráfico desta
+engine: `Add3D`/`AddTile` (não lida, mas mesmo papel por nome) acumulam
+primitivos no `CEGL_PACKET` → `DrawPacket` (seção 13.1) os desenha em
+lote via GLES2 real → `DrawTile4`/`DrawTile` (esta seção) é o atalho
+para desenhar 1 peça imediatamente, sem passar pelo lote.
