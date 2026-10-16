@@ -2915,6 +2915,93 @@ de 8 campos de 16 bits — plausível dado o uso de `GetLocalTime`, mas
 não cruzado com um header). `CAUTOSAVE::Save`/`Load` (maiores, 592/632
 B) e `pspSaveList`/`pspSaveAuto` continuam não lidos.
 
+### 19.1 `CAUTOSAVE::Save` lida — oitavo item 🟠 da Fase 2, e um achado enorme: grava um dump completo da heap (2026-10-16, Fase 2, iteração 13)
+
+`CAUTOSAVE::Save(uint mode)` (`0x28c7ec`, 592 B, cobertura total: 142
+instruções reais + pool de literais). Resolvendo os `bl` por nome
+antes de ler, aparece uma lista enorme de funções nunca vistas nesta
+investigação: `CWORK_MEM::GetTail`, `iOS_ResumeGetData`/
+`iOS_WorldMapResumeGetData`, `CFFT_STATE::Suspend`, `xpLib_GetTPage`,
+`CAPP_INFO::GetStoragePath`, `xpGetHeap`/`xpGetHeapSize`/
+`xpMoveHeap`, além de `CCOMP_Z_ENC::Encode` (seção 18.1, acabada de
+ler!) e o mesmo `CFILE` já visto em `cSaveFFT::Save` (seção 19).
+
+```c
+// CAUTOSAVE::Save(mode) -- "this" nunca é usado no corpo
+int CAUTOSAVE::Save(uint mode) {
+    void* scratch = g_workMem->GetTail(0x180000);   // *** reserva 1,5 MB de memória de trabalho ***
+
+    void *buf, *size;
+    if (mode == 0)
+        iOS_WorldMapResumeGetData(&buf, &size);         // snapshot de "resume" do MAPA MUNDI
+    else
+        iOS_ResumeGetData(&buf, &size);                   // snapshot de "resume" de BATALHA
+    memcpy(scratch + 0x20, buf, size);                      // copia o snapshot pro scratch
+
+    CFFT_STATE::Suspend(g_cfftState, scratch + 0xc0020);     // *** snapshot do estado geral do jogo ***
+
+    CCOMP_Z_ENC enc;    // construído em pilha
+    void* tpage = xpLib_GetTPage(&buf);                       // dados de "página de textura" (conceito PS1)
+    int compSize = enc.Encode(scratch + 0xc006c, tpage, size, -1); // *** COMPRIME via zlib (nível -1 = default) ***
+
+    char path[...];
+    strcpy(path, CAPP_INFO::GetStoragePath());
+    memcpy(path + strlen(path), <sufixo fixo de 11 B>, 11);     // monta o caminho do arquivo de autosave
+
+    CFILE* f = new CFILE(path);
+    if (f->Open(2) == 1) goto CLEANUP;    // modo 2 = escrita (igual seção 19)
+
+    // grava um cabeçalho de 4 words em `scratch` (constantes + `mode`)
+    // e um campo de tamanho total (contagem de blocos × tamanho por
+    // bloco, 0xc006c B) em scratch->+0x10
+    f->Write(workMemTail2, 0, totalSize);                       // *** grava os dados do scratch ***
+    f->Write(workMemTail3, compSize, scratch_advanced);           // 2º bloco
+    f->Write(tpage_related_ptr, compSize2, size2);                 // 3º bloco
+
+    // *** grava a heap ALOCADA INTEIRA no arquivo! ***
+    void* heapBase = xpGetHeap();
+    uint  heapSize = xpGetHeapSize();
+    f->Write(&heapBase_sign_extended_64bit, heapBase, 8);           // 8 B — o próprio ponteiro, como metadado
+    f->Write(heapBase, scratch + 0x74, heapSize);                     // *** o CONTEÚDO INTEIRO da heap! ***
+
+    xpMoveHeap(0, 0, 1);    // *** compacta/realoca a heap depois de salvar ***
+
+CLEANUP:
+    if (f) { f->~CFILE(); delete f; }
+    return result;
+}
+```
+
+**Achado principal: `CAUTOSAVE::Save` não é um save de progresso —
+é um "suspender pra disco" de verdade, que grava o conteúdo bruto da
+heap alocada do jogo inteiro** (`xpGetHeap()`/`xpGetHeapSize()` +
+`CFILE::Write` do buffer completo), depois de compactar/realocar a
+heap via `xpMoveHeap`. Isso é categoricamente diferente de
+`cSaveFFT::Save` (seção 19, que só grava um "blob" de progresso
+pré-definido) — `CAUTOSAVE` é o mecanismo que deixa o jogador
+retomar EXATAMENTE de onde parou (inclusive estado de alocador de
+memória), não só os dados de progresso da história. Confirma também
+que o motor tem sua própria API de gerência de heap (`xpGetHeap`/
+`xpGetHeapSize`/`xpMoveHeap`/`xpGetHeapSize` — prefixo `xp`, nunca
+visto antes nesta investigação) e um sistema de "resume data" dual
+(mapa mundi vs. batalha, via `iOS_WorldMapResumeGetData`/
+`iOS_ResumeGetData` — já catalogadas por nome em listagens anteriores
+do `.dynsym`, mas nunca cruzadas com um chamador real até agora).
+
+**Achado bônus:** confirma `CCOMP_Z_ENC::Encode` (seção 18.1) sendo
+usado de verdade com **nível de compressão `-1`** (`Z_DEFAULT_
+COMPRESSION`, a convenção real da zlib) — primeira vez que vemos o
+encoder realmente chamado em código do jogo, não só analisado
+isoladamente.
+
+**O que ficou sem confirmar:** o layout byte a byte exato dos
+múltiplos blocos gravados no arquivo (cabeçalho de 4 words, os 3
+`CFILE::Write` intermediários, e os offsets exatos dentro do scratch
+de 1,5 MB) — a estrutura geral (resume data + estado + tpage
+comprimido + heap completa) está confirmada, mas não cada campo
+individual. `CAUTOSAVE::Load` (par desta função, `0x28ca3c`, 632 B)
+continua não lida.
+
 ## 20. `CINPUT_IF_TOUCH::OnTouchesBegan` lida por completo — terceiro item ⚪, revela um detector de duplo-toque (2026-10-16, loop de continuação, iteração 16)
 
 Terceiro item da camada ⚪. `CINPUT_IF_TOUCH::OnTouchesBegan(int,int,

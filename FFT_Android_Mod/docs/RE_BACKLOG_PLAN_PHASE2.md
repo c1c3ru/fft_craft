@@ -135,12 +135,16 @@ continuam os mesmos:
   `flags` com `Decode` (`2`=comprimido, `0`=cru). Achado bônus: um
   fallback real — se comprimir não encolher os dados, descarta e
   grava o original sem compressão.
-- [ ] `CAUTOSAVE::Save(uint)` (`0x28c7ec`, 592 B) e `Load()`
-  (`0x28ca3c`, 632 B) — maiores que `cSaveFFT::Save` (seção 19),
-  provavelmente o mecanismo real de autosave (diferente do save
-  manual). `pspSaveList::paramCreate`/`setUserId`
-  (`0x2a3950`/`0x2a38d8`) e `pspSaveAuto::paramCreate` (`0x2a3154`)
-  como funções-ponte das outras 2 classes do sistema de save.
+- [x] `CAUTOSAVE::Save(uint)` (`0x28c7ec`, 592 B) — lida, ver
+  `REVERSE_ENGINEERING_NOTES.md` seção 19.1. **Achado enorme**: não é
+  um save de progresso, é um "suspender pra disco" de verdade — grava
+  o conteúdo bruto da heap alocada inteira do jogo (`xpGetHeap`/
+  `xpGetHeapSize`/`CFILE::Write`), categoricamente diferente de
+  `cSaveFFT::Save` (seção 19). Confirma também `CCOMP_Z_ENC::Encode`
+  sendo usado de verdade (nível `-1`) e revela uma API de gerência de
+  heap própria do motor (`xpGetHeap`/`xpMoveHeap`). `Load`
+  (`0x28ca3c`, 632 B), `pspSaveList`/`pspSaveAuto` continuam não
+  lidas.
 
 ## 🟡 Prioridade baixa — sistemas que a Fase 1 nunca abriu
 
