@@ -1186,7 +1186,7 @@ avaliação de jogada: via a cadeia `FundamentalRoutine→SetBestMove→
 EvaluationFunction` (seção 6) e via este atalho direto quando
 `g->b[0xed4]==0`.
 
-### 14.3 `sub_275e3c` (`0x275e3c`–`0x2761ec`, 2992 B) — caracterizada, não lida linha a linha
+### 14.3 `sub_275e3c` (`0x275e3c`–`0x2761ec`, 944 B — corrigido na seção 19, era dito 2992 B por engano) — caracterizada, não lida linha a linha
 
 Chamada por `0x2761ec` (a "estática de cache elemental", seção 9.1) e
 **recursiva** (chama a si mesma uma vez). Lista de chamadas confirmadas
@@ -1660,3 +1660,129 @@ unidades" — está confirmado, não cada bit); os destinos
 `0x275ae8` (blocos de fallback/skip citados mas fora do range de 1232 B
 pedido, então não lidos nesta passada); e o corpo de `MakeMapDanger()`
 em si.
+
+## 19. `sub_275e3c` — lido por completo, e correção de tamanho (2026-10-16, loop de continuação, iteração 2)
+
+Segundo item do plano. **Correção importante antes de mais nada:** o
+tamanho de 2992 B atribuído a esta função nas seções 9.1/14.3 estava
+**errado** (erro de aritmética de uma sessão anterior). O tamanho real
+é **944 B** (`0x275e3c`–`0x2761ec`, onde `0x2761ec` é exatamente o
+início da "estática de cache elemental" da seção 9.1) — confirmado de
+dois jeitos independentes: a subtração correta dos endereços, e o fato
+de o desmontador por grafo de fluxo (`disasm_cfg.py`) achar exatamente
+as mesmas 232 instruções reais ao pedir um intervalo maior (o resto é
+território de outras funções já catalogadas, não deste `sub_275e3c`).
+
+### 19.1 Papel confirmado: orquestrador real de "aplicar resultado de habilidade + reações", com ligação direta à pontuação da IA
+
+```c
+// sub_275e3c(uint8_t* abilityData /*r0*/, int isReapplyMode /*r1*/)
+int sub_275e3c(uint8_t* ability, int mode) {
+    // canário de pilha via global resolvido por GOT (mesmo padrão de
+    // 0x715cc = __stack_chk_fail, seção 14.1 do REVERSE_ENGINEERING_NOTES.md)
+
+    if (mode == 0) {                                    // "primeira entrada"
+        if (getskillresult_first(ability->b[0]) != 0)      // 0x1e21f8
+            goto END;                                       // nada a fazer
+        goto MAIN;                                           // cai direto no corpo principal
+    }
+
+MAIN:                                                     // 0x275e78 — entra aqui direto se mode!=0
+    int16_t abilityId = ability->h[2];
+    AbilityCatTable* cat = &abilityCatTable8B[abilityId];   // *** tabela nova, stride 8 B ***
+
+    int w1, w2;                                             // pesos de ajuste de pontuação
+    if (g->b[0xcba] == 0xff) { w1 = 0; w2 = 0; }              // cache elemental "frio" (seção 9.1)
+    else {
+        bool bit3 = (cat->b[4] >> 3) & 1;
+        w1 = bit3 ? 4 : 1;
+        w2 = bit3 ? 3 : 0;
+    }
+
+    SkillResult res;                                          // sp+0x24
+    if (getskillresult_main(ability->b[0], &res) != 0) goto AFTER_TARGETS;   // 0x1e5bac
+    if (res.hasTargets == 0) goto AFTER_TARGETS;                // res.b[1]
+    uint8_t targetIdx = res.firstTarget;                         // res.b[2]
+    if (targetIdx == 0xff) goto AFTER_TARGETS;
+
+    // --- laço pelos alvos da lista devolvida por getskillresult_main ---
+    do {
+        BWORK* t = &bwork[targetIdx];
+        int16_t extra = *(int16_t*)((uint8_t*)t + 0x1ae);        // bwork[idx]+0x1a8+6
+        if (extra <= 0) goto NEXT;
+
+        bool catBit7 = (cat2->b[1] >> 7) & 1;                      // cat2 = cat+4 (2ª metade do registro de 8 B)
+        if (!catBit7 && IsAlmostNullUnit(targetIdx)) goto NEXT;     // alvo inválido/morto
+
+        if (ability->b[0xa] == 6) {                                 // categoria especial "6"
+            if (bwork[cat2->b[0]... ].b[0xe18] == 0) goto <checagem padrão>;
+            if (targetIdx != cat2->b[0]) goto NEXT; else goto APPLY;
+        } else if (!(cat2->b[0] & 1)) {
+            if (bwork[targetIdx].b[0xe18] != 0) goto NEXT;           // já afetado/imune nesta rodada
+        }
+
+APPLY:
+        setskillresult(targetIdx);                                  // *** aplica o efeito de verdade *** (0x1cda4c)
+
+        if (g->b[0xcba] != 0xff) {
+            if ((cat2->b[0] >> 1) & 1) goto RETRY_TARGET;             // alvo "duplo" (ex.: self+ally?)
+            if (!(cat2->b[0] & 1)) {
+                if (!catBit7 ... ) {
+                    g->h[0x32] -= w1;      // *** AJUSTA DIRETO O CAMPO DE PONTUAÇÃO DA IA ***
+                }
+            } else {
+                // ... caminho alternativo usa w2 em vez de w1 (não isolado byte a byte)
+            }
+        }
+NEXT:
+        targetIdx = res.remainingTargets[++i];     // sp+0x50 + índice crescente
+    } while (targetIdx != 0xff);
+
+AFTER_TARGETS:                                              // 0x27609c
+    setskillresult_caster(ability->b[0]);                      // 0x1ce950 — aplica no próprio conjurador
+    if (res.b[0x3c] != 0) goto MAIN_RETRY;                       // multi-hit? volta pro getskillresult_main
+
+    if (g->b[0xcba] == 0xff || g->b[0xe4d] != 0) goto FINAL_CHECK;
+
+    afterskillhandle(&bwork[ability->b[0]]);                    // 0x1e2124 — pós-processamento
+    for (i = 0; ; i++) {
+        if (reactingUnitFound(i)) {                               // bwork[i].b[0xe18] != 0
+            sub_275e3c(reactionAbilityPtr, 1);                       // *** RECURSÃO: aplica a reação ***
+            continue;
+        }
+        if (getreaction_post(...) == -1) break;                    // 0x1e6d74 — sem mais reações pendentes
+    }
+
+FINAL_CHECK:
+    // g->b[0xe4c]==1 -> nada extra; ==2 && sp+0xc==0 -> g->b[0xe4e]=1 (flag de combo/encadeamento)
+    // canário de pilha; return
+}
+```
+
+### 19.2 Por que isso importa para o objetivo original do projeto (dificuldade)
+
+A linha **`g->h[0x32] -= w1`** fecha um ciclo que a investigação
+original só tinha metade: a seção 6.4 do próprio documento já tinha
+achado que `EvaluationFunction` **grava** o resultado da simulação em
+`unit[0x32]` (o campo de pontuação lido por `CompareScore`); agora
+temos a outra ponta — **é `sub_275e3c`, chamado de dentro da simulação,
+quem efetivamente ajusta esse mesmo campo**, com um peso (`w1`, 1 ou 4)
+que depende de um bit da tabela nova `AbilityCatTable` (stride 8 B,
+indexada por ID de habilidade) e de o cache elemental `g->b[0xcba]`
+estar "quente" ou não. Ou seja: **o peso que a IA dá ao efeito de uma
+habilidade sobre um alvo durante a simulação depende da categoria da
+habilidade** (via esse bit da tabela de 8 B) — um candidato concreto a
+mais para ajuste de dificuldade, no mesmo espírito do patch já aplicado
+na seção 6.4/6.5 original (bônus elemental 51→102).
+
+### 19.3 O que ficou sem confirmar
+- O layout completo de `AbilityCatTable` (8 B/entrada) além dos bits
+  `+4 bit3`, `+1 bit7` e `+0 bits0/1` usados aqui.
+- O significado exato de `bwork[idx]+0x1ae` ("extra", comparado a 0 pra
+  decidir se o alvo é processado) e de `bwork[idx].b[0xe18]`
+  ("já afetado"? usado também pela Fase 1 da seção 18 e por outros
+  pontos do `FundamentalRoutine` — campo bastante reutilizado, papel
+  exato ainda não isolado por completo).
+- O caminho "categoria especial `ability->b[0xa]==6`" (linha ~0x276150)
+  — lido, mas o papel de negócio exato (por que só um alvo específico
+  entre vários é processado) não ficou claro além do mecanismo.

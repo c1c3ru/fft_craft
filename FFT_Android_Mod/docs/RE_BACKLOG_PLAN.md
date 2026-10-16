@@ -46,8 +46,16 @@ documentado. Os dois documentos de resultado são:
   Pendências sub-item: corpo de `MakeMapDanger()`, e os blocos de
   fallback `0x275d84`/`0x275d30`/`0x275ba8`/`0x275d10`/`0x275dd0`/
   `0x275e18`/`0x275ae8` (fora do range de 1232 B lido).
-- [ ] `sub_275e3c` (`0x275e3c`, 2992 B) — orquestrador de resultado de
-  habilidade, só caracterizado pela lista de chamadas (seção 14.3).
+- [x] `sub_275e3c` (`0x275e3c`, **944 B, não 2992** — corrigido erro de
+  aritmética de sessão anterior) — lida por completo, ver
+  `AI_DIFFICULTY_RESEARCH.md` seção 19. Achado maior: aplica o
+  resultado da habilidade a cada alvo (`setskillresult`) e **ajusta
+  diretamente `g->h[0x32]` (o campo de pontuação de `EvaluationFunction`/
+  `CompareScore`)** com um peso dependente de uma tabela nova
+  (`AbilityCatTable`, stride 8 B) — fecha o ciclo "quem grava a
+  pontuação" que a seção 6.4 só tinha pela metade. Também processa
+  reações (Counter/Counter Magic) recursivamente via `getreaction_post`
+  + chamada recursiva de si mesmo.
 - [ ] `GetTargetBaseArea(int,int)` (`0x276930`, 644 B) — candidato real
   para a geometria de área de efeito (ver seção 15, "a tabela de 27
   formatos não existe onde se pensava — isso é o candidato certo").
