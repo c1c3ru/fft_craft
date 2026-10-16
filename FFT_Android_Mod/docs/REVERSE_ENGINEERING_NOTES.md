@@ -2492,16 +2492,28 @@ void CINPUT_IF_TOUCH::OnTouchesBegan(CINPUT_IF_TOUCH* this, int slot,
         // *** detector de duplo-toque, só roda se o touchId já existia ***
         if (GetTouchCount() == 1) {                // 0xb41ec
             int state = this->comboState;            // +0x100
-            if (state == 0) { /* nada a fazer */ }
-            else if (state == 2) { this->comboState = 3; }   // 2º toque dentro da janela -> *** CONFIRMA duplo-toque ***
-            else { this->comboTimestamp = timeGetTime();       // 0xb9fe0 — API Win32/PSP-SDK, igual a `GetLocalTime` da seção 19
-                   this->comboState++; }
+            if (state == 0) {
+                this->comboTimestamp = timeGetTime();  // 0xb9fe0 — API Win32/PSP-SDK, igual a `GetLocalTime` da seção 19
+                this->comboState = 1;
+            }
+            else if (state == 2) { this->comboState = 3; }   // 2º toque dentro da janela -> avança
+            else { this->comboState = 0; this->comboTimestamp = 0; }  // estado inesperado -> cancela
         } else {
             this->comboState = 0; this->comboTimestamp = 0;      // mais de 1 dedo na tela -> cancela a detecção
         }
     }
 }
 ```
+
+**Correção (seção 26):** a versão original desta seção tinha os ramos
+`state==0`/`else` trocados (dizia "state==0 → nada a fazer" e
+"else → `comboTimestamp=now; comboState++`"). A leitura de
+`OnTouchesEnded` na seção 26 exigiu reconferir `OnTouchesBegan` byte a
+byte de novo, e a lógica real é a trocada: **`state==0` é quem inicia
+o rastreio** (`comboTimestamp=now; comboState=1`), e o `else`
+(cobrindo `state==1` e qualquer outro valor inesperado) é quem
+**cancela**. O ramo `state==2 → comboState=3` sempre esteve certo. Ver
+seção 26 pro quadro de estados completo e corrigido.
 
 **Achados:**
 - Confirma a arquitetura de múltiplos toques simultâneos: arrays
@@ -2523,11 +2535,12 @@ void CINPUT_IF_TOUCH::OnTouchesBegan(CINPUT_IF_TOUCH* this, int slot,
   duplo-toque quando há exatamente 1 dedo (evita falso positivo
   durante multi-touch/pinça).
 
-**O que ficou sem confirmar:** quem lê `comboState==3` (o "duplo-toque
-confirmado") e o que isso dispara no jogo; a janela de tempo exata do
-duplo-toque (`comboTimestamp` é só gravado aqui, nunca comparado) —
-provavelmente em `OnTouchesEnded`/`OnEventDispatched`
-(`0xb44a4`/`0xb45c0`), não lidas nesta passada.
+**Atualização (seção 26):** `OnTouchesEnded` foi lida e fecha boa
+parte do que ficava aberto aqui — ver seção 26 pro quadro de estados
+completo (`comboState` vai até `4`, não para em `3`) e pra confirmação
+de qual campo é o sinal consumível de "duplo-toque". A janela de
+tempo exata (`comboTimestamp` comparado contra o quê) continua sem
+confirmação.
 
 ## 21. `CFRAMERATE::FrameMove` lida por completo — quarto item ⚪, revela o medidor/regulador real de velocidade do jogo (2026-10-16, loop de continuação, iteração 17)
 
@@ -2761,3 +2774,108 @@ int CFFT_STATE::EVTCHRToFID(int evtChrID) {                // 0x28c7c0, 24 B
 de Face ID específicos por personagem) — cada uma é só um array de
 `int` em `.data`/`.rodata`, cruzar com nomes de personagem exigiria
 dados do jogo em si, fora do escopo de engenharia reversa de código.
+
+## 26. `CINPUT_IF_TOUCH::OnTouchesEnded`/`OnEventDispatched` lidas por completo — fecha o último item 🔴 da Fase 2, e corrige um erro real da seção 20 (2026-10-16, Fase 2, iteração 4)
+
+Último item 🔴 da Fase 2: fechar a pergunta da seção 20 sobre quem
+confirma o duplo-toque. `OnTouchesEnded(int,int,int,int,int)`
+(`0xb44a4`, 248 B, cobertura total: 62 instruções exatas) e
+`OnEventDispatched(int)` (`0xb45c0`, 16 B) lidas por completo.
+
+### 26.1 Correção necessária na seção 20
+
+Reler `OnTouchesEnded` exigiu reconferir `OnTouchesBegan` byte a byte
+de novo, e isso revelou que a seção 20 tinha os ramos **trocados**: o
+texto original dizia "`state==0` → nada a fazer" e "`else` →
+`comboTimestamp=now; comboState++`". A ordem real das instruções é a
+**inversa**: `state==0` é quem **inicia** o rastreio
+(`comboTimestamp=now; comboState=1`), e o `else` (cobrindo `state==1`
+e qualquer valor inesperado) é quem **cancela** (`comboState=0`). Já
+corrigido diretamente na seção 20 (ver nota ali). O ramo
+`state==2 → comboState=3` sempre esteve certo.
+
+### 26.2 `OnTouchesEnded` — fecha o quadro de estados completo
+
+```c
+// OnTouchesEnded(this, int slot, int touchId, int x, int y)
+void CINPUT_IF_TOUCH::OnTouchesEnded(CINPUT_IF_TOUCH* this, int slot,
+                                       int touchId, int x, int y) {
+    this->genCounter2[slot] = 0;    // +0xd8, por slot — zerado no início, ver 26.3
+
+    int idx = find_slot_by_touchId(touchId);    // mesma busca confirmada na seção 20
+    if (idx == -1) return;                         // touchId desconhecido, ignora
+
+    this->touchFlags[idx] |= 0x40;    // *** bit DIFERENTE do 0x80 de OnTouchesBegan! ***
+    this->curX[idx] = x;                 // reaproveita os campos +0x88/+0xb0 (seção 20: "startX/startY")
+    this->curY[idx] = y;                  // agora pra gravar a posição de SOLTAR o dedo
+
+    if (GetTouchCount() != 1) {             // 0 ou 2+ dedos na tela
+        this->comboState = 0; this->comboTimestamp = 0;    // cancela (mesmo padrão da seção 20)
+        return;
+    }
+
+    int state = this->comboState;
+    if (state == 1) { this->comboState = 2; this->genCounter2[idx] = 1; }      // avança
+    else if (state == 3) { this->comboState = 4; this->genCounter2[idx] = 1; }   // *** avança pra 4, não pra 3! ***
+    else { this->comboState = 0; this->comboTimestamp = 0; }                      // cancela
+}
+```
+
+**Confirma o quadro de estados completo e corrigido**
+(`comboState`, `this->+0x100`):
+
+```
+0 --(toque reusado, DOWN)--> 1 --(solta, UP, 1 dedo)--> 2
+2 --(toque reusado, DOWN)--> 3 --(solta, UP, 1 dedo)--> 4   *** estado final ***
+qualquer outra combinação, ou != 1 dedo na tela  -->  volta pra 0
+```
+
+**Achado principal: `comboState` vai até `4`, não para em `3`** como
+a seção 20 supunha — `3` é só um estado intermediário (confirma que
+houve um segundo toque reusado), e `4` é o estado final de verdade.
+**O sinal consumível real do "gesto completo" é
+`this->genCounter2[idx]` (`+0xd8`, zerado no início da própria
+`OnTouchesEnded` e setado pra `1` exatamente nas duas transições que
+avançam o estado** (`1→2` e `3→4`) — ou seja, `+0xd8` marca "esta
+soltada de dedo fez o `comboState` avançar", não especificamente
+"duplo-toque confirmado" (isso só é verdade na segunda vez, quando
+`state` chega a `4`).
+
+**Bit de flag confirmado**: `OnTouchesBegan` seta o bit `0x80`
+("toque ativo", seção 20); `OnTouchesEnded` seta o bit `0x40`
+("toque solto") — **são dois bits independentes, não um
+enum/estado único** — confirma que o byte de flags por slot
+(`this->touchFlags[idx]`) pode ter os dois setados ao mesmo tempo
+(no frame exato em que o dedo é solto).
+
+### 26.3 `OnEventDispatched(int slot)` — achado: mais simples do que o nome sugere
+
+```c
+void CINPUT_IF_TOUCH::OnEventDispatched(CINPUT_IF_TOUCH* this, int slot) {
+    this->slotTable[slot].field_0x13c = 1;
+}
+```
+
+Só um setter de 1 campo por slot — **não lê nem participa do estado
+de duplo-toque** (não toca `comboState`/`+0xd8`). Provavelmente marca
+"o evento de toque deste slot já foi entregue/consumido pelo
+restante do jogo" — um mecanismo de reconhecimento genérico, separado
+do detector de combo.
+
+### 26.4 O que ficou sem confirmar
+- A janela de tempo exata do duplo-toque: `comboTimestamp`
+  (`this->+0x104`) é gravado quando `state` vira `1`, mas **nenhuma
+  das duas funções lidas (`OnTouchesBegan`/`OnTouchesEnded`) o
+  compara contra nada** — o cheque de "dentro da janela de X ms" deve
+  estar em outro lugar (talvez no consumidor de `+0xd8`, não
+  localizado).
+- Se o mundo real de 2 toques físicos realmente leva o estado de `0`
+  até `4` em 2 ciclos down/up ou se o primeiro toque de uma sequência
+  "gasta" um ciclo sem contribuir (a análise estática sugere que o
+  PRIMEIRO toque de uma sequência nova — não reusado — nunca entra no
+  bloco de combo, então a contagem real de "toques físicos" pra
+  chegar no estado `4` depende de como o Android reusa IDs de toque
+  entre toques consecutivos, isso é comportamento de runtime, não
+  staticamente verificável).
+- Quem consome `this->genCounter2[idx]` (`+0xd8`) depois de setado —
+  não localizado nesta passada.

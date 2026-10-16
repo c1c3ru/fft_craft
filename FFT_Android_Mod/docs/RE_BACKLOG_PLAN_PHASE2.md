@@ -67,11 +67,14 @@ continuam os mesmos:
   antes. Confirma também que o literal `0x5e0` usado em
   `UnitIDToFID_SP2` é só coincidência numérica, sem relação com o
   `g+0x5e0` da IA (seção 24 do `AI_DIFFICULTY_RESEARCH.md`).
-- [ ] `CINPUT_IF_TOUCH::OnTouchesEnded` (`0xb44a4`, 248 B) e
-  `OnEventDispatched(int)` (`0xb45c0`, 16 B) — fecha a pergunta aberta
-  da seção 20 do `REVERSE_ENGINEERING_NOTES.md`: quem lê
-  `comboState==3` (duplo-toque confirmado) e qual é a janela de tempo
-  real.
+- [x] `CINPUT_IF_TOUCH::OnTouchesEnded`/`OnEventDispatched` — lidas
+  por completo, ver `REVERSE_ENGINEERING_NOTES.md` seção 26. **Achou e
+  corrigiu um erro real na seção 20** (os ramos `if`/`else` do
+  `comboState==0` estavam trocados). Quadro de estados completo
+  confirmado: `comboState` vai até `4` (não para em `3`); o sinal
+  consumível real é `this->+0xd8`, setado nas transições `1→2` e
+  `3→4`. `OnEventDispatched` é só um setter simples, não participa
+  do combo. Janela de tempo exata ainda não confirmada (escalonado).
 
 ## 🟠 Prioridade média — termina as classes já abertas na Fase 1
 
