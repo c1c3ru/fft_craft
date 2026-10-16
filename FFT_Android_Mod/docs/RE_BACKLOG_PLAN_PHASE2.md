@@ -49,11 +49,14 @@ continuam os mesmos:
   marcada como ameaça (fase 2). Endereçamento 2D exato do acumulador
   (`g+0x174`) ficou ambíguo — escalonado, não forçado (ver seção
   23.3).
-- [ ] Quem lê `g+0x5e0` (tabela de "painel ocupado por outra unidade",
-  escrita por `GetDestinationsAndMakeMaskTG`, seção 21 do
-  `AI_DIFFICULTY_RESEARCH.md`, mas nunca lida de volta na própria
-  função) — varrer com `find_bl.py`/busca de referência de dado pra
-  achar o consumidor real.
+- [x] Quem toca `g+0x5e0` — ver `AI_DIFFICULTY_RESEARCH.md` seção 24.
+  Achado: um segundo ponto de contato real, dentro de uma função de
+  ~1200 B **sem símbolo no `.dynsym`** (`sub_277f78`,
+  `0x277f78`–`0x27842c`), que togla bits na mesma tabela durante a
+  avaliação de movimento candidato (chama `SetBestMove()` em laço).
+  Varredura sistemática por imediato não achou um terceiro ponto —
+  escalonado como achado honesto, não forçado. `sub_277f78` virou um
+  novo item 🟠 abaixo (grande demais pra ler dentro deste item).
 - [ ] Cluster `CFFT_STATE` de mapeamento de identidade (todas pequenas,
   todas sem leitura): `WorldFaceIDToFaceID(int)` (`0x28c6e0`, 76 B),
   `AttackTeamFaceIDToFaceID(int,int*)` (`0x28c72c`, 60 B),
@@ -72,6 +75,14 @@ continuam os mesmos:
 
 ## 🟠 Prioridade média — termina as classes já abertas na Fase 1
 
+- [ ] `sub_277f78` (`0x277f78`–`0x27842c`, ~1204 B, **sem símbolo no
+  `.dynsym`** — função local/`static`) — achada durante o item 🔴
+  "quem toca `g+0x5e0`" (seção 24 do `AI_DIFFICULTY_RESEARCH.md`),
+  mas grande demais pra ler ali. Chama `SetBestMove()` (`0x277f1c`)
+  em laço sobre colunas do mapa — forte candidata a ser o verdadeiro
+  "laço de escolha de melhor movimento" da IA, nunca documentado até
+  agora. Revela também `sub_224d4c`/`sub_224650`/`0x271e1c`
+  (chamados por ela, papéis não investigados).
 - [ ] `CEGL2_SPRITE::AddPacketPartial` (`0xad324`, 1244 B),
   `DrawPartial` (`0xae090`, 1088 B), `Draw8` (`0xaceec`, 1080 B) — as 3
   maiores da família, ainda não lidas (seção 13.4 só leu

@@ -2222,3 +2222,71 @@ posição `b[0x4f]`/`b[0x50]` (já usados em toda a investigação).
 - Quem **consome** o mapa de perigo em `g+0x174` depois de calculado
   (provavelmente a função de decisão de movimento da IA, não
   localizada nesta passada).
+
+## 24. Quem toca `g+0x5e0` — achado: uma função de ~1200 B sem símbolo, nunca documentada antes (2026-10-16, Fase 2, iteração 2)
+
+Segundo item da Fase 2: "quem lê `g+0x5e0`" (tabela de ocupação de
+painel escrita por `GetDestinationsAndMakeMaskTG`, seção 21, mas nunca
+lida de volta na própria função). Escrevi um script novo
+(`find_imm.py`, mesma técnica de varredura linear do `find_bl.py`,
+mas procurando um **imediato** em vez de um alvo de `bl`) pra varrer
+`.text` inteiro por instruções usando o literal `0x5e0`. Filtrando os
+falsos positivos (a grande maioria é `ldr rX,[pc,#0x5e0]` — carga de
+literal pool, deslocamento coincidente, nada a ver com `g`) e
+restringindo à região de código da IA (`0x270000`–`0x280000`), sobrou
+**um único candidato real**: `0x278014`.
+
+Esse endereço cai dentro de uma função **sem símbolo no `.dynsym`**
+(local/`static`, como outras já vistas nesta investigação) — o `.so`
+não tem NENHUM nome pra ela. Chamo de `sub_277f78` (`0x277f78`,
+~1204 B, `0x277f78`–`0x27842c`). **Não lida por completo** — é grande
+demais pro escopo deste item específico — mas o suficiente pra
+confirmar o que importa pra esta pergunta:
+
+```c
+// sub_277f78() — parte do laço de avaliação/escolha de movimento da IA
+void sub_277f78() {
+    if (!(g->b[0x19b7] && g->b[0xc72])) { /* ...caminho alternativo, não lido... */ return; }
+
+    // lê g->h[0x28]/h[0x2a]/h[0x2c] (coordenadas candidatas X/Y/Z) e
+    // toggla um bit em g+0x5e0 (stride 18 halfwords, mesma tabela da
+    // seção 21!) usando essas coordenadas:
+    uint16_t* row = &g->h[(g->h[0x2a] * 18 + g->h[0x2c]) + (0x5e0/2) + 6];
+    *row ^= (0x8000 >> g->h[0x28]);     // *** idêntico ao idioma da seção 21 ***
+
+    SetBestMove();          // 0x277f1c — chamado ANTES deste trecho, no topo do laço
+    // ... segue um laço sobre as colunas do mapa (0..gMapX), testando
+    // bits de uma máscara de destino (r6) e, para cada bit setado,
+    // repetindo o ciclo "atualiza g->h[0x28/0x2a/0x2c] -> chama
+    // SetBestMove() de novo" -- claramente a ITERAÇÃO sobre painéis
+    // candidatos de destino que todo o resto do documento já citava
+    // de fora, mas nunca tinha sido localizada concretamente.
+}
+```
+
+**Achado principal**: `g+0x5e0` tem **dois pontos de contato
+confirmados**, não um: `GetDestinationsAndMakeMaskTG` (seção 21,
+constrói a ocupação a partir da posição real das unidades vivas) e
+este `sub_277f78` (togla bits durante a própria avaliação/iteração de
+movimento candidato, chamando `SetBestMove()` em laço). A varredura
+sistemática por imediato `0x5e0` em toda a região de código da IA
+**não achou nenhum terceiro ponto** — ou seja, não existe (ou não é
+visível por essa técnica) um "consumidor puro" que só lê a tabela pra
+filtrar destinos; os dois pontos encontrados são ambos
+leitura-modificação-escrita (XOR), não leitura simples.
+
+**Escalonado, não forçado**: `sub_277f78` é claramente uma função
+importante (provavelmente o verdadeiro "laço de escolha de melhor
+movimento" da IA, nunca documentado até agora) — grande demais pra
+ler por completo dentro do escopo deste item. Adicionada como novo
+item 🟠 no `RE_BACKLOG_PLAN_PHASE2.md` pra uma leitura dedicada futura.
+
+### 24.1 O que ficou sem confirmar
+- `sub_277f78` por completo (só a parte relevante pra `g+0x5e0` foi
+  lida com confiança).
+- `sub_224d4c`/`sub_224650`/`0x271e1c` (chamados por `sub_277f78`,
+  nomes/papéis não investigados).
+- Se existe um consumidor "read-only" de `g+0x5e0` que a técnica de
+  varredura por imediato não conseguiria achar (ex.: acessado via um
+  ponteiro computado em OUTRO lugar e só passado como parâmetro, sem
+  reconstruir o literal `0x5e0` de novo).
