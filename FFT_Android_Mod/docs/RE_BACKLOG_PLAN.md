@@ -199,9 +199,16 @@ nas seções anteriores — não são "pendência pequena":
   principal: um **detector de duplo-toque embutido** (máquina de
   estados + `timeGetTime()`, mesma família de API Win32/PSP-SDK da
   seção 19). `CINPUT_DATA` (mapeamento toque→botão) continua não lida.
-- [ ] Classes utilitárias (`CRECT`, `CSTR_UTIL`, `CLIST`, `CTHREAD`,
-  `CFRAMERATE`, `CFILE_UTIL`) — baixa prioridade, provável trabalho de
-  "glue" sem achados arquiteturais novos.
+- [x] Classes utilitárias — função-central (`CFRAMERATE::FrameMove`,
+  `0xbd9e4`, 244 B) lida por completo, ver
+  `REVERSE_ENGINEERING_NOTES.md` seção 21. **Surpreendeu a expectativa
+  do plano**: não é "glue" trivial — é o regulador real de
+  velocidade/FPS do jogo (mede taxa de ticks ~1x/segundo via
+  `timeGetTime`, clampa contra um teto configurável, deriva um fator
+  de escala), com um modo "fixo" separado pra avanço de quadro
+  determinístico (debug/replay). 3ª ocorrência da família de API
+  Win32/PSP-SDK (depois de `GetLocalTime` seção 19). `CRECT`/
+  `CSTR_UTIL`/`CLIST`/`CTHREAD`/`CFILE_UTIL` continuam não lidas.
 - [ ] `CFFT_STATE` (42 métodos) — candidato a classe orquestradora de
   nível mais alto do jogo inteiro; nunca investigada diretamente (só
   `GetParam` foi referenciado, de fora, várias vezes).

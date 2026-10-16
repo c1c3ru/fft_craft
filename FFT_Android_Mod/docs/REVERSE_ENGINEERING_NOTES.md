@@ -2459,3 +2459,72 @@ confirmado") e o que isso dispara no jogo; a janela de tempo exata do
 duplo-toque (`comboTimestamp` é só gravado aqui, nunca comparado) —
 provavelmente em `OnTouchesEnded`/`OnEventDispatched`
 (`0xb44a4`/`0xb45c0`), não lidas nesta passada.
+
+## 21. `CFRAMERATE::FrameMove` lida por completo — quarto item ⚪, revela o medidor/regulador real de velocidade do jogo (2026-10-16, loop de continuação, iteração 17)
+
+Quarto item da camada ⚪ ("classes utilitárias... provável trabalho de
+glue sem achados arquiteturais novos" — o plano já avisava que a
+expectativa era baixa, mas esta função surpreendeu). Escolhida
+`CFRAMERATE::FrameMove()` (`0xbd9e4`, 244 B, cobertura total: 61
+instruções pra 61 esperadas, função folha — só helpers de software
+float do libgcc, `__aeabi_ui2f/i2f/fmul/fdiv/fcmpgt`) em vez dos
+getters/setters triviais da mesma classe.
+
+```c
+// CFRAMERATE::FrameMove(this) — chamada uma vez por frame real
+int CFRAMERATE::FrameMove(CFRAMERATE* this) {
+    this->totalCalls++;            // +0x0 — contador de chamadas desde o início
+
+    if (this->fixedMode) {                                // +0x24, setado por SetFixedMode(int)
+        if (this->pendingSteps <= 0) {                       // +0x28, setado por FrameStep(int)
+            this->rate = 0;                                     // +0x14 (reaproveitado como int 0 aqui)
+            return 0;
+        }
+        this->pendingSteps--;
+        this->rate = 1.0f;             // modo fixo: cada chamada = exatamente 1 "tick" de taxa 1.0
+        return 0;
+    }
+
+    this->tickCount++;             // +0x4 — ticks acumulados desde a última recalibração
+    uint32_t now = timeGetTime();    // 0xb9fe0 — mesma API Win32/PSP-SDK das seções 19/20
+    uint32_t elapsed = now - this->lastTime;   // +0x8
+
+    if (elapsed <= 1000) return 0;   // *** só recalibra a taxa ~1x por segundo, não todo frame ***
+
+    // recalcula a taxa real de ticks/segundo dos últimos ~1s:
+    float measured = (this->baseRate * (float)elapsed / 1000.0f) / (float)this->tickCount;  // +0xc = baseRate
+    float cap = this->rateCap;        // +0x18
+    this->rate = (measured > cap) ? cap : measured;   // +0x14 — clampado no teto configurado
+    this->scale = this->baseRate / this->rate;           // +0x10 — fator derivado (baseRate/rate)
+
+    this->lastTime = now;              // +0x8
+    this->tickCount = 0;                // +0x4
+    return 1;
+}
+```
+
+**Achados:**
+- **É o regulador de velocidade/FPS real do jogo** — não um simples
+  contador de quadros. Mede, aproximadamente uma vez por segundo
+  (`elapsed > 1000ms`), quantos ticks de `FrameMove` aconteceram de
+  verdade (`tickCount`) contra um tempo real medido via
+  `timeGetTime()`, calcula uma taxa efetiva, **clampa contra um teto
+  configurável** (`rateCap`, `+0x18`), e deriva um fator de escala
+  (`baseRate/rate`, `+0x10`) — plausivelmente usado em outro lugar
+  pra ajustar velocidade de animação/lógica quando o dispositivo não
+  consegue manter a taxa alvo (`baseRate`, `+0xc`).
+- **Modo "fixo" separado e completo** (`fixedMode`+`pendingSteps`,
+  controlados por `SetFixedMode`/`FrameStep`): em vez de medir o
+  relógio real, consome passos pré-enfileirados um por chamada,
+  sempre com taxa `1.0` — mecanismo claro de **avanço de quadro
+  determinístico** (debug/replay/gravação), independente do
+  relógio de parede.
+- Terceira ocorrência da família de API Win32/PSP-SDK
+  (`timeGetTime`, depois de `GetLocalTime` na seção 19 e de novo
+  aqui) — confirma que esse não é um caso isolado, é um padrão real
+  da camada de compatibilidade herdada do SDK original do PSP.
+
+**O que ficou sem confirmar:** quem lê `rate`/`scale`
+(`+0x14`/`+0x10`) depois de calculados — não localizado nesta
+passada, mas os nomes dos getters já catalogados (`GetRate`,
+`GetSpeed`) dão um ponto de partida direto pra uma leitura futura.
