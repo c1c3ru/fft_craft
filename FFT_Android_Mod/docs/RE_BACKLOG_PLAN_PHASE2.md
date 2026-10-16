@@ -179,11 +179,14 @@ continuam os mesmos:
 
 ## ⚪ Não iniciado — trabalho de escala grande ou de baixo retorno isolado
 
-- [ ] Resolver os literais GOT sem nome ainda abertos em várias seções
-  (tabelas de terreno da seção 21 do doc de IA; constantes `SL_IID_*`
-  e layout de `SLDataFormat_PCM` das seções 13.6/17.6; tabela de
-  subtipo de tile da seção 13.7) — mecânico, mas fecha várias notas de
-  rodapé de uma vez.
+- [x] Resolver os literais GOT sem nome das seções 21/25 do doc de IA
+  — ver `AI_DIFFICULTY_RESEARCH.md` seção 26. **Achado principal**: 3
+  referências antes isoladas (seções 9.3/14.4/21/25) resolvem todas
+  pro mesmo endereço, `comtype` — fecha de vez que não eram tabelas
+  diferentes. Duas outras tabelas resolvidas por endereço mas sem
+  nome real (`0x565db8`, `0x3d21bc`). Os literais do motor de áudio
+  (seções 13.6/17.6, `SL_IID_*`) e da seção 13.7 continuam abertos —
+  não resolvidos nesta passada.
 - [ ] Varredura sistemática das ~46 funções `wld_*` restantes (depois
   das 3 da seção 🟡 acima) — escala grande, só vale a pena se for meta
   explícita de "fechar o motor `wld_*` por completo".

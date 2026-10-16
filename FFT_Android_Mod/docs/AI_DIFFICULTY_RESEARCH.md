@@ -2109,15 +2109,13 @@ duas tabelas da passada 2, mas não o motivo do deslocamento de
 
 ### 21.5 O que ficou sem confirmar
 
-- **Três ponteiros GOT sem nome** usados no laço de validação de
-  terreno/subtipo: literal pools em `0x278bf8`/`0x278bd0`/`0x278bb8`
-  (offsets `[pc,#0x53c]`/`[pc,#0x2b0]`/`[pc,#0x288]` a partir de
-  `0x2786b4`/`0x278948`/`0x278968`) e mais dois em
-  `0x2789c8`-`0x2789d4`. Resolvidos estruturalmente (uma tabela de
-  terreno-por-caster, uma tabela de 8 B/tile, uma tabela de
-  lookup-por-subtipo) mas não cruzados com `.dynsym`/símbolo real —
-  ficou pendente para uma iteração futura caso algum desses vire
-  relevante de novo.
+- **Ponteiros GOT sem nome usados no laço de validação de
+  terreno/subtipo — resolvidos na seção 26**: a tabela
+  "terreno-por-caster" é `comtype` (já catalogada); a tabela de 8 B
+  por painel resolve pro endereço `0x565db8` (sem símbolo); a tabela
+  de lookup-por-subtipo resolve pro endereço `0x3d21bc` (sem
+  símbolo) — essas duas últimas continuam sem nome real, só com
+  endereço confirmado.
 - O significado exato de `g->h[2]` (campo de 16 bits com sinal, lido
   uma vez no início da passada de bits) — hipótese forte é "afinidade
   de terreno/elemento exigida pela habilidade atual", mas não
@@ -2391,7 +2389,7 @@ if (g->b[0x26] == 6 || (g->b[0xf] & 0xc0)) {
         continue;   // painel fora de alcance de arco -> descarta, próxima coluna
     }
 } else if (g->b[0xf] & 0x40) {                              // *** flag "outra arma à distância" (arma de fogo?) ***
-    if (weaponCategoryTable[g->b[0]] == 1) {
+    if (comtype[g->b[0]] == 1) {    // *** confirmado na seção 26: é `comtype`, não uma tabela nova ***
         // caso especial: se a distância real (GetDistance, 0x271e1c)
         // entre o invocador e o alvo for <= 1 (adjacente), PULA o
         // teste de arma — só testa CheckGunReachable se for > 1
@@ -2425,6 +2423,56 @@ precisa checar arma de fogo" via `GetDistance`.
 - `g->b[0x14]`, `g->b[4]`, `g->b[0x26]==6`, `g->b[0xcb7]` bit 1 — todos
   usados como seletores de caminho, papel de negócio exato (que
   categoria de ação/habilidade cada valor representa) não cravado.
-- `weaponCategoryTable` (lookup GOT por `g->b[0]`, caster) — mesmo
-  padrão de "tabela de categoria" visto em outras seções, endereço
-  real não resolvido nesta passada.
+- `weaponCategoryTable` (lookup GOT por `g->b[0]`, caster) — **resolvido
+  na seção 26: é `comtype`**, não uma tabela nova.
+
+## 26. Resolução de literais GOT sem nome — primeiro item ⚪ da Fase 2 (2026-10-16, Fase 2, iteração 19)
+
+Primeiro item ⚪: fechar os literais GOT sem nome deixados abertos nas
+seções 21/25. Técnica: ler o valor bruto do pool de literais (o
+deslocamento somado ao `sl`/`r8`, a âncora GOT confirmada
+`0x347d58`), calcular o endereço final, e cruzar com os globais já
+nomeados na investigação.
+
+### 26.1 Achado principal: 3 referências antes isoladas eram todas `comtype`
+
+As 3 tabelas da seção 21 marcadas como "terrain-table A" (usada em
+`GetDestinationsAndMakeMaskTG`, comparada contra `4`) e a
+`weaponCategoryTable` da seção 25 (usada em `sub_277f78`, comparada
+contra `1`) resolvem **para o mesmo endereço**: `0x3cd9b8` = `comtype`
+(já catalogada, seção 9.3/tabela de globais, 256 B, indexada por
+`g->b[0]`). Confirmado comparando o deslocamento exato do literal
+(`-0x1910` relativo à âncora GOT, idêntico nos dois pontos de
+chamada).
+
+**Isso fecha 3 usos isolados de `comtype` em uma única tabela
+coerente**, usada com constantes de comparação diferentes conforme o
+contexto: `==10` (seção 9.3, achado original), `==3` (seção 14.4,
+`CheckCrystalAndTresureBox`), `==4` (seção 21, validação de
+terreno), `==1` (seção 25, decisão de pular checagem de arma de
+fogo). Isso é consistente com `comtype` ser uma pequena enumeração de
+categoria (provavelmente "tipo de movimento/interação com terreno"
+por unidade), onde cada chamador testa pelo valor específico que lhe
+interessa — mas o significado exato de cada valor numérico (0-255,
+quais correspondem a quê) continua sem ser cravado.
+
+### 26.2 Duas tabelas novas, endereço confirmado mas sem nome
+
+- **Tabela "8 B por painel"** (seção 21, usada em
+  `GetDestinationsAndMakeMaskTG` pra validar subtipo de tile) resolve
+  pro endereço **`0x565db8`** — fica logo depois do fim real de
+  `bwork[]` (`0x563560` + `0x27de` = `0x565d3e`, só 122 B de
+  distância) — provavelmente um array de registros por painel do
+  mapa (não confirmado o tamanho total nem o propósito de cada um dos
+  8 bytes por entrada, só que o byte `+3` é comparado contra `0x3f`).
+- **Tabela "lookup por subtipo"** (seção 21, usada tanto no caminho
+  simples quanto no caminho complexo da validação de terreno) resolve
+  pro endereço **`0x3d21bc`** — não adjacente a nenhum global já
+  nomeado nesta investigação (`aa`/`comtype`/`SV`/`area_data`).
+
+**O que ficou sem confirmar:** os literais GOT das seções 13.6/17.6
+(constantes `SL_IID_*` e layout de `SLDataFormat_PCM`, motor de
+áudio) e da seção 13.7 (tabela de subtipo de tile do `DecodeTexture`)
+não foram resolvidos nesta passada — ficou só a parte do lado da IA
+de batalha, que tinha os endereços de chamada mais concretos já
+documentados.
