@@ -1547,3 +1547,116 @@ arquitetura completa — poucos blocos grandes compartilhados entre fases,
 contadores de retry (`g->b[0xe49]`, `[0xe4a]`, `[0xe4b]`, `[0xedf]`,
 `[0xede]`) reaproveitados entre pelo menos 4 fases diferentes — está
 documentada e auditável por endereço.
+
+## 18. `BattleRoutine` fase 1 interna (`0x27537c`–`0x27584c`, 1232 B) — lida por completo (2026-10-16, loop de continuação)
+
+Primeiro item do plano em `RE_BACKLOG_PLAN.md`. As 308 instruções foram
+lidas por completo; a parte mais densa (manipulação bit a bit da
+tabela `+0xa70` já catalogada na seção 17.6) é descrita em prosa
+estrutural em vez de pseudocódigo linha a linha — é honesto dizer que
+o **papel** de cada bloco está confirmado, mas o significado exato de
+cada bit individual da tabela `+0xa70` não foi isolado bit por bit.
+
+**Dois nomes novos resolvidos nesta passada:** `ClearMove(MOVE*)`
+(`0x27383c`) e `MakeMapDanger()` (`0x27b0b0`, "fazer mapa de perigo" —
+corpo não lido, só o nome e o ponto de chamada).
+
+```c
+int BattleRoutine_Phase1() {
+    if (VSync(1) > 0x1b8) goto TIMEOUT;                  // mesmo limite de 440 ticks de sempre
+
+    // --- bloco 1: ajusta a tabela de interação +0xa70 por altura/alcance ---
+    // para cada um dos 21 slots candidatos, limpa (AND NOT) ou mantém um
+    // bit de "alcançável" em g+idx*2+0xa70+4, usando a diferença de
+    // altura entre o painel candidato e o alvo atual (g->b[0xe30..0xe3b])
+    // contra um limite de tolerância vertical lido de g->b[0xe38] (campo
+    // novo, não catalogado antes) — é um filtro geométrico de
+    // alcance/altura, mesma tabela da seção 17.6.
+
+    // --- bloco 2: duas passadas adicionais de limpeza da mesma tabela ---
+    // zera entradas de unidades inválidas (sentinela 0xff) ou que já são
+    // o alvo cacheado (g->b[0xe2e]), e de unidades com status
+    // "impossível de atingir" (t->h[0x61] & 0x140, mesmo padrão de bits
+    // de status já visto em JudgeStatus/CheckUnitActionEffective/
+    // GetCountToNextTurn — seções 9.4/10/13.2).
+
+    if (unitPtr->b[7] & 8)        goto SKIP_EVAL;         // unitPtr = *(g+0x17c0+0x38), campo já conhecido
+    if (unitPtr->b[0x65] & 1)     goto SKIP_EVAL;
+
+    // --- censo de unidades: quantas estão vivas/em que estado ---
+    int alive = 0, flagged = 0, dead = 0;
+    for (i = 0; i < 0x15; i++) {                            // 21 slots, o limite universal de sempre
+        if (!IsAlmostNullUnit(i)) {
+            if (row16[i].b[0x34] != 0) dead++;
+            else if (bwork[i].b[0x63] & 3) flagged++;
+            alive++;
+        }
+    }
+    if (alive == flagged || alive == 1) goto CENSUS_LOW;    // poucas unidades relevantes -> atalho
+
+    for (i = 0; i < 0x15; i++)
+        if (row16[i].b[0x34] == 0) row16[i].b[0x33] |= 8;     // marca unidades vivas
+
+    g->b[0xcb7] &= ~0x40;                                      // flag compartilhada, seção 9.3/17 etc.
+
+    if (flagged == 0) {
+        if (unitPtr->b[5] & 8) goto NO_TARGET;                   // sem candidato válido -> desiste
+    } else {
+        g->b[0x1980+0x36] = <byte derivado do alvo cacheado>;     // cache de "último alvo avaliado"
+
+        if (unitPtr->b[4] & 8) {
+            // cadeia de condições (unitPtr2->b[0x62]&0x40, g->b[7]&4,
+            // flagged==0 de novo, unitPtr->b[4]&0x40, g->b[0x19bb]!=0)
+            // decide se limpa unitPtr->b[4] bit 3 antes de continuar —
+            // não totalmente isolado, mas claramente uma condição de
+            // "pular a etapa de perigo se a unidade já decidiu outra
+            // coisa"
+        }
+
+        if (flagged == 0) goto FALLBACK;
+
+        int ratio = (unitPtr2->h[0x30] << 7) / unitPtr2->h[0x32];   // __divsi3 — velocidade/distância?
+        if (ratio <= 44) goto SKIP_DANGER_MAP;
+
+        memset(g->b[0xc8d..0xca1], 1, 0x15);        // marca todos os 21 slots do array de "alvos marcados"
+                                                        // (mesmo array das seções 17.1–17.7!)
+        int nearest = GetNearestUnit(4);              // *** tipo 4 — novo, nem "inimigo"(1) nem "aliado"(2) ***
+        SetDestUnit(nearest);                          // já catalogada desde a seção 1 original
+    }
+
+SKIP_DANGER_MAP:
+CENSUS_LOW:
+    if (!g->b[0x19b7]) {                               // "IA ativa"? mesmo flag de sempre
+        for (MOVE* m = &g->moves[0x54]; m != &g->moves[0x154]; m += 0x20)
+            ClearMove(m);                               // limpa um array de ~8 MOVE de 32 B cada
+    } else {
+        goto 0x2747c4;   // *** volta pro bloco "não pensando" da seção 14.2! ***
+    }
+    ClearMove(&g->b[0x14]);
+    ClearMove(&g->b[0x34]);
+    ClearMove(&g->b[0x154]);
+    ClearMove(&g->b[0x17c0+0x3c]);
+    MakeMapDanger();                                    // *** recalcula o mapa de perigo global ***
+}
+```
+
+**Achado estrutural:** a Fase 1 é a etapa de **"censo de unidades +
+mapa de perigo"** — decide se vale a pena reavaliar o campo de batalha
+(com base em quantas unidades ainda estão vivas/relevantes e numa razão
+velocidade/distância), opcionalmente escolhe um destino inicial via
+`GetNearestUnit(4)`/`SetDestUnit`, limpa os buffers de `MOVE`
+candidatos de rodadas anteriores, e termina chamando `MakeMapDanger()`
+para recalcular o mapa de ameaça que outras fases/`SetBMList` devem
+consumir. O salto de volta pro bloco "não pensando" (seção 14.2,
+`0x2747c4`) quando a IA está ativa é um elo de controle de fluxo
+**novo**, não documentado antes — mostra que o dispatcher de
+`BattleRoutine` não é estritamente "uma fase por chamada": a Fase 1
+pode re-executar trechos da Fase 0/else dentro da mesma invocação.
+
+**O que ficou sem confirmar:** o significado exato de cada bit da
+tabela `+0xa70` (só o papel geral — "alcançável"/"interação entre duas
+unidades" — está confirmado, não cada bit); os destinos
+`0x275d84`/`0x275d30`/`0x275ba8`/`0x275d10`/`0x275dd0`/`0x275e18`/
+`0x275ae8` (blocos de fallback/skip citados mas fora do range de 1232 B
+pedido, então não lidos nesta passada); e o corpo de `MakeMapDanger()`
+em si.

@@ -37,9 +37,15 @@ documentado. Os dois documentos de resultado são:
 
 ## 🔴 Prioridade alta — fecha os ~3 furos que sobraram da IA de batalha
 
-- [ ] `BattleRoutine` fase 1 interna (`0x27537c`–`0x27584c`, ~1232 B) —
-  maior bloco interno ainda não lido do dispatcher de `BattleRoutine`
-  (ver `AI_DIFFICULTY_RESEARCH.md` seção 14.5).
+- [x] `BattleRoutine` fase 1 interna (`0x27537c`–`0x27584c`, ~1232 B) —
+  lida por completo, ver `AI_DIFFICULTY_RESEARCH.md` seção 18. Achado:
+  é a etapa de "censo de unidades + mapa de perigo", termina chamando
+  `MakeMapDanger()`. Revelou `ClearMove(MOVE*)` e `MakeMapDanger()`
+  (novos), e um salto de controle de volta pro bloco "não pensando" da
+  seção 14.2 (`BattleRoutine` não é estritamente uma fase por chamada).
+  Pendências sub-item: corpo de `MakeMapDanger()`, e os blocos de
+  fallback `0x275d84`/`0x275d30`/`0x275ba8`/`0x275d10`/`0x275dd0`/
+  `0x275e18`/`0x275ae8` (fora do range de 1232 B lido).
 - [ ] `sub_275e3c` (`0x275e3c`, 2992 B) — orquestrador de resultado de
   habilidade, só caracterizado pela lista de chamadas (seção 14.3).
 - [ ] `GetTargetBaseArea(int,int)` (`0x276930`, 644 B) — candidato real
