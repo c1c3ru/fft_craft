@@ -3687,3 +3687,50 @@ void CSTR_UTIL::GetName(char* out, char* in, int hasFullPath) {
 **O que ficou sem confirmar:** `GetFile`/`Conv`/`Find` (as outras
 funções do mesmo item do plano) e `CLIST::GetData`/`DeleteAll` não
 lidas nesta passada.
+
+## 31. Binário x86 — primeira comparação real com o ARM, item ⚪ nunca tocado (2026-10-16, Fase 2, iteração 21)
+
+Último item ⚪ concreto: o binário x86
+(`FFT_Android_Mod/src/lib/x86/libgl2jni.so`, ELF i386, ~4,99 MB,
+*stripped*) nunca tinha sido tocado em toda a investigação — tudo até
+aqui foi só do binário ARM. Primeira comparação real: `.dynsym` tem
+**6530 símbolos `FUNC`** (vs 6636 no ARM — bem próximo, consistente
+com ser a mesma base de código recompilada pra outra arquitetura, não
+um build divergente). Cruzando por nome mangled exato, os endereços
+batem com funções já documentadas:
+
+| Função | ARM | x86 |
+|---|---|---|
+| `CCOMP_Z_DEC::Decode` | `0xb6204`, 412 B | `0xb98a0`, 423 B |
+| `MakeMapDanger()` | `0x27b0b0`, 400 B | `0x2869b0`, 435 B |
+| `GetTargetBaseArea(int,int)` | `0x276930`, 644 B | `0x282240`, 732 B |
+
+Desmontei `CCOMP_Z_DEC::Decode` em x86 (`Cs(CS_ARCH_X86, CS_MODE_32)`)
+pra comparar com a versão ARM já documentada por completo na seção
+18. **Lógica idêntica, confirmada instrução por instrução**: mesmo
+teste de flag de chunk (`test byte ptr [eax+4],2`), mesmo caminho de
+`memcpy` pra chunk não comprimido, mesma sequência `inflateInit_` →
+`inflate` (testando `1`=fim, `0`=continua, `-3`=`Z_DATA_ERROR` →
+`inflateSync`) → `inflateEnd`, mesma chamada de `Error()` nos
+caminhos de falha.
+
+**Achado de diferença real de build**: no ARM, as 4 funções da zlib
+são **importadas via `.plt`/`.rel.plt`** (biblioteca externa). No
+x86, elas aparecem como **símbolos globais exportados direto no
+`.dynsym`** (`inflateInit_`/`inflate`/`inflateSync`/`inflateEnd`,
+endereços reais `0x7a800`/`0x7a8b0`/`0x7ca70`/`0x7c880`) — ou seja,
+o build x86 parece ter a zlib **embutida estaticamente** e reexportada
+nesse `.so`, em vez de vinculada dinamicamente contra uma `libz.so`
+do sistema. Mecanismo de linkagem diferente, lógica de negócio
+idêntica.
+
+**Conclusão desta primeira passada**: a hipótese natural — que o x86
+é a mesma base de código C++ recompilada, sem lógica de jogo
+divergente — se confirma pro caso testado. Não dá pra generalizar pra
+todo o binário a partir de uma função só, mas não apareceu nenhum
+sinal de divergência de comportamento, só de infraestrutura de
+build (linkagem da zlib).
+
+**O que ficou sem confirmar:** qualquer divergência real de
+comportamento de jogo entre as duas arquiteturas — testado só 1
+função; o restante do binário x86 continua inteiramente não lido.

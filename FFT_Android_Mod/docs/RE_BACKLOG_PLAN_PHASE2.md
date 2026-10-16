@@ -190,10 +190,13 @@ continuam os mesmos:
 - [ ] Varredura sistemática das ~46 funções `wld_*` restantes (depois
   das 3 da seção 🟡 acima) — escala grande, só vale a pena se for meta
   explícita de "fechar o motor `wld_*` por completo".
-- [ ] Binário x86 (`FFT_Android_Mod/src/lib/x86/libgl2jni.so`) — **nunca
-  tocado em toda a investigação** (Fase 1 inteira foi só ARM). Nem que
-  seja só confirmar que a estrutura é idêntica (mesmos offsets de
-  campo, mesma lógica) ou documentar divergências reais.
+- [x] Binário x86 — primeira comparação feita, ver
+  `REVERSE_ENGINEERING_NOTES.md` seção 31. `.dynsym` tem contagem de
+  símbolos muito próxima da ARM (6530 vs 6636); `CCOMP_Z_DEC::Decode`
+  comparado instrução por instrução — lógica idêntica. Achado real:
+  a zlib é embutida/exportada direto no `.dynsym` do x86, em vez de
+  importada via `.plt` como no ARM — diferença de linkagem, não de
+  lógica. Só 1 função comparada; o resto do x86 continua não lido.
 - [x] `BattleRoutine`'s 7 blocos de fallback — lidos por completo
   (e mais ~10 blocos irmãos que apareceram no mesmo intervalo), ver
   `AI_DIFFICULTY_RESEARCH.md` seção 27. **Achado principal**:
