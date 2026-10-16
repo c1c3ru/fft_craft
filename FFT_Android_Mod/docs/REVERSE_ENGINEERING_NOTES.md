@@ -1241,3 +1241,124 @@ um bug.
 As ~160 funções restantes de `CEGL2_*` (e as ~134 de `CSOUND_*`)
 continuam só no nível de inventário por nome da seção 13 — nenhuma
 outra foi lida nesta sessão.
+
+## 16. Motor de áudio `CSOUND_IF` — ciclo de vida completo lido (2026-10-16)
+
+Continuação pedida explicitamente: a API de alto nível de áudio. Li as
+4 funções centrais do ciclo de vida por completo — `Init`, `Load`,
+`Play`, `FrameMove` — a mesma profundidade dada à família de desenho do
+`CEGL2_IF` nas seções 14–15.
+
+### 16.1 `CSOUND_IF::Init(uint type, int maxChannels, char* path, int flag)` (`0xba3a4`, 264 B)
+
+```c
+bool CSOUND_IF::Init(uint type, int maxChannels, char* path, int flag) {
+    strcpy(this->basePath, path);
+    this->volumes[master/music/sfx] = 100;         // +0x110/+0x114/+0x118
+    this->maxChannels = maxChannels;                 // +0x120
+    this->channelPtrArray = alloc(maxChannels * 4);   // 0x2cdf8c — alocador customizado
+    CSTEP* steps = alloc((maxChannels+2) * 4);         // segundo array paralelo
+    steps[0] = { .type = 4, .count = maxChannels };     // cabeçalho de lista
+    for (i = 0; i < maxChannels; i++)
+        new (steps + 2 + i) CSTEP();                    // *** um CSTEP por canal! ***
+    this->stepArray = steps + 8;                         // +0x128
+
+    if (this->type == 4) {                               // modo "OpenSL real"
+        this->sl = new CSOUND_IF_SL();                    // +4
+        if (!this->sl->EngineInit(flag)) {
+            delete this->sl; this->sl = nullptr;
+        }
+    } else {
+        SetEnable(this, false);                            // modo sem OpenSL: desativa
+    }
+    return true;
+}
+```
+
+**Achado de arquitetura importante:** `CSTEP` — que parecia só uma
+classe de animação gráfica pelo nome ("step"/"passo") — é na verdade
+uma **classe utilitária genérica de interpolação por passos,
+reaproveitada entre gráfico e áudio**. `CSOUND_IF` aloca **um `CSTEP`
+por canal de áudio**, e (seção 16.4) usa ele para controlar curvas de
+fade de volume ao longo do tempo — o mesmo tipo de objeto que
+provavelmente também dirige animações de sprite no `CEGL2_*` (não
+confirmado lá, mas a reutilização aqui é evidência forte).
+
+### 16.2 `CSOUND_IF::Load(int ch, char* path, uchar* buf, uint size, uint off, int fmt, int loop, int vol, uchar extra)` (`0xba9c8`, 612 B)
+
+Confirma o despacho real por formato: se já carregado, chama
+`Unload(ch)` e tenta de novo; com OpenSL ativo, despacha por `fmt`
+(0 → `CSOUND_IF_SL::LoadPCM`, visto completo; 1/2 → variantes
+análogas de `LoadOGG`, mesmo padrão, não transcritas de novo); em
+sucesso, chama `ClearSavedata`, opcionalmente `strcat` do nome do
+arquivo (debug/retry), empacota loop-points/volume/pan em bytes do
+canal (`+0x40..+0x47`) e marca `+0x4a=1` (carregado), terminando com
+`SetVolume`.
+
+### 16.3 `CSOUND_IF::Play(int ch, int vol, int pan, int loopFlag, uchar fadeId)` (`0xbad78`, 400 B)
+
+```c
+int CSOUND_IF::Play(int ch, int vol, int pan, int loopFlag, uint8_t fadeId) {
+    Channel* c = channel[ch];
+    if (!enabled || !c || !c->loaded) return;
+    SetVolume(ch, vol);
+    if (this->type == 4) {
+        g_playCounter++;                                    // estatística de debug
+        int startState = (fadeId == 0xff) ? 1 : 0;             // *** sem fade = ataque imediato ***
+        c->fadeId = fadeId;
+        c->state = (fadeId == 0xff) ? 3 : 2;                    // 3=tocando direto, 2=tocando com fade pendente
+        CSOUND_IF_SL::Play(ch, vol, pan, loopFlag, startState);
+        c->packed_params[0x70..0x7b] = { vol, pan, loopFlag... };  // bytes salvos p/ FrameMove usar depois
+    }
+    memset(&c->fadeCurveState, 0, 28);     // *** zera o estado de curva de fade (28 B) antes de tocar ***
+}
+```
+
+### 16.4 `CSOUND_IF::FrameMove(int ch, float dt)` (`0xbac2c`, 332 B) — fecha o ciclo com o `CSTEP`
+
+```c
+void CSOUND_IF::FrameMove(int ch, float dt) {
+    Channel* c = channel[ch];
+    if (!enabled || !c || !c->loaded) return;
+
+    if (this->type == 4) CSOUND_IF_SL::FrameMove(ch, dt);   // avança o stream OpenSL de verdade
+
+    if (!(c->flags & 2)) {                 // sem fade pendente
+        if (!(c->flags & 1)) return;        // nem tocando -> nada a fazer
+    } else if (IsPlaying(ch, -1)) {          // tem fade pendente E ainda tocando
+        goto CHECK_FADE_FINISHED;
+    }
+
+    int before = CSTEP::GetData(step[ch]);
+    bool stepChanged = CSTEP::FrameMove(step[ch], dt, 0);   // *** avança a curva de fade ***
+    if (!stepChanged) {
+        c->flags &= ~1;                       // marca "não tocando mais" se a curva não setou o bit "ativo"
+        if (c->flags & 2) goto CHECK_FADE_FINISHED;
+        return;
+    }
+    int after = CSTEP::GetData(step[ch]);
+    if (after != before) SetVolume(ch, after);  // *** volume muda junto com a curva do CSTEP ***
+    return;
+
+CHECK_FADE_FINISHED:
+    if (CSTEP::GetData(step[ch]) != 0) return;   // curva ainda não chegou a zero
+    Unload(ch);                                    // *** fade terminou -> descarrega o canal sozinho ***
+}
+```
+
+**Confirma de ponta a ponta o mecanismo de fade:** o `CSTEP` por canal
+é uma curva de interpolação que o `FrameMove` avança a cada frame;
+quando o valor da curva muda, aplica `SetVolume`; quando a curva chega
+a zero (fade-out completo), o canal se **autodescarrega** sem
+intervenção externa. É uma arquitetura de fade bem mais sofisticada do
+que "diminuir volume manualmente" — reaproveita a mesma máquina de
+interpolação genérica usada em outros lugares do motor.
+
+### 16.5 Estado do motor de áudio
+4 funções do ciclo de vida de `CSOUND_IF` lidas por completo
+(`Init`/`Load`/`Play`/`FrameMove`). Confirma por instrução: alocação de
+um `CSTEP` por canal, despacho real para `CSOUND_IF_SL`
+(OpenSL ES, seção 13.2) por formato/tipo, e um mecanismo de fade de
+volume orientado a curva de interpolação. As ~130 funções restantes de
+`CSOUND_*` (incluindo toda a `CSOUND_IF_SL`/`CSOUND_LOADER_*`) seguem
+só no inventário por nome.
