@@ -187,9 +187,20 @@ continuam os mesmos:
   nome real (`0x565db8`, `0x3d21bc`). Os literais do motor de áudio
   (seções 13.6/17.6, `SL_IID_*`) e da seção 13.7 continuam abertos —
   não resolvidos nesta passada.
-- [ ] Varredura sistemática das ~46 funções `wld_*` restantes (depois
-  das 3 da seção 🟡 acima) — escala grande, só vale a pena se for meta
-  explícita de "fechar o motor `wld_*` por completo".
+- [ ] Varredura sistemática das funções `wld_*` restantes (depois das
+  3 da seção 🟡 acima) — **lista finita e bem definida** (seção 12.1
+  do `REVERSE_ENGINEERING_NOTES.md` já cataloga quais das 72 originais
+  faltam, por nome/categoria, seção 11.2). Não é trabalho sem fim —
+  é só grande; continuar função por função, maior-primeiro, dentro
+  deste mesmo item (sem precisar de uma "Fase 3"):
+  - [x] `wldrute_draw` (`0x267f3c`, 740 B) — ver seção 12.6. Desenha a
+    linha de rota caminhável do mapa mundi via GTE real (`RotTransSV`)
+    + quads semi-transparentes (`SetPolyFT4`/`GsSortPoly`), só pras
+    rotas com flag de evento ativa.
+  - [ ] `wldssd_control` (`0x26b378`, 620 B).
+  - [ ] Demais funções de "Desenho"/"Movimento/câmera"/"Persistência"
+    da tabela da seção 11.2 ainda sem leitura linha a linha (a maioria
+    pequena, <200 B).
 - [x] Binário x86 — primeira comparação feita, ver
   `REVERSE_ENGINEERING_NOTES.md` seção 31. `.dynsym` tem contagem de
   símbolos muito próxima da ARM (6530 vs 6636); `CCOMP_Z_DEC::Decode`

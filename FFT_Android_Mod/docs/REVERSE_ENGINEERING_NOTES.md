@@ -1400,9 +1400,60 @@ void wld_anim(ANMPAC* anim, GsOT* ot) {
 **O que ficou sem confirmar:** a decodificação bit a bit exata dos
 campos de transform empacotados no quadro-chave (escala/rotação
 específicas) — confirmado QUE existem e são decodificados, mas não a
-fórmula geométrica exata de cada bit. `wldrute_draw`/
-`wldssd_control` (as outras 2 funções sugeridas pelo plano) não
-lidas nesta passada.
+fórmula geométrica exata de cada bit.
+
+### 12.6 `wldrute_draw` lida por completo — continuação da varredura `wld_*` (2026-10-16, continuação)
+
+`wldrute_draw(GsOT* ot)` (`0x267f3c`, 740 B, cobertura total: 185
+instruções pra 185 esperadas). Resolvendo os `bl` por nome: mais um
+punhado de funções genuínas da biblioteca gráfica do PS1 —
+`SetPolyFT4`, `SetSemiTrans`, `GetClut`, `GsSortPoly`, `RotTransSV`
+(GTE) — além de `Wread_eventflag` (motor de eventos, seção 9.5/10) e
+`xpLibGetOffset` (camada de compatibilidade `xp*`).
+
+```c
+void wldrute_draw(GsOT* ot) {
+    if (!(g_someFlags & 0x20)) return;    // bit "rotas visíveis" (não cravado 100%)
+
+    POLY_FT4 poly = {};
+    SetPolyFT4(&poly);
+    SetSemiTrans(&poly, 1);                 // *** desenha semi-transparente ***
+    poly.tpage = GetTPage(...);
+    poly.clut  = GetClut(16, 0x1e8);
+    xpLibGetOffset(&offX, &offY);
+
+    for (int routeId = 0; routeId < 0x25c /* 604 */; routeId++) {
+        if (!Wread_eventflag(routeId)) continue;    // *** só desenha rotas cuja flag de evento está ativa ***
+
+        RouteTable* table = g_routeTables[routeId];     // tabela global, indexada por routeId
+        int segCount = table->count;
+        if (segCount <= 0) continue;
+
+        for (int seg = 0; seg < segCount; seg++) {
+            // lê a posição 3D do segmento, projeta pra tela via RotTransSV
+            // (GTE real), checa um limite de distância/clipping, e desenha
+            // o segmento como um quad via GsSortPoly(&poly, ot, 1) quando
+            // dentro do alcance de desenho
+            RotTransSV(&segment3D, &screenPos);
+            if (/* dentro do limite de clipping */)
+                GsSortPoly(&poly, ot, 1);
+        }
+    }
+}
+```
+
+**Confirma, com leitura real, que `wldrute_draw` é o desenho da linha
+de rota caminhável do mapa mundi**: itera até 604 rotas possíveis,
+só desenha as que têm a flag de evento (progresso de história) ativa,
+projeta cada segmento via GTE de verdade (`RotTransSV`), e desenha
+como quads semi-transparentes. Confirma de novo (seção 11.1 já tinha
+mostrado isso pra outras funções) que o motor `wld_*` roda sobre a
+emulação real da API gráfica do PS1, não uma reescrita.
+
+**O que ficou sem confirmar:** a fórmula exata de clipping/distância
+(as comparações contra `0xf2`/`0x150` em ponto fixo) e o papel exato
+do bit `0x20` do flags global. `wldssd_control` (outra função
+sugerida pelo plano) continua não lida.
 
 ## 13. Motores gráfico (`CEGL2_*`) e de áudio (`CSOUND_IF`) — ponte confirmada com a API real (2026-10-16)
 
