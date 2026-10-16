@@ -246,13 +246,16 @@ lida (mesmo padrão já aplicado a `CEGL2_IF`/`CSOUND_IF`). Quando isso
 for atingido, reavaliar se vale continuar para ⚪ por completo ou
 encerrar o loop.
 
-**Atingido em 2026-10-16 (iteração 18).** Todos os itens 🔴🟠🟡⚪ estão
+**Atingido em 2026-10-16 (iteração 19, depois de corrigir um item 🟠
+que tinha sido pulado por engano).** Todos os itens 🔴🟠🟡⚪ estão
 marcados `[x]`, cada um com pelo menos a função-central lida por
 completo e documentada em `AI_DIFFICULTY_RESEARCH.md`/
-`REVERSE_ENGINEERING_NOTES.md`. O que resta — ler as ~6600 funções
-restantes uma a uma, ou aprofundar qualquer item além da função-central
-já lida — é trabalho de escala muito maior, não uma "pendência", e
-cabe a quem continuar decidir se vale a pena por algum motivo
-específico (ex.: investigar um achado aberto citado em alguma seção
-dos dois documentos). O loop de continuação automática pode ser
-encerrado; não há mais um "próximo item não marcado" nesta lista.
+`REVERSE_ENGINEERING_NOTES.md`.
+
+**Continuação: `RE_BACKLOG_PLAN_PHASE2.md`.** O que resta — fechar as
+pontas concretas que cada seção já deixou "sem confirmar", terminar as
+classes que só tiveram uma função lida, e abrir os sistemas que a Fase
+1 nunca tocou (`CINPUT_DATA`, utilitários, binário x86) — está
+organizado nesse novo documento, com a mesma estrutura de prioridade e
+metodologia desta Fase 1. O loop de continuação automática deve
+apontar pra lá a partir de agora.
