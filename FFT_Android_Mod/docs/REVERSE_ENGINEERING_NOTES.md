@@ -1902,6 +1902,75 @@ gatilho do "2º quad"/2ª textura) — confirma que o suporte a
 multi-textura é uma capacidade real do shader genérico, não um
 mecanismo isolado do `DrawScrollBG`.
 
+### 13.11 `CEGL2_TEX_HYBRID::GL_IsUpdate` lida por completo — quarto item 🟠 da Fase 2, e uma 4ª ocorrência do padrão "laço infinito" (2026-10-16, Fase 2, iteração 9)
+
+`CEGL2_TEX_HYBRID::GL_IsUpdate(uint, int*, _RECT_S32*)` (`0xaf120`,
+684 B, cobertura total: 171 instruções pra 171 esperadas). É, na
+prática, **o cache de slots de textura** desse sistema — fecha a
+família iniciada por `DecodeTexture` (seção 13.7): decide ONDE
+(em qual dos 64 slots) uma textura decodificada deve ir, e se o slot
+escolhido já tem o conteúdo certo ou precisa de upload de novo.
+
+```c
+// GL_IsUpdate(this, uint fileID, int* outSlot, _RECT_S32* rect)
+// retorna true = "precisa atualizar/subir de novo"; false = "já está certo"
+bool CEGL2_TEX_HYBRID::GL_IsUpdate(CEGL2_TEX_HYBRID* this, uint fileID,
+                                     int* outSlot, _RECT_S32* rect) {
+    Slot* slots = (Slot*)this;    // array fixo de 64 slots, stride 0x88 B
+
+    if (!rect) {
+        // modo simples: só confere o ID do arquivo
+        for (i = 0; i < 64; i++)
+            if (slots[i].fileID == fileID) { *outSlot = i; return false; }
+        goto FIND_REUSABLE_SLOT;     // ver abaixo — mesmos 3 níveis, sem checar x/y/tamanho
+    }
+
+    // modo com rect: só considera "já certo" se arquivo E os 4 campos
+    // do retângulo (x/y/w/h, campos +0x604/+0x608/+0x60c/+0x610) baterem
+    for (i = 0; i < 64; i++)
+        if (slots[i].fileID == fileID && slots[i].rect == *rect) { *outSlot = i; return false; }
+
+FIND_REUSABLE_SLOT:
+    // *** 3 níveis de fallback, cada um menos exigente que o anterior ***
+    for (i = 0; i < 64; i++)                                           // nível 1
+        if (slots[i].field_0x6c == -1 && slots[i].GetTextureHandle()      // 0xacebc
+            && slots[i].field_0x78 == rect->x && slots[i].field_0x7c == rect->y
+            && (int)slots[i].GetTextureSize() == {rect->w, rect->h}) {    // 0xacec4 + f2i (0x2cb92c)
+            *outSlot = i; return true;    // posição/tamanho compatíveis -> reusa, mas precisa atualizar
+        }
+    for (i = 0; i < 64; i++)                                           // nível 2
+        if (slots[i].field_0x6c == -1 && slots[i].GetTextureHandle()) {
+            *outSlot = i; return true;      // qualquer slot "livre" com handle válido
+        }
+    for (i = 0; i < 64; i++)                                           // nível 3
+        if (slots[i].GetTextureHandle()) {
+            *outSlot = i; return true;        // qualquer slot com handle válido, NEM checa "livre"
+        }
+    for (;;) {}    // *** nenhum slot disponível -- trava pra sempre ***
+}
+```
+
+**Achados:**
+- Confirma o mecanismo real de **cache/alocador de slots de
+  textura**: 64 slots fixos, 3 níveis de fallback progressivamente
+  menos exigentes (livre+tamanho-compatível → livre+qualquer-tamanho
+  → nem-livre-mas-com-handle-válido) antes de desistir.
+- **4ª ocorrência do padrão "condição impossível = laço infinito de
+  1 instrução"** nesta investigação (depois de `CEGL2_SHADER::Load`
+  seção 13.6, `CEGL2_TEX_HYBRID::DecodeTexture` seção 13.7, e agora
+  aqui) — se os 64 slots estiverem todos sem handle de textura válido
+  (cache nunca inicializado), a função trava pra sempre em vez de
+  devolver um erro. Confirma de vez que isso é uma convenção real do
+  código desta engine, não coincidência.
+- O caminho "sem `rect`" (`rect==NULL`) cai nos MESMOS 3 níveis de
+  fallback dos campos `+0x78`/`+0x7c` ignorados — ou seja, a lógica de
+  "achar um slot pra reusar" é compartilhada entre os dois modos,
+  só o critério de "já está certo" (nível 0, antes do fallback) muda.
+
+**O que ficou sem confirmar:** `GL_Load` (`0xaf818`, 392 B, par desta
+função — presumivelmente quem realmente faz o upload pro slot
+escolhido aqui) não lida nesta passada.
+
 ## 14. `DrawTile4` e `Add3D` lidas por completo — e um bônus: resolvidos vários mistérios de PLT antigos (2026-10-16)
 
 Continuação pedida explicitamente: as duas maiores funções do `CEGL2_IF`

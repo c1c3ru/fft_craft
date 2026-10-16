@@ -107,9 +107,12 @@ continuam os mesmos:
   seções 13.1/14); `SetTexture` confirma suporte real a 2 texturas
   simultâneas por shader (bate com `GetMultiTextureHandle` da seção
   13.4).
-- [ ] `CEGL2_TEX_HYBRID::GL_IsUpdate` (`0xaf120`, 684 B) e `GL_Load`
-  (`0xaf818`, 392 B) — fecham a família iniciada por `DecodeTexture`
-  (seção 13.7): como a textura decodificada chega até o GL de verdade.
+- [x] `CEGL2_TEX_HYBRID::GL_IsUpdate` (`0xaf120`, 684 B) — lida por
+  completo, ver `REVERSE_ENGINEERING_NOTES.md` seção 13.11. Confirma
+  o cache/alocador de slots de textura (64 slots, 3 níveis de
+  fallback). **4ª ocorrência do padrão "condição impossível = laço
+  infinito"** nesta investigação. `GL_Load` (`0xaf818`, 392 B)
+  continua não lida.
 - [ ] `CSOUND_IF_SL::Stream_Load(int)` (`0xbc5a4`, 216 B) — par de
   `Stream_CreatePlayer` (seção 17.6), ainda não lido.
 - [ ] `CSOUND_LOADER_OGG::Open` (`0xbd56c`, 460 B) e
