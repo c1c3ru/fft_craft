@@ -1656,6 +1656,98 @@ Retorna `1` (precisa recentralizar) ou `0` (está dentro da margem).
 usados como limiar — prováveis dimensões de viewport/mapa, papel
 não cravado byte a byte.
 
+### 12.10 `wldday_put` lida por completo — maior função "Desenho" ainda sem leitura linha a linha (2026-10-16, Fase 2, continuação)
+
+`wldday_put(GsOT* ot)` (`0x266c84`, 372 B, cobertura total: 60
+instruções pra 60 esperadas + pool de literais de 4 words) — a maior
+função não lida da categoria "Desenho" da tabela da seção 11.2.
+Resolvendo os `bl` por nome: **`fadeanb_calc`** (`0x25e160`, já
+confirmada na seção 12.4), **`wld_anim`** (`0x2660b8`, já lida por
+completo na seção 12.5), e duas funções nunca tocadas antes —
+**`Wread_eventflag(int)`** (`0x103400`) e
+**`sun_to_ivarisday(int*, int*)`** (`0x25e310`, demangle confirmado
+via `.dynsym`).
+
+```c
+void wldday_put(GsOT* ot) {
+    if (!(*g_panelVisFlag & 0x1000)) return;        // bit "painel escondido" (global diferente do 0x800 da seção 12.4)
+
+    Color faded;
+    fadeanb_calc(&g_dayPanelColor, &faded);           // mesmo efeito de "pulsar" do HUD (seção 12.4/12.5)
+
+    int x = g_dayAnchorPos->x;                          // struct global de 2 words (posição-base do widget)
+    int y = g_dayAnchorPos->y - 2;
+
+    int a = Wread_eventflag(46);
+    int b = Wread_eventflag(47);
+    sun_to_ivarisday(&a, &b);                           // converte os 2 flags em (?, dia a exibir) — corpo não lido
+
+    ANMPAC digit = { .flags = 1, .priority = 4, .seqIndex = 0x1000,
+                      /* +0x10/+0x14 também = 0x1000 */ .x = x, .y = y };
+
+    if (b <= 9) {
+        digit.animID = b + 0x2c;         // dígito único (0–9)
+        wld_anim(&digit, ot);
+        digit.x += 0xa;
+        digit.animID = a + 0x1f;          // ícone/glifo fixo após o número
+        wld_anim(&digit, ot);
+        return;
+    }
+    // dois dígitos: desenha a dezena primeiro
+    digit.animID = (b / 10) + 0x2c;      // divisão real via constante mágica 0x66666667
+    wld_anim(&digit, ot);
+    digit.x += 8;
+    digit.animID = (b % 10) + 0x2c;      // unidade
+    wld_anim(&digit, ot);
+    digit.x += 0xa;
+    digit.animID = a + 0x1f;              // mesmo ícone fixo final
+    wld_anim(&digit, ot);
+}
+```
+
+**Achados:**
+- **Confirma um segundo chamador real de `wld_anim`** (seção 12.5)
+  fora do sistema de personagens do mapa mundi: cada dígito (0–9) e um
+  ícone/glifo final são montados como um `ANMPAC` temporário na pilha
+  e desenhados pelo mesmo "tocador" de animação genérico — o
+  `animID` escolhido é literalmente `dígito + 0x2c`, ou seja, existem
+  entradas de tabela de animação dedicadas a cada dígito (0x2c–0x35) e
+  pelo menos mais uma (`a + 0x1f`) pro glifo fixo.
+- A divisão por 10 usa a mesma constante mágica clássica
+  (`0x66666667`, multiplicação de 64 bits + shift) que a seção 10 já
+  tinha visto em contexto de bytecode — aqui é só aritmética de
+  compilador pra `/10`/`%10`, não um opcode de VM.
+- **Achado novo, nunca tocado antes:** `Wread_eventflag(int)`
+  (`0x103400`) é chamada com os índices **46** e **47**, e o par de
+  resultados passa por `sun_to_ivarisday(int*, int*)` (`0x25e310`)
+  antes de qualquer dígito ser desenhado. Ou seja, **o valor exibido
+  por este widget não vem direto do contador de dias do
+  `wldday_countup` (seção 12.2)** — vem de dois flags de evento
+  convertidos por uma função dedicada. Como `sun_to_ivarisday` tem
+  nome claramente ligado a calendário ("dia"), a hipótese mais provável
+  é que este widget mostra uma **data/dia específico de um evento de
+  história** (gatilhado pelos flags 46/47), não o relógio genérico do
+  mapa mundi — mas isso não está cravado, porque nem `Wread_eventflag`
+  nem `sun_to_ivarisday` foram lidos por dentro.
+- O painel usa um bit de visibilidade diferente (`0x1000`) do painel
+  de Gil (`0x800`, seção 12.4) — confirma que cada widget de HUD tem
+  seu próprio bit de controle na mesma palavra de flags globais (ou em
+  globais vizinhos), não um único "esconder tudo".
+
+**O que ficou sem confirmar (escalonado, não forçado):**
+- O corpo de `Wread_eventflag`/`sun_to_ivarisday` — logo, a semântica
+  exata de "o que são os flags 46/47" e "o que exatamente `a` (o
+  glifo final) representa" ficam como hipótese, não fato.
+- Os três campos do `ANMPAC` temporário todos setados pro mesmo valor
+  `0x1000` (reaproveitamento de registrador `r4` que também guarda o
+  bit de visibilidade testado no início) — pode ser coincidência de
+  geração de código ou um sentinela deliberado; não investigado mais a
+  fundo.
+- Os dois globais resolvidos só por offset de GOT (posição-base do
+  widget e cor-base do painel) não têm nome — mesma honestidade já
+  praticada nas seções anteriores quando o `.dynsym` não cobre dados,
+  só funções.
+
 ## 13. Motores gráfico (`CEGL2_*`) e de áudio (`CSOUND_IF`) — ponte confirmada com a API real (2026-10-16)
 
 Continuação direta: os dois últimos motores sem nenhum código lido.
