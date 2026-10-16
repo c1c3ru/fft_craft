@@ -197,7 +197,11 @@ continuam os mesmos:
     linha de rota caminhável do mapa mundi via GTE real (`RotTransSV`)
     + quads semi-transparentes (`SetPolyFT4`/`GsSortPoly`), só pras
     rotas com flag de evento ativa.
-  - [ ] `wldssd_control` (`0x26b378`, 620 B).
+  - [x] `wldssd_control` (`0x26b378`, 620 B) — ver seção 12.7.
+    **Correção da seção 11.2**: não é widget de UI ("SSD" ficava sem
+    identificação), é a máquina de estados de 18 estados que controla
+    a música de fundo do mapa mundi, com fila de comandos de troca de
+    faixa e fade-in/fade-out reais.
   - [ ] Demais funções de "Desenho"/"Movimento/câmera"/"Persistência"
     da tabela da seção 11.2 ainda sem leitura linha a linha (a maioria
     pequena, <200 B).

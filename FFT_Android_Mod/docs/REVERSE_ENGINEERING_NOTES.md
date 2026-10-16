@@ -1452,8 +1452,111 @@ emulação real da API gráfica do PS1, não uma reescrita.
 
 **O que ficou sem confirmar:** a fórmula exata de clipping/distância
 (as comparações contra `0xf2`/`0x150` em ponto fixo) e o papel exato
-do bit `0x20` do flags global. `wldssd_control` (outra função
-sugerida pelo plano) continua não lida.
+do bit `0x20` do flags global.
+
+### 12.7 `wldssd_control` lida por completo — correção: não é widget de UI, é música (2026-10-16, continuação)
+
+`wldssd_control()` (`0x26b378`, 620 B, cobertura total: 153
+instruções reais + pool de literais). A seção 11.2 catalogava essa
+função como "widget 'SSD', acrônimo não identificado" — **corrigido
+agora**: resolvendo os `bl` por nome, aparecem só funções de música
+(`loadMusicBuffer`, `disposeMusic`, `activateMusic`, `inactivateMusic`,
+`fadeMusic`). "SSD" é quase certamente "Sound/Stream Sequence Data"
+ou similar — **é a máquina de estados que controla a música de fundo
+do mapa mundi**, não um widget visual.
+
+```c
+void wldssd_control() {
+    MusicCtl* g = *g_musicCtl;   // global, via GOT
+
+    switch (g->state /*+0x80*/) {   // tabela de salto, 18 estados + default
+    default:                          // volta pro "idle"
+        g->state = 0; goto TOP;
+
+    case 1:   // fade de saída concluído -> libera o buffer
+        int ch = g->fadeOutDuration ?: g->currentChannel;   // +0x84 / +0x98
+        disposeMusic(ch);
+        if (g->currentChannel == ch) g->playingFlags &= ~1;   // +0x8c
+        g->channelSlot[ch] = 0;                                  // +0x23+ch, array por canal
+        goto TOP;
+
+    case 2:   // contagem decrescente de fade-in
+        if (--g->fadeCounter != 0) return;     // +0x84
+        g->playingFlags |= 1; g->state = 0;       // +0x8c
+        goto TOP;
+
+    case 3:   // contagem decrescente de fade-out
+        if (--g->fadeCounter != 0) return;
+        g->playingFlags &= ~1;
+        inactivateMusic();                          // *** desativa a música de verdade ***
+        g->state = 0;
+        goto TOP;
+
+    case 17:  // espera uma flag externa (motor de áudio ocupado?) antes de continuar
+        if (g_someAudioBusy->field_0x4 != 0) return;
+        goto TOP;
+
+    case 4:   // inicia fade-in de verdade
+        activateMusic(g->currentChannel, 0, 0);
+        fadeMusic(g->fadeTargetVolume, g->fadeCounter * 4);   // *** fade real, duração = contador×4 ***
+        g->state = 0x12;   // vai pro estado 18 (laço de fila)
+        return;
+
+    case 5:   // inicia fade-out de verdade
+        if (!(g->playingFlags & 1)) goto TOP;
+        fadeMusic(0, g->fadeCounter * 4);
+        g->state = 0x11;    // vai pro estado 17 (espera externa)
+        return;
+
+    case 0 (via tabela, entrada 2): // *** processa um pedido de troca de música ***
+        if (g_someAudioBusy->field_0x4 != 0) return;
+        int reqChannel = (g->pendingRequest >> 8) & 0xf;
+        int reqTrack   = g->pendingRequest & 0xff;
+        int loaded = g->channelSlot[reqChannel];
+        if (loaded == reqTrack) {
+            activateMusic(reqChannel, reqTrack, reqTrack);   // já carregada -> só reconfigura
+            g->currentChannel = reqChannel; g->state = reqTrack;
+        } else {
+            if (loaded != 0) disposeMusic(loaded);              // libera a anterior desse canal
+            int ok = loadMusicBuffer(reqTrack, reqChannel);        // *** carrega a nova faixa ***
+            if (ok) {
+                g->channelSlot2[reqChannel] = reqTrack;
+                g->currentChannel = reqChannel; g->state = 0x10;      // vai pro estado 16
+            } else g->state = 0;
+        }
+        return;
+
+    case 18 (0x12, via tabela, entrada 1): // *** laço da FILA de comandos pendentes ***
+        int n = g->queueCount;    // +0x88
+        if (n == 0) return;
+        g->fadeCounter = g->queue[0].a;    // +0x40
+        g->state       = g->queue[0].b;     // +0x0
+        if (--n > 0)
+            memmove-shift(g->queue, 1, n);    // desloca a fila 1 posição (consome o comando processado)
+        g->queueCount = n;
+        goto TOP;   // reprocessa o switch com o novo estado já carregado
+    }
+}
+```
+
+**Achados:**
+- **Corrige a categorização da seção 11.2**: `wldssd_control` é um
+  controlador de música, não um widget de interface. Confirma, junto
+  com `wldmusic_change` (já citada, mas não lida), que existe um
+  sistema real de **fila de comandos de música** — pedidos de troca
+  de faixa são enfileirados e processados um por tick da máquina de
+  estados, com fade-in/fade-out reais via `fadeMusic`/
+  `activateMusic`/`inactivateMusic`.
+- 18 estados numerados confirmam uma máquina de estados genuína (não
+  um conjunto de flags soltas) — states 1-5 cobrem o ciclo completo
+  "liberar buffer antigo → contar fade → ativar/desativar", states
+  16-18 cobrem "carregar nova faixa → esperar o motor de áudio →
+  consumir a fila".
+
+**O que ficou sem confirmar:** o papel exato de cada campo do
+`MusicCtl` global (nomes de campo são hipóteses baseadas no uso, não
+cravados), e a identidade do "something busy" global checado nos
+estados 17 e na troca de faixa.
 
 ## 13. Motores gráfico (`CEGL2_*`) e de áudio (`CSOUND_IF`) — ponte confirmada com a API real (2026-10-16)
 
