@@ -2138,3 +2138,87 @@ Com esta função, **todos os 4 itens de prioridade alta do
 loop passa agora para a prioridade 🟠 (parsers/motores já começados:
 `TIM_LoadMemory`, `CG2D_LOADER_TIM::Load`, opcodes de áudio do motor
 de eventos, e as ~50 funções pequenas restantes de `wld_*`).
+
+## 23. `MakeMapDanger()` lida por completo — fecha o item pendente da seção 18, primeiro item da Fase 2 (2026-10-16, Fase 2, iteração 1)
+
+A seção 18 tinha deixado pendente o corpo de `MakeMapDanger()`
+(chamada pela fase 1 interna de `BattleRoutine`). Lida agora por
+completo: `MakeMapDanger()` (`0x27b0b0`, 400 B, cobertura total: 98
+instruções reais pra 98 esperadas).
+
+### 23.1 Fase 1 da função: fecha "quem escreve" o array de alvos marcados #1
+
+```c
+void MakeMapDanger_Phase1() {
+    for (int idx = 0; idx < 21; idx++) {
+        g->b[0xc8d + idx] = 0;                       // zera o slot
+        if (IsAlmostNullUnit(idx)) continue;           // 0x273cc8 — unidade quase morta, ignora
+        if (!IsNeedlessToFear(idx))                      // 0x27afdc — "não há nada a temer"?
+            g->b[0xc8d + idx] = 1;                         // marca como "ameaça real"
+    }
+}
+```
+
+**Achado que fecha um buraco antigo**: o array `g->b[0xc8d..0xca1]`
+(21 bytes) — já usado como "array de alvo marcado #1" por
+`GetDestinationsAndMakeMaskTG`/seção 21 e por outras funções, mas
+nunca com a escrita confirmada — **é escrito exatamente aqui**: marca
+como "1" cada unidade que não está quase morta E que não é
+"dispensável de temer" (ou seja, uma ameaça real). `IsAlmostNullUnit`/
+`IsNeedlessToFear` não foram lidas por dentro, mas os nomes já
+confirmam o papel com alta confiança.
+
+### 23.2 Fase 2 da função: o "mapa de perigo" real — distância Manhattan com raio 10
+
+```c
+void MakeMapDanger_Phase2() {
+    int16_t gMapY = g->b[0xe3b], gMapX = g->b[0xe3a];     // seção 9.5
+    for (int pass = 0; pass < 2; pass++) {                  // sp8 = 0, depois 0x24 — 2 passadas
+        uint8_t* dangerBase = (uint8_t*)g + pass*8;            // ver 23.3, endereçamento não 100% resolvido
+        uint16_t* rowMaskPtr = (uint16_t*)((uint8_t*)g + 0xa72 + pass);
+        for (int row = 0; row < gMapY; row++) {
+            uint16_t rowMask = *++rowMaskPtr;                   // tabela em g+0xa70, mesma região da seção 21
+            if (rowMask == 0 || gMapX == 0) continue;
+            for (int col = 0; col < gMapX; col++) {
+                if (!(rowMask << col & 0x8000)) continue;          // só colunas com bit setado na máscara da linha
+                dangerBase[col + 0x174] = 0;                        // zera antes de acumular
+                for (int k = 0; k < 21; k++) {                       // mesmo array de "ameaça real" da fase 1!
+                    if (!g->b[0xc8d + k]) continue;
+                    int dx = abs(bwork[k].b[0x4f] - col);              // posição real da unidade (campos
+                    int dz = abs(bwork[k].b[0x50] - row);               // já confirmados em todo o resto do doc)
+                    int dist = dx + dz;                                  // distância Manhattan
+                    if (dist <= 10)
+                        dangerBase[col + 0x174] += (10 - dist);            // *** contribuição de perigo ***
+                }
+            }
+        }
+    }
+}
+```
+
+**Confirma o mecanismo real do "mapa de perigo" da IA**: cada unidade
+marcada como ameaça real (fase 1) contribui com perigo pra cada
+painel dentro de um raio de **10 (distância Manhattan)**, com a
+contribuição caindo linearmente (`10 - distância`) conforme a
+distância aumenta — exatamente o "mapa de calor de ameaça" clássico
+que uma IA de tática usa pra decidir painéis seguros de recuo/avanço.
+Confirma de novo o stride real de `bwork[]` (`0x1e6`) e os campos de
+posição `b[0x4f]`/`b[0x50]` (já usados em toda a investigação).
+
+### 23.3 O que ficou sem confirmar
+
+- **O endereçamento 2D exato do acumulador de perigo (`+0x174`)**: a
+  posição de escrita (`dangerBase + col`) depende da coluna e da
+  passada (`pass`, só 2 valores: `0`/`0x24`), mas **não da linha
+  (`row`)** dentro do loop — ou seja, cada coluna acumula
+  contribuições de TODAS as linhas onde o bit da máscara daquela
+  linha está setado, não um grid 2D completo linha×coluna. Não ficou
+  claro se isso é intencional (o "perigo" é por coluna, não por
+  painel completo) ou se há uma indireção que não enxerguei. Marcado
+  como ambíguo em vez de forçar uma leitura — exatamente o caso que a
+  metodologia do plano pede pra escalonar, não inventar.
+- `IsAlmostNullUnit`/`IsNeedlessToFear` não lidas por dentro — nomes
+  dão confiança alta no papel, mas não confirmado por instrução real.
+- Quem **consome** o mapa de perigo em `g+0x174` depois de calculado
+  (provavelmente a função de decisão de movimento da IA, não
+  localizada nesta passada).

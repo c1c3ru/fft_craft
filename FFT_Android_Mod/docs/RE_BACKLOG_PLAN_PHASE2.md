@@ -40,9 +40,15 @@ continuam os mesmos:
 
 ## 🔴 Prioridade alta — fecha pontas concretas já identificadas nas seções existentes
 
-- [ ] `MakeMapDanger()` (chamada por `BattleRoutine` fase 1, seção 18
-  do `AI_DIFFICULTY_RESEARCH.md` — endereço `0x27b0b0`, corpo nunca
-  lido). Fecha o único sub-item pendente da seção 18.
+- [x] `MakeMapDanger()` (`0x27b0b0`, 400 B) — lida por completo, ver
+  `AI_DIFFICULTY_RESEARCH.md` seção 23. Fecha o sub-item pendente da
+  seção 18. Achado maior: confirma quem escreve o array de "ameaça
+  real" `g->b[0xc8d..0xca1]` (fase 1) e o mecanismo do mapa de perigo
+  — contribuição de perigo por distância Manhattan, raio 10,
+  `10-distância`, somada por painel a partir de cada unidade
+  marcada como ameaça (fase 2). Endereçamento 2D exato do acumulador
+  (`g+0x174`) ficou ambíguo — escalonado, não forçado (ver seção
+  23.3).
 - [ ] Quem lê `g+0x5e0` (tabela de "painel ocupado por outra unidade",
   escrita por `GetDestinationsAndMakeMaskTG`, seção 21 do
   `AI_DIFFICULTY_RESEARCH.md`, mas nunca lida de volta na própria
