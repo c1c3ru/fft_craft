@@ -174,10 +174,16 @@ documentado. Os dois documentos de resultado são:
 Cada um destes é, pelo tamanho, comparável ao que já foi investigado
 nas seções anteriores — não são "pendência pequena":
 
-- [ ] Compressão (`CCOMP_Z_DEC`/`CCOMP_Z_ENC`, 7+7 métodos) — provável
-  relação com o formato do `fftpack.bin`/`.obb` (seção 7 do
-  `REVERSE_ENGINEERING_NOTES.md` já documentou que o `.obb` é lido sem
-  decriptação, mas não investigou compressão).
+- [x] Compressão — função-central (`CCOMP_Z_DEC::Decode`, `0xb6204`,
+  412 B) lida por completo, ver `REVERSE_ENGINEERING_NOTES.md` seção
+  18. **Confirma a hipótese**: `fftpack.bin`/`.obb` usam DEFLATE/zlib
+  real (`inflateInit_`/`inflate`/`inflateEnd`/`inflateSync`
+  resolvidos por nome real), não formato proprietário. Achado bônus:
+  recuperação de stream corrompido via `inflateSync` — resiliência
+  deliberada. Formato de chunk descoberto: flag de "comprimido" no
+  bit 1 de um campo; chunks sem a flag são só `memcpy`.
+  `CCOMP_Z_ENC::Encode` não lida (só interessa pra recomprimir, não
+  pra entender o jogo).
 - [ ] Sistema de save (`pspSaveBase`/`pspSaveList`/`pspSaveAuto`/
   `cSaveFFT`/`CAUTOSAVE`, ~35+6+5+12+8 métodos).
 - [ ] Input touch (`CINPUT_IF_TOUCH`/`CINPUT_DATA`, 60+35 métodos).

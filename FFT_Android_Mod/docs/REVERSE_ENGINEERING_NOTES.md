@@ -2211,3 +2211,91 @@ jogo).
 
 **Fecha o último item 🟡 do plano** — todos os itens 🟡 agora têm pelo
 menos a função-central lida por completo.
+
+## 18. `CCOMP_Z_DEC::Decode` lida por completo — primeiro item ⚪, e confirma a biblioteca real de compressão (2026-10-16, loop de continuação, iteração 14)
+
+Primeiro item da camada ⚪ (sistemas nunca tocados). `CCOMP_Z_DEC::Decode(uchar*
+dst, ChunkDesc* src, int totalAvail)` (`0xb6204`, 412 B, cobertura
+total: 99 instruções reais + pool de literais). **Mesmo padrão de
+achado das seções 17.6/17.7**: resolvendo os `bl` por nome real no
+`.dynsym` antes de ler o corpo, aparecem `inflateInit_` (`0x7b180`),
+`inflate` (`0x7b200`), `inflateEnd` (`0x7cbfc`) e `inflateSync`
+(`0x7cdd8`) — **a API real da zlib**, confirmando de uma vez a
+hipótese do plano: a compressão do `fftpack.bin`/`.obb` é **DEFLATE
+padrão (zlib)**, não um formato proprietário.
+
+```c
+// CCOMP_Z_DEC::Decode(this, uchar* dst, ChunkDesc* src, int totalAvail)
+// ChunkDesc = { _pad0, uint32 flags /*+4, bit1=comprimido*/, uint32 size /*+8*/,
+//               _pad0xc, uchar* data /*+0x10*/ }
+int CCOMP_Z_DEC::Decode(CCOMP_Z_DEC* this, uchar* dst, ChunkDesc* src, int totalAvail) {
+    if (!(src->flags & 2)) {                 // *** atalho: chunk NÃO comprimido ***
+        memcpy(dst, src->data, src->size);     // simples passthrough, zlib nunca entra em cena
+        return src->size;
+    }
+
+    // z_stream (56 B = sizeof(z_stream) real, this->+0 em diante) zerado
+    // nos campos de callback (zalloc/zfree/opaque) e next_in/avail_in
+    if (inflateInit_(this, ZLIB_VERSION, sizeof(z_stream)) != 0) {
+        Error(this, "..."); return -1;
+    }
+    this->next_out  = dst;
+    this->avail_out = this->field_0x3c;    // tamanho de bloco configurável (ver `SetBlockSize`)
+    int decoded = 0;
+
+    for (;;) {
+        if (this->avail_in == 0) {                    // precisa de mais dado de entrada
+            // avança next_in/avail_in dentro de src->data, recortado
+            // pelo limite real (`totalAvail - 0x10`, o tamanho do
+            // header do chunk) — não deixa ler além do buffer de origem
+            ...
+        }
+        int r = inflate(this, Z_NO_FLUSH);
+        if (r == Z_STREAM_END) break;                   // terminou
+        if (r == Z_DATA_ERROR) {
+            if (inflateSync(this) != 0) goto FAIL;        // *** recuperação de stream corrompido ***
+            continue;                                     // resincronizou -> continua decodificando
+        }
+        if (r != Z_OK) goto FAIL;
+
+        if (this->avail_out == 0) {                      // bloco de saída cheio
+            decoded += this->field_0x3c;
+            this->next_out  = dst + decoded;                // próximo bloco de saída
+            this->avail_out = this->field_0x3c;
+        }
+    }
+    decoded += this->field_0x3c - this->avail_out;         // soma o resto do último bloco, parcial
+    if (inflateEnd(this) != 0) goto FAIL;
+    return decoded;
+
+FAIL:
+    Error(this, "..."); inflateEnd(this); return -1;
+}
+```
+
+**Achados:**
+- Confirma a hipótese do plano: `fftpack.bin`/pacotes do `.obb` usam
+  DEFLATE/zlib real — não decriptação (já estabelecido na seção 7) e
+  agora também não um formato de compressão proprietário.
+- Formato de chunk descoberto por leitura real: um `ChunkDesc` com
+  flag de "comprimido" no bit 1 do campo `+4` — chunks SEM essa flag
+  são copiados direto (`memcpy`), sem gastar ciclos de zlib. Explica
+  por que um pacote de assets pode misturar dados comprimidos e não
+  comprimidos no mesmo arquivo.
+- **Achado mais interessante**: em caso de `Z_DATA_ERROR` (stream
+  corrompido), o código **não falha imediatamente** — chama
+  `inflateSync` pra tentar reencontrar um ponto de sincronização
+  válido no meio do stream e **continuar decodificando a partir
+  daí**. Isso é uma escolha deliberada de resiliência, consistente
+  com a seção 7 (`.obb` com mismatch de versão corrigido manualmente
+  por esta investigação) — o código já esperava lidar com pacotes
+  possivelmente alterados/incompletos.
+
+**O que ficou sem confirmar:** o layout exato de `ChunkDesc` fora dos
+3 campos usados (`+4`/`+8`/`+0x10`), e o valor exato de
+`this->field_0x3c` (tamanho de bloco) — sabido que existe e que vem de
+`SetBlockSize`, mas não lido por dentro. `CCOMP_Z_ENC::Encode`
+(contraparte de compressão) não lida nesta passada — dado que
+`Decode` já confirma a biblioteca e o formato de chunk, `Encode`
+provavelmente só interessa pra quem for RECOMPRIMIR assets
+modificados, não pra entender o jogo em si.
