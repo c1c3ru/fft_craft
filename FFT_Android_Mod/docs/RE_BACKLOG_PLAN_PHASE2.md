@@ -1,5 +1,13 @@
 # Plano de ação — Fase 2 da engenharia reversa do `libgl2jni.so`
 
+> **Nota (2026-10-16): a meta mudou.** A partir desta data, o loop
+> passa a seguir `RE_BACKLOG_PLAN_PHASE3.md` — a meta agora é 100% de
+> cobertura do binário (6.455 funções, só 1,19% lidas de verdade até
+> aqui), não mais o critério modesto deste documento. Este plano
+> continua sendo fechado em paralelo (a varredura `wld_*` da seção
+> ⚪ segue valendo), mas quem decide a PRÓXIMA função do loop a partir
+> de agora é o `RE_FUNCTION_INVENTORY.csv` da Fase 3.
+
 A Fase 1 (`RE_BACKLOG_PLAN.md`) está **zerada**: todos os itens
 🔴🟠🟡⚪ têm pelo menos a função-central lida por completo. Mas
 "zerado" ali significava algo deliberadamente modesto — cada item 🟡/⚪
