@@ -1786,3 +1786,109 @@ na seção 6.4/6.5 original (bônus elemental 51→102).
 - O caminho "categoria especial `ability->b[0xa]==6`" (linha ~0x276150)
   — lido, mas o papel de negócio exato (por que só um alvo específico
   entre vários é processado) não ficou claro além do mecanismo.
+
+## 20. `GetTargetBaseArea` — achado principal: fecha de vez o item original "tabela de 27 formatos de AoE" (2026-10-16, loop de continuação, iteração 3)
+
+Terceiro item do plano. **Esta é a função certa que a seção 15 já tinha
+apontado como candidata** para a geometria espacial real de área de
+efeito — lida por completo (161 instruções, nenhuma chamada — função
+folha).
+
+### 20.1 `GetTargetBaseArea(int mode, int unused)` (`0x276930`, 644 B)
+
+```c
+int GetTargetBaseArea(int mode, int unused) {
+    int areaVal;
+    switch (mode) {
+        case 0: areaVal = g->b[4]; break;            // "alcance" puro
+        case 1: areaVal = g->b[5]; break;             // "área" pura
+        case 2: areaVal = g->b[4] + g->b[5]; break;    // alcance+área combinados
+        default: areaVal = <indefinido>;
+    }
+
+    memset16(&g->b[0xb4a], -1, <tamanho variável>);     // limpa a máscara anterior em g+0xb40
+
+    if (areaVal < 0) goto CLIP;                          // sem área -> não preenche nada
+
+    int originY = g->b[0xc74], originZ = g->b[0xc76];     // origem vertical/altura do efeito
+    int16_t* shapeRow = &area_data[areaVal * 2];           // *** area_data[8] — a tabela real ***
+    int shift = abs(originY - 7);
+    for (row = originZ; row > -2; row--, shapeRow--) {       // percorre as linhas verticais do efeito
+        uint16_t pattern = *shapeRow;
+        pattern = (originY > 7) ? (pattern >> shift) : (pattern << shift);  // compensa diferença de altura
+        g->h[0xb40/2 + row + 6] = pattern;                     // grava a máscara da linha (g+0xb40, 16 bits/linha)
+    }
+
+CLIP:
+    if ((g->b[0xf] & 0x20) && g->b[0xe3b] != 0) {           // gMapY != 0 (seção 9.5)
+        int mapX = g->b[0xe3a];                                // gMapX (seção 9.5)
+        for (row = 0; row < originZ; row++) {
+            uint16_t* maskRow = &g->h[0xb40/2 + row];
+            if (*maskRow != 0 && mapX != 0 && row != originY) {
+                for (col = 0; col < mapX; col++)
+                    *maskRow ^= (0x8000 >> col);                 // zera bits fora da largura real do mapa
+            }
+        }
+    }
+
+    MemCpyW(&g->b[0xb70], &g->b[0xb70 - 0x24], 0x24);          // copia a tabela final pra um 2º buffer
+}
+```
+
+### 20.2 O achado que fecha o item original da fila
+
+O item 3 da fila **original** desta investigação (bem no começo, antes
+da seção 9) pedia para "decodificar o array/matriz dos 27 formatos de
+área de efeito, mapeando os bytes de filtro de posição painel por
+painel". A seção 15 já tinha mostrado que a suspeita inicial (uma
+tabela de 27 formatos espaciais fixos) estava errada — aquele ponto era
+na verdade `SV[40]`, pesos de pontuação por status, não geometria.
+
+**Agora temos a resposta certa, com nome de símbolo real:**
+`area_data` (`0x3e9518`, **16 bytes = 8 entradas de 16 bits**) é a
+tabela espacial real — mas **não são 27 formatos pré-desenhados**. É
+uma tabela minúscula de **8 padrões base** (um por valor combinado de
+alcance+área, 0–7), e `GetTargetBaseArea` os expande em tempo real
+para uma máscara completa por altura (`g->b[0xb40]`, uma palavra de 16
+bits por "linha" vertical do efeito), deslocando o padrão base
+(`<<`/`>>`) conforme a diferença de altura entre a origem do efeito e
+cada linha, e por fim recortando o resultado pela largura real do mapa
+(`gMapX`/`gMapY`). **É um algoritmo generativo, não uma tabela de
+formatos — a "decodificação painel a painel" que a tarefa original
+pedia não existe como dado estático porque o formato não é fixo, é
+calculado.**
+
+### 20.3 Bônus: os 8 valores de `area_data`, extraídos — confirmam o padrão "diamante crescente"
+
+```
+índice (areaVal) | valor (hex) | binário (16 bits)             | largura
+0                | 0x0100      | 0000000100000000              | 1
+1                | 0x0380      | 0000001110000000              | 3
+2                | 0x07c0      | 0000011111000000              | 5
+3                | 0x0fe0      | 0000111111100000              | 7
+4                | 0x1ff0      | 0001111111110000              | 9
+5                | 0x3ff8      | 0011111111111000              | 11
+6                | 0x7ffc      | 0111111111111100              | 13
+7                | 0xfffe      | 1111111111111110              | 15
+```
+
+**Padrão confirmado numericamente:** cada entrada `N` é uma faixa de
+`2N+1` bits consecutivos centrada na mesma posição (bit 8, ajustando
+pelos limites de 16 bits na entrada 7) — exatamente a sequência de
+larguras de um **corte transversal de diamante/quadrado crescente**
+(raio 0 = 1 painel, raio 1 = 3 painéis, ..., raio 7 = 15 painéis). Isso
+é o gerador de forma mais simples e elegante possível para "alcance N"
+— não precisa de tabela de formato nenhuma além destes 8 valores, e
+`GetTargetBaseArea` empilha uma dessas faixas por "linha" vertical
+(deslocando conforme a altura) para montar a área 3D completa.
+
+### 20.4 O que ficou sem confirmar
+- O layout exato de `g+0xb40`/`g+0xb60`/`g+0xb70` (quantas "linhas"
+  cabem, se são 3 regiões distintas ou uma só tabela com sub-janelas —
+  os limites usados no `memset` inicial (`r0+0xb60+0xe` vs
+  `r3=r0+0xb40+0xa`) sugerem que a tabela tem pelo menos 0x20 bytes de
+  margem antes/depois do centro, mas não isolei o tamanho total).
+- Quem **chama** `GetTargetBaseArea` e consome o resultado em
+  `g+0xb40` (sabemos pelo nome e pela seção 6.1 que é usada dentro do
+  dispatcher de fase 0 do `FundamentalRoutine`, mas não revisitei o
+  call site agora).

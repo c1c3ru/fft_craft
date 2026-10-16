@@ -56,9 +56,14 @@ documentado. Os dois documentos de resultado são:
   pontuação" que a seção 6.4 só tinha pela metade. Também processa
   reações (Counter/Counter Magic) recursivamente via `getreaction_post`
   + chamada recursiva de si mesmo.
-- [ ] `GetTargetBaseArea(int,int)` (`0x276930`, 644 B) — candidato real
-  para a geometria de área de efeito (ver seção 15, "a tabela de 27
-  formatos não existe onde se pensava — isso é o candidato certo").
+- [x] `GetTargetBaseArea(int,int)` (`0x276930`, 644 B) — lida por
+  completo, ver `AI_DIFFICULTY_RESEARCH.md` seção 20. **Achado maior
+  da sessão:** fecha de vez o item original "tabela de 27 formatos de
+  AoE" — não é uma tabela de formatos fixos, é um algoritmo gerador
+  usando uma tabela minúscula (`area_data`, 8 entradas de 16 bits,
+  valores extraídos e confirmados = padrão "diamante crescente"
+  2N+1 bits), expandido em tempo real por altura e recortado pela
+  largura real do mapa (`gMapX`/`gMapY`).
 - [ ] `GetDestinationsAndMakeMaskTG()` (`0x278480`, 1932 B) — idem.
 
 ## 🟠 Prioridade média — fecha os parsers/motores já começados
