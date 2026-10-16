@@ -57,16 +57,16 @@ continuam os mesmos:
   Varredura sistemática por imediato não achou um terceiro ponto —
   escalonado como achado honesto, não forçado. `sub_277f78` virou um
   novo item 🟠 abaixo (grande demais pra ler dentro deste item).
-- [ ] Cluster `CFFT_STATE` de mapeamento de identidade (todas pequenas,
-  todas sem leitura): `WorldFaceIDToFaceID(int)` (`0x28c6e0`, 76 B),
-  `AttackTeamFaceIDToFaceID(int,int*)` (`0x28c72c`, 60 B),
-  `AttackTeamFaceIDToUnitATFID(int)` (`0x28c768`, 88 B),
-  `EVTCHRToFID(int)` (`0x28c7c0`, 24 B), `FaceIDToFID(int)`
-  (`0x28c644`, 36 B), `UnitIDToFID_SPRE(int)` (`0x28c668`, 40 B),
-  `UnitIDToFID_SP2(int,int)` (`0x28c690`, 80 B) — provável ponte real
-  entre IDs de sprite do mapa mundi, IDs de unidade de batalha e IDs
-  de "face" (retrato) — um mecanismo de identidade nunca confirmado
-  nesta investigação.
+- [x] Cluster `CFFT_STATE` de mapeamento de identidade — todas as 7
+  lidas por completo, ver `REVERSE_ENGINEERING_NOTES.md` seção 22.5.
+  Achado principal: `AttackTeamFaceIDToFaceID` **chama**
+  `WorldFaceIDToFaceID` de verdade pra personagens nomeados
+  (retrato compartilhado mapa mundi ↔ tela de time de ataque).
+  Achado bônus: `EVTCHRToFID` liga o motor de eventos/diálogo (seções
+  9.5–10) a este mesmo sistema de retrato — ponte nunca conectada
+  antes. Confirma também que o literal `0x5e0` usado em
+  `UnitIDToFID_SP2` é só coincidência numérica, sem relação com o
+  `g+0x5e0` da IA (seção 24 do `AI_DIFFICULTY_RESEARCH.md`).
 - [ ] `CINPUT_IF_TOUCH::OnTouchesEnded` (`0xb44a4`, 248 B) e
   `OnEventDispatched(int)` (`0xb45c0`, 16 B) — fecha a pergunta aberta
   da seção 20 do `REVERSE_ENGINEERING_NOTES.md`: quem lê

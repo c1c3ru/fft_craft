@@ -2660,8 +2660,104 @@ de vez a investigação "quem grava/lê" sem precisar adivinhar mais: é
 literalmente um array plano de `int`, acessado por índice, sem
 indireção nem validação de bounds.
 
-### 22.4 Estado final — fecha o plano inteiro
+### 22.4 Estado final — fecha o plano inteiro (Fase 1)
 
 Com esta seção, **todos os itens do `RE_BACKLOG_PLAN.md` (🔴🟠🟡⚪)
 têm pelo menos a função-central lida por completo e documentada**.
 O critério de "zerado" definido no próprio plano foi atingido.
+
+### 22.5 O cluster de mapeamento de identidade — lido por completo, confirma a ponte real (2026-10-16, Fase 2, iteração 3)
+
+Terceiro item da Fase 2 (`RE_BACKLOG_PLAN_PHASE2.md`): as 7 funções
+pequenas de `CFFT_STATE` que pareciam ligar IDs de sprite do mapa
+mundi, IDs de unidade de batalha e IDs de "face" (retrato). Todas são
+funções folha, puramente lookup-table com validação de faixa — lidas
+por completo (404 B somadas, cobertura total):
+
+```c
+int CFFT_STATE::FaceIDToFID(int faceID) {                 // 0x28c644, 36 B
+    if ((unsigned)faceID > 0xcd) return -1;                 // faixa 0..0xcd (206 entradas)
+    return faceIdTable[faceID];
+}
+
+int CFFT_STATE::UnitIDToFID_SPRE(int unitID) {             // 0x28c668, 40 B
+    if ((unsigned)unitID > 0xa9) return -1;                  // faixa 0..0xa9 (170 entradas)
+    return *(int*)((char*)unitTable + unitID*4 + 0x338);
+}
+
+int CFFT_STATE::UnitIDToFID_SP2(int unitID, int variant) { // 0x28c690, 80 B
+    if ((unsigned)unitID > 0xa9) return -1;
+    if (unitID == 0x9a) {                                      // *** unidade especial (0x9a=154) ***
+        if ((unsigned)variant > 3) return -1;                    // 4 variantes (0..3)
+        return *(int*)((char*)variantTable + variant*4 + 0x5e0); // tabela SEPARADA, indexada pela variante
+    }
+    return *(int*)((char*)unitTable + unitID*4 + 0x338);        // mesma tabela/offset de UnitIDToFID_SPRE
+}
+
+int CFFT_STATE::WorldFaceIDToFaceID(int worldFaceID) {     // 0x28c6e0, 76 B
+    if ((unsigned)worldFaceID <= 0x9f)                          // faixa A: 0..0x9f (160 entradas)
+        return *(int*)((char*)tableA + worldFaceID*4 + 0x898);
+    int idx = worldFaceID - 0xb0;
+    if ((unsigned)idx <= 0x1d)                                  // faixa B: 0xb0..0xcd (30 entradas)
+        return *(int*)((char*)tableB + idx*4 + 0xb18);
+    return -1;                                                  // *** buraco 0xa0-0xaf (16 valores) é inválido ***
+}
+
+int CFFT_STATE::AttackTeamFaceIDToFaceID(int atfID, int* isNamed) {  // 0x28c72c, 60 B
+    if ((unsigned)atfID <= 0x51) {                              // faixa "nomeado": 0..0x51 (82 entradas)
+        if (isNamed) *isNamed = 1;
+        return WorldFaceIDToFaceID(atfID);     // *** CHAMA a função anterior — a ponte real ***
+    }
+    if (isNamed) *isNamed = 0;
+    return *(int*)((char*)tableC + atfID*4 + 0xb90);            // faixa "genérico": tabela separada
+}
+
+int CFFT_STATE::AttackTeamFaceIDToUnitATFID(int id) {      // 0x28c768, 88 B
+    if (id == 0xcd) id = 0x4c;                                  // remapeia um sentinela
+    if ((unsigned)id <= 0x51) return tableD[id];                 // via offset 0xd48
+    int idx = id - 0x54;
+    if ((unsigned)idx <= 0x1b) return tableE[idx];                // via offset 0xcd8
+    return -1;
+}
+
+int CFFT_STATE::EVTCHRToFID(int evtChrID) {                // 0x28c7c0, 24 B
+    return *(int*)((char*)tableF + evtChrID*4 + 0xe90);          // *** SEM checagem de faixa! ***
+}
+```
+
+**Achados:**
+- **Confirma a ponte real por chamada direta, não por suspeita**:
+  `AttackTeamFaceIDToFaceID` chama `WorldFaceIDToFaceID` de verdade
+  (tail-call) pra IDs "nomeados" (0–0x51) — personagens com nome têm
+  **um único retrato compartilhado** entre o mapa mundi e a tela de
+  "time de ataque" pré-batalha; unidades genéricas (soldados sem
+  nome) usam uma tabela de retrato totalmente separada. O parâmetro
+  de saída (`isNamed`) marca explicitamente qual dos dois casos
+  ocorreu.
+- **`EVTCHRToFID` liga o motor de eventos/diálogo (seções 9.5–10) a
+  este mesmo sistema de retrato** — "EVTCHR" = ID de personagem do
+  motor de eventos, convertido pra "FID" (Face ID) sem nenhuma
+  validação de faixa (confia que o script de evento sempre passa um
+  ID válido). Fecha uma ponte de arquitetura que nunca tinha sido
+  conectada: o diálogo/cutscene mostra retratos através do MESMO
+  sistema de ID usado pelo mapa mundi e pela tela de time de ataque.
+- `WorldFaceIDToFaceID` tem um **buraco de 16 valores inválidos**
+  (`0xa0`-`0xaf`) entre suas duas faixas válidas — provavelmente
+  espaço reservado/nunca usado no range de IDs.
+- `UnitIDToFID_SP2` tem um caso especial pra uma única unidade
+  (ID `0x9a`=154) com 4 variantes de retrato — provavelmente um
+  personagem jogável com múltiplos estados visuais (classe
+  promovida? gênero? disfarce?) — não identificado qual unidade é
+  essa sem cruzar com os dados reais do jogo.
+- **Nota de verificação cruzada**: o endereço `0x28c6c8` (dentro de
+  `UnitIDToFID_SP2`) usa o literal `0x5e0` como offset de tabela —
+  é o MESMO literal que apareceu na varredura da seção 24 do
+  `AI_DIFFICULTY_RESEARCH.md` ("quem toca `g+0x5e0`"), mas confirmado
+  agora: é uma tabela completamente diferente, sem relação com o
+  `g+0x5e0` da IA — apenas uma coincidência numérica, não um terceiro
+  ponto de contato real (já suspeitado na seção 24, agora cravado).
+
+**O que ficou sem confirmar:** o conteúdo real das 6 tabelas (valores
+de Face ID específicos por personagem) — cada uma é só um array de
+`int` em `.data`/`.rodata`, cruzar com nomes de personagem exigiria
+dados do jogo em si, fora do escopo de engenharia reversa de código.
