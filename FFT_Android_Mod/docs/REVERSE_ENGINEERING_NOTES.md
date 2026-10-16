@@ -1362,3 +1362,135 @@ um `CSTEP` por canal, despacho real para `CSOUND_IF_SL`
 volume orientado a curva de interpolação. As ~130 funções restantes de
 `CSOUND_*` (incluindo toda a `CSOUND_IF_SL`/`CSOUND_LOADER_*`) seguem
 só no inventário por nome.
+
+## 17. `CSOUND_IF_SL` — o backend OpenSL ES real, lido por completo (2026-10-16)
+
+Continuação pedida explicitamente: a implementação por baixo do
+`CSOUND_IF` (seção 16). Li `EngineInit`, `LoadPCM`, `Play` e
+`CB_for_Stream` por completo — cobre os dois modos de reprodução da
+classe (estático totalmente carregado vs. streaming decodificado em
+blocos).
+
+**Nota de leitura:** boa parte das chamadas aqui são `blx` **através da
+vtable das próprias interfaces OpenSL ES** (`(*itf)->Metodo(itf,...)`,
+o jeito C de "interface COM" do OpenSL) — isso é esperado e correto
+para código OpenSL ES genuíno, não uma lacuna de análise. Resolvi por
+nome as poucas chamadas de função livre (`slCreateEngine`, já
+confirmado na seção 13.2; `CSOUND_LOADER_PCM`/`CSOUND_LOADER_OGG`,
+seção 9.4/13).
+
+### 17.1 `CSOUND_IF_SL::EngineInit(int maxChannels)` (`0xbb6e8`, 332 B)
+
+```c
+bool CSOUND_IF_SL::EngineInit(int maxChannels) {
+    slCreateEngine(&engineObj, 0, NULL, 0, iids, req);
+    (*engineObj)->Realize(engineObj, false);                 // blx via vtable do IObject
+    (*engineObj)->GetInterface(engineObj, ENGINE, &engineItf);
+    (*engineItf)->CreateOutputMix(engineItf, &mixObj, ...);    // offset +0x1c da vtable do engine
+    (*mixObj)->Realize(mixObj, false);
+    this->maxChannels = maxChannels;
+    this->channelData = alloc(maxChannels * 0x88);              // 136 B por canal
+    for (i = 0; i < maxChannels; i++) memset(&channelData[i], 0, 0x88);
+    return true;
+}
+```
+
+Confirma a sequência padrão de boilerplate do OpenSL ES
+(`slCreateEngine`→`Realize`→`GetInterface`→`CreateOutputMix`→
+`Realize`) **de verdade**, não emulada, e fixa o tamanho real do
+registro por canal (**136 bytes**) que `CSOUND_IF` referencia por
+offset desde a seção 16.
+
+### 17.2 `CSOUND_IF_SL::LoadPCM(int ch, char*, uchar*, uint, uint)` (`0xbbe7c`, 448 B)
+
+```c
+int CSOUND_IF_SL::LoadPCM(int ch, char* path, uchar* buf, uint size, uint off) {
+    Channel* c = &channelData[ch];
+    CSOUND_LOADER_PCM* loader = new CSOUND_LOADER_PCM();
+    c->loader = loader;
+    if (!loader->Open(path, buf, size, off)) { cleanup(); return -1; }
+
+    int numCh = loader->GetNumChannels();            // via vtable +0x2c
+    int fmtCode = GetSLFormat(numCh);                   // 0xbbc18 — mapeia p/ constante SL_PCMSAMPLEFORMAT
+    if (fmtCode == -1) { cleanup(); return -1; }
+    c->loaded = true;
+    int bitDepth = loader->GetBitDepth();              // via vtable +0x34
+    c->totalSamples = sampleRate * bitDepth;              // +0x40
+    c->targetFormat = fmtCode;                            // +0x44
+    c->sampleBuf = alloc(...);                             // +0x3c
+    loader->FillBuffer(buf, c->totalSamples, loop);       // via vtable +0x10 — decodifica os sample de verdade
+
+    if (c->hasPlayer) {                                     // já existe objeto OpenSL deste canal
+        if (numCh == c->prevNumCh && c->prevFormat == fmtCode) goto REUSE;
+        Static_DeletePlayer(ch);                             // formato mudou -> recria
+    }
+    Static_CreatePlayer(ch, numCh, fmtCode);                 // *** cria o player OpenSL real ***
+    c->hasPlayer = true;
+REUSE:
+    loader->Release(); c->loader = NULL;
+    return 0;
+}
+```
+
+Fecha o ciclo: um `CSOUND_LOADER_PCM` temporário decide o formato real
+(canais/taxa/bits) e decodifica os samples, e **só então** um player
+OpenSL ES de verdade é criado (ou reaproveitado, se o formato não
+mudou) via `Static_CreatePlayer`.
+
+### 17.3 `CSOUND_IF_SL::Play(int ch, int vol, ...)` (`0xbc0a4`, 452 B) — a chamada real que faz o som sair
+
+Depois de configurar pontos de loop (campos `+0x28/+0x30`, pares de 64
+bits via `strd`) e volume, o desenho central:
+
+```c
+SLPlayItf playItf = c->playItf;             // +0x78
+(*playItf)->SetPlayState(playItf, SL_PLAYSTATE_PLAYING /* = 3 */);  // *** blx real na vtable ***
+if (ok) c->state = 3;  // tocando
+```
+
+**É literalmente a chamada OpenSL ES `SetPlayState` de verdade** — o
+ponto exato onde o som passa a sair pelo alto-falante. Lida também a
+lógica de "já está tocando, reconfigura em vez de reiniciar"
+(`IsPlaying` + `Static_Load` para recarregar sem recriar o player).
+
+### 17.4 `CSOUND_IF_SL::CB_for_Stream(const SLAndroidSimpleBufferQueueItf*, void*)` (`0xbb5fc`, 208 B) — o callback de streaming
+
+```c
+void CSOUND_IF_SL::CB_for_Stream(const SLAndroidSimpleBufferQueueItf* bq, void* ctx) {
+    Channel* c = (Channel*)ctx;
+    bool firstCall = (bq == NULL);
+    void* sample = loader->GetPlaySample();          // CSOUND_LOADER_OGG::GetPlaySample
+    c->ringPtrs = sample;
+    c->streaming = true;
+    void* streamBuf = loader->GetStreamBuffer();
+    int decoded = loader->Decode(streamBuf, loopStart, loopEnd, 0x800, firstCall);  // decodifica até 2048 B de Ogg Vorbis
+    c->streaming = firstCall;
+
+    if (c->playerObj) {
+        if (decoded == 0) {
+            bufferQueueItf->Enqueue(firstCall, ...);    // fim do stream -> enfileira marcador
+        } else {
+            void* buf = loader->GetStreamBuffer();        // re-busca o ponteiro atualizado
+            bufferQueueItf2->Enqueue(buf, decoded);         // *** reabastece a fila de buffers ***
+        }
+    }
+}
+```
+
+É o **callback de fila de buffers do Android (`SLAndroidSimpleBufferQueueItf`)**
+de verdade: cada vez que o OpenSL ES termina de tocar um bloco, chama
+este callback, que decodifica o próximo pedaço do Ogg Vorbis
+(`CSOUND_LOADER_OGG::Decode`) e o **reenfileira** — o mecanismo real de
+streaming contínuo de música, por trás de `Stream_CreatePlayer`/
+`Stream_Load` (não lidas, mas agora com papel totalmente claro pelo
+contraste com o caminho estático de `LoadPCM`/seção 17.2).
+
+### 17.5 Estado final do motor de áudio
+Os dois modos de reprodução do `CSOUND_IF_SL` — **estático** (PCM
+totalmente decodificado na memória, `LoadPCM`→`Static_CreatePlayer`→
+`Play`/`SetPlayState`) e **streaming** (Ogg Vorbis decodificado em
+blocos de 2048 B via callback de fila de buffers) — estão confirmados
+por leitura real de 4 funções centrais, incluindo a chamada OpenSL ES
+que efetivamente inicia a reprodução. As ~125 funções restantes
+(`Stream_*`, `Static_Delete*`, `EngineUninit`, `CSOUND_LOADER_OGG`/
+`PCM` por dentro) seguem no inventário por nome das seções 13/16.
