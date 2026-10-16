@@ -157,10 +157,11 @@ continuam os mesmos:
   `sched_yield` reais — diferente do `CCRYPT` morto da seção 9.1, este
   mecanismo é real e funcional. Quem de fato usa `CTHREAD` não
   identificado.
-- [ ] `CFILE_UTIL::FileCopy`/`DirCreate` (`0xb79d8`/`0xb78b4`, 424/204
-  B) — as maiores da classe; confirma se são wrappers POSIX
-  (`open`/`read`/`mkdir`) ou algo mais específico do PSP-SDK (padrão
-  já visto em `GetLocalTime`/`timeGetTime`, seções 19/21).
+- [x] `CFILE_UTIL::FileCopy` (`0xb79d8`, 424 B) — lida por completo,
+  ver `REVERSE_ENGINEERING_NOTES.md` seção 29. Achado: a ordem real
+  dos parâmetros é `(destino, fonte)`, confirmada por comportamento,
+  não pelo nome. Lê o arquivo inteiro pra memória, escreve em blocos
+  de até 4 MiB. `DirCreate` (`0xb78b4`, 204 B) continua não lida.
 - [ ] `CSTR_UTIL::GetName`/`Conv`/`Find` (`0xb8d34`/`0xb942c`/`0xb9644`)
   e `CLIST::GetData`/`DeleteAll` (`0xb8a20`/`0xb89b0`) — baixa
   prioridade, provável "glue" puro (mesma ressalva que a Fase 1 já

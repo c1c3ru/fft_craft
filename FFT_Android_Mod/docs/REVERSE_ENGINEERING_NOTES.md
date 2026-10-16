@@ -3512,3 +3512,60 @@ resolvido via GOT, não nomeado nesta passada).
 clássico de adaptação de assinatura, mas não lida por dentro); quem
 no resto do jogo de fato chama `CreateAndRegister`/`Register` (não
 localizado nesta passada).
+
+## 29. `CFILE_UTIL::FileCopy` lida — terceiro item 🟡 da Fase 2, e uma inversão de parâmetro confirmada por comportamento (2026-10-16, Fase 2, iteração 16)
+
+`CFILE_UTIL::FileCopy(char*, char*)` (`0xb79d8`, 424 B, cobertura
+total: 106 instruções pra 106 esperadas). Usa `CFILE` (já catalogada
+nas seções 19/19.1) pros dois lados da cópia.
+
+```c
+// *** ordem real confirmada pelo COMPORTAMENTO, não pelo nome: (destino, fonte) ***
+int CFILE_UTIL::FileCopy(char* dst, char* src) {
+    CFILE* in = new CFILE(src);
+    if (in->Open(1) == 1) { delete in; return 1; }      // modo 1 = leitura
+
+    uint size = in->GetSize();
+    uchar* buf = malloc(size);                             // *** aloca o arquivo INTEIRO na memória ***
+    if (!buf) { delete in; return 1; }
+
+    if (in->Read(buf, size, 0, &dummy) == 1) { /* erro */ }
+    delete in;                                                // fecha a fonte antes de abrir o destino
+
+    CFILE* out = new CFILE(dst);
+    if (out->Open(2) != 1) {    // modo 2 = escrita
+        if (size <= 0x400000 /* 4 MiB */) {
+            out->Write(buf, 0, size);                            // escreve tudo de uma vez
+        } else {
+            // *** arquivos grandes: escreve em blocos de até 4 MiB ***
+            for (uint off = 0; off < size; ) {
+                uint chunk = min(size - off, 0x400000);
+                if (out->Write(buf + off, off, chunk) != 1) break;   // erro no meio -> aborta
+                off += chunk;
+            }
+        }
+    }
+    delete out;
+    free(buf);
+    return 0;
+}
+```
+
+**Achados:**
+- **A ordem dos parâmetros é `(destino, fonte)`, não `(fonte,
+  destino)`** — confirmado pelo comportamento real (o 1º parâmetro é
+  aberto em modo escrita, o 2º em modo leitura), não por suposição a
+  partir do nome do método. Vale a pena registrar explicitamente
+  porque é fácil adivinhar errado só pelo nome `FileCopy`.
+- **Cópia de arquivo não é feita em streaming** — lê o arquivo fonte
+  **inteiro** pra memória de uma vez (`malloc(size)`), depois escreve
+  de volta em blocos de até **4 MiB** se o arquivo for maior que
+  isso. Pra arquivos muito grandes, isso significa um pico de uso de
+  memória igual ao tamanho do arquivo inteiro.
+- O limite de 4 MiB por bloco de escrita é um valor fixo real — não
+  confirmado o motivo exato (limite de alguma API Android por baixo,
+  ou só uma escolha de implementação), mas o valor em si (`0x400000`)
+  está confirmado por instrução.
+
+**O que ficou sem confirmar:** `DirCreate(char*)` (`0xb78b4`, 204 B,
+2ª função sugerida pelo plano pra este item) não lida nesta passada.
