@@ -94,9 +94,13 @@ continuam os mesmos:
   `v3`/`v4` — confirma o layout "2 triângulos degenerados" na
   origem (onde o lote é montado), não só no desenho. `DrawPartial`/
   `Draw8` continuam não lidas.
-- [ ] `CEGL2_FBO::RenderToFBO` (`0xaae00`, 868 B) e `RenderFromFBO`
-  (`0xab164`, 732 B) — usam o FBO que a seção 13.5 (`Create`) já
-  documentou; fecha o ciclo "criar → usar".
+- [x] `CEGL2_FBO::RenderToFBO` (`0xaae00`, 868 B) — lida por completo,
+  ver `REVERSE_ENGINEERING_NOTES.md` seção 13.9. Fecha o ciclo "criar
+  → usar" com a seção 13.5. Achados: usa `GL_TRIANGLE_STRIP` de 4
+  vértices (formato diferente do resto do motor, que sempre usa
+  `GL_TRIANGLES` com diagonal compartilhada); `glGenerateMipmap` real
+  condicional; pula blend quando a cor é opaca. `RenderFromFBO`
+  (`0xab164`, 732 B) continua não lida.
 - [ ] `CEGL2_SHADER::Begin(int,MATRIX4*)` (`0xab7f4`, 120 B) e
   `SetTexture(int)` (`0xab8e8`, 60 B) — chamadas de verdade por
   `CEGL2_IF::DrawPacket` (seção 13.1), nunca lidas por dentro.

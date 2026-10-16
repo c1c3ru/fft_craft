@@ -1776,6 +1776,80 @@ real) — confirmado QUE a função monta um quad com UV parcial de uma
 folha de sprite maior, mas não a matemática linha a linha completa
 (mesma ressalva já aplicada a `DrawScrollBG`, seção 13.4).
 
+### 13.9 `CEGL2_FBO::RenderToFBO` lida por completo — segundo item 🟠 da Fase 2 (2026-10-16, Fase 2, iteração 7)
+
+`CEGL2_FBO::RenderToFBO(float×6, short×2, int×2)` (`0xaae00`, 868 B,
+cobertura total: 217 instruções pra 217 esperadas). Usa a textura que
+`Create` (seção 13.5) já tinha criado — fecha o ciclo "criar → usar"
+desse lado do par.
+
+```c
+// RenderToFBO(this, p1..p6 /*float*/, colorR, colorG /*ambos 0-255*/,
+//             filterMode /*p9, 0..2*/, flipUV /*p10, bool*/)
+void CEGL2_FBO::RenderToFBO(CEGL2_FBO* this, float p1, float p2, float p3,
+                              float p4, float p5, float p6,
+                              int colorR, int colorG, int filterMode, int flipUV) {
+    // monta um quad (posição a partir de p1-p4, UV escalado por
+    // this->+0x10/+0x14 — provável "tamanho lógico vs tamanho real da
+    // textura", mesma ideia de UV com padding de seções anteriores) e
+    // um array de cor RGBA de 4 vértices a partir de colorR/colorG
+    bool opaque = (colorR == 0xff && colorG == 0xff);
+    if (!opaque) glDisable(GL_BLEND);     // *** pula o overhead de blend quando totalmente opaco ***
+
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(2);
+    glEnableVertexAttribArray(3);
+    glBindTexture(GL_TEXTURE_2D, this->field_0x8);     // *** a textura criada em `Create`, seção 13.5 ***
+
+    switch (filterMode) {
+        case 0: case 1:
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            break;
+        case 2:
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            glGenerateMipmap(GL_TEXTURE_2D);              // *** mipmap real, não só filtro ***
+            break;
+    }
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, posBuf);
+    glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, true, 0, colorBuf);
+    glVertexAttribPointer(3, 2, GL_FLOAT, false, 0, flipUV ? uvBufFlipped : uvBufNormal);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);    // *** TRIANGLE_STRIP de 4 vértices — formato DIFERENTE! ***
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+    if (!opaque) glEnable(GL_BLEND);         // reabilita o blend que desligou no início
+}
+```
+
+**Achados:**
+- **Formato de desenho diferente do resto do motor**: `DrawPacket`
+  (seção 13.1), `DrawScrollBG` (13.4) e `AddPacketPartial` (13.8)
+  sempre usam `GL_TRIANGLES` com 2 triângulos degenerados por quad
+  (6 vértices). `RenderToFBO` usa **`GL_TRIANGLE_STRIP` com só 4
+  vértices** (`mode=5` confirmado contra a enumeração real da GL ES:
+  `TRIANGLES=4`, `TRIANGLE_STRIP=5`, `TRIANGLE_FAN=6`) — um jeito mais
+  direto de desenhar um quad único (sem precisar duplicar vértices
+  via diagonal compartilhada), condizente com ser uma função de
+  "blit" simples (um quad só, sem lote).
+- Confirma `glGenerateMipmap` real sendo chamado condicionalmente
+  (`filterMode==2`) — a textura de uma FBO pode ser amostrada com
+  mipmap, não só filtro bilinear simples.
+- Achado de performance: pula `glDisable`/`glEnable(GL_BLEND)`
+  completamente quando a cor é opaca (`0xff,0xff`) — otimização
+  explícita pra não pagar o custo de blend quando não precisa.
+- Dois buffers de UV pré-computados (`flipUV` escolhe entre eles) —
+  provável correção de orientação vertical entre o espaço de textura
+  FBO (OpenGL, origem embaixo) e o espaço de UV normal do resto do
+  motor (origem no topo, convenção PS1).
+
+**O que ficou sem confirmar:** a fórmula exata de escala de UV via
+`this->+0x10`/`+0x14` (dimensões lógicas vs reais da textura — não
+cruzado com `Create`, seção 13.5, que não grava esses campos
+explicitamente nessa passagem). `RenderFromFBO` (par desta função,
+`0xab164`, 732 B) continua não lida.
+
 ## 14. `DrawTile4` e `Add3D` lidas por completo — e um bônus: resolvidos vários mistérios de PLT antigos (2026-10-16)
 
 Continuação pedida explicitamente: as duas maiores funções do `CEGL2_IF`
