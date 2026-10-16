@@ -129,9 +129,12 @@ continuam os mesmos:
   confirmar se algum chamador usa esse caminho de verdade. Fluxo de
   controle do caminho "arquivo" não 100% decomposto (escalonado).
   `CSOUND_LOADER_PCM::Open` (`0xbced4`, 608 B) continua não lida.
-- [ ] `CCOMP_Z_ENC::Encode(uchar*,uchar*,int,int)` (`0xb63d0`, 432 B) —
-  contraparte de `CCOMP_Z_DEC::Decode` (seção 18); confirma se usa
-  `deflate`/`deflateInit_` reais (mesmo padrão esperado).
+- [x] `CCOMP_Z_ENC::Encode` (`0xb63d0`, 432 B) — lida por completo,
+  ver `REVERSE_ENGINEERING_NOTES.md` seção 18.1. Confirma
+  `deflateInit_`/`deflate`/`deflateEnd` reais, e fecha a convenção de
+  `flags` com `Decode` (`2`=comprimido, `0`=cru). Achado bônus: um
+  fallback real — se comprimir não encolher os dados, descarta e
+  grava o original sem compressão.
 - [ ] `CAUTOSAVE::Save(uint)` (`0x28c7ec`, 592 B) e `Load()`
   (`0x28ca3c`, 632 B) — maiores que `cSaveFFT::Save` (seção 19),
   provavelmente o mecanismo real de autosave (diferente do save

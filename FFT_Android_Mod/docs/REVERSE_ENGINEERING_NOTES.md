@@ -2774,6 +2774,68 @@ FAIL:
 provavelmente só interessa pra quem for RECOMPRIMIR assets
 modificados, não pra entender o jogo em si.
 
+### 18.1 `CCOMP_Z_ENC::Encode` lida por completo — sétimo item 🟠 da Fase 2 (2026-10-16, Fase 2, iteração 12)
+
+`CCOMP_Z_ENC::Encode(uchar* dst, uchar* src, int srcSize, int level)`
+(`0xb63d0`, 432 B, cobertura total: 102 instruções reais + pool de
+literais). Resolvendo os `bl` por nome real, aparecem `deflateInit_`,
+`deflate` e `deflateEnd` — a contraparte real de compressão do
+`inflateInit_`/`inflate`/`inflateEnd` já confirmado em `Decode`
+(seção 18).
+
+```c
+int CCOMP_Z_ENC::Encode(CCOMP_Z_ENC* this, uchar* dst, uchar* src,
+                          int srcSize, int level) {
+    this->zalloc = this->zfree = this->opaque = NULL;
+    if (deflateInit_(this, level, ZLIB_VERSION, sizeof(z_stream)) != 0) {
+        Error(this, "..."); return -1;
+    }
+
+    this->next_out  = dst + 0x10;         // reserva 16 B de cabeçalho
+    this->avail_out = this->field_0x3c;     // tamanho de bloco (mesma convenção de `Decode`)
+    int compressedSize = 0x10;
+    int flush = Z_NO_FLUSH;
+
+    for (;;) {
+        // alimenta blocos de `src` (tamanho configurável, `this->+0x38`);
+        // no último bloco, muda `flush` pra Z_FINISH
+        int r = deflate(this, flush);
+        if (r == Z_STREAM_END) break;
+    }
+    compressedSize += this->field_0x3c - this->avail_out;
+
+    int endResult = deflateEnd(this);
+    if (endResult != 0) { Error(this, "..."); return -1; }
+
+    dst->magic = MAGIC;          // literal fixo
+    dst->size  = srcSize;          // +8
+    dst->field_0xc = endResult;      // ==0
+
+    if (compressedSize < srcSize) {
+        dst->flags = 2;                // *** comprimiu e valeu a pena ***
+        return compressedSize;
+    }
+
+    // *** comprimir NÃO ajudou -- descarta e guarda o original cru ***
+    Error(this, "...");                   // chamado mesmo não sendo falha fatal
+    dst->flags = endResult;                 // ==0 -> "não comprimido"
+    memcpy(dst + 0x10, src, srcSize);         // sobrescreve com os dados originais
+    return srcSize + 0x10;
+}
+```
+
+**Achado principal: fecha o par com `Decode` e confirma a convenção
+exata do `flags`** — `flags=2` (bit 1 setado) = "comprimido" (igual
+ao `& 2` que `Decode` testava), `flags=0` = "cru". **E revela um
+fallback real de compressão**: se o resultado comprimido não ficar
+**menor** que o original, o `Encode` **descarta o dado comprimido e
+grava os bytes originais sem compressão** — a mesma lógica de
+"não vale a pena comprimir isso" que muitos formatos de pacote usam,
+agora confirmada com instrução real neste motor. `Error()` é chamado
+também nesse caminho de fallback, mesmo não sendo um erro fatal —
+sugere que `Error()` é mais um canal de log/diagnóstico genérico do
+que um sinalizador estrito de falha.
+
 ## 19. `cSaveFFT::Save` lida por completo — segundo item ⚪, primeiro toque real em `CFFT_STATE` (2026-10-16, loop de continuação, iteração 15)
 
 Segundo item da camada ⚪. Entre as 5 classes do sistema de save
