@@ -1169,3 +1169,75 @@ engine: `Add3D`/`AddTile` (não lida, mas mesmo papel por nome) acumulam
 primitivos no `CEGL_PACKET` → `DrawPacket` (seção 13.1) os desenha em
 lote via GLES2 real → `DrawTile4`/`DrawTile` (esta seção) é o atalho
 para desenhar 1 peça imediatamente, sem passar pelo lote.
+
+## 15. `AddTile` e `DrawTile` lidas por completo — fecham a família de 5 (2026-10-16)
+
+Continuação pedida explicitamente. Com estas duas, a família inteira de
+desenho de sprite do `CEGL2_IF` identificada nas seções 13–14 está
+fechada: `Add3D`/`AddTile` (acumula em lote) e `DrawPacket`/`DrawTile4`/
+`DrawTile` (desenha).
+
+### 15.1 `CEGL2_IF::AddTile(int x, int y, int z, int id, short, short, short, short, short)` (`0xa8ec4`, 368 B) — é um wrapper fino sobre `Add3D`
+
+```c
+void CEGL2_IF::AddTile(int x, int y, int z, int id,
+                        short u0, short v0, short u1, short v1, short flags) {
+    EGL_PACKET_SPR tmp;
+    memset(&tmp, 0, sizeof(tmp));         // 0x714c4 = memset, 184 B
+    tmp.pos[0..3] = { (float)x, (float)y, (float)z };   // __floatsisf nos 3 eixos
+    tmp.uv[0..3]  = { u0, v0, u1, v1 };     // replicado nos 4 cantos (bytes 0x90-0xa7)
+    tmp.flags     = flags;
+    Add3D(this, &tmp, 1);                   // *** delega pro acumulador de lote ***
+}
+```
+
+**Confirma exatamente a hipótese da seção 14.3:** `AddTile` monta, em
+pilha, um registro `_EGL_PACKET_SPR` de 1 sprite a partir de parâmetros
+escalares simples e entrega pro `Add3D` fazer o trabalho real de
+conversão para o formato de vértice do VBO. O `bne`/`bl
+__stack_chk_fail` no final não é nada específico de sprite — é
+simplesmente o canário de pilha do compilador (`-fstack-protector`)
+protegendo o buffer local de 184 bytes, mesmo padrão confirmado na
+seção 14.1.
+
+### 15.2 `CEGL2_IF::DrawTile(float x, float y, float w, float h, uint32_t color)` (`0xa977c`, 332 B) — o irmão sem rotação e sem textura de `DrawTile4`
+
+```c
+void CEGL2_IF::DrawTile(float x, float y, float w, float h, uint32_t color) {
+    float x1 = x + w, y1 = y + h;            // __addsf3 — SEM sinf/cosf, é um retângulo alinhado aos eixos
+    Vertex v[4] = { {x,y}, {x1,y}, {x,y1}, {x1,y1} };  // 4 cantos, cor RGBA8 replicada em todos
+    shader->Begin(matrix+0x1c, 1000, 0);
+    shader->SetMatrix4(0, matrix+0x98);       // *** usa o wrapper de alto nível, não glUniformMatrix4fv direto ***
+    glEnableVertexAttribArray(0); glEnableVertexAttribArray(2);
+    glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, &v[0].pos);
+    glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, true, 0, &v[0].color);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    // sem glBindTexture em lugar nenhum do corpo
+}
+```
+
+**Achado de assinatura que já era visível no nome, agora confirmado no
+corpo:** `DrawTile` não recebe nenhum parâmetro de textura/ângulo — e o
+corpo **de fato não chama `glBindTexture`** em ponto algum. É o
+caminho para **retângulos sólidos sem textura** (provavelmente usado
+por caixas de UI/fundo de janela), enquanto `DrawTile4` (seção 14.2) é
+o caminho textura+rotação (sprites de jogo). Também usa
+`CEGL2_SHADER::SetMatrix4` (`0xaba20`, método de conveniência que
+provavelmente só resolve a location do uniform e chama
+`glUniformMatrix4fv` por dentro) em vez de ir direto à GL como
+`DrawTile4` fazia — uma pequena inconsistência de estilo entre as duas
+funções (ou just reflete código escrito em momentos diferentes), não
+um bug.
+
+### 15.3 Família de desenho do `CEGL2_IF` — mapa completo
+| Função | Papel | Lida |
+|---|---|---|
+| `AddTile` | Monta 1 sprite escalar → `Add3D` | ✅ completo |
+| `Add3D` | Converte `_EGL_PACKET_SPR` → vértice do lote atual | ✅ completo |
+| `DrawPacket` | Desenha o lote acumulado via GLES2 real | ✅ completo |
+| `DrawTile` | Retângulo sólido sem textura, desenho imediato | ✅ completo |
+| `DrawTile4` | Sprite texturizado rotacionado, desenho imediato | ✅ completo |
+
+As ~160 funções restantes de `CEGL2_*` (e as ~134 de `CSOUND_*`)
+continuam só no nível de inventário por nome da seção 13 — nenhuma
+outra foi lida nesta sessão.
