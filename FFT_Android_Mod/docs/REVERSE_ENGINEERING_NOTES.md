@@ -1598,7 +1598,59 @@ já confirmados (posição/cor/UV, seções 13.1 e 13.4) mais 4 outros não
 identificados (os nomes de string exatos ficam em `.rodata`, não
 lidos nesta passada).
 
-### 14. `DrawTile4` e `Add3D` lidas por completo — e um bônus: resolvidos vários mistérios de PLT antigos (2026-10-16)
+### 13.7 `CEGL2_TEX_HYBRID::DecodeTexture` lida por completo — quarto item 🟡, fecha o elo TIM→GL (2026-10-16, loop de continuação, iteração 11)
+
+`CEGL2_TEX_HYBRID::DecodeTexture(uint*, uchar*, int, int, uint*, int,
+int, int, int)` (`0xaf644`, 468 B, cobertura total: 117 instruções —
+função folha, nenhum `bl`). Escolhida sobre `GL_IsUpdate`/`GL_Load`
+porque é exatamente a função que o plano apontava como suspeita:
+**"provável ponto de conversão do formato TIM decodificado pra
+textura GL"** — confirmado.
+
+```c
+// DecodeTexture(uint32* dst, uchar* src, int widthPx, int bpp,
+//               uint32* clut, int p6, int p7, int p8, int clipMode)
+void DecodeTexture(uint32_t* dst, uint8_t* src, int widthPx, int bpp,
+                    uint32_t* clut, int p6, int p7, int p8, int clipMode) {
+    if (bpp != 4) { for(;;); }   // *** TRAP de novo — só aceita 4bpp ***
+
+    // (opcionalmente recorta a região se p7+p8 > 0x200 = 512 — o limite
+    // clássico de textura/VRAM do PS1 — zerando as linhas fora do
+    // recorte; aritmética de recorte não decomposta 100%, mas o gatilho
+    // e o efeito —zerar em vez de desenhar— estão confirmados)
+
+    for (cada linha) {
+        for (cada byte de origem) {
+            uint8_t packed = *src++;          // 1 byte = 2 índices de 4 bits (4bpp)
+            *dst++ = clut[packed & 0xf];        // nibble baixo  -> 1º pixel
+            *dst++ = clut[packed >> 4];          // nibble alto   -> 2º pixel
+        }
+    }
+}
+```
+
+**Fecha de vez a ponte arquitetural** que as seções 9.2/9.8 (parser
+TIM) e 13.1/13.5 (upload de textura GL, que só aceita `GL_RGBA`+
+`GL_UNSIGNED_BYTE`, ou seja, 32 bits/pixel) deixavam implícita: o TIM
+nativo guarda pixels 4bpp indexados (2 por byte) + uma paleta
+separada, e a GPU real não entende esse formato — **é exatamente esta
+função que expande cada par de índices de 4 bits em dois pixels
+RGBA8888 completos via a tabela de paleta (CLUT)**, byte a byte, antes
+do `glTexImage2D`.
+
+**Achado secundário — padrão recorrente confirmado:** esta é a
+**segunda** função nesta investigação (depois de `CEGL2_SHADER::Load`,
+seção 13.6) com um laço infinito de 1 instrução (`b $`) como resposta
+a uma condição "impossível" (aqui, `bpp != 4`) — reforça que isso é
+uma convenção real do código desta engine (provavelmente um trap de
+debug que o build de produção não limpou), não um caso isolado.
+
+**O que ficou sem confirmar:** a aritmética exata de recorte/clipping
+(`p6`/`p7`/`p8`/`clipMode`, o "modo complexo" de `0xaf674`–`0xaf754`) —
+confirmado QUE existe e QUANDO dispara (soma de duas dimensões > 512),
+mas não a fórmula linha-a-linha completa.
+
+## 14. `DrawTile4` e `Add3D` lidas por completo — e um bônus: resolvidos vários mistérios de PLT antigos (2026-10-16)
 
 Continuação pedida explicitamente: as duas maiores funções do `CEGL2_IF`
 encontradas na seção 13.

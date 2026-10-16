@@ -143,10 +143,15 @@ documentado. Os dois documentos de resultado são:
   `GL_LINK_STATUS`==0) cai num laço infinito sem tratamento, diferente
   de falha de compilação (que retorna erro graciosamente). `Begin`/
   `SetTexture`/`SetMatrix4` continuam não lidos por dentro.
-- [ ] `CEGL2_TEX_HYBRID` — decodificação/upload de textura
-  (`GL_IsUpdate` 684 B, `DecodeTexture` 468 B, `GL_Load` 392 B) — **
-  conecta direto com o parser TIM** (provável ponto de conversão do
-  formato TIM decodificado pra textura GL).
+- [x] `CEGL2_TEX_HYBRID` — função-central (`DecodeTexture`, `0xaf644`,
+  468 B) lida por completo, ver `REVERSE_ENGINEERING_NOTES.md` seção
+  13.7. **Confirma a hipótese do plano**: é exatamente a expansão
+  4bpp-indexado+paleta (CLUT) → RGBA8888 que liga o parser TIM (seções
+  9.2/9.8) ao upload de textura GL (`glTexImage2D`, seção 13.5).
+  Achado bônus: 2ª ocorrência do padrão "condição impossível = laço
+  infinito" (1ª foi `CEGL2_SHADER::Load`, seção 13.6) — convenção real
+  do código, não caso isolado. `GL_IsUpdate`/`GL_Load` continuam não
+  lidos por dentro.
 - [ ] `CSOUND_IF_SL::Stream_CreatePlayer`/`Stream_Load` (560/216 B) — o
   lado streaming que ficou só inferido por contraste com o estático
   (seção 17.4).
