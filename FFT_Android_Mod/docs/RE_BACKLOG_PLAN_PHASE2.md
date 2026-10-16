@@ -168,10 +168,14 @@ continuam os mesmos:
   surpreendente — nome sem `.` produz saída VAZIA, não o nome
   original. `Conv`/`Find`/`CLIST::GetData`/`DeleteAll` continuam não
   lidas.
-- [ ] Mais 3 das ~49 funções pequenas de `wld_*` ainda por chamada/
-  padrão: `wld_anim` (852 B), `wldrute_draw` (740 B), `wldssd_control`
-  (620 B) — já sugeridas pela Fase 1, nunca lidas (só `wldinfo_put`
-  foi, seção 12.4).
+- [x] `wld_anim` (852 B) — lida por completo, ver
+  `REVERSE_ENGINEERING_NOTES.md` seção 12.5. **Fecha o último item
+  🟡 da Fase 2.** Confirma ser o "tocador" de animação de sprite do
+  mapa mundi — tabela de quadros-chave por animação, looping
+  automático, múltiplos sub-sprites por quadro, e `GsSortFlipSprite`
+  (nova função real da lib PS1, suporte a espelhamento). Reusa o
+  mesmo `fadeanb_calc` do HUD (seção 12.4). `wldrute_draw`/
+  `wldssd_control` continuam não lidas.
 
 ## ⚪ Não iniciado — trabalho de escala grande ou de baixo retorno isolado
 

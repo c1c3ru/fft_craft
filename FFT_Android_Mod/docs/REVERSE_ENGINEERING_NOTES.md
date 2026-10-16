@@ -1337,6 +1337,73 @@ dado numérico?) — ficaria pra uma leitura futura de `info_war_funds`/
 `infonumber_put` por dentro. As demais ~49 funções pequenas de
 `wld_*` continuam só por chamada/padrão (seção 12.1).
 
+### 12.5 `wld_anim` lida — último item 🟡 da Fase 2 (2026-10-16, Fase 2, iteração 18)
+
+`wld_anim(ANMPAC* anim, GsOT* ot)` (`0x2660b8`, 852 B, cobertura
+total: 207 instruções pra 207 esperadas) — segunda das 3 funções
+`wld_*` grandes sugeridas pelo plano (depois de `wldinfo_put`, seção
+12.4). Resolvendo os `bl` por nome: `GetTPage` e `fadeanb_calc` (já
+conhecidas, seção 12.4) e **`GsSortFlipSprite`** (nova — mais uma
+função real da biblioteca gráfica do PS1).
+
+**Confirmado com alta confiança: é o "tocador" de animação de sprite
+do mapa mundi.**
+
+```c
+void wld_anim(ANMPAC* anim, GsOT* ot) {
+    // *** cor de tingimento: fixa (bit 0x400 setado) ou pulsante via
+    // fadeanb_calc (bit 0x400 limpo, mesmo efeito da seção 12.4) ***
+    uint16_t tintColor = (anim->flags & 0x400) ? anim->field_0x20 : fadeanb_calc(&anim->field_0x20, &localColor);
+
+    AnimTable* table = g_animTables[anim->animID];   // anim->+4 indexa uma tabela global por nome de animação
+
+    if (!(anim->flags & 0x800) || !(g_someConfig->flags & 0x8000000)) {
+        anim->tickCounter++;                            // avança o relógio da animação
+
+        // percorre `table` a partir de `anim->seqIndex` (+0xc),
+        // somando a DURAÇÃO de cada entrada (empacotada nos 16 bits
+        // altos de cada word da tabela) até achar em qual quadro-chave
+        // o `tickCounter` atual cai — reinicia pra entrada 0 se
+        // ultrapassar o fim (looping de animação)
+        KeyFrame* frame = find_current_keyframe(table, anim->seqIndex, anim->tickCounter);
+
+        for (int i = 0; i < frame->subSpriteCount; i++) {
+            // decodifica campos empacotados do quadro-chave (escala,
+            // rotação/flip, offset de posição — formato clássico de
+            // "transform compactado" de engine PS1, bits espalhados
+            // em `0x70000000`/`0x30000000`/`0x8000000`/etc.) e acumula
+            // posição em `localX`/`localY`
+            int tpage = GetTPage(mode, x, y, subSprite->w, subSprite->h);  // 0x291348
+            GsSortFlipSprite(&sprite, ot, anim->priority);                    // *** 0x29bbec — desenha com suporte a espelhamento ***
+        }
+    }
+}
+```
+
+**Achados:**
+- Confirma `GsSortFlipSprite` como mais uma função real da biblioteca
+  gráfica do PS1 usada neste motor (junto com `GetTPage`/
+  `GsSortFastSprite` já confirmadas na seção 12.4) — **suporte real a
+  espelhamento de sprite** (horizontal/vertical), técnica clássica
+  pra reaproveitar arte de animação (ex.: andar pra esquerda = sprite
+  de andar pra direita espelhado).
+- Reusa o MESMO mecanismo de cor pulsante (`fadeanb_calc`) do painel
+  de HUD (`wldinfo_put`, seção 12.4) — confirma que esse efeito de
+  "pulsar"/fade é uma capacidade genérica do motor `wld_*`, não
+  exclusiva do HUD.
+- Estrutura de animação confirmada: uma tabela de quadros-chave por
+  animação (indexada globalmente por ID), com duração empacotada nos
+  bits altos de cada entrada, suporte a múltiplos "sub-sprites" por
+  quadro (animação composta/segmentada, não um único sprite só) e
+  looping automático ao esgotar a sequência.
+
+**O que ficou sem confirmar:** a decodificação bit a bit exata dos
+campos de transform empacotados no quadro-chave (escala/rotação
+específicas) — confirmado QUE existem e são decodificados, mas não a
+fórmula geométrica exata de cada bit. `wldrute_draw`/
+`wldssd_control` (as outras 2 funções sugeridas pelo plano) não
+lidas nesta passada.
+
 ## 13. Motores gráfico (`CEGL2_*`) e de áudio (`CSOUND_IF`) — ponte confirmada com a API real (2026-10-16)
 
 Continuação direta: os dois últimos motores sem nenhum código lido.
