@@ -985,3 +985,99 @@ gráfico `CEGL2_*` (OpenGL ES 2.0) e o motor de áudio `CSOUND_IF`/
 inventário de classes por nome, sem nenhuma função lida. Esses dois
 continuam sendo o trabalho genuíno que falta para "item 8" no sentido
 mais completo possível.
+
+## 13. Motores gráfico (`CEGL2_*`) e de áudio (`CSOUND_IF`) — ponte confirmada com a API real (2026-10-16)
+
+Continuação direta: os dois últimos motores sem nenhum código lido.
+Levantamento primeiro — **167 funções/31 KB** em `CEGL2_*` e **134
+funções/14 KB** em `CSOUND_*` — maior que o motor `wld_*` inteiro.
+Dado o tamanho, apliquei a mesma estratégia: achar e ler por completo a
+**função-ponte** (onde a emulação de API do PS1 encontra a API real do
+Android) em vez de tentar ler as ~300 funções uma a uma.
+
+### 13.1 Gráfico — `CEGL2_IF::DrawPacket(int, int)` (`0xaa190`, 1860 B) lida por completo
+
+Resolvi os alvos de `bl` que caem dentro do `.plt` calculando o
+endereço de GOT que cada stub referencia (soma de dois `add` + o
+deslocamento do `ldr pc,[...]`) e cruzando com `.rel.plt` — a mesma
+técnica de relocation usada desde a seção 9. Resultado: **confirmação
+direta, por nome de símbolo importado, não por suspeita**, de que esta
+função despeja chamadas **reais** da OpenGL ES 2.0:
+
+```c
+void CEGL2_IF::DrawPacket(int idx, int matrixOrParam, ...) {
+    CEGL_PACKET* packet = this->packetArray[idx];     // +0xfc
+    int count = packet->GetCount();
+    if (count == 0) return;
+
+    void* vboData = packet->GetVBOInfo();
+    glActiveTexture(GL_ARRAY_BUFFER /* = 0x8892, imediato visto como 0x8800+0x92 */);
+    glBindBuffer(GL_ARRAY_BUFFER, packet->GetVBOBuffer());
+    glBufferData(GL_ARRAY_BUFFER, count*0x18, vboData, GL_DYNAMIC_DRAW /* 0x88e4 */);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, ..., 0x18, offset0);   // posição (3 floats)
+    glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, ..., 0x18, offset12); // cor (4 bytes)
+    glVertexAttribPointer(3, 2, GL_FLOAT, ..., 0x18, offset16);  // UV (2 floats)
+    glEnableVertexAttribArray(0);
+
+    for (/* sub-lotes agrupados por blend mode + textura, via CEGL_PACKET::GetBlendMode/GetTexture */) {
+        shader->Begin(matrix, 0x3e8, count);           // CEGL2_SHADER::Begin
+        glDisableVertexAttribArray(3);
+        // ... despacha pra um de 4 blocos especiais se blendMode ∈ {5,6,7,8}
+        glBindTexture(GL_TEXTURE_2D, packet->GetTexture(i));
+        glDrawArrays(GL_TRIANGLES, offset, count);      // *** o desenho de verdade ***
+    }
+}
+```
+
+Stride de vértice confirmado: **24 bytes** (posição 3D + cor RGBA8 +
+UV). Isto é **a ponte exata** entre a emulação da API gráfica do PS1
+(seção 11.1 — `GsOT`, `AddPrims`, `SetPolyFT4`) e a GPU real do
+Android: o jogo monta primitivas no estilo PS1, `CEGL2_*` as agrupa por
+material (textura+blend) num VBO e emite `glDrawArrays` de verdade.
+Classes relacionadas, não lidas, mas com papel claro pelo nome +
+assinatura: `CEGL2_SPRITE` (desenho em lote de sprites 2D —
+`DrawScrollBG`, `Draw8`, `AddPacketPartial`), `CEGL2_FBO`
+(`RenderToFBO`/`RenderFromFBO` — render-to-texture), `CEGL2_SHADER`
+(cache de shaders via `std::map<int,DATA_SHADER>`, confirmado pelos
+símbolos de `_Rb_tree` do STLport), `CEGL2_TEX_HYBRID`
+(`DecodeTexture`/`GL_Load` — upload de textura, provavelmente convertendo
+do formato TIM decodificado na seção 9.2 para um formato aceito pela
+GPU).
+
+### 13.2 Áudio — confirmado como OpenSL ES real via import + tipo de callback
+
+Não precisei ler uma função inteira para fechar isto com confiança alta
+— dois achados diretos no próprio `.dynsym`/`.rel.plt` já bastam:
+
+- **Import real `slCreateEngine`** (`.rel.plt`, offset `0x347f70`) — a
+  função de entrada genuína da API OpenSL ES do Android NDK.
+- **`CSOUND_IF_SL::CB_for_Stream(const SLAndroidSimpleBufferQueueItf*,
+  void*)`** — o próprio nome do parâmetro mangled é o tipo de callback
+  real do OpenSL ES Android (`SLAndroidSimpleBufferQueueItf`), usado
+  para preencher o buffer de áudio sob demanda.
+
+Arquitetura por nome (não lida): `CSOUND_IF` é a API de alto nível que
+o jogo chama (`Play`, `Pause`, `SetVolume`, `FadeVolume`, `FrameMove`);
+`CSOUND_IF_SL` é a implementação OpenSL ES por baixo
+(`EngineInit`/`EngineUninit`, `Static_CreatePlayer`/
+`Stream_CreatePlayer` — dois modos, som curto pré-carregado vs. stream
+contínuo); `CSOUND_LOADER_OGG`/`CSOUND_LOADER_PCM` decodificam os
+formatos de arquivo (`CSOUND_LOADER_OGG::Decode` confirma Ogg Vorbis
+real, não um formato proprietário do PS1 — mudança de formato de áudio
+em relação ao original, esperado numa engine mobile).
+
+### 13.3 Estado final do item 8
+Com isto, **os 8 itens da fila original de prioridade alta e os 3 de
+prioridade média/baixa foram todos, pelo menos, abertos e têm algum
+nível de evidência real de instrução/import** — nenhum ficou "não
+tocado". Nível de profundidade por item (honesto, não uniforme):
+CCRYPT e parser TIM = leitura completa das funções nomeadas; motor de
+eventos/diálogo = os dois interpretadores + quase todos os opcodes
+lidos; motor `wld_*` = ~20 das maiores funções lidas por completo +
+resto por chamada/padrão; motores gráfico/áudio = **a função-ponte
+central lida por completo, o resto (quase 300 funções) caracterizado só
+por nome/assinatura/import**, não por leitura individual. Essa última
+camada — ler as ~300 funções `CEGL2_*`/`CSOUND_*` uma a uma — é o que
+ficaria para uma eventual continuação futura, mas não é razoável tratar
+isso como pendência pequena.
