@@ -2528,3 +2528,71 @@ int CFRAMERATE::FrameMove(CFRAMERATE* this) {
 (`+0x14`/`+0x10`) depois de calculados — não localizado nesta
 passada, mas os nomes dos getters já catalogados (`GetRate`,
 `GetSpeed`) dão um ponto de partida direto pra uma leitura futura.
+
+## 22. `CFFT_STATE` — construtor lido por completo + mapa de campos confirmado — fecha o último item do plano (2026-10-16, loop de continuação, iteração 18)
+
+Último item do plano inteiro. `CFFT_STATE` era "candidata a classe
+orquestradora de nível mais alto do jogo", citada de fora várias
+vezes mas nunca lida por dentro. Li o construtor
+(`CFFT_STATEC2Ev`, `0x28bfb8`, 584 B, cobertura total: 146
+instruções — só inicialização de campos, nenhuma chamada) e, por ser
+muito barato (a maioria tem 2-6 instruções), **todos os 23
+getters/setters pequenos** citados no plano — o que dá um mapa de
+campos quase completo, não só os defaults.
+
+### 22.1 Mapa de campos confirmado (getter/setter → offset real)
+
+| Offset | Campo | Confirmado por |
+|---|---|---|
+| `+0x0`/`+0x4` | tamanho de render (w,h) — default `340`/`240` | `GetRenderSize(int*,int*)` |
+| `+0x8`/`+0xc` | escala de vértice (x,y) — default `1.0f`/`1.0f` | `Get`/`SetVertexScaling(float,float)` |
+| `+0x10` | `captureRequest` — default `0` | `GetCaptureRequest` |
+| `+0x14` | `captureDraw` — default `0` | `GetCaptureDraw` |
+| `+0x18` | `encountRequest` — default `0` | `GetEncountRequest` |
+| `+0x1c` | **`mode`** — default `0` | `Get`/`SetMode`, e também lido por `GetBackdropColor`/`GetMenuBarVisible` (ver 22.2) |
+| `+0x20` | `debugMode` — default `0` | `Get`/`SetDebugMode` |
+| `+0x24` | `moviePlaying` — default **`-1`** (sentinela "nenhum") | `Get`/`SetMoviePlaying` |
+| `+0x28..` | array `musicBuffer[]` (índice `+0xa`) — zerado | `Get`/`SetMusicBuffer(int idx,...)` |
+| `+0x30` | `settingsEnable` — default `0` | `Get`/`SetSettingsEnable` |
+| `+0x34` | `linkEnable` — default `0` | `Get`/`SetLinkEnable` |
+| **`+0x38..`** | **array `params[]`** (índice direto, sem offset) | `Get`/`Set`/`AddParam(int id, ...)` — ver 22.3 |
+
+### 22.2 Achado: `mode` (`+0x1c`) controla UI e cor de fundo
+
+`GetMenuBarVisible()` (`0x28c2c0`) lê `mode` e retorna **oculto (`0`)
+quando `mode` ∈ `{2,3,4}`**, visível (`1`) nos demais valores — a
+primeira confirmação real de que "modo" não é só um rótulo, ele
+**decide se a barra de menu aparece**. `GetBackdropColor(float*,
+float*,float*)` (`0x28c288`) também é indexado por `mode` via uma
+tabela de salto de 5 casos (`0`–`4`) — nesta build, todos os 5 casos
+convergem pro mesmo bloco de código (`0x28c2ac`, fora da janela lida),
+então o mecanismo de "cor de fundo por modo" existe mas não pôde ser
+diferenciado caso a caso nesta passada.
+
+### 22.3 Achado principal: fecha de vez a pergunta da seção 19 sobre `params[]`
+
+A seção 19 (`cSaveFFT::Save`) já tinha descoberto que `CFFT_STATE::
+SetParam` grava o timestamp do save nos IDs `0x39`-`0x3f`, mas sem
+saber o layout exato. Agora, com `GetParam`/`SetParam`/`AddParam`
+lidos por completo:
+
+```c
+int  CFFT_STATE::GetParam(int id)            { return *(int*)((char*)this + 0x38 + id*4); }
+void CFFT_STATE::SetParam(int id, int val)   { *(int*)((char*)this + 0x38 + id*4) = val; }
+void CFFT_STATE::AddParam(int id, int delta) { *(int*)((char*)this + 0x38 + id*4) += delta; }
+```
+
+**`params[]` começa exatamente em `this+0x38`** — confirma que os IDs
+`0x39`-`0x3f` da seção 19 (timestamp do save) caem em
+`this+0x38+(0x39..0x3f)*4` = `this+0x11c` até `this+0x134`, dentro do
+grande bloco zerado pelo construtor (`+0x38` até `~+0x454`, 1088 B —
+sem defaults especiais, cada "parâmetro" começa em `0`). Isso fecha
+de vez a investigação "quem grava/lê" sem precisar adivinhar mais: é
+literalmente um array plano de `int`, acessado por índice, sem
+indireção nem validação de bounds.
+
+### 22.4 Estado final — fecha o plano inteiro
+
+Com esta seção, **todos os itens do `RE_BACKLOG_PLAN.md` (🔴🟠🟡⚪)
+têm pelo menos a função-central lida por completo e documentada**.
+O critério de "zerado" definido no próprio plano foi atingido.

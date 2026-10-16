@@ -209,9 +209,15 @@ nas seções anteriores — não são "pendência pequena":
   determinístico (debug/replay). 3ª ocorrência da família de API
   Win32/PSP-SDK (depois de `GetLocalTime` seção 19). `CRECT`/
   `CSTR_UTIL`/`CLIST`/`CTHREAD`/`CFILE_UTIL` continuam não lidas.
-- [ ] `CFFT_STATE` (42 métodos) — candidato a classe orquestradora de
-  nível mais alto do jogo inteiro; nunca investigada diretamente (só
-  `GetParam` foi referenciado, de fora, várias vezes).
+- [x] `CFFT_STATE` (construtor, `0x28bfb8`, 584 B + 23 getters/setters
+  pequenos, todos lidos por serem muito baratos) — ver
+  `REVERSE_ENGINEERING_NOTES.md` seção 22. **Fecha o plano inteiro.**
+  Mapa de campos quase completo confirmado. Achado principal: fecha a
+  pergunta da seção 19 — `params[]` começa exatamente em `this+0x38`,
+  acesso direto por índice sem indireção. Achado bônus: `mode`
+  (`+0x1c`) controla visibilidade da barra de menu e indexa uma
+  tabela de cor de fundo (5 casos, convergem no mesmo código nesta
+  build).
 
 ## Ferramentas (recriar se a sessão/worktree for nova)
 
@@ -233,3 +239,14 @@ em aberto**, e cada item 🟡/⚪ com pelo menos a função-ponte/central
 lida (mesmo padrão já aplicado a `CEGL2_IF`/`CSOUND_IF`). Quando isso
 for atingido, reavaliar se vale continuar para ⚪ por completo ou
 encerrar o loop.
+
+**Atingido em 2026-10-16 (iteração 18).** Todos os itens 🔴🟠🟡⚪ estão
+marcados `[x]`, cada um com pelo menos a função-central lida por
+completo e documentada em `AI_DIFFICULTY_RESEARCH.md`/
+`REVERSE_ENGINEERING_NOTES.md`. O que resta — ler as ~6600 funções
+restantes uma a uma, ou aprofundar qualquer item além da função-central
+já lida — é trabalho de escala muito maior, não uma "pendência", e
+cabe a quem continuar decidir se vale a pena por algum motivo
+específico (ex.: investigar um achado aberto citado em alguma seção
+dos dois documentos). O loop de continuação automática pode ser
+encerrado; não há mais um "próximo item não marcado" nesta lista.
