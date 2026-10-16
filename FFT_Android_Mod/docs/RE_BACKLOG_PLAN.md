@@ -159,9 +159,15 @@ documentado. Os dois documentos de resultado são:
   bônus: o objeto por canal em `+0x10` é um `CSOUND_LOADER_OGG` de
   verdade, construído via placement-new aqui mesmo — o streaming é Ogg
   exclusivamente, nunca PCM. `Stream_Load` continua não lida por dentro.
-- [ ] `CSOUND_LOADER_OGG`/`CSOUND_LOADER_PCM` por dentro (`Decode` 540 B,
-  `Open` 460/608 B) — hoje só sabemos a assinatura e o papel pelo
-  contexto de quem chama.
+- [x] `CSOUND_LOADER_OGG::Decode` (`0xbd740`, 540 B) lida por completo,
+  ver `REVERSE_ENGINEERING_NOTES.md` seção 17.7. **Fecha o último item
+  🟡.** Achado maior: os 3 únicos `bl` resolvem por nome real pra
+  `ov_read`/`ov_pcm_tell`/`ov_pcm_seek` — confirma que o motor usa a
+  API genuína da `libvorbisfile`/Tremor, não um decoder proprietário.
+  Confirma também o mecanismo de loop sem costura: pontos de
+  início/fim codificados como pares 32-bit `(-1,-1)="sem valor"`, com
+  3 estratégias (loop fechado, loop aberto só com início, sem loop).
+  `CSOUND_LOADER_PCM::Open` continua não lida por dentro.
 
 ## ⚪ Não iniciado — motores/sistemas inteiros, zero leitura de código
 

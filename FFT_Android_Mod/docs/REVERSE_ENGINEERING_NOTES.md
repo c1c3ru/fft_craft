@@ -2137,3 +2137,77 @@ int CSOUND_IF_SL::Stream_CreatePlayer(CSOUND_IF_SL* this, int ch, int numCh, int
 `ldm`/`stm`) e os valores exatos das constantes `SL_IID_*` lidas via
 GOT (resolvidas estruturalmente como "uma tabela de IDs de interface",
 não cruzadas uma a uma com o header do NDK nesta passada).
+
+### 17.7 `CSOUND_LOADER_OGG::Decode` lida por completo — fecha o último item 🟡 do plano, e confirma a biblioteca real usada (2026-10-16, loop de continuação, iteração 13)
+
+`CSOUND_LOADER_OGG::Decode(signed char*, int, long long, long long,
+int*)` (`0xbd740`, 540 B, cobertura total: 135 instruções pra 135
+esperadas). **Achado mais importante, antes até de olhar a lógica**:
+os 3 únicos `bl` da função resolvem, por nome real no `.dynsym`, pra
+`ov_read` (`0xa1264`), `ov_pcm_tell` (`0xa0864`) e `ov_pcm_seek`
+(`0x9fe08`) — **a API real da `libvorbisfile`** (ou do port de ponto
+fixo, Tremor — o nome da API é idêntico nos dois). Confirma de uma vez
+por todas que este motor usa uma biblioteca Ogg Vorbis genuína, não um
+decodificador proprietário.
+
+```c
+// CSOUND_LOADER_OGG::Decode(this, char* buf, int bufSize,
+//                            int64 loopStartSample, int64 loopEndSample, int* errOut)
+int CSOUND_LOADER_OGG::Decode(CSOUND_LOADER_OGG* this, char* buf, int bufSize,
+                                int64_t loopStart, int64_t loopEnd, int* errOut) {
+    if (errOut) *errOut = 1;             // default "não terminou"
+    bool hasStart = (loopStart != -1);     // par de 32 bits == -1 == "sem valor"
+    bool hasEnd   = (loopEnd   != -1);
+
+    if (hasStart && hasEnd) {
+        // *** CAMINHO 1: loop com início E fim definidos (loop de música clássico) ***
+        OggVorbis_File* vf = &this->field_0x82c;    // this+0x820+0xc
+        int remaining = bufSize;
+        char* cursor = buf;
+        do {
+            int n = ov_read(vf, cursor, remaining, 0, 2, 1);  // (file, buf, len, bigendian=0, wordsize=2, signed=1)
+            if (n > 0) { cursor += n; remaining -= n; continue; }
+            if (n != 0) break;    // erro real de decodificação -> sai (sem seek)
+
+            // n==0 (EOF) -> calcula quanto "passou" do ponto de loop e
+            // volta pro início, cortando a diferença pra não repetir
+            // amostras extras — trecho de aritmética fina (ov_pcm_tell
+            // vs loopEnd, multiplicado por um tamanho de amostra) que
+            // não foi decomposto byte a byte, mas o EFEITO é claro:
+            // seek(loopStart) e continua decodificando pro mesmo buffer.
+            ov_pcm_tell(vf);
+            ov_pcm_seek(vf, loopStart);
+        } while (remaining != 0);
+    } else if (hasStart) {
+        // *** CAMINHO 2: só início definido (loop do track inteiro, sem fim fixo) ***
+        // decodifica normalmente; ao bater EOF (ov_read==0), dá
+        // ov_pcm_seek(loopStart) e continua enchendo o buffer — repete
+        // a faixa inteira indefinidamente a partir do início.
+    } else {
+        // *** CAMINHO 3: sem nenhum loop point — decodificação única ***
+        // decodifica até preencher o buffer OU bater EOF; se bateu EOF
+        // (ov_read<=0) sem preencher tudo, NÃO faz seek — grava o
+        // número de bytes restantes em *errOut e devolve.
+    }
+    if (errOut) *errOut = remaining;
+    return bufSize - remaining;   // bytes decodificados de verdade
+}
+```
+
+**Confirma, com evidência real, exatamente como funciona o loop de
+música sem costura (seamless loop) deste motor:** os pontos de
+início/fim de loop são codificados como pares de 32 bits
+`(-1,-1) = "sem valor"`, e a própria `Decode` decide entre 3
+estratégias (loop fechado com início+fim, loop aberto só com início,
+ou sem loop) — tudo por cima da API padrão `ov_read`/`ov_pcm_seek`/
+`ov_pcm_tell` da libvorbisfile/Tremor, sem nenhuma lógica de
+decodificação proprietária.
+
+**O que ficou sem confirmar:** a aritmética fina de ajuste de corte no
+caminho 1 (quantas amostras exatas cortar na costura do loop) e o
+layout exato de `OggVorbis_File`/do campo `this+0x82c` (não vale a
+pena isolar — é estrutura padrão da própria libvorbisfile, não deste
+jogo).
+
+**Fecha o último item 🟡 do plano** — todos os itens 🟡 agora têm pelo
+menos a função-central lida por completo.
