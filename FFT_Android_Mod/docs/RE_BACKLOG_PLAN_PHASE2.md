@@ -162,10 +162,12 @@ continuam os mesmos:
   dos parâmetros é `(destino, fonte)`, confirmada por comportamento,
   não pelo nome. Lê o arquivo inteiro pra memória, escreve em blocos
   de até 4 MiB. `DirCreate` (`0xb78b4`, 204 B) continua não lida.
-- [ ] `CSTR_UTIL::GetName`/`Conv`/`Find` (`0xb8d34`/`0xb942c`/`0xb9644`)
-  e `CLIST::GetData`/`DeleteAll` (`0xb8a20`/`0xb89b0`) — baixa
-  prioridade, provável "glue" puro (mesma ressalva que a Fase 1 já
-  tinha pra essas classes), mas nunca confirmado por leitura real.
+- [x] `CSTR_UTIL::GetName` (`0xb8d34`, 212 B) — lida por completo, ver
+  `REVERSE_ENGINEERING_NOTES.md` seção 30. Achado: trata corretamente
+  caracteres multi-byte Shift-JIS (`IsLeadByte`); achado comportamental
+  surpreendente — nome sem `.` produz saída VAZIA, não o nome
+  original. `Conv`/`Find`/`CLIST::GetData`/`DeleteAll` continuam não
+  lidas.
 - [ ] Mais 3 das ~49 funções pequenas de `wld_*` ainda por chamada/
   padrão: `wld_anim` (852 B), `wldrute_draw` (740 B), `wldssd_control`
   (620 B) — já sugeridas pela Fase 1, nunca lidas (só `wldinfo_put`

@@ -3569,3 +3569,54 @@ int CFILE_UTIL::FileCopy(char* dst, char* src) {
 
 **O que ficou sem confirmar:** `DirCreate(char*)` (`0xb78b4`, 204 B,
 2ª função sugerida pelo plano pra este item) não lida nesta passada.
+
+## 30. `CSTR_UTIL::GetName` lida — quarto item 🟡 da Fase 2, revela um comportamento surpreendente (2026-10-16, Fase 2, iteração 17)
+
+`CSTR_UTIL::GetName(char* out, char* in, int hasFullPath)` (`0xb8d34`,
+212 B, cobertura total: 53 instruções pra 53 esperadas).
+
+```c
+void CSTR_UTIL::GetName(char* out, char* in, int hasFullPath) {
+    char localBuf[0x100];
+    if (hasFullPath) {
+        GetFile(localBuf, in);   // 0xb8ca4 — extrai só o nome do arquivo de um caminho completo
+        in = localBuf;
+    }
+
+    int len = strlen(in);
+    if (len <= 0) { *out = 0; return 1; }
+
+    int dotPos = 0;
+    bool foundDot = false;
+    for (int i = 0; i < len; ) {
+        if (IsLeadByte(in[i])) { i += 2; continue; }   // 0xb8be4 — *** pula 2 bytes de caractere Shift-JIS ***
+        if (in[i] == '.') { dotPos = i; foundDot = true; }
+        i++;
+    }
+
+    if (!foundDot) { *out = 0; return 1; }    // *** achado: sem extensão -> saída VAZIA, não o nome ***
+
+    memcpy(out, in, dotPos);
+    out[dotPos] = 0;
+    return 0;
+}
+```
+
+**Achados:**
+- **Confirma consciência real de codificação multi-byte (Shift-JIS)**
+  no tratamento de string: usa `IsLeadByte` pra nunca cortar no meio
+  de um caractere de 2 bytes ao procurar o `.` da extensão —
+  consistente com este ser um jogo japonês, e a primeira confirmação
+  real (não só suposição) de que o motor lida com texto multi-byte
+  corretamente nessa classe utilitária.
+- **Achado comportamental surpreendente, confirmado por instrução**:
+  se o nome de arquivo **não tiver `.` nenhum**, `GetName` não
+  devolve o nome como está — **devolve uma string vazia** (e retorna
+  `1`, um código diferente do caminho normal). Ou seja, a função
+  assume que todo nome de arquivo chamado aqui TEM extensão; nomes
+  sem extensão são tratados como um caso à parte, não um "nome sem
+  nada pra cortar".
+
+**O que ficou sem confirmar:** `GetFile`/`Conv`/`Find` (as outras
+funções do mesmo item do plano) e `CLIST::GetData`/`DeleteAll` não
+lidas nesta passada.
