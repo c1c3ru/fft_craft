@@ -2378,3 +2378,84 @@ com a estrutura real do PSP-SDK (assumidos pelo layout Win32 clássico
 de 8 campos de 16 bits — plausível dado o uso de `GetLocalTime`, mas
 não cruzado com um header). `CAUTOSAVE::Save`/`Load` (maiores, 592/632
 B) e `pspSaveList`/`pspSaveAuto` continuam não lidos.
+
+## 20. `CINPUT_IF_TOUCH::OnTouchesBegan` lida por completo — terceiro item ⚪, revela um detector de duplo-toque (2026-10-16, loop de continuação, iteração 16)
+
+Terceiro item da camada ⚪. `CINPUT_IF_TOUCH::OnTouchesBegan(int,int,
+int,int,int)` (`0xb42b0`, 356 B, cobertura total: 89 instruções pra 89
+esperadas) — a função que recebe de verdade um evento de toque iniciado
+(provável ponte direta com o callback Android `onTouchEvent`/
+`ACTION_DOWN`).
+
+```c
+// OnTouchesBegan(this, int slot, int touchId, int x, int y)
+void CINPUT_IF_TOUCH::OnTouchesBegan(CINPUT_IF_TOUCH* this, int slot,
+                                      int touchId, int x, int y) {
+    this->genCounter[slot] = this->nextGen++;   // +0x700/+0x704 — numera essa atribuição de slot
+
+    int count = this->activeCount;    // +0x0
+    if (count < 0) return;              // defensivo
+    int idx;
+    bool reused;
+    if (count == 0) {
+        idx = 0; reused = false;          // primeiro toque: usa o slot 0 direto
+    } else if (this->touchId[0] == touchId) {
+        idx = 0; reused = true;             // atalho comum: já é o mesmo touchId do slot 0
+    } else {
+        // procura um slot JÁ OCUPADO com o mesmo touchId (atualização)
+        idx = find(this->touchId, count, touchId);
+        if (idx == -1) {
+            // não achou -> procura um slot LIVRE (touchId[i]==0)
+            idx = find_empty(this->touchId, count);
+            if (idx == -1) return;    // *** sem slots livres: toque extra é ignorado, sem erro ***
+            reused = false;
+        } else reused = true;
+    }
+
+    this->touchFlags[idx] |= 0x80;         // *** marca "toque ativo" (bit 7) *** — decodificado de um
+                                             // idioma `mvn ip,ip,lsl#25; mvn ip,ip,lsr#25` que, uma vez
+                                             // truncado pro `strb` final, equivale a um simples OR de bit
+    this->touchId[idx] = touchId;             // +0x10, array de 4 B por slot
+    this->curX[idx] = this->startX[idx] = x;    // +0x38 / +0x88, 0x50 B apart
+    this->curY[idx] = this->startY[idx] = y;    // +0x60 / +0xb0, 0x50 B apart
+
+    if (reused) {
+        // *** detector de duplo-toque, só roda se o touchId já existia ***
+        if (GetTouchCount() == 1) {                // 0xb41ec
+            int state = this->comboState;            // +0x100
+            if (state == 0) { /* nada a fazer */ }
+            else if (state == 2) { this->comboState = 3; }   // 2º toque dentro da janela -> *** CONFIRMA duplo-toque ***
+            else { this->comboTimestamp = timeGetTime();       // 0xb9fe0 — API Win32/PSP-SDK, igual a `GetLocalTime` da seção 19
+                   this->comboState++; }
+        } else {
+            this->comboState = 0; this->comboTimestamp = 0;      // mais de 1 dedo na tela -> cancela a detecção
+        }
+    }
+}
+```
+
+**Achados:**
+- Confirma a arquitetura de múltiplos toques simultâneos: arrays
+  paralelos por slot (`touchId`, `curX/curY`, `startX/startY`,
+  `touchFlags`), com busca linear por touchId OS-nativo e fallback
+  pra slot livre — sem alocação dinâmica, capacidade fixa (slots
+  esgotados = toque extra simplesmente ignorado, sem erro).
+- **Achado principal: um detector de duplo-toque embutido na própria
+  camada de input de toque**, usando uma máquina de estados de 4
+  valores (`comboState` em `this->+0x100`) e `timeGetTime()`
+  (`this->+0x104`) — mesmo padrão de API estilo Win32/PSP-SDK já visto
+  na seção 19 (`GetLocalTime`), reforçando que esse compat layer tem
+  várias funções de tempo "emprestadas" do SDK original do PSP. A
+  janela de tempo exata pra considerar "duplo toque" não foi
+  encontrada nesta função (deve estar em outra função que lê
+  `comboTimestamp`, não localizada nesta passada).
+- Confirma `GetTouchCount()` (`0xb41ec`, self-classe) como "quantos
+  dedos estão na tela agora" — usado aqui pra só tentar detectar
+  duplo-toque quando há exatamente 1 dedo (evita falso positivo
+  durante multi-touch/pinça).
+
+**O que ficou sem confirmar:** quem lê `comboState==3` (o "duplo-toque
+confirmado") e o que isso dispara no jogo; a janela de tempo exata do
+duplo-toque (`comboTimestamp` é só gravado aqui, nunca comparado) —
+provavelmente em `OnTouchesEnded`/`OnEventDispatched`
+(`0xb44a4`/`0xb45c0`), não lidas nesta passada.

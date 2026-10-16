@@ -192,7 +192,13 @@ nas seções anteriores — não são "pendência pequena":
   `CFFT_STATE::GetParam` depois. Achado bônus: timestamp via
   `GetLocalTime` estilo Win32/PSP-SDK, não POSIX. `CAUTOSAVE`/
   `pspSaveList`/`pspSaveAuto` continuam não lidos.
-- [ ] Input touch (`CINPUT_IF_TOUCH`/`CINPUT_DATA`, 60+35 métodos).
+- [x] Input touch — função-central (`CINPUT_IF_TOUCH::OnTouchesBegan`,
+  `0xb42b0`, 356 B) lida por completo, ver
+  `REVERSE_ENGINEERING_NOTES.md` seção 20. Confirma arrays paralelos
+  por slot de toque (sem alocação dinâmica, capacidade fixa). Achado
+  principal: um **detector de duplo-toque embutido** (máquina de
+  estados + `timeGetTime()`, mesma família de API Win32/PSP-SDK da
+  seção 19). `CINPUT_DATA` (mapeamento toque→botão) continua não lida.
 - [ ] Classes utilitárias (`CRECT`, `CSTR_UTIL`, `CLIST`, `CTHREAD`,
   `CFRAMERATE`, `CFILE_UTIL`) — baixa prioridade, provável trabalho de
   "glue" sem achados arquiteturais novos.
