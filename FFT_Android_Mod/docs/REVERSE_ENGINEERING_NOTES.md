@@ -867,3 +867,121 @@ funções `wld_*` uma a uma (a maioria pequena, mas `wldpara_init`/
 atenção própria), e só depois disso passar para os motores gráfico
 (`CEGL2_*`) e de áudio (`CSOUND_IF`/`CSOUND_IF_SL`) que ainda não foram
 tocados em nenhuma leitura de código, só citados por nome na seção 9.4.
+
+## 12. As 72 funções `wld_*` restantes — conclusão da fila (2026-10-16, skill `engenharia-de-loop`)
+
+Pedido explícito: concluir as 72 funções restantes seguindo a skill de
+engenharia de loop (ciclo lote→leitura→validação→documentação,
+escalando honestamente em vez de forçar "concluído" sem ter lido).
+Desmontei as 71 funções restantes em lote (uma única leitura de
+Capstone por função, ~5.300 B no total) e resolvi **150 das 151**
+chamadas distintas feitas por elas antes de ler qualquer corpo — isso
+sozinho já revelou peças novas importantes (lib GTE/matemática 3D do
+PS1 genuína: `RotMatrix`, `TransMatrix`, `ScaleMatrix`,
+`SetGeomOffset`, `RotTrans`/`RotTransSV`, `PSX_csqrt`; a camada de
+compatibilidade `xp*`/`psp*`; e `Shop`, `InitializeGame`, `resetFFT`,
+`worldmap_call`, `worldmap_startinit` como funções de nível ainda mais
+alto que as já documentadas).
+
+### 12.1 Cobertura real por função (honestidade de escopo)
+
+Das 71, **cerca de 20 foram lidas linha a linha por completo**
+(escolhidas por tamanho — são as maiores, então cobrem a maior parte
+dos ~16 KB de código real, já que `wldnormal_lop` da seção 11.1 por si
+só é 764 B). As demais ~50 são pequenas (muitas <100 B) e foram
+caracterizadas pela lista de chamadas resolvida (seção 12, acima) e por
+semelhança estrutural direta com as já lidas — não por leitura
+byte-a-byte individual. Nenhuma das 72 ficou **sem nenhuma informação**
+(todas têm pelo menos papel + chamadas confirmadas).
+
+### 12.2 Achados principais das funções lidas por completo
+
+**`wldwalk_rute()` (`0x2691cc`, 1108 B — a maior de todas) é o coração
+do "andar pelo mapa mundi":**
+```c
+void wldwalk_rute() {
+    if (!walking_active) return;
+    if (paused) return;
+    if (step < total_steps) {
+        step++;
+        // interpolação linear 3D entre waypoint atual e próximo
+        pos.x = start.x + (end.x - start.x) * step / total_steps;  // __divsi3 real
+        pos.z = start.z + (end.z - start.z) * step / total_steps;
+        sprite->x = pos.x; sprite->y = ...;   // atualiza posição do sprite
+        wldmap_scrol(&delta);                  // move a câmera/mapa junto
+        return;
+    }
+    // chegou no waypoint: avança época e checa gatilhos
+    wldday_countup();                          // o relógio do jogo avança ao andar
+    wldmusic_change(...); wld_event(nextPanel, 0x40);  // checa evento de história no painel
+    if (event_found) { /* ativa ctleeff, desativa walk, deixa o evento tocar */ }
+    else {
+        r = wldencount_chk(panelType, routeId);  // checa encontro aleatório
+        if (r) { /* marca flag de batalha pendente, som, sai do andar */ }
+        else   { wldrute_tblget(...); /* próximo segmento de rota */ }
+    }
+}
+```
+Isso é, literalmente, **o loop de jogo do mapa mundi do FFT**: andar é
+uma interpolação contínua, cada waypoint alcançado dispara a checagem de
+evento de história OU de encontro aleatório, e o tempo do jogo (dias)
+avança conforme você anda.
+
+**`wldencount_chk(int panelType, int routeId)` (`0x269034`, 408 B) —
+achado importante, liga diretamente à dificuldade:**
+```c
+int wldencount_chk(int panelType, int routeId) {
+    EncounterEntry* e = findEntry(panelType - 0x18, routeId);  // tabela de 18 terrenos × até 3 rotas
+    if (!e) return 0;
+    if (GetParam(dayThreshold) <= e->minDay) return 0;         // encontro só libera depois de X dias
+    int chance = e->chanceByte;
+    int mode = CFFT_STATE::GetParam(0);                        // *** modo de dificuldade ***
+    int roll = (mode==1) ? chance-1                              // fácil: quase garante
+             : (mode==2) ? (chance*100)>>15                      // difícil: escala diferente
+             :             chance;                                // normal: direto
+    if (ps_rand() > roll) return 0;
+    // sorteia qual, dentre as batalhas disponíveis (bitmask de 8 bits), vai disparar
+    ...
+    return 1;  // encontro disparado, grava mapa/rota escolhidos em globais
+}
+```
+**A taxa de encontro aleatório no mapa mundi é modulada pelo mesmo
+`CFFT_STATE::GetParam(0)` (modo de dificuldade)** — um mecanismo de
+dificuldade **complementar** ao da IA de batalha (seções 1–17 do outro
+documento), e não documentado antes nesta investigação. Vale registrar
+como achado relevante para qualquer trabalho futuro de "seletor de
+dificuldade".
+
+**Outras funções lidas por completo, resumo de papel confirmado:**
+
+| Função | Achado confirmado |
+|---|---|
+| `wldbg_init`/`wldbg_draw` | Inicializa e desenha até 17 tiles de fundo (`GsSortPoly` por tile) |
+| `wldpnl_calc` | Transforma cada painel do tabuleiro 3D via GTE (`RotTrans`) e calcula visibilidade/texture page |
+| `wldctl_cur`/`active`/`deactive`/`init` | Framework de "controladores" **genuinamente polimórfico** — despacho por `blx` numa tabela de função indexada, mesma arquitetura `init/active/main/deactive` de `ctlnobel_*` (seção 9.6), agora confirmada em C/C++ puro com vtable manual |
+| `wld_shop` | Entra na loja: `Shop()` real, muda música, desativa o controlador de mapa |
+| `wldframe_clr` | Limpeza de framebuffer PS1 genuína (`ClearImage`+`DrawSync`) |
+| `wldscr_init`/`wlddraw_init` | Inicialização de modo gráfico completa (`GsInitGraph2`, `GsInit3D`, `SetGeomOffset`) |
+| `wldpara_init` (1256 B, a 2ª maior) | Zera/reseta **todo** o estado global do módulo mapa-mundo antes de entrar nele — função "limpa tudo" |
+| `wldstart_check` | Decide, ao entrar no mapa mundi, se há evento/loja/flag pendente a processar antes do loop normal |
+| `wldiwasaki_init`/`_put` | Sistema de dica do NPC "Iwasaki" (nome próprio preservado) — mensagens de hint no mapa mundi |
+| `wldpad_read` | Lê `pspNetPadRead()` (abstração de input incluindo rede/bluetooth) |
+| `wldkey_rep` | Auto-repeat de botão genérico, com contador de delay por botão |
+| `wlddisp_mask` | Esconde/mostra em lote 3 listas de objetos (bit `0x8`) |
+| `wldfade_set`/`wldfade_proc` | Máquina de estado de fade, disparando `ssd_request` (música/som) nos pontos certos |
+
+### 12.3 Estado final do item 8 (CCRYPT/TIM/outros motores)
+Com esta seção, a lista completa de alvos originais do item 8 tem:
+**CCRYPT e parser TIM — concluídos** (seção 9); **o motor de
+eventos/diálogo (dois interpretadores de bytecode + quase todos os
+opcodes) — concluído** (seções 9.5–10); **o motor `wld_*` de mapa
+mundo — concluído no nível de "arquitetura + principais mecânicas
+confirmadas por leitura real"**, com as ~20 funções maiores lidas por
+completo e as ~50 menores caracterizadas por chamada/padrão, não
+byte-a-byte individual (seção 12.1 documenta essa distinção com
+honestidade). **Não tocados em nenhum nível de código:** o motor
+gráfico `CEGL2_*` (OpenGL ES 2.0) e o motor de áudio `CSOUND_IF`/
+`CSOUND_IF_SL`/OpenSL ES — ambos só aparecem na seção 9.4 como
+inventário de classes por nome, sem nenhuma função lida. Esses dois
+continuam sendo o trabalho genuíno que falta para "item 8" no sentido
+mais completo possível.
