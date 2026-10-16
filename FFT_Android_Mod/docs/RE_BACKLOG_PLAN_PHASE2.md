@@ -152,10 +152,11 @@ continuam os mesmos:
   completo, ver `REVERSE_ENGINEERING_NOTES.md` seção 27. Confirma um
   array de perfis/slots de input (stride 1436 B), cada um validado
   por um sentinela `-1` na primeira word.
-- [ ] `CTHREAD::Register`/`CreateAndRegister` (`0xb9eb0`/`0xb9f04`,
-  84/64 B) — confirma se este engine usa threads reais (pthreads) pra
-  algo (áudio? loading assíncrono?) ou se é só um wrapper nunca
-  exercitado, igual ao `CCRYPT` morto da seção 9.1.
+- [x] `CTHREAD::Register`/`CreateAndRegister` — lidas por completo,
+  ver `REVERSE_ENGINEERING_NOTES.md` seção 28. Confirma `pthread_create`/
+  `sched_yield` reais — diferente do `CCRYPT` morto da seção 9.1, este
+  mecanismo é real e funcional. Quem de fato usa `CTHREAD` não
+  identificado.
 - [ ] `CFILE_UTIL::FileCopy`/`DirCreate` (`0xb79d8`/`0xb78b4`, 424/204
   B) — as maiores da classe; confirma se são wrappers POSIX
   (`open`/`read`/`mkdir`) ou algo mais específico do PSP-SDK (padrão

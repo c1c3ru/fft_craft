@@ -3465,3 +3465,50 @@ por botão, não só um valor simples.
 1436 B (quais offsets correspondem a quais botões/temporizadores) e
 quantos slots o array `records` de fato tem — não investigado nesta
 passada, já que o item pedia só a função-central.
+
+## 28. `CTHREAD::Register`/`CreateAndRegister` lidas — segundo item 🟡 da Fase 2, confirma threads reais (2026-10-16, Fase 2, iteração 15)
+
+`CTHREAD::Register(void(*)(void*), void*)` (`0xb9eb0`, 84 B) e
+`CreateAndRegister(int,...)` (`0xb9f04`, 64 B) — ambas lidas por
+completo (cobertura total nos dois casos). Resolvendo o `bl` por
+nome: `pthread_create` e `sched_yield` — **API POSIX real**.
+
+```c
+int CTHREAD::Register(CTHREAD* this, ThreadFunc fn, void* arg) {
+    this->field_0x8  = fn;
+    this->field_0xc  = arg;
+    this->field_0x10 = 2;
+
+    // *** this duplamente: como saída do pthread_t E como argumento ***
+    int r = pthread_create((pthread_t*)this, NULL, trampoline, this);
+    if (r != 0) return 1;
+
+    sched_yield();              // cede o processador uma vez pra deixar a nova thread começar
+    this->field_0x14 = 1;        // marca "thread criada/rodando"
+    return 0;
+}
+
+int CTHREAD::CreateAndRegister(CTHREAD* this, int priority, ThreadFunc fn, void* arg) {
+    if (Create(this, priority) != 0) return 1;   // 0xb9e94
+    return Register(this, fn, arg) ? 1 : 0;
+}
+```
+
+**Achado: `CTHREAD` usa `pthread_create` de verdade, não é um wrapper
+morto** — diferente do `CCRYPT` da seção 9.1 (achado como código
+morto, sem nenhum chamador no binário), `pthread_create`/`sched_yield`
+são chamadas reais da libc, confirmando que este motor **usa threads
+de verdade** em algum lugar (áudio assíncrono? carregamento em
+segundo plano? não identificado qual subsistema usa `CTHREAD`
+especificamente, mas o mecanismo em si é real e funcional).
+`this` é reaproveitado de forma compacta: serve tanto de `pthread_t*`
+de saída (sobrescrevendo o próprio início do objeto) quanto de
+argumento passado pra nova thread via a função-trampolim (endereço
+resolvido via GOT, não nomeado nesta passada).
+
+**O que ficou sem confirmar:** o endereço/papel exato da função
+"trampolim" passada pro `pthread_create` (provavelmente só chama
+`this->field_0x8(this->field_0xc)` e descarta o retorno — padrão
+clássico de adaptação de assinatura, mas não lida por dentro); quem
+no resto do jogo de fato chama `CreateAndRegister`/`Register` (não
+localizado nesta passada).
