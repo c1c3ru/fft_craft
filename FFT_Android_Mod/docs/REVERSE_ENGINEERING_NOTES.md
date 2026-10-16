@@ -1621,6 +1621,41 @@ void wldfade_proc() {
 (usa os 3 canais calculados como R/G/B, mas o nome sugere algo mais
 amplo que "cor") e o significado preciso da flag "mundo" nº 4.
 
+### 12.9 `wldcenter_chk` lida por completo (2026-10-16, continuação)
+
+`wldcenter_chk(_POINT* pos)` (`0x268aec`, 176 B, cobertura total: 42
+instruções pra 42 esperadas) — função folha, sem chamadas.
+
+```c
+int wldcenter_chk(_POINT* pos) {
+    if (pos->x >= -0x18) {                       // x dentro da margem pela esquerda
+        if (pos->x <= 0x20 && *g_marginA <= 8)      // E dentro da margem pela direita (threshold via global)
+            goto CHECK_Y;
+        return 1;                                     // fora da margem horizontal -> precisa recentrar
+    }
+    if (*g_marginB <= 0x20) goto CHECK_Y;
+    return 1;
+
+CHECK_Y:
+    if (pos->y < -0x40)
+        return ((0x50 - g_someGlobal->field_0x4) > 0x20) ? 1 : 0;
+    if (pos->y > 0x40)
+        return (g_otherGlobal->field_0x4 >= -0xf) ? 1 : 0;
+    return 0;    // dentro de ambas as margens -> não precisa recentrar
+}
+```
+
+**Confirma, com leitura real, o papel exato sugerido pelo nome**: é
+o teste "a posição está fora da margem de centralização da câmera do
+mapa mundi?" — compara `x`/`y` contra limites fixos (`±0x18`-ish em
+X, `±0x40` em Y), com alguns dos limiares vindo de globais de
+configuração (prováveis dimensões de tela/viewport, não cravados).
+Retorna `1` (precisa recentralizar) ou `0` (está dentro da margem).
+
+**O que ficou sem confirmar:** a identidade exata dos 2-3 globais
+usados como limiar — prováveis dimensões de viewport/mapa, papel
+não cravado byte a byte.
+
 ## 13. Motores gráfico (`CEGL2_*`) e de áudio (`CSOUND_IF`) — ponte confirmada com a API real (2026-10-16)
 
 Continuação direta: os dois últimos motores sem nenhum código lido.

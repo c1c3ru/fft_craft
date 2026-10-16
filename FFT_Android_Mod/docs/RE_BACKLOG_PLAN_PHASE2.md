@@ -207,6 +207,9 @@ continuam os mesmos:
     máquina de música da seção 12.7 (espera a fila de música esvaziar
     antes de continuar o fade); curva de interpolação assimétrica
     real pros canais de "ambiência" via `changewindowamb`.
+  - [x] `wldcenter_chk` (`0x268aec`, 176 B) — ver seção 12.9. Confirma
+    o papel sugerido pelo nome: testa se a posição está fora da
+    margem de centralização da câmera do mapa mundi.
   - [ ] Demais funções de "Desenho"/"Movimento/câmera"/"Persistência"
     da tabela da seção 11.2 ainda sem leitura linha a linha (a maioria
     pequena, <200 B).
