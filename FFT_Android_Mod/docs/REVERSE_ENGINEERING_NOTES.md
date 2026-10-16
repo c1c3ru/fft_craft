@@ -1850,6 +1850,58 @@ cruzado com `Create`, seção 13.5, que não grava esses campos
 explicitamente nessa passagem). `RenderFromFBO` (par desta função,
 `0xab164`, 732 B) continua não lida.
 
+### 13.10 `CEGL2_SHADER::Begin`/`SetTexture` lidas por completo — terceiro item 🟠 da Fase 2, e uma correção de assinatura (2026-10-16, Fase 2, iteração 8)
+
+`CEGL2_SHADER::Begin(int,MATRIX4*)` (`0xab7f4`, 120 B) e
+`SetTexture(int)` (`0xab8e8`, 60 B) — chamadas de verdade por
+`CEGL2_IF::DrawPacket` (seção 13.1), lidas por completo (ambas
+funções folha quanto a desmontagem — cobertura total nos dois casos).
+
+```c
+void CEGL2_SHADER::Begin(CEGL2_SHADER* this, int key, MATRIX4* matrix) {
+    Node* root = this->field_0x10;         // raiz do std::map (mesma árvore da seção 13.6)
+    if (!root) return;
+
+    Node* found = tree_lower_bound(root, key);   // mesmo algoritmo de busca do std::map
+    if (found == end || found->key > key) return;  // não achou exato
+
+    if (found->field_0x14 == 2)                        // campo de status do nó
+        glUseProgram(found->field_0x18);                  // *** ATIVA o shader de verdade ***
+
+    this->field_0x4 = key;
+    this->field_0x8 = &found->field_0x14;    // cacheia o nó pra `SetTexture`/outros getters usarem
+}
+
+void CEGL2_SHADER::SetTexture(CEGL2_SHADER* this, int slot) {
+    DATA_SHADER* node = this->field_0x8;      // nó cacheado por `Begin`
+    if (!node) return;
+
+    int idx = (slot == 0) ? 1 : (slot == 1) ? 2 : -1;
+    if (idx < 0) return;                          // só aceita slot 0 ou 1 — *** 2 texturas por shader ***
+
+    int loc = node->uniformLoc[idx];              // array de 27 uniforms (seção 13.6)
+    if (loc < 0) return;
+    glUniform1i(loc, slot);                         // liga a sampler uniform à texture unit `slot`
+}
+```
+
+**Achado — correção de assinatura**: `Begin` **nunca usa o parâmetro
+`matrix`** dentro do próprio corpo — só busca o shader no cache e
+chama `glUseProgram`. Isso corrige a suposição de pseudocódigo das
+seções 13.1/14 (`shader->Begin(matrix, 1000, count)`, com 3
+argumentos) — a assinatura real tem só 2 parâmetros explícitos
+(`int key`, `MATRIX4* matrix`), e o `matrix` não é consumido aqui
+(deve ser aplicado em outro método, como `SetMatrix4`, catalogado mas
+não lido, chamado separadamente pelo chamador).
+
+**Achado de arquitetura**: `SetTexture` confirma que shaders deste
+motor suportam **até 2 texturas simultâneas** (`slot` 0 ou 1, mapeado
+pra 2 dos 27 uniforms via `glUniform1i`) — bate exatamente com o
+`GetMultiTextureHandle()` de `CEGL2_SPRITE::DrawScrollBG` (seção 13.4,
+gatilho do "2º quad"/2ª textura) — confirma que o suporte a
+multi-textura é uma capacidade real do shader genérico, não um
+mecanismo isolado do `DrawScrollBG`.
+
 ## 14. `DrawTile4` e `Add3D` lidas por completo — e um bônus: resolvidos vários mistérios de PLT antigos (2026-10-16)
 
 Continuação pedida explicitamente: as duas maiores funções do `CEGL2_IF`

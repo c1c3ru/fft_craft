@@ -101,9 +101,12 @@ continuam os mesmos:
   `GL_TRIANGLES` com diagonal compartilhada); `glGenerateMipmap` real
   condicional; pula blend quando a cor é opaca. `RenderFromFBO`
   (`0xab164`, 732 B) continua não lida.
-- [ ] `CEGL2_SHADER::Begin(int,MATRIX4*)` (`0xab7f4`, 120 B) e
-  `SetTexture(int)` (`0xab8e8`, 60 B) — chamadas de verdade por
-  `CEGL2_IF::DrawPacket` (seção 13.1), nunca lidas por dentro.
+- [x] `CEGL2_SHADER::Begin`/`SetTexture` — lidas por completo, ver
+  `REVERSE_ENGINEERING_NOTES.md` seção 13.10. Achados: `Begin` nunca
+  usa o parâmetro `matrix` (corrige a suposição de 3 argumentos das
+  seções 13.1/14); `SetTexture` confirma suporte real a 2 texturas
+  simultâneas por shader (bate com `GetMultiTextureHandle` da seção
+  13.4).
 - [ ] `CEGL2_TEX_HYBRID::GL_IsUpdate` (`0xaf120`, 684 B) e `GL_Load`
   (`0xaf818`, 392 B) — fecham a família iniciada por `DecodeTexture`
   (seção 13.7): como a textura decodificada chega até o GL de verdade.
