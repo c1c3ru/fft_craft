@@ -202,6 +202,11 @@ continuam os mesmos:
     identificação), é a máquina de estados de 18 estados que controla
     a música de fundo do mapa mundi, com fila de comandos de troca de
     faixa e fade-in/fade-out reais.
+  - [x] `wldfade_proc` (`0x25df88`, 472 B) — ver seção 12.8. Confirma
+    `iOSwldssd_wait()` como a ponte real entre o fade visual e a
+    máquina de música da seção 12.7 (espera a fila de música esvaziar
+    antes de continuar o fade); curva de interpolação assimétrica
+    real pros canais de "ambiência" via `changewindowamb`.
   - [ ] Demais funções de "Desenho"/"Movimento/câmera"/"Persistência"
     da tabela da seção 11.2 ainda sem leitura linha a linha (a maioria
     pequena, <200 B).

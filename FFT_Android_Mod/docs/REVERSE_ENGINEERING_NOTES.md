@@ -1558,6 +1558,69 @@ void wldssd_control() {
 cravados), e a identidade do "something busy" global checado nos
 estados 17 e na troca de faixa.
 
+### 12.8 `wldfade_proc` lida por completo — confirma a ponte com a máquina de música da seção 12.7 (2026-10-16, continuação)
+
+`wldfade_proc()` (`0x25df88`, 472 B, cobertura total: 114 instruções
+reais + pool de literais). Fecha a nota da seção 11.2 ("`wldfade_set`/
+`wldfade_proc` disparando `ssd_request`") com um nome real:
+**`iOSwldssd_wait()`** (`0x26b6e0`) é exatamente essa chamada.
+
+```c
+void wldfade_proc() {
+    FadeCtl* g = *g_fadeCtl;
+    if (!(g->flags & 1)) return;              // bit "fade ativo"
+
+    if (g->curFrame == g->totalFrames) {        // chegou ao fim -> desliga tudo
+        g->flags &= ~0xd;
+        return;
+    }
+
+    if (g->curFrame + 2 == g->totalFrames) {
+        g_worldFlags->flags &= ~8;
+        iOSwldssd_wait();        // *** espera a máquina de estados de música (seção 12.7) terminar ***
+    }
+
+    g->curFrame++;
+    int r, gC, b;   // 3 canais de "ambiência" (tingimento de tela)
+    if (g->flags & 2) {    // *** fade IN (clareando) ***
+        int t1 = g->curFrame * 0x80 / g->totalFrames;   // __divsi3 real, interpolação linear
+        r = max(0x70 - t1, 0);
+        int t2 = g->curFrame * 0x100 / g->totalFrames;
+        b = min(t2 + 0x20, 0xff);
+    } else {                  // *** fade OUT (escurecendo) ***
+        int t1 = g->curFrame * 0x80 / g->totalFrames;
+        r = min(t1 + 0x10, 0x80);
+        int t2 = g->curFrame * 0x100 / g->totalFrames;
+        b = max(0xc0 - t2, 0);
+        pspWorldDisableFlg(4);     // *** desliga uma flag "mundo" nº 4 durante o fade-out ***
+    }
+    changewindowamb(r, r, r);        // *** aplica o tingimento de tela de verdade ***
+    g->ambR = b; g->ambG = b; g->ambB = b;   // grava os canais calculados (+0x24/+0x25/+0x26)
+
+    if (!(g->flags & 4)) g_otherFlags->flags |= 2;
+}
+```
+
+**Achados:**
+- **Confirma a ponte real entre o fade visual e a música**:
+  `iOSwldssd_wait()` é literalmente "espera a máquina de estados de
+  música (seção 12.7) consumir sua fila antes de continuar o fade" —
+  sincroniza a transição de tela com a transição de áudio, não são
+  dois sistemas independentes.
+- Confirma uma curva de interpolação assimétrica real pros canais de
+  "ambiência" (tingimento de tela): fade-in e fade-out usam fórmulas
+  espelhadas, não um fade linear simples de brilho — um canal decresce
+  enquanto o outro cresce, com faixas de valor diferentes (`0x70→0` e
+  `0x20→0xff` pro fade-in, invertido pro fade-out).
+- `pspWorldDisableFlg(4)`/`pspWorldEnableFlg(4)` confirmam mais uma
+  flag "mundo" numerada (bit 4), ligada/desligada em pontos específicos
+  do fade — provável "input desabilitado durante a transição", papel
+  exato não cravado.
+
+**O que ficou sem confirmar:** o papel exato de `changewindowamb`
+(usa os 3 canais calculados como R/G/B, mas o nome sugere algo mais
+amplo que "cor") e o significado preciso da flag "mundo" nº 4.
+
 ## 13. Motores gráfico (`CEGL2_*`) e de áudio (`CSOUND_IF`) — ponte confirmada com a API real (2026-10-16)
 
 Continuação direta: os dois últimos motores sem nenhum código lido.
