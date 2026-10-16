@@ -966,6 +966,102 @@ raras — todas devem seguir os mesmos dois padrões já confirmados (bit
 simples vs. chamada real de engine), mas isso é inferência por
 semelhança estrutural, não leitura linha a linha de cada uma.
 
+### 10.5 Os 7 opcodes de áudio/parâmetro, lidos linha a linha — fecha o último item 🟠 (2026-10-16, loop de continuação, iteração 7)
+
+Bônus desta leitura: o ponteiro global `s` (usado por **todos** os
+`evt_*`/`snpl_*` desta investigação, sempre resolvido via GOT nas
+seções 9.5–10.4 mas nunca nomeado) finalmente tem **nome real**,
+cruzado por endereço no `.dynsym`: é o objeto global **`snpl_copy`**
+(`0x6b251c`, 56 B). Essa é a "VM state" do interpretador do motor de
+eventos inteiro.
+
+**Os 3 de áudio são wrappers finos de 1 chamada cada** (confirma a
+hipótese da seção 10.4):
+
+```c
+void snpl_sndreq(void)   { callSoundEffect(snpl_copy->b[9]); s->h[0xc] |= 4; }   // 0x26a1a4, chama 0x2168e4
+void snpl_envsndreq(void){                                                        // 0x26ab70
+    int v = (snpl_copy->field_0x8 & 0xff00) >> 8;
+    if (snpl_copy->field_0x8 & 0xff0000) snpl_copy->h[0x32] = v | 0x4000;          // só grava se o byte "canal" for != 0
+    envSound_play(0 /*ignora v, lê de novo internamente*/);                        // 0x26a85c
+    s->h[0xc] |= 4;
+}
+void snpl_musicreq(void) { snpl_mreqcore(snpl_copy->b[9]); s->h[0xc] |= 4; }       // 0x26b0b8, chama 0x26aeec (172 B, não lida)
+```
+
+`callSoundEffect(int)` (`0x2168e4`) é, ela mesma, só um tail-branch de
+4 B pra `0x27131c` (não lida). `envSound_play(int)` (`0x26a85c`, 24 B)
+chama `0x21695c` e depois tail-branca pra `0x2168e8` (o endereço
+**imediatamente depois** do `b` de `callSoundEffect` — ou seja,
+`envSound_play` entra na mesma rotina de despacho de som, só que
+pulando o primeiro passo). `snpl_mreqcore` (172 B) não foi lida por
+dentro — catalogada por nome/tamanho, não é mais um opcode da VM, já é
+"motor de música" de verdade.
+
+**Os 4 de parâmetro revelam um mecanismo de duas fases que não estava
+documentado:**
+
+```c
+void snpl_setpara(void) {               // 0x269930, 44 B
+    int operand = (snpl_copy->field_0x8 & 0x00ffffff) >> 8;  // campo de 16 bits do opcode (mesmo formato da seção 9.7)
+    snpl_copy->field_0x34 = operand;     // ESCREVE DIRETO no parâmetro de 32 bits
+    s->h[0xc] |= 4;
+}
+void snpl_addpara(void) {               // 0x26995c, 48 B
+    int operand = (snpl_copy->field_0x8 & 0x00ffffff) >> 8;
+    snpl_copy->h[0x12] += operand;       // acumula num campo de 16 bits DIFERENTE — "delta pendente"
+    s->h[0xc] |= 4;
+}
+void snpl_subpara(void) {               // 0x26998c, 48 B — idêntico ao addpara, troca + por -
+    int operand = (snpl_copy->field_0x8 & 0x00ffffff) >> 8;
+    snpl_copy->h[0x12] -= operand;
+    s->h[0xc] |= 4;
+}
+void snpl_chgpara(void) {               // 0x269aa0, 104 B — o mais complexo dos 4
+    int32_t acc = snpl_copy->field_0x34;         // o parâmetro de 32 bits "real" (o mesmo que setpara grava)
+    int16_t delta = (int16_t)snpl_copy->h[0x12];  // o delta pendente de add/subpara, COM SINAL
+    snpl_copy->h[0x12] = 0;                        // consome/zera o delta pendente
+    acc += delta;
+    if (acc > 0xffff) acc = 0xffff;                // clampa em [0, 0xffff] (parâmetro é efetivamente de 16 bits úteis)
+    if (acc < 0)      acc = 0;
+    snpl_copy->field_0x34 = acc;
+    wldinfo_data1 = acc;    // *** grava o valor final também numa global do motor wld_*! ***
+    s->h[0xc] |= 4;
+}
+```
+
+**Achado principal:** `snpl_setpara`/`addpara`/`subpara` não tocam o
+mesmo campo — `setpara` escreve direto em `snpl_copy->field_0x34` (o
+"parâmetro real", 32 bits), enquanto `addpara`/`subpara` só acumulam
+num campo de **delta pendente** separado (`snpl_copy->h[0x12]`, 16
+bits com sinal). É **`snpl_chgpara`** quem de fato **aplica** esse
+delta pendente ao parâmetro real, com saturação em `[0, 0xffff]`, e
+zera o delta depois de consumido — um padrão "acumula, depois
+confirma" explícito, não um jeito alternativo de escrever o mesmo
+valor. **E `chgpara` propaga o resultado final pra fora da VM**,
+escrevendo em `wldinfo_data1` (`0x67b31c`, 4 B) — uma global já
+catalogada pelo nome na seção 11/12 (motor `wld_*`) mas nunca antes
+conectada a um opcode do motor de eventos. Isso é uma ponte de
+arquitetura real entre os dois sistemas documentados separadamente até
+agora: **o motor de eventos (`wld_event`/`wld_snpl`) manipula
+diretamente estado do motor de mundo (`wld_*`) através do opcode
+`chgpara`**, não só pelos opcodes `evt_wldinfo`/`evt_town_*` já
+catalogados na seção 10.2.
+
+### 10.6 O que ficou sem confirmar
+- O papel exato de `wldinfo_data1` dentro do motor `wld_*` (o que ela
+  controla em termos de jogo) — catalogada só pelo nome/tamanho nas
+  seções 11/12, não investigada por dentro.
+- `snpl_mreqcore` (172 B) e os alvos de `callSoundEffect`/
+  `envSound_play` (`0x27131c`/`0x21695c`) — não lidos por dentro (já
+  são "motor de áudio", fora do escopo da VM de opcodes).
+- Por que `envSound_play` é chamado com `0` fixo em vez do valor lido
+  em `snpl_copy->field_0x8` — ou ela ignora o argumento e relê o campo
+  internamente, ou o valor real já foi consumido/gravado em
+  `snpl_copy->h[0x32]` antes da chamada (mais provável, dado o `strhne`
+  condicional logo antes) — mecanismo plausível, não cravado com 100%
+  de certeza sem ler `0x21695c`.
+
 ## 11. Motor `wld_*` — levantamento estrutural (2026-10-14, continuação "o motor wld* inteiro")
 
 Pedido explícito de ir atrás do motor `wld_*` inteiro. Avaliação honesta

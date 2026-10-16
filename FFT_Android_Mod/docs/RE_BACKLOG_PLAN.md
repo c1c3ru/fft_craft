@@ -100,10 +100,17 @@ documentado. Os dois documentos de resultado são:
   simplesmente `path != NULL`. Achado bônus: `GetImageFormatType`/
   `GetImageFormatExt` retornam `char*` (usadas como origem de
   `strcpy`, não como inteiros).
-- [ ] Opcodes de áudio/parâmetro do motor de eventos ainda não lidos
-  individualmente: `snpl_sndreq`, `snpl_musicreq`, `snpl_envsndreq`,
-  `snpl_setpara`/`addpara`/`subpara`/`chgpara` (seção 10.4 — esperado
-  seguir os 2 padrões já confirmados, mas não verificado linha a linha).
+- [x] Opcodes de áudio/parâmetro do motor de eventos: `snpl_sndreq`,
+  `snpl_musicreq`, `snpl_envsndreq`, `snpl_setpara`/`addpara`/
+  `subpara`/`chgpara` — lidos linha a linha, ver
+  `REVERSE_ENGINEERING_NOTES.md` seção 10.5. Achados: o ponteiro
+  global `s` da VM finalmente tem nome real (`snpl_copy`, `0x6b251c`);
+  `setpara` escreve direto no parâmetro de 32 bits enquanto
+  `addpara`/`subpara` só acumulam um delta pendente de 16 bits
+  separado, que só `chgpara` de fato aplica (com clamp `[0,0xffff]`) —
+  e `chgpara` **também grava o resultado em `wldinfo_data1`**, uma
+  ponte de arquitetura real entre o motor de eventos e o motor
+  `wld_*` que não estava documentada.
 - [ ] As ~50 funções pequenas restantes de `wld_*` (seção 12.1 lista
   quais das 72 já foram lidas por completo — o resto está só por
   chamada/padrão). Sugestão de ordem: `wldinfo_put` (1040 B),
