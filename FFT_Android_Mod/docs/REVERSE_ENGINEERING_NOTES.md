@@ -2299,3 +2299,82 @@ FAIL:
 `Decode` já confirma a biblioteca e o formato de chunk, `Encode`
 provavelmente só interessa pra quem for RECOMPRIMIR assets
 modificados, não pra entender o jogo em si.
+
+## 19. `cSaveFFT::Save` lida por completo — segundo item ⚪, primeiro toque real em `CFFT_STATE` (2026-10-16, loop de continuação, iteração 15)
+
+Segundo item da camada ⚪. Entre as 5 classes do sistema de save
+(`pspSaveBase`/`pspSaveList`/`pspSaveAuto`/`cSaveFFT`/`CAUTOSAVE`),
+escolhi `cSaveFFT::Save(int mode)` (`0x27fcb8`, 460 B, cobertura
+total: 113 instruções reais) por ser o orquestrador de save do próprio
+jogo (`pspSaveBase` é a camada de emulação da API do PSP por baixo,
+menos específica do FFT). Cobertura confirmada via o símbolo exato no
+`.dynsym` (não há ambiguidade de endereço aqui).
+
+```c
+// cSaveFFT::Save(this, int mode)
+int cSaveFFT::Save(cSaveFFT* this, int mode) {
+    char path[0x104];
+    strcpy(path, (char*)this);              // *** this começa com um campo char[] (basename/caminho) ***
+    int len = strlen(path);
+    memcpy(path + len, <sufixo fixo de 12 B>, 12);   // extensão/sufixo do arquivo de save
+
+    CFILE* f = new CFILE(path);              // 0xb6620 — classe de arquivo própria do jogo
+    int openResult = f->Open(2);              // 0xb6654, modo 2 = escrita
+
+    if (openResult == 1) {                     // falha ao abrir
+        if (f) { f->~CFILE(); delete f; }
+        return 1;                                // propaga o erro, sem escrever nada
+    }
+
+    if (mode == 0) {
+        // *** grava o timestamp "quando foi salvo" ANTES do blob ***
+        void* saveBlob = Savedata_GetAddr();                    // 0x28a08c
+        SYSTEMTIME* ts = (SYSTEMTIME*)(saveBlob + 0x2798c);        // escreve DIRETO dentro do blob de save!
+        GetLocalTime(ts);                                          // 0xba094 — API estilo Win32/PSP-SDK
+
+        CFFT_STATE::SetParam(0x39, 1);              // *** 1º toque real em CFFT_STATE ***
+        CFFT_STATE::SetParam(0x3a, ts->wYear);
+        CFFT_STATE::SetParam(0x3b, ts->wMonth);
+        CFFT_STATE::SetParam(0x3c, ts->wDay);         // (pula wDayOfWeek)
+        CFFT_STATE::SetParam(0x3d, ts->wHour);
+        CFFT_STATE::SetParam(0x3e, ts->wMinute);
+        CFFT_STATE::SetParam(0x3f, ts->wSecond);
+        // cai direto no bloco abaixo (não retorna, não refaz o cheque de mode)
+    }
+
+    // *** grava o blob de save de verdade (roda sempre, inclusive após o bloco acima) ***
+    void* saveBlob = Savedata_GetAddr();                       // 0x28a08c
+    int   size     = pspGetFftPspSaveDataSize();                  // 0x28a080
+    f->Write(saveBlob, 0, size);                                    // 0xb6770
+    f->~CFILE(); delete f;
+    return 0;
+}
+```
+
+**Achados:**
+- **Primeira leitura real de `CFFT_STATE` por dentro** (até agora só
+  citada de fora, "candidata a orquestradora de nível mais alto").
+  Descobertos 7 IDs de parâmetro reais e seu papel exato:
+  `0x39`=flag "tem timestamp" (sempre `1`), `0x3a`-`0x3f`=ano/mês/
+  dia/hora/minuto/segundo do último save — dá um ponto de partida
+  concreto e testável pra investigar `CFFT_STATE::GetParam` no futuro
+  (basta procurar por esses mesmos IDs do lado da leitura).
+- O timestamp é obtido via `GetLocalTime(_SYSTEMTIME*)` (`0xba094`) —
+  **uma API de estilo Win32/PSP-SDK**, não uma chamada POSIX
+  (`time()`/`localtime()`) — reforça a origem do código (camada de
+  compatibilidade herdada do SDK do PSP, como o nome `pspSaveBase`
+  já sugeria).
+- `cSaveFFT` guarda seu caminho de arquivo como uma **string C
+  diretamente no início do próprio objeto** (`strcpy(buf, this)`) —
+  não um ponteiro separado.
+- O parâmetro `mode` não seleciona "tipo de save" — seleciona **se o
+  timestamp deve ser atualizado** antes de escrever o blob. O blob em
+  si (`Savedata_GetAddr()`/`pspGetFftPspSaveDataSize()`) é sempre
+  escrito, com ou sem `mode`.
+
+**O que ficou sem confirmar:** o conteúdo/formato do "blob" de save
+(`Savedata_GetAddr()`), e se os offsets exatos de `SYSTEMTIME` batem
+com a estrutura real do PSP-SDK (assumidos pelo layout Win32 clássico
+de 8 campos de 16 bits — plausível dado o uso de `GetLocalTime`, mas
+não cruzado com um header). `CAUTOSAVE::Save`/`Load` (maiores, 592/632
+B) e `pspSaveList`/`pspSaveAuto` continuam não lidos.

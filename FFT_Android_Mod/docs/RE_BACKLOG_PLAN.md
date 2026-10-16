@@ -184,8 +184,14 @@ nas seções anteriores — não são "pendência pequena":
   bit 1 de um campo; chunks sem a flag são só `memcpy`.
   `CCOMP_Z_ENC::Encode` não lida (só interessa pra recomprimir, não
   pra entender o jogo).
-- [ ] Sistema de save (`pspSaveBase`/`pspSaveList`/`pspSaveAuto`/
-  `cSaveFFT`/`CAUTOSAVE`, ~35+6+5+12+8 métodos).
+- [x] Sistema de save — função-central (`cSaveFFT::Save`, `0x27fcb8`,
+  460 B) lida por completo, ver `REVERSE_ENGINEERING_NOTES.md` seção
+  19. **Primeira leitura real de `CFFT_STATE` por dentro**: descobre
+  7 IDs de parâmetro reais (`0x39`-`0x3f` = timestamp do último save,
+  ano/mês/dia/hora/min/seg) — ponto de partida concreto pra investigar
+  `CFFT_STATE::GetParam` depois. Achado bônus: timestamp via
+  `GetLocalTime` estilo Win32/PSP-SDK, não POSIX. `CAUTOSAVE`/
+  `pspSaveList`/`pspSaveAuto` continuam não lidos.
 - [ ] Input touch (`CINPUT_IF_TOUCH`/`CINPUT_DATA`, 60+35 métodos).
 - [ ] Classes utilitárias (`CRECT`, `CSTR_UTIL`, `CLIST`, `CTHREAD`,
   `CFRAMERATE`, `CFILE_UTIL`) — baixa prioridade, provável trabalho de
