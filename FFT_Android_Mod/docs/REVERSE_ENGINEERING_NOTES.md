@@ -1719,6 +1719,63 @@ debug que o build de produção não limpou), não um caso isolado.
 confirmado QUE existe e QUANDO dispara (soma de duas dimensões > 512),
 mas não a fórmula linha-a-linha completa.
 
+### 13.8 `CEGL2_SPRITE::AddPacketPartial` lida por completo — primeiro item 🟠 da Fase 2 (2026-10-16, Fase 2, iteração 6)
+
+`CEGL2_SPRITE::AddPacketPartial(float×6, CEGL_PACKET*)` (`0xad324`,
+1244 B, cobertura total: 311 instruções pra 311 esperadas) — a maior
+das 3 funções da família ainda não lidas (seção 13.4 só tinha lido
+`DrawScrollBG`). Escolhida como função-central porque é a que
+**monta** o lote que `DrawPartial`/`Draw8` presumivelmente desenham
+depois.
+
+**Achado estrutural confirmado: é uma função 100% linear, sem nenhum
+desvio condicional** (as 311 instruções formam um único caminho,
+confirmado byte a byte) — puro cálculo de ponto flutuante (via
+helpers `libgcc` já conhecidos) seguido de gravação manual byte a
+byte (`strb` + `lsr #8/0x10/0x18`) do padrão de bits de cada `float`
+calculado, mais alguns `memcpy` (`0x714b8`) de 4 B copiando campos
+fixos de `this` direto pro buffer.
+
+```c
+void CEGL2_SPRITE::AddPacketPartial(float p1, float p2, float p3,
+                                      float p4, float p5, float p6,
+                                      CEGL_PACKET* packet) {
+    void* v = packet->GetVBOBufferCurrent();     // 0xb1bc8 — mesmo ponteiro de escrita do Add3D/AddTile
+
+    // calcula posição/UV combinando p1..p6 com this->+0x4c/+0x50/+0x54/
+    // +0x58/+0x5c/+0x60/+0x64 (campos do sprite — provavelmente o
+    // retângulo fonte dentro da folha de textura, dado o nome
+    // "Partial"), grava em formato intercalado de 24 B/vértice
+    // (mesmo layout confirmado em `DrawPacket`, seção 13.1):
+    //   v[0] = {pos, cor=0, uv}
+    //   v[1] = {pos, cor=0, uv}
+    //   v[2] = {pos, cor=0, uv}
+    memcpy(v + 0x48, v + 0x18, 0x30);    // *** copia v[1] e v[2] pra v[3]/v[4] ***
+    // v[5] = {pos, cor=0, uv}
+
+    packet->SetTypeCurrent(this->b[0x48]);                  // 0xb1b0c
+    packet->SetBlendModeCurrent(packet->GetDefaultBlendMode()); // 0xb1acc + 0xb1b34
+    packet->SetTextureCurrent(this->w[0x28]);                 // 0xb1b5c
+    packet->SetExtraCurrent((int)p1, -3);                      // 0xb1ba0
+    packet->Add(6);                                             // 0xb1a80 — tail-call, 6 vértices
+}
+```
+
+**Confirma, com o `memcpy` interno explícito, o layout exato do quad
+de 6 vértices via 2 triângulos degenerados compartilhando uma
+diagonal** (`v0,v1,v2,v1,v2,v5` — os vértices `v1`/`v2` são
+literalmente duplicados pra `v3`/`v4` por um `memcpy` de 48 B dentro
+da própria função, não por dois cálculos separados) — o mesmo truque
+clássico de "desenhar um quad sem index buffer" que `DrawPacket`
+(seção 13.1) e `DrawScrollBG` (seção 13.4) já usavam, agora confirmado
+na origem (onde o lote é **montado**, não só desenhado).
+
+**O que ficou sem confirmar:** a fórmula geométrica exata (o que cada
+campo `this->+0x4c`.. representa em termos de retângulo fonte/destino
+real) — confirmado QUE a função monta um quad com UV parcial de uma
+folha de sprite maior, mas não a matemática linha a linha completa
+(mesma ressalva já aplicada a `DrawScrollBG`, seção 13.4).
+
 ## 14. `DrawTile4` e `Add3D` lidas por completo — e um bônus: resolvidos vários mistérios de PLT antigos (2026-10-16)
 
 Continuação pedida explicitamente: as duas maiores funções do `CEGL2_IF`

@@ -87,10 +87,13 @@ continuam os mesmos:
   440 VSyncs); (3) `SetThisDestination` confirmado como o "commit"
   real do destino escolhido; (4) filtros reais de alcance de
   arco/arma de fogo via `CheckBowReachable`/`CheckGunReachable`.
-- [ ] `CEGL2_SPRITE::AddPacketPartial` (`0xad324`, 1244 B),
-  `DrawPartial` (`0xae090`, 1088 B), `Draw8` (`0xaceec`, 1080 B) — as 3
-  maiores da família, ainda não lidas (seção 13.4 só leu
-  `DrawScrollBG`).
+- [x] `CEGL2_SPRITE::AddPacketPartial` (`0xad324`, 1244 B) — lida por
+  completo, ver `REVERSE_ENGINEERING_NOTES.md` seção 13.8. Achado:
+  função 100% linear (sem nenhum desvio condicional) que monta um
+  quad de 6 vértices via `memcpy` interno duplicando `v1`/`v2` pra
+  `v3`/`v4` — confirma o layout "2 triângulos degenerados" na
+  origem (onde o lote é montado), não só no desenho. `DrawPartial`/
+  `Draw8` continuam não lidas.
 - [ ] `CEGL2_FBO::RenderToFBO` (`0xaae00`, 868 B) e `RenderFromFBO`
   (`0xab164`, 732 B) — usam o FBO que a seção 13.5 (`Create`) já
   documentou; fecha o ciclo "criar → usar".
