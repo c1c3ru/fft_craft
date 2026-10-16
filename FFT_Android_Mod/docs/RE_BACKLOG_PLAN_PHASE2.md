@@ -113,8 +113,12 @@ continuam os mesmos:
   fallback). **4ª ocorrência do padrão "condição impossível = laço
   infinito"** nesta investigação. `GL_Load` (`0xaf818`, 392 B)
   continua não lida.
-- [ ] `CSOUND_IF_SL::Stream_Load(int)` (`0xbc5a4`, 216 B) — par de
-  `Stream_CreatePlayer` (seção 17.6), ainda não lido.
+- [x] `CSOUND_IF_SL::Stream_Load(int)` (`0xbc5a4`, 216 B) — lida por
+  completo, ver `REVERSE_ENGINEERING_NOTES.md` seção 17.8. Confirma
+  ser a contraparte exata de `CB_for_Stream` (seção 17.4) — o
+  primeiro preenchimento de buffer antes do callback assumir.
+  Achado bônus: os dois pares de loop-point começam zerados pra
+  `-1` (sem loop configurado ao iniciar o streaming).
 - [ ] `CSOUND_LOADER_OGG::Open` (`0xbd56c`, 460 B) e
   `CSOUND_LOADER_PCM::Open` (`0xbced4`, 608 B) — os pontos de entrada
   reais de parsing de arquivo de ambos os decoders (seção 17.7 só leu

@@ -2533,6 +2533,60 @@ jogo).
 **Fecha o último item 🟡 do plano** — todos os itens 🟡 agora têm pelo
 menos a função-central lida por completo.
 
+### 17.8 `CSOUND_IF_SL::Stream_Load` lida por completo — quinto item 🟠 da Fase 2 (2026-10-16, Fase 2, iteração 10)
+
+`CSOUND_IF_SL::Stream_Load(int channel)` (`0xbc5a4`, 216 B, cobertura
+total: 54 instruções pra 54 esperadas). É o par de `Stream_CreatePlayer`
+(seção 17.6) — **o "primeiro preenchimento" do buffer de streaming**,
+antes do callback (`CB_for_Stream`, seção 17.4) assumir os preenchimentos
+seguintes.
+
+```c
+int CSOUND_IF_SL::Stream_Load(CSOUND_IF_SL* this, int channel) {
+    Channel* c = &this->channelTable[channel];   // stride 0x88, confirmado de novo (seção 17.6)
+
+    c->field_0x18 = (*c->field_0x10->vtbl)[0xd](c->field_0x10);   // *** chamada virtual #1 ***
+    int err = (*c->field_0x7c->vtbl)[1](c->field_0x7c);             // *** chamada virtual #2 — no objeto "player interface" ***
+    if (err != 0) return 1;
+
+    c->field_0x28_0x2c = -1;   // par de 64 bits -- *** zera o loop-point A ***
+    c->field_0x30_0x34 = -1;   // par de 64 bits -- *** zera o loop-point B ***
+    c->field_0x20_0x24 = c->field_0x10->GetPlaySample();   // 0xbd738 — cacheia a amostra atual
+
+    c->field_0x54 = 1;    // *** flag "streaming ocupado" ***
+    void* buf = c->field_0x10->GetStreamBuffer();   // 0xbd95c
+    int errOut;
+    int decoded = c->field_0x10->Decode(buf, 0x800 /*2048 B, igual ao `CB_for_Stream`!*/,
+                                          -1, -1, &errOut);          // 0xbd740 — seção 17.7!
+    c->field_0x54 = errOut;    // *** reseta a flag (reaproveita `errOut`, não é literalmente "0") ***
+
+    buf = c->field_0x10->GetStreamBuffer();   // *** re-busca o ponteiro (pode ter avançado no Decode) ***
+    int result = (*c->field_0x7c->vtbl)[0](c->field_0x7c, buf, decoded);  // *** chamada virtual #3 — Enqueue()! ***
+    return (result != 0) ? 1 : 0;
+}
+```
+
+**Confirma, byte a byte, a contraparte exata de `CB_for_Stream`**
+(seção 17.4): a MESMA sequência "pega o buffer → `Decode` 2048 B →
+re-pega o buffer → enfileira na fila de buffers do OpenSL ES"
+aparece aqui, só que como o **primeiro** preenchimento (antes do
+player estar tocando) em vez do preenchimento reativo via callback. A
+chamada virtual final (vtable slot 0 do objeto em `+0x7c`) é quase
+certamente `(*bufferQueueItf)->Enqueue(...)` — mesmo papel que a
+seção 17.4 já tinha identificado.
+
+**Achado bônus**: os pontos de loop (`+0x28/+0x2c` e `+0x30/+0x34`,
+dois pares de 64 bits) são explicitamente zerados pra `-1` aqui —
+ou seja, **toda música que começa a tocar via streaming começa SEM
+loop configurado**, e algum código externo (não localizado) deve
+gravar um loop real depois, se a faixa precisar.
+
+**O que ficou sem confirmar:** a identidade exata dos dois objetos
+polimórficos (`field_0x10`'s vtable slot `0xd`, `field_0x7c`'s vtable
+slots `0`/`1`) — prováveis wrappers C++ sobre as interfaces OpenSL ES
+(`SLAndroidSimpleBufferQueueItf`), mas os nomes reais dos métodos não
+foram cruzados.
+
 ## 18. `CCOMP_Z_DEC::Decode` lida por completo — primeiro item ⚪, e confirma a biblioteca real de compressão (2026-10-16, loop de continuação, iteração 14)
 
 Primeiro item da camada ⚪ (sistemas nunca tocados). `CCOMP_Z_DEC::Decode(uchar*
