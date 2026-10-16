@@ -2290,3 +2290,141 @@ item 🟠 no `RE_BACKLOG_PLAN_PHASE2.md` pra uma leitura dedicada futura.
   varredura por imediato não conseguiria achar (ex.: acessado via um
   ponteiro computado em OUTRO lugar e só passado como parâmetro, sem
   reconstruir o literal `0x5e0` de novo).
+
+## 25. `sub_277f78` lida por completo — o verdadeiro laço "iterar destinos candidatos e avaliar cada um" da IA (2026-10-16, Fase 2, iteração 5)
+
+A função sem símbolo achada na seção 24 (`0x277f78`–`0x27842c`,
+1204 B) foi lida por completo (301 instruções, cobertura total). É,
+com alta confiança, **o laço central que a seção 6.1 já citava de
+fora como "quem decide o melhor movimento"** — fecha esse buraco de
+vez, e amarra sozinha achados de 5 seções diferentes (18, 20, 21, 23,
+24) num único mecanismo coerente.
+
+### 25.1 Visão geral confirmada
+
+```c
+void sub_277f78() {   // nome de referência — sem símbolo no .dynsym
+    if (!(g->b[0x19b7] && g->b[0xc72])) goto COOLDOWN_OR_COMMIT;  // ver 25.4
+
+    // lê uma máscara de linha da tabela em g+0x5a0 (mesmo formato
+    // mla(row,0x12,z)+0x5a0 — tabela PARALELA à +0xa70, papel exato
+    // não isolado) usando a posição candidata atual
+    // (g->h[0x28]=coluna, g->h[0x2a]=linha, g->h[0x2c]=z)
+    int result = SetBestMove();          // 0x277f1c — AVALIA a posição candidata atual
+    if (result == -1) { g->b[0xc72] = 1; return; }   // sinaliza "tentar de novo"
+
+    if (!g->b[0x19bc]) return;             // flag irmã da "IA ativa" (+0x1980+0x3c) — sem ela, sai
+
+    if (g->b[0xe4e] != 0) {
+        // *** togla o bit em g+0x5e0 pra este candidato (seção 24) ***
+        g->h5e0row ^= (0x8000 >> col);
+        // *** decrementa o contador de painéis restantes! ***
+        if (--g->b[0xcbb] != 0) goto NEXT_CANDIDATE;    // 0xcbb = contagem da seção 21 (CountMap)!
+        // contagem zerou -> avança pra próxima "linha" de busca
+        g->b[0xcbb-ish state]; iteration_row++;
+    }
+    goto MAIN_SCAN_LOOP;   // ver 25.3
+}
+```
+
+**Confirma, com leitura real, quem consome `g->b[0xcbb]`** — o
+contador de painéis de destino que `GetDestinationsAndMakeMaskTG`
+calculava via `CountMap` (seção 21) e que ficava sem consumidor
+identificado: **é decrementado aqui, um por candidato avaliado**, até
+chegar a zero.
+
+### 25.2 `COOLDOWN_OR_COMMIT` — o watchdog de tempo real da IA, e o "commit" do destino escolhido
+
+Quando a IA não está "ativa" (ou não há mais candidatos pendentes,
+`g->b[0xc72]==0`), a função faz duas coisas bem diferentes:
+
+```c
+int vcount = VSync(1);                 // *** chamada real da lib gráfica do PS1! ***
+if (vcount > 0x1b8 /* 440 */) {         // *** watchdog de tempo: aborta se "pensar" demais ***
+    g->b[0xc72] = 0;
+    return -1;
+}
+
+g->b[0x19b7] = 0;                        // desliga a flag "IA ativa"
+void* dest = g->b[0x14] ? &g->b[0xe30] : &g->b[0x18];  // escolhe a origem do destino final
+SetThisDestination(dest);                 // *** COMMIT: grava o destino escolhido de verdade ***
+
+if (g->b[4] != 0) {                        // contexto de habilidade específica
+    if (getskillrange(&g->b[0x1c]) == 3) return 0;   // 0x1e03c8 — recalcula alcance, aborta se código 3
+}
+// (senão) zera o bit 0x40 de um registro de 8 B por painel num array
+// de 512 entradas (provável "tabela de ocupação/visitado de todo o
+// mapa", stride 8 B — tamanho MUITO maior que `bwork` — ver 25.5),
+// depois marca esse mesmo bit SÓ pro painel que acabou de ser
+// escolhido (`dest`) -- "desmarca tudo, marca só o escolhido".
+```
+
+**Achado maior: a IA tem um orçamento de tempo real, medido em
+contagens de `VSync` (biblioteca gráfica do PS1 de verdade), não em
+número de candidatos** — se passar de **440 VSyncs** avaliando
+candidatos, a busca é abortada (`g->b[0xc72]=0`, retorna `-1`). Isso é
+literalmente um watchdog de "não deixa a IA travar o jogo pensando
+demais", medido pelo mesmo relógio que o jogo usa pra desenhar
+quadros. E **`SetThisDestination` é a função real de "commit"** —
+grava o destino que `SetBestMove()` escolheu ao longo de todas as
+iterações anteriores.
+
+### 25.3 O laço principal de varredura — filtro de alcance de arma (arco/arma de fogo)
+
+O corpo central (`0x278104`–`0x278318`) é um laço duplo
+linha-por-linha/coluna-por-coluna sobre uma máscara construída a
+partir da região de `GetTargetBaseArea` (`g+0xb40`) **intersectada**
+com a tabela de 512 entradas mencionada em 25.2 (só considera painéis
+que foram marcados como "escolhidos" em alguma iteração anterior —
+mecanismo de deduplicação entre passadas, não isolado por completo).
+Pra cada bit setado (um painel candidato):
+
+```c
+g->h[0x2a] = row; g->h[0x28] = col; g->h[0x2c] = z;   // define a NOVA posição candidata
+
+if (g->b[0x26] == 6 || (g->b[0xf] & 0xc0)) {
+    // acha qual unidade de bwork[] (se alguma) ocupa este painel
+    // exatamente (bwork[k].b[0x4f]/b[0x50]/b[0x51]) e grava o índice
+    // em g->b[0x27]; se nenhuma, recomeça o fluxo de "próximo candidato"
+} else if (g->b[0xf] & 0x80) {                              // *** flag "arco" ***
+    if (!CheckBowReachable(g->b[0xe2e], g->b[0x27])) {        // 0x224650
+        continue;   // painel fora de alcance de arco -> descarta, próxima coluna
+    }
+} else if (g->b[0xf] & 0x40) {                              // *** flag "outra arma à distância" (arma de fogo?) ***
+    if (weaponCategoryTable[g->b[0]] == 1) {
+        // caso especial: se a distância real (GetDistance, 0x271e1c)
+        // entre o invocador e o alvo for <= 1 (adjacente), PULA o
+        // teste de arma — só testa CheckGunReachable se for > 1
+        if (GetDistance(...) > 1 && !CheckGunReachable(g->b[0xe2e], g->b[0x27]))  // 0x224d4c
+            continue;
+    } else if (!CheckGunReachable(g->b[0xe2e], g->b[0x27])) {
+        continue;
+    }
+}
+// painel passou os filtros -> decide g->b[0xe4e] a partir de um bit
+// de g->b[0xcb7], e VOLTA PRO TOPO (chama SetBestMove() de novo pra
+// esta nova posição candidata)
+goto TOP;
+```
+
+**Confirma, com chamadas reais, os dois filtros de alcance de arma à
+distância da IA**: `CheckBowReachable`/`CheckGunReachable` (nomes
+reais do `.dynsym`) — a IA não considera um painel de destino válido
+pra uma habilidade de arco/arma de fogo sem antes confirmar
+alcançabilidade real, com um atalho de "se já está adjacente, nem
+precisa checar arma de fogo" via `GetDistance`.
+
+### 25.4/25.5 O que ficou sem confirmar
+- O papel exato da tabela em `g+0x5a0` (mesma fórmula de indexação da
+  `+0xa70`, mas base diferente — provavelmente um dado paralelo por
+  linha, não isolado).
+- A tabela de 512 entradas × 8 B (`bit 0x40` = "painel escolhido
+  nalguma iteração") — maior que `bwork` (21×486 B), provavelmente
+  cobre painéis de mapa, não unidades; papel exato de dedução
+  cruzada com a máscara de `GetTargetBaseArea` não fechado 100%.
+- `g->b[0x14]`, `g->b[4]`, `g->b[0x26]==6`, `g->b[0xcb7]` bit 1 — todos
+  usados como seletores de caminho, papel de negócio exato (que
+  categoria de ação/habilidade cada valor representa) não cravado.
+- `weaponCategoryTable` (lookup GOT por `g->b[0]`, caster) — mesmo
+  padrão de "tabela de categoria" visto em outras seções, endereço
+  real não resolvido nesta passada.
