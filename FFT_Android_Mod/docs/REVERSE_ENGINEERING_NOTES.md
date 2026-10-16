@@ -1748,6 +1748,91 @@ void wldday_put(GsOT* ot) {
   praticada nas seções anteriores quando o `.dynsym` não cobre dados,
   só funções.
 
+### 12.11 `wld_window` lida por completo — revela a máquina de estados real de abrir/fechar janela (2026-10-16, Fase 2, continuação)
+
+`wld_window(WINPAC* win, GsOT* ot)` (`0x26679c`, 356 B, cobertura
+total: 89 instruções pra 89 esperadas, sem pool de literais — função
+inteira acessa dados só via campos de `win`, nenhum global PIC
+direto). Resolvendo os `bl` por nome: **`fadeanb_calc`** (`0x25e160`,
+já confirmada nas seções 12.4/12.5/12.10) e **`GsSortFastSprite`**
+(`0x29c340`, já confirmada na seção 12.4), e uma função nova,
+**`winopen_frmcalc(int, RECT16*, RECT16*)`** (`0x2666d4`).
+
+```c
+void wld_window(WINPAC* win, GsOT* ot) {
+    Sprite s;
+    s.field_0xc = (win->flags & 4) ? 0x1000000 : 0;        // bit de modo (semi-transparência?), não cravado
+    s.u = win->+0x20;
+    if (win->+0x14 != 0)
+        s.u += (win->+0x14 - 1) << 4;                        // seleciona coluna de 16px num atlas de skins de janela
+    s.v = win->+0x24;
+
+    uint32_t color;
+    if (win->flags & 0x400) color = win->+0x30;               // cor fixa
+    else                     fadeanb_calc(&win->+0x30, &color); // cor pulsante (MESMO padrão de wld_anim/wldday_put)
+    s.rgb = color;                                              // bytes de color -> s.r/g/b
+    s.priority = win->+4;
+
+    if (!(win->flags & 0x100)) {
+        // *** estático: janela totalmente aberta ou fechada — copia o RECT16 cru ***
+        s.rect = { win->+0x18, win->+0x1c, win->+0x28, win->+0x2a, win->+0x2c, win->+0x2e };
+    } else {
+        // *** animando: máquina de 8 passos (win->+0x10 = 0..7) ***
+        RECT16 animRect;
+        winopen_frmcalc(win->+0x10 / 2, (RECT16*)&win->+0x28, &animRect);  // interpola o frame atual
+
+        s.rect.x0 = animRect.x0 + win->+0x18;    // soma offset animado + canto fixo da janela
+        s.rect.y0 = animRect.y0 + win->+0x1c;
+        s.rect.x1 = animRect.x1 + win->+0x28;
+        s.rect.y1 = animRect.y1 + win->+0x2a;
+
+        if (win->+0x10 > 7) {                      // 8º passo: animação terminou
+            win->flags ^= 0x100;                      // desliga o bit "animando"
+            win->+0x10 = 0;                            // zera o contador
+        } else {
+            win->+0x10 += 1;                           // avança um passo
+        }
+    }
+    GsSortFastSprite(&s, ot, win->+8 /* ? */, win->+0x34 /* ? */);
+}
+```
+
+**Achados:**
+- **Terceira ocorrência confirmada** do padrão "cor fixa (bit `0x400`)
+  OU pulsante via `fadeanb_calc`" — já visto em `wld_anim` (ANMPAC,
+  seção 12.5) e `wldday_put` (seção 12.10), agora também em `WINPAC`.
+  Confirma que é uma convenção genérica do motor (bit `0x400` = "não
+  pulsar"), não algo específico de um struct.
+- **Revela a máquina de estados real de abrir/fechar janela do FFT**:
+  o bit `0x100` de `win->flags` indica "animando"; enquanto ativo, um
+  contador de 8 passos (`win->+0x10`) avança a cada chamada e
+  `winopen_frmcalc` interpola o retângulo atual entre o estado inicial
+  e o `RECT16` final da janela (`win->+0x28..+0x2e`); ao completar o
+  8º passo, o bit `0x100` é desligado automaticamente e o contador
+  zera — ou seja, **a transição de abrir/fechar dura exatamente 8
+  frames**, sem precisar de nenhum outro chamador pra "terminar" a
+  animação.
+- Enquanto `win->flags & 0x100` está desligado (janela totalmente
+  aberta/fechada, estado estável), a função pula `winopen_frmcalc`
+  inteiramente e copia o `RECT16` final direto — caminho mais barato,
+  confirma que o cálculo de interpolação só roda durante a transição.
+- Hipótese (não confirmada): `win->+0x14` parece indexar uma coluna de
+  16px num atlas de texturas de "skins" de janela (múltiplos estilos
+  de moldura compartilhando uma textura) — bateria com
+  `wldwintex_point` (seção 11.2, "Janelas de UI"), que não foi lida.
+
+**O que ficou sem confirmar (escalonado, não forçado):**
+- Os 3º/4º argumentos passados a `GsSortFastSprite`
+  (`win->+8`/`win->+0x34`) — na chamada de `wldinfo_put` (seção 12.4)
+  o 3º argumento era um literal `0`; aqui são campos dinâmicos do
+  `WINPAC`, então o papel completo da assinatura real de
+  `GsSortFastSprite` (quantos parâmetros ela de fato usa) não está
+  cravado.
+- O layout completo de `WINPAC` — só os campos tocados por esta função
+  foram nomeados por offset; os demais (e o papel exato de
+  `win->+0x14`) ficam por confirmar lendo `wldwintex_point`/
+  `wldwin_set`/`wldwin_trans` (ainda não lidas).
+
 ## 13. Motores gráfico (`CEGL2_*`) e de áudio (`CSOUND_IF`) — ponte confirmada com a API real (2026-10-16)
 
 Continuação direta: os dois últimos motores sem nenhum código lido.

@@ -217,11 +217,18 @@ continuam os mesmos:
     vem de `wldday_countup` — vem de dois `Wread_eventflag` (índices
     46/47) convertidos por `sun_to_ivarisday`, nunca lida por dentro
     (escalonado).
+  - [x] `wld_window` (`0x26679c`, 356 B) — ver seção 12.11. **Achado
+    maior**: revela a máquina de estados real de abrir/fechar janela
+    — bit `0x100` de `win->flags` = "animando", contador de 8 passos
+    em `win->+0x10`, `winopen_frmcalc` interpola o retângulo a cada
+    passo, desliga o bit sozinho ao fim. Confirma a 3ª ocorrência do
+    padrão "cor fixa vs. pulsante via `fadeanb_calc`" (depois de
+    `wld_anim`/`wldday_put`).
   - [ ] Demais funções de "Desenho"/"Movimento/câmera"/"Persistência"
     da tabela da seção 11.2 ainda sem leitura linha a linha (a maioria
-    pequena, <200 B). Maiores restantes por tamanho: `wld_window`
-    (356 B), `wldtown_bright` (320 B), `wldtname_put` (260 B),
-    `wldmap_scrol` (220 B), `wlddata_load`/`wldtown_draw` (212 B).
+    pequena, <200 B). Maiores restantes por tamanho: `wldtown_bright`
+    (320 B), `wldtname_put` (260 B), `wldmap_scrol` (220 B),
+    `wlddata_load`/`wldtown_draw` (212 B).
 - [x] Binário x86 — primeira comparação feita, ver
   `REVERSE_ENGINEERING_NOTES.md` seção 31. `.dynsym` tem contagem de
   símbolos muito próxima da ARM (6530 vs 6636); `CCOMP_Z_DEC::Decode`
