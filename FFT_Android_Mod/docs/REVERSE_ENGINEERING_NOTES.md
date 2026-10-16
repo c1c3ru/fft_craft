@@ -821,6 +821,59 @@ int TIM_LoadMemory(TimObject* dst, uint8_t* src) {
   `beq 0xa6ba4`, `pop` sem `mov r0` explícito antes — herda o `r0` da
   chamada anterior, então provavelmente `1`, mas não cravado).
 
+### 9.10 `CG2D_LOADER_TIM::Load` lida por completo — e correção de endereço no plano
+
+**Correção importante:** o plano (`RE_BACKLOG_PLAN.md`) listava este
+item em `0xa6cd0`, mas esse endereço cai **no meio** da função real —
+o `.dynsym` dá o endereço certo: `_ZN15CG2D_LOADER_TIM4LoadEPcPhjj`
+(`CG2D_LOADER_TIM::Load(char*, uchar*, uint, uint)`) está em
+**`0xa6c90`**, 204 B (mesmo tamanho que o plano já tinha). Lida por
+completo (51 instruções, 204 B exatos — cobertura total).
+
+```c
+// CG2D_LOADER_TIM::Load(this, char* path, uint8_t* buf, uint size, uint /*4º arg, não usado aqui*/)
+int CG2D_LOADER_TIM::Load(CG2D_LOADER_TIM* this, char* path, uint8_t* buf, uint size) {
+    memset((uint8_t*)this + 4, 0, 0x10);     // zera 16 B logo após o início do objeto
+    TimSub* sub = this->field_0x14;           // mesmo sub-struct das seções 9.2/9.8
+    sub->field_0x0 = -1;
+    sub->field_0x4 = -1;
+
+    int result = (path != NULL)
+        ? TIM_LoadFile(this, path, size)        // 0xa67d8 — confirma: a escolha entre os
+        : TIM_LoadMemory(this, buf);              // 0xa6a9c   dois é simplesmente "path != NULL"
+
+    if (result == 1) return 1;                  // erro de parse, propaga sem tocar mais nada
+
+    sub = this->field_0x14;        // relê o ponteiro (por segurança, pode ter mudado)
+    sub->field_0x0 = 0xb;           // código de tipo/estado fixo = 11 (carregamento OK)
+
+    if (this->field_0x18 == 0) return 0;   // sem pós-processamento de formato pedido
+
+    // *** achado: GetImageFormatType/GetImageFormatExt retornam char*, não int ***
+    strcpy((char*)&sub->field_0x20, GetImageFormatType(this, 0));              // 0xa65e0
+    strcpy((char*)&this->field_0x14->field_0x50, GetImageFormatExt(this, -1)); // 0xa6608
+    return 0;
+}
+```
+
+**Achados:**
+- Confirma, com o mecanismo exato, a frase da seção 9.2 ("escolhe entre
+  `TIM_LoadFile`/`TIM_LoadMemory` dependendo do caminho de entrada"):
+  a condição é literalmente **`path != NULL`** (2º parâmetro da função,
+  `char*`) — nada mais sofisticado.
+- `GetImageFormatType(int)` (`0xa65e0`, 40 B) e `GetImageFormatExt(int)`
+  (`0xa6608`, 16 B) — catalogadas na tabela da seção 9.2 só por nome —
+  **retornam `char*`** (usadas diretamente como origem de `strcpy`,
+  resolvido via GOT/PLT: `0x714a0` = `strcpy`, técnica padrão desta
+  investigação). São, quase certamente, "nome do formato de pixel" e
+  "extensão de arquivo associada" (ex.: `"TIM"`/`".tim"`), gravados no
+  sub-struct em `+0x20`/`+0x50` — mas o conteúdo exato das strings não
+  foi lido (ficaria em `.rodata`, não investigado agora).
+- `0xa6608` (`GetImageFormatExt`) é chamada com `-1` como argumento —
+  convenção provável de "formato atual/default" (mesmo padrão de outras
+  funções desta família que usam `-1` como sentinela, ver `field_0x0`/
+  `field_0x4` setados pra `-1` no início desta mesma função).
+
 ## 10. Os handlers de opcode, quase todos lidos (2026-10-14, continuação "vamos para os 90 handlers")
 
 Desmontagem em lote de **88 handlers** (`evt_*`/`snpl_*`, ~6,5 KB de

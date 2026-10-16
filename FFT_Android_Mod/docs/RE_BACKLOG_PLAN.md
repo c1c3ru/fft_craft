@@ -92,8 +92,14 @@ documentado. Os dois documentos de resultado são:
   na mesma ordem. Confirmado também, por extração do literal pool
   (`0x55555556`), que o caso 4bpp usa o idioma clássico de compilador
   pra "divisão por 3".
-- [ ] `CG2D_LOADER_TIM::Load` (`0xa6cd0`, 204 B) — orquestrador que
-  escolhe entre `TIM_LoadFile`/`TIM_LoadMemory`.
+- [x] `CG2D_LOADER_TIM::Load` (**endereço corrigido: `0xa6c90`**, não
+  `0xa6cd0` como este plano tinha — `0xa6cd0` cai no meio da função
+  real; `.dynsym` confirma `0xa6c90`, mesmo tamanho 204 B) — lida por
+  completo, ver `REVERSE_ENGINEERING_NOTES.md` seção 9.10. Confirma o
+  mecanismo exato de escolha entre `TIM_LoadFile`/`TIM_LoadMemory`:
+  simplesmente `path != NULL`. Achado bônus: `GetImageFormatType`/
+  `GetImageFormatExt` retornam `char*` (usadas como origem de
+  `strcpy`, não como inteiros).
 - [ ] Opcodes de áudio/parâmetro do motor de eventos ainda não lidos
   individualmente: `snpl_sndreq`, `snpl_musicreq`, `snpl_envsndreq`,
   `snpl_setpara`/`addpara`/`subpara`/`chgpara` (seção 10.4 — esperado
