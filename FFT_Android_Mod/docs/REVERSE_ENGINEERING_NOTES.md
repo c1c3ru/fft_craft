@@ -1981,6 +1981,62 @@ void wldtname_put(GsOT* ot) {
 - O papel exato do offset `+0x36` somado ao contador pra formar o
   `animID`.
 
+### 12.14 `wldmap_scrol` lida por completo — os mesmos limiares de `wldcenter_chk`, agora disparando o scroll real (2026-10-16, Fase 2, continuação)
+
+`wldmap_scrol(_POINT* delta)` (`0x268f58`, 220 B, 52 instruções de
+código real cobertas por completo + pool de literais de GOT no
+restante dos 220 B) — já citada por nome na seção 12.2
+(`wldwalk_rute` chama `wldmap_scrol(&delta)` "move a câmera/mapa
+junto"), agora lida por dentro. Resolve os dois `bl` por nome:
+**`bgscrol_chk_x(_POINT*, VECTOR*)`** e
+**`bgscrol_chk_y(_POINT*, VECTOR*)`** (`0x24c44c`/`0x24c4c0`, nunca
+tocadas antes).
+
+```c
+void wldmap_scrol(_POINT* delta) {
+    CameraInfo* ci = g_cameraInfo;              // global
+    VECTOR* camPos = g_camPos;                     // global, 2 words (x,y)
+    int savedX = camPos->x, savedY = camPos->y;
+
+    int testX = delta->x + ci->+0x30;
+    if ((delta->x < 0 && testX < -0x18) ||
+        (delta->x > 0 && testX >  0x20))
+        bgscrol_chk_x(delta, camPos);
+
+    int testY = delta->y + ci->+0x34;
+    if ((delta->y < 0 && testY < -0x40) ||
+        (delta->y > 0 && testY >  0x40))
+        bgscrol_chk_y(delta, camPos);
+
+    if (camPos->x != savedX || camPos->y != savedY)
+        g_flagsG |= 2;                                // "o fundo rolou este frame"
+}
+```
+
+**Achados:**
+- **Os limiares são EXATAMENTE os mesmos de `wldcenter_chk`**
+  (seção 12.9: `-0x18`/`+0x20` em X, `±0x40` em Y) — confirma que as
+  duas funções testam a **mesma janela de centralização da câmera**:
+  `wldcenter_chk` só RESPONDE se está fora dela (usado em outro lugar
+  pra decidir "precisa recentrar"), enquanto `wldmap_scrol` **age** de
+  verdade, chamando `bgscrol_chk_x`/`_y` para empurrar o fundo quando
+  o delta de movimento ultrapassa a mesma margem.
+- Delega o cálculo real do scroll para `bgscrol_chk_x`/`_y`
+  (nomes reais, nunca lidos por dentro) — `wldmap_scrol` é só o
+  "disparador com janela de margem", não quem move a câmera de fato.
+- Confirma um padrão de flag "mudou de verdade?" já visto em outras
+  seções: só marca `g_flagsG |= 2` se a posição da câmera
+  (`g_camPos`) **de fato mudou** depois das chamadas — não assume que
+  chamar `bgscrol_chk_x`/`_y` sempre produz movimento.
+
+**O que ficou sem confirmar (escalonado, não forçado):**
+- O corpo de `bgscrol_chk_x`/`bgscrol_chk_y` — a aritmética real do
+  scroll (quanto desloca, se há limites de mapa) não foi lida.
+- O papel exato de `ci->+0x30`/`ci->+0x34` (deslocamentos
+  configuráveis por modo de câmera, não cravados byte a byte) e de
+  `g_flagsG` bit `2` (consumido em algum outro ponto não
+  identificado).
+
 ## 13. Motores gráfico (`CEGL2_*`) e de áudio (`CSOUND_IF`) — ponte confirmada com a API real (2026-10-16)
 
 Continuação direta: os dois últimos motores sem nenhum código lido.
