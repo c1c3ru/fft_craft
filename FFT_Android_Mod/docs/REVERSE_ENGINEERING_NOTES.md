@@ -1909,6 +1909,78 @@ APPLY:
   por nome.
 - O enum `PSP_WORLD_FLG` e o papel exato do valor `2`.
 
+### 12.13 `wldtname_put` lida por completo — confirma o mesmo array de objetos de `wldtown_bright` por um ângulo diferente (2026-10-16, Fase 2, continuação)
+
+`wldtname_put(GsOT* ot)` (`0x266df8`, 260 B, 60 instruções de código
+real cobertas por completo + pool de literais de GOT no restante dos
+260 B). Resolve os dois `bl` por nome: **`fadeanb_calc`** (`0x25e160`)
+e **`wld_anim`** (`0x2660b8`), ambas já confirmadas — esta é a
+**quarta ocorrência** do par `fadeanb_calc`/`wld_anim` nesta
+investigação (depois de `wld_anim` consigo mesma na 12.5, `wldday_put`
+na 12.10, e agora aqui).
+
+```c
+void wldtname_put(GsOT* ot) {
+    if (g_flagsA & 0x2000) return;              // bit "banner de nome escondido"
+    int count = g_activeTownCount;                 // global B
+    if (count == 0) return;                          // nenhuma cidade "ativa" agora
+
+    TownObj* obj = &g_townObjArray[count - 1];      // MESMO array/stride 0x34 de wldtown_bright (seção 12.12)!
+
+    uint8_t fade = g_bannerFadeCounter;                // global D, lido só o byte baixo
+    Color c = { fade, fade, fade };
+    fadeanb_calc(&c, &c);                                // fade-in in-place (entrada = saída, mesmo buffer)
+
+    ANMPAC banner = {
+        .flags = 1, .animID = count + 0x36, .priority = 4,
+        .x = obj->+0x28, .y = obj->+0x2c,                  // posição herdada do objeto da cidade ativa
+        .tint = c,                                           // cor pré-calculada escrita direto no campo da seção 12.5
+    };
+    wld_anim(&banner, ot);
+
+    if (g_bannerFadeCounter <= 0x7f)
+        g_bannerFadeCounter += 8;                          // avança o fade-in; para de avançar ao passar de 127
+}
+```
+
+**Achados:**
+- **Confirma, por um ângulo totalmente diferente, o mesmo array de
+  objetos de `wldtown_bright`** (seção 12.12): mesmo stride `0x34`
+  (52 B), e os campos lidos aqui (`+0x28`/`+0x2c`, posição X/Y) não
+  colidem com os já confirmados lá (`+0x10`/`+0x24`/`+0x30..0x32`) —
+  **forte evidência de que é literalmente o mesmo array de "objetos
+  de cidade" do mapa mundi**, usado tanto para brilho ambiente quanto
+  para ancorar o banner de nome na posição da cidade ativa
+  (`g_activeTownCount - 1` = a última cidade entrada).
+- Confirma, pela quarta vez, o layout do `ANMPAC` (seção 12.5/12.10):
+  `flags@+0`, `animID@+4`, `priority@+8`, `tint color@+0x20`
+  (byte a byte, `r/g/b`), `x@+0x18`, `y@+0x1c` — e revela o campo de
+  cor (`anim->field_0x20` citado só por offset na seção 12.5) sendo
+  **pré-preenchido pelo próprio chamador** com o resultado de seu
+  PRÓPRIO `fadeanb_calc`, antes de `wld_anim` rodar sua lógica interna
+  de cor (que, com `flags=1` → bit `0x400` limpo, vai chamar
+  `fadeanb_calc` de novo por dentro — **duas camadas de fade
+  aparentemente empilhadas**, não investigado se é redundância real
+  ou um efeito "duplo-pulsar" intencional).
+- O campo `animID = count + 0x36` sugere uma sequência de quadros de
+  "revelar o nome" indexada pelo contador de cidade ativa — mas
+  **isso é uma hipótese**, não confirmado sem olhar a tabela de
+  animação de verdade.
+- `g_bannerFadeCounter` (global D) é lido como **byte** (valor cru
+  0–255 usado direto como nível de cinza pro fade-in) e depois escrito
+  como **word** incrementado por 8, travando ao passar de 127 — um
+  fade-in de ~16 quadros que para de avançar sozinho ao terminar
+  (mesmo padrão de "contador que se autolimita" já visto em
+  `wld_window`, seção 12.11, só que linear em vez de 8 passos fixos).
+
+**O que ficou sem confirmar (escalonado, não forçado):**
+- Se as duas camadas de `fadeanb_calc` (uma aqui, outra dentro de
+  `wld_anim`) são redundância de geração de código ou um efeito
+  visual deliberado — não lido o corpo de `fadeanb_calc` pra saber se
+  ela depende de tempo global ou do valor de entrada.
+- O papel exato do offset `+0x36` somado ao contador pra formar o
+  `animID`.
+
 ## 13. Motores gráfico (`CEGL2_*`) e de áudio (`CSOUND_IF`) — ponte confirmada com a API real (2026-10-16)
 
 Continuação direta: os dois últimos motores sem nenhum código lido.

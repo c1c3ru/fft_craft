@@ -229,11 +229,16 @@ continuam os mesmos:
     contador oscilante de 64 passos (onda triangular), convertido em
     2 rampas de brilho aplicadas como tingimento cinza num array de
     objetos (cada um pode escolher a rampa ou ignorar o ciclo).
+  - [x] `wldtname_put` (`0x266df8`, 260 B) — ver seção 12.13.
+    **Achado maior**: confirma, por um ângulo diferente (campos
+    `+0x28`/`+0x2c`, posição), o MESMO array de objetos de cidade
+    (stride 0x34) já visto em `wldtown_bright` (seção 12.12) — usado
+    pra ancorar o banner de nome na posição da cidade ativa. Quarta
+    confirmação do par `fadeanb_calc`/`wld_anim` e do layout `ANMPAC`.
   - [ ] Demais funções de "Desenho"/"Movimento/câmera"/"Persistência"
     da tabela da seção 11.2 ainda sem leitura linha a linha (a maioria
-    pequena, <200 B). Maiores restantes por tamanho: `wldtname_put`
-    (260 B), `wldmap_scrol` (220 B), `wlddata_load`/`wldtown_draw`
-    (212 B).
+    pequena, <200 B). Maiores restantes por tamanho: `wldmap_scrol`
+    (220 B), `wlddata_load`/`wldtown_draw` (212 B).
 - [x] Binário x86 — primeira comparação feita, ver
   `REVERSE_ENGINEERING_NOTES.md` seção 31. `.dynsym` tem contagem de
   símbolos muito próxima da ARM (6530 vs 6636); `CCOMP_Z_DEC::Decode`
