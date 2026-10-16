@@ -1364,6 +1364,80 @@ camada — ler as ~300 funções `CEGL2_*`/`CSOUND_*` uma a uma — é o que
 ficaria para uma eventual continuação futura, mas não é razoável tratar
 isso como pendência pequena.
 
+### 13.4 `CEGL2_SPRITE::DrawScrollBG` lida por completo — primeiro item 🟡 (2026-10-16, loop de continuação, iteração 8)
+
+A seção 13.1 já tinha a função-ponte geral do motor gráfico
+(`CEGL2_IF::DrawPacket`) lida, mas nenhuma função **dentro** das
+classes `CEGL2_SPRITE`/`FBO`/`SHADER`/`TEX_HYBRID` tinha sido lida
+ainda — só catalogadas por nome. `CEGL2_SPRITE::DrawScrollBG(float,
+float, _RECT_F32*, _RECT_F32*)` (`0xae584`, 1676 B, cobertura total:
+419 instruções pra 419 instruções esperadas) é a maior do grupo, e foi
+escolhida como a "função-central" deste item.
+
+**Assinatura e papel confirmados:** `this` (sprite/textura de fundo),
+`u`/`v` (deslocamento de scroll, parâmetros 1–2), `srcRect`/`dstRect`
+(retângulos fonte/destino, parâmetros 3–4). A função monta **até 2
+quads** (12 vértices = 2×6, formato `GL_TRIANGLES`) com coordenadas de
+UV deslocadas pelo scroll — o segundo quad é o "tile duplicado" clássico
+pra rolagem contínua sem costura.
+
+**Achado de arquitetura — formato de vértice DIFERENTE do
+`DrawPacket` (seção 13.1):** `DrawPacket` usa um VBO único
+intercalado de stride 24 B (posição+cor+UV juntos). `DrawScrollBG` usa
+**três arrays separados, cada um com `stride=0` (compacto, não
+intercalado)**, sem VBO (ponteiros direto pra pilha local, não
+`glBindBuffer`/`glBufferData`):
+
+```c
+glEnableVertexAttribArray(2);                                  // 0xae9fc área 2 = cor
+void* posBuf   = &stack[0x94];   // vec3 float × 6, zerado por memset antes de preencher X/Y (Z fica 0 — fundo é 2D)
+void* uvBuf    = &stack[0x34];   // vec2 float × 6, coordenadas de UV deslocadas pelo scroll
+void* colorBuf = &stack[0x124];  // vec4 uint8 × 6 (dobrado: 2 blocos de 24 B) -- vem de this->b[0x58..0x67] (16 B)
+
+if (GetMultiTextureHandle() == 0) {                            // 0xaea5c
+    glBindTexture(GL_TEXTURE_2D /*0xde1*/, this->field_0x28);   // 0xaea74, textura única
+    glVertexAttribPointer(0, 3, GL_FLOAT,         false, 0, posBuf);    // 0xaea98
+    glVertexAttribPointer(3, 2, GL_FLOAT,         false, 0, uvBuf);     // 0xaeab4 (índice 3 = UV, igual ao DrawPacket)
+    glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, true,  0, colorBuf);  // 0xaeae0 (índice 2 = cor, normalizada)
+    glDrawArrays(GL_TRIANGLES, 0, 12);                           // 0xaeaf0 -- 12 vértices = 2 quads
+} else {
+    // caminho de 2ª textura (parallax/multi-camada?): recalcula posBuf/uvBuf
+    // (volta pro mesmo bloco de ponto flutuante em 0xae720) e repete a
+    // MESMA sequência de 3 glVertexAttribPointer + glDrawArrays
+    // (0xaebb4-0xaebf8), mas usando os registradores zerados (r4=0) nos
+    // parâmetros de stride/normalized -- estruturalmente idêntico, só
+    // reusa valor 0 de forma mais direta.
+}
+glDisableVertexAttribArray(2);                                  // 0xaeaf8
+```
+
+Confirma, pela mesma técnica de GOT/`.rel.plt` já usada desde a seção
+9: `0x71710`=`glEnableVertexAttribArray`, `0x71728`=
+`glDisableVertexAttribArray`, `0x71758`=`glBindTexture`,
+`0x717b8`=`glVertexAttribPointer`, `0x717c4`=`glDrawArrays` (os
+mesmos 2 últimos já vistos na seção 13.1, agora com mais dois GL
+import novos resolvidos). Confirma também que `GL_TEXTURE_2D` (`0xde1`),
+`GL_FLOAT` (`0x1406`), `GL_UNSIGNED_BYTE` (`0x1401`) e `GL_TRIANGLES`
+(`4`) são os literais reais usados — não suposição.
+
+**Achado secundário:** a função inteira faz aritmética de ponto
+flutuante via **helpers de software do libgcc**
+(`__aeabi_fadd`/`fsub`/`fmul`/`fdiv`, resolvidos por nome no
+`.dynsym`), não instruções VFP de hardware — confirma que (ao menos
+esta unidade de compilação) usa ABI de float em software (`softfp` ou
+equivalente), não hardware FPU direto.
+
+**O que ficou sem confirmar:** a fórmula exata do deslocamento de
+scroll (a cadeia de ~30 chamadas de `fadd`/`fsub`/`fmul`/`fdiv`
+combinando `u`/`v`, os campos `this->+0x3c/+0x40/+0x50/+0x54` e os
+retângulos fonte/destino) não foi decomposta álgebra-por-álgebra —
+ficou confirmado QUE ela computa UV/posição com wraparound (usa
+divisão, consistente com módulo de scroll contínuo), mas não a fórmula
+precisa. O papel exato de `GetMultiTextureHandle()`/do 2º quad
+(parallax de 2 camadas? ou só "textura alternativa quando
+multi-handle está em uso"?) também não foi cravado — mecanismo
+estrutural confirmado, semântica de produto não.
+
 ## 14. `DrawTile4` e `Add3D` lidas por completo — e um bônus: resolvidos vários mistérios de PLT antigos (2026-10-16)
 
 Continuação pedida explicitamente: as duas maiores funções do `CEGL2_IF`

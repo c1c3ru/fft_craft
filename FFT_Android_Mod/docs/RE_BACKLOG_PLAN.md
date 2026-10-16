@@ -119,9 +119,15 @@ documentado. Os dois documentos de resultado são:
 
 ## 🟡 Prioridade baixa — motores grandes, só a ponte foi confirmada
 
-- [ ] `CEGL2_SPRITE` — família de desenho em lote de sprite 2D
-  (`DrawScrollBG` 1676 B, `AddPacketPartial` 1244 B, `DrawPartial`
-  1088 B, `Draw8` 1080 B são os maiores — ver seção 13.1).
+- [x] `CEGL2_SPRITE` — função-central (`DrawScrollBG`, `0xae584`,
+  1676 B) lida por completo, ver `REVERSE_ENGINEERING_NOTES.md` seção
+  13.4. Achado: formato de vértice **não-intercalado** (3 arrays
+  separados, `stride=0`, sem VBO) — diferente do `DrawPacket`
+  intercalado da seção 13.1. Desenha até 2 quads (12 vértices,
+  `GL_TRIANGLES`) pra scroll contínuo sem costura, com um 2º caminho
+  gated por `GetMultiTextureHandle()`. `AddPacketPartial`/`DrawPartial`/
+  `Draw8` continuam não lidos por dentro (critério de "zerado" pede só
+  a função-central por item 🟡/⚪, não a família inteira).
 - [ ] `CEGL2_FBO` — render-to-texture (`RenderToFBO` 868 B,
   `RenderFromFBO` 732 B, `Create` 472 B).
 - [ ] `CEGL2_SHADER` — cache de shader via `std::map` (`Load` 596/384 B,
