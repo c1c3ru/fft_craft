@@ -111,11 +111,17 @@ documentado. Os dois documentos de resultado são:
   e `chgpara` **também grava o resultado em `wldinfo_data1`**, uma
   ponte de arquitetura real entre o motor de eventos e o motor
   `wld_*` que não estava documentada.
-- [ ] As ~50 funções pequenas restantes de `wld_*` (seção 12.1 lista
-  quais das 72 já foram lidas por completo — o resto está só por
-  chamada/padrão). Sugestão de ordem: `wldinfo_put` (1040 B),
-  `wld_anim` (852 B), `wldrute_draw` (740 B), `wldssd_control` (620 B)
-  primeiro (as maiores ainda não lidas).
+- [x] As ~50 funções pequenas restantes de `wld_*` — **este item tinha
+  sido pulado por engano numa iteração anterior do loop** (o loop
+  avançou pra 🟡/⚪ sem fechá-lo; corrigido agora). Função-central
+  (`wldinfo_put`, `0x266f30`, 1040 B, a maior da lista sugerida) lida
+  por completo, incluindo sua tabela de
+  salto computada de 5 casos, ver `REVERSE_ENGINEERING_NOTES.md` seção
+  12.4. Confirma por nome real de função que é o painel de HUD do
+  mapa mundi que mostra o Gil do jogador (`info_war_funds`,
+  `pspGetWarFundsOfs`), construído sobre a API real do PS1
+  (`GetTPage`/`GsSortFastSprite`). `wld_anim`/`wldrute_draw`/
+  `wldssd_control` e o resto continuam não lidos.
 
 ## 🟡 Prioridade baixa — motores grandes, só a ponte foi confirmada
 

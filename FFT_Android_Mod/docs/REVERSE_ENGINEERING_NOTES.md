@@ -1268,6 +1268,75 @@ inventário de classes por nome, sem nenhuma função lida. Esses dois
 continuam sendo o trabalho genuíno que falta para "item 8" no sentido
 mais completo possível.
 
+### 12.4 `wldinfo_put` lida por completo — item 🟠 que tinha ficado esquecido no plano (2026-10-16, loop de continuação, iteração 19)
+
+O plano (`RE_BACKLOG_PLAN.md`) ainda tinha um item 🟠 pendente —
+"as ~50 funções pequenas restantes de `wld_*`" — que uma iteração
+anterior do loop **pulou por engano** ao avançar direto pra 🟡/⚪. Lido
+agora `wldinfo_put(GsOT*)` (`0x266f30`, 1040 B, a maior ainda não lida
+da lista sugerida pelo próprio plano), incluindo a tabela de salto
+computada de 5 casos (extraída à mão, mesma técnica das seções 9.8/21).
+
+**Confirmado por nome real de função (sem precisar adivinhar pelo
+contexto): é o painel de HUD do mapa mundi que mostra o Gil (dinheiro)
+do jogador**, construído inteiramente sobre a API real da biblioteca
+gráfica do PS1 (`GetTPage`, `GsSortFastSprite` — mesmo padrão
+`GsOT`/`GsSPRITE` já confirmado nas seções 11.1/13.1):
+
+```c
+void wldinfo_put(GsOT* ot) {
+    if (globalFlags & 0x800) return;     // bit "painel de info escondido"
+
+    GsSPRITE spr = {};
+    // ... monta um sprite base (tamanho/posição/UV herdados de um
+    // sprite global de fonte/painel) e aplica um efeito de cor via
+    // fadeanb_calc(&colorA, &colorB) — 0x25e160, cálculo de
+    // interpolação de cor (efeito de "pulsar"/fade do painel)
+
+    switch (displayMode) {    // 5 casos, via tabela de salto computada
+    case 0: infonumber_put(x, y, &spr, ot); break;              // 0x266900 — desenha um número via sprites
+    case 1: pspGetWarFundsOfs(&wofs,&hofs);                       // 0x266efc
+            info_war_funds(ot, &spr, &line);                        // 0x266b94 — *** desenha o Gil de verdade ***
+            break;
+    case 2: GsSortFastSprite(&panelBg, ot, 0);                    // GsSortFastSprite real da lib PS1
+            infonumber_put(...); infonumber_put_zero(...); ...      // vários números no mesmo quadro
+            break;
+    case 3: GsSortFastSprite(&otherSprite, ot, 0);
+            /* desvia pro FINAL do case 4 — tail-merge do compilador */
+            break;
+    case 4: pspGetWarFundsOfs(&wofs,&hofs);
+            GsSortFastSprite(&panelBg, ot, 0);
+            info_war_funds(ot, &spr, &line);                         // 0x266b94 de novo
+            infonumber_put_zero(x, y, &spr, ot, 5);                   // 0x266a00 — número com zeros à esquerda
+            break;
+    }
+}
+```
+
+**Achados:**
+- Confirma, com nomes reais de função (`info_war_funds`,
+  `pspGetWarFundsOfs`, `infonumber_put`/`infonumber_put_zero`), que
+  este painel **mostra o Gil do jogador no mapa mundi** — `info_war_
+  funds` é chamada diretamente 2 das 5 vezes (casos 1 e 4).
+- Todas as 5 variantes do switch estão construídas sobre chamadas
+  reais da biblioteca gráfica do PS1 (`GetTPage`/`GsSortFastSprite`),
+  reforçando que o motor `wld_*` inteiro (mapa mundi) ainda roda sobre
+  a emulação dessa API, não sobre o `CEGL2_*` moderno diretamente —
+  consistente com a arquitetura já confirmada nas seções 11.1/13.1
+  (a emulação PS1 monta primitivas, e só depois `CEGL2_IF::DrawPacket`
+  as converte pra GL de verdade).
+- `fadeanb_calc` (`0x25e160`) aplica um efeito de cor variável ao
+  painel — provavelmente o "pulsar"/fade visual clássico de painéis de
+  HUD do FFT original.
+
+**O que ficou sem confirmar:** a semântica exata de cada um dos 5
+modos além dos dois que chamam `info_war_funds` diretamente (0, 2 e 3
+desenham números, mas não ficou claro O QUE exatamente — dia do mês?
+nível médio do time? só reaproveitamento do mesmo painel pra outro
+dado numérico?) — ficaria pra uma leitura futura de `info_war_funds`/
+`infonumber_put` por dentro. As demais ~49 funções pequenas de
+`wld_*` continuam só por chamada/padrão (seção 12.1).
+
 ## 13. Motores gráfico (`CEGL2_*`) e de áudio (`CSOUND_IF`) — ponte confirmada com a API real (2026-10-16)
 
 Continuação direta: os dois últimos motores sem nenhum código lido.
