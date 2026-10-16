@@ -1891,4 +1891,250 @@ larguras de um **corte transversal de diamante/quadrado crescente**
 - Quem **chama** `GetTargetBaseArea` e consome o resultado em
   `g+0xb40` (sabemos pelo nome e pela seção 6.1 que é usada dentro do
   dispatcher de fase 0 do `FundamentalRoutine`, mas não revisitei o
-  call site agora).
+  call site agora). **Atualização (seção 21):** agora sabemos quem
+  chama — `GetDestinationsAndMakeMaskTG`, duas vezes por iteração.
+
+### 20.5 Correção (seção 21): o 2º parâmetro ("unused") não é sempre inerte
+
+A leitura de `GetDestinationsAndMakeMaskTG` (seção 21) revelou um
+`mode` novo, **`3`**, que esta função não documentava. Olhando de novo
+o código: `cmp r0,#1 / cmp r0,#2 / cmp r0,#0` são três comparações
+sequenciais contra o `mode` original (`r0`), e só *depois* da terceira
+`r0` é sobrescrito com `g` (`ldr r0,[r4,r3]`). Para `mode==3`, nenhuma
+das três comparações bate, então `ldrbeq r1,[r0,#4]` (que preencheria
+`areaVal` a partir de `g->b[4]`) **não executa** — `r1` (`areaVal`)
+fica com o valor que o **chamador** passou como 2º argumento. Ou seja,
+o 2º parâmetro só é "unused" para `mode` 0/1/2; para `mode==3` ele *é*
+`areaVal` diretamente. Na prática, todo chamador visto até agora passa
+`0` como 2º argumento mesmo quando usa `mode==3` — então `mode==3` hoje
+sempre produz `areaVal=0` (um efeito de raio zero/degenerado), mas o
+mecanismo em si permite um `mode==3` com área explícita se algum outro
+chamador passar um valor não-zero.
+
+## 21. `GetDestinationsAndMakeMaskTG()` — fecha o último item 🔴 do plano (2026-10-16, loop de continuação, iteração 4)
+
+Último item de prioridade alta. Função grande (1932 B, 476 instruções
+cobertas pelo `disasm_cfg.py`, cobertura muito boa — só alguns
+ponteiros de literal pool ficaram sem nome, ver 21.5). Chama
+`GetPanelUnderUnit` (`0x278440`), `GetTargetBaseArea` (`0x276930`,
+seção 20), `CountMap` (`0x2715a0`), `MemCpyW` (`0x279c34`) e
+`check_status_data2` (`0x1d98c8`).
+
+### 21.1 Visão geral confirmada
+
+A função computa **duas máscaras de painéis** sobre o mapa — uma
+baseada no **alcance** da habilidade (`GetTargetBaseArea` com
+`mode` 0/2) e outra baseada na **área/AoE** da habilidade
+(`GetTargetBaseArea` com `mode` 1/3) — cada uma centrada,
+sucessivamente, em cada unidade "marcada" de um array de candidatos,
+unidas por OR. Depois intersecta (AND) cada máscara com uma tabela
+pré-computada por unidade (`g+0xa70`, indexada por
+`g->b[0xe2d]`), invalida painéis de terreno tipo 4 (obstáculo),
+opcionalmente invalida painéis ocupados por outras unidades vivas, e
+termina contando quantos painéis sobraram em cada máscara
+(`CountMap`), gravando os totais em `g->b[0xcbb]`/`g->b[0xcbc]`.
+
+Isso é literalmente o **"TG" (Target Group)** que a seção 6.1 já tinha
+citado de fora (`sub_271628` chama esta função pra "calcular o
+conjunto de painéis de destino válidos e uma máscara de alcance") —
+agora temos o mecanismo interno completo.
+
+### 21.2 Pseudocódigo (fiel à estrutura, nomes de campo conforme confirmado)
+
+```c
+void GetDestinationsAndMakeMaskTG(void) {
+    // zera os dois acumuladores de 21 linhas usados neste ciclo
+    memset16(&g->b[0xbda], 0, ...);   // acumulador A (+0xbd0)
+    memset16(&g->b[0xbfe], 0, ...);   // acumulador B (região +0xc00, zerada em paralelo)
+
+    if (g->b[0xf] & 0x80) {
+        // CAMINHO "ATALHO": em vez de computar tudo, só copia o
+        // registro de 0x48 B já cacheado pro candidato g->b[0xe2d]
+        MemCpyW(&g->b[0xb94], &g[g->b[0xe2d]*0x48 + 0xa74], 0x48);
+        goto PASS2;    // pula a passada 1 (alcance) inteiramente
+    }
+
+    // ---- PASSADA 1 (mode 0/2 = alcance) ----
+    for (idx = 0; idx < 21; idx++) {
+        if (!g->b[0xc8d + idx]) continue;        // array de "alvo marcado" #1
+        GetPanelUnderUnit(idx, &g->b[0xc74]);     // escreve origem c74/c75/c76
+        mode = (g->b[0x26] == 6) ? 0 : 2;
+        GetTargetBaseArea(mode, 0);
+        if (!g->b[0xe3b]) continue;               // gMapY==0 -> nada a acumular
+        for (row = 0; row < g->b[0xe3b]*2; row += 2) {
+            // acumulador A |= resultado "bruto" de GetTargetBaseArea (+0xb40)
+            g->h[row + 0xbd0 + 0xc] |= g->h[row + 0xb40 + 0xc];
+            // acumulador B |= cópia final de GetTargetBaseArea (+0xb70)
+            g->h[row + 0xc00] |= g->h[row + 0xb70];
+        }
+    }
+
+    // intersecta os acumuladores com a tabela por-unidade cacheada
+    // (g+0xa70, registro de 0x48 B por unidade, indexado por g->b[0xe2d])
+    // e, no mesmo laço, ZERA os acumuladores A/B pra reusar na passada 2
+    if (g->b[0xe3b]) {
+        unit = g->b[0xe2d];
+        uint16_t* cached = &g[unit*0x48 + 0xa74];
+        for (row = 0; row < g->b[0xe3b]*2; row += 2) {
+            g->h[row + 0xb94] = g->h[row + 0xbd0 + 0xc] & cached[row/2];
+            g->h[row + 0xbb8] = g->h[row + 0xc00]       & cached[row/2 + 0x12 /*=+0x24 B*/];
+            g->h[row + 0xbd0 + 0xc] = 0;   // limpa acumulador A
+            g->h[row + 0xc00]       = 0;   // limpa acumulador B
+        }
+    }
+
+PASS2:
+    // registra c74/c75/c76 anteriores, prepara contexto de linha
+    // (gMapX, gMapY, g->b[0], g->h[2] com sinal, g->b[0x19b9]) em slots
+    // de pilha reaproveitados no laço de bits abaixo.
+    // Em seguida: 2 iterações externas consumindo, respectivamente,
+    // a tabela +0xb94 (resultado da passada 1, mode 0/2 ∩ cache) e a
+    // tabela +0xbb8 (idem, offset +0x24) — para cada bit setado em
+    // cada linha:
+    //   - se g->b[0x19b9] == 0: checa terreno da tile (tabela GOT A
+    //     indexada por g->b[0], byte lido, comparado a 4) -> se ==4,
+    //     limpa o bit (ver 21.3).
+    //   - se g->b[0x19b9] != 0: faz o mesmo + uma checagem extra
+    //     contra um "subtipo de tile" e g->h[2] (ver 21.3, caminho
+    //     mais elaborado).
+
+    if (g->b[0x10] & 8) goto SKIP_SECOND_PASS;  // (ver 21.4, bit não
+                                                  // totalmente isolado)
+
+    // ---- PASSADA 2 (mode 1/3 = área/AoE) ----
+    for (idx = 0; idx < 21; idx++) {
+        if (!g->b[0xc8d + idx]) continue;   // MESMO array "marcado" #1
+        GetPanelUnderUnit(idx, &g->b[0xc74]);
+        mode = (g->b[0x26] == 6) ? 3 : 1;
+        GetTargetBaseArea(mode, 0);
+        if (!g->b[0xe3b]) continue;
+        for (row = 0; row < g->b[0xe3b]*2; row += 2) {
+            g->h[row + 0xbd0 + 0xc] |= g->h[row + 0xb40 + 0xc];
+            g->h[row + 0xc00]       |= g->h[row + 0xb70];
+        }
+    }
+
+    // se g->b[0xe] & 0x10: percorre o array "marcado" #2 (g->b[0xca1+k])
+    // em paralelo com bwork[] (stride 0x1e6 confirmado!), e para cada
+    // unidade viva relevante alterna (XOR) um bit em g+0x5e0 baseado
+    // na posição daquela unidade -- ver 21.4; efeito nunca é lido de
+    // volta DENTRO desta função (fica pra outro consumidor).
+
+    if (g->b[0xe3b]) {
+        // funde (AND) as duas regiões +0xc20/+0xbd0/+0xc00 entre si
+        // com deslocamentos fixos de 0x46/0x48 B -- ver 21.4, não
+        // totalmente isolado qual "linha" corresponde a qual.
+    }
+
+SKIP_SECOND_PASS:
+    g->b[0xcbb] = CountMap(&g->b[0xbdc]);          // conta máscara final (passada 2)
+    g->b[0xcbc] = CountMap(&g->b[0xbdc] - 0x48);   // conta máscara da passada 1 (+0xb94)
+}
+```
+
+### 21.3 Achado forte: `mode` 0/2 = alcance, `mode` 1/3 = área — confirma a semântica de "TG"
+
+As duas passadas usam exatamente os pares de `mode` que
+`GetTargetBaseArea` (seção 20.1) já definia como **alcance puro**
+(`mode 0`, ou `2` quando combinado com área) e **área pura** (`mode 1`,
+ou `3` — que, pela correção da seção 20.5, hoje sempre degenera pra
+`areaVal=0` porque o chamador aqui passa `0` como 2º argumento em
+ambas as chamadas). Isso fecha com muita confiança a leitura de que
+esta função produz **dois conjuntos de painéis**: um de "onde a
+habilidade alcança" (passada 1) e outro de "qual a pegada de área da
+habilidade a partir de cada painel candidato" (passada 2) — literalmente
+o "Target Group" (conjunto de alvos válidos) + "máscara de alcance"
+que a seção 6.1 já tinha inferido de fora, agora com o mecanismo
+completo por dentro.
+
+**Achado extra importante:** as duas passadas usam o **mesmo par de
+acumuladores de scratch** (`g+0xbd0`/`g+0xc00`) — não são regiões
+paralelas independentes. A passada 1 roda, salva seu resultado
+(intersectado com a tabela por-unidade `g+0xa70`) em `g+0xb94`/`g+0xbb8`,
+**zera os acumuladores**, e só então a passada 2 roda reusando o
+mesmo espaço.
+
+### 21.4 O caminho condicional por `g->b[0x19b9]` (invalidação de terreno tipo 4)
+
+O laço de bits por linha (que roda duas vezes, uma por tabela de
+passada 1) testa cada bit setado; se o terreno da tile (lookup
+GOT-resolvido, indexado por `g->b[0]` = id do invocador) é `4`
+(obstáculo, mesmo valor já visto em outras rotinas), o comportamento
+depende de `g->b[0x19b9]` (byte vizinho ao flag "IA ativa" conhecido,
+`+0x1980+0x37`, mas não o mesmo byte):
+
+- **`g->b[0x19b9] == 0`** (caminho simples, `0x2786ac`–`0x2786d4`):
+  terreno `4` → **limpa o bit incondicionalmente** (tile obstáculo não
+  é destino válido).
+- **`g->b[0x19b9] != 0`** (caminho elaborado, `0x278908`–`0x2789c4`):
+  além do terreno, consulta um registro de 8 bytes por tile (tabela
+  GOT A, indexada por `coluna*8`, byte `+3` = "subtipo da tile"). Se
+  esse subtipo for **> 63**, limpa o bit sempre. Se for **≤ 63** e o
+  terreno for `4`, faz **mais um lookup** (tabela GOT C, indexada por
+  `subtipo & 0x3f`) e compara o resultado contra `g->h[2]` (campo de
+  16 bits com sinal, carregado uma vez no início da função) — só limpa
+  o bit se **não bater**. Isso tem toda a aparência de "terreno tipo 4
+  cobre vários subtipos (lava, água, etc.), e a habilidade só pode
+  alcançar aquele subtipo específico se `g->h[2]` (provavelmente a
+  afinidade elemental/terreno exigida pela habilidade) combinar" —
+  mecanismo plausível, mas o papel exato de `g->h[2]` e das 3 tabelas
+  GOT não foi cruzado com nome de símbolo (ver 21.5).
+
+Bloco adicional, gated por `g->b[0xe] & 0x10` (`0x2787e8`–`0x278878`,
+só roda depois da passada 2): percorre o array "marcado" #2
+(`g->b[0xca1+k]`, 21 bytes) em paralelo com um ponteiro que **avança
+exatamente `0x1e6` (486) bytes por iteração** — confirmando de novo o
+stride real de `bwork[]`. Para cada unidade onde
+`(g->b[0x26]==5) || (bwork[idx].b[0x61] & 4)` é verdade, calcula o
+painel da própria posição da unidade (`b[0x4f]/b[0x50]/b[0x51]`, igual
+a `GetPanelUnderUnit`) e **alterna (XOR)**, não limpa, um bit em
+`g+0x5e0` (tabela de 18 halfwords por linha — resolve a aparente
+discrepância de stride da seção anterior: `g+0x5e0` usa stride 18
+halfwords, `g+0xa70` usa stride 0x48 B por unidade — **são duas
+tabelas diferentes**, não a mesma tabela lida com strides
+conflitantes). O resultado em `g+0x5e0` **nunca é lido de volta dentro
+desta função** — é efeito colateral para outro consumidor (candidato
+mais provável: o código que decide se um painel de movimento está
+"ocupado por outra unidade", mas o call site que lê `g+0x5e0` não foi
+localizado nesta iteração).
+
+Bloco final condicional em `g->b[0xe3b]` (gMapY, `0x278878`–`0x2788dc`):
+faz duas passadas de AND entre as regiões `+0xc20`/`+0xbd0`/`+0xc00`
+com deslocamentos fixos de `0x46`/`0x48` bytes, produzindo o conteúdo
+final que é contado em `g->b[0xcbb]`. A relação exata de alinhamento
+entre as três regiões sobrepostas (`+0xbd0`, `+0xc00`, `+0xc20`) **não
+foi totalmente isolada** — ficou claro que é uma fusão/interseção das
+duas tabelas da passada 2, mas não o motivo do deslocamento de
+0x46/0x48 especificamente.
+
+### 21.5 O que ficou sem confirmar
+
+- **Três ponteiros GOT sem nome** usados no laço de validação de
+  terreno/subtipo: literal pools em `0x278bf8`/`0x278bd0`/`0x278bb8`
+  (offsets `[pc,#0x53c]`/`[pc,#0x2b0]`/`[pc,#0x288]` a partir de
+  `0x2786b4`/`0x278948`/`0x278968`) e mais dois em
+  `0x2789c8`-`0x2789d4`. Resolvidos estruturalmente (uma tabela de
+  terreno-por-caster, uma tabela de 8 B/tile, uma tabela de
+  lookup-por-subtipo) mas não cruzados com `.dynsym`/símbolo real —
+  ficou pendente para uma iteração futura caso algum desses vire
+  relevante de novo.
+- O significado exato de `g->h[2]` (campo de 16 bits com sinal, lido
+  uma vez no início da passada de bits) — hipótese forte é "afinidade
+  de terreno/elemento exigida pela habilidade atual", mas não
+  confirmado contra nenhum outro call site.
+- Quem **lê** `g+0x5e0` depois que este bloco o escreve (XOR) — efeito
+  colateral sem consumidor identificado nesta função.
+- O alinhamento exato de linha entre `+0xbd0`/`+0xc00`/`+0xc20` no
+  bloco de fusão final (21.4, último parágrafo).
+- O bit `g->b[0x10] & 8` que pula a passada 2 inteira (`0x278730`) —
+  mecanismo claro (skip condicional), mas o significado do bit (que
+  categoria de habilidade dispensa o cálculo de área?) não foi
+  cruzado com outra função.
+
+### 21.6 Fecha o plano de prioridade 🔴
+
+Com esta função, **todos os 4 itens de prioridade alta do
+`RE_BACKLOG_PLAN.md` estão lidos e documentados** (seções 18–21). O
+loop passa agora para a prioridade 🟠 (parsers/motores já começados:
+`TIM_LoadMemory`, `CG2D_LOADER_TIM::Load`, opcodes de áudio do motor
+de eventos, e as ~50 funções pequenas restantes de `wld_*`).

@@ -64,7 +64,21 @@ documentado. Os dois documentos de resultado são:
   valores extraídos e confirmados = padrão "diamante crescente"
   2N+1 bits), expandido em tempo real por altura e recortado pela
   largura real do mapa (`gMapX`/`gMapY`).
-- [ ] `GetDestinationsAndMakeMaskTG()` (`0x278480`, 1932 B) — idem.
+- [x] `GetDestinationsAndMakeMaskTG()` (`0x278480`, 1932 B) — lida por
+  completo, ver `AI_DIFFICULTY_RESEARCH.md` seção 21. **Fecha o
+  último item 🔴.** Achado maior: constrói as duas máscaras do "TG"
+  (Target Group) citado na seção 6.1 — uma de alcance (`GetTargetBaseArea`
+  mode 0/2) e uma de área/AoE (mode 1/3) — cada uma OR-acumulada sobre
+  até 21 unidades candidatas, intersectada (AND) com uma tabela
+  cacheada por unidade (`g+0xa70`, registro de 0x48 B), com invalidação
+  de terreno tipo 4 (caminho simples ou um caminho mais elaborado
+  gated por `g->b[0x19b9]` que compara subtipo de tile contra
+  `g->h[2]`), e contagem final via `CountMap` em `g->b[0xcbb]`/`[0xcbc]`.
+  Também revelou um 2º array paralelo a `bwork[]` (stride 0x1e6
+  confirmado de novo) que alterna bits de "ocupação" em `g+0x5e0` como
+  efeito colateral sem consumidor identificado. Corrigiu a seção 20:
+  `GetTargetBaseArea` tem um `mode==3` não documentado (2º parâmetro
+  passa a ser `areaVal` direto nesse caso).
 
 ## 🟠 Prioridade média — fecha os parsers/motores já começados
 
