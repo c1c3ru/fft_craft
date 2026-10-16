@@ -224,11 +224,16 @@ continuam os mesmos:
     passo, desliga o bit sozinho ao fim. Confirma a 3ª ocorrência do
     padrão "cor fixa vs. pulsante via `fadeanb_calc`" (depois de
     `wld_anim`/`wldday_put`).
+  - [x] `wldtown_bright` (`0x26bc60`, 320 B) — ver seção 12.12.
+    **Achado maior**: revela o ciclo dia/noite real do mapa mundi —
+    contador oscilante de 64 passos (onda triangular), convertido em
+    2 rampas de brilho aplicadas como tingimento cinza num array de
+    objetos (cada um pode escolher a rampa ou ignorar o ciclo).
   - [ ] Demais funções de "Desenho"/"Movimento/câmera"/"Persistência"
     da tabela da seção 11.2 ainda sem leitura linha a linha (a maioria
-    pequena, <200 B). Maiores restantes por tamanho: `wldtown_bright`
-    (320 B), `wldtname_put` (260 B), `wldmap_scrol` (220 B),
-    `wlddata_load`/`wldtown_draw` (212 B).
+    pequena, <200 B). Maiores restantes por tamanho: `wldtname_put`
+    (260 B), `wldmap_scrol` (220 B), `wlddata_load`/`wldtown_draw`
+    (212 B).
 - [x] Binário x86 — primeira comparação feita, ver
   `REVERSE_ENGINEERING_NOTES.md` seção 31. `.dynsym` tem contagem de
   símbolos muito próxima da ARM (6530 vs 6636); `CCOMP_Z_DEC::Decode`

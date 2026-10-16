@@ -1833,6 +1833,82 @@ void wld_window(WINPAC* win, GsOT* ot) {
   `win->+0x14`) ficam por confirmar lendo `wldwintex_point`/
   `wldwin_set`/`wldwin_trans` (ainda não lidas).
 
+### 12.12 `wldtown_bright` lida por completo — revela o ciclo dia/noite real do mapa mundi (2026-10-16, Fase 2, continuação)
+
+`wldtown_bright()` (`0x26bc60`, 320 B, 74 instruções de código real
+cobertas por completo + pool de literais de GOT no restante dos
+320 B) — a maior função "Desenho" ainda sem leitura depois de
+`wld_window` (seção 12.11). Resolve um `bl` por nome:
+**`pspWorldCheckFlg(PSP_WORLD_FLG)`** (`0x28b050`, nunca tocada
+antes). O resto dos dados é acessado via GOT, sem nomes no
+`.dynsym` (globais internos, não exportados — honesto não cravar
+endereço absoluto, mas o comportamento sai claro da trilha de
+registradores).
+
+```c
+void wldtown_bright() {
+    if (g_flagsA & 0x400) return;              // bit "efeito desligado"
+    if (pspWorldCheckFlg(2)) return;             // early-exit por estado do mundo (valor exato do enum não cravado)
+
+    if (g_flagsA & 0x8000000) {
+        // *** modo "reaplicar": usa o contador de ciclo já avançado noutro lugar neste frame ***
+    } else if (g_cycleDir == 0) {
+        g_cycleCounter = (g_cycleCounter + 1) & 0xff;         // avança o relógio dia/noite
+        if (g_cycleCounter == 0x40) g_cycleDir = 1;             // bateu no topo -> inverte
+    } else {
+        g_cycleCounter = (g_cycleCounter - 1) & 0xff;
+        if (g_cycleCounter == 0) g_cycleDir = 0;                 // bateu no fundo -> inverte
+    }
+
+APPLY:
+    uint8_t rising  = ((g_cycleCounter + 0x30) << 1) & 0xff;   // rampa "clareando"
+    uint8_t falling = ((0x70 - g_cycleCounter) << 1) & 0xff;     // rampa "escurecendo"
+
+    int count = g_objArray.count;
+    if (count <= 0) return;
+    TownObj* obj = g_objArray.items;               // stride 0x34 (52 B) por elemento
+    for (int i = 0; i < count; i++, obj++) {
+        if (!(obj->+0x10 & 0x10)) {                   // bit "ignora iluminação ambiente"
+            uint8_t tint = (obj->+0x24 != 0) ? rising : falling;  // cada objeto escolhe sua rampa
+            obj->r = obj->g = obj->b = tint;             // tingimento cinza uniforme (brilho ambiente)
+        }
+    }
+}
+```
+
+**Achados:**
+- **Revela o ciclo dia/noite real do mapa mundi**: um contador
+  oscilante de 0 a 64 (`g_cycleCounter`, onda triangular — sobe 64
+  passos, desce 64 passos, inverte a direção nos dois extremos via
+  `g_cycleDir`), convertido em duas rampas de brilho complementares
+  (`rising`/`falling`) aplicadas como tingimento cinza (R=G=B) em
+  cada objeto de um array de objetos do mapa mundi (stride 52 B).
+  Confirma, com leitura real, o papel sugerido pelo nome
+  (`wldtown_bright` = "brilho do mapa mundi").
+- Cada objeto escolhe **qual das duas rampas usar** por um campo
+  próprio (`+0x24`), e pode **optar por ignorar completamente** o
+  ciclo (bit `0x10` em `+0x10`) — sugere que luzes/fontes de luz
+  fixas (ex.: janelas iluminadas de uma vila à noite) não escurecem
+  junto com o resto do cenário.
+- O bit `0x8000000` separa dois modos de chamada: "avançar o relógio
+  E aplicar" vs. "só aplicar" (reaproveitando um avanço já feito por
+  outra chamada no mesmo frame) — sugere que `wldtown_bright` pode
+  ser chamada mais de uma vez por frame (uma vez por "sub-tela"/
+  camada do mapa mundi), mas o relógio global só deve avançar uma
+  vez.
+- Primeira função lida nesta investigação a chamar
+  `pspWorldCheckFlg` — mais uma peça real da camada de compatibilidade
+  `psp*` (já vista em `wldpad_read`/`CAUTOSAVE`, seção 12.2/19.1), mas
+  o enum `PSP_WORLD_FLG` e o significado do valor `2` não foram
+  cravados (sem debug info; escalonado).
+
+**O que ficou sem confirmar (escalonado, não forçado):**
+- O layout completo de `TownObj` (só os campos `+0x10`/`+0x24`/
+  `+0x30..0x32` foram confirmados) e qual array exatamente é esse
+  (tiles de fundo? sprites de prédio? os dois?) — não identificado
+  por nome.
+- O enum `PSP_WORLD_FLG` e o papel exato do valor `2`.
+
 ## 13. Motores gráfico (`CEGL2_*`) e de áudio (`CSOUND_IF`) — ponte confirmada com a API real (2026-10-16)
 
 Continuação direta: os dois últimos motores sem nenhum código lido.
