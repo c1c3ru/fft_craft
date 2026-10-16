@@ -148,9 +148,10 @@ continuam os mesmos:
 
 ## 🟡 Prioridade baixa — sistemas que a Fase 1 nunca abriu
 
-- [ ] `CINPUT_DATA::GetData(int)` (`0xb3548`, 36 B) — a função-central
-  da camada de **mapeamento toque→botão** (`CINPUT_DATA` nunca foi
-  aberta na Fase 1; só `CINPUT_IF_TOUCH`, a camada de toque bruto).
+- [x] `CINPUT_DATA::GetData(int)` (`0xb3548`, 36 B) — lida por
+  completo, ver `REVERSE_ENGINEERING_NOTES.md` seção 27. Confirma um
+  array de perfis/slots de input (stride 1436 B), cada um validado
+  por um sentinela `-1` na primeira word.
 - [ ] `CTHREAD::Register`/`CreateAndRegister` (`0xb9eb0`/`0xb9f04`,
   84/64 B) — confirma se este engine usa threads reais (pthreads) pra
   algo (áudio? loading assíncrono?) ou se é só um wrapper nunca

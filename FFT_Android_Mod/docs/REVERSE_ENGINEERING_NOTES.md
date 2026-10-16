@@ -3433,3 +3433,35 @@ do detector de combo.
   staticamente verificável).
 - Quem consome `this->genCounter2[idx]` (`+0xd8`) depois de setado —
   não localizado nesta passada.
+
+## 27. `CINPUT_DATA::GetData` lida — primeiro item 🟡 da Fase 2, abre um sistema nunca tocado (2026-10-16, Fase 2, iteração 14)
+
+Primeiro item 🟡: `CINPUT_DATA` nunca tinha sido aberta nesta
+investigação (só `CINPUT_IF_TOUCH`, a camada de toque bruto — seções
+20/26). `CINPUT_DATA::GetData(int id)` (`0xb3548`, 36 B, cobertura
+total: 9 instruções — função folha minúscula).
+
+```c
+void* CINPUT_DATA::GetData(CINPUT_DATA* this, int id) {
+    int stride = 0x59c;                  // 1436 B por registro
+    int* records = this->field_0x0;        // array de registros (ponteiro)
+    int sentinel = records[id * stride / 4];   // 1ª word do registro -- flag de validade
+    if (sentinel == -1) return NULL;             // slot inválido/não usado
+    return (uint8_t*)records + id * stride;        // ponteiro pro registro de verdade
+}
+```
+
+**Achado**: `CINPUT_DATA` gerencia um **array de perfis/slots de
+input** (stride de 1436 B cada), cada um validado por um sentinela
+`-1` na primeira word — mesma convenção "-1 = inválido/vazio" já vista
+em várias outras partes do motor (seções 17.6, 19, etc.). O tamanho
+generoso do registro (1436 B) bate com `CINPUT_DATA` ter ~35 métodos
+(`GetPress`/`GetDown`/`GetUp`/`GetRepeat`/`SetKeyWait`/
+`SetKeyDelay`/etc.) — provavelmente cada perfil guarda estado
+completo de mapeamento de botão + temporizadores de repetição/delay
+por botão, não só um valor simples.
+
+**O que ficou sem confirmar:** o layout interno do registro de
+1436 B (quais offsets correspondem a quais botões/temporizadores) e
+quantos slots o array `records` de fato tem — não investigado nesta
+passada, já que o item pedia só a função-central.
