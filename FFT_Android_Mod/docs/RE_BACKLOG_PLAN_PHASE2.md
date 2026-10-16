@@ -194,9 +194,14 @@ continuam os mesmos:
   tocado em toda a investigação** (Fase 1 inteira foi só ARM). Nem que
   seja só confirmar que a estrutura é idêntica (mesmos offsets de
   campo, mesma lógica) ou documentar divergências reais.
-- [ ] `BattleRoutine`'s 7 blocos de fallback nunca lidos (seção 18 do
-  doc de IA): `0x275d84`/`0x275d30`/`0x275ba8`/`0x275d10`/`0x275dd0`/
-  `0x275e18`/`0x275ae8`.
+- [x] `BattleRoutine`'s 7 blocos de fallback — lidos por completo
+  (e mais ~10 blocos irmãos que apareceram no mesmo intervalo), ver
+  `AI_DIFFICULTY_RESEARCH.md` seção 27. **Achado principal**:
+  `g->b[0xed4]` é o código de motivo de saída da IA (`0`/`1`/`2`,
+  gravado junto com a flag "IA ativa" antes do epílogo real de
+  `BattleRoutine`). Achado bônus: mais um escritor da tabela
+  `+0xa70`; um bloco de busca grande (256×256) não decomposto por
+  completo, candidato a item próprio futuro.
 
 ## Ferramentas (idêntico à Fase 1 — recriar se a sessão/worktree for nova)
 

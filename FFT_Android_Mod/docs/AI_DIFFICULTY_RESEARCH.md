@@ -2476,3 +2476,71 @@ quais correspondem a quê) continua sem ser cravado.
 não foram resolvidos nesta passada — ficou só a parte do lado da IA
 de batalha, que tinha os endereços de chamada mais concretos já
 documentados.
+
+## 27. Os 7 blocos de fallback do `BattleRoutine` — segundo item ⚪ da Fase 2, fecha a pendência da seção 18 (2026-10-16, Fase 2, iteração 20)
+
+A seção 18 tinha deixado pendentes 7 endereços de blocos de fallback
+nunca lidos (`0x275d84`/`0x275d30`/`0x275ba8`/`0x275d10`/`0x275dd0`/
+`0x275e18`/`0x275ae8`), fora do range de 1232 B lido na época. Lidos
+agora todos — e, como estão intercalados num intervalo contíguo de
+~816 B, a leitura revelou **mais ~10 blocos irmãos** que não tinham
+sido explicitamente pedidos, mas fazem parte do mesmo tecido de
+"saltos de volta pro meio do `BattleRoutine`".
+
+### 27.1 Achado principal: `g->b[0xed4]` é o código de motivo de saída da IA
+
+Confirmado por 3 blocos diferentes que convergem no mesmo padrão:
+antes de `BattleRoutine` retornar `-1` pelo seu epílogo real
+(`0x274c18`, bate com o range `0x274764`–`0x274c1c` já confirmado),
+sempre se grava `g->b[0x19b7]=1` (flag "IA ativa", já conhecida) **e**
+um valor diferente em `g->b[0xed4]`:
+
+| Bloco | `g->b[0xed4]` | Contexto |
+|---|---|---|
+| `0x275d84` | `1` | fallback direto (condição não decomposta) |
+| `0x275ddc` | `2` | depois de `sub_272aac()` retornar `-1` |
+| `0x275dfc` | `0` | fallback direto (condição não decomposta) |
+
+**Isso confirma que `g->b[0xed4]` é um código de "motivo pelo qual a
+IA parou de pensar"**, nunca identificado antes — um dado novo e
+concreto pra uma investigação futura que queira mapear os valores
+0/1/2 a motivos específicos.
+
+### 27.2 Outros achados confirmados
+
+- **Confirma mais um escritor da tabela `+0xa70`** (18 halfwords de
+  stride, mesma região das seções 21/23): o bloco `0x275b34` grava
+  direto a partir de `g->b[0xe30]/[0xe31]/[0xe32]` (campos de
+  posição-alvo já estabelecidos) via `(0x8000 >> col)`, mesmo idioma
+  de bit confirmado em várias outras seções.
+- **Confirma mais dois flags vizinhos da já conhecida "IA ativa"**
+  (`g->b[0x1980+0x37]`): `g->b[0x1980+0x36]` e `g->b[0x1980+0x39]` —
+  ambos usados nesses blocos de fallback, papel exato não cravado.
+- **Um bloco (`0x275ba8`) zera `g->b[0x1836]`(`+0x36`) e preenche o
+  array `g->b[0xc8d..0xca1]` (21 slots) com `1` incondicionalmente**
+  — diferente de `MakeMapDanger` (seção 23), que só marcava unidades
+  específicas; aqui é "marca todo mundo como ameaça", um caminho de
+  fallback mais agressivo/pessimista.
+- **Um bloco grande (`0x275bf4`–`0x275d0c`, ~280 B) implementa um
+  laço de busca duplo (até 256×256 iterações)**, chamando duas
+  funções nunca vistas (`sub_279b70`, `sub_28551c`), comparando bytes
+  de registro (`+5`/`+2`) e um campo de outro struct (`+0x1de`,
+  bits `0x30`) contra uma tabela GOT indexada por tipo — provável
+  busca de "melhor item/equipamento compatível" entre até 256
+  candidatos, mas **não decomposto por completo** (escala grande
+  demais pro escopo deste item; candidato a item próprio numa
+  iteração futura).
+- `0x275e18` confirma `GetPanelUnderUnit`/`IsAlmostNullUnit` (ambas já
+  nomeadas, seções AI anteriores) sendo chamadas em sequência pra
+  validar a posição de uma unidade específica antes de decidir o
+  próximo salto.
+- Revela 2 funções novas, não investigadas: `sub_272aac()` (chamada
+  em `0x275b7c`, resultado comparado contra `-1`/`0` pra escolher
+  entre 3 caminhos diferentes) e `sub_27207c(5)` (chamada em
+  `0x275dd4`).
+
+### 27.3 O que ficou sem confirmar
+- O laço de busca de `0x275bf4` por completo (ver 27.2).
+- `sub_272aac`/`sub_27207c` — só os pontos de chamada, não o corpo.
+- O significado exato dos valores `0`/`1`/`2` de `g->b[0xed4]` em
+  termos de jogo (que condição real cada um representa).
