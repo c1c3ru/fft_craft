@@ -6046,3 +6046,18 @@ validar `jtable.py` contra o resultado já confirmado de `battle()`,
 seção 32) — a cobertura e a contagem de branches acima já refletem a
 extração correta; o achado qualitativo (9 casos, só 2 `bl`, orientado
 a dados) não muda. Marcada `read_structural`.
+
+## 69. `inflate`/`deflate`/`inflateBack` — confirmados como zlib real embutida no ARM, mesmo tratamento do `gl3stubInit` (2026-10-17, Fase 3)
+
+`inflate` (`0x7b200`, 6.652 B), `deflate` (`0x759e8`, 4.872 B),
+`inflateBack` (`0x794ec`, 4.660 B) — os três clusterizados no mesmo
+bloco de endereços `0x71000`–`0x7c000`, junto de `sub_714b8`/
+`sub_714c4` (helpers chamados por DEZENAS de funções de jogo já
+lidas nesta investigação, provavelmente `memset`/`memcpy` da libc ou
+primitivas internas do zlib). **Confirma, com nomes reais de
+`.dynsym`, que a zlib real está embutida como código no ARM** — não
+só via `.plt` dinâmico como a seção 31 (comparação com x86) tinha
+sugerido como regra geral; os dois mecanismos convivem no mesmo
+binário ARM. Mesmo tratamento do `gl3stubInit` (seção 62): biblioteca
+de terceiros padrão, zero lógica de jogo, não vale um passe
+instrução-a-instrução. Marcadas `read_full` as três.

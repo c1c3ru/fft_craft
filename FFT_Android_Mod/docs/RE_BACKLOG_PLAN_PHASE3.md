@@ -12,6 +12,39 @@ convenientes. As Fases 1/2 continuam válidas como histórico e podem
 seguir sendo fechadas em paralelo, mas a partir de agora **este
 documento é a lista-mestra** que direciona o loop.
 
+## Mudança de estratégia (2026-10-17): paralelizar e reduzir retrabalho
+
+Depois de ~37 funções lidas sequencialmente (uma por iteração, sempre
+esperando o commit antes de pedir a próxima), seis ajustes de método
+pra acelerar sem perder honestidade de cobertura:
+
+1. **Paralelizar com múltiplos forks**: já que cada função é
+   independente (mesmo binário, só endereços diferentes), lançar
+   vários forks de uma vez, cada um com uma função diferente da
+   fila, rodando `jtable.py` e devolvendo um rascunho de seção —
+   **sem escrever nos arquivos compartilhados** (evita conflito de
+   edição concorrente). O coordenador integra todos os rascunhos e
+   faz UM commit por lote.
+2. **Parar de tratar família já confirmada como trabalho novo**:
+   depois de 2–3 confirmações do mesmo padrão (`Mdl*`,
+   `disp_personalwindow`+variantes), as próximas são repetição — só
+   vale uma função nova se o catálogo de `bl` divergir
+   significativamente (<90% de overlap) do já lido.
+3. **Baixar a régua de verificação manual** pra funções grandes sem
+   tabela de salto e com cobertura >95% na primeira passada —
+   aceitar o resultado automático direto, sem segunda conferência.
+4. **Extrator de tabela de salto confiável**: `jtable.py` (no scratch
+   da sessão) resolve `cmp`/`addls` corretamente (`PC` no momento da
+   execução = `endereço+8`, não `+4` — erro real encontrado e
+   corrigido nas seções 41/63/68 depois de validar a ferramenta
+   contra o resultado já certo de `battle()`, seção 32). Usar sempre
+   essa ferramenta a partir de agora, não extração manual.
+5. **Continuar "maior primeiro" por bytes** — já é a estratégia em
+   uso e segue sendo a mais eficiente dado que a mediana de tamanho é
+   56 B.
+6. **Boilerplate genérico (`gl3stubInit`) não precisa de passe
+   completo** — reconhecimento rápido de padrão basta.
+
 ## A escala real (números medidos, não estimados)
 
 ```

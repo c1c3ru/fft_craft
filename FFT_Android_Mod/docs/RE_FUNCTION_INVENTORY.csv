@@ -30,7 +30,7 @@ address,size,mangled,demangled,status,section_ref
 001c0930,6956,_Z8UnitListii,"UnitList(int, int)",read_structural,"NOTES §56 (parcial, 58%)"
 001a486c,6908,_Z11AbilityMenuv,AbilityMenu(),read_structural,NOTES §57
 00238bac,6792,_Z7Mdl0013siii,"Mdl0013(short, int, int, int)",unread,
-0007b200,6652,inflate,inflate,mentioned_unverified,
+0007b200,6652,inflate,inflate,read_full,NOTES §69
 00117374,6504,_Z18Wdisp_scrollwindowv,Wdisp_scrollwindow(),read_structural,NOTES §58
 002ae900,6368,_Z17GuEmu_libgu_to_glv,GuEmu_libgu_to_gl(),read_structural,NOTES §59
 001314a8,6228,_Z22Wdisp_floateventwindowv,Wdisp_floateventwindow(),read_structural,NOTES §60
@@ -47,14 +47,14 @@ address,size,mangled,demangled,status,section_ref
 002b8900,5036,_Z19iOS_SetIconPositionv,iOS_SetIconPosition(),unread,
 0023b310,5024,_Z7Mdl0015siii,"Mdl0015(short, int, int, int)",unread,
 00213e78,4976,_Z17executeChangeClutv,executeChangeClut(),unread,
-000759e8,4872,deflate,deflate,mentioned_unverified,
+000759e8,4872,deflate,deflate,read_full,NOTES §69
 0022ae34,4868,_Z7Mdl0001siii,"Mdl0001(short, int, int, int)",unread,
 00127360,4808,_Z14Wdisp_helpmenuv,Wdisp_helpmenu(),unread,
 0023c79c,4792,_Z7Mdl0017siii,"Mdl0017(short, int, int, int)",unread,
 0014935c,4780,_Z16Cdisp_bothwindowv,Cdisp_bothwindow(),unread,
 0013f1dc,4728,_Z19battle_scrollwindowv,battle_scrollwindow(),unread,
 002406d4,4700,_Z7Mdl0028siii,"Mdl0028(short, int, int, int)",unread,
-000794ec,4660,inflateBack,inflateBack,unread,
+000794ec,4660,inflateBack,inflateBack,read_full,NOTES §69
 001255e0,4628,_Z13disp_helpmenuv,disp_helpmenu(),unread,
 001da9e4,4540,_Z17set_monsterwork_jP5BWORKP5EDATAii,"set_monsterwork_j(BWORK*, EDATA*, int, int)",unread,
 000e62cc,4448,_Z20iOS_RESUME_SET_EVENTP21IOS_RESUME_DATA_EVENT24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_EVENT(IOS_RESUME_DATA_EVENT*, IOS_RESUME_DATACOPY_MODE)",unread,
