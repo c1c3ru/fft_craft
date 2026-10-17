@@ -117,7 +117,7 @@ não duplicar 6.455 linhas neste arquivo:
 | Endereço | Bytes | Função | Categoria provável |
 |---|---|---|---|
 | `0x207e10` | 17156 | `battle()` | ✅ passe estrutural feito (`REVERSE_ENGINEERING_NOTES.md` §32, 2026-10-17): switch de 102 estados / 70 endereços distintos, tabela completa extraída, 94 chamadas catalogadas. **Os 70 handlers de estado ainda não foram lidos por dentro** — maior trabalho pendente de toda a Fase 3. |
-| `0x11173c` | 16312 | `Wmesputmain()` | sistema de mensagens/diálogo (variante "W") |
+| `0x11173c` | 16312 | `Wmesputmain()` | ✅ passe estrutural feito (§33, 2026-10-17): confirma o subsistema `W*` de janelas/mensagens inteiro (nunca citado antes) e revela um sistema de tasks "wasm" novo. Corpo do laço principal e das 7 locais sem símbolo não lido. |
 | `0x2c141c` | 16164 | `Main_FrameRender()` | **loop principal do jogo inteiro** |
 | `0x17c27c` | 15920 | `BattleUnitList(uchar*, ulong*)` | lista de unidades em batalha |
 | `0xe88c4` | 15744 | `mesputmain()` | sistema de mensagens/diálogo (base) |

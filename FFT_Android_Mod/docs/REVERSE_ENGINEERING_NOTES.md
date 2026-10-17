@@ -4505,3 +4505,97 @@ acima é só do pouco que a descida recursiva alcançou sem seguir a
 tabela). Ler os 70 handlers de verdade é trabalho de várias iterações
 futuras — ver `RE_FUNCTION_INVENTORY.csv` (`battle()` marcada
 `read_structural`, não `read_full`).
+
+## 33. `Wmesputmain()` — passe estrutural — 2ª maior função do binário, revela um sistema de tasks nunca visto (2026-10-17, Fase 3)
+
+`Wmesputmain()` (`0x11173c`, 16.312 B) — mesmo tratamento da seção 32:
+passe estrutural via `struct_pass.py`, não linha a linha. Cobertura da
+descida recursiva: **3.963 de ~4.078 instruções possíveis (97%)** —
+bem mais completa que `battle()`, porque esta função **não usa uma
+tabela de salto computada** (nenhum `addls pc,...`/`ldr pc,...`
+encontrado); o despacho é feito por uma cascata grande de `cmp`/`beq`/
+`bne` (414 branches, 215 de retrocesso — mais "loops"/"continue" que
+`battle()`, consistente com um laço de tarefas, não um switch único).
+
+### 33.1 Confirma o papel de `W*` (já suspeitado, nunca lido): orquestrador do sistema de janelas/mensagens
+
+95 `bl` resolvidos por nome. O grupo mais revelador é a família
+inteira de funções `W*` **nunca antes lidas nem citadas**, chamadas
+de dentro de `Wmesputmain`:
+
+```
+Wallocatewindow() / Wdisposewindow(MESSAGEPACKET*)
+Wallocatetexture(RECT16*, tagPOLY_FT4*, long*) / Wdisposetexture(RECT16*)
+Wload_replaceitems(int,int)
+Wserchmessagepointer(int) / Wgetvaluelength(int) / Wcount_words2(short*,short*,char*)
+Wgetanimpos2d(int, SVECTOR*)
+Wmakemessagepacket(char*) / Wpushmessagepacket() / Wpopmessagepacket()
+Wmultiwindow_packetextend(COMRECORD*, tagSPRT*, int)
+Wsettaskkind(int) / Wtask_killmyself()
+Wwrite_eventflag(int,int) / Wread_eventflag(int) / Wcnvglobaltolocalid(int)
+Wextend_windowframe(int,int,RECT16*,int,int)
+```
+
+Isso confirma, com nomes reais, que existe um **subsistema `W*`
+completo e nunca documentado**: alocação de janela/textura de
+mensagem, uma fila de "message packets" (`push`/`pop`/`make`), e uma
+ponte própria com o sistema de flags de evento (`Wwrite_eventflag`/
+`Wread_eventflag` — variantes com prefixo `W` das mesmas
+`write_eventflag`/`read_eventflag` já vistas em `wldday_put`, seção
+12.10, e no motor de eventos, seções 9.5–9.6, confirmando que o
+sistema de mensagens tem SEU PRÓPRIO acesso aos flags, paralelo ao do
+mapa mundi).
+
+### 33.2 Achado novo: um sistema de tasks "wasm" nunca mencionado
+
+```
+wasmTaskEntry() ×14   wasmGetInput1() ×1   wasmGetInput2() ×5
+wasmGetInput3() ×5    wasmGetActiveTask(int) ×1
+```
+
+Nome nunca visto nesta investigação (quase certamente não é
+WebAssembly — é jargão interno do motor, estilo "SSD"/"Iwasaki"
+já catalogado). `Wsettaskkind`/`Wtask_killmyself` (do grupo 33.1)
+reforçam a hipótese: mensagens rodam como **tasks cooperativas**,
+com `wasmTaskEntry` como ponto de entrada do agendador e
+`wasmGetInput1/2/3` buscando até 3 parâmetros por task — um sistema
+de execução paralelo ao de bytecode de evento já documentado (seções
+9.5–9.6), não o mesmo.
+
+### 33.3 Outros sistemas confirmados por chamada
+
+- **`iOS_CMenuTouch`** (`setYLine`/`init`/`exec`/`setDispAssist`) —
+  uma classe C++ real de menu de toque **dentro** do sistema de
+  mensagens (prováveis escolhas de diálogo/múltipla escolha).
+- Uso pesado do sistema de ícones V2 (`iOS_getV2Icon` ×26,
+  `iOS_setV2Icon` ×28) e de tutorial (`iOSTutoFlagCheck` ×8,
+  `iOS_getTutoBegin` ×8, `iOS_getTutorialbreak`/`iOSTutorialMessageKill`/
+  `iOSTutoTaskCheck`) — mensagens e tutorial estão fortemente
+  acoplados.
+- Ponte com `CFFT_STATE` (`GetParam`, `WorldFaceIDToFaceID` — a MESMA
+  função confirmada na seção 22.5, reforçando que o sistema de
+  retrato de personagem também alimenta mensagens de diálogo).
+- Um ponto de convergência pesado em `0x1122dc` (14+ branches
+  diferentes caem lá) lido por instrução: monta um "motivo de
+  bloqueio" (`r4`, sentinela `0xfe`) a partir de `iOS_getV2Icon(5)`,
+  `iOS_getTutorialbreak()`, `Get_bravebreak()` e
+  `CFFT_STATE::GetParam(0xd)`, depois testa um campo `+0x14c` de um
+  array de stride `0x400` (1024 B) contra o valor `3` — **parece ser
+  o topo do laço principal de processamento de uma lista de tasks de
+  mensagem**, mas o corpo do laço (o que o valor `3` representa) não
+  foi lido.
+- 7 chamadas locais sem símbolo (`sub_714b8`/`714c4`/`fb7e0`×19/
+  `fbf74`/`fe238`/`103488`/`10def8`×4/`111638`×5) — `sub_714c4` é
+  chamada bem no início da função sobre o buffer local de 0x354 B,
+  padrão compatível com um `memset`/zerador de buffer; as demais não
+  investigadas.
+
+**O que ficou sem confirmar (escalonado — intencional pro nível
+"passe estrutural")**: a estrutura exata do laço de tasks (o que
+significa cada valor do campo `+0x14c`), os corpos de cada bloco
+alcançado pela cascata de 414 branches, e o papel exato das 7 funções
+locais sem símbolo. Marcada `read_structural` no
+`RE_FUNCTION_INVENTORY.csv`. `mesputmain()` (a versão sem prefixo `W`,
+0xe88c4, 15.744 B, 5ª maior do binário) é a candidata natural pra
+comparar contra esta e confirmar se é duplicação por idioma/plataforma
+ou lógica genuinamente diferente — não lida ainda.
