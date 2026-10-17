@@ -5689,3 +5689,30 @@ Sim/Não da seção 42), e `isInRectUi(_RECT_UI*, int, int)` — um tipo
 **O que ficou sem confirmar**: 42% da função (a tabela de função
 indexada e tudo que só é alcançável por ela). Marcada
 `read_structural` com a ressalva explícita de cobertura parcial.
+
+## 57. `AbilityMenu()` — passe estrutural — confirma o sistema real de aprendizado de habilidade por job (2026-10-17, Fase 3)
+
+`AbilityMenu()` (`0x1a486c`, 6.908 B) — descida recursiva: **1.646
+de ~1.727 instruções possíveis (95%)**, sem tabela de salto; **152
+branches, 73 de retrocesso**.
+
+### Confirma o mecanismo real de aprender habilidade por job (o sistema clássico de FFT)
+
+```
+GetAbilityList(short,short,int,short*,int)      GetTotalAbilityList(short,int,short*)
+AbilityCompare(C_STTS*,short,short)              AbilityEquip(short,short,short,int)
+IsUntauchableAbility(int)                           pspAbilityCompareSupport(short,short)
+LearnJobStts() / LearnAbiStts() / JobToAbiChg()    SetSttsAbi(int)
+```
+Paralelo direto ao sistema de itens já confirmado (`ItemMenu`, seção
+39): mesma estrutura (`List`/`Compare`/`Equip`), agora pra
+habilidades aprendidas por job. `JobToAbiChg()` confirma a ponte
+real entre o job atual de uma unidade e as habilidades que ela pode
+aprender/equipar — o mecanismo central de customização de personagem
+do FFT, nunca catalogado byte a byte antes. Reusa a mesma biblioteca
+de janela/menu já vista (`WindowInit`/`SetMenuSelVertical`/
+`MenuSelVerticalWithSnd`) sem prefixo — mais uma tela cliente da
+biblioteca compartilhada (seções 39/40/42/45/49-51).
+
+**O que ficou sem confirmar**: os corpos da cascata de 152 branches
+(73 de retrocesso). Marcada `read_structural`.
