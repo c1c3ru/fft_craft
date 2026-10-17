@@ -4,7 +4,7 @@ address,size,mangled,demangled,status,section_ref
 002c141c,16164,_Z16Main_FrameRenderv,Main_FrameRender(),read_structural,NOTES §34
 0017c27c,15920,_Z14BattleUnitListPhPm,"BattleUnitList(unsigned char*, unsigned long*)",read_structural,NOTES §36
 000e88c4,15744,_Z10mesputmainv,mesputmain(),read_structural,NOTES §37
-0016a6a4,15412,_Z14ASHURA_addPrimP6MATRIX,ASHURA_addPrim(MATRIX*),unread,
+0016a6a4,15412,_Z14ASHURA_addPrimP6MATRIX,ASHURA_addPrim(MATRIX*),read_structural,NOTES §38
 001aeda0,13764,_Z8ItemMenuv,ItemMenu(),unread,
 002bbb74,13272,_Z14Main_FrameMovev,Main_FrameMove(),read_structural,NOTES §35
 0018aeec,12580,_Z9eItemMenuv,eItemMenu(),unread,

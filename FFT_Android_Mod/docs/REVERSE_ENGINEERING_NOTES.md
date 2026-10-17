@@ -4917,3 +4917,62 @@ simples não foi confirmada lendo o corpo de nenhuma das duas; e,
 exceto por `getBattleWorkIDFromAnimation`, não foi feita uma
 comparação exaustiva instrução-a-instrução (só por nome de chamada)
 entre as duas funções. Marcada `read_structural`.
+
+## 38. `ASHURA_addPrim` — passe estrutural — confirma o motor 3D "ASHURA" como uma pilha de matrizes GTE real, com ray-picking e partículas (2026-10-17, Fase 3)
+
+`ASHURA_addPrim(MATRIX*)` (`0x16a6a4`, 15.412 B) — mesmo tratamento
+das seções 32–37. Primeira leitura do motor "ASHURA", descoberto por
+nome na seção 32.3 (catálogo de `battle()`) mas nunca aberto. Descida
+recursiva: **3.720 de ~3.853 instruções possíveis (97%)**, sem
+tabela de salto computada. Catálogo mais curto de `bl` desta fase (47
+distintos) — função mais matemática que orquestradora.
+
+### 38.1 Confirma uma pilha de matrizes GTE real (hierarquia 3D de verdade)
+
+```
+PushMatrix / PopMatrix          — pilha real de transformação
+RotMatrix / TransMatrix / ScaleMatrix / SetTransMatrix / SetRotMatrix
+MulMatrix0 / MulMatrix2
+SetLightMatrix / SetColorMatrix / SetBackColor
+rsin
+```
+`PushMatrix`/`PopMatrix` nunca tinham aparecido nesta investigação —
+confirma que o `ASHURA_addPrim` monta uma **hierarquia real de
+transformações** (ex.: matriz do modelo → matriz de uma parte do
+corpo → matriz de um efeito anexado), não só uma transformação plana
+única. `SetLightMatrix`/`SetColorMatrix`/`SetBackColor` confirmam
+**iluminação real via GTE** (não só cor fixa), capacidade nunca
+catalogada byte a byte antes nesta investigação.
+
+### 38.2 Achados novos: clipping, ray-picking, partículas
+
+- **`GLIVON_FT4`/`GLIVON_FT3`/`GLIVON_F3`/`GLIVON_F4`** — nunca
+  vistas; assinatura (ponteiro de primitiva + contagem + buffers de
+  saída) é consistente com **clipping/recorte de polígono contra o
+  volume de vista** antes do desenho (nome provável: "GL Interpolate
+  Vertices ON" ou similar — não cravado).
+- **`RayPick_GT4`/`RayPick_GT3`** — confirma **ray-picking real**
+  contra polígonos texturizados com Gouraud — provável mecanismo de
+  seleção de alvo/unidade em 3D via toque, nunca catalogado antes.
+- **`ps_rand()` chamada 29 vezes** — de longe a chamada mais
+  frequente desta função; consistente com geração de posições/
+  variações aleatórias de partículas ou efeitos (faíscas, destroços),
+  já que "addPrim" sugere adicionar primitivas de efeito ao OT.
+- **`ASHURA_FALL(unsigned char)`** — nome sugere queda/gravidade de
+  objeto (destroços, itens largados); **`ASURA_LMDL_TIME_TBL()`**
+  tem o nome escrito **sem o H** (`ASURA`, não `ASHURA`) — inconsistência
+  de nomenclatura real no binário, preservada tal como está, não
+  corrigida (mesmo espírito de preservar nomes "estranhos" como
+  "Iwasaki"/"SSD" já catalogado em seções anteriores).
+- `VectorDataBase(unsigned int)`/`Vector_AffineTransform(int)` —
+  confirma um pipeline de dados de vértice próprio do ASHURA, separado
+  dos vértices do `wld_*`/`CEGL2_*`.
+- Uso pesado de divisão inteira real (`__divsi3` ×14, `__aeabi_idivmod`
+  ×11) — matemática de verdade, não só tabelas.
+
+**O que ficou sem confirmar (nível "passe estrutural" intencional)**:
+os corpos dos ~70+ blocos da cascata de branches (230 branches, 108
+de retrocesso), a semântica exata de `GLIVON_*`, e o papel preciso de
+`ASHURA_FALL`/`ASURA_LMDL_TIME_TBL`. Marcada `read_structural`. As
+outras funções `ASHURA_*` já catalogadas por nome (`init`, `matrix`,
+`getOTptrZ`, `clearOT`, `Exit` — seção 32.3) continuam não lidas.
