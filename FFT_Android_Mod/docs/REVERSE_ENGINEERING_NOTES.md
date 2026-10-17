@@ -5363,3 +5363,58 @@ exclusivo da tela de save do menu principal.
 os corpos das 3 tabelas (22 casos no total) e do resto da cascata de
 197 branches; o layout exato de `CARD_HEADER`. Marcada
 `read_structural`.
+
+## 46. `disp_personalwindow()` — passe estrutural — a janela de status pessoal real, com texto kanji e sombreamento PS1 de verdade (2026-10-17, Fase 3)
+
+`disp_personalwindow()` (`0x128ed4`, 8.756 B, a maior das 6 variantes
+`disp_personalwindow`/`Wdisp_`/`Adisp_`/`Cdisp_`/`Ddisp_`/
+`Edisp_personalwindow` listadas no inventário) — mesmo tratamento
+das seções 32–45. Descida recursiva: **2.135 de ~2.189 instruções
+possíveis (97%)**, sem tabela de salto computada.
+
+### 46.1 Confirma a janela de status pessoal, com texto kanji real
+
+```
+statusfigprint(int,int,char*,COPYFIELD*)     valueput(char*,VALUERECORD*,COPYFIELD*,int)
+statuskanjiprint(int,char*,COPYFIELD*)          statuskanjiprintwithptr(char*,COPYFIELD*,char*)
+addstatusback/sttsback_normal/sttsback_blue/initstatusback(...STTSWINDOWBACK*)
+bgput(tagPOLY_FT4*,RECT16*,RECT16*,BGRECORD*)
+addlocalprim/initpolyft4/initsprtfield
+```
+**`statuskanjiprint`/`statuskanjiprintwithptr`** confirmam, com nomes
+reais, impressão de texto **kanji** nesta janela — reforça o
+tratamento Shift-JIS real já visto em `CSTR_UTIL::GetName` (seção
+30), agora na própria camada de desenho da UI, não só no utilitário
+de string. `addstatusback`/`sttsback_normal`/`sttsback_blue` sugerem
+pelo menos 2 esquemas de cor de fundo pro painel de status (normal
+vs. azul — provável distinção de time aliado/inimigo ou estado
+normal/alterado).
+
+### 46.2 Confirma desenho direto com GPU PS1 real, incluindo sombreamento
+
+```
+SetPolyG4 / SetDrawOffset / SetDrawMode / SetSemiTrans / SetShadeTex / GetClut
+```
+**`SetShadeTex`** nunca vista antes nesta investigação — confirma
+**sombreamento (shading) real** sobre textura via GTE, além da
+semi-transparência já confirmada na seção 36. Este painel desenha
+com primitivas PS1 cruas (`addlocalprim`/`initpolyft4`), não via
+`DB`/`b*` (seção 36) nem `CEGL2_*` — um **quarto caminho de desenho**
+catalogado nesta investigação (mapa mundi `GsOT`, moderno `CEGL2_*`,
+buffer `DB` de UI de batalha/save, e agora este caminho mais direto
+de primitivas soltas).
+
+### 46.3 Confirma uma máquina de fases pra animação da janela
+
+`iOSdisp_personalWinPhase()`/`iOSdisp_personalWinPhaseSet(int)`/
+`iOSPersonalWinPosSet(int)` — confirma que a janela tem fases
+numeradas (provável abrir/mostrar/fechar, no espírito do contador de
+8 passos de `wld_window`, seção 12.11, mas pra este painel
+específico). `iOSUnitListAddGet()` chamada **22 vezes** — maior
+contagem desta função, sugere iteração pesada sobre a lista de
+unidades pra montar o conteúdo exibido.
+
+**O que ficou sem confirmar (nível "passe estrutural" intencional)**:
+os corpos da cascata de 133 branches (72 de retrocesso); as outras 5
+variantes de letra (`W`/`A`/`C`/`D`/`E`) continuam só no inventário,
+não lidas. Marcada `read_structural`.
