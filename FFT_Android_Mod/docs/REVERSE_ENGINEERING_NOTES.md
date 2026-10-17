@@ -5818,3 +5818,19 @@ traduzido, no espírito de "Iwasaki"/"SSD" já catalogados.
 
 **O que ficou sem confirmar**: os corpos da cascata de 150 branches
 (77 de retrocesso). Marcada `read_structural`.
+
+## 62. `gl3stubInit` — confirmado como boilerplate genérico do Android NDK, lida por completo em uma passada rápida (2026-10-17, Fase 3)
+
+`gl3stubInit` (`0xb1cdc`, 6.204 B) — diferente de todas as seções
+anteriores, este NÃO precisou de passe estrutural extenso: uma
+olhada no padrão já basta pra confirmar 100% do conteúdo. Único `bl`
+chamado (**104 vezes**): `sub_719ec`, que é um trampolim direto pra
+`dlsym` via GOT (`add ip,pc,#...; ldr pc,[ip,#...]!`). O corpo de
+`gl3stubInit` é literalmente: pra cada uma das 104 funções GLES3,
+chama `dlsym(handle, "glNomeDaFunção")` e grava o ponteiro resolvido
+num slot de função global. **Este é o arquivo `gl3stub.c` padrão do
+Android NDK** (usado por inúmeros projetos Android com OpenGL ES 3
+pra resolver os símbolos em tempo de execução) — zero lógica
+específica do jogo. Marcada `read_full` (não `read_structural`): não
+há mais profundidade a extrair, o padrão já confirma o conteúdo
+inteiro sem precisar enumerar as 104 repetições individualmente.
