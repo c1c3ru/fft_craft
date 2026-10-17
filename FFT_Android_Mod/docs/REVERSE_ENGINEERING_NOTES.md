@@ -5629,3 +5629,36 @@ horizontal também, não só vertical.
 **O que ficou sem confirmar**: os corpos da cascata de 148 branches
 (74 de retrocesso); o formato exato de `PRIMPACKET`. Marcada
 `read_structural`.
+
+## 55. `UnitTable` — passe estrutural — confirma uma rotina genérica de lista de unidades parametrizada por callback (2026-10-17, Fase 3)
+
+`UnitTable(short,short,short,short,short, int(*)(int), int(*)(int), int)`
+(`0x1bde2c`, 6.976 B) — descida recursiva: **1.596 de ~1.744
+instruções possíveis (91%)**; **180 branches, 104 de retrocesso**.
+
+### A "tabela de salto não resolvida" era, na verdade, duas chamadas via ponteiro de função reais
+
+A ferramenta sinalizou 2 blocos terminando em branch computado
+(`blx ip`/`blx r1`) — mas não são tabelas de switch: são **chamadas
+diretas através dos dois parâmetros `int(*)(int)` da própria
+assinatura**. Confirma que `UnitTable` é uma rotina **genérica e
+parametrizada**: quem chama fornece dois callbacks (prováveis
+"pegar unidade no índice N" e "filtro/ordem"), e o restante do
+código é compartilhado entre todo mundo que precisa desenhar uma
+lista de unidades — explica por que `UnitList`/`BattleUnitList`
+(seção 36) e as telas de item usam tantas funções `iOSUnitList*` em
+comum: todas são clientes desta mesma rotina parametrizada.
+
+### Achados novos de desenho
+
+`DrawEggWithShadow(short, DVECTOR*, int, COLOR*, int, int)` e
+`DrawUnitWithShadow(short, DVECTOR*, COLOR*, int, int)` — nunca
+vistas; "Egg" sugere um ícone/retrato de unidade com formato oval
+desenhado com sombra própria (hipótese, não confirmada).
+`UnitScroll(short*, short*)`/`scroll_chk()` confirmam lógica de
+rolagem própria desta lista. `GetSttsAMovingTime()`/`GetSttsApos`
+sugerem posição/tempo de uma animação de movimento de status.
+
+**O que ficou sem confirmar**: os corpos da cascata de 180 branches
+(104 de retrocesso); o papel exato de "Egg". Marcada
+`read_structural`.

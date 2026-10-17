@@ -141,7 +141,7 @@ não duplicar 6.455 linhas neste arquivo:
 | `0x23e29c` | 8616 | `Mdl0024(short,int,int,int)` | ✅ passe estrutural feito (§48, 2026-10-17): confirma que a família `Mdl*` é o conjunto de rotinas de desenho de efeito/animação numeradas, construídas direto sobre `ASHURA` (§38) e o gerador de partículas (§44) — fecha o ciclo entre os dois. 99,4% de cobertura. |
 | `0x1b2ea8` | 6216 | `JobChange()` | troca de classe/job |
 | `0x1a486c` | 6908 | `AbilityMenu()` | menu de habilidades |
-| `0x1bde2c` | 6976 | `UnitTable(...)` | tabela de unidades |
+| `0x1bde2c` | 6976 | `UnitTable(...)` | ✅ passe estrutural feito (§55, 2026-10-17): rotina GENÉRICA parametrizada por 2 callbacks (não tabela de salto — eram chamadas via ponteiro de função dos próprios parâmetros). Explica o `iOSUnitList*` compartilhado entre telas. |
 | `0x1c0930` | 6956 | `UnitList(int,int)` | lista de unidades |
 
 **Observação honesta**: `battle()`, `Main_FrameMove()` e
