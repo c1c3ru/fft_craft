@@ -116,6 +116,15 @@ Trabalho pendente de maior valor identificado: os **70 handlers de
 estado do switch de `battle()`** (endereços na seção 32.2 do
 `REVERSE_ENGINEERING_NOTES.md`) — nenhum lido por dentro ainda.
 
+- **Atualização (2026-10-17, `GuEmu_libgu_to_gl`, §59)**: o prefixo
+  `psp*` (dezenas de funções já catalogadas: `pspSaveInit`,
+  `pspBattleCheckFlg`, `pspItemGetCommonData`, etc.) é literalmente
+  **PlayStation Portable** — confirmado por `GuEmu_libgu_to_gl` ser a
+  ponte real entre a API gráfica do PSP (`libgu`/`sceGu`) e o motor
+  `CEGL2_*`. Este jogo tem raiz dupla PS1 (`Gs*`/`libgpu`, seções
+  9–15) + PSP (`psp*`/`libgu`), não só PS1 como as seções mais
+  antigas assumiam implicitamente.
+
 ## Fila prioritária imediata (as 30 maiores funções nunca tocadas)
 
 Lista completa em `RE_FUNCTION_INVENTORY.csv` — aqui só o topo, pra

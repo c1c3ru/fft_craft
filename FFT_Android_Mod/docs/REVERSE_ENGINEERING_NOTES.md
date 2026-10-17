@@ -5730,3 +5730,48 @@ e `Wdisp_personalwindow`/`disp_personalwindow`. A hipótese "`W` é
 cópia real de fonte, correlacionada com a task `wasm`" está, a essa
 altura, bem estabelecida pra múltiplas famílias de tela. Marcada
 `read_structural`.
+
+## 59. `GuEmu_libgu_to_gl()` — passe estrutural — a ponte real entre o PSP e o motor gráfico moderno; reclassifica todo o `psp*` da investigação (2026-10-17, Fase 3)
+
+`GuEmu_libgu_to_gl()` (`0x2ae900`, 6.368 B) — citada desde a seção
+32 (`battle()`) e a 35 (`Main_FrameMove`), nunca aberta. Descida
+recursiva: **1.544 de ~1.592 instruções possíveis (97%)**, sem
+tabela de salto; **146 branches, 67 de retrocesso**.
+
+### Achado maior: confirma que "psp" é literalmente PSP (PlayStation Portable), não um prefixo genérico
+
+`GuEmu` = emulação da **`libgu`/`sceGu`, a API gráfica real do PSP**
+(análoga à `libgpu` do PS1 já confirmada em várias seções). Esta
+função é a **ponte real** entre chamadas de estilo PSP (`GuEmu_Clear`,
+`GuEmu_GetRAW`, `GuEmu_GetCLUTAddress`, `GuEmu_FrameMove` — seção
+35) e o motor gráfico moderno `CEGL2_*` já documentado nas seções
+13–15/34:
+```
+CEGL2_IF::GetPacket(int)
+CEGL2_SPRITE::LoadBegin/LoadEnd/Overwrite/GetImageSize/GetImageBPP/GetTextureHandle/Unload
+CEGL2_TEX_HYBRID::Register/UV_Get/UV_AutoRelease/CLUTAddr_AutoRelease/RAW_GetBuf/
+  GL_IsUpdate/AutoRelease/RAW_IsUpdate/GL_GetTextureHandle/GL_SetUsed/GL_Load
+CEGL_PACKET::GetCount/SetTexture/GetExtra/SetExtra/GetVBOBuffer/GetVBOInfo
+CFILE_DAT::Unload/CacheFind/CacheReplace/GetBuffer/Load/Decode
+CWORK_MEM::Get/GetTail
+```
+**Isto reclassifica, com evidência concreta, todas as dezenas de
+funções `psp*` já catalogadas nesta investigação inteira**
+(`pspSaveInit`, `pspBattleCheckFlg`, `pspNetGetBattleModeFlag`,
+`pspItemGetCommonData`, `pspWorldCheckFlg`, etc., seções 12.12, 19.1,
+36, 39–45, 56): **não são um "prefixo de compatibilidade genérico"
+— são literalmente a camada de API do PlayStation Portable**,
+confirmando que este jogo tem raiz **PSP**, não só PS1 (a lib
+gráfica PS1 `Gs*`/`libgpu` já documentada nas seções 9–15 convive
+com a camada PSP `libgu`/`sceGu` nesta mesma base de código — duas
+plataformas de origem, não uma).
+
+**Também confirma, com nome real, o motivo de `CEGL2_TEX_HYBRID` ter
+"HYBRID" no nome** (seções 13.7/13.11): é híbrida entre o caminho
+"RAW" (textura cru, provavelmente do PSP/`Gu`) e o caminho "GL"
+(OpenGL ES moderno) — `RAW_GetBuf`/`RAW_IsUpdate` vs. `GL_Load`/
+`GL_IsUpdate`/`GL_GetTextureHandle` confirmam os dois caminhos
+reais dentro da mesma classe, exatamente o "hybrid" do nome.
+
+**O que ficou sem confirmar**: os corpos da cascata de 146 branches
+(67 de retrocesso). Marcada `read_structural`.

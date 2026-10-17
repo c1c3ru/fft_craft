@@ -32,7 +32,7 @@ address,size,mangled,demangled,status,section_ref
 00238bac,6792,_Z7Mdl0013siii,"Mdl0013(short, int, int, int)",unread,
 0007b200,6652,inflate,inflate,mentioned_unverified,
 00117374,6504,_Z18Wdisp_scrollwindowv,Wdisp_scrollwindow(),read_structural,NOTES §58
-002ae900,6368,_Z17GuEmu_libgu_to_glv,GuEmu_libgu_to_gl(),unread,
+002ae900,6368,_Z17GuEmu_libgu_to_glv,GuEmu_libgu_to_gl(),read_structural,NOTES §59
 001314a8,6228,_Z22Wdisp_floateventwindowv,Wdisp_floateventwindow(),unread,
 001b2ea8,6216,_Z9JobChangev,JobChange(),unread,
 000b1cdc,6204,gl3stubInit,gl3stubInit,unread,
