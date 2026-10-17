@@ -27,7 +27,7 @@ address,size,mangled,demangled,status,section_ref
 000ec908,7444,_Z17disp_scrollwindowv,disp_scrollwindow(),read_structural,NOTES §54
 0023237c,6996,_Z7Mdl0007siii,"Mdl0007(short, int, int, int)",unread,
 001bde2c,6976,_Z9UnitTablesssssPFiiES0_i,"UnitTable(short, short, short, short, short, int (*)(int), int (*)(int), int)",read_structural,NOTES §55
-001c0930,6956,_Z8UnitListii,"UnitList(int, int)",unread,
+001c0930,6956,_Z8UnitListii,"UnitList(int, int)",read_structural,"NOTES §56 (parcial, 58%)"
 001a486c,6908,_Z11AbilityMenuv,AbilityMenu(),unread,
 00238bac,6792,_Z7Mdl0013siii,"Mdl0013(short, int, int, int)",unread,
 0007b200,6652,inflate,inflate,mentioned_unverified,

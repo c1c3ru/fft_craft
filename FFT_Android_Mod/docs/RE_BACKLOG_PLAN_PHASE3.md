@@ -142,7 +142,7 @@ não duplicar 6.455 linhas neste arquivo:
 | `0x1b2ea8` | 6216 | `JobChange()` | troca de classe/job |
 | `0x1a486c` | 6908 | `AbilityMenu()` | menu de habilidades |
 | `0x1bde2c` | 6976 | `UnitTable(...)` | ✅ passe estrutural feito (§55, 2026-10-17): rotina GENÉRICA parametrizada por 2 callbacks (não tabela de salto — eram chamadas via ponteiro de função dos próprios parâmetros). Explica o `iOSUnitList*` compartilhado entre telas. |
-| `0x1c0930` | 6956 | `UnitList(int,int)` | lista de unidades |
+| `0x1c0930` | 6956 | `UnitList(int,int)` | ⚠️ passe estrutural PARCIAL (§56, 2026-10-17, só 58%): tem uma tabela de ponteiros de função real em memória (não um `addls` extraível), escalonado. 69 `bl` resolvidos mesmo assim. |
 
 **Observação honesta**: `battle()`, `Main_FrameMove()` e
 `Main_FrameRender()` — literalmente o **loop principal do jogo e o

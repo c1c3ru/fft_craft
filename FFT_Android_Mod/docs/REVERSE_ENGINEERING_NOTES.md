@@ -5662,3 +5662,30 @@ sugerem posição/tempo de uma animação de movimento de status.
 **O que ficou sem confirmar**: os corpos da cascata de 180 branches
 (104 de retrocesso); o papel exato de "Egg". Marcada
 `read_structural`.
+
+## 56. `UnitList(int, int)` — passe estrutural parcial — uma tabela de ponteiros de função real, resiste à resolução estática (2026-10-17, Fase 3)
+
+`UnitList(int, int)` (`0x1c0930`, 6.956 B) — provável cliente direto
+de `UnitTable` (seção 55). Descida recursiva alcançou só **1.004 de
+~1.739 instruções possíveis (58%)** — cobertura parcial, honesta,
+não forçada: há um despacho real via **tabela de ponteiros de
+função em memória** (`ip = *(sp+0x84)`; `r3 = ip[*r4]`; `blx r3`),
+diferente das tabelas de salto `addls pc,...` já extraídas em outras
+seções — aqui os alvos são dados em runtime (carregados de uma
+estrutura local, não de um array de instruções `b` embutido no
+código), então **não é extraível estaticamente só com o binário**;
+escalonado, não forçado.
+
+Mesmo com a cobertura parcial, 69 `bl` resolvidos já confirmam um
+catálogo rico: `TutrialInit`/`Tutrial`, `unit_isdark()`,
+`SttsAMovingChk`, `AllSttsDelete`, `UnitFlagInit`,
+`world_stopnoend`/`worldmap_restart` (mesma função de reinício de
+mapa mundi já vista em `CardAccess`, seção 42),
+`iOSLRChgTap`/`iOSLRChgSwype` (troca de unidade selecionada via L/R,
+por toque ou arrasto), `iOS_dispOkNg`/`iOS_clearOkNg` (mesmo diálogo
+Sim/Não da seção 42), e `isInRectUi(_RECT_UI*, int, int)` — um tipo
+`_RECT_UI` novo pra teste de área de toque.
+
+**O que ficou sem confirmar**: 42% da função (a tabela de função
+indexada e tudo que só é alcançável por ela). Marcada
+`read_structural` com a ressalva explícita de cobertura parcial.
