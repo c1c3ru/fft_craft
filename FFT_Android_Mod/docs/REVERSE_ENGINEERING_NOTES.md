@@ -5108,3 +5108,64 @@ idioma da mesma tela.
 (120 de retrocesso), e a causa raiz exata de cada família de prefixo
 (continua sem leitura de corpo que confirme "por que" cada uma
 existe). Marcada `read_structural`.
+
+## 41. `op_attackteam()` — passe estrutural — o opcode de bytecode que monta o time de ataque, com suporte a batalha em rede (2026-10-17, Fase 3)
+
+`op_attackteam()` (`0xc5148`, 12.272 B) — mesmo tratamento das
+seções 32–40. Descida recursiva: **2.753 de ~3.068 instruções
+possíveis (90%)**. Três tabelas de salto pequenas (5, 4 e 4 casos,
+todas com entradas distintas), extraídas à mão:
+
+```
+T1 (0xc5880, base: iOS_getV2Icon(0x37)-1, 5 casos):
+  0xc58bc  0xc5c14  0xc5b68  0xc5c54  0xc5bc4
+T2 (0xc5fb4, base: iOS_GetRectHitNoSlide()+1, 4 casos):
+  0xc6a94  0xc6bc4  0xc6bb4  0xc6b4c
+T3 (0xc67d4, base: campo local sp+0x18, 4 casos):
+  0xc5944  0xc6dfc  0xc6de8  0xc6dd4
+```
+
+### 41.1 Confirma o nome: monta o time de ataque antes da batalha, com suporte real a batalha em rede
+
+Nome de opcode já sugeria o papel (consistente com a arquitetura de
+bytecode das seções 9.5–9.6: `op_*` = handler de instrução do
+interpretador de eventos). Confirmado por chamada: `changeflame(int)`,
+`finishAttackTeamSelect()`, `iOS_ResumeAfterAttackTeam()` — é
+literalmente a tela "escolha seu time de ataque" antes de entrar na
+batalha. Achado maior: **suporte real a modo de rede/multiplayer**,
+nunca confirmado com esta clareza antes:
+```
+pspBattleCheckFlg(unsigned int)
+pspBattleEntryAreaInit() / pspBattleEntryAreaMake(int, int)
+pspNetGetBattleModeFlag()
+get_parent_child()
+pspNetGetErrorCode()
+```
+`pspNetGetBattleModeFlag` sendo consultada aqui, numa tela de seleção
+de time, é forte evidência de que o jogo testa ativamente se a
+batalha é **em rede** (cabo de link do PS1 original, remanescente já
+suspeitado nas seções 36/39) antes de decidir como montar as áreas de
+entrada do time.
+
+### 41.2 Confirma a ponte bytecode↔task, suspeitada desde a seção 33
+
+`task_create`/`task_wait`/`wait_taskend`/`task_killmyself`/
+`send_taskparamater`/`asmTaskEntry` (as variantes sem prefixo e
+`asm`) — confirma que um opcode do interpretador de bytecode de
+eventos **cria e espera uma task cooperativa de verdade** pra deixar
+o jogador escolher o time, em vez de implementar a UI inline no
+próprio laço de bytecode. Fecha, com instrução real, a ponte entre o
+motor de eventos (seções 9.5–9.6) e o sistema de tasks (seções 33/37/
+40) — suspeitada, nunca confirmada byte a byte antes.
+
+### 41.3 Família `iOS_GetRectHitNoTouch*` mais completa vista até aqui
+
+`iOS_GetRectHitNoTap`/`NoTouch`/`NoSlide`/`NoTouchTrg`/`NoTouchOld`/
+`NoTouchDirect(int,int)` — 6 variantes, mais do que qualquer leitura
+anterior catalogou junto.
+
+**O que ficou sem confirmar (nível "passe estrutural" intencional)**:
+os corpos dos 13 casos das 3 tabelas e do resto da cascata de 294
+branches (160 de retrocesso); e o papel exato de `changeflame`
+(provável erro de digitação de "changeframe" preservado no binário,
+não corrigido). Marcada `read_structural`.
