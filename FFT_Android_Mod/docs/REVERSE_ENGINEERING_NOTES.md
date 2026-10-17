@@ -6718,3 +6718,212 @@ formato exato do widget de rolagem de letras; se `unit_isdark`/
 `MasaDataInit` têm relação direta com esta tela ou são só
 utilitários genéricos chamados de passagem. Marcada
 `read_structural` — cobertura parcial, não forçada.
+
+## Quarto lote paralelo (seções 85–89): mais 5 funções lidas por forks simultâneos
+
+## 85. `sBattleTouchToCur(int)` — passe estrutural — confirma o tradutor real de toque pra cursor de batalha, com deslizamento suave e matemática trigonométrica real (2026-10-17, Fase 3, lote paralelo)
+
+`sBattleTouchToCur(int)` (`0x15c15c`, 3.284 B) — já citada no
+catálogo de `battle()` (seção 32), nunca aberta por dentro. Descida
+recursiva via `jtable.py`: **784 de ~821 instruções possíveis
+(95%)**, sem tabela de salto; **115 branches, 80 de retrocesso**
+(consistente com um laço de atualização por frame).
+
+### Confirma a tradução real de toque em movimento de cursor, com sistema de deslizamento suave
+
+```
+iOSSlideNaviCurClear() / iOSexecuteCurSlide() / iOSSlidStop()
+iOSSlideSpeed(int*, int*, double, double) / iOSSlideSpeedGet(int)
+iOSSlideBufSetX(int) / iOSSlideBufSetY(int) / iOSSlidBUfDel()
+iOSSlideIconReset() / iOSMapCursorCheck() / iOSMapCurModeGet()/Set(int)
+iOSTchInputCheck() / iOSTchMovingModeCheck() / iOSRotSlidCls()
+rsin / rcos / ratan2
+iOS_getTouchTap/Release/Press/BeginX/BeginY/NowX/NowY
+IS_GAME_AREA(int,int) ×8
+```
+Confirma, com nomes reais, que esta função é o **tradutor direto de
+gesto de toque em movimento do cursor de batalha**: lê a posição/
+arrasto do toque (`iOS_getTouchNowX/Y`, `iOS_getTouchBeginX/Y`),
+valida se está dentro da área de jogo (`IS_GAME_AREA` ×8), e
+alimenta um sistema de **deslizamento suave com velocidade própria**
+(`iOSSlideSpeed`/`iOSSlideSpeedGet`/`iOSSlideBufSetX/Y`) — ou seja,
+o cursor não salta direto pro tile tocado, ele desliza com
+velocidade/momento, como confirmado pelo nome "Slide". **`rsin`/
+`rcos`/`ratan2` reais** (mesma família trigonométrica já vista em
+`Mdl0010`, seção 52) sugerem que a direção do deslizamento é
+calculada via ângulo real do vetor de arrasto do toque (`atan2`
+entre início e posição atual do toque), não só um delta XY cru.
+`iOSMapCursorCheck`/`iOSMapCurModeGet/Set` ligam este sistema ao
+modo de cursor do mapa de batalha; `iOSTchMovingModeCheck` sugere um
+estado "em movimento" vs. "parado" explícito.
+
+**O que ficou sem confirmar**: os corpos da cascata de 115 branches
+(80 de retrocesso) — a fórmula exata de aceleração/desaceleração do
+deslizamento não foi lida byte a byte. Marcada `read_structural`.
+
+## 86. `Link_FrameRender()` — passe estrutural — revela `CUI_SCROLLBAR`, uma classe de UI de lista rolável nunca vista (2026-10-17, Fase 3, lote paralelo)
+
+`Link_FrameRender()` (`0x2b4680`, 3.636 B) — descida recursiva via
+`jtable.py`: **891 de ~909 instruções possíveis (98%)**, sem tabela
+de salto; **21 branches, 11 de retrocesso**.
+
+### Corrige a hipótese inicial: não é renderização de link-cable/rede
+
+Apesar do nome sugerir o cabo serial de link do PS1 (sistema de
+rede já confirmado em outras seções via `pspNetGetBattleModeFlag`/
+`NetBattleJudge`, seções 36/41/43/63/80), `Link_FrameRender` não
+toca nenhuma dessas funções. É uma tela de UI desenhada inteiramente
+via o motor moderno `CEGL2_*` (`SetScreenSize`/`ClearBackdrop`/
+`DrawPacket`/`AddSprite`/`AddTile`/`CEGL2_FBO::*`), sem nenhuma
+primitiva PS1 — "Link" aqui é mais provavelmente **link de
+hiperlink/promocional** (ex.: tela "outros apps"/crédito com links
+externos clicáveis), não o cabo serial — hipótese, não confirmada
+sem achar o texto/URL real.
+
+### Achado maior: revela `CUI_SCROLLBAR`, classe de UI nunca catalogada
+
+```
+CUI_SCROLLBAR::GetScissor() / GetScrollOffset(int*,int*)
+CUI_SCROLLBAR::IsEnableScrollUp() / IsEnableScrollDown()
+CUI_SCROLLBAR::GetCellRect(int) / GetCellPress(int) / GetCellDraw(int)
+```
+Confirma uma classe C++ real de **barra de rolagem com lista de
+células** (scissor/clip, offset de rolagem, estado habilitado/
+desabilitado de cada seta, retângulo/toque/desenho por célula) —
+nunca vista nesta investigação, apesar de o jogo ter várias telas
+com listas (itens, habilidades, unidades) já documentadas usando
+sistemas mais antigos (`UnitTable`/`iOSUnitList*`, seções 55/56).
+`CUI_SCROLLBAR` parece ser um widget de lista mais moderno, talvez
+exclusivo de telas de UI de app (não de gameplay PS1-emulado).
+
+Também confirma `CSTEP_BATCH::GetData()` (sistema de animação por
+passos, seções 16/17) e `RETINA_SCALE`/`CGX_SCREEN_CORRECT::*`
+(seção 34) sendo usados aqui — mais um cliente do sistema de
+correção de tela por dispositivo.
+
+**O que ficou sem confirmar**: o conteúdo real da tela (que link(s)
+mostra); os corpos dos 21 branches; se `CUI_SCROLLBAR` é usada em
+outras telas além desta. Marcada `read_structural`.
+
+## 87. `ctlopentitle_main(CTLINFO*)` — passe estrutural — confirma a tela de título real, com filme de abertura via CD-XA (2026-10-17, Fase 3, lote paralelo)
+
+`ctlopentitle_main(CTLINFO*)` (`0x246450`, 3.296 B) — fase "main" do
+controlador de tela de título (`CTLINFO*`, mesma arquitetura
+polimórfica `init/active/main/deactive` já confirmada nas seções
+9.6/12.2). Descida recursiva via `jtable.py`: **793 de ~824
+instruções possíveis (96%)**, duas tabelas de salto pequenas (5/5 e
+4/3 casos); **70 branches, 35 de retrocesso**.
+
+### Confirma a tela de título real, com reprodução de filme via CD-XA do PS1
+
+```
+CdControl / CdControlB / CdPosToInt / CdSync       — BIOS de CD-ROM do PS1 real
+cdxa_stop() / movie_exit(int)                         — encerra o filme de abertura
+vOpn_scrinit / vOpn_fadeout / vOpn_key_rep / vOpn_SetCDVolume / vOpn_loadwait / vOpn_bk_load
+ctlopentitle_init(int) / ctlopentitle_deactive(CTLINFO*)
+ctlsound_init() / ctlcard_init() / CardAccess(int)
+wldbin_loadchk(int)                                     — checagem de save do mapa mundi (citada desde a Fase 1, nunca aberta)
+pspClearCurrentSystemFile()
+```
+Confirma, com chamadas reais de BIOS (`CdControl`/`CdSync`), que a
+tela de título reproduz um **filme de abertura via CD-XA** (áudio/
+vídeo direto do CD, técnica clássica do PS1) — `vOpn_*` (provável
+"video opening") controla volume/fade/carregamento desse filme.
+Depois do filme, `ctlopentitle_main` decide entre: ir pro teste de
+som (`ctlsound_init`), ir pra tela de save/load
+(`ctlcard_init`/`CardAccess`, seção 42), ou continuar pro jogo —
+`wldbin_loadchk` sugere que essa decisão depende de existir um save
+de mapa mundi válido. `pspClearCurrentSystemFile()` confirma reset
+de arquivo de sistema (provável limpeza de estado ao voltar pro
+título). `iOS_setV2Icon` chamada 42 vezes — mais uma instância do
+padrão de inicialização de ícones em massa (seções 64/71).
+
+**O que ficou sem confirmar**: os corpos dos handlers das duas
+tabelas de salto; a ordem exata das transições entre filme → menu →
+save/som. Marcada `read_structural`.
+
+## 88. `p04_magicChantFunc()` — passe estrutural — o efeito visual/sonoro real do canto de magia, com objeto 3D persistente (2026-10-17, Fase 3, lote paralelo)
+
+`p04_magicChantFunc()` (`0x2210fc`, 3.176 B) — descida recursiva via
+`jtable.py`: **777 de ~794 instruções possíveis (98%)**, sem tabela
+de salto; **43 branches, 28 de retrocesso**.
+
+### Confirma o efeito visual/sonoro real da fase de "canto" (chant) de magia
+
+```
+createPermanentObject(_JochuParameter*, Physics*)   GetPermanentObject()
+AnimatePermanentObject(int)                              DisposePermanentObject(char)
+SetAirDensity(long) / PushAirDensity()
+Ssd_PlayEffect(long) / Ssd_StopEffect(long)
+ConvertEffectAttribute(int)
+rsin/rcos/ratan2/RotTrans/SetRotMatrix/SetTransMatrix       — GTE real
+```
+Confirma, com nomes reais, que o "canto" de magia do FFT (delay de
+conjuração proporcional ao CT, mecânica clássica da série) tem um
+**objeto 3D persistente real** (`createPermanentObject`, usando dois
+tipos nunca vistos, `_JochuParameter*` — etimologia não decifrada,
+tratada como está — e `Physics*`) — provavelmente o círculo/glifo
+mágico que fica girando sob o conjurador durante o canto, usando
+matemática GTE real (`rsin`/`rcos`/`RotTrans`) pra rotação contínua.
+`SetAirDensity`/`PushAirDensity` sugerem um parâmetro de física
+atmosférica (densidade do ar) afetando partículas/poeira do efeito.
+`Ssd_PlayEffect`/`Ssd_StopEffect` ligam este efeito ao sistema `Ssd`
+já confirmado como a máquina de estados de música do mapa mundi
+(`wldssd_control`, seção 12.7) — **mas aqui usado pra efeito sonoro,
+não música**, confirmando que o `Ssd` é um gerenciador de áudio mais
+geral do que o nome "música de fundo" sugeria. `AnimatePermanentObject`/
+`DisposePermanentObject` confirmam o ciclo de vida completo (criar →
+animar → descartar) do mesmo tipo de objeto persistente já citado
+por `requestParmanentEffect`/`InitPermanentEffect`/`DoEffect`
+(seções 32/82) — aqui com o corpo real aberto por completo.
+
+**O que ficou sem confirmar**: os corpos da cascata de 43 branches
+(28 de retrocesso); o layout de `_JochuParameter`/`Physics`; se
+existem funções irmãs `p01`/`p02`/`p03`/`p05` (não pesquisadas no
+`.dynsym` nesta passada). Marcada `read_structural`.
+
+## 89. `NewAnimation(int, int, int, short, short, short, short, BWORK*, int, void*)` — passe estrutural — confirma ser o ponto real de criação de instância de animação, ligando `executeShape`/`setskillresult`/sistema de arma (2026-10-17, Fase 3, lote paralelo)
+
+`NewAnimation(...)` (`0x1f3828`, 3.096 B) — descida recursiva via
+`jtable.py`: **766 de ~774 instruções possíveis (99%)**, sem tabela
+de salto; **60 branches, 28 de retrocesso**.
+
+### Confirma ser o ponto real de criação de animação, com buscas de dados por categoria
+
+```
+getShapeAddress(unsigned short) / getSequenceAddress(unsigned short)
+getWpnShapeAddress(unsigned short) / getWpnSequenceAddress(unsigned short)
+getEffShapeAddress() / getEffSequenceAddress()
+getPositionFromPanel(tag_animation*)
+requestDefaultColor(tag_animation*,int,int) / requestDefaultAnimation(tag_animation*)
+NewWeaponEquip(int, tag_animation*)
+requestDamageResult(int)
+Resume_Get_WORK_MU_BWorkFontID() / Resume_Get_WORK_MU_BWorkAnimationID()
+CFFT_STATE::UnitIDToFID_SPR(int)
+loadClutData / LoadTPage / GetTPage / GetClut / xpLibgpuExVramSet
+init_status_animation(int) / iOS_setTransFace(int,int) / pspBattleDataCharTexBufGet(int)
+```
+Confirma, com nomes reais, que esta é a função que **instancia uma
+nova animação de verdade**, buscando os dados certos por categoria
+(unidade/arma/efeito, cada um com par forma+sequência —
+`getShapeAddress`/`getSequenceAddress` e variantes `Wpn`/`Eff`) —
+liga diretamente ao interpretador `executeShape` (seção 82), que
+consome esses mesmos dados. `NewWeaponEquip(int, tag_animation*)`
+confirma que a arma equipada influencia a animação já na criação,
+reforçando o achado da seção 82 (`pspItemGetWeaponVariationBlock`).
+**`requestDamageResult(int)`** é o achado mais importante: liga esta
+função DIRETAMENTE a `setskillresult` (seção 77) — confirma que
+criar uma animação de golpe também enfileira a exibição do resultado
+de dano, fechando o ciclo "golpe → animação → resultado visível".
+`Resume_Get_WORK_MU_BWorkFontID`/`BWorkAnimationID` ligam esta
+criação de animação ao sistema de resume
+(`IOS_RESUME_DATA_WORK_MU`, par de `iOS_RESUME_SET_EVENT`, seção
+76) — confirma que o ID de animação em curso faz parte do estado
+salvo ao suspender o app. `CFFT_STATE::UnitIDToFID_SPR` é uma
+função nova da família de ponte de ID de rosto/sprite (seção 22.5).
+`loadClutData`/`LoadTPage`/`xpLibgpuExVramSet` confirmam
+carregamento real de textura/CLUT pra a nova animação.
+
+**O que ficou sem confirmar**: os corpos da cascata de 60 branches
+(28 de retrocesso); os 3 campos int/4 campos short do parâmetro (não
+nomeados individualmente). Marcada `read_structural`.
