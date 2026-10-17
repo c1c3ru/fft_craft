@@ -6927,3 +6927,168 @@ carregamento real de textura/CLUT pra a nova animação.
 **O que ficou sem confirmar**: os corpos da cascata de 60 branches
 (28 de retrocesso); os 3 campos int/4 campos short do parâmetro (não
 nomeados individualmente). Marcada `read_structural`.
+
+## Quinto lote paralelo (seções 90–93): mais 4 funções lidas por forks simultâneos (a 5ª, `FundamentalRoutine`, foi pro `AI_DIFFICULTY_RESEARCH.md` seção 28 — território de IA)
+
+## 90. `calc_result(ACT*, unsigned char)` — passe estrutural — o despachante real de tipo de ação, logo antes de `setskillresult` (2026-10-17, Fase 3, lote paralelo)
+
+`calc_result(ACT*, unsigned char)` (`0x1cba40`, 2.996 B) — vizinha
+imediata de `setskillresult` (seção 77, `0x1cda4c`) em endereço, com
+um novo tipo `ACT*` ("action", nunca visto). Descida recursiva via
+`jtable.py`: **668 de ~749 instruções possíveis (89%)**, duas
+tabelas de salto resolvidas (11 casos/8 distintos; 25 casos/18
+distintos); **86 branches, 58 de retrocesso**.
+
+### Confirma ser o despachante por TIPO de ação, não a fórmula de dano em si
+
+```
+set_ct_weapon(ACT*)                          — define o CT (charge time) a partir da arma
+check_reaction_deny(BWORK*) / check_reaction_deny2(BWORK*)   — checagens de reação (seção 77)
+bcp_roll(BWORK*) / check_act_ok(BWORK*)          — rolagem de probabilidade / validação de ação (seção 77)
+copyACTst(ACT*, ACT*)                              — confirma `ACT` como struct real, copiável
+get_fusui_ability(BWORK*)                            — achado novo ("fusui", termo japonês não decifrado)
+get_timing_true() / get_rival()                      — já visto em setskillresult (seção 77)
+pspItemGetCommonData/OptionData/WeaponData/ItemData/IsEmpty/IsType/IsDataType
+pspNetGetBattleModeFlag()
+```
+Duas tabelas de salto grandes (11 e 25 casos) dominam a função —
+confirma que `calc_result` **despacha por tipo de ação/arma/item**
+(provavelmente o `unsigned char` do segundo parâmetro é o
+discriminador), delegando pra lógica específica em cada handler, em
+vez de calcular dano numa fórmula linear única. `set_ct_weapon`
+confirma que o tempo de recarga (CT) depende da arma equipada,
+mecânica central do sistema de turnos do FFT. `get_fusui_ability` é
+um achado honesto não decifrado — "fusui" (風水, fengshui) sugere
+ligação com elemento/terreno, mas não confirmado sem ler o corpo.
+Compartilha quase todo o catálogo `pspItem*`/`check_reaction_deny`/
+`bcp_roll`/`get_rival`/`get_timing_true` com `setskillresult` (seção
+77) — as duas funções claramente operam em sequência no mesmo fluxo
+de resolução de ação de batalha, `calc_result` decidindo O QUE
+aconteceu, `setskillresult` aplicando as consequências.
+
+**O que ficou sem confirmar**: os corpos dos 8+18 handlers das duas
+tabelas (qual tipo de ação/arma cai em qual); a fórmula de dano em
+si (não encontrada como chamada separada, pode estar inline); o
+papel exato de `get_fusui_ability`. Marcada `read_structural`.
+
+## 91. `ASHURA_Animation()` — passe estrutural parcial — confirma rotação de cor de paleta real e um switch de 130 casos quase todo colapsado (2026-10-17, Fase 3, lote paralelo)
+
+`ASHURA_Animation()` (`0x166ee0`, 2.976 B) — já citada no catálogo
+de `battle()` (seção 32) como uma das funções do motor `ASHURA`,
+nunca aberta por dentro. Descida recursiva via `jtable.py`: **604
+de ~744 instruções possíveis (81%)**, uma tabela de salto resolvida
+(**130 casos, só 12 endereços distintos** — a enorme maioria
+colapsa num único handler, consistente com o padrão "switch grande
+com default dominante" já visto em `battle()`/`ASHURA_GNS_Garage`,
+seções 32/81); **23 branches, 20 de retrocesso**.
+
+### Confirma ser o avanço de animação por frame do lado "efeito"/ambiente do ASHURA, com rotação de cor de paleta real
+
+Só 6 `bl` distintos em toda a função:
+```
+iOS_GetFrameRateNative()           ×7
+loadClutData(unsigned short*, unsigned int, unsigned int, int)   ×4
+startColorRotation(int, int, int, int)
+AddPrim                             ×2
+system_warning(int, int)
+```
+**`startColorRotation(int,int,int,int)`** é o achado central —
+nunca vista antes nesta investigação, confirma uma técnica clássica
+de efeito visual de era PS1: **rotação cíclica de entradas de
+paleta (CLUT)** por frame, sem precisar mudar geometria nem textura
+(usada tipicamente pra água, lava, luzes pulsantes).
+`iOS_GetFrameRateNative()` chamada 7 vezes confirma que o ritmo da
+animação é regulado pelo framerate real do dispositivo, não por um
+contador fixo. `loadClutData` liga este efeito ao sistema de paleta
+já visto em `NewAnimation` (seção 89). Dado o nome genérico (sem
+"set_Mesh"/"addPrim" específico) e o switch de 130 casos
+majoritariamente vazio, a hipótese mais provável é que esta função é
+um **despachante de tipo de animação de efeito ambiente** chamado
+uma vez por frame pra cada objeto ASHURA ativo, com a maioria dos
+"tipos" não implementando nada além do avanço de frame padrão e só
+alguns tipos (rotação de cor, etc.) tendo lógica própria.
+
+**O que ficou sem confirmar**: os corpos dos 12 handlers distintos;
+os ~19% não alcançados da função. Marcada `read_structural` —
+cobertura parcial, não forçada.
+
+## 92. `ctlmap_main(CTLINFO*)` — passe estrutural — controlador de frame do mapa mundi, com detecção real de toque em cidade (2026-10-17, Fase 3, lote paralelo)
+
+`ctlmap_main(CTLINFO*)` (`0x2542a4`, 3.124 B) — fase "main" do
+controlador do mapa mundi (`CTLINFO*`, arquitetura polimórfica
+`init/active/main/deactive` já confirmada nas seções 9.6/12.2).
+Descida recursiva via `jtable.py`: **760 de ~781 instruções
+possíveis (97%)**, sem tabela de salto; **79 branches, 38 de
+retrocesso**.
+
+### Correção importante da hipótese inicial: não chama `worldmap_call` diretamente
+
+Diferente do esperado, `ctlmap_main` **não chama `worldmap_call`**
+(seção 80) — nenhuma referência no catálogo de 32 `bl`. O
+dispatcher de bytecode do mapa mundi deve ser invocado de outro
+lugar (candidato mais provável: `wldnormal_lop`, o laço de frame
+real já confirmado na seção 11.1, ou `wld_event`). `ctlmap_main` é,
+em vez disso, o driver de **interação por frame** do mapa mundi:
+detecção de toque em cidade, scroll, e troca pra outros
+controladores.
+
+### Achados confirmados
+
+```
+town_find(_POINT) / town_find3(_POINT, int) / town_touch(_POINT, int*, int*)
+townmenu_check(int, int*) / iOS_debugDispTownCircle(int, int)
+bgscrol_chk(_POINT*, VECTOR*) — mesma família de bgscrol_chk_x/y (seção 12.14)
+walkrute_set(int, int) / wldscr_snapshot(int) / sound_request(int)
+ctlmap_deactive(CTLINFO*) / ctlcenter_init / ctlopt_init / ctlhelp_init / ctltownmenu_init
+```
+Confirma um sistema real de **detecção de toque em cidade no mapa
+3D** — `town_find`/`town_find3`/`town_touch` buscam qual cidade
+corresponde a uma posição `_POINT` (provável projeção de toque pra
+coordenada de mundo), `townmenu_check` decide se abre o menu de
+interação da cidade (via `ctltownmenu_init`, trocando de
+controlador), e `iOS_debugDispTownCircle` confirma um **círculo de
+debug visível** ao redor de cada cidade (remanescente de build de
+desenvolvimento, no espírito de `debug_chrmenu`/`Main_Init`, seções
+64/79). Usa `rsin`/`rcos`/`ratan2` reais (mesma família
+trigonométrica de `Mdl0010`/`sBattleTouchToCur`, seções 52/85) —
+provavelmente pra projetar a posição da cidade ou calcular ângulo de
+toque. `bgscrol_chk` (sem sufixo `_x`/`_y`) pode ser uma função
+"pai" que despacha pras duas variantes já lidas (seção 12.14) — não
+confirmado.
+
+**O que ficou sem confirmar**: os corpos da cascata de 79 branches
+(38 de retrocesso); onde `worldmap_call` é de fato chamado, já que
+não é aqui; o papel exato de `bgscrol_chk` vs. `bgscrol_chk_x`/`_y`.
+Marcada `read_structural`.
+
+## 93. `bWorldJobStts()` — passe estrutural — confirma a tela de status de job/habilidade DENTRO da batalha, usando a biblioteca `b*` de UI já documentada (2026-10-17, Fase 3, lote paralelo)
+
+`bWorldJobStts()` (`0x178e98`, 3.300 B) — descida recursiva via
+`jtable.py`: **762 de ~825 instruções possíveis (92%)**, sem tabela
+de salto; **64 branches, 34 de retrocesso**.
+
+### Confirma ser a versão de batalha da tela de status de job/habilidade
+
+Os 42 `bl` resolvidos são quase todos prefixados com **`b`**
+(`bSetFrameRate`, `bGetJobList`, `bGetAbilityList`, `bDrawFT4RGB`,
+`bMakeTextureMessage`, `bSetMenuSelSide`/`bMenuSelSide`/
+`bMenuSelSideWithSnd(Direct)`, `bClearPadData`,
+`bWindowPositionInit`/`InitSingle`, `bSetWindowPosition`/
+`bGetWindowPosition`, `bWindowInit`/`Init2`, `bDrawWindow2`,
+`bSetWindowCount`) — a MESMA biblioteca de UI com prefixo `b` já
+confirmada em `BattleUnitList` (seção 36). Isto confirma a hipótese:
+`bWorldJobStts` é a tela real de consultar **status de job/
+habilidade de uma unidade DENTRO da batalha** (contraparte de
+`AbilityMenu`/`JobChange`, seções 57/61, que são do menu principal)
+— `bGetJobList`/`bGetAbilityList` confirmam a mesma consulta de
+dados, só que desenhada com a biblioteca `b*` exclusiva de batalha
+em vez da biblioteca compartilhada sem prefixo. `GetLocalJobNumber(short)`
+é um achado novo (conversão de ID de job global pra índice local).
+`iOS_CMenuTouch` ganha métodos novos aqui: `setMaxNumY`/`setDispNumY`/
+`setXIconRect` — confirma mais parâmetros de layout de lista (altura
+máxima, número exibido, retângulo de ícone por linha) nunca
+catalogados nesta classe.
+
+**O que ficou sem confirmar**: os corpos da cascata de 64 branches
+(34 de retrocesso); os corpos das 5 funções locais sem símbolo
+(`sub_178ca0`/`cf8`/`d44`/`da0`/`df8`). Marcada `read_structural`.

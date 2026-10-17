@@ -2544,3 +2544,40 @@ concreto pra uma investigação futura que queira mapear os valores
 - `sub_272aac`/`sub_27207c` — só os pontos de chamada, não o corpo.
 - O significado exato dos valores `0`/`1`/`2` de `g->b[0xed4]` em
   termos de jogo (que condição real cada um representa).
+
+## 28. `FundamentalRoutine()` — passe estrutural — o dispatcher central que amarra várias sub-rotinas de IA já lidas separadamente (2026-10-17, Fase 3, lote paralelo)
+
+`FundamentalRoutine()` (`0x278f84`, 2.880 B) — descida recursiva via
+`jtable.py` (ferramenta nova da Fase 3, validada contra o switch de
+`battle()`): **688 de ~720 instruções possíveis (96%)**, uma tabela
+de salto resolvida (9 casos, 9 endereços distintos); **100
+branches, 56 de retrocesso**.
+
+### Confirma ser o dispatcher central de fase da IA, amarrando sub-rotinas já lidas em seções anteriores
+
+```
+SetBestMoveAnywhereOK() / SetBMList()           — já citadas desde a seção 6.1
+CheckUnitActionOK(unsigned char*) / CheckUnitActionEffective(int,int)
+GetTargetBaseArea(int,int) / JudgeMovable(int) / SetThisDestination(unsigned char*)
+SetBestMove() / sub_277f78 (RecheckFlaggedTargets, §17.4) / sub_277f78 (§25)
+JudgeStatus(int, BWORK*, int) / GetPanelUnderUnit(int, unsigned char*)
+CheckCrystalAndTresureBox() / GetCountToDeath(BWORK*) / CheckAbilityGet(int,int,int)
+get_ability(int,int) / pspItemGetOptionData / pspRoutineCheckArithmeticPermission()
+```
+O switch de 9 casos (um "estado/fase" de decisão por caso) confirma
+que `FundamentalRoutine` é o **ponto de dispatch que várias
+sub-rotinas de IA já lidas nesta investigação (§6.1, §17.4, §25)
+tinham como contexto implícito, mas nunca com o chamador real
+identificado**. Dois achados novos concretos: **`CheckCrystalAndTresureBox()`**
+confirma que a IA considera explicitamente painéis de cristal/baú de
+tesouro (mecânica real do FFT quando uma unidade morre) na tomada de
+decisão; **`GetCountToDeath(BWORK*)`** confirma que a IA calcula
+quantos turnos faltam até uma unidade morrer (ex.: por veneno/
+contagem regressiva), informação usada pra priorizar alvos.
+`pspRoutineCheckArithmeticPermission()` é um nome estranho, não
+decifrado — tratado como está.
+
+**O que ficou sem confirmar**: os corpos dos 9 handlers da tabela
+(qual fase de decisão corresponde a qual caso); a ordem exata de
+chamada das sub-rotinas dentro de cada caso. Marcada
+`read_structural`.
