@@ -6,7 +6,7 @@ address,size,mangled,demangled,status,section_ref
 000e88c4,15744,_Z10mesputmainv,mesputmain(),unread,
 0016a6a4,15412,_Z14ASHURA_addPrimP6MATRIX,ASHURA_addPrim(MATRIX*),unread,
 001aeda0,13764,_Z8ItemMenuv,ItemMenu(),unread,
-002bbb74,13272,_Z14Main_FrameMovev,Main_FrameMove(),unread,
+002bbb74,13272,_Z14Main_FrameMovev,Main_FrameMove(),read_structural,NOTES §35
 0018aeec,12580,_Z9eItemMenuv,eItemMenu(),unread,
 000c5148,12272,_Z13op_attackteamv,op_attackteam(),unread,
 00184670,11004,_Z10CardAccessi,CardAccess(int),unread,

@@ -123,7 +123,7 @@ não duplicar 6.455 linhas neste arquivo:
 | `0xe88c4` | 15744 | `mesputmain()` | sistema de mensagens/diálogo (base) |
 | `0x16a6a4` | 15412 | `ASHURA_addPrim(MATRIX*)` | motor gráfico "ASHURA" (nome nunca visto antes) |
 | `0x1aeda0` | 13764 | `ItemMenu()` | menu de itens |
-| `0x2bbb74` | 13272 | `Main_FrameMove()` | **loop principal do jogo inteiro** |
+| `0x2bbb74` | 13272 | `Main_FrameMove()` | ✅ passe estrutural feito (§35, 2026-10-17): 2 switches de estado aninhados (9 casos externo, 43 interno) extraídos por completo; catálogo de 116 chamadas, maior desta fase — API de polling de toque completa, chamadas de plataforma Android diretas. Corpos dos 7+32 casos não lidos. |
 | `0x18aeec` | 12580 | `eItemMenu()` | variante de `ItemMenu` |
 | `0xc5148` | 12272 | `op_attackteam()` | opcode de bytecode (time de ataque) |
 | `0x184670` | 11004 | `CardAccess(int)` | sistema de "cartas" (nunca mencionado antes) |

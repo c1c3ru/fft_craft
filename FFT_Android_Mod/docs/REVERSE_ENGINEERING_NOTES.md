@@ -4678,3 +4678,100 @@ branches, a ordem exata de decisão entre "jogo normal"/"loading"/
 (`0x2bbb74`, 13.272 B, a contraparte lógica desta função — "atualiza
 o estado" em vez de "desenha") é a candidata natural de próximo
 passe estrutural, pro par ficar completo.
+
+## 35. `Main_FrameMove()` — passe estrutural — completa o par com `Main_FrameRender`, revela DOIS switches de estado (2026-10-17, Fase 3)
+
+`Main_FrameMove()` (`0x2bbb74`, 13.272 B) — mesmo tratamento das
+seções 32–34. Descida recursiva alcançou só **2.580 de ~3.318
+instruções possíveis (78%)** — bem menos que as três anteriores,
+porque esta função tem **duas tabelas de salto computadas**
+(`addls pc,pc,rX,lsl#2`, mesma técnica da seção 32), ambas extraídas
+à mão.
+
+### 35.1 Switch externo: 9 casos, dispatch de "modo de jogo" (`0x2bc730`)
+
+```c
+r2 = (*g_gameMode) - 3;         // estados 3..11 (9 casos válidos)
+if ((unsigned)r2 <= 8) goto table[r2]; else goto 0x2bc7cc;
+```
+Tabela (9 entradas, **7 endereços distintos** — 3 casos colapsam no
+default `0x2bc7cc`):
+```
+0:0x2bc908  1:0x2bc928  2:0x2bc8dc  3:0x2bc7cc  4:0x2bc7cc
+5:0x2bc7cc  6:0x2bc954  7:0x2bc8bc  8:0x2bc7b8
+```
+Poucos casos reais (6, fora o default) — compatível com um pequeno
+conjunto de "modos de jogo" de alto nível (mapa mundi / batalha /
+menu / loja / evento / carregando, por exemplo — não confirmado por
+leitura de corpo).
+
+### 35.2 Switch interno: 43 casos, aninhado dentro de um dos casos do switch externo (`0x2bd114`)
+
+```c
+ip = sp[0x28];                   // sub-estado, lido de um campo local
+cmp ip, #0x2a;                     // 42 (43 casos válidos, 0..42)
+addls pc, pc, ip, lsl #2;
+```
+Tabela (43 entradas, **32 endereços distintos** — 11 casos colapsam,
+10 deles seguidos, `14..23`, no mesmo handler `0x2bd358`):
+```
+ 0:0x2bd26c  1:0x2bd258  2:0x2bd244  3:0x2bd230  4:0x2bd21c  5:0x2bd208
+ 6:0x2bd1ec  7:0x2bd5cc  8:0x2bd5b8  9:0x2bd5a8 10:0x2bd594 11:0x2bd584
+12:0x2bd570 13:0x2bd55c 14:0x2bd358 15:0x2bd358 16:0x2bd358 17:0x2bd358
+18:0x2bd358 19:0x2bd358 20:0x2bd358 21:0x2bd358 22:0x2bd358 23:0x2bd358
+24:0x2bd358 25:0x2bd53c 26:0x2bd6a0 27:0x2bd628 28:0x2bd604 29:0x2bd5e0
+30:0x2bd518 31:0x2bd4a0 32:0x2bd458 33:0x2bef08 34:0x2bd360 35:0x2bd348
+36:0x2bd414 37:0x2bd1c8 38:0x2bd308 39:0x2bd2c8 40:0x2bd294 41:0x2bd280
+42:0x2bd280
+```
+O endereço do switch interno (`0x2bd1xx`) cai dentro do intervalo de
+endereços alcançados pelo switch EXTERNO (seus casos ficam em
+`0x2bc7xx`–`0x2bc9xx`, mas o código entre eles se estende até
+`0x2bd1xx`+) — ou seja, **o switch de 43 casos vive dentro do corpo
+de um dos 7 casos do switch de 9**, não é um segundo nível
+independente. Qual caso exatamente, não confirmado sem ler os corpos.
+
+### 35.3 Catálogo de sistemas tocados (116 `bl` resolvidos — o maior de toda a Fase 3)
+
+- **`CINPUT_IF_TOUCH` — API de polling completa, nunca catalogada
+  assim antes**: `GetPress`/`GetPressCount`/`GetDown`/`GetUp`/
+  `GetRepeat`/`GetTouchPoint`/`GetGestureDoubleTap`/`GetEvent`/
+  `GetTouchTime`/`GetGestureTap`/`GetGestureSwipe_Old`/
+  `GetGesturePinch`/`BeginAll`/`EndAll`. As seções 20/26 já tinham
+  lido `OnTouchesBegan`/`OnTouchesEnded` (os HANDLERS de evento);
+  isto é a interface de **consulta** que a lógica de jogo usa pra
+  perguntar "o dedo está apertado agora?" — confirma que são duas
+  APIs complementares do mesmo subsistema de toque.
+- **Plataforma Android direta**: `Android_Movie_Play(char const*,int)`/
+  `Android_Vibrator_Vibrate()` — chamadas de plataforma nunca vistas
+  antes (reprodução de vídeo full-motion e vibração háptica).
+- **Gerente de tela, confirmando o padrão da seção 34.4**:
+  `SettingsWnd_Init`/`FrameMove`/`Uninit` — o PAR de
+  `Main_FrameMove`/`Main_FrameRender` delega pra sub-tela de
+  configurações nos dois sentidos (atualiza E desenha).
+- **Hit-testing de área de toque**: `SCREEN_TO_RENDER`/
+  `IS_GAME_ROT_AREA`/`IS_GAME_MOV_AREA`/`IS_ICON_AREA`/`IS_GAME_AREA`/
+  `IS_SETTINGS_WND_SLIDER_AREA` — confirma um conjunto de funções
+  "o toque caiu dentro desta região retangular lógica?" usado pra
+  rotear toques pra diferentes sistemas (rotação de câmera, movimento,
+  ícones, slider de configurações).
+- **Transição de modo real**: `onGotoNextMode(int)` — nome
+  praticamente confirma que é a função que MUDA `*g_gameMode` (seção
+  35.1), ainda que o corpo não tenha sido lido.
+- **Save/arquivo**: `CFILE_DAT::Load`/`Unload`/`Decode`,
+  `executeSaveFFT()`, `Savedata_LoadGameCleared`.
+- **Infra de baixo nível**: `CWORK_MEM::Get`, `CTHREAD::Sync`,
+  `timeGetTime()`, `CFRAMERATE::GetRate`, `CSTEP_BATCH::FrameMove`,
+  `GuEmu_FrameMove()` — confirma que a emulação da GU (`GuEmu_*`, já
+  vista em `GuEmu_libgu_to_gl`, seção 34.1 cita a contraparte de
+  render) também tem seu próprio passo de "atualização" por frame.
+- 6 chamadas locais sem símbolo.
+
+**O que ficou sem confirmar (nível "passe estrutural" intencional)**:
+os corpos dos 7 casos do switch externo e dos 32 do switch interno, a
+localização exata de qual caso externo contém o switch interno, e o
+papel preciso de `onGotoNextMode`. Marcada `read_structural` no
+`RE_FUNCTION_INVENTORY.csv`. Com esta seção, o par
+`Main_FrameMove`/`Main_FrameRender` — o loop principal do jogo
+inteiro — tem agora pelo menos um passe estrutural completo dos dois
+lados.
