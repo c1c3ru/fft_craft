@@ -131,7 +131,7 @@ não duplicar 6.455 linhas neste arquivo:
 | `0x16a6a4` | 15412 | `ASHURA_addPrim(MATRIX*)` | ✅ passe estrutural feito (§38, 2026-10-17): confirma pilha de matrizes GTE real (`PushMatrix`/`PopMatrix`), iluminação real (`SetLightMatrix`), ray-picking (`RayPick_GT4/GT3`) e uso pesado de `ps_rand` (29×, partículas/efeitos). Corpos não lidos. |
 | `0x1aeda0` | 13764 | `ItemMenu()` | ✅ passe estrutural feito (§39, 2026-10-17): revela o sistema real de itens/equipamento (`GetItemList`/`ItemEquip`/`AutoEquip`/`ChrPowerCompare`) e uma biblioteca completa de widgets de janela/menu (`WindowInit`/`SetBitStream`/`SetMenuSelVertical`), compartilhada. 1 tabela de salto real extraída. |
 | `0x2bbb74` | 13272 | `Main_FrameMove()` | ✅ passe estrutural feito (§35, 2026-10-17): 2 switches de estado aninhados (9 casos externo, 43 interno) extraídos por completo; catálogo de 116 chamadas, maior desta fase — API de polling de toque completa, chamadas de plataforma Android diretas. Corpos dos 7+32 casos não lidos. |
-| `0x18aeec` | 12580 | `eItemMenu()` | variante de `ItemMenu` |
+| `0x18aeec` | 12580 | `eItemMenu()` | ✅ passe estrutural feito (§40, 2026-10-17): confirma a tela de EQUIPAR item (sufixo `_equip` paralelo ao `_unitlist`), terceira cópia paralela do padrão de duplicação por tela. **Corrige** a hipótese de idioma da §37: parece ser duplicação por tela/contexto, não por charset. |
 | `0xc5148` | 12272 | `op_attackteam()` | opcode de bytecode (time de ataque) |
 | `0x184670` | 11004 | `CardAccess(int)` | sistema de "cartas" (nunca mencionado antes) |
 | `0x1506ec` | 10976 | `requireprinf()` | nome não identificável só pelo nome |

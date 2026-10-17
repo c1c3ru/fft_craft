@@ -5051,3 +5051,60 @@ tabela de salto computada real** nos 95% alcançados — as 3 "tabelas"
 que a tentativa automatizada (`struct_pass2.py`) achou eram falso
 positivo do detector, não trabalho pendente real. Marcada
 `read_structural`.
+
+## 40. `eItemMenu()` — passe estrutural — terceira cópia paralela do mesmo padrão, e correção importante da hipótese das seções 33/37 (2026-10-17, Fase 3)
+
+`eItemMenu()` (`0x18aeec`, 12.580 B) — mesmo tratamento das seções
+32–39. Descida recursiva simples já alcança **2.993 de ~3.145
+instruções possíveis (95%)**, sem necessidade de extrair tabela à
+mão desta vez.
+
+### 40.1 Confirma duplicação sistemática — mas **corrige** a hipótese "W = idioma largo"
+
+Os 83 `bl` resolvidos aqui são, de novo, quase 1:1 com os de
+`ItemMenu` (seção 39), agora com prefixo **`e`**: `eItemChg`,
+`eGetSortCondition`/`eSetSortCondition`/`eSetItemUserSort`,
+`eGetItemParameter`, `eChrPowerCompare`, `eGetItemList`,
+`eItemEquip`, `eDrawFT4RGB`/`eDrawTexFlip`, `eSetSttsA/Para/Equ/Para2`,
+`eCurChrChg`, `equans_init` (contraparte de `unitans_init`),
+`eSetWindowPosition`/`eGetWindowPosition`, `eMessageMake`/
+`eWindowDel`/`eDrawMessage`, `eSetMenuSelVertical`/`eGetMenuSelVertical`/
+`eSetMenuSelSide` (+ `WithSnd`), `eSetBitStream`/`eGetBitStream` (+`2`),
+`eWindowInit`/`eWindowInit2`/`eDrawWindow`/`eDrawWindow2`,
+`eCursolFunc`, `eWindowPrioritySet`, `eSetWindowCount`,
+`eGetWindowColor`.
+
+**Mas a família de tasks aqui é a variante SEM prefixo**
+(`task_create`/`task_start`/`task_stop`/`task_status`/
+`send_taskparamater`, sem `W` nem `e`) — diferente de `ItemMenu`
+(seção 39), que usava a variante `W` dos tasks. Isso **não bate** com
+a hipótese "cada tela usa consistentemente sua própria variante de
+TUDO" nem com "W = idioma". **Correção honesta da seção 37**: o
+padrão real parece ser **duplicação por TELA/CONTEXTO de UI**
+(cada menu de alto nível — lista de item, equipar item, lista de
+unidade de batalha — tem sua própria cópia quase idêntica das
+funções de janela/menu, com um prefixo próprio: nenhum, `W`, `e`,
+`b`...), e não necessariamente ligada a idioma/charset. A
+duplicação do sistema de TASK é independente disso (`ItemMenu` usa
+tasks `W`, `eItemMenu` usa tasks sem prefixo, `Wmesputmain`/
+`mesputmain` usam `wasm`/`asm`) — são dois eixos de variação
+diferentes, não um só. A hipótese Shift-JIS da seção 37 fica
+**reclassificada como não confirmada / provavelmente não é a
+explicação completa**, mantida ali só com esta nota de correção.
+
+### 40.2 Confirmação independente via sufixo `_equip`
+
+`iOS_getOt_equip`/`iOS_getOtNum_equip`/
+`iOS_setDispCursor_window_equip`/`iOS_getMaxLineWindowEquip`/
+`iOS_getScrollType_equip` — mesmo padrão de sufixo já visto como
+`_unitlist` em `ItemMenu`/`BattleUnitList` (seções 36/39). Confirma,
+por uma convenção de nome totalmente diferente (sufixo em vez de
+prefixo, numa família `iOS_*` separada), que `eItemMenu` é
+genuinamente a **tela de equipar item**, uma tela distinta de
+`ItemMenu` (provável "ver/usar item"), não uma mera variante de
+idioma da mesma tela.
+
+**O que ficou sem confirmar**: os corpos da cascata de 239 branches
+(120 de retrocesso), e a causa raiz exata de cada família de prefixo
+(continua sem leitura de corpo que confirme "por que" cada uma
+existe). Marcada `read_structural`.
