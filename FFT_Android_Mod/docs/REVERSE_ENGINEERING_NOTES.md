@@ -5231,3 +5231,49 @@ sistema.
 os corpos da cascata de 277 branches (142 de retrocesso); e a
 família `iCloud_*` completa (só uma função vista). Marcada
 `read_structural`.
+
+## 43. `requireprinf()` — passe estrutural — confirma o julgamento de batalha em rede e um sistema "binpack" de dados de batalha (2026-10-17, Fase 3)
+
+`requireprinf()` (`0x1506ec`, 10.976 B, nome não decifrável por
+etimologia — tratado como está, sem forçar significado, mesmo
+espírito de `ASURA_LMDL_TIME_TBL`) — mesmo tratamento das seções
+32–42. Descida recursiva: **2.513 de ~2.744 instruções possíveis
+(91%)**, sem tabela de salto computada.
+
+### 43.1 Confirma o cluster de configuração de batalha (liga com `op_attackteam`, seção 41)
+
+Mistura os mesmos dois grupos já vistos em `op_attackteam`
+(helpers de bytecode/mensagem sem prefixo — `serchmessagepointer`,
+`count_words2`, `checkpara1`, `settaskkind`, `read_eventflag` — e a
+família de tasks sem prefixo — `task_create`/`wait_taskend`/
+`asmTaskEntry`) com funções específicas de configuração de unidades
+de batalha nunca vistas: `get_bwp(int)` (ponteiro de `BWORK`, a área
+de trabalho de batalha já citada desde a seção 12 do backlog
+original), `search_controlID`, `get_unitwork_add`, `erase_unit`,
+`get_jobdata`, `resist_savedata(BWORK*, int)`,
+`getAnimationIDFormBattleWork`.
+
+### 43.2 Achado maior: confirma o julgamento de batalha em rede
+
+**`NetBattleJudge()`/`getNetBattleJudge()`** — nunca vistas antes,
+ligam diretamente com o suporte a batalha em rede já confirmado em
+`op_attackteam` (seção 41, `pspNetGetBattleModeFlag`/
+`pspBattleCheckFlg`, ambas chamadas aqui de novo). Confirma que o
+jogo tem lógica real de **determinar o resultado/vencedor** de uma
+batalha em rede, não só de configurar a entrada. `CalcMissionPayPoint`
+e `pspBattleForceParticipationExit` (participação forçada — unidades
+obrigatórias numa missão de história) completam o quadro de
+configuração/conclusão de uma batalha.
+
+### 43.3 Achado novo: sistema "binpack" de dados binários de batalha
+
+`__bpInitBinpackData`/`__bpGetBinaryData` (mais `addbpitem` já visto
+antes do início da função) — nome sugere um formato de **dados
+binários empacotados** (binpack) específico de batalha — carregado
+via `numa_fileReadCD` (mais um resquício "Cd"=CD-ROM do PS1 original,
+igual a `wldCdRead` da seção 11.2), `mallocForFile`/`fileDispose`. Não
+investigado o formato exato.
+
+**O que ficou sem confirmar (nível "passe estrutural" intencional)**:
+os corpos da cascata de 192 branches (100 de retrocesso); o formato
+"binpack"; e a etimologia de `requireprinf`. Marcada `read_structural`.
