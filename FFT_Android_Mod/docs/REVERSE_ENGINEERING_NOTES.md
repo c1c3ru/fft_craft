@@ -5592,3 +5592,40 @@ provavelmente são repetições do mesmo padrão — leitura estrutural
 adicional tem retorno decrescente; vale pular pro resto da fila e
 voltar aqui só se uma comparação rápida de tamanho/endereço sugerir
 alguma divergente. Marcada `read_structural`.
+
+## 54. `disp_scrollwindow()` — passe estrutural — revela o sistema `multiwindow_*` de pacotes de sprite compartilhados (2026-10-17, Fase 3)
+
+`disp_scrollwindow()` (`0xec908`, 7.444 B) — pulando o resto das
+famílias `Mdl*`/`disp_personalwindow` por retorno decrescente
+(seção 53), este é um sistema genuinamente novo. Descida recursiva:
+**1.757 de ~1.861 instruções possíveis (94%)**, sem tabela de salto;
+**148 branches, 74 de retrocesso**.
+
+### Confirma a janela de texto com scroll, e um sistema `multiwindow_*` nunca catalogado por completo
+
+```
+multiwindow_keydown(COMRECORD*) / multiwindow_keyright(COMRECORD*, int) / multiwindow_break(unsigned long*)
+multiwindow_loadcolor2(tagSPRT*) / multiwindow_packetcolor(PRIMPACKET*)
+multiwindow_packetinit(RECT16*, COMRECORD*, PRIMPACKET*) / multiwindow_packetextend(...) / multiwindow_packetanm(...)
+statusfigprint10 / statusfigprint16 / statusnowprint(char*, COPYFIELD*)
+checkkeyok() / get_padframe() / allocatememorywait(int) / disposememory(char*)
+```
+`multiwindow_packetextend` já tinha aparecido na seção 33
+(`Wmultiwindow_packetextend`, dentro de `Wmesputmain`) — agora
+confirma a família **sem prefixo** inteira: um sistema de **gerência
+de pacote de sprite compartilhado entre várias janelas** (cor, init,
+extensão, animação), usado tanto por mensagens quanto por esta janela
+de scroll. `statusfigprint10`/`statusfigprint16` (variantes por
+número de dígitos) e `statusnowprint` são achados novos dentro da
+família de impressão de status já vista nas seções 46/49/50/51.
+
+Confirma scroll real via teclado/toque: `multiwindow_keydown`/
+`multiwindow_keyright`/`checkkeyok` — navegação de texto com scroll
+usando input real, não só posição estática. `iOS_CMenuTouch::
+getCursorPosLeft`/`getCursorPosRight` (novas, par de métodos nunca
+catalogados) reforçam o papel desta classe em UI de navegação
+horizontal também, não só vertical.
+
+**O que ficou sem confirmar**: os corpos da cascata de 148 branches
+(74 de retrocesso); o formato exato de `PRIMPACKET`. Marcada
+`read_structural`.
