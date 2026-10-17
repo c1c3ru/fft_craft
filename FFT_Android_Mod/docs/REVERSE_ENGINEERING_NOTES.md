@@ -5565,3 +5565,15 @@ mesmo padrão (3 de 4 letras restantes), a família
 `disp_personalwindow` está, no nível "passe estrutural", efetivamente
 encerrada — só `C` falta, e a essa altura seria apenas a quarta
 repetição do mesmo achado. Marcada `read_structural`.
+
+## 52. `Mdl0010` — passe estrutural — confirma a chamada DIRETA a `CreateObjectWithTable` (2026-10-17, Fase 3)
+
+`Mdl0010(short, int, int, int)` (`0x236320`, 7.684 B) — descida
+recursiva: **1.909 de ~1.921 instruções possíveis (99,4%)**, sem
+tabela de salto; **124 branches, 54 de retrocesso**. Confirma e
+estende a seção 48: **chama `CreateObjectWithTable` diretamente**
+(`0x225ac8`, seção 44) — não é só compartilhar matemática, `Mdl0010`
+literalmente invoca o gerador de partículas como sub-rotina. Duas
+funções de variação novas (`getVariationAppearVecRange`,
+`getSmooth`) e `ratan2` (arco-tangente, nova função GTE-adjacente).
+`ps_rand()` ×26. Marcada `read_structural`.
