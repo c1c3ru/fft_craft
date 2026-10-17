@@ -5577,3 +5577,18 @@ literalmente invoca o gerador de partículas como sub-rotina. Duas
 funções de variação novas (`getVariationAppearVecRange`,
 `getSmooth`) e `ratan2` (arco-tangente, nova função GTE-adjacente).
 `ps_rand()` ×26. Marcada `read_structural`.
+
+## 53. `Mdl0003` — passe estrutural — catálogo de chamadas idêntico a `Mdl0010`, sinal de diminishing returns na família (2026-10-17, Fase 3)
+
+`Mdl0003(short, int, int, int)` (`0x22d69c`, 7.664 B) — descida
+recursiva: **1.904 de ~1.916 instruções possíveis (99,4%)**. O
+catálogo de 29 `bl` é **idêntico ao de `Mdl0010`** (seção 52),
+inclusive nas contagens (`ps_rand` ×26, `getVariationData` ×12,
+etc.) — mesmo "esqueleto" de chamadas, parâmetros/constantes
+internas é que devem diferir (não lido). **Nota honesta pro resto da
+fila**: dado que `Mdl0024`/`Mdl0010`/`Mdl0003` já mostraram o mesmo
+catálogo de chamadas três vezes, as ~8 funções `Mdl*` restantes
+provavelmente são repetições do mesmo padrão — leitura estrutural
+adicional tem retorno decrescente; vale pular pro resto da fila e
+voltar aqui só se uma comparação rápida de tamanho/endereço sugerir
+alguma divergente. Marcada `read_structural`.
