@@ -5418,3 +5418,45 @@ unidades pra montar o conteúdo exibido.
 os corpos da cascata de 133 branches (72 de retrocesso); as outras 5
 variantes de letra (`W`/`A`/`C`/`D`/`E`) continuam só no inventário,
 não lidas. Marcada `read_structural`.
+
+## 47. `Wdisp_personalwindow()` — passe estrutural — confirma a cópia 1:1 com `disp_personalwindow`, e uma correlação real entre prefixo `W` e task `wasm` (2026-10-17, Fase 3)
+
+`Wdisp_personalwindow()` (`0x12f2f0`, 8.632 B) — mesmo tratamento das
+seções 32–46, comparação direta com `disp_personalwindow` (seção 46).
+Descida recursiva: **2.102 de ~2.158 instruções possíveis (97%)**,
+sem tabela de salto computada.
+
+### 47.1 Confirma, função por função, a cópia 1:1 já esperada
+
+Os 53 `bl` resolvidos batem exatamente com os de `disp_personalwindow`
+(seção 46), cada um com `W`: `Waddlocalprim`, `Winitpolyft4`,
+`Winitsprtfield`, `Wdisposetexture`, `Waddstatusback`/
+`Wsttsback_normal`/`Winitstatusback`/`Wsttsback_blue`,
+`Wallocatetextureconst`, `Wchecktaskkind`/`Wsettaskkind`,
+`Wloadcdst`, `Winitdrmode`, `Wbgput`, `Wstatusfigprint`/`Wvalueput`/
+`WiOS_valueput_FT4`/`Wstatuskanjiprint`/`Wstatuskanjiprintwithptr`.
+**As chamadas de "cola" compartilhada são literalmente os MESMOS
+endereços** (`iOSdisp_personalWinPhase`/`PhaseSet`/
+`iOSPersonalWinPosSet`/`iOSUnitListAddGet`, ×22 de novo) — confirma
+que as duas funções são, de fato, cópias quase idênticas do mesmo
+código-fonte, compartilhando a MESMA camada de estado/cola, só com
+cópias PRÓPRIAS dos helpers de desenho/texto de baixo nível.
+
+### 47.2 Achado que **restaura, só pra esta família**, uma correlação real `W`/task
+
+Diferente do caso `ItemMenu`/`eItemMenu` (seção 40, que quebrou a
+correlação), aqui ela **se confirma**: `disp_personalwindow` (seção
+46) usa a família de tasks `asm` (`asmTaskEntry`/`asmGetInput3`/
+`asmSerchMessagePointer`); `Wdisp_personalwindow` usa exatamente a
+`wasm` (`wasmTaskEntry`/`wasmGetInput3`/`wasmSerchMessagePointer`) —
+**a mesma correlação de `Wmesputmain`/`mesputmain`** (seções 33/37).
+Conclusão honesta, juntando com a seção 40: a correlação `W`↔`wasm`
+**existe e é real pra algumas famílias** (mensagens, janela pessoal),
+mas **não é universal** (`ItemMenu` usa tasks `W` com helpers sem
+prefixo; `eItemMenu` usa tasks sem prefixo com helpers `e`) — o
+sistema de duplicação por tela não segue uma regra única em todo o
+binário.
+
+**O que ficou sem confirmar**: os corpos da cascata de 128 branches
+(70 de retrocesso); as 4 variantes restantes (`A`/`C`/`D`/`E`).
+Marcada `read_structural`.

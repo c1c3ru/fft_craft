@@ -14,7 +14,7 @@ address,size,mangled,demangled,status,section_ref
 00225ac8,10724,_Z21CreateObjectWithTablesiiP7_Object,"CreateObjectWithTable(short, int, int, _Object*)",read_structural,NOTES §44
 0016fc90,10448,_Z16BattleCardAccessi,BattleCardAccess(int),read_structural,NOTES §45
 00128ed4,8756,_Z19disp_personalwindowv,disp_personalwindow(),read_structural,NOTES §46
-0012f2f0,8632,_Z20Wdisp_personalwindowv,Wdisp_personalwindow(),unread,
+0012f2f0,8632,_Z20Wdisp_personalwindowv,Wdisp_personalwindow(),read_structural,NOTES §47
 0023e29c,8616,_Z7Mdl0024siii,"Mdl0024(short, int, int, int)",unread,
 0022f48c,8420,_Z7Mdl0004siii,"Mdl0004(short, int, int, int)",unread,
 000ce834,7912,_Z20Ddisp_personalwindowv,Ddisp_personalwindow(),unread,
