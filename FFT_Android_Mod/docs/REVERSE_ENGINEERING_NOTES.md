@@ -5931,3 +5931,59 @@ PS1, e esta `CCAMERA` orientada a objeto do renderer moderno.
 projeção — perspectiva ou look-at, não cravado byte a byte); as
 outras ~10 funções pequenas de `CCAMERA` (a maioria ≤28 B, getters/
 setters triviais) continuam não lidas. Marcada `read_structural`.
+
+## 66. `event_call` — passe estrutural — o dispatcher central de ações de evento/cutscene, a maior ponte entre sistemas de toda a investigação (2026-10-17, Fase 3)
+
+`event_call(unsigned long* script, unsigned long pc)` (`0xf431c`,
+5.456 B) — assinatura clássica de interpretador de bytecode
+(ponteiro de script + contador de programa), parte do motor de
+eventos já confirmado nas seções 9.5–9.6. Descida recursiva: **1.261
+de ~1.364 instruções possíveis (92%)**, sem tabela de salto; **167
+branches, 79 de retrocesso**.
+
+### O catálogo de 70 `bl` é, de longe, o mais "amplo" (menos profundo, mais ligações) de toda a Fase 3
+
+Confirma que `event_call` é o **despachante central de ações
+disponíveis pra scripts de evento/cutscene** — chama diretamente
+telas e sistemas inteiros já documentados em seções completamente
+separadas desta investigação:
+
+- **Telas de batalha, chamadas DE DENTRO de um evento**:
+  `BattleCardAccess` (seção 45), `BattleUnitList` (seção 36),
+  `BattleEquip`, `BattleJobStts` — confirma que cutscenes/eventos
+  podem abrir essas telas diretamente.
+- **Controle de câmera do mapa mundi durante eventos**:
+  `setMapScrollXYZ`/`setMapScale`/`setMapAngle` — ligação real com
+  o sistema de câmera já visto nas seções 12.11/12.14.
+- **`ASHURA` específico de evento**: `ASHURA_Control`,
+  `ASHURA_EVENT_CLUT_LOAD`, `ASHURA_GNS_Garage` — três funções novas
+  do motor 3D (seção 38), nomeadas especificamente pra contexto de
+  evento (`GNS_Garage` sugere uma cena fixa tipo "garagem"/base,
+  hipótese não confirmada).
+- **Sistema de animação de evento completo, nunca catalogado**:
+  `loadNewAnimation`/`loadEventAnimation`/`activateEventAnimation`/
+  `inactivateEventAnimation`/`disposeEventAnimation`/
+  `activateCompressedAnimation`/`inactivateCompressedAnimation`/
+  `checkAnimationExist`/`checkModelAnimation`/`checkCharacterMove`/
+  `startVRAMAnimation`/`checkVRAMAnimation` — um ciclo de vida
+  completo de animação de cutscene, com variante "comprimida" e
+  variante "VRAM" distintas.
+- **Corte de câmera/cena**: `eventMapJump`/`eventMapJump2`/
+  `eventMapFadeIn`/`eventMapRewrite`/`ScriptCut__Fiii` — confirma
+  cortes de câmera reais (estilo "jump cut") no sistema de eventos.
+- **Música completa controlada por evento**: `callMusic`/`stopMusic`/
+  `fadeMusic`/`activateMusic`/`inactivateMusic`/`disposeMusic`.
+- Outros: `fade_eventlocal`, `request_tooltest`, `changeflame`,
+  `Set_bravebreak`, `pspBattleDataPadGet`, `getMoviePlayFlg__Fv`,
+  `get_gEventMovieNo`/`getEventStatus`.
+
+**Confirma, com a maior concentração de evidência cruzada de toda a
+Fase 3, que o motor de eventos (seções 9.5–9.6) não é um sistema
+isolado — é o ORQUESTRADOR de praticamente todo o resto do jogo**:
+telas de batalha, câmera do mapa, motor 3D de efeitos, animação,
+música, tudo acionável por uma única instrução de bytecode através
+de `event_call`.
+
+**O que ficou sem confirmar**: os corpos da cascata de 167 branches
+(79 de retrocesso) — qual opcode exato dispara qual chamada não foi
+mapeado função a função. Marcada `read_structural`.

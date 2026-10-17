@@ -41,7 +41,7 @@ address,size,mangled,demangled,status,section_ref
 002bf3e8,5832,_Z9Main_Initv,Main_Init(),read_structural,NOTES §64
 000afb30,5576,_ZN7CCAMERA6UpdateEv,CCAMERA::Update(),read_structural,NOTES §65
 0022c138,5476,_Z7Mdl0002siii,"Mdl0002(short, int, int, int)",unread,
-000f431c,5456,_Z10event_callPmm,"event_call(unsigned long*, unsigned long)",mentioned_unverified,
+000f431c,5456,_Z10event_callPmm,"event_call(unsigned long*, unsigned long)",read_structural,NOTES §66
 0015834c,5236,_Z18world_scrollwindowv,world_scrollwindow(),unread,
 00163ccc,5160,_Z15ASHURA_set_Meshii,"ASHURA_set_Mesh(int, int)",unread,
 002b8900,5036,_Z19iOS_SetIconPositionv,iOS_SetIconPosition(),unread,
