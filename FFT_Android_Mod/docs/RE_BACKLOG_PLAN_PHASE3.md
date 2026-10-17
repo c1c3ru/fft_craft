@@ -136,7 +136,7 @@ não duplicar 6.455 linhas neste arquivo:
 | `0x184670` | 11004 | `CardAccess(int)` | ✅ passe estrutural feito (§42, 2026-10-17): "Card" = memory card do PS1 — revela o sistema REAL de save/load (`pspFftSave`/`pspFftLoad`/`pspSaveDataGetOne`, distinto do dump de heap de `CAUTOSAVE`), com suporte a **iCloud** (`iCloud_GetSlotCount`, nunca visto). |
 | `0x1506ec` | 10976 | `requireprinf()` | ✅ passe estrutural feito (§43, 2026-10-17): liga com `op_attackteam` (§41) no cluster de configuração de batalha; confirma julgamento real de batalha em rede (`NetBattleJudge`/`getNetBattleJudge`) e um sistema "binpack" de dados binários de batalha (`__bpInitBinpackData`). |
 | `0x225ac8` | 10724 | `CreateObjectWithTable(short,int,int,_Object*)` | ✅ passe estrutural feito (§44, 2026-10-17): confirma ser o gerador de partículas/efeitos variados (`_ParticleParameter*`, `getVariationData`), 99,7% de cobertura. `ps_rand()` chamada 103×, a maior contagem de toda a investigação. |
-| `0x16fc90` | 10448 | `BattleCardAccess(int)` | variante de batalha de `CardAccess` |
+| `0x16fc90` | 10448 | `BattleCardAccess(int)` | ✅ passe estrutural feito (§45, 2026-10-17): confirma a tela de save/load acessível DE DENTRO da batalha, quarta cópia paralela (prefixo `c`) do padrão das seções 36/40/42. Revela `CARD_HEADER` (formato real de cabeçalho de save) e mais funções `pspSaveData*`. |
 | `0x128ed4` | 8756 | `disp_personalwindow()` | janela de status pessoal (+ variantes `A/C/D/E/W` prefixadas, provável localização por idioma) |
 | `0x23e29c` | 8616 | `Mdl0024(short,int,int,int)` | handler de modelo/animação por unidade (há uma família `Mdl0001`–`Mdl0028`+) |
 | `0x1b2ea8` | 6216 | `JobChange()` | troca de classe/job |

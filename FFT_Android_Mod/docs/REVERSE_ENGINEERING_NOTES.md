@@ -5320,3 +5320,46 @@ os corpos da cascata de 278 branches (156 de retrocesso) — a fórmula
 exata de cada variação (posição/alcance/vetor) não foi lida byte a
 byte, só confirmada a existência e os nomes reais. Marcada
 `read_structural`.
+
+## 45. `BattleCardAccess(int)` — passe estrutural — quarta cópia paralela confirmada, agora com prefixo `c`, e o formato de cabeçalho de save real (2026-10-17, Fase 3)
+
+`BattleCardAccess(int)` (`0x16fc90`, 10.448 B) — mesmo tratamento das
+seções 32–44. Descida recursiva simples alcança 2.357 de ~2.612
+instruções (90%); três tabelas de salto pequenas (5, 13 e 4 casos)
+extraídas à mão, cobrindo o resto.
+
+### 45.1 Confirma a tela de save/load acessível DE DENTRO da batalha — quarta cópia paralela do padrão
+
+Os 87 `bl` resolvidos são, de novo, quase todos os mesmos de
+`CardAccess` (seção 42), agora com prefixo **`c`**: `cSelectCard`,
+`cCardEventClose`, `cCardInit`, `cGetCardState`, `cCardSetUp`,
+`cSwapDB`/`cDB_init`, `cDrawTile`/`cDrawFT4RGB`/`cDrawTexFlip`,
+`cFadeInInit`/`cFadeOutInit`/`cFadeIn`/`cFadeOut`,
+`cWaitLoadImage`/`cWaitStoreImage`, `cDrawMessageKill(Fast)`/
+`cDrawMessage(Fast)`, `cSetBitStream`/`cSetBitStream2`/
+`cWriteBitStream`/`cGetBitStream2`, `cMakeWindowFunc`, `cValueFunc`,
+`cCursolFunc`, `cWindowPrioritySet`, `cSelectWindowClut`,
+`cGetWindowColor`. **Quarta letra de prefixo confirmada** depois de
+`b` (seção 36), `e` (seção 40) e nenhuma (seção 42/39) — reforça a
+leitura das seções 40/42: parece ser uma sequência de cópias quase
+idênticas por tela/contexto (`A`/`b`/`C`/`c`/`D`/`e`/`E`/`W`... — o
+`RE_FUNCTION_INVENTORY.csv` já lista a família `disp_personalwindow`
+com várias dessas letras), não uma distinção de idioma.
+
+### 45.2 Achado novo: formato real de cabeçalho de save (herança de memory card)
+
+**`MakeHeader(int, int, CARD_HEADER*)`** — tipo `CARD_HEADER*` nunca
+visto, confirma que o save tem um cabeçalho estruturado de verdade
+(herança direta do formato de memory card do PS1, consistente com o
+nome "Card" das seções 42/45). Mais achados do sistema de save nunca
+vistos na seção 42: `pspSaveDataMissionRateSave(FFT_SAVE_DATA*)`
+(taxa de conclusão de missões é salva!), `pspSaveDataEnableSystemFlg`/
+`pspSaveDataCheckSystemFlg(FFTPSP_SYSTEM_FLG)`, `pspSaveSystemFile()`.
+`iCloud_GetSlotCount()` reaparece aqui também — confirma que o
+suporte a iCloud (seção 42) vale pra esta tela também, não é
+exclusivo da tela de save do menu principal.
+
+**O que ficou sem confirmar (nível "passe estrutural" intencional)**:
+os corpos das 3 tabelas (22 casos no total) e do resto da cascata de
+197 branches; o layout exato de `CARD_HEADER`. Marcada
+`read_structural`.
