@@ -44,23 +44,23 @@ address,size,mangled,demangled,status,section_ref
 000f431c,5456,_Z10event_callPmm,"event_call(unsigned long*, unsigned long)",read_structural,NOTES §66
 0015834c,5236,_Z18world_scrollwindowv,world_scrollwindow(),read_structural,NOTES §67
 00163ccc,5160,_Z15ASHURA_set_Meshii,"ASHURA_set_Mesh(int, int)",read_structural,"NOTES §68 (corrigido, 96%)"
-002b8900,5036,_Z19iOS_SetIconPositionv,iOS_SetIconPosition(),unread,
+002b8900,5036,_Z19iOS_SetIconPositionv,iOS_SetIconPosition(),read_structural,NOTES §71
 0023b310,5024,_Z7Mdl0015siii,"Mdl0015(short, int, int, int)",unread,
-00213e78,4976,_Z17executeChangeClutv,executeChangeClut(),unread,
+00213e78,4976,_Z17executeChangeClutv,executeChangeClut(),read_structural,NOTES §70
 000759e8,4872,deflate,deflate,read_full,NOTES §69
 0022ae34,4868,_Z7Mdl0001siii,"Mdl0001(short, int, int, int)",unread,
 00127360,4808,_Z14Wdisp_helpmenuv,Wdisp_helpmenu(),unread,
 0023c79c,4792,_Z7Mdl0017siii,"Mdl0017(short, int, int, int)",unread,
-0014935c,4780,_Z16Cdisp_bothwindowv,Cdisp_bothwindow(),unread,
-0013f1dc,4728,_Z19battle_scrollwindowv,battle_scrollwindow(),unread,
+0014935c,4780,_Z16Cdisp_bothwindowv,Cdisp_bothwindow(),read_structural,NOTES §73
+0013f1dc,4728,_Z19battle_scrollwindowv,battle_scrollwindow(),read_structural,NOTES §74
 002406d4,4700,_Z7Mdl0028siii,"Mdl0028(short, int, int, int)",unread,
 000794ec,4660,inflateBack,inflateBack,read_full,NOTES §69
 001255e0,4628,_Z13disp_helpmenuv,disp_helpmenu(),unread,
-001da9e4,4540,_Z17set_monsterwork_jP5BWORKP5EDATAii,"set_monsterwork_j(BWORK*, EDATA*, int, int)",unread,
+001da9e4,4540,_Z17set_monsterwork_jP5BWORKP5EDATAii,"set_monsterwork_j(BWORK*, EDATA*, int, int)",read_structural,NOTES §72
 000e62cc,4448,_Z20iOS_RESUME_SET_EVENTP21IOS_RESUME_DATA_EVENT24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_EVENT(IOS_RESUME_DATA_EVENT*, IOS_RESUME_DATACOPY_MODE)",unread,
 000c1e20,4260,_Z16Adisp_bothwindowv,Adisp_bothwindow(),unread,
 000d1ab0,4244,_Z13debug_chrmenuv,debug_chrmenu(),unread,
-0012b12c,4196,_Z15disp_bothwindowv,disp_bothwindow(),unread,
+0012b12c,4196,_Z15disp_bothwindowv,disp_bothwindow(),read_structural,NOTES §73
 000cd5e8,4128,_Z16Ddisp_bothwindowv,Ddisp_bothwindow(),unread,
 00216e5c,4004,_Z22iOS_RESUME_SET_WORK_MUP23IOS_RESUME_DATA_WORK_MU24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_WORK_MU(IOS_RESUME_DATA_WORK_MU*, IOS_RESUME_DATACOPY_MODE)",unread,
 0013d248,3996,_Z11disp_optioni,disp_option(int),unread,

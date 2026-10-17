@@ -6061,3 +6061,196 @@ sugerido como regra geral; os dois mecanismos convivem no mesmo
 binário ARM. Mesmo tratamento do `gl3stubInit` (seção 62): biblioteca
 de terceiros padrão, zero lógica de jogo, não vale um passe
 instrução-a-instrução. Marcadas `read_full` as três.
+
+## Primeiro lote paralelo (seções 70–74): 5 funções lidas por forks simultâneos, usando `jtable.py`
+
+A partir daqui, o loop passou a paralelizar: em vez de uma função por
+iteração, vários forks rodam `jtable.py` ao mesmo tempo em funções
+diferentes da fila, devolvem o rascunho, e a integração nos arquivos
+compartilhados acontece numa única passada. As cinco seções abaixo
+(70–74) foram produzidas assim, no mesmo lote.
+
+## 70. `executeChangeClut()` — passe estrutural — o executor real da fila de troca de paleta/CLUT, nunca aberto (2026-10-17, Fase 3, lote paralelo)
+
+`executeChangeClut()` (`0x213e78`, 4.976 B) — descida recursiva via
+`jtable.py`: **1.236 de ~1.244 instruções possíveis (99%)**, sem
+tabela de salto; **81 branches, 45 de retrocesso** (consistente com
+percorrer uma fila/lista em laço).
+
+### Confirma ser o executor real por trás de `requestChangeClut` (seções 48/52/53/68)
+
+```
+requestChangeClut(int,int,unsigned int,unsigned int,int,short,short,short)   ×6
+requestChangeGradation(int,int,int,int,int)
+requestChangeAnbient(int,int,int,int,int)
+requestChangeFlat(int,int,int,int,int)
+ASHURA_CVECTOR(long, CVECTOR*)
+iOS_GetFrameRate()
+```
+`requestChangeClut` já tinha aparecido como chamada de dentro da
+família `Mdl*`/`ASHURA_set_Mesh` (seções 48, 52, 53, 68), mas nunca
+tinha sido aberta por dentro, nem se sabia quem de fato processava os
+pedidos. `executeChangeClut` confirma essa ponte: é quem **executa**
+a fila de pedidos de troca de CLUT/paleta — chamando `requestChangeClut`
+6 vezes, consistente com percorrer uma lista de pedidos pendentes e
+aplicá-los um a um.
+
+Revela três funções irmãs nunca vistas, com a mesma convenção
+`requestChange*` — confirma que o sistema de troca de paleta não é
+só "CLUT" (tabela de cor indexada): também existe troca de
+**gradação**, **ambiente** (achado honesto: o nome real no binário é
+`requestChangeAnbient`, sem o segundo "i" — mais um erro de
+digitação preservado, no espírito de `ASURA_LMDL_TIME_TBL`/
+`iOSJobChaneg*`), e **cor plana**. `ASHURA_CVECTOR` (vetor de cor do
+motor 3D, seção 38) confirma que esse sistema de troca de paleta
+está ligado ao pipeline de cor do ASHURA, não é um sistema isolado.
+
+**O que ficou sem confirmar**: os corpos da cascata de 81 branches
+(45 de retrocesso); a estrutura exata da fila (tamanho, onde é
+preenchida); os corpos das 4 funções `requestChange*` em si (só
+confirmadas por chamada/assinatura). Marcada `read_structural`.
+
+## 71. `iOS_SetIconPosition()` — passe estrutural — novo recorde de `RETINA_SCALE`, confirma posicionamento de ícone totalmente desenrolado (2026-10-17, Fase 3, lote paralelo)
+
+`iOS_SetIconPosition()` (`0x2b8900`, 5.036 B) — descida recursiva via
+`jtable.py`: **1.250 de ~1.259 instruções possíveis (99%)**, sem
+tabela de salto; só **3 branches, 2 de retrocesso** (função quase
+inteiramente linear/desenrolada, não um laço real sobre um array).
+
+Catálogo de `bl` dominado por duas funções já conhecidas da seção 34
+(`Main_FrameRender`): **`RETINA_SCALE(int)` chamada 131 vezes** e
+**`CGX_SCREEN_CORRECT::Scaled(int)` chamada 129 vezes** — supera o
+recorde anterior de `RETINA_SCALE` (68×, seção 34). Cada bloco
+repetido passa um **valor literal diferente** pra
+`RETINA_SCALE`/`CGX_SCREEN_CORRECT::Scaled` — ou seja, **não é um
+laço sobre uma tabela, é código manualmente desenrolado, um bloco
+fixo por ícone**, o mesmo padrão de desenrolamento massivo já
+confirmado em `Main_Init` (seção 64, `iOS_setV2Icon` chamada 230
+vezes). Também usa `CGX_SCREEN_CORRECT::GetOffset_1X`/`GetScale`
+(seção 34) e `CRECT::Register(_RECT_UI*, int)` (seção 65, mesmo
+sistema de hit-rect inicializado em `Main_Init`).
+
+Confirma que esta função é, junto com `Main_Init`, o segundo grande
+ponto de "configuração em massa, um bloco por ícone, sem tabela" do
+sistema de ícones V2/retina — provavelmente chamada quando a tela
+gira ou o dispositivo muda de escala, reposicionando cada ícone
+individualmente.
+
+**O que ficou sem confirmar**: a lista exata de quais dos ~130
+ícones são reposicionados aqui; se esta função é chamada uma vez no
+boot ou repetidamente (ex.: a cada rotação de tela). Marcada
+`read_structural`.
+
+## 72. `set_monsterwork_j(BWORK*, EDATA*, int, int)` — passe estrutural — confirma randomização real de equipamento de monstro (2026-10-17, Fase 3, lote paralelo)
+
+`set_monsterwork_j(BWORK*, EDATA*, int, int)` (`0x1da9e4`, 4.540 B) —
+primeira função lida que toca `BWORK` (área de trabalho de batalha,
+citada desde a seção 12 do backlog original e por `get_bwp`/
+`erase_unit`/`resist_savedata` na seção 43) e `EDATA` por dentro.
+Descida recursiva via `jtable.py`: **1.122 de ~1.135 instruções
+possíveis (99%)**, sem tabela de salto; **148 branches, 66 de
+retrocesso**.
+
+### Confirma a inicialização de unidades monstro, com randomização real de item
+
+```
+get_unitwork_add(int)        set_jcflag(unsigned char*, int)
+copy_struct_data(void const*, void*, int)    clear_cmemory(void*, int)
+pspItemGetCommonData / pspItemIsEmpty / pspItemIsBarehand / pspItemGetWeaponData
+pspItemIsRandom                                — chamada 20 vezes
+pspJobGetJobChangeFlag(unsigned char*, unsigned char, unsigned char(*)[3], int)
+pspNetGetBattleModeFlag()
+```
+A assinatura (`BWORK*, EDATA*`) e o nome confirmam que esta função
+monta a área de trabalho de batalha de uma unidade **monstro**
+(categoria de unidade nunca aberta nesta investigação — distinta do
+sistema de job/habilidade humano das seções 57/61) a partir de um
+template de dados de inimigo (`EDATA`). **`pspItemIsRandom` chamada
+20 vezes** é o achado mais concreto: sugere um laço real sobre slots
+de equipamento resolvendo itens marcados como "aleatórios" no
+template — **randomização de equipamento de monstro**, mecanismo
+nunca confirmado antes. `pspJobGetJobChangeFlag` liga esta
+inicialização ao sistema de troca de job (seção 61);
+`pspNetGetBattleModeFlag` é mais uma aparição do sistema de batalha
+em rede (seções 41/43/63).
+
+**O que ficou sem confirmar**: os corpos das ~10 funções locais sem
+símbolo (`sub_1d6ee0` ×10, `sub_1d6f84` ×16 — as mais chamadas,
+provavelmente getters/setters de campo de `BWORK`); o layout exato
+de `BWORK`/`EDATA` não foi mapeado campo a campo. Marcada
+`read_structural`.
+
+## 73. `disp_bothwindow()` — passe estrutural — janela de comparação dupla de status, reusando os mesmos helpers de `disp_personalwindow` (2026-10-17, Fase 3, lote paralelo)
+
+`disp_bothwindow()` (`0x12b12c`, 4.196 B) — descida recursiva via
+`jtable.py`: **1.018 de ~1.049 instruções possíveis (97%)**, sem
+tabela de salto computada; **64 branches, 44 de retrocesso**.
+
+### Confirma reuso direto da biblioteca de desenho de `disp_personalwindow`, não uma cópia
+
+Os 33 `bl` resolvidos incluem, nos MESMOS endereços sem prefixo já
+vistos nas seções 46/49/50/51 (`disp_personalwindow`): `addlocalprim`
+(`0xd665c`), `statuskanjiprint` (`0xe2b78`), `bgput` (`0xe1118`),
+`initdrmode` (`0xe0fb8`), `loadcdst` (`0xe0fa0`),
+`addstatusback`/`sttsback_normal`/`sttsback_blue`/`initstatusback` —
+confirma que `disp_bothwindow` **não chama** nenhuma variante de
+`disp_personalwindow`; em vez disso, desenha diretamente usando a
+MESMA biblioteca de helpers de status já documentada, consistente
+com o padrão "entrada fina reusando helpers compartilhados" já visto
+(não uma cópia de fonte duplicada, como `W`/`wasm` costuma ser). O
+nome ("both window") e o uso dos dois esquemas de cor
+(`sttsback_normal`/`sttsback_blue`) sugerem uma tela que mostra
+**duas janelas de status lado a lado** — hipótese plausível (ex.:
+comparar unidade antes/depois de trocar equipamento), não confirmada
+byte a byte.
+
+### Achados novos
+
+- **`itemuvclut(tagSPRT*, int)`** — nunca vista; configura UV/CLUT
+  de um sprite pra ícone de item (seções 39/57).
+- **`TexHybrid_RegistCLUTAddr(int, unsigned int)`** — função livre
+  (não método de `CEGL2_TEX_HYBRID`) nunca vista; provável
+  contraparte do lado PSP/raw que a classe híbrida (seções
+  13.7/13.11/59) usa para registrar o endereço de paleta.
+- **`SetLineF2`/`SetTile`** — duas primitivas reais da lib gráfica
+  PS1 nunca catalogadas antes.
+- `pspItemIsEmpty` — mais uma função da família `pspItem*` (seções
+  39/57).
+- Família de task é `asm` (não `wasm`) — consistente com o padrão
+  "sem prefixo de tela = task sem `w`" já visto em outras famílias.
+
+### `Cdisp_bothwindow` — checagem rápida confirma o mesmo padrão
+
+Verificação oportunista de `Cdisp_bothwindow()` (`0x14935c`, 4.780 B,
+97% de cobertura): catálogo de `bl` idêntico (mesmos endereços,
+mesmas contagens, nos primeiros 14+ itens comparados) — confirma que
+`C` aqui também é só um ponto de entrada fino reusando os mesmos
+helpers, não uma cópia separada — mesmo padrão já visto em `D`/`E`/
+`A` de `disp_personalwindow` (seções 49–51).
+
+**O que ficou sem confirmar**: os corpos da cascata de 64 branches
+(44 de retrocesso); se as variantes `A`/`D`/`E`/`W` de
+`disp_bothwindow` seguem o mesmo padrão sem exceção (`W`
+especificamente merece verificação, já que em outras famílias é a
+única variante que de fato duplica os helpers). Marcadas
+`read_structural` (`disp_bothwindow` e `Cdisp_bothwindow`).
+
+## 74. `battle_scrollwindow()` — confirmação rápida do padrão `Wmultiwindow_*`/`wasm` (2026-10-17, Fase 3, lote paralelo)
+
+`battle_scrollwindow()` (`0x13f1dc`, 4.728 B) — **98% de cobertura**
+(1.162/1.182 instruções) via `jtable.py`, sem tabela de salto, 93
+branches. Confirma ser mais um cliente do sistema `Wmultiwindow_*`/
+`wasm` já documentado nas seções 54/58/67 (`Waddlocalprim`,
+`Wmultiwindow_packetclip`/`packetclipinit`/`packetadd`,
+`Wstatuskanjiprint`, `wasmTaskEntry`/`wasmGetInput1`/
+`wasmGetActiveF`). Chama `WiOS_battle_scrollwindow_tap()`
+diretamente, confirmando a ligação já suspeitada na seção 67.
+**Notável**: o nome externo da função não tem prefixo `W`, mas ela
+usa o conjunto de helpers internos `W`-prefixado mesmo assim —
+confirma que a escolha do prefixo é por **contexto de tela**, não
+pelo nome da função chamadora. Dois achados pequenos novos:
+`iOS_setLockInput(unsigned char)`/`iOS_getLockInput()` e
+`iOS_setPadState(unsigned long)` — primitivas de bloqueio de input
+nunca catalogadas. Marcada `read_structural`. Tratada como
+confirmação curta, não seção completa, conforme a nova política de
+não redocumentar famílias já confirmadas.
