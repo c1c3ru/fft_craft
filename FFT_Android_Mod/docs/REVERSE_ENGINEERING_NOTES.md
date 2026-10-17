@@ -4599,3 +4599,82 @@ locais sem símbolo. Marcada `read_structural` no
 0xe88c4, 15.744 B, 5ª maior do binário) é a candidata natural pra
 comparar contra esta e confirmar se é duplicação por idioma/plataforma
 ou lógica genuinamente diferente — não lida ainda.
+
+## 34. `Main_FrameRender()` — passe estrutural — o renderizador principal do jogo inteiro, nunca tocado (2026-10-17, Fase 3)
+
+`Main_FrameRender()` (`0x2c141c`, 16.164 B, 3ª maior função do
+binário) — mesmo tratamento das seções 32/33. Descida recursiva:
+**3.935 de ~4.041 instruções possíveis (97%)**, sem tabela de salto
+computada (248 branches, 127 de retrocesso — cascata de `cmp`, não
+switch único). 110 `bl` resolvidos por nome — o maior catálogo de
+chamadas de toda a Fase 3 até aqui.
+
+### 34.1 Fecha o elo que faltava: quem chama `CEGL2_IF`/`CEGL2_FBO`/`CEGL2_SPRITE`
+
+As seções 13/14/15 documentaram o motor gráfico `CEGL2_*` por dentro,
+mas nunca o chamador real do topo. Agora está confirmado:
+`Main_FrameRender` chama diretamente `CEGL2_IF::SetScreenSize`,
+`ClearBackdrop`, `InitRenderState2D`, `SetTexFilter`, `SetScissor`,
+`AddSprite`, `Setup2D`, `DrawPacket` (seção 13.1), `CEGL2_FBO::Begin`/
+`End`/`RenderToFBO`/`RenderFromFBO`/`GetTexture`, e
+`CEGL2_SPRITE::SetScale`/`SetScaleAlignCenter`/`SetColor`/`SetAlpha`/
+`Unload`. **É literalmente o ponto de entrada do frame de desenho do
+jogo inteiro** — fecha o ciclo "motor gráfico documentado por dentro"
+↔ "quem decide quando/como usá-lo por fora".
+
+### 34.2 Classe nova: `CGX_SCREEN_CORRECT` — correção de proporção de tela por dispositivo
+
+Nunca vista antes, mas pesadamente usada: `Area_ToScreen` (×26),
+`Area_GetCorrect` (×22), mais `GetCorrect`/`GetScale`/`Scaled`/
+`ScalingDiff`/`GetAppScaledScreenSize`/`Area_ToScreenY`/
+`Area_X_AlignC`/`Area_X_ScalingDiff`/`Area_Y_ScalingDiff`. Confirma
+que o jogo faz correção de proporção/escala em tempo real pra se
+adaptar a telas de dispositivo diferentes — consistente com
+`RETINA_SCALE(int)` (sozinha, **68 chamadas** — a função mais chamada
+de toda esta passada) e `CAPP_INFO::IsDeviceiPhoneRetina4inch()`.
+
+### 34.3 `CFFT_STATE` como hub de decisão de renderização
+
+Nove getters/setters diferentes de `CFFT_STATE` chamados aqui:
+`GetRenderSize`, `GetVertexScaling`, `GetCaptureRequest`/
+`SetCaptureRequest`, `GetCaptureDraw`/`SetCaptureDraw`,
+`GetEncountRequest`/`SetEncountRequest`, `GetMode`,
+`GetBackdropColor`, `GetMenuBarVisible`. Confirma que o render
+principal consulta e ATUALIZA um conjunto real de flags de "o que
+desenhar este frame" — inclusive um fluxo de **captura de tela**
+(`CaptureRequest`/`CaptureDraw`, que bate com `Offscreen_ReadPixels`/
+`Offscreen_Get`, também chamadas aqui) e um fluxo de
+"entrando em encontro/batalha" (`EncountRequest`) decidido no
+MESMO lugar que desenha o frame.
+
+### 34.4 Confirma um padrão "screen manager": delega pra sub-telas inteiras
+
+`NowLoading_FrameRender()`/`NowLoading_FrameMove()` e
+`SettingsWnd_FrameRender()` são chamadas de dentro de
+`Main_FrameRender` — confirma que esta função não é só "desenhar o
+jogo", é um **dispatcher de tela** que decide se o frame atual
+desenha o jogo normal, a tela de carregamento, ou a janela de
+configurações — mesma arquitetura, em espírito, do despacho de
+`wldctl_cur`/`active`/`deactive`/`init` (seção 12.2), só que no nível
+de tela inteira em vez de controlador de mapa mundi. `Debug_DrawFPS()`
+confirma um overlay de depuração real (contador de FPS).
+
+### 34.5 Outros achados
+
+- Usa ponto flutuante de software (`__addsf3`/`__subsf3`/`__mulsf3`/
+  `__divsf3`/`__floatsisf`/`__fixsfsi`) em pelo menos parte do
+  cálculo — provavelmente herança de compilação sem FPU de hardware
+  garantida em todos os alvos ARM suportados, não achado de jogo.
+- 15 chamadas locais sem símbolo, a mais frequente `sub_2b6110`
+  (**43 vezes**, endereço vizinho do cluster `iOS_getV2Icon`/
+  `iOS_setV2Icon` em `0x2b7xxx` — candidata forte a ser outro
+  acessor/wrapper de ícone, não investigado).
+
+**O que ficou sem confirmar (escalonado — nível "passe estrutural"
+intencional)**: os corpos dos ~70+ blocos individuais da cascata de
+branches, a ordem exata de decisão entre "jogo normal"/"loading"/
+"settings", e as 15 funções locais sem símbolo. Marcada
+`read_structural` no `RE_FUNCTION_INVENTORY.csv`. `Main_FrameMove()`
+(`0x2bbb74`, 13.272 B, a contraparte lógica desta função — "atualiza
+o estado" em vez de "desenha") é a candidata natural de próximo
+passe estrutural, pro par ficar completo.

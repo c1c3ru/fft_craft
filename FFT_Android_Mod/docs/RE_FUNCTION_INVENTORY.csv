@@ -1,7 +1,7 @@
 address,size,mangled,demangled,status,section_ref
 00207e10,17156,_Z6battlev,battle(),read_structural,NOTES §32
 0011173c,16312,_Z11Wmesputmainv,Wmesputmain(),read_structural,NOTES §33
-002c141c,16164,_Z16Main_FrameRenderv,Main_FrameRender(),unread,
+002c141c,16164,_Z16Main_FrameRenderv,Main_FrameRender(),read_structural,NOTES §34
 0017c27c,15920,_Z14BattleUnitListPhPm,"BattleUnitList(unsigned char*, unsigned long*)",unread,
 000e88c4,15744,_Z10mesputmainv,mesputmain(),unread,
 0016a6a4,15412,_Z14ASHURA_addPrimP6MATRIX,ASHURA_addPrim(MATRIX*),unread,
