@@ -6254,3 +6254,243 @@ pelo nome da função chamadora. Dois achados pequenos novos:
 nunca catalogadas. Marcada `read_structural`. Tratada como
 confirmação curta, não seção completa, conforme a nova política de
 não redocumentar famílias já confirmadas.
+
+## Segundo lote paralelo (seções 75–79): mais 5 funções lidas por forks simultâneos
+
+## 75. `Shop(int)` — passe estrutural parcial — a loja real do jogo, finalmente aberta (2026-10-17, Fase 3, lote paralelo)
+
+`Shop(int)` (`0x19e7b8`, 3.936 B) — citada desde a seção 12.2
+(`wld_shop` chama `Shop()` real, muda música, desativa o controlador
+de mapa), nunca aberta por dentro. Descida recursiva via `jtable.py`:
+**807 de ~984 instruções possíveis (82%)**, uma tabela de salto
+resolvida; **65 branches, 38 de retrocesso**.
+
+### Confirma o ciclo de vida completo da tela de loja, mas o corpo de compra/venda em si fica num bloco não alcançado
+
+Uma tabela de 24 casos (`cmp`/`addls pc,pc,r2,lsl#2` em `0x19f0f8`)
+colapsa em só **3 endereços distintos** (`0x19f168`, `0x19f5f0`,
+`0x19f160`) — uma máquina de estados com muitos casos "vazios"/
+redundantes, mesmo padrão já visto em `battle()` (seção 32) e outros
+switches desta investigação.
+
+`bl` catalogados confirmam infraestrutura real de tela (`SwapDB`/
+`DB_init` — mesmo sistema de buffer de primitivas PS1 da seção
+36/42/45; `FadeIn`; `WaitLoadImage`/`WaitStoreImage`/`WaitMoveImage`;
+`loadMusic`/`disposeMusic`/`activateMusic`; `mallocForFile`/
+`freeForFile`), navegação/toque (`iOS_SetRectHit`,
+`iOS_GetRectHitNoTap`, `iOSUnitListTapCheck`,
+`iOSUnitListAllStatusTapCheck`), e `worldmap_restart()` (mesma
+função de reinício do mapa já vista em `CardAccess`/`UnitList`,
+seções 42/56). **Surpresa honesta**: nenhuma chamada direta a
+`GetItemList`/`ItemEquip`/`pspItem*` apareceu nos 82% alcançados — a
+lógica real de comprar/vender item provavelmente vive dentro de um
+dos 3 blocos de handler da tabela (`0x19f168`/`0x19f5f0`/`0x19f160`)
+ou além deles, numa parte da função ainda não decodificada por esta
+passada. `bak_read(int, void*)` é um achado novo (provável leitura
+de dados de "backup"/save local da loja).
+
+**O que ficou sem confirmar**: os 18% restantes da função (onde a
+lógica de compra/venda de item deveria estar, dado que não apareceu
+nos 82% já lidos); os corpos dos 3 handlers da tabela de 24 casos.
+Marcada `read_structural` — cobertura parcial, não forçada.
+
+## 76. `iOS_RESUME_SET_EVENT(IOS_RESUME_DATA_EVENT*, IOS_RESUME_DATACOPY_MODE)` — passe estrutural — confirma o serializador real do sistema `iOS_Resume*`, campo a campo (2026-10-17, Fase 3, lote paralelo)
+
+`iOS_RESUME_SET_EVENT(...)` (`0xe62cc`, 4.448 B) — descida recursiva
+via `jtable.py`: **1.009 de ~1.112 instruções possíveis (91%)**, sem
+tabela de salto; só **2 branches, 0 de retrocesso** (função quase
+inteiramente linear/desenrolada, mesmo padrão de desenrolamento
+massivo já visto em `Main_Init`/`iOS_SetIconPosition`, seções
+64/71).
+
+### Confirma o primitivo real de cópia por trás de TODO o sistema `iOS_Resume*`
+
+Só **3 `bl` distintos** em toda a função:
+```
+iOS_Resume_DataCopy(IOS_RESUME_DATACOPY_MODE, unsigned char*, unsigned char*, int)   ×149
+iOS_Resume_DataCopyAddr(IOS_RESUME_DATACOPY_MODE, unsigned char*, unsigned char*, int) ×8
+iOS_getLastEventNo()                                                                     ×1
+```
+`iOS_Resume_DataCopy` sendo chamada **149 vezes** confirma que esta
+função é um **serializador campo a campo** de `IOS_RESUME_DATA_EVENT`:
+cada chamada passa `(modo, endereço_do_campo_na_struct,
+endereço_do_campo_no_buffer_global_de_resume, tamanho_do_campo)` —
+inspeção do início da função confirma: primeira chamada copia 4
+bytes do offset 0, segunda copia 4 bytes do offset 4, e assim por
+diante. **A direção (salvar vs. restaurar) é controlada pelo
+parâmetro `IOS_RESUME_DATACOPY_MODE`, passado direto pra
+`iOS_Resume_DataCopy`** — não há um `if`/`else` nesta função
+dividindo os dois casos; o primitivo compartilhado é que decide o
+que fazer com o modo. `iOS_Resume_DataCopyAddr` (8 chamadas, bem
+menos frequente) provavelmente trata os campos que são **ponteiros**
+(precisam de tratamento de endereço diferente dos campos de valor
+puro).
+
+Isto fecha a pergunta em aberto desde a seção 32/41 (`battle()`/
+`op_attackteam` citam `iOS_ResumeMusic`/`iOS_Resume_BGM`/
+`iOS_ResumeGetMode`/`iOS_Resume`/`iOS_ResumeByAutoSave`/
+`iOS_ResumeAfterAttackTeam`, nunca abertas): o sistema `iOS_Resume*`
+é um mecanismo real de **salvar/restaurar estado ao suspender e
+retomar o app** (clássico "process death" do Android — salvar
+estado antes de o sistema matar o processo em segundo plano,
+restaurar ao voltar), com um primitivo de cópia genérico e funções
+de "topo" especializadas por sistema (música, efeito ambiente, modo
+de batalha, auto-save, seleção de time de ataque) que devem seguir
+a MESMA estrutura campo-a-campo confirmada aqui.
+
+**O que ficou sem confirmar**: o layout exato de
+`IOS_RESUME_DATA_EVENT` (quantos campos, quais tamanhos — não
+enumerados um a um); o corpo de `iOS_Resume_DataCopy`/
+`iOS_Resume_DataCopyAddr` em si (não lidas); se as outras funções
+`iOS_Resume*` (música, batalha, etc.) seguem exatamente este mesmo
+padrão campo-a-campo — hipótese plausível, não confirmada. Marcada
+`read_structural`.
+
+## 77. `setskillresult(int)` — passe estrutural — a função real que aplica o resultado de uma habilidade/golpe em batalha (2026-10-17, Fase 3, lote paralelo)
+
+`setskillresult(int)` (`0x1cda4c`, 3.844 B) — nunca tocada antes
+nesta investigação. Descida recursiva via `jtable.py`: **948 de
+~961 instruções possíveis (99%)**, sem tabela de salto computada;
+**149 branches, 65 de retrocesso**.
+
+### Confirma ser o executor real de todos os efeitos colaterais de um golpe/habilidade
+
+27 `bl` resolvidos, quase todos nomes nunca vistos nesta
+investigação, todos girando em torno de `BWORK` (área de trabalho
+de batalha, seções 43/72):
+
+```
+clear_setstatus(A_RESULT*)              check_reaction_deny_all(BWORK*)
+bcp_roll(BWORK*)                            set_status_all(int, int)
+change_status_adjust(int)                  check_charge(BWORK*, int)
+clear_status_animation(BWORK*)             check_prob(int, int)
+adjust_equip_change(BWORK*)                levelup_one(BWORK*, int)
+levelup_check(BWORK*)                        get_unit_jl(BWORK*, int, int*)
+add_jobpointB(int, int, unsigned char, int)  inc_party_item(BWORK*, unsigned short, BWORK*)
+get_rival()                                    pspNetGetBattleModeFlag()
+pspItemGetCommonData / pspItemIsEmpty / pspItemIsBarehand
+```
+
+Isto confirma, com nomes reais, que `setskillresult` é literalmente
+a função que **aplica todas as consequências de um golpe/habilidade
+de batalha depois que ele acerta**:
+
+- **`A_RESULT*`** — tipo nunca visto, confirma uma struct real de
+  "resultado de habilidade" (provavelmente dano, status a aplicar,
+  flags de acerto/erro), consumida por `clear_setstatus`.
+- **`check_reaction_deny_all(BWORK*)`** — checagem de habilidade de
+  reação (ex.: "Auto-Potion"/"Counter" do FFT original) que pode
+  anular o efeito.
+- **`bcp_roll(BWORK*)`**/**`check_prob(int,int)`** — rolagens de
+  probabilidade reais (nome "bcp" não decifrado por etimologia,
+  tratado como está).
+- **`set_status_all(int,int)`**/**`clear_status_animation`** —
+  aplicação e limpeza de status alterado (poison, sleep, etc.).
+- **`levelup_one(BWORK*,int)`/`levelup_check(BWORK*)`** — confirma
+  que o **level-up de verdade pode acontecer como consequência
+  direta de uma habilidade** (ex.: ganhar EXP ao acertar um golpe),
+  nunca confirmado byte a byte antes — e a MESMA `levelup_one` já
+  reaparece como ação de cheat em `debug_chrmenu` (seção 79).
+- **`add_jobpointB(int,int,unsigned char,int)`**/**`get_unit_jl`** —
+  confirma o ganho real de **JP (job points)**, ligando a esta
+  função o mecanismo central de progressão de habilidade do FFT
+  (sistema de job, seções 57/61).
+- **`inc_party_item`**/`pspItemGetCommonData`/`pspItemIsEmpty`/
+  `pspItemIsBarehand` — ganho de item (ex.: roubo, item largado por
+  inimigo).
+- **`adjust_equip_change(BWORK*)`** — ajuste de equipamento como
+  efeito de habilidade (ex.: quebrar arma/armadura).
+- `pspNetGetBattleModeFlag()` — mais uma aparição do sistema de
+  batalha em rede (seções 41/43/63/72).
+- `get_rival()` — nome sugere "unidade rival"; papel exato não
+  confirmado.
+- 7 funções locais sem símbolo (`sub_1c7934` ×6, `sub_1cc784`/
+  `sub_1cc848` ×6 cada — provavelmente getters/setters de campo de
+  `A_RESULT`/`BWORK`).
+
+**O que ficou sem confirmar**: os corpos da cascata de 149 branches
+(65 de retrocesso) — qual efeito é aplicado em qual ordem/condição
+não foi mapeado; o layout de `A_RESULT`; o papel exato de
+`get_rival`/`bcp_roll`. Marcada `read_structural`.
+
+## 78. `disp_helpmenu()`/`Wdisp_helpmenu()` — passe estrutural — revela um sistema de mensagens LZW nunca visto, e confirma que os DOIS padrões de duplicação por letra coexistem (2026-10-17, Fase 3, lote paralelo)
+
+`disp_helpmenu()` (`0x1255e0`, 4.628 B) — descida recursiva via
+`jtable.py`: **1.114 de ~1.157 instruções possíveis (96%)**, sem
+tabela de salto; **93 branches, 42 de retrocesso**.
+
+### Confirma o padrão "entrada fina reusando helpers compartilhados" — igual a `disp_bothwindow` (seção 73), diferente de `disp_personalwindow`
+
+`disp_helpmenu` chama `addlocalprim`/`initpolyft4` nos MESMOS
+endereços sem prefixo já vistos em `disp_personalwindow`/
+`disp_bothwindow` (seções 46/73) — não tem cópia própria dos
+helpers de desenho. Família de task é `asm` (`asmGetInput1`/
+`asmGetInput3`), consistente com o padrão "sem prefixo de tela =
+task sem `w`".
+
+### Achado novo: sistema de mensagens LZW nunca catalogado
+
+**`pspMsgLzwBaseGet(FFTPSP_MSG_LZW)`** — confirma que (pelo menos
+parte d)o texto de ajuda do jogo é armazenado **compactado via LZW**
+(Lempel-Ziv-Welch), um formato de compressão nunca mencionado nesta
+investigação (distinto do `CCOMP_Z_*`/zlib já documentado nas seções
+18/18.1/31/69). Outros achados: `get_cursoroffset(int)`,
+`import_localstatus`, `checktaskkind` (×4), `iOS_hookHelp(int*)` —
+ponto de integração com o sistema de ajuda contextual da UI
+(`iOS_*`) — e mais uma aparição de `pspNetGetBattleModeFlag()`
+(seções 41/43/63/72).
+
+### `Wdisp_helpmenu()` — checagem oportunista: aqui `W` É uma cópia real (padrão diferente de `disp_bothwindow`)
+
+`Wdisp_helpmenu()` (`0x127360`, 4.808 B, 96% de cobertura, sem
+tabela de salto) tem sua PRÓPRIA cópia `W`-prefixada de TODOS os
+helpers (`Waddlocalprim`, `Winitpolyft4`, `Wimport_localstatus`,
+`Wget_cursoroffset`, `Wchecktaskkind`, `Wtask_wait`/`Wtask_create`/
+`Wsend_taskparamater`) — e usa a família de task `wasm`
+(`wasmGetInput1`/`wasmGetInput3`), não `asm`. **Confirma que os dois
+padrões de duplicação por letra (cópia real vs. entrada fina)
+coexistem em famílias diferentes do mesmo binário** — `disp_helpmenu`
+segue o padrão "entrada fina" (como `disp_bothwindow`, seção 73),
+enquanto `Wdisp_helpmenu` segue o padrão "cópia real correlacionada
+com `wasm`" (como `Wdisp_personalwindow`, seção 47). `pspMsgLzwBaseGet`
+é chamada SEM prefixo mesmo dentro de `Wdisp_helpmenu` — confirma que
+funções de acesso a dado (não helpers de desenho) são sempre
+compartilhadas, independente da letra.
+
+**O que ficou sem confirmar**: os corpos da cascata de branches em
+ambas; o formato exato do LZW de mensagem. Marcadas `read_structural`
+(`disp_helpmenu` e `Wdisp_helpmenu`).
+
+## 79. `debug_chrmenu()` — passe estrutural — menu de debug real para batalha, com "level up" direto (2026-10-17, Fase 3, lote paralelo)
+
+`debug_chrmenu()` (`0xd1ab0`, 4.244 B) — nunca tocada. Descida
+recursiva via `jtable.py`: **1.001 de ~1.061 instruções possíveis
+(94%)**, sem tabela de salto; **54 branches, 29 de retrocesso**.
+
+### Confirma ser um menu de debug real, com ação de "subir nível" direta numa unidade
+
+```
+get_bwp(int)                    — pega o ponteiro de área de trabalho de batalha (seção 43)
+search_controlID(int, int*)     — já visto na seção 43 (requireprinf)
+levelup_one(BWORK*, int)        — a MESMA função confirmada em setskillresult (seção 77)
+task_create/task_wait/send_taskparamater/asmTaskEntry  — a própria tela roda como task
+```
+`levelup_one(BWORK*, int)` é o achado central: confirma uma ação
+real de debug/cheat que força o level-up de uma unidade de batalha
+específica, operando direto sobre a estrutura `BWORK` — a MESMA
+função que `setskillresult` (seção 77) chama como consequência
+normal de uso de habilidade, agora confirmada como também acessível
+via um menu de debug direto (bypass do fluxo normal de jogo). A
+função itera sobre um conjunto de unidades (loop com `r4`
+incrementando, chamando `get_bwp(r4)` por unidade), escrevendo flags
+byte a byte num buffer de controle — consistente com uma tela que
+lista as unidades em campo e permite escolher uma pra aplicar a ação
+de debug. A própria tela é implementada como task cooperativa (mesmo
+padrão já visto em telas de evento, seções 41/61), reforçando que o
+sistema de task é usado para UI em geral, não só diálogo.
+
+**O que ficou sem confirmar**: os corpos das 4 funções locais sem
+símbolo (`sub_cc794`, `sub_cc950` ×8, `sub_ccbc8` ×10 — as mais
+chamadas, prováveis getters/setters de campo de debug ou de desenho
+de texto do menu); se existem outras ações de debug além de "level
+up". Marcada `read_structural`.

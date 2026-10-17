@@ -49,25 +49,25 @@ address,size,mangled,demangled,status,section_ref
 00213e78,4976,_Z17executeChangeClutv,executeChangeClut(),read_structural,NOTES §70
 000759e8,4872,deflate,deflate,read_full,NOTES §69
 0022ae34,4868,_Z7Mdl0001siii,"Mdl0001(short, int, int, int)",unread,
-00127360,4808,_Z14Wdisp_helpmenuv,Wdisp_helpmenu(),unread,
+00127360,4808,_Z14Wdisp_helpmenuv,Wdisp_helpmenu(),read_structural,NOTES §78 (checagem oportunista)
 0023c79c,4792,_Z7Mdl0017siii,"Mdl0017(short, int, int, int)",unread,
 0014935c,4780,_Z16Cdisp_bothwindowv,Cdisp_bothwindow(),read_structural,NOTES §73
 0013f1dc,4728,_Z19battle_scrollwindowv,battle_scrollwindow(),read_structural,NOTES §74
 002406d4,4700,_Z7Mdl0028siii,"Mdl0028(short, int, int, int)",unread,
 000794ec,4660,inflateBack,inflateBack,read_full,NOTES §69
-001255e0,4628,_Z13disp_helpmenuv,disp_helpmenu(),unread,
+001255e0,4628,_Z13disp_helpmenuv,disp_helpmenu(),read_structural,NOTES §78
 001da9e4,4540,_Z17set_monsterwork_jP5BWORKP5EDATAii,"set_monsterwork_j(BWORK*, EDATA*, int, int)",read_structural,NOTES §72
-000e62cc,4448,_Z20iOS_RESUME_SET_EVENTP21IOS_RESUME_DATA_EVENT24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_EVENT(IOS_RESUME_DATA_EVENT*, IOS_RESUME_DATACOPY_MODE)",unread,
+000e62cc,4448,_Z20iOS_RESUME_SET_EVENTP21IOS_RESUME_DATA_EVENT24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_EVENT(IOS_RESUME_DATA_EVENT*, IOS_RESUME_DATACOPY_MODE)",read_structural,NOTES §76
 000c1e20,4260,_Z16Adisp_bothwindowv,Adisp_bothwindow(),unread,
-000d1ab0,4244,_Z13debug_chrmenuv,debug_chrmenu(),unread,
+000d1ab0,4244,_Z13debug_chrmenuv,debug_chrmenu(),read_structural,NOTES §79
 0012b12c,4196,_Z15disp_bothwindowv,disp_bothwindow(),read_structural,NOTES §73
 000cd5e8,4128,_Z16Ddisp_bothwindowv,Ddisp_bothwindow(),unread,
 00216e5c,4004,_Z22iOS_RESUME_SET_WORK_MUP23IOS_RESUME_DATA_WORK_MU24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_WORK_MU(IOS_RESUME_DATA_WORK_MU*, IOS_RESUME_DATACOPY_MODE)",unread,
 0013d248,3996,_Z11disp_optioni,disp_option(int),unread,
-0019e7b8,3936,_Z4Shopi,Shop(int),mentioned_unverified,
+0019e7b8,3936,_Z4Shopi,Shop(int),read_structural,"NOTES §75 (parcial, 82%)"
 001f1680,3924,_Z12executeShapeP13tag_animation,executeShape(tag_animation*),unread,
 001156f4,3880,_Z13Wdisp_statuscv,Wdisp_statusc(),unread,
-001cda4c,3844,_Z14setskillresulti,setskillresult(int),mentioned_unverified,
+001cda4c,3844,_Z14setskillresulti,setskillresult(int),read_structural,NOTES §77
 000ef83c,3828,_Z12disp_statuscv,disp_statusc(),unread,
 001431c4,3828,_Z12Wdisp_optioni,Wdisp_option(int),unread,
 00221f64,3816,_Z17dispPolygonObjectP7SVECTORP6VECTORS0_S2_i,"dispPolygonObject(SVECTOR*, VECTOR*, SVECTOR*, VECTOR*, int)",unread,
