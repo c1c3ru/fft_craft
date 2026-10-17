@@ -5460,3 +5460,41 @@ binário.
 **O que ficou sem confirmar**: os corpos da cascata de 128 branches
 (70 de retrocesso); as 4 variantes restantes (`A`/`C`/`D`/`E`).
 Marcada `read_structural`.
+
+## 48. `Mdl0024` — passe estrutural — primeira da família `Mdl*`, fecha o ciclo com ASHURA e o gerador de partículas (2026-10-17, Fase 3)
+
+`Mdl0024(short, int, int, int)` (`0x23e29c`, 8.616 B) — primeira
+leitura da família `Mdl0001`–`Mdl0028`+ (pelo menos 11 símbolos
+vistos no inventário: `Mdl0001`–`Mdl0004`, `Mdl0007`, `Mdl0009`,
+`Mdl0010`, `Mdl0013`, `Mdl0015`, `Mdl0017`, `Mdl0024`, `Mdl0028`).
+Mesmo tratamento das seções 32–47. Descida recursiva: **2.142 de
+~2.154 instruções possíveis (99,4%)**, sem tabela de salto
+computada. Catálogo de `bl` minúsculo (15 distintos) — função
+dominada por matemática 3D, não orquestração.
+
+### Fecha o ciclo com dois sistemas já documentados
+
+```
+ASHURA_getOTptrZ(int)                        — motor 3D "ASHURA" (seção 38)
+getVariationData / getVariationAppearPosition  — gerador de partículas (seção 44)
+GetAnimationPosition / getOffsetAnimationPosition
+rsin / rcos / SetRotMatrix / SetTransMatrix / RotTrans   — GTE real (seções 38/44)
+AddPrim / SetPolyGT4
+Malloc(unsigned long, long) / Free(void*)
+```
+Confirma, com instrução real, que a família `Mdl*` é o conjunto de
+**rotinas de desenho de efeito/animação numeradas individualmente**
+(uma por modelo de efeito — provavelmente golpes/magias específicas
+do jogo), construídas diretamente sobre o motor `ASHURA` (seção 38)
+e o gerador de variação de partículas (`CreateObjectWithTable`,
+seção 44) — não um sistema à parte, é o **consumidor direto** dos
+dois. `Malloc`/`Free` (sem prefixo `xp`) confirmam alocação dinâmica
+real dentro da própria rotina de efeito, não só buffers estáticos.
+
+**O que ficou sem confirmar**: os corpos da cascata de 47 branches
+(19 de retrocesso); e por que especificamente o modelo `24` (qual
+efeito de jogo corresponde a este número) — nenhuma tabela de nomes
+encontrada ainda. As outras ~10 funções `Mdl*` já catalogadas por
+nome continuam não lidas; dado que compartilham a mesma arquitetura,
+uma leitura futura pode ser mais rápida por comparação direta (como
+já feito pras famílias `W`/`e`/`c`/`b`). Marcada `read_structural`.

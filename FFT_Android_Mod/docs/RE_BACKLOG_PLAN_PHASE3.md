@@ -138,7 +138,7 @@ não duplicar 6.455 linhas neste arquivo:
 | `0x225ac8` | 10724 | `CreateObjectWithTable(short,int,int,_Object*)` | ✅ passe estrutural feito (§44, 2026-10-17): confirma ser o gerador de partículas/efeitos variados (`_ParticleParameter*`, `getVariationData`), 99,7% de cobertura. `ps_rand()` chamada 103×, a maior contagem de toda a investigação. |
 | `0x16fc90` | 10448 | `BattleCardAccess(int)` | ✅ passe estrutural feito (§45, 2026-10-17): confirma a tela de save/load acessível DE DENTRO da batalha, quarta cópia paralela (prefixo `c`) do padrão das seções 36/40/42. Revela `CARD_HEADER` (formato real de cabeçalho de save) e mais funções `pspSaveData*`. |
 | `0x128ed4` | 8756 | `disp_personalwindow()` | ✅ passe estrutural feito (§46, 2026-10-17): confirma a janela de status pessoal real, com texto kanji (`statuskanjiprint`) e sombreamento PS1 real (`SetShadeTex`, nunca visto). Desenha via primitivas soltas, um 4º caminho de desenho distinto de `GsOT`/`CEGL2_*`/`DB`. Variantes `A/C/D/E/W` ainda não lidas. |
-| `0x23e29c` | 8616 | `Mdl0024(short,int,int,int)` | handler de modelo/animação por unidade (há uma família `Mdl0001`–`Mdl0028`+) |
+| `0x23e29c` | 8616 | `Mdl0024(short,int,int,int)` | ✅ passe estrutural feito (§48, 2026-10-17): confirma que a família `Mdl*` é o conjunto de rotinas de desenho de efeito/animação numeradas, construídas direto sobre `ASHURA` (§38) e o gerador de partículas (§44) — fecha o ciclo entre os dois. 99,4% de cobertura. |
 | `0x1b2ea8` | 6216 | `JobChange()` | troca de classe/job |
 | `0x1a486c` | 6908 | `AbilityMenu()` | menu de habilidades |
 | `0x1bde2c` | 6976 | `UnitTable(...)` | tabela de unidades |
