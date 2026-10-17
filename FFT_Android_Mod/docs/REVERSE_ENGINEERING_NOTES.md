@@ -5864,3 +5864,41 @@ recompensa" com evidência real em pelo menos 3 funções diferentes.
 
 **O que ficou sem confirmar**: 28% da função (corpos de blocos ainda
 não alcançados). Marcada `read_structural`.
+
+## 64. `Main_Init()` — passe estrutural — completa o trio principal do jogo, e o maior número de chamadas a uma única função de toda a investigação (2026-10-17, Fase 3)
+
+`Main_Init()` (`0x2bf3e8`, 5.832 B) — a inicialização principal do
+jogo, completando o trio com `Main_FrameMove`/`Main_FrameRender`
+(seções 34/35). Descida recursiva: **1.428 de ~1.458 instruções
+possíveis (98%)**, sem tabela de salto; só **25 branches** (função
+quase linear — inicialização sequencial, não um laço).
+
+### Achado numérico: `iOS_setV2Icon` chamada 230 vezes — recorde absoluto
+
+Mais que o triplo do recorde anterior (`Main_FrameMove`, 50×, seção
+35). Confirma que `Main_Init` zera/configura o estado inicial de
+**centenas de ícones de UI individualmente**, um por um — o sistema
+`iOS_*V2Icon` (visto em quase toda função de UI desta investigação)
+é, de fato, uma tabela de estado central enorme, inicializada
+exaustivamente no boot.
+
+### Confirma a inicialização real de vários sistemas já documentados
+
+```
+CGX_SCREEN_CORRECT::Init/Area_InitLandscape    (seção 34 — correção de tela, agora com o ponto de init real)
+CINPUT_IF_TOUCH::ClearAll()                       (sistema de toque, seção 20/26/35)
+CRECT::Register/SetRect/SetDrawRect/SetEnable/MulRect/Clear  (sistema de hit-rect, usado em dezenas de telas)
+CTHREAD::Register(...)                              (thread real spawnada no boot, seção 28)
+initSaveFFT(char*, char*, bool)                      (caminhos do sistema de save, seções 42/45)
+CFFT_STATE::SetMode/SetDebugMode/SetMoviePlaying/SetSettingsEnable/SetLinkEnable/SetParam  (hub de estado global)
+```
+Confirma `Main_Init` como o ponto real de boot de praticamente todo
+sistema já documentado nesta investigação — fecha, de forma
+concreta, "quem inicializa" pra vários "o que faz" já catalogados.
+
+**Achado bônus**: `Debug_SetDebugDirectBtn(int)`/
+`Debug_SetMapPolyCheck(int)` — flags de depuração reais, ativáveis
+no boot, remanescentes de build de desenvolvimento.
+
+**O que ficou sem confirmar**: os ~2% não alcançados (muito pouco,
+função quase inteiramente linear). Marcada `read_structural`.
