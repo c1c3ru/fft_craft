@@ -5118,12 +5118,22 @@ todas com entradas distintas), extraídas à mão:
 
 ```
 T1 (0xc5880, base: iOS_getV2Icon(0x37)-1, 5 casos):
-  0xc58bc  0xc5c14  0xc5b68  0xc5c54  0xc5bc4
+  0xc5c14  0xc5b68  0xc5c54  0xc5bc4  0xc589c
 T2 (0xc5fb4, base: iOS_GetRectHitNoSlide()+1, 4 casos):
-  0xc6a94  0xc6bc4  0xc6bb4  0xc6b4c
+  0xc6bc4  0xc6bb4  0xc6b4c  0xc6a94
 T3 (0xc67d4, base: campo local sp+0x18, 4 casos):
-  0xc5944  0xc6dfc  0xc6de8  0xc6dd4
+  0xc6dfc  0xc6de8  0xc6dd4  0xc6dc0
 ```
+**Correção (2026-10-17, mesma sessão, após validar a ferramenta
+`jtable.py` contra `battle()`)**: os três endereços acima substituem
+os publicados na primeira passada desta seção — a extração manual
+original usava `endereço_do_addls + 4` como início da tabela; o
+correto é `+ 8` (regra do pipeline ARM: `PC` no momento da execução
+do `addls` já vale `endereço+8`). O erro deslocava a tabela em uma
+posição, fazendo o endereço do caso "else"/default (o `b` que vem
+logo depois do `addls`, fora da tabela) aparecer como se fosse o
+primeiro caso, e perdendo o último caso real. Achado qualitativo
+(3 tabelas pequenas, contagens de caso) não muda.
 
 ### 41.1 Confirma o nome: monta o time de ataque antes da batalha, com suporte real a batalha em rede
 
@@ -5838,11 +5848,12 @@ inteiro sem precisar enumerar as 104 repetições individualmente.
 ## 63. `resultproc()` — passe estrutural — a tela de resultado de batalha, com recompensa/JP/dinheiro e julgamento de rede (2026-10-17, Fase 3)
 
 `resultproc()` (`0x14ec70`, 6.156 B) — descida recursiva simples
-alcançou só 946 instruções; uma tabela de salto (5 casos, todos
-distintos) extraída e usada como semente eleva a cobertura pra
-**1.111 de ~1.539 instruções possíveis (72%)** — resultado parcial
-honesto, sem tabela adicional detectada nos 72% alcançados; **68
-branches, 37 de retrocesso**.
+alcançou só 946 instruções; **duas** tabelas de salto (5 e 6 casos,
+todos distintos nas duas) extraídas com `jtable.py` (ferramenta
+validada contra `battle()`, seção 32 — a segunda tabela não tinha
+sido encontrada na extração manual original desta seção) e usadas
+como semente elevam a cobertura pra **1.461 de ~1.539 instruções
+possíveis (95%)**; **91 branches, 50 de retrocesso**.
 
 ### Confirma a tela de resultado pós-batalha, com recompensas reais
 
@@ -5852,7 +5863,7 @@ getGetItemCount() / get_itemcommon(unsigned short) / get_item_number(unsigned sh
 getRewardLv() / CalcRewardLv() / Final_CalcMissionPayPoint()
 setBattlePoint(int) / getBattlePoint()
 pspNetGetBattleModeFlag() / pspNetJudgeBattlePoint() / pspNetGetLimitAction()
-GetNetmissionNo()
+GetNetmissionNo()                    callZingle(int)  /  callSoundEffect(int)
 ```
 Confirma que a tela de fim de batalha calcula e aplica **dinheiro,
 nível de recompensa e pontos de missão pagos** de verdade — e,
@@ -5861,9 +5872,12 @@ batalha em rede** (`pspNetJudgeBattlePoint`/`GetNetmissionNo`) bem
 aqui na tela de resultado, não só na configuração — confirma o ciclo
 completo "configurar batalha em rede → julgar resultado → mostrar
 recompensa" com evidência real em pelo menos 3 funções diferentes.
+`callZingle(int)` é um achado novo — mesmo nome de "Zingle" citado
+por `controlZingle` no catálogo de `battle()` (seção 32), provável
+cue de som/efeito sonoro específico (ex.: fanfarra de vitória).
 
-**O que ficou sem confirmar**: 28% da função (corpos de blocos ainda
-não alcançados). Marcada `read_structural`.
+**O que ficou sem confirmar**: os ~5% restantes da função. Marcada
+`read_structural`.
 
 ## 64. `Main_Init()` — passe estrutural — completa o trio principal do jogo, e o maior número de chamadas a uma única função de toda a investigação (2026-10-17, Fase 3)
 
@@ -6010,9 +6024,11 @@ direta) dentro do contexto de batalha. Marcada `read_structural`.
 `ASHURA_set_Mesh(int, int)` (`0x163ccc`, 5.160 B) — mais uma função
 do motor `ASHURA` (seção 38). A descida recursiva simples só
 alcançou 15 instruções por uma tabela de salto logo no início
-(`addls pc,pc,r0,lsl#2`, `cmp r0,#8` → 9 casos). Extraída à mão e
-usada como semente, a cobertura sube pra **1.007 de ~1.290
-instruções possíveis (78%)**; **50 instruções tipo branch**.
+(`addls pc,pc,r0,lsl#2`, `cmp r0,#8` → 9 casos). Extraída com a
+ferramenta validada `jtable.py` (ver nota de correção abaixo) e
+usada como semente, a cobertura sube pra **1.240 de ~1.290
+instruções possíveis (96%)**; 66 instruções tipo branch, 21 de
+retrocesso.
 
 Só **2 `bl` em toda a função**: `ASHURA_LightSwitch(long)` e
 `requestChangeClut(...)` — confirma que `ASHURA_set_Mesh` é, na
@@ -6021,4 +6037,12 @@ campos de configuração de malha/matriz diretamente (inline), e só
 ocasionalmente chama fora pra trocar iluminação ou paleta de
 textura. Os 9 casos provavelmente correspondem a 9 "tipos de malha"
 pré-definidos (formas de unidade/efeito 3D distintas — hipótese, não
-confirmada byte a byte em cada caso). Marcada `read_structural`.
+confirmada byte a byte em cada caso).
+
+**Correção (2026-10-17, mesma sessão)**: a primeira extração manual
+da tabela desta função usava `endereço_do_addls + 4` como início da
+tabela em vez de `+ 8` (erro de offset, achado e corrigido depois de
+validar `jtable.py` contra o resultado já confirmado de `battle()`,
+seção 32) — a cobertura e a contagem de branches acima já refletem a
+extração correta; o achado qualitativo (9 casos, só 2 `bl`, orientado
+a dados) não muda. Marcada `read_structural`.
