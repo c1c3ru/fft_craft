@@ -4976,3 +4976,78 @@ de retrocesso), a semântica exata de `GLIVON_*`, e o papel preciso de
 `ASHURA_FALL`/`ASURA_LMDL_TIME_TBL`. Marcada `read_structural`. As
 outras funções `ASHURA_*` já catalogadas por nome (`init`, `matrix`,
 `getOTptrZ`, `clearOT`, `Exit` — seção 32.3) continuam não lidas.
+
+## 39. `ItemMenu()` — passe estrutural — revela o sistema real de itens/equipamento e uma biblioteca completa de widgets de janela (2026-10-17, Fase 3)
+
+`ItemMenu()` (`0x1aeda0`, 13.764 B) — mesmo tratamento das seções
+32–38, com uma ressalva de honestidade: a descida recursiva simples
+só alcançou **313 de ~3.441 instruções (9%)** por causa de uma
+tabela de salto computada logo no início (`addls pc,pc,r3,lsl#2` em
+`0x1aeed0`, 4 casos). Tentei automatizar a extração de tabelas em
+cascata (`struct_pass2.py`, novo) e ela **gerou 3 falsos positivos**
+(endereços que não eram tabelas de verdade — ficam registrados como
+lição, não como achado). Extraindo só a tabela real à mão (4 casos:
+`0x1af7f4`/`0x1af310`/`0x1aefdc`/`0x1af364`, todos distintos) e
+semeando a descida recursiva com eles, a cobertura sobe pra **3.269
+de 3.441 (95%)** — o resto do passe usa esse número.
+
+### 39.1 Achado maior: o sistema real de itens/equipamento, nunca catalogado byte a byte
+
+```
+GetItemParameter(short, A_STTS*, C_STTS*, int)   GetItemList(short, short, signed char, short*, unsigned short, unsigned char)
+GetTotalEquipItem(short) / GetTotalItem(short)     ItemEquip(short, short, short) / ItemChg(short, int)
+Equip() / AutoEquip()                                 ChrPowerCompare(C_STTS*, A_STTS*, short*, short*)
+GetSortCondition/SetSortCondition(int, short*)        SetItemUserSort / RefleshItemUserSort(int)
+pspItemGetCommonData / pspItemGetEquipBonus / pspItemIsBarehand / pspItemGetWeaponData / pspItemIsType
+```
+Confirma, com nomes reais, toda a cadeia "ver lista de itens → trocar
+equipamento → comparar poder antes/depois → auto-equipar" — e a
+camada `psp*` (já vista em `wldpad_read`/`CAUTOSAVE`/`pspWorldCheckFlg`,
+seções 12.2/19.1/12.12) tem sua própria API de **dados de item**
+(`pspItemGetCommonData`/`pspItemIsBarehand`/`pspItemGetWeaponData`/
+`pspItemIsType`), nunca catalogada antes.
+
+### 39.2 Achado maior: biblioteca de widgets de janela/menu completa, compartilhada
+
+Dezenas de funções de UI genérica (não específicas de item), que
+provavelmente sustentam MUITOS menus do jogo, não só este:
+```
+WindowInit/WindowInit2 / ScrollWindowInit / CursolFunc
+SetMenuSelVertical/SetMenuSelSide (+ "WithSnd"/"WithSndDirect")
+SetBitStream/SetBitStream2 / GetBitStream/GetBitStream2
+SetWindowPosition/GetWindowPosition / SetWindowCount/GetWindowCount
+DrawWindow2 / WindowPrioritySet / WindowDel / WindowPositionInit
+```
+`SetBitStream`/`GetBitStream` (e as variantes `2`) são achado novo —
+sugerem que o estado de seleção de menu é empacotado/lido via um
+stream de bits genérico, não campos soltos.
+
+### 39.3 `iOS_CMenuTouch` — superfície mais completa vista até aqui
+
+Além de `init`/`exec`/`setYLine`/`setDispAssist` (já conhecidas das
+seções 33/37), aparecem `setDispOffset`, `setDisableHeightAdjust`,
+`drawMenuAssist`, `setLRCurEffect`, `isTaped` — confirma que esta
+classe C++ de menu por toque é bem mais rica do que as leituras
+anteriores sugeriam.
+
+### 39.4 Outros achados
+
+- **Família de tasks `W*`** (`Wtask_create`/`Wtask_start`/
+  `Wtask_stop`/`Wtask_status`/`Wsend_taskparamater`) — confirma que
+  `ItemMenu` usa especificamente a variante **`W`** do sistema de
+  tasks (seções 33/37), não a variante sem prefixo.
+- `DrawFT4RGB` chamada 11 vezes — desenho 2D pesado, mesma família já
+  vista em `BattleUnitList` (seção 36, lá como `bDrawFT4RGB`) —
+  reforça que o prefixo `b` daquela seção é específico de batalha, e
+  este menu usa a versão sem prefixo (mundo/geral).
+- 1 chamada local sem símbolo relevante (as demais ~dezenas de
+  `sub_*` detectadas na tentativa de auto-extração de tabela foram
+  descartadas junto com os falsos positivos — não confiáveis).
+
+**O que ficou sem confirmar (nível "passe estrutural" intencional)**:
+os corpos dos 4 casos da tabela real e do resto da cascata de 249
+branches. Verificação extra confirmou que **não há mais nenhuma
+tabela de salto computada real** nos 95% alcançados — as 3 "tabelas"
+que a tentativa automatizada (`struct_pass2.py`) achou eram falso
+positivo do detector, não trabalho pendente real. Marcada
+`read_structural`.

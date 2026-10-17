@@ -104,6 +104,13 @@ desta sessão:
   de despejar cada instrução) — usar nas próximas funções grandes
   (`Wmesputmain`, `Main_FrameRender`, `Main_FrameMove`, etc.) antes de
   decidir se vale a leitura linha-a-linha completa.
+- **Atualização (2026-10-17, `ItemMenu`, §39)**: existe uma tentativa
+  `struct_pass2.py` de auto-resolver tabelas de salto em cascata —
+  **não confiar nela sem verificar**; em `ItemMenu` ela gerou 3 falsos
+  positivos (endereços que não eram tabelas de verdade). Pra tabelas
+  de salto, continuar extraindo à mão (achar o `cmp`/`addls`, calcular
+  `instr+8+offset`, decodificar os words como `b`) e só então semear
+  a descida recursiva com os alvos reais — é mais lento mas confiável.
 
 Trabalho pendente de maior valor identificado: os **70 handlers de
 estado do switch de `battle()`** (endereços na seção 32.2 do
@@ -122,7 +129,7 @@ não duplicar 6.455 linhas neste arquivo:
 | `0x17c27c` | 15920 | `BattleUnitList(uchar*, ulong*)` | ✅ passe estrutural feito (§36, 2026-10-17): revela uma família `b*` inteira (~30 funções) de primitivas de desenho PS1 dedicada à UI 2D de batalha (`bDB_init`/`bSwapDB` = um 3º sistema de buffer, além de `GsOT` e `CEGL2_*`), com semi-transparência real confirmada. 3 tabelas de salto (toque) extraídas. Corpos não lidos. |
 | `0xe88c4` | 15744 | `mesputmain()` | ✅ passe estrutural feito (§37, 2026-10-17): confirma que `W*`/sem-prefixo são duas variantes paralelas do MESMO sistema (quase 1:1 função por função — hipótese: texto largo/Shift-JIS vs. 1 byte), não dois sistemas diferentes. Generaliza provavelmente pra família `disp_personalwindow`. |
 | `0x16a6a4` | 15412 | `ASHURA_addPrim(MATRIX*)` | ✅ passe estrutural feito (§38, 2026-10-17): confirma pilha de matrizes GTE real (`PushMatrix`/`PopMatrix`), iluminação real (`SetLightMatrix`), ray-picking (`RayPick_GT4/GT3`) e uso pesado de `ps_rand` (29×, partículas/efeitos). Corpos não lidos. |
-| `0x1aeda0` | 13764 | `ItemMenu()` | menu de itens |
+| `0x1aeda0` | 13764 | `ItemMenu()` | ✅ passe estrutural feito (§39, 2026-10-17): revela o sistema real de itens/equipamento (`GetItemList`/`ItemEquip`/`AutoEquip`/`ChrPowerCompare`) e uma biblioteca completa de widgets de janela/menu (`WindowInit`/`SetBitStream`/`SetMenuSelVertical`), compartilhada. 1 tabela de salto real extraída. |
 | `0x2bbb74` | 13272 | `Main_FrameMove()` | ✅ passe estrutural feito (§35, 2026-10-17): 2 switches de estado aninhados (9 casos externo, 43 interno) extraídos por completo; catálogo de 116 chamadas, maior desta fase — API de polling de toque completa, chamadas de plataforma Android diretas. Corpos dos 7+32 casos não lidos. |
 | `0x18aeec` | 12580 | `eItemMenu()` | variante de `ItemMenu` |
 | `0xc5148` | 12272 | `op_attackteam()` | opcode de bytecode (time de ataque) |
