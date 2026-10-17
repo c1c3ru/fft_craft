@@ -5834,3 +5834,33 @@ pra resolver os símbolos em tempo de execução) — zero lógica
 específica do jogo. Marcada `read_full` (não `read_structural`): não
 há mais profundidade a extrair, o padrão já confirma o conteúdo
 inteiro sem precisar enumerar as 104 repetições individualmente.
+
+## 63. `resultproc()` — passe estrutural — a tela de resultado de batalha, com recompensa/JP/dinheiro e julgamento de rede (2026-10-17, Fase 3)
+
+`resultproc()` (`0x14ec70`, 6.156 B) — descida recursiva simples
+alcançou só 946 instruções; uma tabela de salto (5 casos, todos
+distintos) extraída e usada como semente eleva a cobertura pra
+**1.111 de ~1.539 instruções possíveis (72%)** — resultado parcial
+honesto, sem tabela adicional detectada nos 72% alcançados; **68
+branches, 37 de retrocesso**.
+
+### Confirma a tela de resultado pós-batalha, com recompensas reais
+
+```
+ChgMoney(int)                        — dinheiro ganho na batalha
+getGetItemCount() / get_itemcommon(unsigned short) / get_item_number(unsigned short,int)
+getRewardLv() / CalcRewardLv() / Final_CalcMissionPayPoint()
+setBattlePoint(int) / getBattlePoint()
+pspNetGetBattleModeFlag() / pspNetJudgeBattlePoint() / pspNetGetLimitAction()
+GetNetmissionNo()
+```
+Confirma que a tela de fim de batalha calcula e aplica **dinheiro,
+nível de recompensa e pontos de missão pagos** de verdade — e,
+reforçando as seções 41/43, consulta de novo o **julgamento de
+batalha em rede** (`pspNetJudgeBattlePoint`/`GetNetmissionNo`) bem
+aqui na tela de resultado, não só na configuração — confirma o ciclo
+completo "configurar batalha em rede → julgar resultado → mostrar
+recompensa" com evidência real em pelo menos 3 funções diferentes.
+
+**O que ficou sem confirmar**: 28% da função (corpos de blocos ainda
+não alcançados). Marcada `read_structural`.

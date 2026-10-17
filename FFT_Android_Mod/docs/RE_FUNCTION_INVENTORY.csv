@@ -36,7 +36,7 @@ address,size,mangled,demangled,status,section_ref
 001314a8,6228,_Z22Wdisp_floateventwindowv,Wdisp_floateventwindow(),read_structural,NOTES §60
 001b2ea8,6216,_Z9JobChangev,JobChange(),read_structural,NOTES §61
 000b1cdc,6204,gl3stubInit,gl3stubInit,read_full,NOTES §62
-0014ec70,6156,_Z10resultprocv,resultproc(),unread,
+0014ec70,6156,_Z10resultprocv,resultproc(),read_structural,"NOTES §63 (parcial, 72%)"
 00274764,5848,_Z13BattleRoutineiP13ActionRequest,"BattleRoutine(int, ActionRequest*)",read_full,AI §18; AI §20
 002bf3e8,5832,_Z9Main_Initv,Main_Init(),unread,
 000afb30,5576,_ZN7CCAMERA6UpdateEv,CCAMERA::Update(),mentioned_unverified,
