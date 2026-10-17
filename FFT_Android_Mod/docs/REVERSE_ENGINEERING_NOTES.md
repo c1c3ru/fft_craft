@@ -5169,3 +5169,65 @@ os corpos dos 13 casos das 3 tabelas e do resto da cascata de 294
 branches (160 de retrocesso); e o papel exato de `changeflame`
 (provável erro de digitação de "changeframe" preservado no binário,
 não corrigido). Marcada `read_structural`.
+
+## 42. `CardAccess(int)` — passe estrutural — revela o sistema REAL de save/load, com suporte a iCloud (2026-10-17, Fase 3)
+
+`CardAccess(int)` (`0x184670`, 11.004 B) — mesmo tratamento das
+seções 32–41. Descida recursiva: **2.504 de ~2.751 instruções
+possíveis (91%)**, sem tabela de salto computada.
+
+### 42.1 Confirma o papel real do nome "Card" — tela de gerência de memory card / save-load
+
+"Card" não era um sistema novo misterioso — é o nome herdado do
+**memory card do PS1**. 95 `bl` resolvidos confirmam, com nomes reais
+nunca catalogados antes, a tela completa de save/load:
+```
+SelectCard(int) / CardInit() / CardSetUp() / CardEventClose()
+GetCardState() / Wait_GetCardState(int)
+MakeSaveData(int) / SetLoadData(int) / GetSaveDataInit()
+pspSaveInit() / pspSaveUpdate() / pspSaveExit()
+pspIsNoneSaveData(int) / pspFftSave(int, FFT_SAVE_DATA*, int*)
+pspFftLoad(int, FFT_SAVE_DATA*, int*, int)
+pspSaveDataGetOne(int, FFT_SAVE_DATA*) / pspSaveDelete() / pspLoadSystemFile()
+iOS_fftSave() / iOS_dispOkNg(int, int)
+```
+Isto é um sistema **categoricamente diferente** de `CAUTOSAVE::Save`
+(seção 19.1, que despeja a heap inteira pra disco) — aqui há uma API
+de save/load estruturada de verdade, com slots (`pspSaveDataGetOne`),
+tipo de dado próprio (`FFT_SAVE_DATA*`), e um fluxo de confirmação
+(`iOS_dispOkNg` = diálogo Sim/Não).
+
+### 42.2 Achado novo: suporte real a iCloud
+
+**`iCloud_GetSlotCount()`** — nunca mencionada nesta investigação.
+Confirma que o port iOS integra sincronização de save via iCloud,
+pelo menos no nível de contar slots disponíveis. Candidato de alto
+valor pra uma leitura futura (`iCloud_*` é quase certamente uma
+família pequena, vale varrer por nome no `.dynsym`).
+
+### 42.3 Confirma o sistema `DB`/primitivas PS1 fora de batalha
+
+`SwapDB(int,int)`/`DB_init(DB*, ...25 ponteiros de primitiva...)` —
+**mesma arquitetura `b*` da seção 36 (`bSwapDB`/`bDB_init`), mas sem
+o prefixo `b`** — confirma que o sistema de buffer de primitivas PS1
+não é exclusivo de batalha; é usado aqui pra desenhar a tela de
+save/load. Reforça a leitura das seções 39/40: o prefixo (`b`, `e`,
+`W`, nenhum) parece mesmo ser **por tela/contexto**, não por
+sistema.
+
+### 42.4 Outros achados
+
+- **`iOS_CMenuTouchSaveLoad`** (`setYLine`/`exec`/`init`) — uma
+  **classe C++ própria**, não só um prefixo de função, dedicada ao
+  menu de toque desta tela — mostra que a duplicação por tela às
+  vezes vai até o nível de classe inteira, não só função solta.
+- Confirma mais uma vez `DrawMessage`/`DrawMessageFast`/
+  `DrawMessageKill`/`DrawMessageKillFast` — variante "Fast" nunca
+  catalogada antes nas famílias de mensagem já vistas.
+- `worldmap_restart()`/`load_worldname()` — liga esta tela a voltar
+  pro mapa mundi depois de carregar (ou reiniciar) um save.
+
+**O que ficou sem confirmar (nível "passe estrutural" intencional)**:
+os corpos da cascata de 277 branches (142 de retrocesso); e a
+família `iCloud_*` completa (só uma função vista). Marcada
+`read_structural`.

@@ -9,7 +9,7 @@ address,size,mangled,demangled,status,section_ref
 002bbb74,13272,_Z14Main_FrameMovev,Main_FrameMove(),read_structural,NOTES §35
 0018aeec,12580,_Z9eItemMenuv,eItemMenu(),read_structural,NOTES §40
 000c5148,12272,_Z13op_attackteamv,op_attackteam(),read_structural,NOTES §41
-00184670,11004,_Z10CardAccessi,CardAccess(int),unread,
+00184670,11004,_Z10CardAccessi,CardAccess(int),read_structural,NOTES §42
 001506ec,10976,_Z12requireprinfv,requireprinf(),unread,
 00225ac8,10724,_Z21CreateObjectWithTablesiiP7_Object,"CreateObjectWithTable(short, int, int, _Object*)",unread,
 0016fc90,10448,_Z16BattleCardAccessi,BattleCardAccess(int),unread,

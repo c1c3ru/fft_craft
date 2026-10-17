@@ -133,7 +133,7 @@ não duplicar 6.455 linhas neste arquivo:
 | `0x2bbb74` | 13272 | `Main_FrameMove()` | ✅ passe estrutural feito (§35, 2026-10-17): 2 switches de estado aninhados (9 casos externo, 43 interno) extraídos por completo; catálogo de 116 chamadas, maior desta fase — API de polling de toque completa, chamadas de plataforma Android diretas. Corpos dos 7+32 casos não lidos. |
 | `0x18aeec` | 12580 | `eItemMenu()` | ✅ passe estrutural feito (§40, 2026-10-17): confirma a tela de EQUIPAR item (sufixo `_equip` paralelo ao `_unitlist`), terceira cópia paralela do padrão de duplicação por tela. **Corrige** a hipótese de idioma da §37: parece ser duplicação por tela/contexto, não por charset. |
 | `0xc5148` | 12272 | `op_attackteam()` | ✅ passe estrutural feito (§41, 2026-10-17): confirma suporte real a batalha em rede (`pspNetGetBattleModeFlag`) e fecha a ponte bytecode↔task (opcode cria/espera uma task real pra UI de seleção de time). 3 tabelas de salto extraídas. |
-| `0x184670` | 11004 | `CardAccess(int)` | sistema de "cartas" (nunca mencionado antes) |
+| `0x184670` | 11004 | `CardAccess(int)` | ✅ passe estrutural feito (§42, 2026-10-17): "Card" = memory card do PS1 — revela o sistema REAL de save/load (`pspFftSave`/`pspFftLoad`/`pspSaveDataGetOne`, distinto do dump de heap de `CAUTOSAVE`), com suporte a **iCloud** (`iCloud_GetSlotCount`, nunca visto). |
 | `0x1506ec` | 10976 | `requireprinf()` | nome não identificável só pelo nome |
 | `0x225ac8` | 10724 | `CreateObjectWithTable(short,int,int,_Object*)` | fábrica de objetos do motor |
 | `0x16fc90` | 10448 | `BattleCardAccess(int)` | variante de batalha de `CardAccess` |
