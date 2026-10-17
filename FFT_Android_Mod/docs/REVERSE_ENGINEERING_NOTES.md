@@ -4860,3 +4860,60 @@ os corpos dos handlers das 3 tabelas, e os corpos de qualquer uma das
 `bl`/demangle, nenhuma lida por dentro). Marcada `read_structural`.
 A família `b*` é candidata forte a abrir uma frente própria de
 leitura na Fase 3 — é um sistema inteiro, não uma função isolada.
+
+## 37. `mesputmain()` — passe estrutural — confirma que `W*`/sem-prefixo são duas variantes paralelas do MESMO sistema (2026-10-17, Fase 3)
+
+`mesputmain()` (`0xe88c4`, 15.744 B) — mesmo tratamento das seções
+32–36, e comparação direta com `Wmesputmain` (seção 33). Descida
+recursiva: **3.884 de ~3.936 instruções possíveis (98%)**, sem tabela
+de salto computada — mesma arquitetura de cascata de `cmp`/`beq`/
+`bne` de `Wmesputmain` (377 branches aqui vs. 414 lá, bem próximo).
+
+### 37.1 Achado principal: confirma a hipótese da seção 33 — é um par de variantes paralelas, não um sistema diferente
+
+Comparando os 88 `bl` resolvidos aqui contra os 95 de `Wmesputmain`
+(seção 33), a correspondência é **quase 1:1, função por função, só
+sem o prefixo**:
+
+| `Wmesputmain` (seção 33) | `mesputmain` (aqui) |
+|---|---|
+| `Wallocatewindow`/`Wdisposewindow` | `allocatewindow`/`disposewindow` |
+| `Wallocatetexture`/`Wdisposetexture` | `allocatetexture`/`disposetexture` |
+| `Wserchmessagepointer`/`Wgetvaluelength`/`Wcount_words2` | `serchmessagepointer`/`getvaluelength`/`count_words2` |
+| `Wgetanimpos2d` | `getanimpos2d` |
+| `Wmultiwindow_packetextend` | `multiwindow_packetextend` |
+| `Wsettaskkind`/`Wtask_killmyself` | `settaskkind`/`task_killmyself` |
+| `Wwrite_eventflag`/`Wread_eventflag`/`Wcnvglobaltolocalid` | `write_eventflag`/`read_eventflag`/`cnvglobaltolocalid` |
+| `Wextend_windowframe` | `extend_windowframe` |
+| `wasmTaskEntry`/`wasmGetInput1/2/3`/`wasmGetActiveTask` | `asmTaskEntry`/`asmGetInput1/2/3`/`asmGetActiveTask` (**uma letra menos**: "asm", não "wasm") |
+
+Isto **fecha a pergunta em aberto da seção 33**: `W*`/sem-prefixo não
+são sistemas diferentes — são **duas implementações paralelas do
+mesmo código-fonte**, uma compilada com prefixo `W` e outra sem,
+quase certamente **variante de texto largo/`wchar` (Shift-JIS,
+japonês) vs. variante de texto de 1 byte (ASCII/ocidental)** — hipótese
+reforçada por `CSTR_UTIL::GetName` já ter confirmado tratamento real
+de multi-byte Shift-JIS (seção 30), e pelo próprio contador de
+chamadas da função-helper local mais usada em cada versão ser
+**idêntico** (`sub_fb7e0` ×19 em `Wmesputmain`, `sub_d3f44` ×19 aqui —
+endereços diferentes, mesma contagem exata de chamadas, forte indício
+de ser literalmente a mesma função-fonte compilada duas vezes). Essa
+mesma duplicação `W`/sem-prefixo provavelmente explica também a
+família `disp_personalwindow`/`Wdisp_personalwindow`/
+`Adisp_personalwindow`/`Cdisp_personalwindow`/`Ddisp_personalwindow`/
+`Edisp_personalwindow` do `RE_FUNCTION_INVENTORY.csv` — não
+confirmado ainda, mas a hipótese generaliza bem.
+
+### 37.2 Única chamada nova (não presente em `Wmesputmain`)
+
+`getBattleWorkIDFromAnimation(unsigned int)` — liga o sistema de
+mensagens à área de trabalho de animação de batalha (`BWORK`, já
+citada na seção 12 do backlog original). Não estava em `Wmesputmain`.
+Pode ser um ponto de divergência real entre as duas variantes, ou só
+reaproveitamento de código diferente — não investigado a fundo.
+
+**O que ficou sem confirmar**: a hipótese W=largo/sem-prefixo=byte
+simples não foi confirmada lendo o corpo de nenhuma das duas; e,
+exceto por `getBattleWorkIDFromAnimation`, não foi feita uma
+comparação exaustiva instrução-a-instrução (só por nome de chamada)
+entre as duas funções. Marcada `read_structural`.
