@@ -5532,3 +5532,23 @@ função confirmada na seção 22.5, reaparecendo aqui).
 (58 de retrocesso); e o contexto exato em que `D` é chamada vs. a
 versão sem prefixo (hipótese de "remoção de personagem" não
 confirmada). Marcada `read_structural`.
+
+## 50. `Edisp_personalwindow()` — passe estrutural — segunda confirmação do padrão "entrada fina" da seção 49 (2026-10-17, Fase 3)
+
+`Edisp_personalwindow()` (`0x11f848`, 7.888 B) — mesmo tratamento das
+seções 32–49. Descida recursiva: **1.922 de ~1.972 instruções
+possíveis (97%)**, sem tabela de salto computada; **116 branches,
+59 de retrocesso**.
+
+**Confirma, pela segunda vez, o padrão da seção 49**: `E` chama os
+MESMOS endereços sem prefixo de `disp_personalwindow` (`addlocalprim`
+`0xd665c`, `statuskanjiprint` `0xe2b78`, idênticos) — não tem cópia
+`E`-prefixada dos helpers de desenho, só a função de entrada é
+própria (com seus próprios locais internos pequenos, em endereços
+diferentes de `Ddisp_personalwindow`). Com `D` e `E` confirmando o
+mesmo padrão, e só `W` tendo cópia completa, a hipótese fica mais
+sólida: **`W` é a única variante que é uma recompilação de verdade**
+do código-fonte; `A`/`C`/`D`/`E` (três ainda não lidas) são, com alta
+confiança agora, só pontos de entrada finos — não precisam de leitura
+byte a byte individual, dado o padrão já confirmado duas vezes.
+Marcada `read_structural`.
