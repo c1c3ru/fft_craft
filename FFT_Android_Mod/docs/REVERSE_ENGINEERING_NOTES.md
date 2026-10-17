@@ -6494,3 +6494,227 @@ símbolo (`sub_cc794`, `sub_cc950` ×8, `sub_ccbc8` ×10 — as mais
 chamadas, prováveis getters/setters de campo de debug ou de desenho
 de texto do menu); se existem outras ações de debug além de "level
 up". Marcada `read_structural`.
+
+## Terceiro lote paralelo (seções 80–84): mais 5 funções lidas por forks simultâneos
+
+## 80. `worldmap_call(unsigned long*, unsigned long)` — passe estrutural — confirma ser o `event_call` do mapa mundi (2026-10-17, Fase 3, lote paralelo)
+
+`worldmap_call(unsigned long* script, unsigned long pc)`
+(`0x156bec`, 3.520 B) — mesma assinatura clássica de interpretador
+de bytecode já confirmada em `event_call` (seção 66). Descida
+recursiva via `jtable.py`: **814 de ~880 instruções possíveis
+(92%)**, sem tabela de salto; **72 branches, 36 de retrocesso**.
+
+### Confirma a hipótese: é o dispatcher de ações de bytecode específico do mapa mundi
+
+26 `bl` resolvidos, a maioria ligando diretamente a sistemas do
+motor `wld_*` (Fases 1/2, seções 9–12) e a telas já documentadas
+nesta Fase 3:
+```
+worldmap_restart()                       — chamada 9 vezes, de longe a mais frequente
+wldframe_clr(int) / wldfade_set(int, int)   — motor wld_* original (seção 12.8)
+CardAccess(int)                              — tela de save/load (seção 42)
+UnitList(int, int)                            — lista de unidades (seção 56)
+changewindowamb(int, int, int)             — já visto em wldfade_proc (seção 12.8)
+pspWorldCheckFlg(PSP_WORLD_FLG)            — já visto em wldtown_bright (seção 12.12)
+numa_fileReadCD(unsigned long, unsigned long, void*)  — já visto em requireprinf (seção 43)
+pspNetEntranceOptionInit()                   — achado novo, liga ao sistema de batalha em rede
+request_worldwindow(int,int,int,int) / request_worldcommand(int,int,int)  — achados novos
+```
+Confirma, com evidência cruzada forte, que `worldmap_call` é
+literalmente **o `event_call` do mapa mundi**: um opcode de
+bytecode aqui pode abrir `CardAccess` (save/load), abrir `UnitList`,
+reiniciar o estado do mapa mundi (`worldmap_restart`, 9× — provável
+opcode "voltar ao mapa" chamado de vários pontos), limpar o frame,
+disparar fade de janela, e inicializar opções de entrada em batalha
+de rede. `request_worldwindow`/`request_worldcommand` sugerem um
+sistema de fila de comandos específico do mapa mundi, paralelo ao
+`multiwindow_*` já visto em telas (seções 54/58/67/74) mas num nível
+mais alto (comandos de mapa, não pacotes de sprite). Família de task
+é `wasm` aqui (`wasmTaskEntry`/`wasmGetActiveTask`), não `asm`.
+
+**O que ficou sem confirmar**: os corpos da cascata de 72 branches
+(36 de retrocesso) — qual opcode dispara qual chamada não foi
+mapeado; a estrutura exata de `request_worldwindow`/
+`request_worldcommand`. Marcada `read_structural`.
+
+## 81. `ASHURA_GNS_Garage(long, unsigned long)` — passe estrutural — confirma `GNS` como o formato real de mapa do FFT original, carregado assincronamente (2026-10-17, Fase 3, lote paralelo)
+
+`ASHURA_GNS_Garage(long, unsigned long)` (`0x16e7c8`, 3.504 B) — já
+citada na seção 66 (catálogo de `event_call`) como uma das três
+funções `ASHURA` específicas de evento, nunca aberta por dentro.
+Descida recursiva via `jtable.py`: **801 de ~876 instruções
+possíveis (91%)**; uma tabela de salto resolvida (32 casos, só 7
+endereços distintos — a maioria colapsa num único handler de
+"espera", mesmo padrão já visto em `battle()`, seção 32.2); **107
+branches, 65 de retrocesso**.
+
+### Confirma `GNS` como formato real de mapa do FFT original (fato documentado na comunidade de modding do jogo, não hipótese)
+
+```
+ASHURA_GNS_Read(unsigned short)              ASHURA_GNS_Analyzer(unsigned long, unsigned long)
+ASHURA_MapProjectFlag(char, short, short)       ASHURA_MapProjectMem2Mem(unsigned char, char*)
+ASHURA_FileRead_Proto(char const*, char*, char*, unsigned long)
+ASHURA_LMDL_DB_COPY(unsigned short*)            ASURA_WorkInit()
+FFTPSP_ASURA_polygon_combine(unsigned int, ADB*, SVECTOR*, SVECTOR*, SVECTOR*, SVECTOR*)
+fileReadCheck() / mallocForFile(unsigned int) / freeForFile(void*)
+```
+`GNS` é o formato real dos arquivos de **índice de geometria de
+mapa** do FFT original de PS1 (par de arquivos GNS/GSD por mapa —
+fato documentado publicamente na comunidade de ROM-hacking do jogo,
+não uma suposição desta investigação). `ASHURA_GNS_Garage` confirma
+ser um **carregador assíncrono multi-estado** de um mapa `GNS`
+específico: a máquina de 32 estados passa por fases como "esperar
+leitura de arquivo terminar" (`fileReadCheck()`, estado 0, confirmado
+por instrução: se o resultado ainda está pendente, volta pro estado
+de espera; se terminou, avança), análise do arquivo
+(`ASHURA_GNS_Analyzer`), projeção de mapa
+(`ASHURA_MapProjectFlag`/`Mem2Mem`), e cópia de dados de modelo
+(`ASHURA_LMDL_DB_COPY` — mesma família de `ASURA_LMDL_TIME_TBL`,
+seção 38). **"Garage" no nome é quase certamente o nome de uma
+cena/mapa específico** (um local chamado "garagem" na história,
+carregado por esta instância do loader genérico) — hipótese
+plausível dado o padrão de nomes de função por cena já visto em
+outras famílias, não confirmada sem achar o ID do mapa real.
+
+**`FFTPSP_ASURA_polygon_combine(...)`** é um achado notável à parte:
+o prefixo **`FFTPSP`** (Final Fantasy Tactics PSP) nomeia o
+jogo+plataforma diretamente na função — reforça, com ainda mais
+força que a seção 59 (`GuEmu_libgu_to_gl`), que este binário tem
+raiz real no port de **PSP**, não só PS1. `ASURA_WorkInit()` confirma
+mais uma vez a grafia sem H ("ASURA") já catalogada desde
+`ASURA_LMDL_TIME_TBL` (seção 38).
+
+**O que ficou sem confirmar**: os corpos dos 7 handlers de estado
+restantes (estado 0 foi o único lido por instrução); o ID/nome real
+do mapa "Garage"; o layout de `ADB`. Marcada `read_structural`.
+
+## 82. `executeShape(tag_animation*)` — passe estrutural — o interpretador de "comandos de forma" dentro do sistema de animação (2026-10-17, Fase 3, lote paralelo)
+
+`executeShape(tag_animation*)` (`0x1f1680`, 3.924 B) — descida
+recursiva via `jtable.py`: **924 de ~981 instruções possíveis
+(94%)**, uma tabela de salto resolvida (45 casos, 25 endereços
+distintos); **107 branches, 69 de retrocesso**.
+
+### Confirma ser um interpretador de opcode de "comandos de forma", dentro do motor de animação, chamado por `executeAnimationProgram`
+
+```
+executeAnimationProgram(tag_animation*)        — chama executeShape (confirma a relação de hierarquia)
+searchAnimationByID(unsigned short)
+setAnimationRealVector(SVECTOR*, tag_animation*)
+setShapeDataSub(tag_animation*, subAnimation*, unsigned short, unsigned short)
+callAnimationSound(tag_animation*, int)
+requestParmanentEffect(tag_animation*)          — mesmo erro de digitação ("Parmanent") já catalogado no espírito de ASURA/changeflame
+pspItemGetWeaponVariationBlock / pspItemGetWeaponClut
+errorHandler(int)
+```
+A tabela de 45 casos colapsa em 25 endereços distintos — confirma
+uma máquina de estados com um "opcode de comando de forma" por caso,
+consistente com um mini-interpretador de bytecode de animação
+(paralelo em espírito ao `event_call`/opcodes do motor de eventos,
+seção 66, mas num nível mais baixo, dentro de UMA animação).
+`searchAnimationByID`/`setShapeDataSub` confirmam que a animação é
+dirigida por dados (tabela de sub-animações buscada por ID);
+`setAnimationRealVector` aplica posição/transformação real por
+quadro. `callAnimationSound` confirma que animações podem disparar
+efeito sonoro em quadros específicos (cue de som sincronizado).
+`requestParmanentEffect` liga este sistema ao
+`InitPermanentEffect`/`DoEffect` já vistos no catálogo de `battle()`
+(seção 32). `pspItemGetWeaponVariationBlock`/`pspItemGetWeaponClut`
+confirmam que a animação de uma unidade pode variar visualmente
+conforme a **arma equipada** (modelo/paleta diferente por arma).
+
+**O que ficou sem confirmar**: os corpos dos 25 handlers distintos
+(qual comando de forma faz exatamente o quê); os corpos das 7
+funções locais sem símbolo (`sub_1f0c70` ×7, a mais chamada).
+Marcada `read_structural`.
+
+## 83. `DoEffectCameraWork()` — passe estrutural — o sequenciador real de câmera com interpolação suave e tremor, pra eventos/cutscenes (2026-10-17, Fase 3, lote paralelo)
+
+`DoEffectCameraWork()` (`0x219728`, 3.740 B) — descida recursiva via
+`jtable.py`: **905 de ~935 instruções possíveis (97%)**, sem tabela
+de salto; **142 branches, 85 de retrocesso** (consistente com laços
+de interpolação por frame).
+
+### Confirma ser o executor de "trabalho de câmera" roteirizado — a peça que faltava entre `event_call` e a câmera do mapa mundi
+
+`setMapScrollXYZ`/`setMapScale`/`setMapAngle` (10/10/11 chamadas) —
+as MESMAS três funções já vistas como callees de `event_call`
+(seção 66) e do sistema de câmera do mapa mundi (seções 12.11/
+12.14) — confirmam que `DoEffectCameraWork` controla
+especificamente a câmera do **mapa mundi**, não a `CCAMERA` moderna
+(seção 65) nem a pilha GTE crua de `ASHURA` (seções 38/48).
+
+**Confirma interpolação suave real com curvas de easing**:
+```
+getSmoothSVECCosPai / getSmoothSVECCos2Pai / getSmoothSVECLinear
+getSmoothVECCosPai  / getSmoothVECCos2Pai  / getSmoothVECLinear
+```
+Seis variantes (SVECTOR de ângulo × VECTOR de posição, cada uma com
+3 curvas: cosseno de meia-volta, cosseno de volta completa, linear)
+— confirma que o jogo tem um sistema real de **ease-in/ease-out**
+pra movimento de câmera roteirizado, não interpolação linear
+simples.
+
+**Confirma tremor de câmera real (camera shake)**:
+```
+AddRndVECTORToVECTOR / AddRndVECTORToVECTORShift12 / AddRndSVECTORToSVECTOR
+AddVECTORToVECTOR / AddVECTORToVECTORShift12 / AddSVECTORToSVECTORAnd0xfff
+```
+As variantes `Rnd` (random) somam um deslocamento aleatório ao vetor
+de posição/ângulo da câmera — tremor de câmera real, provavelmente
+pra efeitos de impacto/explosão em cutscenes. `Shift12` confirma
+aritmética de ponto fixo 12 bits (padrão PS1); `And0xfff` em
+`SVECTOR` confirma wraparound de ângulo (0–4095 = 0–360°, mesmo
+esquema angular do GTE do PS1).
+
+**O que ficou sem confirmar**: os corpos da cascata de 142 branches
+(85 de retrocesso) — a fonte exata dos dados de keyframe (tabela de
+script roteirizado, não identificada); se o tremor é condicional a
+um parâmetro de evento específico. Marcada `read_structural`.
+
+## 84. `GlobalName(unsigned char*, unsigned char*)` — passe estrutural parcial — a tela real de nomear unidade, com widget de rolagem de letras (2026-10-17, Fase 3, lote paralelo)
+
+`GlobalName(unsigned char*, unsigned char*)` (`0x1a17e8`, 3.764 B) —
+nunca tocada antes. Descida recursiva via `jtable.py`: **728 de
+~941 instruções possíveis (77%)**, sem tabela de salto computada
+(verificado: nenhum branch computado pendente, o gap é provavelmente
+pool de literais de GOT); **29 branches, 13 de retrocesso**.
+
+### Confirma a tela de nomear unidade, desenhada com primitivas PS1 cruas (não via `DB`/`multiwindow_*`)
+
+```
+iOS_SetScrollNameFunc(unsigned char)     — nunca vista
+unit_isdark() / MasaDataInit()              — novas
+VSync / DrawSync / ClearOTag / AddPrim / DrawOTag
+PutDrawEnv / PutDispEnv / GetDrawEnv / SetDefDispEnv / SetDefDrawEnv
+pspPrimBackDraw(int,int,ushort,ushort,ulong*,uchar*)
+GuEmu_SetLineInterval(int)
+iOS_dispOkNg(int,int) / iOS_clearOkNg()
+worldmap_restart()
+```
+A assinatura (dois `unsigned char*`, provavelmente destino/origem do
+buffer de nome) e **`iOS_SetScrollNameFunc`** confirmam que esta é a
+tela real de **dar nome a uma unidade** (recruta nova ou edição de
+nome), usando um widget de **rolagem de letras** — padrão clássico
+de telas de nomeação de jogos PS1 (escolher letra por letra numa
+lista/roda rolável). Diferente da maioria das telas já documentadas
+(que usam o buffer `DB`/sistema `multiwindow_*`, seções 36/42/45/54),
+esta desenha com chamadas **diretas e cruas da lib gráfica PS1**
+(`VSync`/`DrawSync`/`ClearOTag`/`AddPrim`/`DrawOTag`/`PutDrawEnv`/
+`PutDispEnv`/`GetDrawEnv`/`SetDef*Env`) — mais um caminho de desenho
+independente nesta investigação, parecido com o confirmado em
+`disp_personalwindow` (seção 46) mas com ainda mais chamadas de
+baixo nível de setup de ambiente gráfico (`PutDrawEnv`/`PutDispEnv`/
+`GetDrawEnv`, nunca vistas antes). `GuEmu_SetLineInterval` confirma
+mais uma função da ponte PSP↔GL já documentada na seção 59.
+`iOS_dispOkNg`/`iOS_clearOkNg` (mesmo diálogo Sim/Não das seções
+42/56) sugerem uma confirmação final do nome escolhido.
+`worldmap_restart()` sugere que esta tela também pode ser acessada a
+partir do mapa mundi (ex.: ao recrutar uma unidade numa cutscene).
+
+**O que ficou sem confirmar**: os ~23% restantes da função; o
+formato exato do widget de rolagem de letras; se `unit_isdark`/
+`MasaDataInit` têm relação direta com esta tela ou são só
+utilitários genéricos chamados de passagem. Marcada
+`read_structural` — cobertura parcial, não forçada.
