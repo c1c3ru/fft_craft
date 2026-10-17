@@ -4367,3 +4367,141 @@ build (linkagem da zlib).
 **O que ficou sem confirmar:** qualquer divergência real de
 comportamento de jogo entre as duas arquiteturas — testado só 1
 função; o restante do binário x86 continua inteiramente não lido.
+
+## 32. `battle()` — passe estrutural (não linha a linha) — primeiro item da Fase 3, cobertura total (2026-10-17)
+
+**Mudança de metodologia, documentada no `RE_BACKLOG_PLAN_PHASE3.md`**:
+`battle()` (`0x207e10`, 17.156 B) é a maior função do binário inteiro
+e nunca tinha sido tocada. Pra uma função deste tamanho, "lida por
+completo" nesta fase significa um **passe estrutural**: grafo de
+chamadas resolvido por nome, blocos principais identificados, tabelas
+de salto extraídas — não pseudocódigo instrução-a-instrução de cada
+um dos ~4.300 slots de instrução. Isto é intencional (ver
+metodologia da Fase 3), não uma leitura rasa disfarçada: cada
+achado abaixo vem de instrução real lida, só que a função como um
+todo não teve cada um dos seus ~70 blocos de estado abertos.
+
+Construí uma ferramenta nova (`struct_pass.py`, descida recursiva por
+alvos de branch como o `disasm_cfg.py` já existente, mas resumindo em
+vez de despejar linha a linha) — fica no scratch da sessão, reutilizável
+pras próximas funções grandes da Fase 3.
+
+### 32.1 Arquitetura confirmada: switch de 102 estados sobre um contador global
+
+Antes do switch, dois guardas reais (lidos por instrução):
+```c
+if (iOS_getV2Icon(0x13) != 0) goto 0x20aa50;             // ícone de UI "19" ativo -> desvia
+if (iOS_getV2Icon(0xcb) == 0) {                             // ícone "203" NÃO ativo
+    if (*g_someState <= 0x19 && (g_bitmaskA >> *g_someState) & 1)
+        goto 0x20afb0;                                        // estado atual está numa lista de ~26 flags -> desvia
+}
+r6 = iOS_getV2Icon(0xca);                                    // ícone "202"
+if (*g_someState == r3 /* comparação com algo antes salvo */ ... ) { /* ver 32.3 */ }
+```
+(detalhe exato dos dois desvios `0x20aa50`/`0x20afb0`/`0x20afbc` não
+seguido nesta passada — são os únicos 3 alvos de `bl`/branch fora do
+switch principal que ficaram de fora do passe estrutural.)
+
+O switch real:
+```c
+r3 = *g_battleState;              // *sl, o contador de "fase/estado de batalha"
+r2 = r3 - 1;                        // estados são 1-based
+if (r3 != old_value) *g_battleState_prevSlot = r3;   // grava o estado anterior num campo vizinho (+4)
+if ((unsigned)r2 <= 0x65)             // 0..101 = 102 casos válidos
+    goto table[r2];                     // addls pc, pc, r2, lsl #2
+else
+    goto DEFAULT;                        // 0x20a670
+```
+
+### 32.2 Tabela de salto completa extraída (102 entradas, 70 endereços distintos)
+
+Técnica: tabela de 102 words em `0x2084a0`–`0x208638`, cada word é
+literalmente um `b #alvo` (o compilador gera a tabela como código
+executável, mesma técnica das seções 9.8/12.4/21). Extraída e
+decodificada por completo — **nenhum estado ficou sem endereço
+resolvido**.
+
+- **21 estados** (`50`, `60`, `61`, `82`–`99`) caem no handler padrão
+  `0x20a670` — provavelmente slots "reservado/não usado" do enum de
+  estados.
+- **13 estados** (`62`–`71`, `100`–`102`) caem num SEGUNDO handler
+  compartilhado, `0x2092d4` — distinto do padrão, então é um handler
+  real só que idêntico pra vários estados (não lido o corpo).
+- **Os 68 estados restantes têm, cada um, seu próprio endereço
+  único** — são os candidatos reais a "estados de batalha distintos"
+  (seleção de unidade, animação de movimento, animação de ataque,
+  checagem de morte, vez da IA, etc. — hipótese por posição/contexto,
+  não confirmada por leitura de corpo).
+
+Tabela completa (estado → endereço, 1-based):
+
+```
+1:0x20a5f4  2:0x20a41c  3:0x20a518  4:0x20a4a8  5:0x20a598  6:0x209780
+7:0x20a2c8  8:0x20a254  9:0x20a1ec 10:0x20a14c 11:0x2096c4 12:0x209648
+13:0x20a3a4 14:0x2095fc 15:0x20a0f4 16:0x20a010 17:0x209d5c 18:0x209d10
+19:0x209fc8 20:0x209f80 21:0x20a080 22:0x209914 23:0x209f3c 24:0x209b4c
+25:0x209ac8 26:0x209a68 27:0x209df0 28:0x209dac 29:0x209e40 30:0x20972c
+31:0x209a1c 32:0x2099f4 33:0x209ca0 34:0x209984 35:0x209ba4 36:0x2098c8
+37:0x20984c 38:0x209814 39:0x209550 40:0x209530 41:0x2094e4 42:0x2094ac
+43:0x209458 44:0x2093b0 45:0x209378 46:0x2092e0 47:0x2092c0 48:0x209154
+49:0x208f88 50:0x20a670 51:0x208f10 52:0x2091a0 53:0x208fd0 54:0x208bbc
+55:0x208b00 56:0x2091dc 57:0x209090 58:0x208efc 59:0x208d64 60:0x20a670
+61:0x20a670 62:0x2092d4 63:0x2092d4 64:0x2092d4 65:0x2092d4 66:0x2092d4
+67:0x2092d4 68:0x2092d4 69:0x2092d4 70:0x2092d4 71:0x2092d4 72:0x208638
+73:0x208fa4 74:0x209174 75:0x2088e0 76:0x208854 77:0x2089fc 78:0x208974
+79:0x208c5c 80:0x208998 81:0x2088b0 82:0x20a670 83:0x20a670 84:0x20a670
+85:0x20a670 86:0x20a670 87:0x20a670 88:0x20a670 89:0x20a670 90:0x20a670
+91:0x20a670 92:0x20a670 93:0x20a670 94:0x20a670 95:0x20a670 96:0x20a670
+97:0x20a670 98:0x20a670 99:0x20a670 100:0x2092d4 101:0x2092d4 102:0x2092d4
+```
+
+### 32.3 Catálogo de sistemas tocados (94 `bl` resolvidos por nome, nenhum corpo lido)
+
+A descida recursiva (ainda incompleta — só alcança os blocos
+diretamente acessíveis sem seguir os 70 alvos da tabela, então isto é
+parcial, não a lista completa de chamadas de `battle()`) já resolve
+94 chamadas distintas por nome, agrupadas por sistema:
+
+- **Cursor/toque deslizante do campo de batalha** (família `iOSSlide*`/
+  `iOSRot*`/`iOSTch*`/`iOSMapTouchCancel`/`sBattleTouchToCur`) — 15+
+  funções, confirma que o controle touch do campo de batalha é um
+  subsistema grande próprio, nunca antes investigado.
+- **Motor 3D "ASHURA"** (`ASHURA_init`, `ASHURA_matrix`, `ASHURA_addPrim`,
+  `ASHURA_getOTptrZ`, `ASHURA_clearOT`, `ASHURA_Exit`) — **nome nunca
+  visto antes nesta investigação inteira**; parece ser uma segunda
+  camada de desenho 3D além do `wld_*`/`CEGL2_*` já documentados,
+  específica de batalha (unidades/efeitos em 3D). Candidato forte a
+  próximo sistema a abrir na Fase 3.
+- **Ícones/UI "V2"** (`iOS_getV2Icon`/`iOS_setV2Icon`/`iOS_v2menuSetType`/
+  `iOS_v2menuSetEnable`) — `iOS_setV2Icon` sozinha aparece **69 vezes**
+  dentro do que já foi varrido, de longe a chamada mais frequente;
+  claramente o sistema de ícones de comando da UI de batalha.
+  `iOS_getV2Icon` aparece 29 vezes, muitas no início como guarda (ver
+  32.1).
+- **Tutorial** (`iOSTutoCheck` ×11, `iOSTutoBtlSkipClear`,
+  `iOS_clearTutorialbreak`) — confirma que há lógica de tutorial
+  real entremeada no loop principal de batalha.
+- **Ponte com `CFFT_STATE`** (`GetParam`/`SetParam`/`SetMode`) — mesmo
+  sistema de modo de dificuldade/estado global já visto em outras
+  seções (12.2, 22).
+- **PS1 real**: `VSync`/`DrawSync`/`SetGeomScreen`/`AddPrim` — confirma,
+  de novo, que o núcleo gráfico de baixo nível continua sendo a
+  emulação da lib do PS1, mesmo dentro do loop de batalha moderno.
+- **Save/Resume**: `iOS_Resume*` (6 variantes: `GetMode`,
+  `BeforeBattle`, genérico, `ByAutoSave`, `Music`, `BGM`,
+  `ENVEFFECT_Rain`) — sugere que uma batalha pode ser retomada de um
+  save específico de "durante a batalha" (não só do mapa mundi),
+  sistema nunca mencionado antes.
+- **4 chamadas a endereços locais sem símbolo** (`sub_1f9620`,
+  `sub_1fc478`, `sub_202ff0`, `sub_204ff0`) — candidatos a próximos
+  alvos, endereços registrados mas não lidos.
+
+**O que ficou sem confirmar (escalonado, não forçado — intencional
+pro nível "passe estrutural")**: o corpo de cada um dos 70 handlers
+de estado (a lógica real de cada fase de batalha), os 3 desvios
+`0x20aa50`/`0x20afb0`/`0x20afbc` antes do switch, e qualquer chamada
+feita só de DENTRO de um dos 70 blocos de estado (a lista de 94 `bl`
+acima é só do pouco que a descida recursiva alcançou sem seguir a
+tabela). Ler os 70 handlers de verdade é trabalho de várias iterações
+futuras — ver `RE_FUNCTION_INVENTORY.csv` (`battle()` marcada
+`read_structural`, não `read_full`).

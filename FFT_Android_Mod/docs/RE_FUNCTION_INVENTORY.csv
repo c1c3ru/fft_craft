@@ -1,5 +1,5 @@
 address,size,mangled,demangled,status,section_ref
-00207e10,17156,_Z6battlev,battle(),unread,
+00207e10,17156,_Z6battlev,battle(),read_structural,NOTES §32
 0011173c,16312,_Z11Wmesputmainv,Wmesputmain(),unread,
 002c141c,16164,_Z16Main_FrameRenderv,Main_FrameRender(),unread,
 0017c27c,15920,_Z14BattleUnitListPhPm,"BattleUnitList(unsigned char*, unsigned long*)",unread,

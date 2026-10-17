@@ -86,6 +86,29 @@ linha: `address,size,mangled,demangled,status,section_ref`.
    ciclo de sempre.
 4. **Escalonar, não forçar**, quando um alvo resistir.
 
+## Atualização (2026-10-17): primeira função grande processada
+
+`battle()` recebeu o primeiro passe estrutural da Fase 3 (ver
+`REVERSE_ENGINEERING_NOTES.md` §32). Dois ajustes à infraestrutura
+desta sessão:
+
+- `status` no CSV agora tem um terceiro valor possível,
+  **`read_structural`** — grafo de chamadas + blocos principais +
+  tabelas de salto resolvidos, mas os corpos dos blocos individuais
+  não lidos. Só `read_full` conta como "100% concluído" de verdade;
+  `read_structural` é um estado intermediário explícito, não
+  "terminado".
+- Ferramenta nova no scratch da sessão, `struct_pass.py` (descida
+  recursiva por branches como o `disasm_cfg.py`, mas resumindo em bl
+  resolvidos + branches de retrocesso + pontos de convergência em vez
+  de despejar cada instrução) — usar nas próximas funções grandes
+  (`Wmesputmain`, `Main_FrameRender`, `Main_FrameMove`, etc.) antes de
+  decidir se vale a leitura linha-a-linha completa.
+
+Trabalho pendente de maior valor identificado: os **70 handlers de
+estado do switch de `battle()`** (endereços na seção 32.2 do
+`REVERSE_ENGINEERING_NOTES.md`) — nenhum lido por dentro ainda.
+
 ## Fila prioritária imediata (as 30 maiores funções nunca tocadas)
 
 Lista completa em `RE_FUNCTION_INVENTORY.csv` — aqui só o topo, pra
@@ -93,7 +116,7 @@ não duplicar 6.455 linhas neste arquivo:
 
 | Endereço | Bytes | Função | Categoria provável |
 |---|---|---|---|
-| `0x207e10` | 17156 | `battle()` | **loop principal de batalha** — nunca tocado, é o maior ponto cego de toda a investigação |
+| `0x207e10` | 17156 | `battle()` | ✅ passe estrutural feito (`REVERSE_ENGINEERING_NOTES.md` §32, 2026-10-17): switch de 102 estados / 70 endereços distintos, tabela completa extraída, 94 chamadas catalogadas. **Os 70 handlers de estado ainda não foram lidos por dentro** — maior trabalho pendente de toda a Fase 3. |
 | `0x11173c` | 16312 | `Wmesputmain()` | sistema de mensagens/diálogo (variante "W") |
 | `0x2c141c` | 16164 | `Main_FrameRender()` | **loop principal do jogo inteiro** |
 | `0x17c27c` | 15920 | `BattleUnitList(uchar*, ulong*)` | lista de unidades em batalha |
