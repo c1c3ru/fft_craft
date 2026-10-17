@@ -5775,3 +5775,18 @@ reais dentro da mesma classe, exatamente o "hybrid" do nome.
 
 **O que ficou sem confirmar**: os corpos da cascata de 146 branches
 (67 de retrocesso). Marcada `read_structural`.
+
+## 60. `Wdisp_floateventwindow()` — passe estrutural — janela de mensagem flutuante de evento, quinta confirmação `W`/`wasm` (2026-10-17, Fase 3)
+
+`Wdisp_floateventwindow()` (`0x1314a8`, 6.228 B) — descida
+recursiva: **1.541 de ~1.557 instruções possíveis (99%)**, sem
+tabela de salto; **153 branches, 80 de retrocesso**.
+
+Confirma, pelo nome e pelas chamadas, uma **janela de mensagem
+flutuante** (provavelmente balão de diálogo sobreposto à cena, não
+uma janela de UI fixa) ligada ao sistema de eventos:
+`Wwrite_eventflag`/`Wread_eventflag` (7×/5×), `Wmultiwindow_packetextend`,
+`Wextend_windowframemain`/`Wextend_windowframe`/`Wextend_systemframe`
+(três variantes de "estender moldura de janela", novas). Quinta
+confirmação da correlação `W`↔`wasm` (`wasmTaskEntry` ×9,
+`wasmGetInput2` ×11) — seções 33/37/47/58. Marcada `read_structural`.
