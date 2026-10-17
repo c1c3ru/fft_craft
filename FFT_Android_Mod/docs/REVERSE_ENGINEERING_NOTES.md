@@ -5277,3 +5277,46 @@ investigado o formato exato.
 **O que ficou sem confirmar (nível "passe estrutural" intencional)**:
 os corpos da cascata de 192 branches (100 de retrocesso); o formato
 "binpack"; e a etimologia de `requireprinf`. Marcada `read_structural`.
+
+## 44. `CreateObjectWithTable` — passe estrutural — o gerador de partículas/efeitos do motor, cobertura quase total (2026-10-17, Fase 3)
+
+`CreateObjectWithTable(short, int, int, _Object*)` (`0x225ac8`,
+10.724 B) — mesmo tratamento das seções 32–43. Descida recursiva:
+**2.673 de ~2.681 instruções possíveis (99,7%)** — a cobertura mais
+alta de toda a Fase 3 até aqui, sem tabela de salto computada.
+Catálogo de `bl` bem menor (21 distintos) que o normal — função
+dominada por aritmética, não orquestração.
+
+### 44.1 Confirma ser o gerador real de partículas/efeitos variados do motor
+
+```
+getVariationData(int,int,int) ×32      getVariationAppearPosition(_ParticleParameter*, int, VECTOR*)
+getVariationAppearRange(...)            getVariationAppearVec(...)
+ChangeEffectAnimation(effectAnimation*, uchar, short)
+GetAnimationPosition(int,int,EffectOrder*,SVECTOR*)
+NewObject(short,short)                  getAbsoluteMaximumOf3(short,short,short)
+AddSVECTORToVECTOR / RotMatrix / SetRotMatrix / SetTransMatrix / RotTrans / VectorNormal
+```
+O tipo `_ParticleParameter*` confirma, com nome real, um sistema de
+**parâmetros de variação de partícula** (posição/alcance/vetor de
+aparecimento) — "WithTable" no nome da função bate exatamente: cria
+um objeto de efeito usando uma tabela de parâmetros de variação. Usa
+a mesma matemática GTE real já confirmada em `ASHURA_addPrim`
+(seção 38: `RotMatrix`/`SetRotMatrix`/`RotTrans`), reforçando que é
+parte do mesmo motor de efeitos 3D.
+
+### 44.2 Achado numérico: a função mais dominada por aleatoriedade de toda a investigação
+
+**`ps_rand()` chamada 103 vezes** — de longe o maior número desta
+investigação inteira (a 2ª colocada, `ASHURA_addPrim`, teve 29).
+Junto com `__aeabi_idivmod` (101 chamadas, quase sempre pra mapear o
+resultado de `ps_rand()` pra um intervalo via módulo), confirma que
+esta função gera posições/vetores/variações **aleatórios de verdade**
+em massa — consistente com efeitos de partículas clássicos (faíscas,
+destroços, magia) precisando de variação visual por instância.
+
+**O que ficou sem confirmar (nível "passe estrutural" intencional)**:
+os corpos da cascata de 278 branches (156 de retrocesso) — a fórmula
+exata de cada variação (posição/alcance/vetor) não foi lida byte a
+byte, só confirmada a existência e os nomes reais. Marcada
+`read_structural`.
