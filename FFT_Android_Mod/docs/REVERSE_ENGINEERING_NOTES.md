@@ -7092,3 +7092,192 @@ catalogados nesta classe.
 **O que ficou sem confirmar**: os corpos da cascata de 64 branches
 (34 de retrocesso); os corpos das 5 funções locais sem símbolo
 (`sub_178ca0`/`cf8`/`d44`/`da0`/`df8`). Marcada `read_structural`.
+
+## Sexto lote paralelo (seções 94–98): mais 5 funções lidas por forks simultâneos
+
+## 94. `getskillrange(ACT*)` — passe estrutural — confirma o cálculo real de alcance/forma de área de habilidade (2026-10-17, Fase 3, lote paralelo)
+
+`getskillrange(ACT*)` (`0x1e03c8`, 2.812 B) — parte da mesma família
+de resolução de ação de batalha já aberta em `calc_result`/
+`setskillresult` (seções 77/90, tipo `ACT*`). Descida recursiva via
+`jtable.py`: **676 de ~703 instruções possíveis (96%)**, uma tabela
+de salto resolvida (16 casos, 9 endereços distintos); **82 branches,
+42 de retrocesso**.
+
+### Confirma o cálculo de alcance/forma de área, não a resolução de dano em si
+
+```
+get_coord_address(BWORK*)      ×7 — busca coordenada de painel real
+copyACTst(ACT*, ACT*)             ×4 — mesma função de cópia de ACT (seção 90)
+set_normability2(int, unsigned char, short*, unsigned char*, unsigned char*, int, unsigned char*, unsigned char*)
+pspItemGetCommonData
+```
+A tabela de 16 casos (9 distintos) despacha, com alta confiança, por
+**tipo de padrão de alcance/área** (linha reta, diamante, cruz,
+"todos", etc. — mecânica clássica do FFT de forma de AoE por
+habilidade), chamando `get_coord_address` repetidamente pra resolver
+as coordenadas de painel afetadas em cada forma. `set_normability2`
+(assinatura complexa, buffers `short*`/`unsigned char*` de saída)
+provavelmente grava a lista de offsets dx/dy do padrão de alcance
+calculado num buffer de saída pro chamador consumir. `copyACTst`
+reaparecendo confirma que o cálculo de alcance opera sobre uma CÓPIA
+da struct `ACT`, não a original — consistente com simular/testar o
+alcance sem alterar o estado real da ação. Tem uma função irmã,
+`getskilleffect(ACT*)` (seção 95), que calcula o efeito (dano/
+status) em vez da forma geométrica.
+
+**O que ficou sem confirmar**: os corpos dos 9 handlers distintos
+(qual padrão geométrico cada caso representa); os corpos das 5
+funções locais sem símbolo (`sub_1dec0c` ×4, `sub_1dfa48` ×3); o
+layout exato dos buffers de saída de `set_normability2`. Marcada
+`read_structural`.
+
+## 95. `getskilleffect(ACT*)` — passe estrutural — despachante de 7 categorias de efeito de habilidade, com checagem de invencibilidade e altura real (2026-10-17, Fase 3, lote paralelo)
+
+`getskilleffect(ACT*)` (`0x1e4f3c`, 2.712 B) — mesma família `ACT*`
+já confirmada em `calc_result`/`setskillresult`/`getskillrange`
+(seções 77/90/94). Descida recursiva via `jtable.py`: **648 de ~678
+instruções possíveis (96%)**, uma tabela de salto resolvida (16
+casos, 7 endereços distintos); **99 branches, 47 de retrocesso**.
+
+### Confirma ser o despachante por categoria de efeito, não a aplicação em si
+
+```
+copyACTst(ACT*, ACT*)                     — mesma cópia de struct de calc_result (seção 90)
+get_coord_address(BWORK*)                  — mesma função de getskillrange (seção 94)
+check_invincible(int, int*)                 — achado novo: checagem real de invencibilidade/imunidade a dano
+get_unit_height(int)                          — achado novo: altura da unidade entra no cálculo de efeito
+get_fusui_ability(BWORK*)                    — mesmo termo não decifrado de calc_result (seção 90)
+pspItemGetCommonData
+```
+A tabela de 16 casos (colapsando em 7 endereços) confirma que
+`getskilleffect` decide **qual das ~7 categorias de efeito** uma
+habilidade produz (dano, cura, status, drenar, instant-kill, etc. —
+hipótese de quais categorias são essas, não confirmada byte a byte).
+`check_invincible` confirma, por instrução real, que existe uma
+checagem de invencibilidade/imunidade que pode anular o efeito antes
+de ele ser calculado — mecânica real do FFT (unidades com estado
+"Invincible" ou imunes a certo tipo de dano). `get_unit_height`
+sugere que a diferença de altura entre atacante e alvo participa do
+cálculo de algum efeito (plausível pra ataques de área/explosão, que
+no FFT original têm alcance vertical limitado). Reusa `copyACTst` e
+`get_fusui_ability` — confirma, pela segunda vez, que `calc_result`
+e `getskilleffect` operam sobre a mesma família de dados `ACT`.
+
+**O que ficou sem confirmar**: os corpos dos 7 handlers distintos
+(qual categoria de efeito cada um implementa); os corpos das 5
+funções locais sem símbolo (`sub_1dea08`/`1dec0c`/`1df060`/
+`1df480`/`1dfa48`); o papel exato de `get_fusui_ability`/
+`get_coord_address`. Marcada `read_structural`.
+
+## 96. `ctlnobel_main(CTLINFO*)` — passe estrutural — confirma "Nobel" como "Novel" (cena de diálogo estilo visual novel), amarrando vários controladores irmãos (2026-10-17, Fase 3, lote paralelo)
+
+`ctlnobel_main(CTLINFO*)` (`0x264cf8`, 2.784 B) — fase "main" da
+família de controlador `ctlnobel_*` já citada desde a seção 9.6
+como referência arquitetural (mesmo padrão polimórfico
+`init/active/main/deactive` de `ctlopentitle_main`/`ctlmap_main`,
+seções 87/92), nunca aberta por dentro. Descida recursiva via
+`jtable.py`: **661 de ~696 instruções possíveis (95%)**, sem tabela
+de salto; **78 branches, 44 de retrocesso**.
+
+### Confirma "Nobel" como transliteração de "Novel" — o controlador real de cena de diálogo estilo visual novel
+
+```
+iOSSdNovelClear() / iOSSdNovelLogIconOn()/Off() / iOSSdNovelBrightCtrlClear()
+iOSSDNovelHelpTrgSet(long) / iOSNovelModeRestore() / Main_Novel_GetBtnRect(...)
+wld_snpl() / snplinf_init(int)                        — já citada na seção 9.5
+ssd_request(int,int) / Ssd_DisposeEffectData(void*)       — sistema Ssd (seções 12.7/88)
+ctlzodiac_init / ctlhelp_init / ctlnobelstop_init / ctlnblwldinfo_init / ctlbackpage_init
+ret_adventurestatus() / stop_adventuremessage(int)
+iOS_add_anmpac_max(int)                                   — ANMPAC (seções 12.5/12.10/12.13)
+```
+Confirma, com nomes reais (`SdNovel`, `Main_Novel_GetBtnRect`), que
+"Nobel" é a transliteração japonesa de **"Novel"** (ノベル) — este é
+o controlador real de **cenas de diálogo estilo visual novel**
+(texto full-screen com escolhas, comum em RPGs japoneses), distinto
+do sistema de mensagem genérico (`Wmesputmain`/`mesputmain`, seções
+33/37). `ret_adventurestatus`/`stop_adventuremessage` confirmam
+terminologia "adventure" ligada a este modo. `ctlnobel_main`
+alterna entre vários controladores-irmãos (`ctlzodiac_init` — tela
+de zodíaco/horóscopo do FFT; `ctlhelp_init`; `ctlnobelstop_init`;
+`ctlnblwldinfo_init` — overlay de info do mapa mundi durante a
+novel; `ctlbackpage_init` — provável "voltar página"/log de texto).
+`iOS_add_anmpac_max` sugere que cenas de novel permitem mais sprites
+animados simultâneos que o padrão.
+
+**O que ficou sem confirmar**: os corpos da cascata de 78 branches
+(44 de retrocesso); os corpos dos controladores-irmãos citados.
+Marcada `read_structural`.
+
+## 97. `LearnAbiStts()` — passe estrutural — a tela real de "aprendeu uma habilidade", confirma `AbilityLearning` como a mutação de verdade (2026-10-17, Fase 3, lote paralelo)
+
+`LearnAbiStts()` (`0x1b5104`, 2.716 B) — já citada no catálogo de
+`AbilityMenu` (seção 57), nunca aberta por dentro. Descida recursiva
+via `jtable.py`: **616 de ~679 instruções possíveis (91%)**, uma
+tabela de salto pequena (6 casos, 5 distintos); **40 branches, 20 de
+retrocesso**.
+
+### Confirma a tela de notificação de habilidade aprendida, e a função real que marca a habilidade como aprendida
+
+```
+AbilityLearning(short, short, short)      — a mutação real: marca a habilidade como aprendida
+GetAbilityList(short, short, int, short*, int)   ×3  — mesma consulta da seção 57
+MakeTextureMessage / DrawMessage(int, COMRECORD*)
+MenuSelSide / MenuSelSideWithSnd(Direct)
+WindowInit/Init2 / WindowPositionInitSingle / SetWindowPosition/GetWindowPosition
+unitans_init()
+```
+`AbilityLearning(short, short, short)` é o achado central: a
+assinatura (3 `short`, provavelmente unidade/job/ID-de-habilidade)
+confirma ser a função que **realmente grava** que uma unidade
+aprendeu uma habilidade — `LearnAbiStts` é a tela que EXIBE essa
+notificação (texto "aprendeu X!", lista de habilidades via
+`GetAbilityList`), não a lógica de progressão em si (que já foi
+vista como consumidora de JP via `add_jobpointB`/`get_unit_jl` em
+`setskillresult`, seção 77). Reusa a mesma biblioteca de janela/menu
+compartilhada (`WindowInit`, `MenuSelSide`) já vista em `AbilityMenu`
+(seção 57) e várias outras telas. `unitans_init()` (já visto na
+seção 61, `JobChange`) sugere que esta notificação pode aparecer
+tanto ao fim de uma batalha quanto numa transição de tela de menu.
+
+**O que ficou sem confirmar**: os corpos dos 5 handlers da tabela de
+6 casos; o corpo de `AbilityLearning` em si; se `LearnJobStts`,
+citada junto com esta na seção 57, segue exatamente o mesmo padrão
+pra jobs em vez de habilidades. Marcada `read_structural`.
+
+## 98. `Equip()` — passe estrutural — confirma a tela real de troca de equipamento, ligada à lista de unidades, não ao item (2026-10-17, Fase 3, lote paralelo)
+
+`Equip()` (`0x1adf8c`, 2.684 B) — já citada no catálogo de `ItemMenu`
+(seção 39) entre as funções do sistema real de itens/equipamento,
+nunca aberta por dentro. Descida recursiva via `jtable.py`: **630 de
+~671 instruções possíveis (94%)**, sem tabela de salto; **48
+branches, 22 de retrocesso**.
+
+### Confirma ser o controlador real da tela de equipar, construído sobre a mesma biblioteca de janela/menu já documentada
+
+```
+GetItemList(short,short,signed char,short*,unsigned short,unsigned char)
+ItemEquip(short,short,short) / ItemChg(short,int) / IsUntauchable(int)
+ChrPowerCompare(C_STTS*,A_STTS*,short*,short*)
+WindowInit2 / DrawWindow / CursolFunc / WindowPrioritySet
+SetWindowPosition/GetWindowPosition / MenuSelVerticalWithSnd(Direct)
+iOS_CMenuTouch::setDispOffset/setYLine/drawMenuAssist/init/exec
+Wtask_start(long) / Wtask_stop(long)
+iOS_getOtNum_unitlist() / iOS_setDispCursor_window_unitlist / iOS_getScrollType_unitlist
+```
+Confirma, com nomes reais, que `Equip()` é o controlador de tela
+real de troca de equipamento — reusa a mesma biblioteca de janela/
+menu compartilhada já vista em `ItemMenu`/`AbilityMenu` (seções
+39/57), roda como task (variante `W`), e usa `iOS_CMenuTouch` pra
+navegação por toque. **Achado notável**: os sufixos `iOS_*` aqui são
+`_unitlist` (`iOS_getOtNum_unitlist`/`iOS_getScrollType_unitlist`),
+a MESMA família já vista em `ItemMenu`/`BattleUnitList` (seções
+36/39) — não `_equip` como em `eItemMenu` (seção 40). Isso sugere
+que `Equip()` é acessado a partir de um fluxo centrado em **lista de
+unidades** (escolher a unidade primeiro, depois equipar), distinto
+do fluxo próprio de `eItemMenu`, que tem sua família `_equip`
+dedicada.
+
+**O que ficou sem confirmar**: os corpos da cascata de 48 branches
+(22 de retrocesso); o contexto exato de chamada (quem invoca
+`Equip()` vs. `eItemMenu`). Marcada `read_structural`.

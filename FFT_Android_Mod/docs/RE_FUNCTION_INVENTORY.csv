@@ -95,12 +95,12 @@ address,size,mangled,demangled,status,section_ref
 001267f4,2840,_Z14disp_helpmenu2v,disp_helpmenu2(),unread,
 000940f0,2828,_vp_psy_init,_vp_psy_init,unread,
 0011cbb4,2812,_Z22iOS_RESUME_SET_EVENT_WP23IOS_RESUME_DATA_EVENT_W24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_EVENT_W(IOS_RESUME_DATA_EVENT_W*, IOS_RESUME_DATACOPY_MODE)",unread,
-001e03c8,2812,_Z13getskillrangeP3ACT,getskillrange(ACT*),mentioned_unverified,
+001e03c8,2812,_Z13getskillrangeP3ACT,getskillrange(ACT*),read_structural,NOTES §94
 0008aa00,2800,floor1_fit,floor1_fit,unread,
-00264cf8,2784,_Z13ctlnobel_mainP7CTLINFO,ctlnobel_main(CTLINFO*),unread,
-001b5104,2716,_Z12LearnAbiSttsv,LearnAbiStts(),unread,
-001e4f3c,2712,_Z14getskilleffectP3ACT,getskilleffect(ACT*),unread,
-001adf8c,2684,_Z5Equipv,Equip(),unread,
+00264cf8,2784,_Z13ctlnobel_mainP7CTLINFO,ctlnobel_main(CTLINFO*),read_structural,NOTES §96
+001b5104,2716,_Z12LearnAbiSttsv,LearnAbiStts(),read_structural,NOTES §97
+001e4f3c,2712,_Z14getskilleffectP3ACT,getskilleffect(ACT*),read_structural,NOTES §95
+001adf8c,2684,_Z5Equipv,Equip(),read_structural,NOTES §98
 0009f3f8,2576,ov_pcm_seek_page,ov_pcm_seek_page,unread,
 001b937c,2568,_Z7Tutrialv,Tutrial(),unread,
 001225e8,2552,_Z16Edisp_bothwindowv,Edisp_bothwindow(),unread,
