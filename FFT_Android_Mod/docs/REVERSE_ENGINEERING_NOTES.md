@@ -5716,3 +5716,17 @@ biblioteca compartilhada (seções 39/40/42/45/49-51).
 
 **O que ficou sem confirmar**: os corpos da cascata de 152 branches
 (73 de retrocesso). Marcada `read_structural`.
+
+## 58. `Wdisp_scrollwindow()` — passe estrutural — quarta confirmação do padrão `W` = cópia real + `wasm` (2026-10-17, Fase 3)
+
+`Wdisp_scrollwindow()` (`0x117374`, 6.504 B) — descida recursiva:
+**1.541 de ~1.626 instruções possíveis (95%)**, sem tabela de
+salto; **121 branches, 59 de retrocesso**. Cópia `W`-prefixada
+completa de `disp_scrollwindow` (seção 54) — todo o sistema
+`multiwindow_*` reaparece como `Wmultiwindow_*`, e a família de task
+é `wasm` (não `asm`) — **quarta confirmação** da correlação
+`W`↔`wasm` (seções 33/37/47), depois de `Wmesputmain`/`mesputmain`
+e `Wdisp_personalwindow`/`disp_personalwindow`. A hipótese "`W` é
+cópia real de fonte, correlacionada com a task `wasm`" está, a essa
+altura, bem estabelecida pra múltiplas famílias de tela. Marcada
+`read_structural`.
