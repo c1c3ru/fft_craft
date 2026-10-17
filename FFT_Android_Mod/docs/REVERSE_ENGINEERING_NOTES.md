@@ -5987,3 +5987,20 @@ de `event_call`.
 **O que ficou sem confirmar**: os corpos da cascata de 167 branches
 (79 de retrocesso) — qual opcode exato dispara qual chamada não foi
 mapeado função a função. Marcada `read_structural`.
+
+## 67. `world_scrollwindow()` — passe estrutural — mais uma cliente `W` do sistema `multiwindow_*`, com recorte (clip) real (2026-10-17, Fase 3)
+
+`world_scrollwindow()` (`0x15834c`, 5.236 B) — descida recursiva:
+**1.293 de ~1.309 instruções possíveis (98%)**, sem tabela de
+salto; **108 branches, 54 de retrocesso**. Sexta confirmação do
+padrão `W`/`wasm` (seções 33/37/47/58/60).
+
+Achados novos dentro do sistema `multiwindow_*` (seção 54/58):
+**`Wmultiwindow_packetclip(CLIP*, RECT16*, int, int)`/
+`Wmultiwindow_packetclipinit(CLIP*)`/
+`Wmultiwindow_packetadd(PRIMPACKET*, int, int)`** — confirmam
+**recorte (clipping) real** de pacotes de sprite contra um
+retângulo, nunca visto nas leituras anteriores do sistema. Também
+**`WiOS_battle_scrollwindow_tap()`** — nome sugere que esta janela
+de scroll do mapa mundi é reaproveitada (ou tem uma contraparte
+direta) dentro do contexto de batalha. Marcada `read_structural`.
