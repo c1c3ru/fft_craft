@@ -119,7 +119,7 @@ não duplicar 6.455 linhas neste arquivo:
 | `0x207e10` | 17156 | `battle()` | ✅ passe estrutural feito (`REVERSE_ENGINEERING_NOTES.md` §32, 2026-10-17): switch de 102 estados / 70 endereços distintos, tabela completa extraída, 94 chamadas catalogadas. **Os 70 handlers de estado ainda não foram lidos por dentro** — maior trabalho pendente de toda a Fase 3. |
 | `0x11173c` | 16312 | `Wmesputmain()` | ✅ passe estrutural feito (§33, 2026-10-17): confirma o subsistema `W*` de janelas/mensagens inteiro (nunca citado antes) e revela um sistema de tasks "wasm" novo. Corpo do laço principal e das 7 locais sem símbolo não lido. |
 | `0x2c141c` | 16164 | `Main_FrameRender()` | ✅ passe estrutural feito (§34, 2026-10-17): confirma o chamador real do motor `CEGL2_*` (fecha seções 13–15), revela `CGX_SCREEN_CORRECT` (correção de proporção por dispositivo) e um padrão "screen manager" (delega pra `NowLoading_FrameRender`/`SettingsWnd_FrameRender`). Corpos dos blocos individuais não lidos. |
-| `0x17c27c` | 15920 | `BattleUnitList(uchar*, ulong*)` | lista de unidades em batalha |
+| `0x17c27c` | 15920 | `BattleUnitList(uchar*, ulong*)` | ✅ passe estrutural feito (§36, 2026-10-17): revela uma família `b*` inteira (~30 funções) de primitivas de desenho PS1 dedicada à UI 2D de batalha (`bDB_init`/`bSwapDB` = um 3º sistema de buffer, além de `GsOT` e `CEGL2_*`), com semi-transparência real confirmada. 3 tabelas de salto (toque) extraídas. Corpos não lidos. |
 | `0xe88c4` | 15744 | `mesputmain()` | sistema de mensagens/diálogo (base) |
 | `0x16a6a4` | 15412 | `ASHURA_addPrim(MATRIX*)` | motor gráfico "ASHURA" (nome nunca visto antes) |
 | `0x1aeda0` | 13764 | `ItemMenu()` | menu de itens |

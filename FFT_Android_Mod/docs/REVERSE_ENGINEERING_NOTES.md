@@ -4775,3 +4775,88 @@ papel preciso de `onGotoNextMode`. Marcada `read_structural` no
 `Main_FrameMove`/`Main_FrameRender` — o loop principal do jogo
 inteiro — tem agora pelo menos um passe estrutural completo dos dois
 lados.
+
+## 36. `BattleUnitList` — passe estrutural — revela uma família `b*` inteira de primitivas PS1 de batalha, nunca vista (2026-10-17, Fase 3)
+
+`BattleUnitList(unsigned char*, unsigned long*)` (`0x17c27c`,
+15.920 B) — mesmo tratamento das seções 32–35. Descida recursiva:
+**3.618 de ~3.980 instruções possíveis (91%)**. Três tabelas de
+salto computadas (`addls pc,pc,r0,lsl#2`), todas extraídas.
+
+### 36.1 Três tabelas pequenas, todas sobre "qual região de toque foi tocada"
+
+Cada tabela segue o padrão: `r0 = iOS_GetRectHitNo{Tap,Slide,Touch}()
+- BASE; cmp r0,#N; addls pc,pc,r0,lsl#2`:
+
+- **Tabela A** (`0x17e384`, base `0x43`=67, 7 casos): 4 dos 7 casos
+  (`0,3,4,5`) caem no mesmo handler `0x17e3ac` — só 3 casos (1, 2, 6)
+  têm handler próprio.
+- **Tabela B** (`0x17e3bc`, base `0x4a`=74, 5 casos): 5 endereços
+  todos distintos.
+- **Tabela C** (`0x17f77c`, base `0x3c`=60, 7 casos): 4 dos 7
+  (`0,3,5,6`) caem em `0x17f7ac` — só 3 casos (1, 2, 4) têm handler
+  próprio.
+
+Confirma que o menu de lista de unidades de batalha tem pelo menos
+**19 regiões de toque identificadas por ID** (faixas `60–66`,
+`67–73`, `74–78`), cada uma com dispatch próprio — consistente com
+uma grade de botões/linhas (um por unidade do time, mais botões de
+navegação/confirmação).
+
+### 36.2 Achado maior: uma família `b*` inteira de primitivas de desenho PS1, nunca vista nesta investigação
+
+Mais de 30 funções com prefixo `b` resolvidas por nome — um
+subsistema de desenho 2D dedicado à tela de batalha, separado tanto
+do `wld_*` do mapa mundi quanto do `CEGL2_*` moderno:
+
+```
+bSwapDB(int,int)              bDB_init(DB*, ...25 ponteiros de primitiva PS1...)
+bSetFrameRate(int)            bChrSort(int)
+bGetChrList / bGetSortCondition / bSetSortCondition / bSearchUnit
+bDrawG4 / bDrawPluralFT4RGB / bDrawFT4RGB / bDrawFT4RGB2 / bDrawTexFlip
+bGetFadeStatus / bFadeInInit / bFadeOutInit / bFadeIn / bFadeOut
+bWaitLoadImage / bWaitStoreImage / bWorldJobStts
+bMessageMake / bWindowDel / bDrawMessage / bHelpMessage / bRoundHelpMessage
+bMenuSel2D / bGetMaskedPad
+bWindowColorSet / bWindowPrioritySet / bSelectWindowClut / bDrawWindow2 / bGetWindowColor
+```
+
+**`bDB_init`** é a função mais reveladora: recebe ponteiros pra
+**25 tipos de primitiva da lib gráfica do PS1** (`tagPOLY_F3/FT3/F4/
+FT4/G3/GT3/G4/GT4`, `tagLINE_F2/F3/F4/G2/G3/G4`, `tagTILE/TILE_1/
+TILE_8/TILE_16`, `tagSPRT/SPRT_8/SPRT_16`, `DR_MOVE/DR_AREA/DR_MODE`)
+— **"DB" = Double Buffer**, termo clássico do PS1. Isto confirma um
+**terceiro sistema de buffer de desenho**, nunca visto antes:
+- `GsOT`/`GsSPRITE` — mapa mundi (seções 11, 12.5 etc.)
+- `CEGL2_*` — motor moderno OpenGL ES (seções 13–15, 34)
+- **`DB`/`b*` — buffer de primitivas PS1 cru, dedicado à UI 2D de
+  batalha** (listas, janelas, mensagens, fade) — recém-descoberto
+
+Reforçado por chamadas reais de baixo nível da lib PS1 nunca vistas
+nesta função: `SetSprt`, `SetDrawMode`, `SetSemiTrans`,
+`SetDefDispEnv`/`SetDefDrawEnv`, `xpSetDrawOffset`,
+`xpLibgpuOffScreenRectGet` — **semi-transparência real** confirmada
+(`SetSemiTrans`), nunca mencionada antes nesta investigação.
+
+### 36.3 Outros sistemas confirmados
+
+- **Sistema de tasks genérico** (`task_create(long,char*)`/
+  `task_status(long)` ×11/`send_taskparamater`) — nome mais genérico
+  que o `wasmTaskEntry` da seção 33; candidato a ser o sistema de
+  tasks REAL subjacente (do qual "wasm" seria um wrapper), ou um
+  terceiro sistema — não investigado a fundo.
+- **Rede/link** (`pspNetSetPad`/`pspNetSetPadPushTiming`/
+  `net_control_ex`/`pspNetGetErrorCode`) — resquício de suporte a
+  cabo de link do PS1 original, nunca mencionado nesta investigação.
+- **`iOSUnitList*`** (`OutWin`/`FlagGet`/`MoveFlagSet`/
+  `MoveFlagReset`/`MoveFlagResetSTA`/`MovOtherCheck`/`WinOnOff`/
+  `CurSave_W`/`AreaTapCheck`) — confirma uma API de UI dedicada e
+  completa só pra esta lista de unidades, nunca catalogada.
+- 8 chamadas locais sem símbolo.
+
+**O que ficou sem confirmar (nível "passe estrutural" intencional)**:
+os corpos dos handlers das 3 tabelas, e os corpos de qualquer uma das
+~30 funções `b*` (todas só catalogadas por nome/assinatura via
+`bl`/demangle, nenhuma lida por dentro). Marcada `read_structural`.
+A família `b*` é candidata forte a abrir uma frente própria de
+leitura na Fase 3 — é um sistema inteiro, não uma função isolada.
