@@ -5552,3 +5552,16 @@ do código-fonte; `A`/`C`/`D`/`E` (três ainda não lidas) são, com alta
 confiança agora, só pontos de entrada finos — não precisam de leitura
 byte a byte individual, dado o padrão já confirmado duas vezes.
 Marcada `read_structural`.
+
+## 51. `Adisp_personalwindow()` — passe estrutural — terceira confirmação, fecha a família `disp_personalwindow` (2026-10-17, Fase 3)
+
+`Adisp_personalwindow()` (`0xc96a0`, 7.728 B) — descida recursiva:
+**1.880 de ~1.932 instruções possíveis (97%)**, sem tabela de salto;
+**109 branches, 56 de retrocesso**. Terceira confirmação do padrão
+das seções 49/50: chama os mesmos endereços sem prefixo de
+`disp_personalwindow` (`addlocalprim`, `statuskanjiprint`, etc.,
+idênticos), só a entrada é própria. Com `D`/`E`/`A` confirmando o
+mesmo padrão (3 de 4 letras restantes), a família
+`disp_personalwindow` está, no nível "passe estrutural", efetivamente
+encerrada — só `C` falta, e a essa altura seria apenas a quarta
+repetição do mesmo achado. Marcada `read_structural`.
