@@ -5902,3 +5902,32 @@ no boot, remanescentes de build de desenvolvimento.
 
 **O que ficou sem confirmar**: os ~2% não alcançados (muito pouco,
 função quase inteiramente linear). Marcada `read_structural`.
+
+## 65. `CCAMERA::Update()` — passe estrutural — a câmera 3D real do motor moderno, matemática pura em ponto flutuante de software (2026-10-17, Fase 3)
+
+`CCAMERA::Update()` (`0xafb30`, 5.576 B) — primeira leitura da
+classe `CCAMERA` (vtable real confirmada, `_ZTV7CCAMERA`; construtor/
+destrutor/`Init`/`SetMode`/`SetNearClip`/`SetFarClip`/`SetFov`/
+`GetView`/`GetProj`/`GetDir`/`SetProjOrtho` todos no `.dynsym`, a
+maioria não lida). Descida recursiva: **1.393 de ~1.394 instruções
+possíveis (99,9%)** — cobertura quase total. **Só 8 branches, ZERO
+de retrocesso** — função inteiramente linear, sem nenhum laço.
+
+### Confirma uma câmera 3D moderna, orientada a objeto, separada da pilha GTE do PS1
+
+Catálogo de `bl` dominado por ponto flutuante de **software**:
+`__mulsf3` (**174×**), `__addsf3` (89×), `__subsf3` (60×),
+`__divsf3` (13×), `__extendsfdf2`/`__truncdfsf2`/`__divdf3`
+(conversões float↔double). Nenhuma chamada a `RotMatrix`/
+`SetRotMatrix`/`RotTrans` (a pilha GTE do PS1 já confirmada em
+`ASHURA_addPrim`/`Mdl*`, seções 38/48/52/53) — **`CCAMERA` é a
+câmera real do motor `CEGL2_*` moderno**, com sua própria matemática
+de view/projeção em ponto flutuante puro, não a câmera de estilo
+PS1. Isso **separa, com evidência concreta, duas câmeras distintas**
+nesta investigação: a câmera GTE/fixa do mapa mundi e batalha estilo
+PS1, e esta `CCAMERA` orientada a objeto do renderer moderno.
+
+**O que ficou sem confirmar**: a fórmula matemática exata (view/
+projeção — perspectiva ou look-at, não cravado byte a byte); as
+outras ~10 funções pequenas de `CCAMERA` (a maioria ≤28 B, getters/
+setters triviais) continuam não lidas. Marcada `read_structural`.
