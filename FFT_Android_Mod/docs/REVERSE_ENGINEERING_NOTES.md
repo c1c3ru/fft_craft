@@ -6004,3 +6004,21 @@ retângulo, nunca visto nas leituras anteriores do sistema. Também
 **`WiOS_battle_scrollwindow_tap()`** — nome sugere que esta janela
 de scroll do mapa mundi é reaproveitada (ou tem uma contraparte
 direta) dentro do contexto de batalha. Marcada `read_structural`.
+
+## 68. `ASHURA_set_Mesh(int, int)` — passe estrutural — switch de 9 configurações de malha 3D, quase todo orientado a dados (2026-10-17, Fase 3)
+
+`ASHURA_set_Mesh(int, int)` (`0x163ccc`, 5.160 B) — mais uma função
+do motor `ASHURA` (seção 38). A descida recursiva simples só
+alcançou 15 instruções por uma tabela de salto logo no início
+(`addls pc,pc,r0,lsl#2`, `cmp r0,#8` → 9 casos). Extraída à mão e
+usada como semente, a cobertura sube pra **1.007 de ~1.290
+instruções possíveis (78%)**; **50 instruções tipo branch**.
+
+Só **2 `bl` em toda a função**: `ASHURA_LightSwitch(long)` e
+`requestChangeClut(...)` — confirma que `ASHURA_set_Mesh` é, na
+maior parte, **orientado a dados**: cada um dos 9 casos escreve
+campos de configuração de malha/matriz diretamente (inline), e só
+ocasionalmente chama fora pra trocar iluminação ou paleta de
+textura. Os 9 casos provavelmente correspondem a 9 "tipos de malha"
+pré-definidos (formas de unidade/efeito 3D distintas — hipótese, não
+confirmada byte a byte em cada caso). Marcada `read_structural`.
