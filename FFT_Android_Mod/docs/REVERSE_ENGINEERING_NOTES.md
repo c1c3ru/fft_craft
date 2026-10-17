@@ -5790,3 +5790,31 @@ uma janela de UI fixa) ligada ao sistema de eventos:
 (três variantes de "estender moldura de janela", novas). Quinta
 confirmação da correlação `W`↔`wasm` (`wasmTaskEntry` ×9,
 `wasmGetInput2` ×11) — seções 33/37/47/58. Marcada `read_structural`.
+
+## 61. `JobChange()` — passe estrutural — a roda giratória real de troca de classe, e um termo japonês romanizado novo (2026-10-17, Fase 3)
+
+`JobChange()` (`0x1b2ea8`, 6.216 B) — descida recursiva: **1.460 de
+~1.554 instruções possíveis (94%)**, sem tabela de salto; **150
+branches, 77 de retrocesso**.
+
+### Confirma a UI real de "roda" 3D giratória de troca de job
+
+```
+iOSJobChangeRot(short*,short*)       iOSJobChanegAngle()/Init/Hosei/Reset
+iOSJobChgRotAct()/Chk()/Stop()       iOSJobAngleSet/Get    iOSJobRotStop()
+iOSCircleCtrl(unsigned short)        iOSJobChgRotStop()     iOSGetTchRotDY()
+JobCicle(int,int,int,int)            SetJobName()           GetJobList/JobEquip
+```
+Confirma, com nomes reais, a UI clássica do FFT de troca de classe:
+uma **roda giratória controlada por arrasto de toque**
+(`iOSGetTchRotDY` = "delta Y do toque pra rotação", confirma que
+deslizar o dedo verticalmente gira a roda), com ângulo/estado de
+rotação geridos por uma família própria de funções `iOSJobChaneg*`
+(nota: "Chaneg", não "Change" — erro de digitação real preservado,
+mesmo espírito de `ASURA`/`changeflame`). **`Hosei`**
+(`iOSJobChanegAngleHosei`) é japonês romanizado (**補正**,
+"correção/ajuste") preservado no nome — mais um termo nunca
+traduzido, no espírito de "Iwasaki"/"SSD" já catalogados.
+
+**O que ficou sem confirmar**: os corpos da cascata de 150 branches
+(77 de retrocesso). Marcada `read_structural`.

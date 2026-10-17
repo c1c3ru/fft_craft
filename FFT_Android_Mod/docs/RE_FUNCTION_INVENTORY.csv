@@ -34,7 +34,7 @@ address,size,mangled,demangled,status,section_ref
 00117374,6504,_Z18Wdisp_scrollwindowv,Wdisp_scrollwindow(),read_structural,NOTES §58
 002ae900,6368,_Z17GuEmu_libgu_to_glv,GuEmu_libgu_to_gl(),read_structural,NOTES §59
 001314a8,6228,_Z22Wdisp_floateventwindowv,Wdisp_floateventwindow(),read_structural,NOTES §60
-001b2ea8,6216,_Z9JobChangev,JobChange(),unread,
+001b2ea8,6216,_Z9JobChangev,JobChange(),read_structural,NOTES §61
 000b1cdc,6204,gl3stubInit,gl3stubInit,unread,
 0014ec70,6156,_Z10resultprocv,resultproc(),unread,
 00274764,5848,_Z13BattleRoutineiP13ActionRequest,"BattleRoutine(int, ActionRequest*)",read_full,AI §18; AI §20
