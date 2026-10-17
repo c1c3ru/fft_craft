@@ -5498,3 +5498,37 @@ encontrada ainda. As outras ~10 funções `Mdl*` já catalogadas por
 nome continuam não lidas; dado que compartilham a mesma arquitetura,
 uma leitura futura pode ser mais rápida por comparação direta (como
 já feito pras famílias `W`/`e`/`c`/`b`). Marcada `read_structural`.
+
+## 49. `Ddisp_personalwindow()` — passe estrutural — revela que nem toda duplicação por letra é uma cópia completa (2026-10-17, Fase 3)
+
+`Ddisp_personalwindow()` (`0xce834`, 7.912 B) — mais uma variante da
+família `disp_personalwindow` (seções 46/47). Descida recursiva:
+**1.927 de ~1.978 instruções possíveis (97%)**, sem tabela de salto
+computada.
+
+### Correção/refinamento importante: `D` não duplica os helpers, só reusa os de `disp_personalwindow`
+
+Diferente de `Wdisp_personalwindow` (seção 47, que tinha SUAS
+PRÓPRIAS cópias `W`-prefixadas de `addlocalprim`/`statuskanjiprint`/
+etc.), `Ddisp_personalwindow` chama os **MESMOS endereços sem
+prefixo** de `disp_personalwindow` (seção 46) — `addlocalprim`
+(`0xd665c`), `statusfigprint` (`0xe1db8`), `statuskanjiprint`
+(`0xe2b78`), todos idênticos. **Não há uma cópia `D`-prefixada dos
+helpers de desenho** — só a função de entrada (`Ddisp_personalwindow`
+em si) é duplicada; o trabalho pesado de desenho é **compartilhado**
+com a versão sem prefixo. Isto refina a leitura das seções 39/40/42/
+45/47: a duplicação por letra **não é uniforme** — `W` parece ser
+uma cópia de verdade (fonte compilada duas vezes), enquanto `D` (e
+provavelmente `A`/`C`/`E`, ainda não lidas) parecem ser só **pontos
+de entrada alternativos** pro mesmo código de desenho, talvez
+chamados de contextos diferentes do jogo (ex.: unidade viva vs.
+morta, time aliado vs. inimigo — hipótese, não confirmada).
+
+Achado novo: `iOS_setTransFaceForChrRemove(int)` (sugere remoção de
+personagem do time) e `CFFT_STATE::AttackTeamFaceIDToFaceID` (mesma
+função confirmada na seção 22.5, reaparecendo aqui).
+
+**O que ficou sem confirmar**: os corpos da cascata de 117 branches
+(58 de retrocesso); e o contexto exato em que `D` é chamada vs. a
+versão sem prefixo (hipótese de "remoção de personagem" não
+confirmada). Marcada `read_structural`.

@@ -17,7 +17,7 @@ address,size,mangled,demangled,status,section_ref
 0012f2f0,8632,_Z20Wdisp_personalwindowv,Wdisp_personalwindow(),read_structural,NOTES §47
 0023e29c,8616,_Z7Mdl0024siii,"Mdl0024(short, int, int, int)",read_structural,NOTES §48
 0022f48c,8420,_Z7Mdl0004siii,"Mdl0004(short, int, int, int)",unread,
-000ce834,7912,_Z20Ddisp_personalwindowv,Ddisp_personalwindow(),unread,
+000ce834,7912,_Z20Ddisp_personalwindowv,Ddisp_personalwindow(),read_structural,NOTES §49
 0011f848,7888,_Z20Edisp_personalwindowv,Edisp_personalwindow(),unread,
 000c96a0,7728,_Z20Adisp_personalwindowv,Adisp_personalwindow(),unread,
 00236320,7684,_Z7Mdl0010siii,"Mdl0010(short, int, int, int)",unread,
