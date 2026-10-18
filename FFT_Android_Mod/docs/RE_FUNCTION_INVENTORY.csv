@@ -153,18 +153,18 @@ address,size,mangled,demangled,status,section_ref
 0026e428,1992,_Z12ctltuto_mainP7CTLINFO,ctltuto_main(CTLINFO*),unread,
 0016671c,1988,_Z14ASHURA_Controlmmll,"ASHURA_Control(unsigned long, unsigned long, long, long)",read_structural,NOTES §132
 0010e154,1988,_Z20Wdrawmessagepolygonsv,Wdrawmessagepolygons(),read_structural,NOTES §155
-000f5898,1984,_Z9menu_callPmm,"menu_call(unsigned long*, unsigned long)",unread,
+000f5898,1984,_Z9menu_callPmm,"menu_call(unsigned long*, unsigned long)",read_structural,NOTES §156
 002632ec,1984,_Z17ctlmouketeam_mainP7CTLINFO,ctlmouketeam_main(CTLINFO*),unread,
 001e5bac,1980,_Z19getskillresult_mainiP12SKILL_RESULT,"getskillresult_main(int, SKILL_RESULT*)",read_structural,NOTES §151
 002b07ac,1980,_ZN11CDebugPrint9FrameStepEiiiij,"CDebugPrint::FrameStep(int, int, int, int, unsigned int)",mentioned_unverified,
-002c562c,1968,_Z13Settings_Initv,Settings_Init(),unread,
+002c562c,1968,_Z13Settings_Initv,Settings_Init(),read_structural,NOTES §157
 0007f4a8,1960,_tr_flush_block,_tr_flush_block,read_full,NOTES §138
 0010f124,1960,_Z10Wmenu_callPmm,"Wmenu_call(unsigned long*, unsigned long)",unread,
 000a872c,1944,_ZN8CEGL2_IF5Add3DEiP15_EGL_PACKET_SPRh,"CEGL2_IF::Add3D(int, _EGL_PACKET_SPR*, unsigned char)",read_full,NOTES §14.3
-002284ac,1944,_Z21createPermanentObjectP15_JochuParameterP7Physics,"createPermanentObject(_JochuParameter*, Physics*)",unread,
+002284ac,1944,_Z21createPermanentObjectP15_JochuParameterP7Physics,"createPermanentObject(_JochuParameter*, Physics*)",read_structural,NOTES §158
 00091898,1932,mdct_forward,mdct_forward,read_full,NOTES §138
 002657f8,1932,_Z16ctlbackpage_mainP7CTLINFO,ctlbackpage_main(CTLINFO*),unread,
-00278480,1932,_Z28GetDestinationsAndMakeMaskTGv,GetDestinationsAndMakeMaskTG(),mentioned_unverified,
+00278480,1932,_Z28GetDestinationsAndMakeMaskTGv,GetDestinationsAndMakeMaskTG(),read_structural,NOTES §159
 002c5ddc,1908,_Z18Settings_FrameMovev,Settings_FrameMove(),unread,
 00091128,1904,mdct_backward,mdct_backward,read_full,NOTES §138
 000a75ac,1904,_ZN4math7MATRIX4mLERKS0_,math::MATRIX4::operator*=(math::MATRIX4 const&),unread,
@@ -180,7 +180,7 @@ address,size,mangled,demangled,status,section_ref
 00231570,1852,_Z7Mdl0005siii,"Mdl0005(short, int, int, int)",read_structural,NOTES §101
 001f5420,1840,_Z16displayDirectionv,displayDirection(),unread,
 001b7270,1836,_Z16RoundHelpMessages,RoundHelpMessage(short),unread,
-00276e4c,1828,_Z24CheckUnitActionEffectiveii,"CheckUnitActionEffective(int, int)",mentioned_unverified,
+00276e4c,1828,_Z24CheckUnitActionEffectiveii,"CheckUnitActionEffective(int, int)",read_structural,NOTES §160
 00174aa0,1800,_Z15cMakeWindowFuncPh,cMakeWindowFunc(unsigned char*),unread,
 001f25d4,1796,_Z12displayShapeP13tag_animation,displayShape(tag_animation*),unread,
 00187920,1784,_Z8eDB_initP2DBPmP10tagPOLY_F3P11tagPOLY_FT3P10tagPOLY_F4P11tagPOLY_FT4P10tagPOLY_G3P11tagPOLY_GT3P10tagPOLY_G4P11tagPOLY_GT4P10tagLINE_F2P10tagLINE_F3P10tagLINE_F4P10tagLINE_G2P10tagLINE_G3P9tagLINEG4P7tagTILEP9tagTILE_1P9tagTILE_8P10tagTILE_16P7tagSPRTP9tagSPRT_8P10tagSPRT_16P7DR_MOVEP7DR_AREAP7DR_MODE,"eDB_init(DB*, unsigned long*, tagPOLY_F3*, tagPOLY_FT3*, tagPOLY_F4*, tagPOLY_FT4*, tagPOLY_G3*, tagPOLY_GT3*, tagPOLY_G4*, tagPOLY_GT4*, tagLINE_F2*, tagLINE_F3*, tagLINE_F4*, tagLINE_G2*, tagLINE_G3*, tagLINEG4*, tagTILE*, tagTILE_1*, tagTILE_8*, tagTILE_16*, tagSPRT*, tagSPRT_8*, tagSPRT_16*, DR_MOVE*, DR_AREA*, DR_MODE*)",read_full,NOTES §153

@@ -8665,3 +8665,120 @@ agora (que são cópias de tamanho comparável à base), `Wevent_call`
 parece implementar só um SUBCONJUNTO dos opcodes de evento que
 `event_call` cobre — não é uma recompilação 1:1 completa, é uma
 variante reduzida de escopo. Marcadas `read_structural`.
+
+
+## Décimo-quinto lote paralelo (seções 156–160): 5 funções lidas por forks simultâneos, usando `jtable.py`
+
+## 156. `menu_call(...)` — entrada de task concreta que chama `event_call` direto, não um primitivo genérico (2026-10-18, Fase 3, lote paralelo)
+
+`menu_call(unsigned long*, unsigned long)` (`0xf5898`, 1.984 B) —
+descida recursiva via `jtable.py`: **457 de ~496 instruções
+possíveis (92%)**, sem tabela de salto; **44 branches, 20 de
+retrocesso**. 9 `bl` distintos.
+
+Toca estado de task (`asmGetActiveTask`), dado de mapa/geometria
+(`get_mapid`, `getMapXYZ`), submissão de primitivo pra desenho
+(`addlocalprim`), um toggle de efeito de chama (`changeflame`),
+chamadas de emulação de GPU PSX (`iOS_GetFrameRate`,
+`iOS_setHalftoneSize`), e, achado chave, **chama `event_call`
+diretamente** (`0xf431c`, seção 66 — o dispatcher central de
+cutscene). Alta densidade de branch de retrocesso sem tabela de
+salto sugere, como `itemmenu_call`/`Witemmenu_call` (seções 129/130),
+que `menu_call` é uma função de entrada de task CONCRETA que faz seu
+próprio trabalho de desenho de mapa/polígono por quadro — não é um
+primitivo genérico compartilhado que outras `*_call` constroem por
+cima; na verdade ela mesma invoca/encadeia pro sistema de evento.
+Marcada `read_structural`.
+
+## 157. `Settings_Init()` — setup de layout e asset do toolkit `CEGL2_*`, adaptado por dispositivo (2026-10-18, Fase 3, lote paralelo)
+
+`Settings_Init()` (`0x2c562c`, 1.968 B) — descida recursiva via
+`jtable.py`: **472 de ~492 instruções possíveis (96%)**, sem tabela
+de salto; **17 branches, 6 de retrocesso**. 24 `bl` distintos.
+
+Setup de uma vez só da tela de Configurações: registra/configura
+retângulos de UI `CRECT` (`Register`, `SetScreenOffset`/`Scale`,
+`MulRect` ×12 — provavelmente escala por widget, `SetEnableAll`),
+inicializa correção de tela via `CGX_SCREEN_CORRECT` (correção de
+aspecto/área segura por dispositivo), carrega um recurso de sprite
+via `CEGL2_SPRITE::LoadBegin`/`LoadEnd`, e carrega/decodifica um
+arquivo de dado via `CFILE_DAT::Load`/`Decode` (descarregando um
+anterior primeiro via `Unload`). Também consulta características do
+dispositivo via `CAPP_INFO` (`GetDeviceType`, `GetDeviceScale`,
+`IsDeviceiPhoneRetina4inch`) pra adaptar layout/escala por
+dispositivo, e toca `CWORK_MEM::Get()`/`CSTEP_BATCH::Init`/`Uninit`
+(memória de rascunho e um recurso de animação/step-batch ligado à
+UI). Três locais sem símbolo. Confirma ser trabalho clássico de
+init de tela do toolkit `CEGL2_*` já visto (seções 133–135): setup
+de retângulo de layout, carga de asset de sprite/dado, escala
+adaptativa por dispositivo. Marcada `read_structural`.
+
+## 158. `createPermanentObject(...)` — construtor físico/de transformação real pros objetos de efeito permanente (2026-10-18, Fase 3, lote paralelo)
+
+`createPermanentObject(_JochuParameter*, Physics*)` (`0x2284ac`,
+1.944 B) — descida recursiva via `jtable.py`: **486 de ~486
+instruções possíveis (100%)**, sem tabela de salto; **22 branches, 9
+de retrocesso**. 15 `bl` distintos, 37 chamadas no total.
+
+Fortemente dirigida por matemática GTE (`RotMatrix`/`SetRotMatrix`/
+`SetTransMatrix`/`RotTrans`/`VectorNormal`/`ratan2`/`SquareRoot0`) —
+consistente com o parâmetro `Physics*` precisando de setup real de
+orientação/transformação pro objeto recém-spawnado. **`efrand`**
+(×7, a chamada mais frequente) e `ps_rand` (×3) indicam
+randomização pesada de parâmetro inicial (jitter de velocidade/
+direção/posição típico de spawn de partícula/efeito).
+`getAnimationDirection`/`GetAnimationPosition` ligam de volta ao
+sistema de animação/efeito já visto nas funções de ciclo de vida do
+`ASHURA`. **Confirma que `createPermanentObject` é o construtor real
+de física/transformação pros objetos de efeito permanente** —
+combina randomização via RNG com setup completo de orientação 3D
+(matriz de rotação + translação) antes do objeto entrar na pipeline
+de animação/efeito. Dois locais sem símbolo. Marcada
+`read_structural`.
+
+## 159. `GetDestinationsAndMakeMaskTG()` — constrói a grade de máscara de movimento/alvo iterando painéis (2026-10-18, Fase 3, lote paralelo)
+
+`GetDestinationsAndMakeMaskTG()` (`0x278480`, 1.932 B) — descida
+recursiva via `jtable.py`: **476 de ~483 instruções possíveis
+(99%)**, sem tabela de salto; **55 branches, 34 de retrocesso** —
+função densamente orientada a laço.
+
+Rotina de grade de batalha/alcance de movimento: consulta status de
+unidade (`check_status_data2`), avalia/agrega uma área-base de alvo
+(`GetTargetBaseArea`), busca qual painel/tile está sob uma unidade
+dada (`GetPanelUnderUnit`), contabiliza células de mapa (`CountMap`,
+operando sobre uma grade `short` fixa de largura 18 — provavelmente
+o stride de largura do mapa), e copia um buffer de word (`MemCpyW`)
+— consistente com montar uma grade "máscara" de movimento/alvo
+iterando painéis candidatos, checando status de unidade por tile, e
+copiando/contando resultados num array de máscara de saída. Liga
+diretamente ao subsistema de pathfinding/alvejamento de IA junto com
+`GetTargetBaseArea` e os helpers de busca de painel já vistos perto
+de `ForAutoCommand` (seção 150). Marcada `read_structural`.
+
+## 160. `CheckUnitActionEffective(...)` — avaliador de efetividade de IA baseado em status/tempo, com RNG, alimenta `ForAutoCommand` (2026-10-18, Fase 3, lote paralelo)
+
+`CheckUnitActionEffective(int, int)` (`0x276e4c`, 1.828 B) —
+descida recursiva via `jtable.py`: **447 de ~457 instruções
+possíveis (98%)**; **uma tabela de salto resolvida** (guarda `cmp`
+em `0x277180`, dispatch em `0x277184`, 4 casos, 4 handlers
+distintos); **122 branches, 64 de retrocesso** — densidade de laço
+muito alta pra um tamanho pequeno.
+
+Dominada por `JudgeStatus(int,BWORK*,int)` (×7) — checa uma ou mais
+condições de efeito de status (buff/debuff/aflição) contra a
+unidade, com a tabela de 4 vias provavelmente selecionando entre
+categorias de checagem de status ou tipo de efeito.
+`GetCountToNextTurn`/`GetCountToDeath` sugerem que também fatora
+estado de tempo de turno/contagem até morte (ex.: "isso mataria
+antes do próximo turno"), e `ps_rand()` indica uma checagem
+probabilística/influenciada por RNG (chance de proc ou pontuação de
+IA randomizada), não um cálculo puramente determinístico. Nenhuma
+fórmula de dano ou checagem de resistência elemental aparece
+diretamente aqui — a "efetividade" julgada parece ser
+primariamente baseada em status/condição e tempo, não em dano bruto.
+**Perfil consistente com um helper de avaliação de IA que alimenta a
+decisão de `ForAutoCommand`** (seção 150): responde "aplicar esse
+status/ação ainda importa dado o status/tempo de turno atual do
+alvo" — usado pra filtrar/pontuar ações candidatas. Marcada
+`read_structural`.
