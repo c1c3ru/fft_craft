@@ -8310,3 +8310,20 @@ Alta densidade de laço (26 de retrocesso) consistente com laço
 aninhado clássico de era PSX construindo muitos quads pequenos pros
 glifos/tiles da mensagem — usa a pipeline legada, não o toolkit
 `CEGL2_*` das seções 133–135. Marcada `read_structural`.
+
+
+## 138. `vorbis_synthesis_blockin`/`_tr_flush_block`/`mdct_forward`/`mdct_backward` — mais quatro internos de `libvorbis`/`zlib` reconhecidos por nome (2026-10-18, Fase 3, regra 6 da metodologia)
+
+Quatro símbolos genuínos de bibliotecas de terceiros upstream:
+`vorbis_synthesis_blockin` (`0x85fe0`, 2.068 B, API real de
+`libvorbis`), `_tr_flush_block` (`0x7f4a8`, 1.960 B, interno de
+`deflate.c` do `zlib`), `mdct_forward`/`mdct_backward` (`0x91898`/
+`0x91128`, 1.932/1.904 B, transformada MDCT de `libvorbis`).
+Checagem rápida via `jtable.py`: **99–100% de cobertura** nas
+quatro, **zero tabela de salto**, catálogos de `bl` mínimos (3–5
+alvos) dominados por runtime de ponto flutuante do compilador
+(`__addsf3`/`__subsf3`) e helpers locais sem símbolo — nenhuma
+chamada a função prefixada do jogo nas quatro. Confirma serem código
+de terceiros genérico, mesma família já identificada nas seções
+17.x/102. Marcadas `read_full` sem passe completo, regra 6 da
+metodologia.
