@@ -8327,3 +8327,126 @@ chamada a função prefixada do jogo nas quatro. Confirma serem código
 de terceiros genérico, mesma família já identificada nas seções
 17.x/102. Marcadas `read_full` sem passe completo, regra 6 da
 metodologia.
+
+
+## Décimo-terceiro lote paralelo (seções 139–144): 6 funções lidas por forks simultâneos, usando `jtable.py`
+
+## 139. `getShadowRect(tag_animation*)` — confirma que a sombra consulta diretamente mapa e vetor de animação (2026-10-18, Fase 3, lote paralelo)
+
+`getShadowRect(tag_animation*)` (`0x1ebffc`, 2.240 B) — descida
+recursiva via `jtable.py`: **559 de ~560 instruções possíveis
+(100%)**, sem tabela de salto; **32 branches, 15 de retrocesso**.
+Catálogo mínimo (2 `bl` distintos): `get_mapstp(int,int,int)`
+(sistema de grade de mapa/terreno, seção 112) e
+`setAnimationRealVector(SVECTOR*, tag_animation*)` (sistema de
+posição real de animação). Alta densidade de laço (15 de 32) pra só
+duas chamadas sugere trabalho geométrico iterativo (percorrer
+células/vértices de mapa pra montar o retângulo de sombra), não
+aritmética simples. Confirma que o sistema de sombra consulta
+DIRETAMENTE o mapa/terreno (pra terreno irregular) e o rastreador de
+posição de animação, como esperado pra posicionamento de sombra sob
+unidade em movimento. Marcada `read_structural`.
+
+## 140. `s28_doSchedule(_EffectTCB*)` — efeito cinemático multi-estágio: fade de paleta, câmera, partícula e som num só agendamento (2026-10-18, Fase 3, lote paralelo)
+
+`s28_doSchedule(_EffectTCB*)` (`0x21d620`, 2.236 B, 28º da família
+de efeitos agendados `s*`, distinta da família `Mdl*`/`p*`) —
+descida recursiva via `jtable.py`: **551 de ~559 instruções
+possíveis (99%)**, sem tabela de salto; **47 branches, 19 de
+retrocesso**. 16 `bl` distintos.
+
+Mistura várias subsistemas num único callback agendado: efeito de
+tela/paleta (`changeMapClut`, `changeCharacterClut` ×3,
+`changeGradation`, `changeFlatColor` ×2, `fadeGradation`,
+`fadeFlatColor`), scripting de câmera (`SetCameraWorkWithSchedule`),
+controle de taxa de quadro (`setFrameRate`, `GetSQLFrameRate`),
+agendamento de partícula/efeito (`doSchedulePtclCommandOnce` ×2,
+`StartPermanentEffect`, `CreateObjectWithTable`), e som
+(`getNextSENo`, `Ssd_PlayEffect`). **Conclusão**: o efeito #28 é uma
+sequência "cinemática"/transição multi-estágio — encadeia mudanças
+de cor/iluminação (fade de CLUT de mapa e personagem, fade de cor
+plana/gradação), movimento de câmera, spawna um sub-efeito/objeto
+permanente, e toca som — não é um emissor de partícula simples como
+os efeitos de número menor. Dois locais sem símbolo. Marcada
+`read_structural`.
+
+## 141. `wipe_const()` — transição de tela rotativa/escalada, orientada a task com matemática GTE real (2026-10-18, Fase 3, lote paralelo)
+
+`wipe_const()` (`0x14e0ec`, 2.228 B) — descida recursiva via
+`jtable.py`: **543 de ~557 instruções possíveis (97%)**, sem tabela
+de salto; **27 branches, 16 de retrocesso**. 16 `bl` distintos.
+
+Função orientada a task (`settaskkind`, `task_wait`, `asmTaskEntry`,
+`asmGetInput2`) que dirige uma pipeline GTE/renderização estilo PSX
+pra efeito de wipe de quad: constrói/atualiza quads `POLY_F4` via
+`addlocalprim2` (×5)/`SetPolyF4`, lê estado de textura/modo de
+desenho/transparência (`GetTPage`, `SetDrawMode`, `SetSemiTrans`), e
+usa matemática de matriz/geometria real (`SquareRoot0`, `RotMatrix`,
+`ApplyMatrixLV`) junto com checagem de event-flag
+(`read_eventflag`). Confirma ser uma transição de wipe de tela
+rotativa/escalada de verdade, orientada pelo agendador de task com
+operações de matriz estilo GTE, não um wipe linear simples. Dois
+locais sem símbolo. Marcada `read_structural`.
+
+## 142. `get_ability(int, int)` — front-end fino sobre `get_command_ability`, confirma representação unificada de habilidade (2026-10-18, Fase 3, lote paralelo)
+
+`get_ability(int, int)` (`0x1d82a8`, 2.224 B) — descida recursiva via
+`jtable.py`: **539 de ~556 instruções possíveis (97%)**, sem tabela
+de salto; **97 branches, 52 de retrocesso** — densidade de branch
+muito alta pra um único callee.
+
+**Único `bl` distinto**: `get_command_ability(int,int)`, chamada
+**16 vezes**. Sem outras chamadas externas e sem tabela de salto —
+os 97 branches (52 de retrocesso) sugerem um laço/filtro inline
+escaneando registros de habilidade-comando repetidamente, em vez de
+um dispatch de tabela simples. Fica um nível abaixo de
+`make_abilitylistmain` (seção 128, que agrega via `get_bwp`/
+`set_*ability2`/etc.) — `get_ability` parece ser uma busca
+especializada que canaliza inteiramente por `get_command_ability`,
+sugerindo que registros de "habilidade" neste código são
+representados/resolvidos como "habilidade de comando" — confirma uma
+representação de dado unificada por baixo dos vários tipos de
+habilidade. Marcada `read_structural`.
+
+## 143. `sBattleTouchRotation()` — confirma ser o handler real de arrastar-pra-rotacionar câmera em batalha (2026-10-18, Fase 3, lote paralelo)
+
+`sBattleTouchRotation()` (`0x15b688`, 2.224 B) — descida recursiva
+via `jtable.py`: **526 de ~556 instruções possíveis (95%)**, sem
+tabela de salto; **60 branches, 42 de retrocesso**. 25 `bl`
+distintos.
+
+Confirma exatamente a hipótese: lê estado de toque bruto
+(`iOS_getTouchTap`/`Press`/`Release`/`Swype`/`BeginX`/`BeginY`/
+`NowX`/`NowY`), valida contra os limites da área de jogo
+(`IS_GAME_AREA`), e dirige um subsistema de rotação dedicado
+(`iOSRotStop`, `iOSRotSpeed`, `iOSRotSpeedGet` ×3, `iOSRotBufSetX`/
+`Y`, `iOSRotSetupAfterX`/`Y`) usando helpers de ponto flutuante do
+compilador pra matemática de velocidade/ângulo — **confirma a
+matemática trigonométrica teorizada na seção 85**. Também chama
+`startTurnRelative(int)` (ajuste de orientação por turno/câmera) e
+manipula estado de ícone V2 e um timer de status — sugere feedback de
+UI (ícone de rotação) ligado ao gesto de arrastar. Alta densidade de
+laço (42 de 60) consistente com cálculo por quadro de delta-de-toque
+pra velocidade de rotação. Marcada `read_structural`.
+
+## 144. `disp_chapter()` — driver de task do cartão de título de capítulo, coordena com flags de batalha PSP (2026-10-18, Fase 3, lote paralelo)
+
+`disp_chapter()` (`0xd361c`, 2.184 B) — descida recursiva via
+`jtable.py`: **524 de ~546 instruções possíveis (96%)**, sem tabela
+de salto; **50 branches, 31 de retrocesso**. 20 `bl` distintos.
+
+Driver de task real do cartão de título de capítulo: despachado via
+`asmTaskEntry`/`asm_function` (os alvos mais chamados, ×20/×6),
+sondando input via `asmGetInput1` e lendo taxa de quadro via
+`iOS_GetFrameRate` — consistente com uma task que roda por vários
+quadros pra animar/exibir o cartão. Desenha com chamadas gráficas de
+baixo nível estilo PSX (`DrawSync`, `FntPrint`, `PSX_LoadImage`) e
+gerencia gráfico de overlay de ícone V2 (`iOS_getV2Icon`/
+`setV2Icon`) — sugere que o cartão de capítulo inclui um elemento de
+ícone/retrato. Também toca flags de dado de batalha PSP
+(`pspBattleDataBackBufGet`/`DisableFlg`/`EnableFlg`) e
+`CFFT_STATE::GetParam`, implicando que a transição de capítulo
+coordena com/trava o estado do subsistema de batalha, e faz trabalho
+de heap via `mallocAddress`/`freeForFile`/`xpMallocIO`. Dois locais
+sem símbolo, chamados pesadamente (×6/×3) — bons candidatos pra
+próxima leitura. Marcada `read_structural`.

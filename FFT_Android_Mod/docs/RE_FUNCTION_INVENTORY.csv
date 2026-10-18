@@ -127,14 +127,14 @@ address,size,mangled,demangled,status,section_ref
 00124964,2260,_Z24Wselect_valuewithmessagev,Wselect_valuewithmessage(),unread,
 000a98c8,2248,_ZN8CEGL2_IF9DrawTile4EffffPjf,"CEGL2_IF::DrawTile4(float, float, float, float, unsigned int*, float)",read_full,NOTES §14.2
 000e062c,2240,_Z19drawmessagepolygonsv,drawmessagepolygons(),read_structural,NOTES §137
-001ebffc,2240,_Z13getShadowRectP13tag_animation,getShadowRect(tag_animation*),unread,
+001ebffc,2240,_Z13getShadowRectP13tag_animation,getShadowRect(tag_animation*),read_structural,NOTES §139
 002c78d4,2240,_Z21SettingsWnd_FrameMovev,SettingsWnd_FrameMove(),read_structural,NOTES §135
-0021d620,2236,_Z14s28_doScheduleP10_EffectTCB,s28_doSchedule(_EffectTCB*),unread,
-0014e0ec,2228,_Z10wipe_constv,wipe_const(),unread,
-001d82a8,2224,_Z11get_abilityii,"get_ability(int, int)",mentioned_unverified,
-0015b688,2224,_Z20sBattleTouchRotationv,sBattleTouchRotation(),unread,
+0021d620,2236,_Z14s28_doScheduleP10_EffectTCB,s28_doSchedule(_EffectTCB*),read_structural,NOTES §140
+0014e0ec,2228,_Z10wipe_constv,wipe_const(),read_structural,NOTES §141
+001d82a8,2224,_Z11get_abilityii,"get_ability(int, int)",read_structural,NOTES §142
+0015b688,2224,_Z20sBattleTouchRotationv,sBattleTouchRotation(),read_structural,NOTES §143
 00135218,2188,_Z14Witemmenu_callPmmi,"Witemmenu_call(unsigned long*, unsigned long, int)",read_structural,NOTES §130
-000d361c,2184,_Z12disp_chapterv,disp_chapter(),unread,
+000d361c,2184,_Z12disp_chapterv,disp_chapter(),read_structural,NOTES §144
 001b5ba0,2180,_Z12WorldJobSttsv,WorldJobStts(),unread,
 002826c8,2176,_Z14GLIVON_FT4_oldPmP11tagPOLY_GT4siPt,"GLIVON_FT4_old(unsigned long*, tagPOLY_GT4*, short, int, unsigned short*)",unread,
 0012cdcc,2168,_Z13itemmenu_callPmmi,"itemmenu_call(unsigned long*, unsigned long, int)",read_structural,NOTES §129
