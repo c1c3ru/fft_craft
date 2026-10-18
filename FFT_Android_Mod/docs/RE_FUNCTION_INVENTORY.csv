@@ -181,7 +181,7 @@ address,size,mangled,demangled,status,section_ref
 001f5420,1840,_Z16displayDirectionv,displayDirection(),unread,
 001b7270,1836,_Z16RoundHelpMessages,RoundHelpMessage(short),unread,
 00276e4c,1828,_Z24CheckUnitActionEffectiveii,"CheckUnitActionEffective(int, int)",read_structural,NOTES §160
-00174aa0,1800,_Z15cMakeWindowFuncPh,cMakeWindowFunc(unsigned char*),unread,
+00174aa0,1800,_Z15cMakeWindowFuncPh,cMakeWindowFunc(unsigned char*),read_structural,NOTES §181
 001f25d4,1796,_Z12displayShapeP13tag_animation,displayShape(tag_animation*),unread,
 00187920,1784,_Z8eDB_initP2DBPmP10tagPOLY_F3P11tagPOLY_FT3P10tagPOLY_F4P11tagPOLY_FT4P10tagPOLY_G3P11tagPOLY_GT3P10tagPOLY_G4P11tagPOLY_GT4P10tagLINE_F2P10tagLINE_F3P10tagLINE_F4P10tagLINE_G2P10tagLINE_G3P9tagLINEG4P7tagTILEP9tagTILE_1P9tagTILE_8P10tagTILE_16P7tagSPRTP9tagSPRT_8P10tagSPRT_16P7DR_MOVEP7DR_AREAP7DR_MODE,"eDB_init(DB*, unsigned long*, tagPOLY_F3*, tagPOLY_FT3*, tagPOLY_F4*, tagPOLY_FT4*, tagPOLY_G3*, tagPOLY_GT3*, tagPOLY_G4*, tagPOLY_GT4*, tagLINE_F2*, tagLINE_F3*, tagLINE_F4*, tagLINE_G2*, tagLINE_G3*, tagLINEG4*, tagTILE*, tagTILE_1*, tagTILE_8*, tagTILE_16*, tagSPRT*, tagSPRT_8*, tagSPRT_16*, DR_MOVE*, DR_AREA*, DR_MODE*)",read_full,NOTES §153
 000a2c4c,1780,_ZN15CG2D_LOADER_BMP4SaveEPviiP9_G2D_SAVE,"CG2D_LOADER_BMP::Save(void*, int, int, _G2D_SAVE*)",mentioned_unverified,
@@ -196,19 +196,19 @@ address,size,mangled,demangled,status,section_ref
 0017a42c,1732,_Z17bRoundHelpMessagesh,"bRoundHelpMessage(short, unsigned char)",unread,
 0019a3f8,1716,_Z7BuyUnitv,BuyUnit(),unread,
 00233ed0,1712,_Z7Mdl0008siii,"Mdl0008(short, int, int, int)",read_structural,NOTES §101
-000d071c,1708,_Z16Ddisp_parawindowv,Ddisp_parawindow(),unread,
+000d071c,1708,_Z16Ddisp_parawindowv,Ddisp_parawindow(),read_structural,NOTES §181
 000d140c,1700,_Z15chokobo_chrmenui,chokobo_chrmenu(int),read_structural,NOTES §170
 0018e3f0,1700,_Z11BattleEquipiPl,"BattleEquip(int, long*)",read_structural,NOTES §179
 001aa014,1692,_Z12GetBestEquipsPs,"GetBestEquip(short, short*)",read_structural,NOTES §173
 00262b18,1692,_Z21hakenunit_status_mainP7CTLINFO,hakenunit_status_main(CTLINFO*),read_structural,NOTES §169
 000ae584,1676,_ZN12CEGL2_SPRITE12DrawScrollBGEffP9_RECT_F32S1_,"CEGL2_SPRITE::DrawScrollBG(float, float, _RECT_F32*, _RECT_F32*)",read_full,NOTES §13.4
 00137b10,1676,_Z23select_valuewithmessagev,select_valuewithmessage(),read_structural,NOTES §171
-0017aaf0,1672,_Z7bGetPadv,bGetPad(),unread,
-000c3d94,1668,_Z16Adisp_parawindowv,Adisp_parawindow(),unread,
+0017aaf0,1672,_Z7bGetPadv,bGetPad(),read_structural,NOTES §181
+000c3d94,1668,_Z16Adisp_parawindowv,Adisp_parawindow(),read_structural,NOTES §181
 00133560,1668,_Z19Wdisp_abilitywindowv,Wdisp_abilitywindow(),unread,
-0014a834,1668,_Z16Cdisp_parawindowv,Cdisp_parawindow(),unread,
-00180b64,1652,_Z15bMakeWindowFuncPh,bMakeWindowFunc(unsigned char*),unread,
-00190b98,1652,_Z15eMakeWindowFuncPh,eMakeWindowFunc(unsigned char*),unread,
+0014a834,1668,_Z16Cdisp_parawindowv,Cdisp_parawindow(),read_structural,NOTES §181
+00180b64,1652,_Z15bMakeWindowFuncPh,bMakeWindowFunc(unsigned char*),read_structural,NOTES §181
+00190b98,1652,_Z15eMakeWindowFuncPh,eMakeWindowFunc(unsigned char*),read_structural,NOTES §181
 0008cbf4,1648,vorbis_analysis_headerout,vorbis_analysis_headerout,read_full,NOTES §174
 00163348,1636,_Z16ASHURA_SetMatrixlP6MATRIXS0_t,"ASHURA_SetMatrix(long, MATRIX*, MATRIX*, unsigned short)",read_structural,NOTES §180
 00195270,1636,_Z7AbiSttsv,AbiStts(),unread,
@@ -218,16 +218,16 @@ address,size,mangled,demangled,status,section_ref
 0008c4fc,1612,vorbis_synthesis_headerin,vorbis_synthesis_headerin,unread,
 00097f44,1608,_book_unquantize,_book_unquantize,unread,
 00193104,1608,_Z8jDB_initP2DBPmP10tagPOLY_F3P11tagPOLY_FT3P10tagPOLY_F4P11tagPOLY_FT4P10tagPOLY_G3P11tagPOLY_GT3P10tagPOLY_G4P11tagPOLY_GT4P10tagLINE_F2P10tagLINE_F3P10tagLINE_F4P10tagLINE_G2P10tagLINE_G3P9tagLINEG4P7tagTILEP9tagTILE_1P9tagTILE_8P10tagTILE_16P7tagSPRTP9tagSPRT_8P10tagSPRT_16P7DR_MOVEP7DR_AREA,"jDB_init(DB*, unsigned long*, tagPOLY_F3*, tagPOLY_FT3*, tagPOLY_F4*, tagPOLY_FT4*, tagPOLY_G3*, tagPOLY_GT3*, tagPOLY_G4*, tagPOLY_GT4*, tagLINE_F2*, tagLINE_F3*, tagLINE_F4*, tagLINE_G2*, tagLINE_G3*, tagLINEG4*, tagTILE*, tagTILE_1*, tagTILE_8*, tagTILE_16*, tagSPRT*, tagSPRT_8*, tagSPRT_16*, DR_MOVE*, DR_AREA*)",unread,
-00122fe0,1604,_Z16Edisp_parawindowv,Edisp_parawindow(),unread,
+00122fe0,1604,_Z16Edisp_parawindowv,Edisp_parawindow(),read_structural,NOTES §181
 001a33a0,1596,_Z8PoachBuyv,PoachBuy(),unread,
 00261dac,1592,_Z17ctlmouketeam_initv,ctlmouketeam_init(),unread,
-001345d4,1588,_Z16Wdisp_parawindowv,Wdisp_parawindow(),unread,
-00173df8,1588,_Z7cGetPadv,cGetPad(),unread,
+001345d4,1588,_Z16Wdisp_parawindowv,Wdisp_parawindow(),read_structural,NOTES §181
+00173df8,1588,_Z7cGetPadv,cGetPad(),read_structural,NOTES §181
 0019e188,1580,_Z13NameChgSelectv,NameChgSelect(),unread,
 00169aa4,1572,_Z19ASHURA_LMDL_DB_COPYPt,ASHURA_LMDL_DB_COPY(unsigned short*),unread,
-0018f374,1568,_Z7eGetPadv,eGetPad(),unread,
+0018f374,1568,_Z7eGetPadv,eGetPad(),read_structural,NOTES §181
 00084790,1564,vorbis_bitrate_addblock,vorbis_bitrate_addblock,unread,
-001965a4,1560,_Z7jGetPadv,jGetPad(),unread,
+001965a4,1560,_Z7jGetPadv,jGetPad(),read_structural,NOTES §181
 00108568,1540,_Z17Wevent_status_settt,"Wevent_status_set(unsigned short, unsigned short)",unread,
 00280dfc,1540,_Z19iOS_setStatusHPMPCTP11IOS_STTSNUMiiiiiiiiiPvi,"iOS_setStatusHPMPCT(IOS_STTSNUM*, int, int, int, int, int, int, int, int, int, void*, int)",unread,
 001e6d74,1524,_Z16getreaction_postPt,getreaction_post(unsigned short*),mentioned_unverified,
@@ -235,7 +235,7 @@ address,size,mangled,demangled,status,section_ref
 002570f4,1516,_Z16ctltownmenu_mainP7CTLINFO,ctltownmenu_main(CTLINFO*),unread,
 00137524,1512,_Z12select_valuev,select_value(),unread,
 0007a760,1504,inflate_fast,inflate_fast,unread,
-00197a10,1504,_Z15jMakeWindowFuncPh,jMakeWindowFunc(unsigned char*),unread,
+00197a10,1504,_Z15jMakeWindowFuncPh,jMakeWindowFunc(unsigned char*),read_structural,NOTES §181
 00165520,1500,_Z15ASURA_FALL_INITh,ASURA_FALL_INIT(unsigned char),unread,
 001a6d00,1496,_Z7Dismissv,Dismiss(),unread,
 00094e54,1480,_vp_tonemask,_vp_tonemask,unread,

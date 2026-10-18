@@ -9184,3 +9184,77 @@ de nó na hierarquia LMDL (junto com `ASHURA_LMDL_Read`/
 `ASURA_LMDL_TIME_TBL`/`ASHURA_MapProjectMem2Mem`), mas com múltiplos
 modos de dispatch em vez de uma única rotina dedicada. Marcada
 `read_structural`.
+
+
+## 181. Confirmação definitiva: `b`/`c`/`e`/`j` são contextos de task com cópia completa até o nível de primitivo — dois sistemas de letra DISTINTOS nesta base de código (2026-10-18, Fase 3, regra 2 da metodologia, achado arquitetural central)
+
+`family_sim.py` rodado contra as três referências da seção anterior
+(175–177) resolve a questão em aberto da seção 179 de uma vez:
+
+### `MakeWindowFunc`/`b`/`c`/`e`/`j`: Jaccard 0,00 nas quatro — duplicação completa até o PRIMITIVO
+
+```
+bMakeWindowFunc  0x180b64  1.652 B   Jaccard 0,00
+cMakeWindowFunc  0x174aa0  1.800 B   Jaccard 0,00
+eMakeWindowFunc  0x190b98  1.652 B   Jaccard 0,00
+jMakeWindowFunc  0x197a10  1.504 B   Jaccard 0,00
+```
+Resolvendo os dois alvos de `bl` de cada uma por nome: `bMakeWindowFunc`
+chama **`bDrawFT4RGB`**/**`bMakeSmallWindowFunc`**; `cMakeWindowFunc`
+chama `cDrawFT4RGB`/`cMakeSmallWindowFunc`; `eMakeWindowFunc` chama
+`eDrawFT4RGB`/`eMakeSmallWindowFunc`; `jMakeWindowFunc` chama
+`jDrawFT4RGB`/`jMakeSmallWindowFunc`. **Cada letra tem sua PRÓPRIA
+cópia até o primitivo de desenho mais baixo** (`DrawFT4RGB`) — não é
+só a função de entrada duplicada, é a árvore de chamada inteira,
+recompilada por contexto de letra.
+
+### `GetPad`/`b`/`c`/`e`/`j`: mesmo padrão, Jaccard 0,17–0,29
+
+```
+bGetPad  0x17aaf0  1.672 B   Jaccard 0,20 (chama helpers próprios, não GetFrameRate/ClearPadData/TruePadRead)
+cGetPad  0x173df8  1.588 B   Jaccard 0,29
+eGetPad  0x18f374  1.568 B   Jaccard 0,20
+jGetPad  0x1965a4  1.560 B   Jaccard 0,17
+```
+Nenhuma chama `GetFrameRate`/`ClearPadData`/`TruePadRead` (os alvos
+da referência) — cada uma tem seu próprio conjunto de helpers de
+leitura de pad.
+
+### `disp_parawindow`/`A`/`C`/`D`/`E`/`W`: o padrão JÁ CONHECIDO (entrada fina + W real)
+
+```
+Adisp_parawindow  0xc3d94   1.668 B   Jaccard 0,75 (entrada fina)
+Cdisp_parawindow  0x14a834  1.668 B   Jaccard 0,75 (entrada fina)
+Ddisp_parawindow  0xd071c   1.708 B   Jaccard 0,75 (entrada fina)
+Edisp_parawindow  0x122fe0  1.604 B   Jaccard 0,59 (entrada fina, mais locais próprios)
+Wdisp_parawindow  0x1345d4  1.588 B   Jaccard 0,08 (cópia real: Waddlocalprim/Wbgput/
+                                                     Wsettaskkind/Wimport_localpad/
+                                                     wasmTaskEntry/wasmGetInput3)
+```
+Décima-terceira confirmação do padrão `A`/`C`/`D`=entrada fina,
+`W`=cópia real pra esta família especificamente.
+
+### Conclusão: há DOIS sistemas de letra distintos nesta base de código
+
+1. **Família `disp_*window`/`*_call` (letras `A`/`C`/`D`/`E`/`W`)**:
+   representa TELAS/variantes de contexto de exibição. `A`/`C`/`D`/`E`
+   são pontos de entrada finos reusando uma biblioteca de desenho
+   compartilhada sem prefixo; só `W` (task `wasm`) é uma
+   recompilação completa com sua própria biblioteca de helpers.
+
+2. **Família de utilitário de baixo nível (letras `b`/`c`/`e`/`j`, e
+   possivelmente outras ainda não vistas)**: representa CONTEXTOS DE
+   TASK/SLOT de um kernel cooperativo estilo PS1 onde não existe
+   isolamento de memória real entre tasks — em vez de compartilhar
+   uma função utilitária entre contextos, o pipeline de build
+   recompila a função E TODA sua árvore de chamada (até o primitivo
+   `DrawFT4RGB`/pad de controle) uma vez por letra/contexto. Isso é
+   duplicação de código muito mais extensa do que o padrão `W` —
+   aqui TODAS as letras são "cópias reais", nenhuma é entrada fina.
+
+Esse é o achado arquitetural central da sessão: a mesma convenção
+de letra de prefixo tem dois significados completamente diferentes
+dependendo da família de função, e só dá pra saber qual se aplica
+rodando `family_sim.py` e olhando o Jaccard — não pelo nome. Treze
+funções confirmadas nesta passada (21.232 B). Todas marcadas
+`read_structural`.
