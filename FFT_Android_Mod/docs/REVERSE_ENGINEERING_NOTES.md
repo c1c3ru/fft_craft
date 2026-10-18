@@ -7281,3 +7281,26 @@ dedicada.
 **O que ficou sem confirmar**: os corpos da cascata de 48 branches
 (22 de retrocesso); o contexto exato de chamada (quem invoca
 `Equip()` vs. `eItemMenu`). Marcada `read_structural`.
+
+## Sétimo lote paralelo: 1 de 5 forks completou antes do limite de uso da sessão
+
+**Nota operacional (2026-10-18)**: dos 5 forks lançados pro sétimo
+lote (`ASURA_LMDL_TIME_TBL`, `Tutrial`, `ctlhoukmes_main`,
+`iOS_RESUME_SET_EVENT_W`, `hight_font_draw`), 4 falharam por limite
+de uso da sessão (não leram nada, erro de API antes de começar). Só
+`iOS_RESUME_SET_EVENT_W` completou — fica registrada abaixo. Os
+outros 4 alvos continuam na fila pra uma próxima rodada.
+
+## 99. `iOS_RESUME_SET_EVENT_W(...)` — confirmação curta do padrão da seção 76 (2026-10-18, Fase 3)
+
+**`iOS_RESUME_SET_EVENT_W(IOS_RESUME_DATA_EVENT_W*, IOS_RESUME_DATACOPY_MODE)`**
+(`0x11cbb4`, 2.812 B) — confirma o mesmo padrão de
+`iOS_RESUME_SET_EVENT` (seção 76): serializador campo a campo, 87%
+de cobertura, zero branches reais, só `iOS_Resume_DataCopy` (×84) e
+`iOS_Resume_DataCopyAddr` (×11) chamadas. Serializa um struct
+diferente (`IOS_RESUME_DATA_EVENT_W`, provavelmente variante de
+layout, não necessariamente "wide" no sentido de texto), usando os
+MESMOS dois primitivos de cópia — confirma que o sufixo `_W` aqui
+**não segue** o padrão "cópia real de fonte" das telas de UI
+(seções 33/37/47/58/60), é só uma segunda estrutura de dados
+compartilhando o mesmo mecanismo. Marcada `read_structural`.

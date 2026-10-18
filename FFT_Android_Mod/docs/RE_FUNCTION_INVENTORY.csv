@@ -94,7 +94,7 @@ address,size,mangled,demangled,status,section_ref
 00278f84,2880,_Z18FundamentalRoutinev,FundamentalRoutine(),read_structural,AI §28
 001267f4,2840,_Z14disp_helpmenu2v,disp_helpmenu2(),unread,
 000940f0,2828,_vp_psy_init,_vp_psy_init,unread,
-0011cbb4,2812,_Z22iOS_RESUME_SET_EVENT_WP23IOS_RESUME_DATA_EVENT_W24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_EVENT_W(IOS_RESUME_DATA_EVENT_W*, IOS_RESUME_DATACOPY_MODE)",unread,
+0011cbb4,2812,_Z22iOS_RESUME_SET_EVENT_WP23IOS_RESUME_DATA_EVENT_W24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_EVENT_W(IOS_RESUME_DATA_EVENT_W*, IOS_RESUME_DATACOPY_MODE)",read_structural,NOTES §99 (87%)
 001e03c8,2812,_Z13getskillrangeP3ACT,getskillrange(ACT*),read_structural,NOTES §94
 0008aa00,2800,floor1_fit,floor1_fit,unread,
 00264cf8,2784,_Z13ctlnobel_mainP7CTLINFO,ctlnobel_main(CTLINFO*),read_structural,NOTES §96
