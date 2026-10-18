@@ -66,24 +66,24 @@ address,size,mangled,demangled,status,section_ref
 0013d248,3996,_Z11disp_optioni,disp_option(int),read_structural,NOTES §106
 0019e7b8,3936,_Z4Shopi,Shop(int),read_structural,"NOTES §75 (parcial, 82%)"
 001f1680,3924,_Z12executeShapeP13tag_animation,executeShape(tag_animation*),read_structural,NOTES §82
-001156f4,3880,_Z13Wdisp_statuscv,Wdisp_statusc(),unread,
+001156f4,3880,_Z13Wdisp_statuscv,Wdisp_statusc(),read_structural,NOTES §111
 001cda4c,3844,_Z14setskillresulti,setskillresult(int),read_structural,NOTES §77
 000ef83c,3828,_Z12disp_statuscv,disp_statusc(),read_structural,NOTES §107
-001431c4,3828,_Z12Wdisp_optioni,Wdisp_option(int),unread,
+001431c4,3828,_Z12Wdisp_optioni,Wdisp_option(int),read_structural,NOTES §111
 00221f64,3816,_Z17dispPolygonObjectP7SVECTORP6VECTORS0_S2_i,"dispPolygonObject(SVECTOR*, VECTOR*, SVECTOR*, VECTOR*, int)",read_structural,NOTES §108
 00228ee8,3808,_Z10drawShape2P6Shape2P5PointsP6VECTORPm,"drawShape2(Shape2*, Point*, short, VECTOR*, unsigned long*)",read_structural,NOTES §109
 001a17e8,3764,_Z10GlobalNamePhS_,"GlobalName(unsigned char*, unsigned char*)",read_structural,"NOTES §84 (parcial, 77%)"
 00219728,3740,_Z18DoEffectCameraWorkv,DoEffectCameraWork(),read_structural,NOTES §83
 002b4680,3636,_Z16Link_FrameRenderv,Link_FrameRender(),read_structural,NOTES §86
 00168ba8,3632,_Z24ASHURA_MapProjectMem2MemhPc,"ASHURA_MapProjectMem2Mem(unsigned char, char*)",unread,
-002adab4,3544,sceGuSendList,sceGuSendList,unread,
+002adab4,3544,sceGuSendList,sceGuSendList,read_structural,NOTES §110
 00156bec,3520,_Z13worldmap_callPmm,"worldmap_call(unsigned long*, unsigned long)",read_structural,NOTES §80
 0016e7c8,3504,_Z17ASHURA_GNS_Garagelm,"ASHURA_GNS_Garage(long, unsigned long)",read_structural,NOTES §81
 00178e98,3300,_Z13bWorldJobSttsv,bWorldJobStts(),read_structural,NOTES §93
 00246450,3296,_Z17ctlopentitle_mainP7CTLINFO,ctlopentitle_main(CTLINFO*),read_structural,NOTES §87
 0023a634,3292,_Z7Mdl0014siii,"Mdl0014(short, int, int, int)",read_structural,NOTES §101
 0015c15c,3284,_Z17sBattleTouchToCuri,sBattleTouchToCur(int),read_structural,NOTES §85
-002ace34,3200,sceGuDrawArray,sceGuDrawArray,unread,
+002ace34,3200,sceGuDrawArray,sceGuDrawArray,read_structural,NOTES §110
 002210fc,3176,_Z18p04_magicChantFuncv,p04_magicChantFunc(),read_structural,NOTES §88
 002542a4,3124,_Z11ctlmap_mainP7CTLINFO,ctlmap_main(CTLINFO*),read_structural,NOTES §92
 001f3828,3096,_Z12NewAnimationiiissssP5BWORKiPv,"NewAnimation(int, int, int, short, short, short, short, BWORK*, int, void*)",read_structural,NOTES §89

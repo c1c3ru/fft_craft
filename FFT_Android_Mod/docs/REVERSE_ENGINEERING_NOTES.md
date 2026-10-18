@@ -7663,3 +7663,57 @@ bem apertada (desenrolada por vértice/sub-parte) sobre os pontos da
 `dispPolygonObject` (seção 108) — os dois parecem ser o par
 "carregar malha TMD" / "rasterizar forma convertida" da mesma
 pipeline de desenho. Marcada `read_structural`.
+
+
+## 110. `sceGuSendList`/`sceGuDrawArray` — NÃO são boilerplate: são a ponte real PSP-GU -> `CEGL2_*`, confirmando `GuEmu_libgu_to_gl` por um ângulo novo (2026-10-18, Fase 3)
+
+Checagem rápida pela regra 6 da metodologia (nome `sce*` sugeria
+código de compatibilidade PSP genérico) **revela o contrário**:
+`sceGuSendList` (`0x2adab4`, 3.544 B, 94% de cobertura, 2 tabelas de
+salto — 20 casos/15 handlers e 4 casos/3 handlers) e
+`sceGuDrawArray` (`0x2ace34`, 3.200 B, 95% de cobertura, 2 tabelas de
+salto — 6 casos/5 handlers e 4 casos/3 handlers) chamam
+`CEGL2_IF::GetPacket`, `CEGL_PACKET::Add`/`SetTypeCurrent`/
+`SetBlendModeCurrent`/`SetTextureCurrent`/`SetExtraCurrent` (×48!) e
+`CFFT_STATE::GetVertexScaling`/`GetParam`/`FaceIDToFID` — chamadas
+genuínas do motor do próprio jogo, não de uma lib PSP de verdade.
+
+**Confirma `GuEmu_libgu_to_gl` por um segundo ângulo**: a API `sceGu*`
+não é código de terceiros preservado — é a camada de compatibilidade
+do PRÓPRIO jogo que traduz chamadas de desenho no estilo PSP (`libgu`)
+pra pacotes `CEGL_PACKET` internos (que por sua vez vão pro OpenGL).
+`GuEmu_GetRAW(int)` (chamada por ambas) é outro elo dessa ponte.
+
+**Achado extra**: as duas funções compartilham a MESMA lista de ~13
+locais sem símbolo (`0x2a3d74`...`0x2aa528`) como alvo das tabelas de
+salto — consistente com um array compartilhado de handlers "por tipo
+de primitivo/vértice" usado tanto no caminho de lista de comandos
+quanto no de desenho de array direto. **35 branches/28 retrocesso**
+(`sceGuSendList`) e **44/30** (`sceGuDrawArray`). Aceitas direto pela
+regra 3 da metodologia (cobertura alta, tabelas resolvidas, sem
+verificação manual extra). Marcadas `read_structural`.
+
+
+## 111. `Wdisp_statusc()`/`Wdisp_option(int)` — quinta e sexta confirmação independente de que `W` é sempre a cópia real (2026-10-18, Fase 3, regra 2 da metodologia)
+
+`family_sim.py` contra as bases recém-lidas (seções 106/107):
+
+```
+Wdisp_statusc()    0x1156f4  3.880 B   Jaccard 0,30 (vs disp_statusc)
+Wdisp_option(int)  0x1431c4  3.828 B   Jaccard 0,21 (vs disp_option)
+```
+Jaccard baixo nas duas, como esperado — confirmam de novo que `W`
+**não reusa nenhum helper sem prefixo**, chamando em vez disso sua
+própria biblioteca `W`-prefixada: `Waddlocalprim`, `Winitsprtfield`,
+`Waddstatusback`, `Winitstatusback`, `Witemuvclut`, `Wloadcdst`,
+`Wbgput`, `Wstatuskanjiprint`, `Wsettaskkind`, `Wimport_localpad`,
+`Wtask_create`, `Wtask_killmyself`, `Wwait_taskend`,
+`Wsend_taskparamater`, mais `wasmTaskEntry`/`wasmGetInput3`/
+`wasmGetActiveTask` (task `wasm`, não `asm`/task puro das bases).
+Com estas duas, já são **cinco famílias independentes**
+(`disp_personalwindow`, `disp_bothwindow`, `Wmultiwindow_*`,
+`disp_statusc`, `disp_option`) confirmando o mesmo padrão
+arquitetural: `W` é sempre uma recompilação de verdade do código-
+fonte com sua própria biblioteca de helpers e task `wasm`, nunca um
+ponto de entrada fino. Aceito direto via catálogo de `bl`, sem
+verificação manual (regra 3). Marcadas `read_structural`.
