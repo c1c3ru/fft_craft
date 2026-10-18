@@ -8782,3 +8782,138 @@ decisão de `ForAutoCommand`** (seção 150): responde "aplicar esse
 status/ação ainda importa dado o status/tempo de turno atual do
 alvo" — usado pra filtrar/pontuar ações candidatas. Marcada
 `read_structural`.
+
+
+## 161. `Wmenu_call(...)` — espelha `menu_call`→`event_call` como `Wmenu_call`→`Wevent_call` (2026-10-18, Fase 3, regra 2 da metodologia)
+
+`family_sim.py` contra `menu_call` (seção 156): `Wmenu_call`
+(`0x10f124`, 1.960 B) tem Jaccard 0,31 — chama `Waddlocalprim`
+(`0xfe1a4`) em vez de `addlocalprim`, `wasmGetActiveTask`
+(`0x162028`) em vez de `asmGetActiveTask`, e, espelhando o achado da
+seção 156, **chama `Wevent_call` diretamente** (`0x10e918`, seção
+155) em vez de `event_call` — confirma que a dupla `menu_call`/
+`event_call` tem uma dupla `W` paralela e completa (`Wmenu_call`/
+`Wevent_call`), encadeadas entre si da mesma forma. Décima-primeira
+confirmação do padrão `W`. Marcada `read_structural`.
+
+
+## Décimo-sexto lote paralelo (seções 162–167): 6 funções lidas por forks simultâneos, usando `jtable.py`
+
+## 162. `Settings_FrameMove()` — confirma o par update/draw da tela principal de Configurações (2026-10-18, Fase 3, lote paralelo)
+
+`Settings_FrameMove()` (`0x2c5ddc`, 1.908 B, DISTINTA de
+`SettingsWnd_FrameMove`, seção 135 — nomes parecidos, funções
+diferentes) — descida recursiva via `jtable.py`: **447 de ~477
+instruções possíveis (94%)**; **uma tabela de salto resolvida** (9
+casos, 6 handlers distintos); **43 branches, 28 de retrocesso**. 25
+`bl` distintos.
+
+Confirma ser a contraparte "update" de `Settings_FrameRender`
+(seção 133): sondagem de toque completa (`CINPUT_IF_TOUCH::Begin`/
+`EndAll`, `GetPress`/`Down`/`Up`/`Repeat`/`TouchPoint` ×7/
+`TouchCount`/`GetEvent`), atualização de widget (`CRECT::FrameMove`/
+`SetEnable`, `CSTEP_BATCH::FrameMove`/`Init`), escala de tela
+(`CGX_SCREEN_CORRECT::Scaled`/`CorrectX`, `RETINA_SCALE`),
+**`SettingsBundle_Get()`** (×12, o alvo mais chamado), áudio
+(`SysSE_PlayDef`, `CSOUND_IF::SetMasterVolume`), e
+**`onGotoNextMode(int)`** (transição de modo/tela). A tabela de 9
+casos mais o tráfego pesado de `SettingsBundle_Get` sugere um laço
+de dispatch por item de configuração tratando evento de toque pra
+cada controle (slider/botão). Marcada `read_structural`.
+
+## 163. `SettingsWnd_Init()` — mesmo toolkit de `Settings_Init`, escopo próprio pra variante janela (2026-10-18, Fase 3, lote paralelo)
+
+`SettingsWnd_Init()` (`0x2c718c`, 1.864 B) — descida recursiva via
+`jtable.py`: **451 de ~466 instruções possíveis (97%)**, sem tabela
+de salto; **13 branches, 4 de retrocesso**. 21 `bl` distintos.
+
+Mesmo toolkit de `Settings_Init` (seção 157): `CRECT::Register`/
+`Init`/`MulRect` (×11)/`SetEnableAll`, `CEGL2_SPRITE::LoadBegin`/
+`LoadEnd`, `CFILE_DAT::Load`/`Unload`/`Decode`, `CAPP_INFO::
+GetDeviceType`/`GetDeviceScale` — confirma ser a contraparte de init
+de uma vez só da variante "janela" da tela de Configurações, com
+escopo próprio: chama `CGX_SCREEN_CORRECT::Area_GetCorrect` e
+`GX_GetScreenW_1X()` (não vistos em `Settings_Init`), sugerindo
+lógica extra de correção de tela/largura específica da variante
+`Wnd`. Três locais sem símbolo. Marcada `read_structural`.
+
+## 164. `Edisp_equipwindow()` — conteúdo real da tela de equipar, confirma pra onde os stubs triviais da seção 131 desembocam (2026-10-18, Fase 3, lote paralelo)
+
+`Edisp_equipwindow()` (`0x12171c`, 2.156 B) — descida recursiva via
+`jtable.py`: **516 de ~539 instruções possíveis (96%)**, sem tabela
+de salto; **35 branches, 20 de retrocesso**. 27 `bl` distintos.
+
+Confirma ser conteúdo real de tela, não um stub: `addlocalprim`
+(×17, dominante — laço pesado de desenho por item/slot),
+`initsprtfield`/`itemuvclut`/`bgput`/`SetDrawOffset`/`IS_TEX_2X`/
+`TexHybrid_RegistCLUTAddr`/`PSX_LoadImage` (textura/CLUT e fundo),
+`addstatusback`/`initstatusback`/`statuskanjiprint` (moldura da
+janela e texto em japonês), `import_localpad`/`settaskkind`/
+`asmGetInput3`/`asmTaskEntry` (input/task), `pspItemIsEmpty`/
+`CFFT_STATE::GetParam`/`SetParam` (estado/checagem de item), e
+**`iOSUnitListMoveFlagReset()`** (flag de navegação de lista).
+**Confirma a hipótese**: `Edisp_equipwindow` é a implementação real
+em que os stubs triviais `disp_equipwindow`/`A`/`D`/`C` (16 B/4 B,
+seção 131) desembocam via `asmTaskEntry` — constrói e desenha a
+janela de equipar de verdade (sprites, fundo, texto de status,
+checagem de slot de item). Cinco locais sem símbolo. Marcada
+`read_structural`.
+
+## 165. `Wdisp_equipwindow()` — décima-segunda confirmação do padrão `W` (2026-10-18, Fase 3, lote paralelo)
+
+`Wdisp_equipwindow()` (`0x132cfc`, 2.148 B) — descida recursiva via
+`jtable.py`: **513 de ~537 instruções possíveis (96%)**, sem tabela
+de salto; **35 branches, 20 de retrocesso**. 27 `bl` distintos.
+
+Confirma o padrão pela décima-segunda vez: chama `wasmTaskEntry()`/
+`wasmGetInput3()` mais a biblioteca `W`-prefixada completa
+(`Waddlocalprim` ×17, `Winitsprtfield`, `Waddstatusback`,
+`Winitstatusback`, `Witemuvclut`, `Wsettaskkind`,
+`Wimport_localpad`, `Wloadcdst`, `Wbgput` ×5, `Wstatuskanjiprint`)
+— cópia real recompilada, catálogo quase idêntico ao de
+`Edisp_equipwindow` (seção 164) só com prefixo `W` em tudo. Cinco
+locais próprios sem símbolo. Marcada `read_structural`.
+
+## 166. `ctltuto_main(CTLINFO*)` — hub do subsistema de tutorial EM MENU, separado do overlay `Tutrial()` de campo (2026-10-18, Fase 3, lote paralelo)
+
+`ctltuto_main(CTLINFO*)` (`0x26e428`, 1.992 B) — descida recursiva
+via `jtable.py`: **479 de ~498 instruções possíveis (96%)**; **uma
+tabela de salto resolvida** (4 casos, 4 handlers distintos); **41
+branches, 23 de retrocesso**. 38 `bl` distintos.
+
+Confirma membro do framework `ctl*_main`: usa `Wtask_status`/
+`Wsend_taskparamater`, tem sua própria tabela de fase de 4 casos, e
+é um HUB que transiciona pra vários sub-controladores nomeados
+(`ctltips_init`, `ctlopt_init`, `ctlhelp_init`, `ctlhentuto_init`,
+`ctlsentuto_init`, `ctltuto_deactive`, `wldctl_deactive`) — mesmo
+formato de `ctlbrst_main` (seção 125). Dirige pesadamente
+`iOS_CMenuTouch` e ícones `iOS_setV2Icon` (×8)/`getV2Icon`, som/
+música/SSD, e funções de estado `iOSTuto*`
+(`iOSTutoReset`/`iOSTutoFlagSet`/`iOSTutoBtlInputSet`). **Confirma
+ser um subsistema de tutorial SEPARADO** do overlay de campo
+`Tutrial()` (seção 115) — acessado pelo seu próprio hub, não pelos 8
+alvos nomeados de `ctlbrst_main` (nenhum dos quais era
+`ctltuto_init`). Marcada `read_structural`.
+
+## 167. `ctlmouketeam_main(CTLINFO*)` — corrige a hipótese de nome: é a lista de unidades recrutáveis/disponíveis, não "lucro/ganho" (2026-10-18, Fase 3, lote paralelo)
+
+`ctlmouketeam_main(CTLINFO*)` (`0x2632ec`, 1.984 B) — descida
+recursiva via `jtable.py`: **477 de ~496 instruções possíveis
+(96%)**, sem tabela de salto; **35 branches, 16 de retrocesso**. 26
+`bl` distintos.
+
+**Corrige a hipótese inicial** (nome "mouke" sugeria "lucro/ganho"):
+o catálogo mostra ser uma tela de lista/seleção de unidade — chama
+sub-controladores irmãos (`ctlmouke_init`, `ctlmoumes_init`/
+`deactive`, `ctlhaken_init` — "haken" = despacho/alocação de
+unidade), mais helpers locais `mouketeam_scrollset`/
+`mouketeam_unitwin`/`mouketeam_unitface`, e dirige pesadamente
+renderização de ícone/retrato por unidade (**`iOS_setV2Icon`** ×14,
+a chamada mais frequente), setup de retângulo de toque
+(`iOS_SetRectHit`/`ClearRectHitAll`/`GetRectHitNoTap`), rolagem de
+menu (`rewrite_worldscroll`) e som (`sound_request` ×4). **Conclusão
+mais plausível**: "mouketeam" é uma tela de lista/seleção de
+unidades recrutadas/disponíveis pra montar o time ("team" = elenco/
+roster), com retrato por unidade — não uma tela de "lucro". Sem
+tabela de salto, dispatch de fase por branch direto. Um local sem
+símbolo. Marcada `read_structural`.
