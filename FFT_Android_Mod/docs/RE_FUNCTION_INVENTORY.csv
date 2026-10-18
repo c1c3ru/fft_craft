@@ -62,16 +62,16 @@ address,size,mangled,demangled,status,section_ref
 000d1ab0,4244,_Z13debug_chrmenuv,debug_chrmenu(),read_structural,NOTES §79
 0012b12c,4196,_Z15disp_bothwindowv,disp_bothwindow(),read_structural,NOTES §73
 000cd5e8,4128,_Z16Ddisp_bothwindowv,Ddisp_bothwindow(),read_structural,NOTES §103
-00216e5c,4004,_Z22iOS_RESUME_SET_WORK_MUP23IOS_RESUME_DATA_WORK_MU24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_WORK_MU(IOS_RESUME_DATA_WORK_MU*, IOS_RESUME_DATACOPY_MODE)",unread,
-0013d248,3996,_Z11disp_optioni,disp_option(int),unread,
+00216e5c,4004,_Z22iOS_RESUME_SET_WORK_MUP23IOS_RESUME_DATA_WORK_MU24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_WORK_MU(IOS_RESUME_DATA_WORK_MU*, IOS_RESUME_DATACOPY_MODE)",read_structural,NOTES §105
+0013d248,3996,_Z11disp_optioni,disp_option(int),read_structural,NOTES §106
 0019e7b8,3936,_Z4Shopi,Shop(int),read_structural,"NOTES §75 (parcial, 82%)"
 001f1680,3924,_Z12executeShapeP13tag_animation,executeShape(tag_animation*),read_structural,NOTES §82
 001156f4,3880,_Z13Wdisp_statuscv,Wdisp_statusc(),unread,
 001cda4c,3844,_Z14setskillresulti,setskillresult(int),read_structural,NOTES §77
-000ef83c,3828,_Z12disp_statuscv,disp_statusc(),unread,
+000ef83c,3828,_Z12disp_statuscv,disp_statusc(),read_structural,NOTES §107
 001431c4,3828,_Z12Wdisp_optioni,Wdisp_option(int),unread,
-00221f64,3816,_Z17dispPolygonObjectP7SVECTORP6VECTORS0_S2_i,"dispPolygonObject(SVECTOR*, VECTOR*, SVECTOR*, VECTOR*, int)",unread,
-00228ee8,3808,_Z10drawShape2P6Shape2P5PointsP6VECTORPm,"drawShape2(Shape2*, Point*, short, VECTOR*, unsigned long*)",unread,
+00221f64,3816,_Z17dispPolygonObjectP7SVECTORP6VECTORS0_S2_i,"dispPolygonObject(SVECTOR*, VECTOR*, SVECTOR*, VECTOR*, int)",read_structural,NOTES §108
+00228ee8,3808,_Z10drawShape2P6Shape2P5PointsP6VECTORPm,"drawShape2(Shape2*, Point*, short, VECTOR*, unsigned long*)",read_structural,NOTES §109
 001a17e8,3764,_Z10GlobalNamePhS_,"GlobalName(unsigned char*, unsigned char*)",read_structural,"NOTES §84 (parcial, 77%)"
 00219728,3740,_Z18DoEffectCameraWorkv,DoEffectCameraWork(),read_structural,NOTES §83
 002b4680,3636,_Z16Link_FrameRenderv,Link_FrameRender(),read_structural,NOTES §86

@@ -7526,3 +7526,140 @@ juntas = o par de telas do fluxo de remoção de personagem"**,
 possivelmente lado esquerdo/direito da comparação antes de confirmar
 a remoção. Fecha a família `disp_personalwindow` (base + 5 letras,
 seções 46/47/49–51/104). Marcada `read_structural`.
+
+
+## Oitavo lote paralelo (seções 105–109): 5 funções lidas por forks simultâneos, usando `jtable.py`
+
+## 105. `iOS_RESUME_SET_WORK_MU(...)` — diverge do padrão "serializador puro" das seções 76/99, introduz 6 helpers novos de endereço (2026-10-18, Fase 3, lote paralelo)
+
+`iOS_RESUME_SET_WORK_MU(IOS_RESUME_DATA_WORK_MU*, IOS_RESUME_DATACOPY_MODE)`
+(`0x216e5c`, 4.004 B) — descida recursiva via `jtable.py`: **895 de
+~1.001 instruções possíveis (89%)**, sem tabela de salto; **21
+branches, 12 de retrocesso** — já rompe com o padrão "quase 100%
+linear, zero branch real" das duas funções anteriores da família
+(`iOS_RESUME_SET_EVENT`/`_W`, seções 76/99).
+
+Continua dominada por `iOS_Resume_DataCopy` (×105 — confirma que é a
+MESMA família de serialização de dados de resume), mas **não chama
+`iOS_Resume_DataCopyAddr` nenhuma vez** — em vez disso, introduz 6
+helpers de resolução de endereço nunca vistos antes nesta família:
+`getShapeAddress`, `getSequenceAddress`, `getWpnShapeAddress`,
+`getWpnSequenceAddress`, `getEffShapeAddress`,
+`getEffSequenceAddress` (todos ×2), mais `ResumeData_GetHeapOffset()`
+e `PIE_OFFSET(unsigned int)` (ajuste de endereço position-independent
+— confirma que o resume salva PONTEIROS, não só dados planos, e
+precisa recalculá-los no heap ao restaurar). Um local sem símbolo
+(`sub_714b8`, ×2). **Conclusão**: mesma família/primitivo
+(`iOS_Resume_DataCopy`), mas um membro estruturalmente distinto — em
+vez de despejar campos de struct linearmente, serializa tabelas de
+ponteiro (forma/sequência/arma/efeito) em laço, com correção de
+endereço PIE. Marcada `read_structural`.
+
+## 106. `disp_option(int)` — tela de opções, camada de task pesada e acessores PSP-net de modo de batalha em rede (2026-10-18, Fase 3, lote paralelo)
+
+`disp_option(int)` (`0x13d248`, 3.996 B) — descida recursiva via
+`jtable.py`: **953 de ~999 instruções possíveis (95%)**, sem tabela
+de salto; **64 branches, 37 de retrocesso**. 25 `bl` distintos, 85
+chamadas no total.
+
+Dominada pela camada de task/corrotina: `send_taskparamater` (×21) e
+`wait_taskend` (×18) são os dois primitivos mais chamados —
+consistente com uma tela que avança uma máquina de estado
+cooperativa por frame — mais `task_create` (×9), `task_wait`/
+`task_stop`/`task_killmyself` e a família `asm*`
+(`asmTaskEntry`/`asmGetInput1`/`asmGetActiveTask`/`asm_function`).
+Também toca: overlay de ajuda/tutorial (`request_help`,
+`tutorial_syscall`), input (`import_localpad`), a camada de ícone/
+hook `iOS_*` (`iOS_limitOptrecSub`, `iOS_hook_disp_option`,
+`iOS_setV2Icon` ×10 — a chamada não-task mais frequente), consultas
+de item/equipamento (`get_itemcommon`, `get_item_number`, `get_bwp`
+— sugere uma sub-tela de equipar dentro de opções) e, achado novo,
+acessores de rede PSP (`pspNetGetBattleModeFlag`,
+`pspNetEntranceOptionArrayGet`/`RecordGet`/`ScrRecordGet`) — confirma
+que o estado de opção de **modo de batalha em rede** é lido
+diretamente nesta tela. Dois locais sem símbolo. Sem tabela de salto
+— dispatch de menu aqui é por branch condicional direto, não switch.
+Marcada `read_structural`.
+
+## 107. `disp_statusc()` — confirma o padrão "entrada fina" de novo, mas pela camada `asm` (task), não `wasm` — maior catálogo de `bl` já visto numa única função (2026-10-18, Fase 3, lote paralelo)
+
+`disp_statusc()` (`0xef83c`, 3.828 B) — descida recursiva via
+`jtable.py`: **911 de ~957 instruções possíveis (95%)**, sem tabela
+de salto; **63 branches, 35 de retrocesso**. **57 `bl` distintos** —
+recorde da investigação em número de chamadas distintas numa só
+função.
+
+Confirma o padrão previsto "variante sem prefixo reusa helpers
+compartilhados" (já visto em `disp_personalwindow`/
+`disp_bothwindow`), mas pela camada de task **`asm`**, não `wasm`:
+`asmTaskEntry()`/`asmGetInput3()`/`asmGetActiveTask()` (sem o prefixo
+`w`) — função de task cooperativa de verdade, não um ponto de entrada
+fino sobre outra. Catálogo de `bl` reusa, sem prefixo, os MESMOS
+helpers já vistos em `disp_personalwindow`/`disp_bothwindow`:
+`addlocalprim` (×13), `statuskanjiprint`, `bgput`, `initdrmode`,
+`loadcdst`, `addstatusback`/`sttsback_normal`/`sttsback_blue`/
+`initstatusback`, `itemuvclut`, `multiwindow_packetclip*` — confirma
+que TODA a família de telas de status (`disp_personalwindow`,
+`disp_bothwindow`, `disp_statusc`) compartilha a MESMA biblioteca de
+desenho, independente do layout específico da tela.
+
+### Achados novos
+- **`chokobo_chrmenu(int)`** — integração com o menu de personagem
+  via chocobo, nunca vista.
+- **`Get_bravebreak()`** / **`iOS_getTutorialbreak()`** /
+  **`iOSTutoCheck()`** — três funções de controle de tutorial/
+  "brave break" nunca vistas.
+- **`CFFT_STATE::GetParam(int)`/`SetParam(int,int)`** — acessor
+  genérico de estado global do jogo (terceira vez que `CFFT_STATE` é
+  confirmado como um hub de estado central, seções 22/49).
+- **`PSX_LoadImage`/`SetTile`/`SetSemiTrans`/`SetShadeTex`/
+  `TexHybrid_RegistCLUTAddr`/`IS_TEX_2X`** — bloco de plumbing de
+  textura PSX/híbrido nunca visto reunido numa função só.
+- `pspNetGetControlChar`/`pspNetGetBattleModeFlag` — mais acessores
+  de rede PSP, mesma família da seção 106.
+
+Marcada `read_structural`.
+
+## 108. `dispPolygonObject(...)` — carregador de malha TMD real do PS1, com tabela de salto de 4 casos por tipo de primitiva (2026-10-18, Fase 3, lote paralelo)
+
+`dispPolygonObject(SVECTOR*, VECTOR*, SVECTOR*, VECTOR*, int)`
+(`0x221f64`, 3.816 B) — descida recursiva via `jtable.py`: **941 de
+~954 instruções possíveis (99%)**; **uma tabela de salto resolvida**
+(guarda `cmp` em `0x222154`, dispatch em `0x222158`, 4 casos, 4
+handlers distintos: `0x222170`/`0x222568`/`0x222384`/`0x222198`);
+**35 branches, 27 de retrocesso**.
+
+Catálogo pequeno (8 `bl`) mas revelador: **`_OpenTMD`/`_ReadTMD`**
+(`TMD_PRIM*`) são as rotinas REAIS de parsing de TMD ("TIM Model
+Data", formato de malha nativo do PS1) — função confirma, com
+instrução real, que o jogo ainda carrega modelos no formato TMD
+original, não um formato convertido. Isso corre em paralelo com
+`RotMatrix`/`SetRotMatrix`/`ScaleMatrixL`/`SetTransMatrix`/`RotTrans`
+— pipeline de matriz GTE clássico (não o conjunto específico do
+`ASHURA`). `iOS_getSkipAddPrim()` (×5) e a tabela de 4 casos sugerem
+dispatch por tipo de primitiva TMD, decidindo se cada uma deve ser
+pulada ao montar a lista de desenho. Alta densidade de laço (27/35
+branches de retrocesso) consistente com percorrer a lista de
+primitivas e a hierarquia de objetos de um TMD. Marcada
+`read_structural`.
+
+## 109. `drawShape2(...)` — primitivo de rasterização `Shape2`, mesma família de iteração do TMD da seção 108 (2026-10-18, Fase 3, lote paralelo)
+
+`drawShape2(Shape2*, Point*, short, VECTOR*, unsigned long*)`
+(`0x228ee8`, 3.808 B) — descida recursiva via `jtable.py`: **949 de
+~952 instruções possíveis (100%)**, sem tabela de salto; **102
+branches, 59 de retrocesso** — maior densidade de laço relativa (58%)
+já vista numa função deste tamanho, com só 6 `bl` distintos.
+
+`GetShapePrim(int)` (×3, busca dado de primitivo por forma),
+`iOS_getSkipAddPrim()` (×4, mesmo gate de skip da seção 108),
+`SetDrawMode` (×2), `xpLibGetOffset(int*,int*)` (ajuste de
+coordenada/clip), e `rsin`/`rcos` (trigonometria GTE pra rotação) —
+consistente com o pipeline `SVECTOR`/`VECTOR` do `ASHURA`
+(seção 38), não uma chamada bruta à GTE do PS1. A altíssima
+proporção de branch de retrocesso pra só 6 callees indica iteração
+bem apertada (desenrolada por vértice/sub-parte) sobre os pontos da
+`Shape2`, espelhando o padrão de iteração por primitiva de
+`dispPolygonObject` (seção 108) — os dois parecem ser o par
+"carregar malha TMD" / "rasterizar forma convertida" da mesma
+pipeline de desenho. Marcada `read_structural`.
