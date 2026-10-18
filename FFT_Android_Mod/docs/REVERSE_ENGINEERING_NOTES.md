@@ -7867,3 +7867,131 @@ helpers especializados de "mesput"/desenho.
 mensagem de relatório em campo (provavelmente ligada a ações de
 unidade ou texto de relatório de batalha), encadeando para
 `ctlhoukmes2_init` como segundo estágio. Marcada `read_structural`.
+
+
+## Décimo lote paralelo (seções 118–123): 6 funções lidas por forks simultâneos, usando `jtable.py`
+
+## 118. `disp_helpmenu2()` — overlay de ajuda/legenda de controle touch, decodifica texto localizado via LZW (2026-10-18, Fase 3, lote paralelo)
+
+`disp_helpmenu2()` (`0x1267f4`, 2.840 B) — descida recursiva via
+`jtable.py`: **685 de ~710 instruções possíveis (96%)**, sem tabela
+de salto; **40 branches, 17 de retrocesso**. 24 `bl` distintos.
+
+Mistura plumbing de task/mensagem PSP (`task_wait`/`task_create`/
+`send_taskparamater`, `checktaskkind`, **`pspMsgLzwBaseGet`** —
+decodificador de texto localizado comprimido em LZW) com a pipeline
+de polígono PSX (`addlocalprim`/`initpolyft4`, `GetTPage`/
+`SetSemiTrans`) e a ponte de toque `iOS_*` (`iOS_hookHelp`,
+`iOS_ClearRectHitAll`/`iOS_SetRectHit` pra retângulos de toque,
+`iOS_getV2Icon`/`setV2Icon` pra ícones de botão virtual). Confirma
+ser o overlay de legenda de ajuda/controle na tela de toque:
+decodifica texto de ajuda localizado, desenha via pipeline PSX
+legado, e registra retângulos de toque mais ícones V2 pra legenda de
+controle em tela. Quatro locais sem símbolo. Marcada
+`read_structural`.
+
+## 119. `DressEquip()` — confirma que compartilha toda a infraestrutura de menu do `Equip()` regular, não é rotina isolada (2026-10-18, Fase 3, lote paralelo)
+
+`DressEquip()` (`0x19b620`, 2.492 B) — descida recursiva via
+`jtable.py`: **579 de ~623 instruções possíveis (93%)**, sem tabela
+de salto; **39 branches, 15 de retrocesso**. 29 `bl` distintos.
+
+Confirma que `DressEquip` (tela de equipar traje/visual, distinta do
+`Equip()` de arma/armadura já lido) usa a MESMA biblioteca
+`iOS_CMenuTouch` (`setDispOffset`/`setYLine`/`setXIconRect`/
+`drawMenuAssist`/`init`/`exec`), os MESMOS primitivos de item
+(`ItemEquip`/`IsItemEquip`/`GetItemPrice`/`GetShopItemList`) e de
+janela (`WindowInit2`/`DrawWindow2`/`SetWindowPosition`/
+`WindowPrioritySet`/`CursolFunc`) que outras telas de equipar/loja —
+não é uma rotina isolada de mutação de dado, é uma tela interativa
+completa sobre o mesmo toolkit compartilhado. Também toca estado de
+unidade (`ChrPowerCompare`, `SetSttsPara2`, `CurChrChg2`,
+`unit_isdark`) e som (`iOS_soundDirect`). Três locais sem símbolo.
+Marcada `read_structural`.
+
+## 120. `requestChangeClut(...)` — confirma ser o lado produtor da fila de `executeChangeClut` (seção 70): zero chamadas externas, duas tabelas de salto de 11 vias (2026-10-18, Fase 3, lote paralelo)
+
+`requestChangeClut(int, int, unsigned int, unsigned int, int, short,
+short, short)` (`0x211f14`, 2.440 B) — descida recursiva via
+`jtable.py`: **582 de ~610 instruções possíveis (95%)**; **duas
+tabelas de salto resolvidas**, ambas de 11 casos/10 handlers
+distintos (guardas `cmp` em `0x211ff8` e `0x212468`); **43 branches,
+32 de retrocesso**.
+
+**Achado estrutural notável**: **zero chamadas `bl`** — a função não
+invoca NENHUMA outra função (nem helper, nem libc), só grava campos.
+Combinado com duas tabelas de 11 vias de formato idêntico (mesmo
+padrão de colapso de duplicata), isso é consistente com uma função
+que só "estampa" um registro de requisição tagged-union na fila que
+`executeChangeClut()` (seção 70) depois consome — primeiro switch
+provavelmente escolhe o slot/tipo de requisição, segundo escolhe
+quais campos dos 8 parâmetros grava nesse slot. Confirma com
+instrução real a relação produtor/consumidor hipotetizada na seção
+70. Marcada `read_structural`.
+
+## 121. `attack_assumechr()` — NÃO é matemática de pose, é carregamento assíncrono de recurso pro preview de ataque (2026-10-18, Fase 3, lote paralelo)
+
+`attack_assumechr()` (`0xc8238`, 2.416 B) — descida recursiva via
+`jtable.py`: **541 de ~604 instruções possíveis (90%)**; **uma
+tabela de salto resolvida** (guarda `cmp` em `0xc8730`, dispatch em
+`0xc8734`, 36 casos, só **4 handlers distintos** — um domina 32 dos
+36 casos); **63 branches, 38 de retrocesso**. 18 `bl` distintos.
+
+**Achado que corrige a hipótese inicial**: em vez de calcular pose/
+posição 3D hipotética, a função é dominada por I/O e carregamento de
+asset: `mallocForFile`/`fileReadRequest`/`fileDispose`/
+`numa_fileReadCD` (carregamento de arquivo), `PSX_LoadImage` (×6)/
+`StoreImage`/`ClearImage`/`DrawSync` (pipeline de imagem PSX),
+`__bpInitBinpackData`/`__bpGetBinaryData` (leitura de arquivo
+binpack empacotado), `get_unitwork_add`/`get_jobdata` (dados de
+unidade/emprego) e `asmTaskEntry` (dispatch assíncrono — a carga é
+enfileirada como task em background). **"Assume" aqui parece
+significar "carregar/preparar a representação hipotética do
+personagem"** pro preview de alvo, não calcular matemática de pose
+diretamente — a tabela de salto de 36 casos despacha por tipo de
+recurso/estado durante essa sequência de carga. Marcada
+`read_structural`.
+
+## 122. `attack_assumeface()` — irmã de `attack_assumechr`, mesma lógica pro retrato/rosto (2026-10-18, Fase 3, lote paralelo)
+
+`attack_assumeface()` (`0xc8ba8`, 2.396 B, imediatamente adjacente a
+`attack_assumechr`) — descida recursiva via `jtable.py`: **535 de
+~599 instruções possíveis (89%)**; **uma tabela de salto resolvida**
+(guarda `cmp` em `0xc8fcc`, dispatch em `0xc8fd0`, 36 casos, 4
+handlers — mesma forma da seção 121: um handler domina 32 dos 36
+casos); **57 branches, 31 de retrocesso**. 19 `bl` distintos.
+
+Confirma ser a contraparte de retrato/rosto: resolve ID de rosto do
+mundo pra ID de rosto (`CFFT_STATE::WorldFaceIDToFaceID`), lê dados
+de ícone via `__bpInitBinpackData`/`__bpGetBinaryData` (×4) e
+`numa_fileReadCD`, desenha via pipeline de imagem PSX
+(`PSX_LoadImage` ×7, `StoreImage`/`MoveImage`/`DrawSync`) com
+`xpMallocIO`/`xpFree`/`mallocForFile`/`fileDispose` pra buffer,
+também toca dados de unidade/emprego e `iOS_setTransFaceAT`/
+`iOS_getV2Icon` (×6). Confirma que constrói o ícone de retrato
+previsto mostrado no preview de ataque, selecionado por emprego/
+estado de unidade, com a mesma forma de tabela de salto de 36 casos
+da seção 121. Marcada `read_structural`.
+
+## 123. `ASHURA_LMDL_Read(...)` — confirma ser o parser real do sistema `LMDL`, dominado por um laço de 21 chamadas a `new_Vector` (2026-10-18, Fase 3, lote paralelo)
+
+`ASHURA_LMDL_Read(unsigned short*, L_MATRIX*, int)` (`0x16828c`,
+2.332 B, termina exatamente em `0x168ba8` = início de
+`ASHURA_MapProjectMem2Mem`, seção 112, que a chama ×9) — descida
+recursiva via `jtable.py`: **568 de ~583 instruções possíveis
+(97%)**, sem tabela de salto; **19 branches, 9 de retrocesso**.
+Catálogo mínimo (4 `bl` distintos) mas revelador: `new_Vector
+(VECTOR_DATABASE*, SVECTOR const*)` domina com **21 chamadas (~84%
+de todas as chamadas)** — consistente com um laço apertado
+construindo entrada de vetor/matriz enquanto percorre uma lista de
+nó/osso. `new_VectorDataBase`/`new_ColorVectorDataBase` (×1 cada)
+parecem ser setup/alocação única dos pools de vetor antes do laço, e
+`pspMapArrayOperate` (×2, mesma família tocada por
+`ASHURA_MapProjectMem2Mem`) liga esta função ao mesmo subsistema de
+array de mapa/geometria. **Confirma ser o parser central do LMDL**
+("linked model") que constrói a hierarquia de matriz linkada
+(`L_MATRIX`) a partir do buffer fonte — sem tabela de salto, fluxo
+de laço linear por nó, não um decodificador por switch. Fecha o
+trio `ASHURA_MapProjectMem2Mem`/`ASURA_LMDL_TIME_TBL`/
+`ASHURA_LMDL_Read` do sistema `LMDL` (seções 112/114/123). Marcada
+`read_structural`.

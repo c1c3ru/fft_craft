@@ -92,7 +92,7 @@ address,size,mangled,demangled,status,section_ref
 001cba40,2996,_Z11calc_resultP3ACTh,"calc_result(ACT*, unsigned char)",read_structural,NOTES §90
 00166ee0,2976,_Z16ASHURA_Animationv,ASHURA_Animation(),read_structural,"NOTES §91 (parcial, 81%)"
 00278f84,2880,_Z18FundamentalRoutinev,FundamentalRoutine(),read_structural,AI §28
-001267f4,2840,_Z14disp_helpmenu2v,disp_helpmenu2(),unread,
+001267f4,2840,_Z14disp_helpmenu2v,disp_helpmenu2(),read_structural,NOTES §118
 000940f0,2828,_vp_psy_init,_vp_psy_init,read_full,NOTES §102
 0011cbb4,2812,_Z22iOS_RESUME_SET_EVENT_WP23IOS_RESUME_DATA_EVENT_W24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_EVENT_W(IOS_RESUME_DATA_EVENT_W*, IOS_RESUME_DATACOPY_MODE)",read_structural,NOTES §99 (87%)
 001e03c8,2812,_Z13getskillrangeP3ACT,getskillrange(ACT*),read_structural,NOTES §94
@@ -108,14 +108,14 @@ address,size,mangled,demangled,status,section_ref
 000956d4,2544,_vp_couple_quantize_normalize,_vp_couple_quantize_normalize,read_full,NOTES §102
 00133be4,2544,_Z16Wdisp_bothwindowv,Wdisp_bothwindow(),read_structural,NOTES §103
 0025a908,2504,_Z15ctlhoukmes_mainP7CTLINFO,ctlhoukmes_main(CTLINFO*),read_structural,NOTES §117
-0019b620,2492,_Z10DressEquipv,DressEquip(),unread,
+0019b620,2492,_Z10DressEquipv,DressEquip(),read_structural,NOTES §119
 0024265c,2488,_Z15ctlendroll_mainP7CTLINFO,ctlendroll_main(CTLINFO*),unread,
-00211f14,2440,_Z17requestChangeClutiijjisss,"requestChangeClut(int, int, unsigned int, unsigned int, int, short, short, short)",unread,
-000c8238,2416,_Z16attack_assumechrv,attack_assumechr(),unread,
+00211f14,2440,_Z17requestChangeClutiijjisss,"requestChangeClut(int, int, unsigned int, unsigned int, int, short, short, short)",read_structural,NOTES §120
+000c8238,2416,_Z16attack_assumechrv,attack_assumechr(),read_structural,NOTES §121
 002c6550,2412,_Z20Settings_FrameRenderv,Settings_FrameRender(),unread,
-000c8ba8,2396,_Z17attack_assumefacev,attack_assumeface(),unread,
+000c8ba8,2396,_Z17attack_assumefacev,attack_assumeface(),read_structural,NOTES §122
 002235f4,2352,_Z11p20_gunFuncv,p20_gunFunc(),unread,
-0016828c,2332,_Z16ASHURA_LMDL_ReadPtP8L_MATRIXi,"ASHURA_LMDL_Read(unsigned short*, L_MATRIX*, int)",unread,
+0016828c,2332,_Z16ASHURA_LMDL_ReadPtP8L_MATRIXi,"ASHURA_LMDL_Read(unsigned short*, L_MATRIX*, int)",read_structural,NOTES §123
 0011c2bc,2296,_Z13Wdisp_status3v,Wdisp_status3(),unread,
 000e5998,2292,_Z12disp_status3v,disp_status3(),unread,
 002c8194,2292,_Z23SettingsWnd_FrameRenderv,SettingsWnd_FrameRender(),unread,
