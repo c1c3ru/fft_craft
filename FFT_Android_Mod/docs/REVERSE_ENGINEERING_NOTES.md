@@ -7505,3 +7505,24 @@ ponto de entrada fino) — padrão agora visto em `disp_personalwindow`,
 Todas as quatro marcadas `read_structural` por similaridade/catálogo
 direto — fecha a família `disp_bothwindow` (base + `A`/`C`/`D`/`E`/`W`,
 6 funções, seções 73/103) sem passe instrução-a-instrução adicional.
+
+## 104. `Cdisp_personalwindow()` — última letra da família, compartilha o sinal de "remoção de personagem" de `D` (2026-10-18, Fase 3, regra 3 da metodologia)
+
+`Cdisp_personalwindow()` (`0x14c010`, 7.484 B) — 97% de cobertura,
+sem tabela de salto; aceito direto via `family_sim.py` contra
+`disp_personalwindow()` (seção 46), sem verificação manual adicional
+(regra 3 da metodologia, seção 100). Jaccard 0,68 (51 de 55 `bl` da
+referência) — mais baixo que o puro "entrada fina" de `A`/`D`/`E`
+(seções 49–51), porque `C` chama 4 endereços próprios extras:
+`iOS_getTransFaceAT(int)`, `iOS_setTransFaceForChrRemove(int)`,
+`CFFT_STATE::AttackTeamFaceIDToFaceID`, `iOS_getV2Icon(V2ICON_DATA)`.
+
+**Achado**: `C` chama o MESMO `iOS_setTransFaceForChrRemove` já visto
+em `Ddisp_personalwindow` (seção 49, que levantou a hipótese "tela
+usada no fluxo de remoção de personagem do time"). Com `C` e `D`
+compartilhando essa chamada — e `A`/`E`/base/`W` não a chamando —
+a hipótese fica mais específica: não é "D = remoção", é **"C e D
+juntas = o par de telas do fluxo de remoção de personagem"**,
+possivelmente lado esquerdo/direito da comparação antes de confirmar
+a remoção. Fecha a família `disp_personalwindow` (base + 5 letras,
+seções 46/47/49–51/104). Marcada `read_structural`.
