@@ -149,10 +149,10 @@ address,size,mangled,demangled,status,section_ref
 0015f3b0,2044,_Z15iOSJobChangeRotPsS_,"iOSJobChangeRot(short*, short*)",read_structural,NOTES §149
 00272aac,2044,_Z14ForAutoCommandv,ForAutoCommand(),read_structural,NOTES §150
 00277720,2044,_Z18EvaluationFunctionv,EvaluationFunction(),read_full,AI §6.4; AI §14.2
-0010e918,2040,_Z11Wevent_callPmm,"Wevent_call(unsigned long*, unsigned long)",unread,
+0010e918,2040,_Z11Wevent_callPmm,"Wevent_call(unsigned long*, unsigned long)",read_structural,NOTES §155
 0026e428,1992,_Z12ctltuto_mainP7CTLINFO,ctltuto_main(CTLINFO*),unread,
 0016671c,1988,_Z14ASHURA_Controlmmll,"ASHURA_Control(unsigned long, unsigned long, long, long)",read_structural,NOTES §132
-0010e154,1988,_Z20Wdrawmessagepolygonsv,Wdrawmessagepolygons(),unread,
+0010e154,1988,_Z20Wdrawmessagepolygonsv,Wdrawmessagepolygons(),read_structural,NOTES §155
 000f5898,1984,_Z9menu_callPmm,"menu_call(unsigned long*, unsigned long)",unread,
 002632ec,1984,_Z17ctlmouketeam_mainP7CTLINFO,ctlmouketeam_main(CTLINFO*),unread,
 001e5bac,1980,_Z19getskillresult_mainiP12SKILL_RESULT,"getskillresult_main(int, SKILL_RESULT*)",read_structural,NOTES §151
@@ -183,9 +183,9 @@ address,size,mangled,demangled,status,section_ref
 00276e4c,1828,_Z24CheckUnitActionEffectiveii,"CheckUnitActionEffective(int, int)",mentioned_unverified,
 00174aa0,1800,_Z15cMakeWindowFuncPh,cMakeWindowFunc(unsigned char*),unread,
 001f25d4,1796,_Z12displayShapeP13tag_animation,displayShape(tag_animation*),unread,
-00187920,1784,_Z8eDB_initP2DBPmP10tagPOLY_F3P11tagPOLY_FT3P10tagPOLY_F4P11tagPOLY_FT4P10tagPOLY_G3P11tagPOLY_GT3P10tagPOLY_G4P11tagPOLY_GT4P10tagLINE_F2P10tagLINE_F3P10tagLINE_F4P10tagLINE_G2P10tagLINE_G3P9tagLINEG4P7tagTILEP9tagTILE_1P9tagTILE_8P10tagTILE_16P7tagSPRTP9tagSPRT_8P10tagSPRT_16P7DR_MOVEP7DR_AREAP7DR_MODE,"eDB_init(DB*, unsigned long*, tagPOLY_F3*, tagPOLY_FT3*, tagPOLY_F4*, tagPOLY_FT4*, tagPOLY_G3*, tagPOLY_GT3*, tagPOLY_G4*, tagPOLY_GT4*, tagLINE_F2*, tagLINE_F3*, tagLINE_F4*, tagLINE_G2*, tagLINE_G3*, tagLINEG4*, tagTILE*, tagTILE_1*, tagTILE_8*, tagTILE_16*, tagSPRT*, tagSPRT_8*, tagSPRT_16*, DR_MOVE*, DR_AREA*, DR_MODE*)",unread,
+00187920,1784,_Z8eDB_initP2DBPmP10tagPOLY_F3P11tagPOLY_FT3P10tagPOLY_F4P11tagPOLY_FT4P10tagPOLY_G3P11tagPOLY_GT3P10tagPOLY_G4P11tagPOLY_GT4P10tagLINE_F2P10tagLINE_F3P10tagLINE_F4P10tagLINE_G2P10tagLINE_G3P9tagLINEG4P7tagTILEP9tagTILE_1P9tagTILE_8P10tagTILE_16P7tagSPRTP9tagSPRT_8P10tagSPRT_16P7DR_MOVEP7DR_AREAP7DR_MODE,"eDB_init(DB*, unsigned long*, tagPOLY_F3*, tagPOLY_FT3*, tagPOLY_F4*, tagPOLY_FT4*, tagPOLY_G3*, tagPOLY_GT3*, tagPOLY_G4*, tagPOLY_GT4*, tagLINE_F2*, tagLINE_F3*, tagLINE_F4*, tagLINE_G2*, tagLINE_G3*, tagLINEG4*, tagTILE*, tagTILE_1*, tagTILE_8*, tagTILE_16*, tagSPRT*, tagSPRT_8*, tagSPRT_16*, DR_MOVE*, DR_AREA*, DR_MODE*)",read_full,NOTES §153
 000a2c4c,1780,_ZN15CG2D_LOADER_BMP4SaveEPviiP9_G2D_SAVE,"CG2D_LOADER_BMP::Save(void*, int, int, _G2D_SAVE*)",mentioned_unverified,
-00282f48,1776,_Z14GLIVON_FT3_oldPmP11tagPOLY_GT3siPt,"GLIVON_FT3_old(unsigned long*, tagPOLY_GT3*, short, int, unsigned short*)",unread,
+00282f48,1776,_Z14GLIVON_FT3_oldPmP11tagPOLY_GT3siPt,"GLIVON_FT3_old(unsigned long*, tagPOLY_GT3*, short, int, unsigned short*)",read_structural,NOTES §154
 001b7f68,1768,_Z6GetPadv,GetPad(),unread,
 001eda18,1768,_Z22executeAnimationStatusP13tag_animation,executeAnimationStatus(tag_animation*),unread,
 001aaa24,1760,_Z15GetTryBestEquipssPs,"GetTryBestEquip(short, short, short*)",unread,
@@ -6037,7 +6037,7 @@ address,size,mangled,demangled,status,section_ref
 0015991c,4,_Z10asmBoxCopyPcS_P9COPYFIELDS1_,"asmBoxCopy(char*, char*, COPYFIELD*, COPYFIELD*)",unread,
 002805e4,4,_Z12iOS_hookHelpPi,iOS_hookHelp(int*),unread,
 000c4418,4,_Z22Adisp_floateventwindowv,Adisp_floateventwindow(),unread,
-000c4494,4,_Z14Aitemmenu_callPmmi,"Aitemmenu_call(unsigned long*, unsigned long, int)",unread,
+000c4494,4,_Z14Aitemmenu_callPmmi,"Aitemmenu_call(unsigned long*, unsigned long, int)",read_full,NOTES §152
 000c4498,4,_Z15attackdebugfuncv,attackdebugfunc(),unread,
 0020ce18,4,_Z11fileDisposePc,fileDispose(char*),unread,
 0027b39c,4,_Z15numa_fileReadCDmmPv,"numa_fileReadCD(unsigned long, unsigned long, void*)",unread,
@@ -6052,7 +6052,7 @@ address,size,mangled,demangled,status,section_ref
 000cbd74,4,_Z19CreateNetStayWindowv,CreateNetStayWindow(),unread,
 000d0dc8,4,_Z22Ddisp_floateventwindowv,Ddisp_floateventwindow(),unread,
 00280610,4,_Z15iOS_soundDirecti,iOS_soundDirect(int),unread,
-000d1408,4,_Z14Ditemmenu_callPmmi,"Ditemmenu_call(unsigned long*, unsigned long, int)",unread,
+000d1408,4,_Z14Ditemmenu_callPmmi,"Ditemmenu_call(unsigned long*, unsigned long, int)",read_full,NOTES §152
 0020f424,4,_Z16eventEffectStartv,eventEffectStart(),unread,
 000e62c4,4,_Z30DEBUGTRACE_hook_connect_camerav,DEBUGTRACE_hook_connect_camera(),unread,
 00159a70,4,_Z8asmMUL64lll,"asmMUL64(long, long, long)",unread,
@@ -6124,7 +6124,7 @@ address,size,mangled,demangled,status,section_ref
 002806bc,4,_Z19hook_read_eventflagPi,hook_read_eventflag(int*),unread,
 00280804,4,_Z13hook_win_tailv,hook_win_tail(),unread,
 00121718,4,_Z22Edisp_floateventwindowv,Edisp_floateventwindow(),unread,
-00123c40,4,_Z14Eitemmenu_callPmmi,"Eitemmenu_call(unsigned long*, unsigned long, int)",unread,
+00123c40,4,_Z14Eitemmenu_callPmmi,"Eitemmenu_call(unsigned long*, unsigned long, int)",read_full,NOTES §152
 0012b108,4,_Z21disp_floateventwindowv,disp_floateventwindow(),unread,
 00137b0c,4,_Z11value_inputv,value_input(),unread,
 002712cc,4,_Z13Ssd_SetStereoi,Ssd_SetStereo(int),unread,
@@ -6138,7 +6138,7 @@ address,size,mangled,demangled,status,section_ref
 0028849c,4,_Z27Draw_Trap_CancelCommandListPiiiPm,"Draw_Trap_CancelCommandList(int*, int, int, unsigned long*)",unread,
 002875a0,4,_Z9draw_maruPm,draw_maru(unsigned long*),unread,
 0014b9f8,4,_Z22Cdisp_floateventwindowv,Cdisp_floateventwindow(),unread,
-0014bec4,4,_Z14Citemmenu_callPmmi,"Citemmenu_call(unsigned long*, unsigned long, int)",unread,
+0014bec4,4,_Z14Citemmenu_callPmmi,"Citemmenu_call(unsigned long*, unsigned long, int)",read_full,NOTES §152
 0014e0e4,4,_Z12iOSSetjoinusv,iOSSetjoinus(),unread,
 0014e0e8,4,_Z14statushookfuncv,statushookfunc(),unread,
 0014e9a0,4,_Z8sol_drawiii,"sol_draw(int, int, int)",unread,

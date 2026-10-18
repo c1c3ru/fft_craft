@@ -8606,3 +8606,62 @@ de combate, não ler uma função nova. Três locais sem símbolo em
 `getskillresult_main` (`sub_715cc`, `sub_1e0f2c`, `sub_1e59d4`) —
 candidatos a RNG ou lookup de estatística, vale leitura futura.
 Marcada `read_structural`.
+
+
+## 152. `Aitemmenu_call`/`Ditemmenu_call`/`Eitemmenu_call`/`Citemmenu_call` — quatro stubs de 4 B, literalmente só `bx lr` (2026-10-18, Fase 3, regra 3 da metodologia)
+
+As quatro variantes de letra de `itemmenu_call` (`0xc4494`/`0xd1408`/
+`0x123c40`/`0x14bec4`, 4 B cada) são, confirmado por disassembly
+direto, **uma única instrução `bx lr`** — retorno imediato, nenhuma
+chamada, nenhum branch. Mais extremo que os trampolins de 16 B da
+seção 131 (`disp_equipwindow`) — aqui não há nem uma chamada a
+`asmTaskEntry`, é um no-op puro. Aceitas direto, regra 3 da
+metodologia. Marcadas `read_full`.
+
+## 153. `eDB_init(...)` — segunda confirmação de boilerplate PSYQ `DB_Init` (2026-10-18, Fase 3, regra 6 da metodologia)
+
+`eDB_init(DB*, ...)` (`0x187920`, 1.784 B) — mesma assinatura de 26
+ponteiros de primitivo da seção 113 (`bDB_init`). Checagem via
+`jtable.py`: **94% de cobertura**, zero tabela de salto, **9
+branches, só 2 de retrocesso** — catálogo de `bl` é só
+`Set<TipoPrimitivo>` (`SetPolyF4`/`SetPolyFT4`/`SetLineF2`/
+`SetTile`/`SetDrawMove`/`SetShadeTex`) mais `eSwapDB(int,int)`.
+Segunda confirmação do mesmo padrão `DB_Init`/`InitGeom` genuíno do
+PSYQ — a letra de prefixo (`b`/`e`) é só o nome da variável de
+double-buffer, não lógica diferente. Marcada `read_full`.
+
+## 154. `GLIVON_FT3_old` — mesma pipeline de `GLIVON_FT4_old`, sem os mapeamentos de textura específicos de quad (2026-10-18, Fase 3, regra 2 da metodologia)
+
+`family_sim.py` contra `GLIVON_FT4_old` (seção 147): `GLIVON_FT3_old`
+(`0x282f48`, 1.776 B) tem Jaccard 0,71 — reusa quase todo o catálogo
+(`iOS_PalleteHosei`, `VectorDataBase`/`ColorVectorDataBase`/
+`CalcVectorFromID`, pipeline de matriz GTE), mas **não chama**
+`iOSGT4_MapXYZ`/`MapXYZClear`/`MapT9` (mapeamento de textura
+específico de quad de 4 vértices, seção 147) — consistente com `FT3`
+sendo o primitivo triangular (3 vértices), que não precisa do
+mapeamento UV de 4 pontos que `FT4` precisa. Confirma que
+`GLIVON_FT3_old`/`GLIVON_FT4_old` são a mesma pipeline de iluminação/
+cor, parametrizada pelo tipo de primitivo (triângulo vs. quad), não
+duas implementações separadas. Marcada `read_structural`.
+
+## 155. `Wdrawmessagepolygons`/`Wevent_call` — nona/décima confirmação do padrão `W`, com uma nuance de escopo reduzido (2026-10-18, Fase 3, regra 2 da metodologia)
+
+```
+Wdrawmessagepolygons  0x10e154  1.988 B   Jaccard 0,48 (vs drawmessagepolygons, §137)
+Wevent_call           0x10e918  2.040 B   Jaccard 0,10 (vs event_call, §66)
+```
+**`Wdrawmessagepolygons`**: Jaccard baixo, nona confirmação do
+padrão — chama `Waddlocalprim` (`0xfe1a4`) em vez da versão sem
+prefixo.
+
+**`Wevent_call` — nuance nova**: Jaccard baixíssimo (0,10) E, mais
+importante, é **MUITO menor** que `event_call` (2.040 B vs 5.456 B,
+seção 66 — o dispatcher central de cutscene com 70 `bl` distintos).
+`Wevent_call` chama `wasmTaskEntry`/`wasmGetActiveTask` (padrão `W`
+usual) e, achado interessante, **chama `Wdrawmessagepolygons`
+diretamente** (`0x10e154`) — confirma que os dois `W`s desta seção
+se encadeiam. Mas, diferente de toda outra família `W` vista até
+agora (que são cópias de tamanho comparável à base), `Wevent_call`
+parece implementar só um SUBCONJUNTO dos opcodes de evento que
+`event_call` cobre — não é uma recompilação 1:1 completa, é uma
+variante reduzida de escopo. Marcadas `read_structural`.
