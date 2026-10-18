@@ -8450,3 +8450,147 @@ coordena com/trava o estado do subsistema de batalha, e faz trabalho
 de heap via `mallocAddress`/`freeForFile`/`xpMallocIO`. Dois locais
 sem símbolo, chamados pesadamente (×6/×3) — bons candidatos pra
 próxima leitura. Marcada `read_structural`.
+
+
+## 145. `floor1_encode` — mais um interno de `libvorbis` reconhecido por nome (2026-10-18, Fase 3, regra 6 da metodologia)
+
+`floor1_encode` (`0x8b594`, 1.860 B) — checagem rápida via
+`jtable.py`: **99% de cobertura**, uma tabela de salto de 4 casos,
+catálogo de `bl` é só `oggpack_write`, `vorbis_book_encode`,
+`ov_ilog` — API genuína de codificação de piso espectral da
+`libvorbis` (par de `floor1_fit`, seção 102). Marcada `read_full`
+sem passe completo, regra 6 da metodologia.
+
+
+## Décimo-quarto lote paralelo (seções 146–151): 6 funções lidas por forks simultâneos, usando `jtable.py`
+
+## 146. `WorldJobStts()` — popup de status de emprego no mapa-mundo, biblioteca `iOS_CMenuTouch` completa (2026-10-18, Fase 3, lote paralelo)
+
+`WorldJobStts()` (`0x1b5ba0`, 2.180 B) — descida recursiva via
+`jtable.py`: **494 de ~545 instruções possíveis (91%)**, sem tabela
+de salto; **38 branches, 20 de retrocesso**. 32 `bl` distintos.
+
+Combina busca de dado de emprego/habilidade (`GetAbilityList`,
+`LearnJobStts()`) com a máquina de UI de janela completa
+(`WindowPositionInit*`, `WindowInit`/`Init2`, `DrawWindow2`,
+`SetWindowCount`), o subsistema de menu de toque
+(`iOS_CMenuTouch::init`/`exec`/`setMaxNumY`/`setDispNumY`/
+`setDispOffset`/`setYLine`/`setDisableHeightAdjust`/
+`drawMenuAssist`/`setLRCurEffect`), seleção de cursor por lado
+(família `MenuSelSide`), limpeza de pad (`ClearPadData`), e desenho
+de textura (`DrawFT4RGB`, `MakeTextureMessage`, `LoadImage_menuData`,
+`iOS_setV2Icon`). Consistente com um popup de status de emprego no
+mapa-mundo que renderiza um painel de lista de emprego/habilidade
+rolável e dirigido por toque, sobreposto à visão de mapa. Marcada
+`read_structural`.
+
+## 147. `GLIVON_FT4_old(...)` — pipeline de iluminação/cor-de-vértice GTE, dominada por `iOS_PalleteHosei` (2026-10-18, Fase 3, lote paralelo)
+
+`GLIVON_FT4_old(unsigned long*, tagPOLY_GT4*, short, int, unsigned
+short*)` (`0x2826c8`, 2.176 B) — descida recursiva via `jtable.py`:
+**536 de ~544 instruções possíveis (99%)**, sem tabela de salto;
+**26 branches, 14 de retrocesso**. 16 `bl` distintos.
+
+Toca a pipeline de iluminação/cor de vértice estilo GTE
+(`ReadLightMatrix`, `ReadColorMatrix`, `ReadRotMatrix`, `MulMatrix`,
+`GteGetCtrlReg` ×3), correção de cor/paleta de vetor
+(`VectorDataBase`, `ColorVectorDataBase`, `CalcVectorFromID`, e
+**`iOS_PalleteHosei`** ×12 — alvo dominante, consistente com um laço
+de correção de cor por vértice/canal), mapeamento/clipping de FT4
+(`iOSGT4_MapXYZ`/`MapXYZClear`/`MapT9`, `iOS_chkclipoffNoFT4`) e
+hooks diversos do motor (`iOS_EventNumberGet`, `iOS_BattleEventCheck`,
+`iOS_getV2Icon`). **Nota de layout**: `iOS_PalleteHosei`
+(`0x2826b4`) fica apenas 0x14 B antes do início desta função —
+adjacência direta na imagem, não necessariamente relação funcional.
+Nenhum símbolo "GLIVON_FT4" sem `_old` aparece no catálogo — não foi
+possível confirmar/descartar uma variante irmã a partir só deste
+dado. Marcada `read_structural`.
+
+## 148. `check_coord2(...)` — varredura de ocupação de chocobo numa coordenada (2026-10-18, Fase 3, lote paralelo)
+
+`check_coord2(int, int, int, unsigned char)` (`0x1e2308`, 2.152 B) —
+descida recursiva via `jtable.py`: **533 de ~538 instruções
+possíveis (99%)**, sem tabela de salto; **169 branches, 106 de
+retrocesso** — proporção altíssima de retrocesso (~63%), densidade
+de laço extrema.
+
+**Único `bl` distinto**: `check_chokobo(BWORK*)`, chamado **8 vezes**
+— a função não toca praticamente nada fora de si mesma. Consistente
+com percorrer um conjunto de unidades (`BWORK*`) testando cada uma
+contra a coordenada/flag dada — uma rotina de grade de batalha
+varrendo unidades (especificamente chocobos/montados) ocupando ou
+bloqueando um tile de mapa dado, delegando o trabalho pesado de
+teste por unidade a `check_chokobo`. Marcada `read_structural`.
+
+## 149. `iOSJobChangeRot(...)` — confirma ser o handler de rotação por arrastar-toque do seletor de emprego giratório (2026-10-18, Fase 3, lote paralelo)
+
+`iOSJobChangeRot(short*, short*)` (`0x15f3b0`, 2.044 B) — descida
+recursiva via `jtable.py`: **482 de ~511 instruções possíveis
+(94%)**, sem tabela de salto; **50 branches, 29 de retrocesso**. 14
+`bl` distintos.
+
+Confirma a hipótese: sonda estado de toque bruto (`iOS_getTouchTap`/
+`Press`/`Release`/`BeginX`/`Y`/`NowX`/`Y`), valida com
+`IS_GAME_AREA`, e dirige a MESMA máquina de rotação `iOSRot*`
+(`iOSRotStop`, `iOSRotSpeed`, `iOSRotBufSetX`, `iOSRotSpeedGet`,
+`iOSRotSetupAfterX`) já vista em `sBattleTouchRotation` (seção
+143). É a ponte de input-por-quadro-para-rotação do MESMO seletor de
+emprego giratório documentado em `JobChange` — confirma que o
+mecanismo de rotação `iOSRot*` é compartilhado entre pelo menos duas
+UIs diferentes (câmera de batalha e roda de emprego). Marcada
+`read_structural`.
+
+## 150. `ForAutoCommand()` — núcleo de decisão de IA/auto-batalha, três tabelas de salto, revela `DattoNoGotokuNigeyoRoutine` (2026-10-18, Fase 3, lote paralelo)
+
+`ForAutoCommand()` (`0x272aac`, 2.044 B) — descida recursiva via
+`jtable.py`: **476 de ~511 instruções possíveis (93%)**; **três
+tabelas de salto resolvidas** (6 casos/5 handlers; 8 casos/7
+handlers; 4 casos/4 handlers); **84 branches, 35 de retrocesso**. 17
+`bl` distintos.
+
+Núcleo real de decisão de IA/auto-batalha: chama
+`EvaluateAllUnitAction`, `GetNearestUnit`, `SetBaseTargetGroup` (×6),
+`SetDestUnit` (×3), `SetMove` (×4), `SetTmp_UA(UnitAction*)`,
+`ForChantedAction`, `MakeMapChantedAction`, `IsAlmostNullUnit`,
+`SetThresholdDoNothing`, `StayAtSafePanel`, e
+**`MainBattleRoutine()`**/**`FundamentalRoutine()`**. **Achado
+curioso**: **`DattoNoGotokuNigeyoRoutine()`** — nome literal em
+japonês romanizado, "fuja como um papagaio (de papel) cortado"
+(expressão idiomática pra fuga desesperada/em pânico) — é a rotina
+de comportamento de fuga/retirada da IA. Junto, confirma que esta é
+a lógica de seleção de alvo/movimento/habilidade por unidade,
+comportamento de fuga, e o driver de estado de batalha mais amplo —
+consistente com ser a lógica de IA por unidade invocada quando
+auto-batalha está ativa. Marcada `read_structural`.
+
+## 151. `getskillresult_main(...)` — casca de orquestração de alvo, identifica `calc_result` como a fórmula real de dano (próxima prioridade) (2026-10-18, Fase 3, lote paralelo)
+
+`getskillresult_main(int, SKILL_RESULT*)` (`0x1e5bac`, 1.980 B) —
+descida recursiva via `jtable.py`: **480 de ~495 instruções
+possíveis (97%)**, sem tabela de salto; **60 branches, 27 de
+retrocesso**. 13 `bl` distintos.
+
+**Achado importante**: confirma ser a casca de orquestração por alvo
+da resolução de habilidade, NÃO a fórmula de dano bruto em si — chama
+`calc_result(ACT*, unsigned char)` **uma única vez** (a matemática
+real de acerto/dano/efeito mora lá, não aqui). Em volta dessa
+chamada, faz bookkeeping pesado por alvo: `init_target_result` (×2,
+limpa/inicializa o struct `A_RESULT` por alvo), `check_coord`/
+`get_coord_address` (alvejamento posicional/de área, resolução de
+coordenada de tile), `check_invincible` (gate de invencibilidade/
+tile sem dano), `set_ct_weapon` (seleciona contexto de arma pro
+ataque), `set_target_table2`/`copy_target_table2` (monta e tira
+snapshot da lista de alvos afetados, consistente com habilidade de
+área acertando várias unidades), e **`reset_toumei_afterskill`**
+("toumei" = transparência/invisibilidade — limpa flag de status
+furtivo/invisível após a habilidade resolver, ou seja, usar a
+habilidade quebra furtividade). `pspNetSetTimingThroughFlag` parece
+boilerplate residual da camada de rede PSP, não relevante pro
+combate. 27 branches de retrocesso consistentes com laço sobre lista
+multi-alvo (habilidades de área) e/ou slots de efeito de status.
+**Resultado prático**: `calc_result` (`0x1cba40`, ainda não lida) é
+a fórmula real de acerto/dano/efeito da FFT e passa a ser a
+prioridade mais alta pra entender a matemática de combate do jogo.
+Três locais sem símbolo (`sub_715cc`, `sub_1e0f2c`, `sub_1e59d4`) —
+candidatos a RNG ou lookup de estatística, vale leitura futura.
+Marcada `read_structural`.

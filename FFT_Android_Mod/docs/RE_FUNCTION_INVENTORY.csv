@@ -135,19 +135,19 @@ address,size,mangled,demangled,status,section_ref
 0015b688,2224,_Z20sBattleTouchRotationv,sBattleTouchRotation(),read_structural,NOTES §143
 00135218,2188,_Z14Witemmenu_callPmmi,"Witemmenu_call(unsigned long*, unsigned long, int)",read_structural,NOTES §130
 000d361c,2184,_Z12disp_chapterv,disp_chapter(),read_structural,NOTES §144
-001b5ba0,2180,_Z12WorldJobSttsv,WorldJobStts(),unread,
-002826c8,2176,_Z14GLIVON_FT4_oldPmP11tagPOLY_GT4siPt,"GLIVON_FT4_old(unsigned long*, tagPOLY_GT4*, short, int, unsigned short*)",unread,
+001b5ba0,2180,_Z12WorldJobSttsv,WorldJobStts(),read_structural,NOTES §146
+002826c8,2176,_Z14GLIVON_FT4_oldPmP11tagPOLY_GT4siPt,"GLIVON_FT4_old(unsigned long*, tagPOLY_GT4*, short, int, unsigned short*)",read_structural,NOTES §147
 0012cdcc,2168,_Z13itemmenu_callPmmi,"itemmenu_call(unsigned long*, unsigned long, int)",read_structural,NOTES §129
 0012171c,2156,_Z17Edisp_equipwindowv,Edisp_equipwindow(),unread,
-001e2308,2152,_Z12check_coord2iiih,"check_coord2(int, int, int, unsigned char)",unread,
+001e2308,2152,_Z12check_coord2iiih,"check_coord2(int, int, int, unsigned char)",read_structural,NOTES §148
 00132cfc,2148,_Z17Wdisp_equipwindowv,Wdisp_equipwindow(),unread,
 0023837c,2096,_Z7Mdl0012siii,"Mdl0012(short, int, int, int)",read_structural,NOTES §101
 000a42d8,2084,_ZN15CG2D_LOADER_BMP4CopyEPv,CG2D_LOADER_BMP::Copy(void*),mentioned_unverified,
 002ac014,2084,sceGuTexImage,sceGuTexImage,unread,
 000a4ef8,2076,_ZN15CG2D_LOADER_TGA4CopyEPv,CG2D_LOADER_TGA::Copy(void*),mentioned_unverified,
 00085fe0,2068,vorbis_synthesis_blockin,vorbis_synthesis_blockin,read_full,NOTES §138
-0015f3b0,2044,_Z15iOSJobChangeRotPsS_,"iOSJobChangeRot(short*, short*)",unread,
-00272aac,2044,_Z14ForAutoCommandv,ForAutoCommand(),mentioned_unverified,
+0015f3b0,2044,_Z15iOSJobChangeRotPsS_,"iOSJobChangeRot(short*, short*)",read_structural,NOTES §149
+00272aac,2044,_Z14ForAutoCommandv,ForAutoCommand(),read_structural,NOTES §150
 00277720,2044,_Z18EvaluationFunctionv,EvaluationFunction(),read_full,AI §6.4; AI §14.2
 0010e918,2040,_Z11Wevent_callPmm,"Wevent_call(unsigned long*, unsigned long)",unread,
 0026e428,1992,_Z12ctltuto_mainP7CTLINFO,ctltuto_main(CTLINFO*),unread,
@@ -155,7 +155,7 @@ address,size,mangled,demangled,status,section_ref
 0010e154,1988,_Z20Wdrawmessagepolygonsv,Wdrawmessagepolygons(),unread,
 000f5898,1984,_Z9menu_callPmm,"menu_call(unsigned long*, unsigned long)",unread,
 002632ec,1984,_Z17ctlmouketeam_mainP7CTLINFO,ctlmouketeam_main(CTLINFO*),unread,
-001e5bac,1980,_Z19getskillresult_mainiP12SKILL_RESULT,"getskillresult_main(int, SKILL_RESULT*)",mentioned_unverified,
+001e5bac,1980,_Z19getskillresult_mainiP12SKILL_RESULT,"getskillresult_main(int, SKILL_RESULT*)",read_structural,NOTES §151
 002b07ac,1980,_ZN11CDebugPrint9FrameStepEiiiij,"CDebugPrint::FrameStep(int, int, int, int, unsigned int)",mentioned_unverified,
 002c562c,1968,_Z13Settings_Initv,Settings_Init(),unread,
 0007f4a8,1960,_tr_flush_block,_tr_flush_block,read_full,NOTES §138
@@ -175,7 +175,7 @@ address,size,mangled,demangled,status,section_ref
 00281a94,1880,_Z17iOS_v2menuExecuteP8V2_TOUCH,iOS_v2menuExecute(V2_TOUCH*),unread,
 0029bbec,1876,GsSortFlipSprite,GsSortFlipSprite,mentioned_unverified,
 002c718c,1864,_Z16SettingsWnd_Initv,SettingsWnd_Init(),unread,
-0008b594,1860,floor1_encode,floor1_encode,unread,
+0008b594,1860,floor1_encode,floor1_encode,read_full,NOTES §145
 000aa190,1860,_ZN8CEGL2_IF10DrawPacketEii,"CEGL2_IF::DrawPacket(int, int)",read_full,NOTES §13.1
 00231570,1852,_Z7Mdl0005siii,"Mdl0005(short, int, int, int)",read_structural,NOTES §101
 001f5420,1840,_Z16displayDirectionv,displayDirection(),unread,
