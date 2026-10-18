@@ -9054,3 +9054,133 @@ final escolhido). **Confirma**: itera inventário, filtra por regra
 de mão/tipo de arma, compara estatística de arma, escolhe o melhor,
 e comita via `ItemChg` — a lógica real de "auto-equipar melhor item
 por slot". Marcada `read_structural`.
+
+
+## 174. `vorbis_analysis_headerout` — mais um interno de `libvorbis` reconhecido por nome (2026-10-18, Fase 3, regra 6 da metodologia)
+
+`vorbis_analysis_headerout` (`0x8cbf4`, 1.648 B) — checagem rápida
+via `jtable.py`: **97% de cobertura**, zero tabela de salto,
+catálogo de `bl` é só 4 locais sem símbolo na faixa `0x714xx`
+(mesmo padrão de helper interno de `libvorbis` já visto em outras
+funções desta biblioteca) — nenhuma chamada a função prefixada do
+jogo. Confirma ser código de terceiros genérico. Marcada `read_full`
+sem passe completo, regra 6 da metodologia.
+
+
+## Décimo-oitavo lote paralelo (seções 175–180): 6 funções lidas por forks simultâneos, usando `jtable.py`
+
+## 175. `MakeWindowFunc(unsigned char*)` — referência pra família de letra `b`/`c`/`e`/`j`, desenha moldura de janela em laço (2026-10-18, Fase 3, lote paralelo)
+
+`MakeWindowFunc(unsigned char*)` (`0x1c37dc`, 1.884 B) — descida
+recursiva via `jtable.py`: **457 de ~471 instruções possíveis
+(97%)**, sem tabela de salto; **11 branches, 8 de retrocesso**.
+Catálogo mínimo: `DrawFT4RGB` (×12, dominante — laço de desenho de
+tile de moldura/borda) e **`MakeSmallWindowFunc(unsigned char*)`**
+(×1 — delega um sub-painel/área de título a uma função irmã). Serve
+de referência para comparar os 4 irmãos de letra `b`/`c`/`e`/`j`
+(`bMakeWindowFunc`/`cMakeWindowFunc`/`eMakeWindowFunc`/
+`jMakeWindowFunc`) numa checagem de similaridade futura. Marcada
+`read_structural`.
+
+## 176. `GetPad()` — referência pra família de letra, orquestrador de pad ciente de taxa de quadro (2026-10-18, Fase 3, lote paralelo)
+
+`GetPad()` (`0x1b7f68`, 1.768 B) — descida recursiva via
+`jtable.py`: **418 de ~442 instruções possíveis (95%)**, sem tabela
+de salto; **41 branches, 19 de retrocesso**. 5 `bl` distintos.
+
+Não é um leitor de input bruto — orquestra: `GetFrameRate()`
+(escala/debounce de amostragem por taxa de quadro), `ClearPadData()`
+(reset de estado), `TruePadRead(int)` (a leitura real "verdadeira"),
+mais divisão inteira pesada (`__udivsi3` ×3, `__aeabi_uidivmod` ×4)
+e 19 branches de retrocesso — sugere iteração sobre múltiplos slots
+de botão/eixo com aritmética modular por entrada. Serve de
+referência pra comparar `bGetPad`/`cGetPad`/`eGetPad`/`jGetPad` numa
+checagem futura. Marcada `read_structural`.
+
+## 177. `disp_parawindow()` — janela de comparação de parâmetro/estatística, reusa a biblioteca `stts` compartilhada (2026-10-18, Fase 3, lote paralelo)
+
+`disp_parawindow()` (`0x12c190`, 1.632 B) — descida recursiva via
+`jtable.py`: **393 de ~408 instruções possíveis (96%)**, sem tabela
+de salto; **27 branches, 13 de retrocesso**. 21 `bl` distintos.
+
+Confirma a hipótese "janela de comparação de parâmetro": reusa a
+família de fundo de status `stts` (`addstatusback`/
+`sttsback_normal`/`sttsback_blue`/`initstatusback`) e lê/renderiza
+valor de campo via **`valueput(char*, VALUERECORD*, COPYFIELD*,
+int)`** (×3) contra estruturas `COPYFIELD`/`VALUERECORD` — forte
+suporte pra exibição de comparação antes/depois de stat (HP/MP/
+parâmetro). Serve de referência pra comparar os 5 irmãos de letra
+`A`/`C`/`D`/`E`/`W`. Marcada `read_structural`.
+
+## 178. `DressMain()` — controlador de lista/roster de unidade, entrada de nível superior antes de `DressEquip` (2026-10-18, Fase 3, lote paralelo)
+
+`DressMain()` (`0x19aec0`, 1.888 B, termina exatamente onde
+`DressEquip` começa, seção 119) — descida recursiva via `jtable.py`:
+**442 de ~472 instruções possíveis (94%)**, sem tabela de salto;
+**61 branches, 30 de retrocesso**. 33 `bl` distintos.
+
+Dirige a UI de seleção de lista de unidade (família
+`iOSUnitList*`: `OutWin`, `FlagGet`/`Set`/`Clear`, `WinOnOff`,
+`StsMoveCheck`, `LRCur`, `AllStatusTapCheck`), o widget de grade
+genérico `UnitTable`/`UnitTableInit`/`InitFirst`, primitivos de
+toque, o sistema de menu/ícone v2 (`iOS_v2menuSetEnable`/`SetType`/
+`GetType`), e plumbing de janela/mensagem. **Confirma ser o
+controlador de nível superior que apresenta o roster de personagem
+antes de passar pra `DressEquip`** (e outras sub-telas de Dress) —
+embora nenhuma chamada direta a `DressEquip` apareça no catálogo
+(a transição provavelmente passa por uma máquina de estado/
+dispatcher de task compartilhada, via `Wsend_taskparamater`, não
+chamada de função direta). Marcada `read_structural`.
+
+## 179. `BattleEquip(...)` — refina a teoria da letra de prefixo: `e` é um CONTEXTO DE TASK DUPLICADO COMPLETO, não só nome de buffer (2026-10-18, Fase 3, lote paralelo, achado metodológico)
+
+`BattleEquip(int, long*)` (`0x18e3f0`, 1.700 B) — descida recursiva
+via `jtable.py`: **323 de ~425 instruções possíveis (76%)**, sem
+tabela de salto; **9 branches, 3 de retrocesso**. 19 `bl` distintos.
+
+**Achado que corrige a hipótese "`b`/`e` = só nome de variável de
+buffer" das seções 113/153 (`bDB_init`/`eDB_init`)**: esta função
+chama uma FAMÍLIA INTEIRA de helpers com prefixo `e` nunca vista
+reunida — `eSwapDB`, `eDB_init`, `eGetChrSingle(int)`,
+`eRefleshItemUserSort(int)` (×5), `eWaitLoadImage`/`eWaitStoreImage`
+(×6/×2), `eSetSttsA`/`eSetSttsPara`/`eSetSttsEqu`, `eCurChrChg()`,
+`equans_init()`, `eWindowPositionInit()`, `eHelpMessage(int)`,
+`eMenuSelInit()`, `eGetMaskedPad()`, `eSelectWindowClut(int)` — um
+conjunto completo de telas/widgets/helpers `e`-prefixados paralelo
+aos sem prefixo (`GetChrSingle`, `RefleshItemUserSort`, `SetSttsA`,
+etc., não todos ainda confirmados por nome exato mas pelo padrão). **
+Conclusão**: `e` (e, por extensão, `b`/`c`/`j`, vistos em
+`MakeWindowFunc`/`GetPad`) NÃO é apenas o nome de uma variável de
+double-buffer — é um **contexto de task duplicado completo**, do
+mesmo tipo arquitetural que `W` (que tem sua própria
+`Waddlocalprim`/`Wbgput`/etc.), só que pra um conjunto de telas
+diferente (aqui, o fluxo de equipar em batalha). Isso explica por
+que `bDB_init`/`eDB_init` pareciam idênticos (regra 6, boilerplate
+de SDK puro, sem lógica de jogo) mas `BattleEquip` usando `e` revela
+lógica de jogo real duplicada por contexto. Também chama
+`popmessagepacket()` (sincronia de rede/mensagem, plausível pra
+equipar em batalha precisar sincronizar entre jogadores). Marcada
+`read_structural`.
+
+## 180. `ASHURA_SetMatrix(...)` — utilitário de matriz multi-modo com tabela de salto de 12 casos, toca matriz de cor também (2026-10-18, Fase 3, lote paralelo)
+
+`ASHURA_SetMatrix(long, MATRIX*, MATRIX*, unsigned short)`
+(`0x163348`, 1.636 B, termina exatamente em `ASHURA_CVECTOR`,
+0x1639ac) — descida recursiva via `jtable.py`: **387 de ~409
+instruções possíveis (95%)**; **uma tabela de salto resolvida**
+(guarda `cmp` em `0x163368`, dispatch em `0x16336c`, **12 casos, 10
+handlers distintos**); **10 branches, TODOS de retrocesso** (os 10
+branches são todos laço, nenhum é só forward).
+
+Catálogo mínimo (`SetColorMatrix` ×3, `__divsi3` ×8) mas a tabela de
+12 casos despachando por um `unsigned short` (4º parâmetro) sugere
+um utilitário "setar matriz por modo" com 10 caminhos de combinação
+de matriz diferentes (atalhos de identidade, só-rotação, só-escala,
+composição completa, etc.), não uma multiplicação fixa pai×filho
+única — a chamada a `SetColorMatrix` em alguns caminhos sugere que
+também toca matriz de cor/iluminação em certos modos, não só
+geometria. Consistente com um passo de composição de matriz local
+de nó na hierarquia LMDL (junto com `ASHURA_LMDL_Read`/
+`ASURA_LMDL_TIME_TBL`/`ASHURA_MapProjectMem2Mem`), mas com múltiplos
+modos de dispatch em vez de uma única rotina dedicada. Marcada
+`read_structural`.

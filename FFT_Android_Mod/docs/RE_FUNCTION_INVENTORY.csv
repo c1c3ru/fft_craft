@@ -169,8 +169,8 @@ address,size,mangled,demangled,status,section_ref
 00091128,1904,mdct_backward,mdct_backward,read_full,NOTES §138
 000a75ac,1904,_ZN4math7MATRIX4mLERKS0_,math::MATRIX4::operator*=(math::MATRIX4 const&),unread,
 000c478c,1896,_Z13load_loaddatav,load_loaddata(),unread,
-0019aec0,1888,_Z9DressMainv,DressMain(),unread,
-001c37dc,1884,_Z14MakeWindowFuncPh,MakeWindowFunc(unsigned char*),unread,
+0019aec0,1888,_Z9DressMainv,DressMain(),read_structural,NOTES §178
+001c37dc,1884,_Z14MakeWindowFuncPh,MakeWindowFunc(unsigned char*),read_structural,NOTES §175
 0028a76c,1880,_Z12ConvTutoDataP13FFT_SAVE_DATA,ConvTutoData(FFT_SAVE_DATA*),unread,
 00281a94,1880,_Z17iOS_v2menuExecuteP8V2_TOUCH,iOS_v2menuExecute(V2_TOUCH*),unread,
 0029bbec,1876,GsSortFlipSprite,GsSortFlipSprite,mentioned_unverified,
@@ -186,7 +186,7 @@ address,size,mangled,demangled,status,section_ref
 00187920,1784,_Z8eDB_initP2DBPmP10tagPOLY_F3P11tagPOLY_FT3P10tagPOLY_F4P11tagPOLY_FT4P10tagPOLY_G3P11tagPOLY_GT3P10tagPOLY_G4P11tagPOLY_GT4P10tagLINE_F2P10tagLINE_F3P10tagLINE_F4P10tagLINE_G2P10tagLINE_G3P9tagLINEG4P7tagTILEP9tagTILE_1P9tagTILE_8P10tagTILE_16P7tagSPRTP9tagSPRT_8P10tagSPRT_16P7DR_MOVEP7DR_AREAP7DR_MODE,"eDB_init(DB*, unsigned long*, tagPOLY_F3*, tagPOLY_FT3*, tagPOLY_F4*, tagPOLY_FT4*, tagPOLY_G3*, tagPOLY_GT3*, tagPOLY_G4*, tagPOLY_GT4*, tagLINE_F2*, tagLINE_F3*, tagLINE_F4*, tagLINE_G2*, tagLINE_G3*, tagLINEG4*, tagTILE*, tagTILE_1*, tagTILE_8*, tagTILE_16*, tagSPRT*, tagSPRT_8*, tagSPRT_16*, DR_MOVE*, DR_AREA*, DR_MODE*)",read_full,NOTES §153
 000a2c4c,1780,_ZN15CG2D_LOADER_BMP4SaveEPviiP9_G2D_SAVE,"CG2D_LOADER_BMP::Save(void*, int, int, _G2D_SAVE*)",mentioned_unverified,
 00282f48,1776,_Z14GLIVON_FT3_oldPmP11tagPOLY_GT3siPt,"GLIVON_FT3_old(unsigned long*, tagPOLY_GT3*, short, int, unsigned short*)",read_structural,NOTES §154
-001b7f68,1768,_Z6GetPadv,GetPad(),unread,
+001b7f68,1768,_Z6GetPadv,GetPad(),read_structural,NOTES §176
 001eda18,1768,_Z22executeAnimationStatusP13tag_animation,executeAnimationStatus(tag_animation*),unread,
 001aaa24,1760,_Z15GetTryBestEquipssPs,"GetTryBestEquip(short, short, short*)",unread,
 000f07c0,1752,_Z17disp_selectwindowv,disp_selectwindow(),read_structural,NOTES §172
@@ -198,7 +198,7 @@ address,size,mangled,demangled,status,section_ref
 00233ed0,1712,_Z7Mdl0008siii,"Mdl0008(short, int, int, int)",read_structural,NOTES §101
 000d071c,1708,_Z16Ddisp_parawindowv,Ddisp_parawindow(),unread,
 000d140c,1700,_Z15chokobo_chrmenui,chokobo_chrmenu(int),read_structural,NOTES §170
-0018e3f0,1700,_Z11BattleEquipiPl,"BattleEquip(int, long*)",unread,
+0018e3f0,1700,_Z11BattleEquipiPl,"BattleEquip(int, long*)",read_structural,NOTES §179
 001aa014,1692,_Z12GetBestEquipsPs,"GetBestEquip(short, short*)",read_structural,NOTES §173
 00262b18,1692,_Z21hakenunit_status_mainP7CTLINFO,hakenunit_status_main(CTLINFO*),read_structural,NOTES §169
 000ae584,1676,_ZN12CEGL2_SPRITE12DrawScrollBGEffP9_RECT_F32S1_,"CEGL2_SPRITE::DrawScrollBG(float, float, _RECT_F32*, _RECT_F32*)",read_full,NOTES §13.4
@@ -209,11 +209,11 @@ address,size,mangled,demangled,status,section_ref
 0014a834,1668,_Z16Cdisp_parawindowv,Cdisp_parawindow(),unread,
 00180b64,1652,_Z15bMakeWindowFuncPh,bMakeWindowFunc(unsigned char*),unread,
 00190b98,1652,_Z15eMakeWindowFuncPh,eMakeWindowFunc(unsigned char*),unread,
-0008cbf4,1648,vorbis_analysis_headerout,vorbis_analysis_headerout,unread,
-00163348,1636,_Z16ASHURA_SetMatrixlP6MATRIXS0_t,"ASHURA_SetMatrix(long, MATRIX*, MATRIX*, unsigned short)",unread,
+0008cbf4,1648,vorbis_analysis_headerout,vorbis_analysis_headerout,read_full,NOTES §174
+00163348,1636,_Z16ASHURA_SetMatrixlP6MATRIXS0_t,"ASHURA_SetMatrix(long, MATRIX*, MATRIX*, unsigned short)",read_structural,NOTES §180
 00195270,1636,_Z7AbiSttsv,AbiStts(),unread,
 00121f88,1632,_Z19Edisp_abilitywindowv,Edisp_abilitywindow(),unread,
-0012c190,1632,_Z15disp_parawindowv,disp_parawindow(),unread,
+0012c190,1632,_Z15disp_parawindowv,disp_parawindow(),read_structural,NOTES §177
 001f2f84,1624,_Z17DisplayAnimationsv,DisplayAnimations(),unread,
 0008c4fc,1612,vorbis_synthesis_headerin,vorbis_synthesis_headerin,unread,
 00097f44,1608,_book_unquantize,_book_unquantize,unread,
