@@ -215,9 +215,9 @@ address,size,mangled,demangled,status,section_ref
 00121f88,1632,_Z19Edisp_abilitywindowv,Edisp_abilitywindow(),unread,
 0012c190,1632,_Z15disp_parawindowv,disp_parawindow(),read_structural,NOTES §177
 001f2f84,1624,_Z17DisplayAnimationsv,DisplayAnimations(),unread,
-0008c4fc,1612,vorbis_synthesis_headerin,vorbis_synthesis_headerin,unread,
-00097f44,1608,_book_unquantize,_book_unquantize,unread,
-00193104,1608,_Z8jDB_initP2DBPmP10tagPOLY_F3P11tagPOLY_FT3P10tagPOLY_F4P11tagPOLY_FT4P10tagPOLY_G3P11tagPOLY_GT3P10tagPOLY_G4P11tagPOLY_GT4P10tagLINE_F2P10tagLINE_F3P10tagLINE_F4P10tagLINE_G2P10tagLINE_G3P9tagLINEG4P7tagTILEP9tagTILE_1P9tagTILE_8P10tagTILE_16P7tagSPRTP9tagSPRT_8P10tagSPRT_16P7DR_MOVEP7DR_AREA,"jDB_init(DB*, unsigned long*, tagPOLY_F3*, tagPOLY_FT3*, tagPOLY_F4*, tagPOLY_FT4*, tagPOLY_G3*, tagPOLY_GT3*, tagPOLY_G4*, tagPOLY_GT4*, tagLINE_F2*, tagLINE_F3*, tagLINE_F4*, tagLINE_G2*, tagLINE_G3*, tagLINEG4*, tagTILE*, tagTILE_1*, tagTILE_8*, tagTILE_16*, tagSPRT*, tagSPRT_8*, tagSPRT_16*, DR_MOVE*, DR_AREA*)",unread,
+0008c4fc,1612,vorbis_synthesis_headerin,vorbis_synthesis_headerin,read_full,NOTES §182
+00097f44,1608,_book_unquantize,_book_unquantize,read_full,NOTES §182
+00193104,1608,_Z8jDB_initP2DBPmP10tagPOLY_F3P11tagPOLY_FT3P10tagPOLY_F4P11tagPOLY_FT4P10tagPOLY_G3P11tagPOLY_GT3P10tagPOLY_G4P11tagPOLY_GT4P10tagLINE_F2P10tagLINE_F3P10tagLINE_F4P10tagLINE_G2P10tagLINE_G3P9tagLINEG4P7tagTILEP9tagTILE_1P9tagTILE_8P10tagTILE_16P7tagSPRTP9tagSPRT_8P10tagSPRT_16P7DR_MOVEP7DR_AREA,"jDB_init(DB*, unsigned long*, tagPOLY_F3*, tagPOLY_FT3*, tagPOLY_F4*, tagPOLY_FT4*, tagPOLY_G3*, tagPOLY_GT3*, tagPOLY_G4*, tagPOLY_GT4*, tagLINE_F2*, tagLINE_F3*, tagLINE_F4*, tagLINE_G2*, tagLINE_G3*, tagLINEG4*, tagTILE*, tagTILE_1*, tagTILE_8*, tagTILE_16*, tagSPRT*, tagSPRT_8*, tagSPRT_16*, DR_MOVE*, DR_AREA*)",read_full,NOTES §182
 00122fe0,1604,_Z16Edisp_parawindowv,Edisp_parawindow(),read_structural,NOTES §181
 001a33a0,1596,_Z8PoachBuyv,PoachBuy(),unread,
 00261dac,1592,_Z17ctlmouketeam_initv,ctlmouketeam_init(),unread,
@@ -226,7 +226,7 @@ address,size,mangled,demangled,status,section_ref
 0019e188,1580,_Z13NameChgSelectv,NameChgSelect(),unread,
 00169aa4,1572,_Z19ASHURA_LMDL_DB_COPYPt,ASHURA_LMDL_DB_COPY(unsigned short*),unread,
 0018f374,1568,_Z7eGetPadv,eGetPad(),read_structural,NOTES §181
-00084790,1564,vorbis_bitrate_addblock,vorbis_bitrate_addblock,unread,
+00084790,1564,vorbis_bitrate_addblock,vorbis_bitrate_addblock,read_full,NOTES §182
 001965a4,1560,_Z7jGetPadv,jGetPad(),read_structural,NOTES §181
 00108568,1540,_Z17Wevent_status_settt,"Wevent_status_set(unsigned short, unsigned short)",unread,
 00280dfc,1540,_Z19iOS_setStatusHPMPCTP11IOS_STTSNUMiiiiiiiiiPvi,"iOS_setStatusHPMPCT(IOS_STTSNUM*, int, int, int, int, int, int, int, int, int, void*, int)",unread,
@@ -234,7 +234,7 @@ address,size,mangled,demangled,status,section_ref
 0024b988,1524,_Z11ctlbar_mainP7CTLINFO,ctlbar_main(CTLINFO*),unread,
 002570f4,1516,_Z16ctltownmenu_mainP7CTLINFO,ctltownmenu_main(CTLINFO*),unread,
 00137524,1512,_Z12select_valuev,select_value(),unread,
-0007a760,1504,inflate_fast,inflate_fast,unread,
+0007a760,1504,inflate_fast,inflate_fast,read_full,NOTES §182
 00197a10,1504,_Z15jMakeWindowFuncPh,jMakeWindowFunc(unsigned char*),read_structural,NOTES §181
 00165520,1500,_Z15ASURA_FALL_INITh,ASURA_FALL_INIT(unsigned char),unread,
 001a6d00,1496,_Z7Dismissv,Dismiss(),unread,

@@ -9258,3 +9258,26 @@ dependendo da família de função, e só dá pra saber qual se aplica
 rodando `family_sim.py` e olhando o Jaccard — não pelo nome. Treze
 funções confirmadas nesta passada (21.232 B). Todas marcadas
 `read_structural`.
+
+
+## 182. `jDB_init`/`vorbis_synthesis_headerin`/`_book_unquantize`/`vorbis_bitrate_addblock`/`inflate_fast` — cinco confirmações rápidas de boilerplate (2026-10-18, Fase 3, regras 2/6 da metodologia)
+
+Cinco checagens rápidas via `jtable.py`, sem passe completo:
+
+- **`jDB_init(DB*, ...)`** (`0x193104`, 1.608 B) — chama
+  `jSwapDB`/`SetPolyFT4` — quarta letra (`j`) confirmando o mesmo
+  boilerplate `DB_Init`/`InitGeom` genuíno do PSYQ já visto em `b`/
+  `e` (seções 113/153), com seu próprio `jSwapDB` consistente com o
+  padrão "toda letra é cópia completa" da seção 181.
+- **`vorbis_synthesis_headerin`** (`0x8c4fc`, 1.612 B, 69% de
+  cobertura) — só locais sem símbolo da faixa `0x715xx`, padrão
+  interno de `libvorbis`.
+- **`_book_unquantize`** (`0x97f44`, 1.608 B, 100%) — chama
+  `_float32_unpack`, interno genuíno de codebook da `libvorbis`.
+- **`vorbis_bitrate_addblock`** (`0x84790`, 1.564 B, 100%) — chama
+  `oggpack_writetrunc`, API real de bitrate da `libvorbis`.
+- **`inflate_fast`** (`0x7a760`, 1.504 B, 99%) — **zero chamadas
+  `bl`** (34 branches, 20 de retrocesso) — o laço de inflate rápido
+  do `zlib` de verdade, puramente inline, sem chamada de função.
+
+Marcadas `read_full` sem passe completo.
