@@ -16,20 +16,20 @@ address,size,mangled,demangled,status,section_ref
 00128ed4,8756,_Z19disp_personalwindowv,disp_personalwindow(),read_structural,NOTES §46
 0012f2f0,8632,_Z20Wdisp_personalwindowv,Wdisp_personalwindow(),read_structural,NOTES §47
 0023e29c,8616,_Z7Mdl0024siii,"Mdl0024(short, int, int, int)",read_structural,NOTES §48
-0022f48c,8420,_Z7Mdl0004siii,"Mdl0004(short, int, int, int)",unread,
+0022f48c,8420,_Z7Mdl0004siii,"Mdl0004(short, int, int, int)",read_structural,NOTES §101
 000ce834,7912,_Z20Ddisp_personalwindowv,Ddisp_personalwindow(),read_structural,NOTES §49
 0011f848,7888,_Z20Edisp_personalwindowv,Edisp_personalwindow(),read_structural,NOTES §50
 000c96a0,7728,_Z20Adisp_personalwindowv,Adisp_personalwindow(),read_structural,NOTES §51
 00236320,7684,_Z7Mdl0010siii,"Mdl0010(short, int, int, int)",read_structural,NOTES §52
 0022d69c,7664,_Z7Mdl0003siii,"Mdl0003(short, int, int, int)",read_structural,NOTES §53
-00234580,7584,_Z7Mdl0009siii,"Mdl0009(short, int, int, int)",unread,
+00234580,7584,_Z7Mdl0009siii,"Mdl0009(short, int, int, int)",read_structural,NOTES §101
 0014c010,7484,_Z20Cdisp_personalwindowv,Cdisp_personalwindow(),unread,
 000ec908,7444,_Z17disp_scrollwindowv,disp_scrollwindow(),read_structural,NOTES §54
-0023237c,6996,_Z7Mdl0007siii,"Mdl0007(short, int, int, int)",unread,
+0023237c,6996,_Z7Mdl0007siii,"Mdl0007(short, int, int, int)",read_structural,NOTES §101
 001bde2c,6976,_Z9UnitTablesssssPFiiES0_i,"UnitTable(short, short, short, short, short, int (*)(int), int (*)(int), int)",read_structural,NOTES §55
 001c0930,6956,_Z8UnitListii,"UnitList(int, int)",read_structural,"NOTES §56 (parcial, 58%)"
 001a486c,6908,_Z11AbilityMenuv,AbilityMenu(),read_structural,NOTES §57
-00238bac,6792,_Z7Mdl0013siii,"Mdl0013(short, int, int, int)",unread,
+00238bac,6792,_Z7Mdl0013siii,"Mdl0013(short, int, int, int)",read_structural,NOTES §101
 0007b200,6652,inflate,inflate,read_full,NOTES §69
 00117374,6504,_Z18Wdisp_scrollwindowv,Wdisp_scrollwindow(),read_structural,NOTES §58
 002ae900,6368,_Z17GuEmu_libgu_to_glv,GuEmu_libgu_to_gl(),read_structural,NOTES §59
@@ -40,20 +40,20 @@ address,size,mangled,demangled,status,section_ref
 00274764,5848,_Z13BattleRoutineiP13ActionRequest,"BattleRoutine(int, ActionRequest*)",read_full,AI §18; AI §20
 002bf3e8,5832,_Z9Main_Initv,Main_Init(),read_structural,NOTES §64
 000afb30,5576,_ZN7CCAMERA6UpdateEv,CCAMERA::Update(),read_structural,NOTES §65
-0022c138,5476,_Z7Mdl0002siii,"Mdl0002(short, int, int, int)",unread,
+0022c138,5476,_Z7Mdl0002siii,"Mdl0002(short, int, int, int)",read_structural,NOTES §101
 000f431c,5456,_Z10event_callPmm,"event_call(unsigned long*, unsigned long)",read_structural,NOTES §66
 0015834c,5236,_Z18world_scrollwindowv,world_scrollwindow(),read_structural,NOTES §67
 00163ccc,5160,_Z15ASHURA_set_Meshii,"ASHURA_set_Mesh(int, int)",read_structural,"NOTES §68 (corrigido, 96%)"
 002b8900,5036,_Z19iOS_SetIconPositionv,iOS_SetIconPosition(),read_structural,NOTES §71
-0023b310,5024,_Z7Mdl0015siii,"Mdl0015(short, int, int, int)",unread,
+0023b310,5024,_Z7Mdl0015siii,"Mdl0015(short, int, int, int)",read_structural,NOTES §101
 00213e78,4976,_Z17executeChangeClutv,executeChangeClut(),read_structural,NOTES §70
 000759e8,4872,deflate,deflate,read_full,NOTES §69
-0022ae34,4868,_Z7Mdl0001siii,"Mdl0001(short, int, int, int)",unread,
+0022ae34,4868,_Z7Mdl0001siii,"Mdl0001(short, int, int, int)",read_structural,NOTES §101
 00127360,4808,_Z14Wdisp_helpmenuv,Wdisp_helpmenu(),read_structural,NOTES §78 (checagem oportunista)
-0023c79c,4792,_Z7Mdl0017siii,"Mdl0017(short, int, int, int)",unread,
+0023c79c,4792,_Z7Mdl0017siii,"Mdl0017(short, int, int, int)",read_structural,NOTES §101
 0014935c,4780,_Z16Cdisp_bothwindowv,Cdisp_bothwindow(),read_structural,NOTES §73
 0013f1dc,4728,_Z19battle_scrollwindowv,battle_scrollwindow(),read_structural,NOTES §74
-002406d4,4700,_Z7Mdl0028siii,"Mdl0028(short, int, int, int)",unread,
+002406d4,4700,_Z7Mdl0028siii,"Mdl0028(short, int, int, int)",read_structural,NOTES §101
 000794ec,4660,inflateBack,inflateBack,read_full,NOTES §69
 001255e0,4628,_Z13disp_helpmenuv,disp_helpmenu(),read_structural,NOTES §78
 001da9e4,4540,_Z17set_monsterwork_jP5BWORKP5EDATAii,"set_monsterwork_j(BWORK*, EDATA*, int, int)",read_structural,NOTES §72
@@ -81,7 +81,7 @@ address,size,mangled,demangled,status,section_ref
 0016e7c8,3504,_Z17ASHURA_GNS_Garagelm,"ASHURA_GNS_Garage(long, unsigned long)",read_structural,NOTES §81
 00178e98,3300,_Z13bWorldJobSttsv,bWorldJobStts(),read_structural,NOTES §93
 00246450,3296,_Z17ctlopentitle_mainP7CTLINFO,ctlopentitle_main(CTLINFO*),read_structural,NOTES §87
-0023a634,3292,_Z7Mdl0014siii,"Mdl0014(short, int, int, int)",unread,
+0023a634,3292,_Z7Mdl0014siii,"Mdl0014(short, int, int, int)",read_structural,NOTES §101
 0015c15c,3284,_Z17sBattleTouchToCuri,sBattleTouchToCur(int),read_structural,NOTES §85
 002ace34,3200,sceGuDrawArray,sceGuDrawArray,unread,
 002210fc,3176,_Z18p04_magicChantFuncv,p04_magicChantFunc(),read_structural,NOTES §88
@@ -141,7 +141,7 @@ address,size,mangled,demangled,status,section_ref
 0012171c,2156,_Z17Edisp_equipwindowv,Edisp_equipwindow(),unread,
 001e2308,2152,_Z12check_coord2iiih,"check_coord2(int, int, int, unsigned char)",unread,
 00132cfc,2148,_Z17Wdisp_equipwindowv,Wdisp_equipwindow(),unread,
-0023837c,2096,_Z7Mdl0012siii,"Mdl0012(short, int, int, int)",unread,
+0023837c,2096,_Z7Mdl0012siii,"Mdl0012(short, int, int, int)",read_structural,NOTES §101
 000a42d8,2084,_ZN15CG2D_LOADER_BMP4CopyEPv,CG2D_LOADER_BMP::Copy(void*),mentioned_unverified,
 002ac014,2084,sceGuTexImage,sceGuTexImage,unread,
 000a4ef8,2076,_ZN15CG2D_LOADER_TGA4CopyEPv,CG2D_LOADER_TGA::Copy(void*),mentioned_unverified,
@@ -177,7 +177,7 @@ address,size,mangled,demangled,status,section_ref
 002c718c,1864,_Z16SettingsWnd_Initv,SettingsWnd_Init(),unread,
 0008b594,1860,floor1_encode,floor1_encode,unread,
 000aa190,1860,_ZN8CEGL2_IF10DrawPacketEii,"CEGL2_IF::DrawPacket(int, int)",read_full,NOTES §13.1
-00231570,1852,_Z7Mdl0005siii,"Mdl0005(short, int, int, int)",unread,
+00231570,1852,_Z7Mdl0005siii,"Mdl0005(short, int, int, int)",read_structural,NOTES §101
 001f5420,1840,_Z16displayDirectionv,displayDirection(),unread,
 001b7270,1836,_Z16RoundHelpMessages,RoundHelpMessage(short),unread,
 00276e4c,1828,_Z24CheckUnitActionEffectiveii,"CheckUnitActionEffective(int, int)",mentioned_unverified,
@@ -190,12 +190,12 @@ address,size,mangled,demangled,status,section_ref
 001eda18,1768,_Z22executeAnimationStatusP13tag_animation,executeAnimationStatus(tag_animation*),unread,
 001aaa24,1760,_Z15GetTryBestEquipssPs,"GetTryBestEquip(short, short, short*)",unread,
 000f07c0,1752,_Z17disp_selectwindowv,disp_selectwindow(),unread,
-00231cac,1744,_Z7Mdl0006siii,"Mdl0006(short, int, int, int)",unread,
+00231cac,1744,_Z7Mdl0006siii,"Mdl0006(short, int, int, int)",read_structural,NOTES §101
 00257e5c,1740,_Z12ctleeff_drawP4GsOT,ctleeff_draw(GsOT*),mentioned_unverified,
 0011661c,1736,_Z18Wdisp_selectwindowv,Wdisp_selectwindow(),unread,
 0017a42c,1732,_Z17bRoundHelpMessagesh,"bRoundHelpMessage(short, unsigned char)",unread,
 0019a3f8,1716,_Z7BuyUnitv,BuyUnit(),unread,
-00233ed0,1712,_Z7Mdl0008siii,"Mdl0008(short, int, int, int)",unread,
+00233ed0,1712,_Z7Mdl0008siii,"Mdl0008(short, int, int, int)",read_structural,NOTES §101
 000d071c,1708,_Z16Ddisp_parawindowv,Ddisp_parawindow(),unread,
 000d140c,1700,_Z15chokobo_chrmenui,chokobo_chrmenu(int),unread,
 0018e3f0,1700,_Z11BattleEquipiPl,"BattleEquip(int, long*)",unread,
@@ -370,7 +370,7 @@ address,size,mangled,demangled,status,section_ref
 002885f0,988,_Z15pspOpenIconDrawPmii18PSP_OPEN_ICON_TYPEi,"pspOpenIconDraw(unsigned long*, int, int, PSP_OPEN_ICON_TYPE, int)",unread,
 00245f24,988,_Z17ctlopentitle_initi,ctlopentitle_init(int),unread,
 000d8270,984,_Z12count_words2PsS_Pc,"count_words2(short*, short*, char*)",unread,
-0023dc94,984,_Z7Mdl0022siii,"Mdl0022(short, int, int, int)",unread,
+0023dc94,984,_Z7Mdl0022siii,"Mdl0022(short, int, int, int)",read_structural,NOTES §101
 0021e388,984,_Z18s29_doMetascheduleP10_EffectTCB,s29_doMetaschedule(_EffectTCB*),unread,
 000ffe58,980,_Z13Wcount_words2PsS_Pc,"Wcount_words2(short*, short*, char*)",unread,
 0019d83c,980,_Z10MainEmployv,MainEmploy(),unread,
@@ -625,7 +625,7 @@ address,size,mangled,demangled,status,section_ref
 00073370,600,_Z19Android_Font_RenderPKci,"Android_Font_Render(char const*, int)",unread,
 00097c44,600,_make_words,_make_words,unread,
 00157ee4,600,_Z15cnvattackclutnoi,cnvattackclutno(int),unread,
-00238124,600,_Z7Mdl0011siii,"Mdl0011(short, int, int, int)",unread,
+00238124,600,_Z7Mdl0011siii,"Mdl0011(short, int, int, int)",read_structural,NOTES §101
 00267368,600,_Z11ctlret_initv,ctlret_init(),unread,
 000ac850,596,_ZN12CEGL2_SHADER4LoadEiPvjS0_j,"CEGL2_SHADER::Load(int, void*, unsigned int, void*, unsigned int)",read_full,NOTES §13.6
 000c4ef4,596,_Z14attackteam_endv,attackteam_end(),unread,
@@ -672,7 +672,7 @@ address,size,mangled,demangled,status,section_ref
 000bc2bc,560,_ZN12CSOUND_IF_SL19Stream_CreatePlayerEiii,"CSOUND_IF_SL::Stream_CreatePlayer(int, int, int)",read_full,NOTES §17.6
 000dc3d4,560,_Z6direc1Pc,direc1(char*),unread,
 00224e44,560,_Z14CheckGunResultiP7SVECTORi,"CheckGunResult(int, SVECTOR*, int)",unread,
-0023e06c,560,_Z7Mdl0023siii,"Mdl0023(short, int, int, int)",unread,
+0023e06c,560,_Z7Mdl0023siii,"Mdl0023(short, int, int, int)",read_structural,NOTES §101
 002b1be8,556,_Z14AppEngine_Initi,AppEngine_Init(int),unread,
 00104798,556,_Z7Wdirec1Pc,Wdirec1(char*),unread,
 001052e4,556,_Z7Wdirec2Pci,"Wdirec2(char*, int)",unread,
@@ -1292,7 +1292,7 @@ address,size,mangled,demangled,status,section_ref
 0015d06c,264,_Z19iOSstartFukanChangev,iOSstartFukanChange(),unread,
 001ada4c,264,_Z6FadeInPi,FadeIn(int*),unread,
 001c067c,264,_Z13addlocalprim3P11tagPOLY_FT4i,"addlocalprim3(tagPOLY_FT4*, int)",unread,
-002404d8,264,_Z7Mdl0026siii,"Mdl0026(short, int, int, int)",unread,
+002404d8,264,_Z7Mdl0026siii,"Mdl0026(short, int, int, int)",read_structural,NOTES §101
 00256388,264,_Z14ctlsthelp_initv,ctlsthelp_init(),unread,
 0025b8ec,264,_Z14houkoku_mesputP7CTLINFOi,"houkoku_mesput(CTLINFO*, int)",unread,
 000727f4,260,Java_com_square_1enix_FFT_1Android_GL2JNILib_onTouchEvent,Java_com_square_1enix_FFT_1Android_GL2JNILib_onTouchEvent,unread,
@@ -1389,7 +1389,7 @@ address,size,mangled,demangled,status,section_ref
 001b799c,244,_Z17SystemWarningTimeii,"SystemWarningTime(int, int)",unread,
 001d2874,244,_Z19set_succession_dataP5BWORKi,"set_succession_data(BWORK*, int)",unread,
 001eb7d4,244,_Z23setPanelPriorityMoveSubP7SVECTORS0_i,"setPanelPriorityMoveSub(SVECTOR*, SVECTOR*, int)",unread,
-002405e0,244,_Z7Mdl0027siii,"Mdl0027(short, int, int, int)",unread,
+002405e0,244,_Z7Mdl0027siii,"Mdl0027(short, int, int, int)",read_structural,NOTES §101
 00245720,244,_Z11strCallbackv,strCallback(),unread,
 0024bf7c,244,_Z11wldpnl_calcv,wldpnl_calc(),read_full,NOTES §12.2
 0025c744,244,_Z12shogou_checkv,shogou_check(),unread,
@@ -1586,8 +1586,8 @@ address,size,mangled,demangled,status,section_ref
 001ad904,204,_Z11DrawModeChgiiiP6RECT16i,"DrawModeChg(int, int, int, RECT16*, int)",unread,
 00200a1c,204,_Z14startKnockBackP13tag_animationS0_,"startKnockBack(tag_animation*, tag_animation*)",unread,
 0028a6a0,204,_Z17pspTitleSaveCheckv,pspTitleSaveCheck(),unread,
-0023db20,204,_Z7Mdl0019siii,"Mdl0019(short, int, int, int)",unread,
-0023da54,204,_Z7Mdl0018siii,"Mdl0018(short, int, int, int)",unread,
+0023db20,204,_Z7Mdl0019siii,"Mdl0019(short, int, int, int)",read_structural,NOTES §101
+0023da54,204,_Z7Mdl0018siii,"Mdl0018(short, int, int, int)",read_structural,NOTES §101
 00228c74,204,_Z9InitShapev,InitShape(),unread,
 00255e14,204,_Z15ctlfsetnum_initii,"ctlfsetnum_init(int, int)",unread,
 00270224,204,_Z13wldpicwin_seti6RECT166_POINTi,"wldpicwin_set(int, RECT16, _POINT, int)",mentioned_unverified,
@@ -1975,7 +1975,7 @@ address,size,mangled,demangled,status,section_ref
 001f5b50,148,_Z21terminateAnimationSubiisss,"terminateAnimationSub(int, int, short, short, short)",unread,
 00220f94,148,_Z20StartPermanentEffectllP11EffectOrder,"StartPermanentEffect(long, long, EffectOrder*)",unread,
 00210e18,148,_Z22pspNetGetRandomWeatherv,pspNetGetRandomWeather(),unread,
-00240444,148,_Z7Mdl0025siii,"Mdl0025(short, int, int, int)",unread,
+00240444,148,_Z7Mdl0025siii,"Mdl0025(short, int, int, int)",read_structural,NOTES §101
 0024b790,148,_Z15ctlbar_deactiveP7CTLINFO,ctlbar_deactive(CTLINFO*),unread,
 00268ec4,148,_Z14wldcenter_movev,wldcenter_move(),unread,
 00268be0,148,_Z13wldcenter_setP6_POINTP7SVECTOR,"wldcenter_set(_POINT*, SVECTOR*)",mentioned_unverified,
@@ -2251,7 +2251,7 @@ address,size,mangled,demangled,status,section_ref
 001efa60,120,_Z21requestCast2AnimationP13tag_animationS0_,"requestCast2Animation(tag_animation*, tag_animation*)",unread,
 001fd200,120,_Z12setTurnOrderv,setTurnOrder(),unread,
 002b71f0,120,_Z20iOS_ResumeByAutoSavei,iOS_ResumeByAutoSave(int),unread,
-0023c6b0,120,_Z7Mdl0016siii,"Mdl0016(short, int, int, int)",unread,
+0023c6b0,120,_Z7Mdl0016siii,"Mdl0016(short, int, int, int)",read_structural,NOTES §101
 0021e760,120,_Z10doSequences,doSequence(short),unread,
 00245aa8,120,_Z14o_GetCardEventv,o_GetCardEvent(),unread,
 00245b78,120,_Z16o_GetCardEvent_Xv,o_GetCardEvent_X(),unread,
@@ -2298,7 +2298,7 @@ address,size,mangled,demangled,status,section_ref
 00201708,116,_Z23setActionStartDirectionP13tag_animation,setActionStartDirection(tag_animation*),unread,
 0020e19c,116,_Z34getAnimationPositionFromBattleWorkjP7SVECTOR,"getAnimationPositionFromBattleWork(unsigned int, SVECTOR*)",unread,
 0021cc10,116,_Z21s1e_ifMetascheduleEndP10_EffectTCB,s1e_ifMetascheduleEnd(_EffectTCB*),unread,
-0023c728,116,_Z11Mdl0017_subiiP6VECTORP7SVECTOR,"Mdl0017_sub(int, int, VECTOR*, SVECTOR*)",unread,
+0023c728,116,_Z11Mdl0017_subiiP6VECTORP7SVECTOR,"Mdl0017_sub(int, int, VECTOR*, SVECTOR*)",read_structural,NOTES §101
 002492b8,116,_Z9vEnd_initv,vEnd_init(),unread,
 0024c44c,116,_Z13bgscrol_chk_xP6_POINTP6VECTOR,"bgscrol_chk_x(_POINT*, VECTOR*)",mentioned_unverified,
 0024c4c0,116,_Z13bgscrol_chk_yP6_POINTP6VECTOR,"bgscrol_chk_y(_POINT*, VECTOR*)",mentioned_unverified,
@@ -2728,8 +2728,8 @@ address,size,mangled,demangled,status,section_ref
 001eed30,84,_Z15getShapeAddresst,getShapeAddress(unsigned short),unread,
 0024b02c,84,_Z11wldmapEntryi,wldmapEntry(int),mentioned_unverified,
 0022abe4,84,_Z24AddVECTORToVECTORShift12P6VECTORS0_S0_,"AddVECTORToVECTORShift12(VECTOR*, VECTOR*, VECTOR*)",unread,
-0023dc40,84,_Z7Mdl0021siii,"Mdl0021(short, int, int, int)",unread,
-0023dbec,84,_Z7Mdl0020siii,"Mdl0020(short, int, int, int)",unread,
+0023dc40,84,_Z7Mdl0021siii,"Mdl0021(short, int, int, int)",read_structural,NOTES §101
+0023dbec,84,_Z7Mdl0020siii,"Mdl0020(short, int, int, int)",read_structural,NOTES §101
 0021c274,84,_Z16s7_setEditorProcP10_EffectTCB,s7_setEditorProc(_EffectTCB*),unread,
 0021c2c8,84,_Z15s8_mapScrollXYZP10_EffectTCB,s8_mapScrollXYZ(_EffectTCB*),unread,
 0021d1e8,84,_Z16s3_killChildTaskP10_EffectTCB,s3_killChildTask(_EffectTCB*),unread,

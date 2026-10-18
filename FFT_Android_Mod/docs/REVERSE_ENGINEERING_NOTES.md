@@ -7304,3 +7304,142 @@ MESMOS dois primitivos de cópia — confirma que o sufixo `_W` aqui
 **não segue** o padrão "cópia real de fonte" das telas de UI
 (seções 33/37/47/58/60), é só uma segunda estrutura de dados
 compartilhando o mesmo mecanismo. Marcada `read_structural`.
+
+## Metodologia do loop (registrada 2026-10-18, Fase 3): esta é a nossa forma de trabalho a partir de agora
+
+O loop passa a operar por estas seis regras, adotadas numa revisão de
+processo no meio da Fase 3 depois de observar onde o tempo estava
+sendo gasto sem necessidade:
+
+1. **Paralelizar com múltiplos agentes/forks.** Função lida é
+   independente de qualquer outra (mesmo binário, só endereço
+   diferente) — o gargalo real é número de rodadas de ida-e-volta,
+   não CPU. Em vez de uma função por iteração, vários forks rodam
+   `jtable.py`/`family_sim.py` ao mesmo tempo sobre itens diferentes
+   da fila, devolvem o rascunho, e a integração nos arquivos
+   compartilhados acontece numa única passada (em vigor desde a
+   seção 70; ver "lotes paralelos").
+2. **Família já confirmada não é trabalho novo.** Depois de 2–3
+   confirmações do mesmo padrão (`Mdl*`, `disp_personalwindow`
+   `A/C/D/E`, variantes `W`), as próximas são repetição. Em vez do
+   passe estrutural completo em cada uma, comparar o catálogo de `bl`
+   resolvidos da função nova contra o da já lida — Jaccard ≥90% e
+   sem tabela de salto pendente confirma por similaridade sem redigir
+   uma seção cheia (ferramenta: `family_sim.py`, primeira aplicação
+   em lote na seção 100 — 26 funções/68.960 B numa única passada em
+   vez de ~26 seções).
+3. **Rebaixar a régua de "pronto" pra funções grandes.** Quando a
+   função não tem tabela de salto e a primeira passada já cobre
+   >95%, o resultado automático do passe estrutural é aceito direto
+   — sem etapa extra de verificação manual instrução-a-instrução.
+4. **Extração de tabela de salto validada, não um script novo a cada
+   vez.** `jtable.py` (validado contra `battle()`, seção 32) já acha
+   o `cmp` de guarda andando pra trás no fluxo real de instruções e
+   recusa a tabela honestamente se o registrador for sobrescrito
+   antes — essa é a ferramenta usada, não extração manual repetida.
+   A tentativa de descida em cascata totalmente automática
+   (`struct_pass2.py`) gerou falsos positivos e foi abandonada (nota
+   da seção correspondente); não vale retomar sem uma correção clara
+   do que causou os falsos positivos.
+5. **Focar em bytes, não em contagem de função.** A maioria das
+   ~6.600 funções do binário é pequena (mediana de 56 B); um número
+   pequeno de funções grandes já cobre a maior parte do código em
+   bytes. Continuar ordenando a fila "maior primeiro" (por bytes não
+   lidos) é a forma mais eficiente de subir a % de cobertura — ver
+   `RE_FUNCTION_INVENTORY.csv`, ordenado por tamanho.
+6. **Boilerplate genérico não precisa de passe completo.** Código de
+   terceiros reconhecível de cara (ex.: `gl3stubInit`, zlib
+   embutido — seções 69/69) leva só um reconhecimento rápido de
+   padrão, marca `read_full`/`read_structural` e pula pra próxima,
+   sem gastar uma iteração cheia.
+
+Estas seis regras substituem o ritmo "uma função, um commit, repete"
+que vinha sendo usado até a seção 69 — a partir da seção 70
+(primeiro lote paralelo) e, de forma mais explícita, a partir desta
+seção 100, é assim que o loop deve continuar operando.
+
+## 101. Família `Mdl*` completa — confirmação em lote por catálogo de `bl`, 26 funções / 68.960 B numa única passada (2026-10-18, Fase 3, primeira aplicação da regra 2 da metodologia)
+
+Construída `family_sim.py` (ferramenta nova, ver seção 100, regra 2):
+roda a mesma descida recursiva de `jtable.py` em cada função da fila
+e mede a similaridade de Jaccard do catálogo de endereços `bl`
+contra uma referência já lida — ≥90% e sem tabela de salto não
+resolvida confirma por similaridade sem redigir uma seção cheia.
+Rodada contra as 26 funções `Mdl0001`–`Mdl0028` ainda não lidas
+(todas as 29 do inventário, exceto `Mdl0024`/`Mdl0010`/`Mdl0003`, já
+confirmadas nas seções 48/52/53), revela que a família não é
+uniforme — são **três níveis reais**, não repetição cega:
+
+### Nível A — duplicata exata do catálogo "completo" (29 `bl`, Jaccard 1,00)
+
+```
+Mdl0004(short,int,int,int)  0x22f48c  8.420 B
+Mdl0009(short,int,int,int)  0x234580  7.584 B
+```
+Catálogo de `bl` **idêntico**, endereço por endereço, ao de `Mdl0010`/
+`Mdl0003`/`Mdl0024` (seções 48/52/53) — mesmo uso de
+`ASHURA_getOTptrZ`, `CreateObjectWithTable`, `ratan2`, `ps_rand`
+(×26), `VectorNormal`, `AddPrim`. Confirma por similaridade, sem
+leitura linha a linha. Com estas duas, **5 das 29** funções `Mdl*`
+já estão no nível "completo".
+
+### Nível B — mesmo vocabulário, subconjunto menor (9–22 `bl`, Jaccard 0,3–0,76)
+
+```
+Mdl0001  0x22ae34  4.868 B     Mdl0008  0x233ed0  1.712 B
+Mdl0002  0x22c138  5.476 B     Mdl0012  0x23837c  2.096 B
+Mdl0005  0x231570  1.852 B     Mdl0013  0x23237c  6.792 B
+Mdl0006  0x231cac  1.744 B     Mdl0014  0x23a634  3.292 B
+Mdl0007  0x23237c  6.996 B     Mdl0015  0x23b310  5.024 B
+Mdl0017  0x23c79c  4.792 B     Mdl0028  0x2406d4  4.700 B
+```
+Todas chamam o mesmo núcleo matemático do Nível A (`ratan2`,
+`VectorNormal`, `AddPrim`, `getAnimationDirection`, `get_mapstp`,
+`getMapSize`, `__aeabi_idiv`) mas **nenhuma chama
+`CreateObjectWithTable`** (gerador de partícula, seção 44) **exceto
+`Mdl0015`**, que é a única do Nível B a chamar — fica estruturalmente
+a meio caminho entre B e A. Conclusão: o Nível B são modelos/efeitos
+mais simples, desenhados direto via `ASHURA`/GTE sem gerar partículas
+proceduralmente. `Mdl0017` também chama um helper interno próprio
+(`Mdl0017_sub`, `0x23c728`, 116 B, zero `bl` — só aritmética inline).
+Todas marcadas `read_structural` por padrão de família, sem leitura
+instrução-a-instrução individual.
+
+### Nível C — funções minúsculas, NÃO são o mesmo padrão de desenho (12 funções, 3.612 B, lidas por `jtable.py` direto — cabem no passe estrutural completo por serem tão pequenas)
+
+```
+Mdl0018  0x23da54  204 B   -> ASHURA_Control(...) x1, só isso
+Mdl0019  0x23db20  204 B   -> ASHURA_Control(...) x1, só isso
+Mdl0026  0x2404d8  264 B   -> ASHURA_Control(...) x1, só isso
+Mdl0027  0x2405e0  244 B   -> ASHURA_Control(...) x1, só isso
+Mdl0022  0x23dc94  984 B   -> ASHURA_Control + Malloc/Free + CreateObjectWithTable
+Mdl0023  0x23e06c  560 B   -> ASHURA_Control + Malloc/Free + CreateObjectWithTable
+Mdl0011  0x238124  600 B   -> ASHURA_getOTptrZ + mallocForFile + StoreImage +
+                               SetPolyGT4 + SetDrawMode + system_error
+                               (carrega textura pro modelo, não desenha)
+Mdl0016  0x23c6b0  120 B   -> ASHURA_snowMatrix(long,long) só isso (efeito de neve)
+Mdl0020  0x23dbec   84 B   -> stopMapPaletteAnimation() só isso
+Mdl0021  0x23dc40   84 B   -> restertMapPaletteAnimation() só isso (sic, erro de
+                               digitação real no símbolo do binário)
+Mdl0025  0x240444  148 B   -> readed_mapchange + iOS_IsBattleSpeedUp +
+                               ASHURA_Control (dispara condicional a velocidade
+                               de batalha)
+Mdl0017_sub 0x23c728 116 B  -> 0 bl, só aritmética (helper interno de Mdl0017)
+```
+Confirma, com catálogo exato (não só Jaccard), que a tabela `Mdl*` é
+um **dispatch por ID de modelo/efeito heterogêneo**: a maioria dos
+IDs desenha uma malha `ASHURA` completa (Níveis A/B), mas alguns IDs
+são casos especiais sem relação com desenho de malha — animação de
+paleta de mapa (`Mdl0020`/`Mdl0021`), efeito de neve (`Mdl0016`),
+pré-carga de textura (`Mdl0011`), ou um gate condicional de velocidade
+de batalha (`Mdl0025`). Todas pequenas demais para esconder lógica
+relevante além do catálogo de chamadas já mostrado. Marcadas
+`read_structural`.
+
+**O que ficou sem confirmar**: os corpos internos de qualquer uma das
+26 (além do catálogo de chamadas e, pros Níveis A/C, a contagem exata
+de branches); por que o índice numérico de cada `Mdl000N` corresponde
+a qual efeito/golpe específico do jogo (nenhuma tabela de nomes
+encontrada). **Resultado prático**: as 29 funções da família `Mdl*`
+somam **68.960 B confirmados numa única passada** em vez de ~26
+seções individuais.
