@@ -8161,3 +8161,152 @@ funções de ACESSO A DADO puro, que são as mesmas independente do
 contexto de exibição — a lógica de agregação de lista é
 literalmente recompilada duas vezes chamando as MESMAS funções de
 dado. Todas as três marcadas `read_structural`.
+
+
+## 131. `disp_equipwindow()`/`Adisp_equipwindow()`/`Ddisp_equipwindow()`/`Cdisp_equipwindow()` — quatro trampolins triviais de 16 B, só `asmTaskEntry()` e retorno (2026-10-18, Fase 3, regra 3 da metodologia)
+
+Diferente de TODA outra família de letra já vista neste projeto
+(`disp_personalwindow`, `disp_bothwindow`, `disp_statusc`/
+`disp_status3`, onde base e letras são telas completas de milhares
+de bytes), a família `disp_equipwindow` tem a base e três letras
+(`A`/`D`/`C`) com **só 16 B cada** — 4 instruções, 100% de
+cobertura, **uma única chamada a `asmTaskEntry()` e retorno**,
+nenhum branch. São trampolins puros de entrada de task, não telas
+reais. Apenas `E` (2.156 B) e `W` (2.148 B, deixadas pra leitura
+completa) têm tamanho de tela de verdade. Aceitas direto (regra 3 da
+metodologia — cobertura de 100%, zero branch, nada a verificar
+manualmente). Marcadas `read_full`.
+
+
+## Décimo-segundo lote paralelo (seções 132–137): 6 funções lidas por forks simultâneos, usando `jtable.py`
+
+## 132. `ASHURA_Control(...)` — finalmente lida: é um processador de sub-opcode interno de 52 casos, NÃO a tabela de dispatch `Mdl0001`–`Mdl0028` (2026-10-18, Fase 3, lote paralelo)
+
+`ASHURA_Control(unsigned long, unsigned long, long, long)`
+(`0x16671c`, 1.988 B) — a função mais chamada de toda a investigação
+(dezenas de `Mdl*` e stubs triviais a invocam), lida por inteiro por
+fim. Descida recursiva via `jtable.py`: **421 de ~497 instruções
+possíveis (85%)**; **uma tabela de salto resolvida** (guarda `cmp`
+em `0x166730`, dispatch em `0x166734`, **52 casos, 14 handlers
+distintos** — `0x166814` domina como default/no-op em ~29 dos 52
+casos); **36 branches, 26 de retrocesso**.
+
+**Corrige a hipótese natural**: a tabela de 52 casos NÃO é o
+dispatch por ID de modelo/efeito que os `Mdl0NNN` usam — nenhum
+handler chama qualquer `Mdl0NNN` ou algo parecido. O catálogo de
+`bl` é mínimo (6 distintos) e todo de baixo nível:
+`VectorDataBase_SetFlag` (×6), `new_VectorDataBase`/
+`new_ColorVectorDataBase`, `SetDrawMode` (×4), `system_warning`.
+**Conclusão**: `ASHURA_Control` é um processador de sub-opcode
+genérico de baixo nível (switch sobre um dos parâmetros `unsigned
+long`, provavelmente código de comando 0–51) que manipula objetos
+`VectorDataBase`/`ColorVectorDataBase` e modo de desenho — a maioria
+dos casos cai no caminho default compartilhado, só um punhado faz
+trabalho real (alocar vector DB, setar flag, setar modo de desenho).
+**O dispatch real por ID de efeito/modelo (`Mdl0001`→efeito
+específico) deve acontecer a MONTANTE**, nos vários stubs que
+chamam `ASHURA_Control` com argumentos fixos diferentes —
+`ASHURA_Control` é o primitivo de baixo nível compartilhado em que
+todos desembocam, não o roteador por ID de efeito em si. Marcada
+`read_structural`.
+
+## 133. `Settings_FrameRender()` — revela um toolkit de UI moderno baseado em OpenGL ES/`CEGL2_*`, inteiramente separado da pipeline PSX legada (2026-10-18, Fase 3, lote paralelo)
+
+`Settings_FrameRender()` (`0x2c6550`, 2.412 B) — descida recursiva
+via `jtable.py`: **580 de ~603 instruções possíveis (96%)**, sem
+tabela de salto; **13 branches, 5 de retrocesso**. 25 `bl`
+distintos.
+
+**Achado arquitetural novo**: revela um toolkit de renderização de
+UI inteiramente separado da pipeline PSX/GTE legada já documentada —
+`CEGL2_IF::AddSprite` (×14, dominante)/`AddTile`/`Setup2D`/
+`DrawPacket`/`ClearBackdrop`/`InitRenderState2D`/`SetScreenSize`,
+`CEGL2_FBO::Begin`/`End`/`RenderToFBO` (framebuffer offscreen),
+`CEGL2_SPRITE::GetImageSize`, `CGX_SCREEN_CORRECT::GetCorrect`/
+`GetAppScreenSize`/`GetAppScaledScreenSize`, `CRECT::GetRect` (×11,
+layout de retângulo), `CINPUT_IF_TOUCH::GetPress`/`GetDown` (toque
+embutido no próprio desenho), `CAPP_INFO::IsEnableVibration`,
+**`SettingsBundle_Get()`** (×4, leitura de configuração persistida) e
+**`RETINA_SCALE(int)`** (×8, escala de DPI). **Confirma que a tela
+de configurações nativa (distinta do `disp_option` in-game, seção
+106) é construída sobre uma camada C++ moderna (`CEGL2_*`/`CRECT`/
+`CAPP_INFO`/`CGX_SCREEN_CORRECT`) que abstrai OpenGL ES** — um
+sistema de UI completamente separado da pipeline de polígono PS1
+usada em todo o resto do jogo. Marcada `read_structural`.
+
+## 134. `SettingsWnd_FrameRender()` — segunda confirmação do toolkit `CEGL2_*`, variante com recorte por scissor-rect (2026-10-18, Fase 3, lote paralelo)
+
+`SettingsWnd_FrameRender()` (`0x2c8194`, 2.292 B) — descida recursiva
+via `jtable.py`: **557 de ~573 instruções possíveis (97%)**, sem
+tabela de salto; **11 branches, 5 de retrocesso**. 27 `bl` distintos.
+
+Confirma o mesmo toolkit `CEGL2_*` da seção 133, com recorte extra
+por scissor-rect (`CEGL2_IF::GetScissor`/`SetScissor` ×2 variantes),
+`CEGL2_SPRITE::SetScale`/`SetScaleAlignCenter`/`SetColor` (×4 cada,
+posicionamento/cor por sprite), `CAPP_INFO::IsDeviceiPhoneRetina4inch`
+(detecção de dispositivo), e um local (`sub_2c7060`, ×13 — o alvo
+mais chamado, provável sub-rotina de desenho por item/linha
+compartilhada). Variante "janela" (`Wnd`) da mesma tela, com clipping
+adicional — consistente com um diálogo/popup sobreposto em vez da
+tela cheia. Marcada `read_structural`.
+
+## 135. `SettingsWnd_FrameMove()` — confirma o par update/draw: só input e mutação de estado, zero desenho (2026-10-18, Fase 3, lote paralelo)
+
+`SettingsWnd_FrameMove()` (`0x2c78d4`, 2.240 B, termina exatamente
+onde `SettingsWnd_FrameRender` começa) — descida recursiva via
+`jtable.py`: **519 de ~560 instruções possíveis (93%)**; **duas
+tabelas de salto resolvidas** (5 casos/5 handlers e 6 casos/5
+handlers); **45 branches, 31 de retrocesso**. 22 `bl` distintos.
+
+**Confirma ser a contraparte "update" do "draw" de
+`SettingsWnd_FrameRender`**: só toque (`CINPUT_IF_TOUCH::GetPress`/
+`GetDown`/`GetUp`/`GetRepeat`/`GetTouchPoint` ×7/`GetTouchCount`),
+geometria de UI (`CRECT::FrameMove`/`SetEnable` ×8/`GetScreenOffset`),
+áudio (`SysSE_PlayDef` ×5, `CSOUND_IF::SetMasterVolume`),
+`SettingsBundle_Get` (×12) e `RETINA_SCALE` (×24, uso pesadíssimo) —
+**zero chamada de desenho/GPU**. Confirma a separação limpa
+update/draw já esperada pela convenção de nome `FrameMove`/
+`FrameRender` usada em `Main_*`. Marcada `read_structural`.
+
+## 136. `time_flies(int)` — NÃO é efeito visual, é processamento de status de fim-de-turno por unidade (2026-10-18, Fase 3, lote paralelo)
+
+`time_flies(int)` (`0x1d59fc`, 2.288 B) — descida recursiva via
+`jtable.py`: **539 de ~572 instruções possíveis (94%)**; **uma
+tabela de salto resolvida** (guarda `cmp` em `0x1d5a58`, dispatch em
+`0x1d5a5c`, 20 casos, 15 handlers distintos); **84 branches, 39 de
+retrocesso**.
+
+**Corrige a hipótese inicial**: nome sugere algo visual ("o tempo
+voa"), mas o catálogo é dominado por bookkeeping de efeito de status
+por unidade: `status_handle_main`, `status_countdown`,
+`check_hide_reset`, `check_tobe_crystal` (transformação em cristal/
+morte), `inc_dead_number`, `get_floor_damage`, `set_monomane_act`/
+`overlayMonomaneStack` (habilidade Monomane/Mímica), `set_cco_SD`, e
+termina com **`set_turn_end(int)`** — tudo controlado por
+`check_unit_active` (×8, a chamada mais pesada, sugere iterar/validar
+várias unidades). **Conclusão**: é a rotina de processamento de
+status de fim de turno/tick — avança contadores de status, checa
+morte/cristal/esconder, dano de piso, e finalmente fecha o turno —
+não um efeito visual literal. Um local sem símbolo. Marcada
+`read_structural`.
+
+## 137. `drawmessagepolygons()` — emissor de quad PSX direto pra caixa de diálogo, sem tabela de salto (2026-10-18, Fase 3, lote paralelo)
+
+`drawmessagepolygons()` (`0xe062c`, 2.240 B) — descida recursiva via
+`jtable.py`: **551 de ~560 instruções possíveis (98%)**, sem tabela
+de salto; **52 branches, 26 de retrocesso**. 18 `bl` distintos.
+
+Emissor de primitivo de GPU estilo PSX direto pra caixa de mensagem:
+constrói quads `POLY_FT4` via `addlocalprim`/`addlocalprim2` (×12/
+×11, os dois alvos mais pesados — consistente com emissão de quad
+por glifo/tile num laço), resolve estado de textura/CLUT via
+`GetTPage`/`GetClut`/`faceuvclut`, e lê/grava dado de rosto e ícone
+via os acessores `iOS_*` (`iOS_getTransFace`/`getTransFaceEVT`/
+`getTransFaceForChrRemove`, `iOS_getV2Icon`/`setV2Icon`,
+`iOS_getFaceDataID`/`setFaceDataID`) e `CFFT_STATE::GetParam`/
+`SetParam` (×13, o alvo mais chamado de todos). `pspWorldCheckFlg`/
+`IS_TEX_2X` sugerem gate específico da camada de port PSP->mobile.
+Alta densidade de laço (26 de retrocesso) consistente com laço
+aninhado clássico de era PSX construindo muitos quads pequenos pros
+glifos/tiles da mensagem — usa a pipeline legada, não o toolkit
+`CEGL2_*` das seções 133–135. Marcada `read_structural`.

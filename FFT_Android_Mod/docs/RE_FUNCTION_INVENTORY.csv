@@ -112,23 +112,23 @@ address,size,mangled,demangled,status,section_ref
 0024265c,2488,_Z15ctlendroll_mainP7CTLINFO,ctlendroll_main(CTLINFO*),read_structural,NOTES §124
 00211f14,2440,_Z17requestChangeClutiijjisss,"requestChangeClut(int, int, unsigned int, unsigned int, int, short, short, short)",read_structural,NOTES §120
 000c8238,2416,_Z16attack_assumechrv,attack_assumechr(),read_structural,NOTES §121
-002c6550,2412,_Z20Settings_FrameRenderv,Settings_FrameRender(),unread,
+002c6550,2412,_Z20Settings_FrameRenderv,Settings_FrameRender(),read_structural,NOTES §133
 000c8ba8,2396,_Z17attack_assumefacev,attack_assumeface(),read_structural,NOTES §122
 002235f4,2352,_Z11p20_gunFuncv,p20_gunFunc(),read_structural,NOTES §126
 0016828c,2332,_Z16ASHURA_LMDL_ReadPtP8L_MATRIXi,"ASHURA_LMDL_Read(unsigned short*, L_MATRIX*, int)",read_structural,NOTES §123
 0011c2bc,2296,_Z13Wdisp_status3v,Wdisp_status3(),read_structural,NOTES §130
 000e5998,2292,_Z12disp_status3v,disp_status3(),read_structural,NOTES §127
-002c8194,2292,_Z23SettingsWnd_FrameRenderv,SettingsWnd_FrameRender(),unread,
+002c8194,2292,_Z23SettingsWnd_FrameRenderv,SettingsWnd_FrameRender(),read_structural,NOTES §134
 000d5d6c,2288,_Z20make_abilitylistmaini,make_abilitylistmain(int),read_structural,NOTES §128
 000fd318,2288,_Z21Wmake_abilitylistmaini,Wmake_abilitylistmain(int),read_structural,NOTES §130
-001d59fc,2288,_Z10time_fliesi,time_flies(int),mentioned_unverified,
+001d59fc,2288,_Z10time_fliesi,time_flies(int),read_structural,NOTES §136
 00124078,2284,_Z13Wselect_valuev,Wselect_value(),unread,
 0024d068,2272,_Z12ctlbrst_mainP7CTLINFO,ctlbrst_main(CTLINFO*),read_structural,NOTES §125
 00124964,2260,_Z24Wselect_valuewithmessagev,Wselect_valuewithmessage(),unread,
 000a98c8,2248,_ZN8CEGL2_IF9DrawTile4EffffPjf,"CEGL2_IF::DrawTile4(float, float, float, float, unsigned int*, float)",read_full,NOTES §14.2
-000e062c,2240,_Z19drawmessagepolygonsv,drawmessagepolygons(),unread,
+000e062c,2240,_Z19drawmessagepolygonsv,drawmessagepolygons(),read_structural,NOTES §137
 001ebffc,2240,_Z13getShadowRectP13tag_animation,getShadowRect(tag_animation*),unread,
-002c78d4,2240,_Z21SettingsWnd_FrameMovev,SettingsWnd_FrameMove(),unread,
+002c78d4,2240,_Z21SettingsWnd_FrameMovev,SettingsWnd_FrameMove(),read_structural,NOTES §135
 0021d620,2236,_Z14s28_doScheduleP10_EffectTCB,s28_doSchedule(_EffectTCB*),unread,
 0014e0ec,2228,_Z10wipe_constv,wipe_const(),unread,
 001d82a8,2224,_Z11get_abilityii,"get_ability(int, int)",mentioned_unverified,
@@ -151,7 +151,7 @@ address,size,mangled,demangled,status,section_ref
 00277720,2044,_Z18EvaluationFunctionv,EvaluationFunction(),read_full,AI §6.4; AI §14.2
 0010e918,2040,_Z11Wevent_callPmm,"Wevent_call(unsigned long*, unsigned long)",unread,
 0026e428,1992,_Z12ctltuto_mainP7CTLINFO,ctltuto_main(CTLINFO*),unread,
-0016671c,1988,_Z14ASHURA_Controlmmll,"ASHURA_Control(unsigned long, unsigned long, long, long)",unread,
+0016671c,1988,_Z14ASHURA_Controlmmll,"ASHURA_Control(unsigned long, unsigned long, long, long)",read_structural,NOTES §132
 0010e154,1988,_Z20Wdrawmessagepolygonsv,Wdrawmessagepolygons(),unread,
 000f5898,1984,_Z9menu_callPmm,"menu_call(unsigned long*, unsigned long)",unread,
 002632ec,1984,_Z17ctlmouketeam_mainP7CTLINFO,ctlmouketeam_main(CTLINFO*),unread,
@@ -5324,10 +5324,10 @@ address,size,mangled,demangled,status,section_ref
 000be2a4,16,_ZN11CSTEP_BATCH9GetEnableEv,CSTEP_BATCH::GetEnable(),unread,
 0015ef0c,16,_Z24iOSUnitListMoveFlagResetv,iOSUnitListMoveFlagReset(),unread,
 0027f4f4,16,_Z19iOS_GetRectHitNoTapv,iOS_GetRectHitNoTap(),unread,
-000c441c,16,_Z17Adisp_equipwindowv,Adisp_equipwindow(),unread,
+000c441c,16,_Z17Adisp_equipwindowv,Adisp_equipwindow(),read_full,NOTES §131
 000c442c,16,_Z19Adisp_abilitywindowv,Adisp_abilitywindow(),unread,
 002a3100,16,xpMallocIO,xpMallocIO,unread,
-000d0dcc,16,_Z17Ddisp_equipwindowv,Ddisp_equipwindow(),unread,
+000d0dcc,16,_Z17Ddisp_equipwindowv,Ddisp_equipwindow(),read_full,NOTES §131
 000d0ddc,16,_Z19Ddisp_abilitywindowv,Ddisp_abilitywindow(),unread,
 000d6d98,16,_Z12getStatusPadv,getStatusPad(),unread,
 00284b8c,16,_Z23pspBattleDataBackBufGetv,pspBattleDataBackBufGet(),unread,
@@ -5339,12 +5339,12 @@ address,size,mangled,demangled,status,section_ref
 00263aac,16,_Z18iOSNovelBrightStopv,iOSNovelBrightStop(),unread,
 0025690c,16,_Z15IOSsTownModeGetv,IOSsTownModeGet(),unread,
 00101fc0,16,_Z13WgetStatusPadv,WgetStatusPad(),unread,
-0012b10c,16,_Z16disp_equipwindowv,disp_equipwindow(),unread,
+0012b10c,16,_Z16disp_equipwindowv,disp_equipwindow(),read_full,NOTES §131
 0012b11c,16,_Z18disp_abilitywindowv,disp_abilitywindow(),unread,
 002b1444,16,_Z25SettingsBundle_IsLeftHandv,SettingsBundle_IsLeftHand(),unread,
 00286e38,16,_Z29pspNetEntranceOptionRecordGetv,pspNetEntranceOptionRecordGet(),unread,
 00286e48,16,_Z32pspNetEntranceOptionScrRecordGetv,pspNetEntranceOptionScrRecordGet(),unread,
-0014b9fc,16,_Z17Cdisp_equipwindowv,Cdisp_equipwindow(),unread,
+0014b9fc,16,_Z17Cdisp_equipwindowv,Cdisp_equipwindow(),read_full,NOTES §131
 0014ba0c,16,_Z19Cdisp_abilitywindowv,Cdisp_abilitywindow(),unread,
 0015c03c,16,_Z13iOSRotSlidClsv,iOSRotSlidCls(),unread,
 0021036c,16,_Z14setShortVectorP7SVECTORiii,"setShortVector(SVECTOR*, int, int, int)",unread,
