@@ -116,11 +116,11 @@ address,size,mangled,demangled,status,section_ref
 000c8ba8,2396,_Z17attack_assumefacev,attack_assumeface(),read_structural,NOTES §122
 002235f4,2352,_Z11p20_gunFuncv,p20_gunFunc(),read_structural,NOTES §126
 0016828c,2332,_Z16ASHURA_LMDL_ReadPtP8L_MATRIXi,"ASHURA_LMDL_Read(unsigned short*, L_MATRIX*, int)",read_structural,NOTES §123
-0011c2bc,2296,_Z13Wdisp_status3v,Wdisp_status3(),unread,
+0011c2bc,2296,_Z13Wdisp_status3v,Wdisp_status3(),read_structural,NOTES §130
 000e5998,2292,_Z12disp_status3v,disp_status3(),read_structural,NOTES §127
 002c8194,2292,_Z23SettingsWnd_FrameRenderv,SettingsWnd_FrameRender(),unread,
 000d5d6c,2288,_Z20make_abilitylistmaini,make_abilitylistmain(int),read_structural,NOTES §128
-000fd318,2288,_Z21Wmake_abilitylistmaini,Wmake_abilitylistmain(int),unread,
+000fd318,2288,_Z21Wmake_abilitylistmaini,Wmake_abilitylistmain(int),read_structural,NOTES §130
 001d59fc,2288,_Z10time_fliesi,time_flies(int),mentioned_unverified,
 00124078,2284,_Z13Wselect_valuev,Wselect_value(),unread,
 0024d068,2272,_Z12ctlbrst_mainP7CTLINFO,ctlbrst_main(CTLINFO*),read_structural,NOTES §125
@@ -133,7 +133,7 @@ address,size,mangled,demangled,status,section_ref
 0014e0ec,2228,_Z10wipe_constv,wipe_const(),unread,
 001d82a8,2224,_Z11get_abilityii,"get_ability(int, int)",mentioned_unverified,
 0015b688,2224,_Z20sBattleTouchRotationv,sBattleTouchRotation(),unread,
-00135218,2188,_Z14Witemmenu_callPmmi,"Witemmenu_call(unsigned long*, unsigned long, int)",unread,
+00135218,2188,_Z14Witemmenu_callPmmi,"Witemmenu_call(unsigned long*, unsigned long, int)",read_structural,NOTES §130
 000d361c,2184,_Z12disp_chapterv,disp_chapter(),unread,
 001b5ba0,2180,_Z12WorldJobSttsv,WorldJobStts(),unread,
 002826c8,2176,_Z14GLIVON_FT4_oldPmP11tagPOLY_GT4siPt,"GLIVON_FT4_old(unsigned long*, tagPOLY_GT4*, short, int, unsigned short*)",unread,

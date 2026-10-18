@@ -8126,3 +8126,38 @@ pra criar/checar a task. 22 branches de retrocesso com só 94% de
 cobertura confirma trabalho de desenho real por quadro (provavelmente
 ícones/cursor do menu de item com transparência), não só um ponto de
 entrada que delega tudo. Marcada `read_structural`.
+
+
+## 130. `Wdisp_status3`/`Wmake_abilitylistmain`/`Witemmenu_call` — sétima confirmação do padrão `W`, com uma excecao reveladora pra lógica pura de dado (2026-10-18, Fase 3, regra 2 da metodologia)
+
+`family_sim.py` contra as três bases recém-lidas:
+
+```
+Wdisp_status3           0x11c2bc  2.296 B   Jaccard 0,13 (vs disp_status3, §127)
+Wmake_abilitylistmain    0xfd318  2.288 B   Jaccard 1,00 (vs make_abilitylistmain, §128)
+Witemmenu_call           0x135218 2.188 B   Jaccard 0,33 (vs itemmenu_call, §129)
+```
+
+**`Wdisp_status3`**: Jaccard baixíssimo, confirmando o padrão pela
+sétima vez — biblioteca `W`-prefixada própria (`Winitpolyft4`,
+`Wdisposetexture`, `Wallocatetextureconst`, `Wchecktaskkind`,
+`Wstatusfigprint`, `Wstatuskanjiprintwithptr`) mais `wasmTaskEntry`/
+`wasmGetInput3`/`wasmGetActiveTask`.
+
+**`Witemmenu_call`**: Jaccard baixo (0,33), mesmo padrão — chama
+`Wimport_localpad`/`Wexport_localpad` e `wasmTaskEntry`/
+`wasmGetActiveTask` em vez das versões sem prefixo.
+
+**`Wmake_abilitylistmain` — EXCEÇÃO reveladora**: Jaccard **1,00**,
+catálogo de `bl` idêntico ao da base (§128). Diferente de toda
+função de desenho/UI já vista, aqui `W` não precisa de biblioteca
+própria porque os 11 `bl` da base são TODOS acessores de dado puro
+(`set_monsterability2`/`set_normability2`/`set_itemitem`/etc.) — não
+existe versão `W`-prefixada de funções de dado, só de funções de
+desenho/task/janela. **Isso refina a regra geral**: `W` duplica
+helpers de DESENHO/TASK (que fazem sentido existir em dois
+contextos: task normal vs. task `wasm`), mas reusa diretamente
+funções de ACESSO A DADO puro, que são as mesmas independente do
+contexto de exibição — a lógica de agregação de lista é
+literalmente recompilada duas vezes chamando as MESMAS funções de
+dado. Todas as três marcadas `read_structural`.
