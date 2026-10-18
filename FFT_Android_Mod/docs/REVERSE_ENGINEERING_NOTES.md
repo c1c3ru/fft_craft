@@ -7995,3 +7995,134 @@ de laço linear por nó, não um decodificador por switch. Fecha o
 trio `ASHURA_MapProjectMem2Mem`/`ASURA_LMDL_TIME_TBL`/
 `ASHURA_LMDL_Read` do sistema `LMDL` (seções 112/114/123). Marcada
 `read_structural`.
+
+
+## Décimo-primeiro lote paralelo (seções 124–129): 6 funções lidas por forks simultâneos, usando `jtable.py`
+
+## 124. `ctlendroll_main(CTLINFO*)` — confirma ser o controlador dos créditos finais, tabela de 5 casos (2026-10-18, Fase 3, lote paralelo)
+
+`ctlendroll_main(CTLINFO*)` (`0x24265c`, 2.488 B) — descida recursiva
+via `jtable.py`: **594 de ~622 instruções possíveis (95%)**; **uma
+tabela de salto resolvida** (guarda `cmp` em `0x24268c`, dispatch em
+`0x242690`, **5 casos, 5 handlers distintos**); **18 branches, 9 de
+retrocesso**.
+
+Catálogo pequeno (6 `bl` distintos) mas com um nome que confirma a
+hipótese de cara: **`vEnd_rollproc()`** ("end roll proc") — função
+dedicada exclusivamente aos créditos finais. O resto do catálogo é
+runtime de ponto flutuante do compilador (`__subdf3`/`__adddf3`/
+`__fixdfsi` ×6, matemática de posição de scroll/tempo) mais
+`pspGetpspPrimWorkBuf`/`xpFree` (setup/teardown de buffer de
+desenho). Tabela de salto bem mais simples (5 casos) que
+`ctlhoukmes_main` (101 casos, seção 117) — consistente com uma
+sequência linear (fade-in, scroll, fade-out, fim) em vez de um
+dispatcher de muitos estados. Confirma o framework `ctl*_main`
+(parâmetro `CTLINFO*` uniforme), mesmo sem as chamadas genéricas
+`Wtask_status`/`Wsend_taskparamater` aparecerem nesta função
+especificamente. Marcada `read_structural`.
+
+## 125. `ctlbrst_main(CTLINFO*)` — hub de menu com transição pra 8 outros sub-controladores `ctl*_init`, "brst" é seção de UI, não efeito visual (2026-10-18, Fase 3, lote paralelo)
+
+`ctlbrst_main(CTLINFO*)` (`0x24d068`, 2.272 B) — descida recursiva
+via `jtable.py`: **536 de ~568 instruções possíveis (94%)**; **uma
+tabela de salto resolvida** (guarda `cmp` em `0x24d1e4`, dispatch em
+`0x24d1e8`, **7 casos, 7 handlers distintos**); **45 branches, 27 de
+retrocesso**. **38 `bl` distintos** — maior catálogo já visto na
+família `ctl*_main`.
+
+**Corrige a hipótese inicial**: "brst" não é um efeito de flash de
+tela — a função é um **hub de menu** que transiciona pra **8 outros
+sub-controladores**: `ctlkiroku_init`, `ctlperson_init`,
+`ctlwork_init`, `ctlopt_init`, `ctlhelp_init`, `ctlhistory_init`,
+`ctltresure_init`, `ctlunreg_init` (mais `wldctl_deactive`), e chama
+sua própria rotina de desativação `ctlbrst_deactive(CTLINFO*)` (×7).
+Confirma o framework compartilhado via `Wtask_status`/
+`Wsend_taskparamater`, e usa a biblioteca `iOS_CMenuTouch` completa
+(`init`/`exec`/`setDispOffset`/`setYLine`/`setDispAssist`) mais
+`iOS_setDispMenuTouch`/`iOS_setV2Icon` (×9) — é a tela de menu
+principal com ícones de toque que dá acesso a registro (`kiroku`),
+dados de personagem (`person`), trabalho (`work`), opções (`opt`),
+ajuda (`help`), histórico (`history`), tesouro (`tresure`) e
+desbloqueáveis (`unreg`). `wldfade_set`/`wlddisp_mask`/`wldfrm_clr`
+cuidam da transição de tela, `sound_request`/`ssd_request`/
+`wldmusic_change` do áudio do menu. Marcada `read_structural`.
+
+## 126. `p20_gunFunc()` — efeito de projétil de arma de fogo, matemática GTE completa com primitivos de polígono diretos (2026-10-18, Fase 3, lote paralelo)
+
+`p20_gunFunc()` (`0x2235f4`, 2.352 B) — descida recursiva via
+`jtable.py`: **566 de ~588 instruções possíveis (96%)**, sem tabela
+de salto; **45 branches, 25 de retrocesso**. 32 `bl` distintos.
+
+Mistura ciclo de vida de objeto/efeito do `ASHURA`
+(`LockEffectCompelBreak`/`UnlockEffect`/`GetEffectStatus`,
+`GetPermanentObject`/`DisposePermanentObject`) e lógica de jogo real
+(**`requestPhysicalDamage(int,int)`**, **`changeFlameRate(int)`** —
+sugere um efeito de arma de fogo com componente de chama/fogo) com
+matemática GTE pesada (`rsin`/`rcos`/`ratan2`/`SquareRoot12`/
+`SquareRoot0`, `SetRotMatrix`/`SetTransMatrix`/`RotTransPers`/
+`RotTransPers3`/`RotTrans`) e primitivos de polígono diretos
+(`AddPrim`, `SetPolyG3` ×8, `SetPolyG4`, `SetPolyFT4`,
+`dispPolygonObject` — seção 108, `TexHybrid_RegistCLUTAddr`,
+`IS_TEX_2X()`) mais acesso a dado de item (`itemuvclut`,
+`pspItemGetCommonData` ×4). Sem tabela de salto — constrói e
+transforma seus próprios primitivos de polígono por quadro, não
+delega a um dispatcher de tabela de partícula. Consistente com um
+efeito visual de projétil/impacto de arma de tiro (flash de cano,
+traçador ou explosão) com dano físico associado. Marcada
+`read_structural`.
+
+## 127. `disp_status3()` — terceira variante confirmando a mesma biblioteca de desenho de tela de status (2026-10-18, Fase 3, lote paralelo)
+
+`disp_status3()` (`0xe5998`, 2.292 B) — descida recursiva via
+`jtable.py`: **553 de ~573 instruções possíveis (97%)**, sem tabela
+de salto; **33 branches, 19 de retrocesso**. 30 `bl` distintos.
+
+Confirma, sem introduzir categoria de helper nova, que `disp_status3`
+reusa a MESMA biblioteca de desenho de tela de status já catalogada
+em `disp_statusc`/`disp_personalwindow`/`disp_bothwindow`:
+`addlocalprim` (chamada mais pesada, ×16), `initpolyft4`/
+`initsprtfield`, `disposetexture`/`allocatetextureconst`, a família
+`addstatusback`/`sttsback_normal`/`sttsback_blue`/`initstatusback`,
+`bgput`, `loadcdst`/`initdrmode`, e o par de texto
+`statusfigprint`/`statuskanjiprintwithptr`, mais os helpers de ciclo
+de task padrão (`task_killmyself`, `asmTaskEntry`,
+`asmGetInput3`/`asmGetActiveTask`) e primitivos PSX GPU
+(`PSX_LoadImage`, `GetTPage`, `SetDrawOffset`, `SetSemiTrans`). É a
+terceira variante confirmada sobre a mesma biblioteca compartilhada
+— nenhuma lógica estruturalmente nova. Dois locais sem símbolo.
+Marcada `read_structural`.
+
+## 128. `make_abilitylistmain(int)` — agregador de lista de habilidade, toca todas as categorias de item/habilidade de uma vez (2026-10-18, Fase 3, lote paralelo)
+
+`make_abilitylistmain(int)` (`0xd5d6c`, 2.288 B) — descida recursiva
+via `jtable.py`: **546 de ~572 instruções possíveis (95%)**, sem
+tabela de salto; **69 branches, 36 de retrocesso** — alta densidade
+de laço (percorrendo slots de habilidade por categoria).
+
+Catálogo pequeno (11 `bl` distintos) mas cobre TODAS as categorias de
+habilidade/item do jogo numa função só: `set_monsterability2`,
+`set_normability2` (habilidade de emprego), `set_itemitem`,
+`set_throwitem`, `set_katanaitem`, as três habilidades de `sanjutsu`
+(ninjutsu) — `set_sanjutsuability1`/`2`/`3` — e `set_chargeability2`,
+mais `get_bwp` (seção 43). **Confirma ser o agregador real que
+monta a lista de habilidade exibida no menu de seleção**, puxando
+dado de cada tabela de categoria pra popular linhas da tela. Sem
+tabela de salto — dispatch de categoria é por branch condicional
+direto. Um local sem símbolo (×2). Marcada `read_structural`.
+
+## 129. `itemmenu_call(...)` — híbrido: cria a task do menu de item E desenha seus próprios tiles, não é wrapper fino (2026-10-18, Fase 3, lote paralelo)
+
+`itemmenu_call(unsigned long*, unsigned long, int)` (`0x12cdcc`,
+2.168 B) — descida recursiva via `jtable.py`: **509 de ~542
+instruções possíveis (94%)**, sem tabela de salto; **41 branches, 22
+de retrocesso**. 10 `bl` distintos.
+
+**Corrige a hipótese inicial** de que seria um wrapper fino que só
+dispara a task do `ItemMenu`: a função toca primitivos de GPU reais
+(`addlocalprim` ×4, `SetTile` ×5, `SetSemiTrans` ×5, `SetDrawMode`,
+`GetTPage`) e import/export de pad local (`import_localpad`/
+`export_localpad`), além de `asmTaskEntry`/`asmGetActiveTask` (×1/×2)
+pra criar/checar a task. 22 branches de retrocesso com só 94% de
+cobertura confirma trabalho de desenho real por quadro (provavelmente
+ícones/cursor do menu de item com transparência), não só um ponto de
+entrada que delega tudo. Marcada `read_structural`.
