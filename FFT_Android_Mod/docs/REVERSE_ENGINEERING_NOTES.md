@@ -8917,3 +8917,140 @@ unidades recrutadas/disponíveis pra montar o time ("team" = elenco/
 roster), com retrato por unidade — não uma tela de "lucro". Sem
 tabela de salto, dispatch de fase por branch direto. Um local sem
 símbolo. Marcada `read_structural`.
+
+
+## Décimo-sétimo lote paralelo (seções 168–173): 6 funções lidas por forks simultâneos, usando `jtable.py`
+
+## 168. `ctlbackpage_main(CTLINFO*)` — handler de navegação "voltar", sem tabela de salto, com helper `backpage_put` dedicado (2026-10-18, Fase 3, lote paralelo)
+
+`ctlbackpage_main(CTLINFO*)` (`0x2657f8`, 1.932 B) — descida
+recursiva via `jtable.py`: **466 de ~483 instruções possíveis
+(96%)**, **sem tabela de salto** (diferente da maioria dos irmãos
+`ctl*_main` — não usa o padrão de dispatch por tabela de fase); **42
+branches, 20 de retrocesso**. 23 `bl` distintos.
+
+Dominada por sondagem de toque direta (`iOS_getTouchTap`/`Press`/
+`BeginX`/`BeginY`/`NowY`, 15 chamadas no total) e comparação de
+ponto flutuante (`__floatsisf`/`__aeabi_fcmple`, provavelmente
+rastreando uma posição de animação de scroll/transição), mais um
+helper dedicado **`backpage_put(CTLINFO*, int)`** (`0x2657d8`, só 32
+B antes do início desta função — vizinho direto na imagem) que
+parece escrever/inicializar o estado de "página de volta" que esta
+função gerencia. Junto com `wldkey_rep`/`iOSwldkey_repSet` (estado
+de teclado virtual) e `Wwrite_eventflag`/`Wtask_start`, consistente
+com um handler de navegação "voltar pra tela anterior": sonda toque/
+swipe, atualiza um valor de scroll/transição, escreve uma flag de
+evento e inicia uma task de seguimento (provavelmente a transição de
+tela real). Marcada `read_structural`.
+
+## 169. `hakenunit_status_main(CTLINFO*)` — tela de detalhe de status de unidade despachada, tabela de 5 casos (2026-10-18, Fase 3, lote paralelo)
+
+`hakenunit_status_main(CTLINFO*)` (`0x262b18`, 1.692 B) — descida
+recursiva via `jtable.py`: **400 de ~423 instruções possíveis
+(95%)**; **uma tabela de salto resolvida** (5 casos, 5 handlers
+distintos); **33 branches, 19 de retrocesso**.
+
+Dirige o padrão de task padrão (`Wtask_create`/`Wtask_status`/
+`Wsend_taskparamater`) com a tabela de 5 casos pros estados internos
+da task, chama **`hakenunit_status(int)`** uma vez (o acessor de
+dado real de status de despacho de uma unidade), toca input de
+retângulo de toque (`iOS_SetRectHit`/`ClearRectHitAll`/
+`GetRectHitNoTap`, `iOS_getTouchSwype`), ícone V2, cursor de
+navegação L/R de lista de unidade (`iOSUnitListLRCurWrite`,
+`iOSWldEffectLR`), e um overlay de ajuda (`ctlsthelp_init`).
+**Confirma ser a sub-tela de detalhe/status interativa pra uma
+unidade selecionada** na lista de `ctlmouketeam_main` (seção 167),
+com sua própria navegação por cursor entre unidades. Marcada
+`read_structural`.
+
+## 170. `chokobo_chrmenu(int)` — driver de task do menu de personagem via chocobo, toca estado de rede PSP (2026-10-18, Fase 3, lote paralelo)
+
+`chokobo_chrmenu(int)` (`0xd140c`, 1.700 B, já referenciada por
+nome em `disp_statusc`, seção 107) — descida recursiva via
+`jtable.py`: **387 de ~425 instruções possíveis (91%)**, sem tabela
+de salto; **26 branches, 13 de retrocesso**. 17 `bl` distintos, 36
+chamadas no total.
+
+Máquina de estado baseada em task (`task_create` ×4,
+`send_taskparamater` ×7, `asmTaskEntry`/`asmGetActiveF`/
+`asmGetActiveTask`), lê/escreve status local via
+`export_localstatus`, checa/seta um flag de tipo de task
+(`checktaskkind`/`settaskkind`), e **`checkstatusscroll`** sugere
+lista de status/estatística rolável (tela de stats de personagem,
+como esperado). `import_localpad` lê input de controle direto.
+`get_bwp` lê valor de estatística pra exibição. **Achado**:
+`pspNetGetControlChar`/`pspNetGetBattleModeFlag` (estado de rede/
+multiplayer) e `Set_NonDrawTaikiIconFlg` (toggle de ícone de
+"taiki"/standby de personagem) — confirma ser o driver de estado/
+task do menu de personagem via chocobo, ligando task, input,
+exibição de status e a camada de rede PSP já vista em outras funções
+de menu. Três locais sem símbolo, chamados pesadamente. Marcada
+`read_structural`.
+
+## 171. `select_valuewithmessage()` — widget de valor numérico com mensagem anexada, rodando como task cooperativa (2026-10-18, Fase 3, lote paralelo)
+
+`select_valuewithmessage()` (`0x137b10`, 1.676 B) — descida
+recursiva via `jtable.py`: **408 de ~419 instruções possíveis
+(97%)**, sem tabela de salto; **17 branches, 6 de retrocesso**. 27
+`bl` distintos.
+
+Toca a biblioteca de widget `multiwindow_*` (`keydown`/`break`/
+`loadcolor`/`packetcolor`/`packetanm`/`packetinit`/`keyright`) pra
+moldura/key handling, a pipeline de primitivo/sprite estilo PSX
+(`addlocalprim`, `initpolyft4`, `PSX_LoadImage`, `GetTPage`,
+`SetSemiTrans`, `statuskanjiprint`, `statusfigprint0`) pra desenhar
+janela e texto, helpers de string/valor (`serchmessagepointer`,
+`getvaluelength`, `count_words`/`count_words2` — consistente com
+parsear e medir o valor numérico e o texto de mensagem), input
+(`import_localpad`), e controle de task (`task_wait`/
+`task_killmyself`/`asmTaskEntry`/`asmGetActiveF`). Confirma a
+hipótese: um widget de spinner/entrada de valor numérico com prompt
+de mensagem anexado, desenhado via o sistema `multiwindow` e
+rodando como sua própria task cooperativa. Um local sem símbolo.
+Marcada `read_structural`.
+
+## 172. `disp_selectwindow()` — janela de seleção multi-escolha genérica, touch-aware sobre a biblioteca `multiwindow_*` compartilhada (2026-10-18, Fase 3, lote paralelo)
+
+`disp_selectwindow()` (`0xf07c0`, 1.752 B) — descida recursiva via
+`jtable.py`: **432 de ~438 instruções possíveis (99%)**, sem tabela
+de salto; **50 branches, 24 de retrocesso**. **45 `bl` distintos** —
+catálogo grande pra 1.752 B.
+
+Reusa a biblioteca `multiwindow_*` de desenho/animação já
+catalogada (`keydown`/`keyright`/`keyloop`/`packetinit`/
+`packetcolor`/`packetanm`/`packetadd`/`break`) e o boilerplate
+genérico `checkkeyok`/`read_eventflag`/`asmTaskEntry`/`asmGetInput1`/
+`2` compartilhado por toda a família de janela documentada, mas
+ADICIONA uma camada de seleção dirigida por toque não vista nos
+`disp_*window` mais simples: classe `iOS_CMenuTouch` completa
+(`init`/`exec`/`setDispOffset`/`setYLine`/`setXIconRect`/
+`setDispAssist`), manuseio de ícone `iOS_getV2Icon`/`setV2Icon`
+(×4), overlay de halftone (`iOS_getHalftoneSize`/`Tap`), gate de
+tutorial (`iOSTutoCheck`/`getTutorialbreak`/`Type`), persistência da
+escolha via **`iOS_setSelectWindowRecord(short)`**, e som
+(`iOS_soundDirect`). **Conclusão**: é o diálogo de seleção/
+confirmação com reconhecimento de toque construído SOBRE a
+biblioteca de desenho compartilhada, não uma reutilização pura —
+distinto dos `disp_*window` mais simples (`personalwindow`/
+`bothwindow`/`equipwindow`) que não têm essa camada de toque.
+Marcada `read_structural`.
+
+## 173. `GetBestEquip(short, short*)` — confirma a lógica de "melhor equipamento automático" por slot (2026-10-18, Fase 3, lote paralelo)
+
+`GetBestEquip(short, short*)` (`0x1aa014`, 1.692 B) — descida
+recursiva via `jtable.py`: **416 de ~423 instruções possíveis
+(98%)**, sem tabela de salto; **55 branches, 26 de retrocesso** —
+densidade de laço alta, consistente com escanear uma lista de
+candidatos.
+
+Confirma a hipótese: puxa o pool de item disponível via
+`GetItemList`, ordena candidatos com `ItemSort` (×3), checa estado
+de mão de arma via `Nitoryu` (dual-wield) e `Ryoute` (duas mãos)
+pra decidir configurações de equipamento válidas, e classifica/
+consulta cada candidato via `pspItemIsType` (×7)/`pspItemIsBarehand`/
+`pspItemGetWeaponData` (×5, inspeção de estatística/tipo por
+candidato), terminando com `ItemChg` (×1, aplica o equipamento
+final escolhido). **Confirma**: itera inventário, filtra por regra
+de mão/tipo de arma, compara estatística de arma, escolhe o melhor,
+e comita via `ItemChg` — a lógica real de "auto-equipar melhor item
+por slot". Marcada `read_structural`.
