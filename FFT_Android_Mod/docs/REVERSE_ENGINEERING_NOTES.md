@@ -7443,3 +7443,65 @@ a qual efeito/golpe específico do jogo (nenhuma tabela de nomes
 encontrada). **Resultado prático**: as 29 funções da família `Mdl*`
 somam **68.960 B confirmados numa única passada** em vez de ~26
 seções individuais.
+
+## 102. Quatro internos da `libvorbis`/Tremor reconhecidos por nome, sem passe completo (2026-10-18, Fase 3, regra 6 da metodologia)
+
+`_vp_psy_init` (`0x940f0`, 2.828 B), `floor1_fit` (`0x8aa00`, 2.800 B),
+`ov_pcm_seek_page` (`0x9f3f8`, 2.576 B) e
+`_vp_couple_quantize_normalize` (`0x956d4`, 2.544 B) — os quatro nomes
+são símbolos reais da `libvorbis`/Tremor upstream (modelo
+psicoacústico `psy.c`, ajuste de piso espectral `floor1.c`, busca de
+página `vorbisfile.c`, acoplamento stereo `vorbis_quantize`),
+reconhecíveis de cara, igual já estabelecido pra `ov_pcm_tell`/
+`ov_open_callbacks`/`ov_info` nas seções 17.x/3169-3386. Checagem
+rápida via `jtable.py` (sem passe completo) confirma o padrão: 98–
+100% de cobertura, zero tabela de salto, catálogo de `bl` dominado
+por runtime de ponto flutuante do compilador (`__adddf3`/`__muldf3`/
+`__divdf3`/`__extendsfdf2` etc.) mais um punhado de helpers locais
+`sub_*` sem símbolo — nenhuma chamada a qualquer função prefixada do
+jogo (`CFFT_STATE`/`iOS_*`/`ASHURA_*`/etc). Confirma que são código
+de terceiros genérico, consistente com a identificação já feita da
+`libvorbisfile`. Marcadas `read_full` sem leitura instrução-a-
+instrução — regra 6 da metodologia (seção 100): boilerplate
+reconhecível não precisa de passe completo.
+
+## 103. Família `disp_bothwindow` fechada — `A`/`D` confirmam entrada fina, `E` parcial, `W` confirma cópia real dos helpers (2026-10-18, Fase 3, regra 2 da metodologia)
+
+`family_sim.py` contra a referência `disp_bothwindow()` (`0x12b12c`,
+seção 73, já `read_structural`):
+
+```
+Adisp_bothwindow()  0xc1e20   4.260 B   Jaccard 0,89
+Ddisp_bothwindow()  0xcd5e8   4.128 B   Jaccard 0,89
+Edisp_bothwindow()  0x1225e8  2.552 B   Jaccard 0,63
+Wdisp_bothwindow()  0x133be4  2.544 B   Jaccard 0,22
+```
+**`A` e `D`**: catálogo de 33 `bl` quase idêntico ao da referência —
+só 2 endereços da referência não aparecem (locais próprios de
+`disp_bothwindow`) e cada uma tem 2 locais próprios minúsculos sem
+símbolo (`LOCAL(no-dynsym)`) — confirma o mesmo padrão "entrada fina"
+já visto em `C` (seção 73) e em toda a família `disp_personalwindow`
+(seções 49–51): reusam os helpers sem prefixo, não duplicam nada.
+
+**`E`**: Jaccard mais baixo (0,63) por chamar um cluster de 5
+endereços locais próprios adicionais (`0x11e95c` a `0x11f0bc`, todos
+sem símbolo) além do núcleo compartilhado — ainda a MESMA família,
+só com mais lógica própria de entrada que `A`/`D`/`C`.
+
+**`W` — achado que confirma a hipótese deixada pendente na seção 73**:
+Jaccard muito baixo (0,22) porque `W` **não chama nenhum dos helpers
+sem prefixo** da referência — chama, em vez disso, um conjunto
+próprio de duplicatas `W`-prefixadas: `Waddlocalprim`,
+`Winitsprtfield`, `Waddstatusback`, `Winitstatusback`, `Witemuvclut`,
+`Wsettaskkind`, `Wimport_localpad`, `Wloadcdst`, `Wbgput`,
+`Wstatuskanjiprint`, mais `wasmTaskEntry`/`wasmGetInput3` (arquitetura
+de task `wasm`, igual `Wmultiwindow_*`/`Wdisp_personalwindow`, seções
+33/47/58/60/74). **Confirma, com uma quarta família independente, que
+`W` é consistentemente a única variante que é uma recompilação de
+verdade do código-fonte** (biblioteca de helpers própria, não um
+ponto de entrada fino) — padrão agora visto em `disp_personalwindow`,
+`Wmultiwindow_*`, e `disp_bothwindow`.
+
+Todas as quatro marcadas `read_structural` por similaridade/catálogo
+direto — fecha a família `disp_bothwindow` (base + `A`/`C`/`D`/`E`/`W`,
+6 funções, seções 73/103) sem passe instrução-a-instrução adicional.

@@ -58,10 +58,10 @@ address,size,mangled,demangled,status,section_ref
 001255e0,4628,_Z13disp_helpmenuv,disp_helpmenu(),read_structural,NOTES §78
 001da9e4,4540,_Z17set_monsterwork_jP5BWORKP5EDATAii,"set_monsterwork_j(BWORK*, EDATA*, int, int)",read_structural,NOTES §72
 000e62cc,4448,_Z20iOS_RESUME_SET_EVENTP21IOS_RESUME_DATA_EVENT24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_EVENT(IOS_RESUME_DATA_EVENT*, IOS_RESUME_DATACOPY_MODE)",read_structural,NOTES §76
-000c1e20,4260,_Z16Adisp_bothwindowv,Adisp_bothwindow(),unread,
+000c1e20,4260,_Z16Adisp_bothwindowv,Adisp_bothwindow(),read_structural,NOTES §103
 000d1ab0,4244,_Z13debug_chrmenuv,debug_chrmenu(),read_structural,NOTES §79
 0012b12c,4196,_Z15disp_bothwindowv,disp_bothwindow(),read_structural,NOTES §73
-000cd5e8,4128,_Z16Ddisp_bothwindowv,Ddisp_bothwindow(),unread,
+000cd5e8,4128,_Z16Ddisp_bothwindowv,Ddisp_bothwindow(),read_structural,NOTES §103
 00216e5c,4004,_Z22iOS_RESUME_SET_WORK_MUP23IOS_RESUME_DATA_WORK_MU24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_WORK_MU(IOS_RESUME_DATA_WORK_MU*, IOS_RESUME_DATACOPY_MODE)",unread,
 0013d248,3996,_Z11disp_optioni,disp_option(int),unread,
 0019e7b8,3936,_Z4Shopi,Shop(int),read_structural,"NOTES §75 (parcial, 82%)"
@@ -93,20 +93,20 @@ address,size,mangled,demangled,status,section_ref
 00166ee0,2976,_Z16ASHURA_Animationv,ASHURA_Animation(),read_structural,"NOTES §91 (parcial, 81%)"
 00278f84,2880,_Z18FundamentalRoutinev,FundamentalRoutine(),read_structural,AI §28
 001267f4,2840,_Z14disp_helpmenu2v,disp_helpmenu2(),unread,
-000940f0,2828,_vp_psy_init,_vp_psy_init,unread,
+000940f0,2828,_vp_psy_init,_vp_psy_init,read_full,NOTES §102
 0011cbb4,2812,_Z22iOS_RESUME_SET_EVENT_WP23IOS_RESUME_DATA_EVENT_W24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_EVENT_W(IOS_RESUME_DATA_EVENT_W*, IOS_RESUME_DATACOPY_MODE)",read_structural,NOTES §99 (87%)
 001e03c8,2812,_Z13getskillrangeP3ACT,getskillrange(ACT*),read_structural,NOTES §94
-0008aa00,2800,floor1_fit,floor1_fit,unread,
+0008aa00,2800,floor1_fit,floor1_fit,read_full,NOTES §102
 00264cf8,2784,_Z13ctlnobel_mainP7CTLINFO,ctlnobel_main(CTLINFO*),read_structural,NOTES §96
 001b5104,2716,_Z12LearnAbiSttsv,LearnAbiStts(),read_structural,NOTES §97
 001e4f3c,2712,_Z14getskilleffectP3ACT,getskilleffect(ACT*),read_structural,NOTES §95
 001adf8c,2684,_Z5Equipv,Equip(),read_structural,NOTES §98
-0009f3f8,2576,ov_pcm_seek_page,ov_pcm_seek_page,unread,
+0009f3f8,2576,ov_pcm_seek_page,ov_pcm_seek_page,read_full,NOTES §102
 001b937c,2568,_Z7Tutrialv,Tutrial(),unread,
-001225e8,2552,_Z16Edisp_bothwindowv,Edisp_bothwindow(),unread,
+001225e8,2552,_Z16Edisp_bothwindowv,Edisp_bothwindow(),read_structural,NOTES §103
 00287a78,2548,_Z15hight_font_drawi,hight_font_draw(int),unread,
-000956d4,2544,_vp_couple_quantize_normalize,_vp_couple_quantize_normalize,unread,
-00133be4,2544,_Z16Wdisp_bothwindowv,Wdisp_bothwindow(),unread,
+000956d4,2544,_vp_couple_quantize_normalize,_vp_couple_quantize_normalize,read_full,NOTES §102
+00133be4,2544,_Z16Wdisp_bothwindowv,Wdisp_bothwindow(),read_structural,NOTES §103
 0025a908,2504,_Z15ctlhoukmes_mainP7CTLINFO,ctlhoukmes_main(CTLINFO*),unread,
 0019b620,2492,_Z10DressEquipv,DressEquip(),unread,
 0024265c,2488,_Z15ctlendroll_mainP7CTLINFO,ctlendroll_main(CTLINFO*),unread,
