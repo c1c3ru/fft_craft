@@ -7717,3 +7717,153 @@ arquitetural: `W` é sempre uma recompilação de verdade do código-
 fonte com sua própria biblioteca de helpers e task `wasm`, nunca um
 ponto de entrada fino. Aceito direto via catálogo de `bl`, sem
 verificação manual (regra 3). Marcadas `read_structural`.
+
+
+## Nono lote paralelo (seções 112–117): 6 funções lidas por forks simultâneos, usando `jtable.py`
+
+## 112. `ASHURA_MapProjectMem2Mem(unsigned char, char*)` — decodificador de registro com auto-recursão, tabela de 31 vias, carrega chunk de mapa (2026-10-18, Fase 3, lote paralelo)
+
+`ASHURA_MapProjectMem2Mem(unsigned char, char*)` (`0x168ba8`,
+3.632 B) — descida recursiva via `jtable.py`: **732 de ~908
+instruções possíveis (81%)**; **uma tabela de salto resolvida**
+(guarda `cmp` em `0x168bd4`, dispatch em `0x168bd8`, **124 casos, 31
+handlers distintos** — `0x168e4c` domina como alvo default/catch-all
+em ~95 dos 124 casos); **69 branches, 57 de retrocesso** — maior
+densidade de laço relativa já vista (83%).
+
+**Auto-recursão**: a própria função se chama de novo (×5) — confirma
+que é um decodificador de stream de registros tipados (opcode
+`unsigned char` + buffer `char*`) que processa chunks de mapa
+aninhados/encadeados recursivamente. Chama `ASHURA_LMDL_Read` (×9,
+seção pendente — carrega modelo linkado), funções de luz/câmera GTE
+(`ASHURA_LightSwitch`, `ASHURA_LightMatrix`, `ASHURA_BackColor`,
+`ASHURA_CVECTOR`, `setMapVector`), carregamento de textura/CLUT
+(`loadClutData`, `IsMapTexAsideLoad`, `PSX_LoadImage`,
+`xpLibgpuTPageGet`, `SetDrawMode`/`SetDrawMove`), checagem de
+event-flag (`read_eventflag`) e, achado inesperado, uma chamada a
+`iOS_getV2Icon` (ícone de save, sem relação aparente com mapa — fora
+de contexto, possível reuso de helper genérico). **Conclusão**: é o
+parser/streamer real de chunks de mapa — não matemática de vetor
+pura, é a camada que decodifica o formato de arquivo de mapa e
+dispara os sub-sistemas de iluminação/textura/modelo conforme o tipo
+de registro lido. Marcada `read_structural`.
+
+## 113. `bDB_init(...)` — boilerplate genuíno do PSYQ SDK (inicialização de double-buffer/ambiente de desenho), confirmado pela regra 6 (2026-10-18, Fase 3, lote paralelo)
+
+`bDB_init(DB*, ...)` (`0x175a98`, 3.016 B) — 26 pointers de
+primitivo (um por tipo: `POLY_F3`/`FT3`/`F4`/`FT4`/`G3`/`GT3`/`G4`/
+`GT4`, `LINE_F2`/`F3`/`F4`/`G2`/`G3`/`G4`, `TILE`/`TILE_1`/`TILE_8`/
+`TILE_16`, `SPRT`/`SPRT_8`/`SPRT_16`, mais `DR_MOVE`/`DR_AREA`/
+`DR_MODE`) — a MESMA assinatura do `DB_Init`/`InitGeom` real da SDK
+PSYQ do PS1. Descida recursiva: **726 de ~754 instruções possíveis
+(96%)**, **zero tabela de salto**, **26 branches, só 2 de
+retrocesso** — densidade de branch baixíssima, consistente com fiação
+sequencial de ponteiros em struct, não lógica de jogo.
+
+Catálogo de `bl` é exatamente o conjunto `Set<TipoPrimitivo>` (um
+`SetPolyF3`/`SetPolyF4`/.../`SetTile16`/`SetSprt8` por parâmetro, na
+mesma ordem da lista de parâmetros) mais `bSwapDB` (troca de double-
+buffer) e `SetDefDispEnv`/`SetDefDrawEnv` (ambiente de display/
+desenho padrão) — nenhuma chamada fora desse padrão. **Confirma, com
+instrução real, boilerplate genuíno do SDK de renderização de baixo
+nível do PS1** — zero lógica específica do jogo. Marcada `read_full`
+(regra 6 da metodologia), não `read_structural`, por ser
+reconhecidamente código de terceiros/SDK, não lógica própria do
+motor do jogo.
+
+## 114. `ASURA_LMDL_TIME_TBL()` — construtor de tabela de tempo de animação do modelo linkado (2026-10-18, Fase 3, lote paralelo)
+
+`ASURA_LMDL_TIME_TBL()` (`0x165b68`, 2.996 B, termina exatamente em
+`0x16671c` = `ASHURA_Control`) — descida recursiva via `jtable.py`:
+**744 de ~749 instruções possíveis (99%)**, sem tabela de salto;
+**54 branches, 23 de retrocesso**. Catálogo mínimo (4 `bl`
+distintos) mas dominado por `__divsi3` (×27) e `rsin` (×18) dentro de
+um laço — mais um local sem símbolo (`sub_714b8`, ×2) e uma única
+chamada a `iOS_GetFrameRate()`. **Conclusão**: bate exatamente com o
+nome — constrói uma tabela de temporização por quadro (muita divisão
+inteira, provavelmente razão de interpolação/contagem de frame) com
+seno pra interpolação angular/oscilação de curva de animação, gated
+por taxa de quadro real — parte do sistema `LMDL` ("linked model",
+seção 112) do motor `ASHURA`/`ASURA`. Marcada `read_structural`.
+
+## 115. `Tutrial()` — controlador de task do overlay de tutorial, confirma e estende o subsistema já visto nas seções 106/107 (2026-10-18, Fase 3, lote paralelo)
+
+`Tutrial()` (`0x1b937c`, 2.568 B, nome com erro de digitação real no
+binário, "tutorial" sem o segundo `o`) — descida recursiva via
+`jtable.py`: **606 de ~642 instruções possíveis (94%)**, sem tabela
+de salto; **58 branches, 36 de retrocesso**. 26 `bl` distintos.
+
+Confirma o subsistema de tutorial já sinalizado em `disp_option`
+(`request_help`/`tutorial_syscall`, seção 106) e `disp_statusc`
+(`Get_bravebreak`/`iOS_getTutorialbreak`/`iOSTutoCheck`, seção 107),
+com 3 membros NOVOS: `tutorialstatusget(int)`, `iOS_setTutorialbreak
+(unsigned short)`, e **`iOSTutoFlagAdd(int)`** (×6, a chamada mais
+frequente). Também toca a camada de task `W` (`Wtask_create`/
+`Wtask_status`/`Wsend_taskparamater`), o subsistema de mundo
+(`world_stopnoend`, `load_worldname`), renderização (`DrawG4`,
+`DrawModeChg`, `FadeOutInit`/`FadeOut`, `GetTPage`, `GetFrameRate`),
+dados de personagem (`GetChrList`), ícone V2 (`iOS_getV2Icon`/
+`setV2Icon`), input (`iOSHelpInputWaitSet`, `pspNetPadRead`),
+arquivo (`fileDispose`, `SetLoadData`) e um reset completo
+(**`CallresetFFT()`**, achado notável — confirma que existe uma
+rotina de reset total do jogo acessível desde o tutorial). Dois
+locais sem símbolo. Marcada `read_structural`.
+
+## 116. `hight_font_draw(int)` — nome sugere desenho de fonte, catálogo revela plumbing de primitivo/OT estilo PSP (2026-10-18, Fase 3, lote paralelo)
+
+`hight_font_draw(int)` (`0x287a78`, 2.548 B, nome com erro de
+digitação real, "height" sem o `e`) — descida recursiva via
+`jtable.py`: **633 de ~637 instruções possíveis (99%)**, sem tabela
+de salto; só **6 branches, 2 de retrocesso**. Catálogo pequeno (5
+`bl` distintos, 22 chamadas): `ASHURA_getOTptr()` (×10, ponteiro de
+tabela de ordenação), `pspGetpspPrimWorkBuf(int)` (×5, buffer de
+trabalho de primitivo estilo PSP), um local sem símbolo (×5),
+`IS_TEX_2X()` (modo de textura 2x) e `iOS_setV2Icon`.
+
+**Apesar do nome sugerir desenho de glifo/fonte, o catálogo de
+chamadas não confirma lógica de fonte alguma** — é dominado por
+plumbing de buffer de primitivo/tabela de ordenação estilo PSP, com
+um único toque na camada `iOS_*` de ícone V2. Consistente com estar
+na junção entre o renderizador legado PS1/PSP e a camada de UI iOS
+mais nova (endereço na faixa `0x28xxxx`, junto dos outros `iOS_*`) —
+mas o corpo real da lógica de glifo, se existir, está nos 2 branches
+de retrocesso não expandidos ou no local sem símbolo. Marcada
+`read_structural`.
+
+## 117. `ctlhoukmes_main(CTLINFO*)` — controlador de mensagem de "relatório" em campo, confirma o framework `ctl*_main` compartilhado, tabela de 101 casos (2026-10-18, Fase 3, lote paralelo)
+
+`ctlhoukmes_main(CTLINFO*)` (`0x25a908`, 2.504 B) — descida
+recursiva via `jtable.py`: **508 de ~626 instruções possíveis
+(81%)**; **uma tabela de salto resolvida** (guarda `cmp` em
+`0x25a970`, dispatch em `0x25a974`, **101 casos, 20 handlers
+distintos** — `0x25aeb0` domina como default em ~82 dos 101 casos);
+**59 branches, 47 de retrocesso**. 19 `bl` distintos, 45 chamadas.
+
+`houkoku` = "relatório" em japonês — a tabela de 101 casos despacha
+por fase/estado guardado em `CTLINFO*`, dirigindo: seleção de texto
+de mensagem (`houkokumes_select`), renderização da mensagem
+(`houkoku_mesput`, ×15, caminho mais quente), uma variante
+"yokoyari" (lança lateral, provavelmente relatório de um tipo
+específico de ataque: `yokoyari_mesput`), janelas de overlay de
+mundo (`wldwin_noropen`, `wldpicwin_set`, `add_winpac`), consultas de
+unidade/mundo (`get_unitwork_add_wld`, `wldmes_load`, `pic_load`),
+som (`sound_request`), checagem de traço de emprego
+(`tokuseijob_check`), RNG (`ps_rand`) e primitivos PSX GPU/textura
+diretos (`DrawSync`, `LoadClut`, `LoadTPage`, `GsGetTimInfo`) — a
+própria função emite chamadas de desenho/carregamento de baixo
+nível, não delega tudo a uma camada de renderização. Chama também
+**`ctlhoukmes2_init(int)`**, confirmando um controlador companheiro
+de segundo estágio.
+
+**Confirma o framework compartilhado**: os primitivos de task
+genéricos `Wtask_status`/`Wsend_taskparamater` (vistos em toda a
+família `ctl*`) mais o parâmetro uniforme `CTLINFO*` sustentam a
+hipótese de um framework comum "`ctl<nome>_main`" — cada função é
+uma máquina de estado por sequência dirigida pelos mesmos primitivos
+de controle de task, carregando o estado de fase em `CTLINFO`, com
+sua própria tabela de salto de handlers de fase e seus próprios
+helpers especializados de "mesput"/desenho.
+`ctlhoukmes_main` especificamente governa uma sequência de popup/
+mensagem de relatório em campo (provavelmente ligada a ações de
+unidade ou texto de relatório de batalha), encadeando para
+`ctlhoukmes2_init` como segundo estágio. Marcada `read_structural`.
