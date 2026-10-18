@@ -8588,9 +8588,21 @@ habilidade quebra furtividade). `pspNetSetTimingThroughFlag` parece
 boilerplate residual da camada de rede PSP, não relevante pro
 combate. 27 branches de retrocesso consistentes com laço sobre lista
 multi-alvo (habilidades de área) e/ou slots de efeito de status.
-**Resultado prático**: `calc_result` (`0x1cba40`, ainda não lida) é
-a fórmula real de acerto/dano/efeito da FFT e passa a ser a
-prioridade mais alta pra entender a matemática de combate do jogo.
-Três locais sem símbolo (`sub_715cc`, `sub_1e0f2c`, `sub_1e59d4`) —
+**Correção (mesma sessão)**: o fork que gerou esta seção marcou
+`calc_result` como "ainda não lida" por não ter acesso ao inventário
+— na verdade `calc_result` (`0x1cba40`) já foi lida na seção 90, e
+já se sabe que ELA TAMBÉM é um dispatcher (duas tabelas de salto,
+11+25 casos) por tipo de ação/arma, não a fórmula de dano linear em
+si — a seção 90 já deixou isso como pendência honesta ("a fórmula de
+dano em si... não encontrada como chamada separada, pode estar
+inline"). Juntando as duas seções: a cadeia de resolução de
+habilidade é `getskillresult_main` → `calc_result` (dispatch por
+tipo) → handler específico (ainda não aberto, um dos 8+18 casos das
+tabelas da seção 90) → `setskillresult` (seção 77, aplica
+consequência). A fórmula de dano real provavelmente mora dentro de
+um desses handlers de `calc_result`, não numa função própria
+separada — abrir os handlers é a prioridade mais alta pra matemática
+de combate, não ler uma função nova. Três locais sem símbolo em
+`getskillresult_main` (`sub_715cc`, `sub_1e0f2c`, `sub_1e59d4`) —
 candidatos a RNG ou lookup de estatística, vale leitura futura.
 Marcada `read_structural`.
