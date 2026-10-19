@@ -10751,3 +10751,75 @@ stats entre candidatos), Ryoute/SetRyoteFlag (mao dupla), SetSttsEqu2/
 SetSttsPara2 (aplica stats resultantes), CurChrChg2, GetItemPrice,
 e os dialogos iOS_dispOkNg/iOS_getV2Icon/setV2Icon pra feedback de
 UI. Marcada read_structural.
+
+
+## Vigesimo-terceiro lote paralelo (secoes 286-290): 5 funcoes lidas por forks simultaneos, usando jtable.py (2026-10-18, Fase 3)
+
+## 286. SellValue() - logica generica de venda, irma de PoachBuyValue/DressSellEquip (2026-10-18, Fase 3, lote paralelo)
+
+SellValue() (0x1a4338, 1.072 B) - descida recursiva via jtable.py:
+246 de ~268 instrucoes possiveis (92%), sem tabela de salto; 20
+branches, 9 de retrocesso. 14 bl distintos.
+
+Confirma ser a logica generica de venda de item na loja: chama
+GetItemSellPrice, ChgMoney, ItemChg (mutacao de dinheiro/inventario),
+mais plumbing de UI de loja (DrawItemCategory, initMenuTouch,
+ScrollWindowInit, DrawWindow2, SetWindowCount, DrawMessage,
+GetItemList, RefleshItemUserSort) e os helpers de task W. Irma
+generica de PoachBuyValue (secao 274) e DressSellEquip (secao 233).
+Marcada read_structural.
+
+## 287. ShopStatus() - janela de comparacao de equipamento da loja (2026-10-18, Fase 3, lote paralelo)
+
+ShopStatus() (0x1bbe90, 1.052 B, ja referenciada por nome em
+DressRemove, secao 273) - descida recursiva via jtable.py: 243 de
+~263 instrucoes possiveis (92%), sem tabela de salto; 36 branches,
+15 de retrocesso. 9 bl distintos.
+
+Chama WindowDel, os quatro setters de campo de status
+(SetSttsA/SetSttsA2/SetSttsEqu/SetSttsBoth), CurChrChg/CurChrChg2
+(navegacao entre membros do time), iOSUnitListMoveFlagReset.
+Confirma ser a janela de comparacao de stats mostrada durante o
+fluxo de compra/venda na loja. Marcada read_structural.
+
+## 288. vEnd_rollinit() - setup real do buffer/primitivo GPU dos creditos (2026-10-18, Fase 3, lote paralelo)
+
+vEnd_rollinit() (0x2435f0, 1.060 B) - descida recursiva via
+jtable.py: 256 de ~265 instrucoes possiveis (97%); 3 branches,
+TODOS de retrocesso. 11 bl distintos.
+
+Chama GetTPage/GetClut (x3 cada), SetPolyFT4/SetSemiTrans,
+ClearImage/SetDefDispEnv/SetDefDrawEnv/SetGeomOffset, **xpMalloc**
+(alocacao de heap - provavel buffer de lista
+tagLIST_STAFFROLL/tagSTAFFROLL), iOS_setV2Icon. Confirma ser o
+setup de uma vez so que aloca e prepara o contexto de desenho GPU
+antes do rolo de creditos comecar - fecha o trio
+vEnd_rollinit/ctlendroll_main/drawListStaffroll (secoes 124/271).
+Marcada read_structural.
+
+## 289. disp_waitwindow() - janela modal generica de "aguarde", reusa a biblioteca multiwindow compartilhada (2026-10-18, Fase 3, lote paralelo)
+
+disp_waitwindow() (0xee61c, 1.112 B) - descida recursiva via
+jtable.py: 272 de ~278 instrucoes possiveis (98%), sem tabela de
+salto; 16 branches, 9 de retrocesso. 31 bl distintos.
+
+Task real (task_create/task_killmyself/send_taskparamater/
+asmTaskEntry/asmGetInput1/2) construida sobre a biblioteca
+multiwindow_* ja documentada (keydown/keyright/break/packetcolor/
+packetanm/packetadd/packetinit), mais iOS_CMenuTouch, checagem de
+flag de batalha (pspBattleCheckFlg/DisableFlg), e texto kanji
+(statuskanjiprint). Confirma ser o spinner modal generico de
+"aguarde" que sonda input/toque enquanto uma task em background
+roda. Marcada read_structural.
+
+## 290. BuyValue() - logica generica de compra, espelha SellValue (2026-10-18, Fase 3, lote paralelo)
+
+BuyValue() (0x199fd8, 1.056 B) - descida recursiva via jtable.py:
+242 de ~264 instrucoes possiveis (92%), sem tabela de salto; 22
+branches, 10 de retrocesso. 12 bl distintos.
+
+Espelha o catalogo de SellValue (secao 286): GetItemPrice/
+GetTotalItem (em vez de GetItemSellPrice), ChgMoney, ItemChg,
+RefleshItemUserSort, mais UI de loja e toque. Confirma ser a
+contraparte de compra da logica de transacao generica. Marcada
+read_structural.

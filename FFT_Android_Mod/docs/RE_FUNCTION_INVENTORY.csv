@@ -330,7 +330,7 @@ address,size,mangled,demangled,status,section_ref
 000cc270,1128,_Z14Caddzodiacbackv,Caddzodiacback(),unread,
 001e64c4,1128,_Z19setskilldata_commonP3ACTS0_i,"setskilldata_common(ACT*, ACT*, int)",read_structural,NOTES §276
 00160008,1120,_Z11iOSCurHojyoP7SVECTOR,iOSCurHojyo(SVECTOR*),unread,
-000ee61c,1112,_Z15disp_waitwindowv,disp_waitwindow(),unread,
+000ee61c,1112,_Z15disp_waitwindowv,disp_waitwindow(),read_structural,NOTES §289
 002691cc,1108,_Z12wldwalk_rutev,wldwalk_rute(),read_full,NOTES §12.2
 00261184,1096,_Z17ctlhakenokng_initv,ctlhakenokng_init(),unread,
 000ae090,1088,_ZN12CEGL2_SPRITE11DrawPartialEffffff,"CEGL2_SPRITE::DrawPartial(float, float, float, float, float, float)",mentioned_unverified,
@@ -339,12 +339,12 @@ address,size,mangled,demangled,status,section_ref
 00285084,1080,_Z22pspBattleEntryAreaMakeii,"pspBattleEntryAreaMake(int, int)",unread,
 001a2f68,1080,_Z14PoachSellValuev,PoachSellValue(),unread,
 001b2560,1076,_Z8JobCicleiiii,"JobCicle(int, int, int, int)",read_structural,NOTES §284
-001a4338,1072,_Z9SellValuev,SellValue(),unread,
+001a4338,1072,_Z9SellValuev,SellValue(),read_structural,NOTES §286
 0019c918,1060,_Z9DressAutov,DressAuto(),read_structural,NOTES §285
 001a2b44,1060,_Z9PoachSellv,PoachSell(),unread,
-002435f0,1060,_Z13vEnd_rollinitv,vEnd_rollinit(),unread,
-00199fd8,1056,_Z8BuyValuev,BuyValue(),unread,
-001bbe90,1052,_Z10ShopStatusv,ShopStatus(),unread,
+002435f0,1060,_Z13vEnd_rollinitv,vEnd_rollinit(),read_structural,NOTES §288
+00199fd8,1056,_Z8BuyValuev,BuyValue(),read_structural,NOTES §290
+001bbe90,1052,_Z10ShopStatusv,ShopStatus(),read_structural,NOTES §287
 001a3f1c,1052,_Z4Sellv,Sell(),unread,
 00177ed0,1048,_Z12bDrawTexFlipPsP5COLORciii,"bDrawTexFlip(short*, COLOR*, char, int, int, int)",unread,
 00283638,1048,_Z13GLIVON_F3_oldPmP10tagPOLY_F3sP15VECTOR_DATABASE,"GLIVON_F3_old(unsigned long*, tagPOLY_F3*, short, VECTOR_DATABASE*)",unread,
