@@ -9545,3 +9545,69 @@ futura se o detalhe importar. `bRoundHelpMessage` confirma o padrão
 "toda letra é cópia completa" da seção 181 pra mais uma família
 (`b`), com Jaccard baixo e conjunto de helper totalmente próprio.
 Todas marcadas `read_structural`.
+
+
+## Lote de checagens diretas (seções 199–202): mais 4 funções lidas pelo coordenador sem fork (2026-10-18, Fase 3)
+
+## 199. `ctleeff_draw(GsOT*)` — desenho de efeito via ordenação de tabela estilo PSP (2026-10-18, Fase 3, lote direto)
+
+`ctleeff_draw(GsOT*)` (`0x257e5c`, 1.740 B) — descida recursiva
+direta: **429 de ~435 instruções possíveis (99%)**, sem tabela de
+salto; **7 branches, 4 de retrocesso**. Catálogo pequeno e limpo:
+`GsSortPoly` (×2, ordenação de polígono estilo PS1/PSP),
+`pspGetpspPrimWorkBuf`, `pspWorldCheckFlg`,
+`pspWorldDataBackBufGet`, `rsin`/`rcos`. Função curta e linear que
+ordena e desenha um efeito via a tabela de ordenação (`GsOT*`)
+passada como parâmetro, usando o buffer de trabalho de primitivo
+estilo PSP. Marcada `read_structural`.
+
+## 200. `DisplayAnimations()` — driver real por quadro que chama `displayShape`, tabela de 74 casos colapsando em 2 (2026-10-18, Fase 3, lote direto)
+
+`DisplayAnimations()` (`0x1f2f84`, 1.624 B) — descida recursiva
+direta: **318 de ~406 instruções possíveis (78%)**; **uma tabela de
+salto resolvida** (guarda `cmp` em `0x1f2fa0`, dispatch em
+`0x1f2fa4`, **74 casos, só 2 handlers distintos** — um switch
+grande que na prática é um teste binário de flag/bit por caso). 9
+`bl` distintos.
+
+Chama **`displayShape(tag_animation*)`** (seção 192) diretamente —
+confirma ser o driver de nível superior que itera animações ativas
+e invoca o dispatcher de forma por quadro. Também chama
+`iOSUnitWorkClear`/`Set`, `setMovingAnimationShape`,
+`setPanelPriority`, `ASHURA_getOTptrZ`, `setShortVector`,
+`iOS_GetFrameRate`. A tabela de 74 casos colapsando em só 2
+handlers sugere um switch sobre um tipo de animação/flag onde a
+maioria dos valores cai no mesmo caminho binário (ex.: "tem forma
+móvel" vs. "não tem"). Marcada `read_structural`.
+
+## 201. `PoachBuy()` — tela de loja/compra, finalmente revela a função de ouro ausente em `BuyUnit` (2026-10-18, Fase 3, lote direto)
+
+`PoachBuy()` (`0x1a33a0`, 1.596 B) — descida recursiva direta:
+**355 de ~399 instruções possíveis (89%)**; **uma tabela de salto
+resolvida** (4 casos, 4 handlers distintos); **35 branches, 19 de
+retrocesso**. 25 `bl` distintos.
+
+**Achado chave**: chama **`DrawFunds()`** — a função de exibição de
+ouro/fundos que faltava no catálogo de `BuyUnit` (seção 185),
+confirmando que o sistema de moeda existe e é renderizado nesta
+família de tela. Também chama `DrawItemCategory`, `GetShopItemList`,
+`initMenuTouch`, a biblioteca completa de janela (`WindowInit2`/
+`DrawWindow2`/`SetWindowPosition`/`GetWindowPosition`), a família
+`iOS_CMenuTouch`, e `iOS_setV2Icon` (×5). "Poach" (técnica de
+capturar monstro como item no FFT) — esta é a tela de compra/venda
+ligada a esse mecanismo, reusando a mesma infraestrutura de loja do
+sistema de unidade recrutada. Marcada `read_structural`.
+
+## 202. `ctlmouketeam_init()` — setup de uma vez só, zero branch (2026-10-18, Fase 3, lote direto)
+
+`ctlmouketeam_init()` (`0x261dac`, 1.592 B, companheiro de init de
+`ctlmouketeam_main`, seção 167) — descida recursiva direta: **380 de
+~398 instruções possíveis (95%)**, sem tabela de salto; **ZERO
+branches** — função puramente linear, sem nenhum desvio condicional
+nem laço.
+
+Registra elementos de UI de uma vez: `add_anmpac` (×7)/`add_winpac`
+(×5) (registro de pacote de animação/janela), `wldwin_noropen`
+(×3)/`scrwin_para_set` (parâmetro de janela de scroll),
+`mouketeam_scrollset`, `DrawSync` (×2) — setup de tela puro, sem
+nenhuma lógica condicional. Marcada `read_structural`.

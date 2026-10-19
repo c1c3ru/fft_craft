@@ -191,7 +191,7 @@ address,size,mangled,demangled,status,section_ref
 001aaa24,1760,_Z15GetTryBestEquipssPs,"GetTryBestEquip(short, short, short*)",read_structural,NOTES §194
 000f07c0,1752,_Z17disp_selectwindowv,disp_selectwindow(),read_structural,NOTES §172
 00231cac,1744,_Z7Mdl0006siii,"Mdl0006(short, int, int, int)",read_structural,NOTES §101
-00257e5c,1740,_Z12ctleeff_drawP4GsOT,ctleeff_draw(GsOT*),mentioned_unverified,
+00257e5c,1740,_Z12ctleeff_drawP4GsOT,ctleeff_draw(GsOT*),read_structural,NOTES §199
 0011661c,1736,_Z18Wdisp_selectwindowv,Wdisp_selectwindow(),read_structural,NOTES §198
 0017a42c,1732,_Z17bRoundHelpMessagesh,"bRoundHelpMessage(short, unsigned char)",read_structural,NOTES §198
 0019a3f8,1716,_Z7BuyUnitv,BuyUnit(),read_structural,NOTES §185
@@ -214,13 +214,13 @@ address,size,mangled,demangled,status,section_ref
 00195270,1636,_Z7AbiSttsv,AbiStts(),read_structural,NOTES §187
 00121f88,1632,_Z19Edisp_abilitywindowv,Edisp_abilitywindow(),read_structural,NOTES §184
 0012c190,1632,_Z15disp_parawindowv,disp_parawindow(),read_structural,NOTES §177
-001f2f84,1624,_Z17DisplayAnimationsv,DisplayAnimations(),unread,
+001f2f84,1624,_Z17DisplayAnimationsv,DisplayAnimations(),read_structural,NOTES §200
 0008c4fc,1612,vorbis_synthesis_headerin,vorbis_synthesis_headerin,read_full,NOTES §182
 00097f44,1608,_book_unquantize,_book_unquantize,read_full,NOTES §182
 00193104,1608,_Z8jDB_initP2DBPmP10tagPOLY_F3P11tagPOLY_FT3P10tagPOLY_F4P11tagPOLY_FT4P10tagPOLY_G3P11tagPOLY_GT3P10tagPOLY_G4P11tagPOLY_GT4P10tagLINE_F2P10tagLINE_F3P10tagLINE_F4P10tagLINE_G2P10tagLINE_G3P9tagLINEG4P7tagTILEP9tagTILE_1P9tagTILE_8P10tagTILE_16P7tagSPRTP9tagSPRT_8P10tagSPRT_16P7DR_MOVEP7DR_AREA,"jDB_init(DB*, unsigned long*, tagPOLY_F3*, tagPOLY_FT3*, tagPOLY_F4*, tagPOLY_FT4*, tagPOLY_G3*, tagPOLY_GT3*, tagPOLY_G4*, tagPOLY_GT4*, tagLINE_F2*, tagLINE_F3*, tagLINE_F4*, tagLINE_G2*, tagLINE_G3*, tagLINEG4*, tagTILE*, tagTILE_1*, tagTILE_8*, tagTILE_16*, tagSPRT*, tagSPRT_8*, tagSPRT_16*, DR_MOVE*, DR_AREA*)",read_full,NOTES §182
 00122fe0,1604,_Z16Edisp_parawindowv,Edisp_parawindow(),read_structural,NOTES §181
-001a33a0,1596,_Z8PoachBuyv,PoachBuy(),unread,
-00261dac,1592,_Z17ctlmouketeam_initv,ctlmouketeam_init(),unread,
+001a33a0,1596,_Z8PoachBuyv,PoachBuy(),read_structural,NOTES §201
+00261dac,1592,_Z17ctlmouketeam_initv,ctlmouketeam_init(),read_structural,NOTES §202
 001345d4,1588,_Z16Wdisp_parawindowv,Wdisp_parawindow(),read_structural,NOTES §181
 00173df8,1588,_Z7cGetPadv,cGetPad(),read_structural,NOTES §181
 0019e188,1580,_Z13NameChgSelectv,NameChgSelect(),unread,
