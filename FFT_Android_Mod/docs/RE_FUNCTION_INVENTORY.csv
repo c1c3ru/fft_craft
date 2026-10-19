@@ -264,7 +264,7 @@ address,size,mangled,demangled,status,section_ref
 0024ecd0,1384,_Z15ctlpersmes_mainP7CTLINFO,ctlpersmes_main(CTLINFO*),read_structural,NOTES §270
 00243c9c,1380,_Z17drawListStaffrolli,drawListStaffroll(int),read_structural,NOTES §271
 001c4958,1368,_Z9ValueFuncPh,ValueFunc(unsigned char*),read_structural,NOTES §222
-002152f4,1368,_Z20loadClutDataCalcPlusiPtjjisssi,"loadClutDataCalcPlus(int, unsigned short*, unsigned int, unsigned int, int, short, short, short, int)",unread,
+002152f4,1368,_Z20loadClutDataCalcPlusiPtjjisssi,"loadClutDataCalcPlus(int, unsigned short*, unsigned int, unsigned int, int, short, short, short, int)",read_structural,NOTES §294
 00183c20,1364,_Z12MakeSaveDatai,MakeSaveData(int),read_structural,NOTES §223
 0019bfdc,1360,_Z11DressRemovev,DressRemove(),read_structural,NOTES §273
 00181578,1356,_Z10bValueFuncPh,bValueFunc(unsigned char*),read_structural,NOTES §227
@@ -276,7 +276,7 @@ address,size,mangled,demangled,status,section_ref
 002247a0,1316,_Z14CheckBowResultiP7SVECTORi,"CheckBowResult(int, SVECTOR*, int)",read_structural,NOTES §242
 00081c9c,1300,unzOpenCurrentFile3,unzOpenCurrentFile3,read_full,NOTES §228
 000cb4d0,1296,_Z17assumehelpmessagev,assumehelpmessage(),read_structural,NOTES §280
-001579d4,1296,_Z13addzodiacbackv,addzodiacback(),unread,
+001579d4,1296,_Z13addzodiacbackv,addzodiacback(),read_structural,NOTES §292
 00213228,1292,_Z20requestChangeAnbientiiiii,"requestChangeAnbient(int, int, int, int, int)",read_structural,NOTES §237
 00213898,1292,_Z17requestChangeFlatiiiii,"requestChangeFlat(int, int, int, int, int)",read_structural,NOTES §238
 0011e160,1288,_Z23Wextend_windowframemainiiP6RECT16iii,"Wextend_windowframemain(int, int, RECT16*, int, int, int)",read_structural,NOTES §279
@@ -325,7 +325,7 @@ address,size,mangled,demangled,status,section_ref
 00241a60,1152,_Z11pmkprim_puti,pmkprim_put(int),unread,
 002b4200,1152,_Z14Link_FrameMovev,Link_FrameMove(),read_structural,NOTES §283
 000a0df0,1140,ov_read_filter,ov_read_filter,read_full,NOTES §272
-00244974,1140,_Z15create_rolllinePh,create_rollline(unsigned char*),unread,
+00244974,1140,_Z15create_rolllinePh,create_rollline(unsigned char*),read_structural,NOTES §293
 00194e04,1132,_Z9JobStatusv,JobStatus(),read_structural,NOTES §277
 000cc270,1128,_Z14Caddzodiacbackv,Caddzodiacback(),unread,
 001e64c4,1128,_Z19setskilldata_commonP3ACTS0_i,"setskilldata_common(ACT*, ACT*, int)",read_structural,NOTES §276
@@ -341,11 +341,11 @@ address,size,mangled,demangled,status,section_ref
 001b2560,1076,_Z8JobCicleiiii,"JobCicle(int, int, int, int)",read_structural,NOTES §284
 001a4338,1072,_Z9SellValuev,SellValue(),read_structural,NOTES §286
 0019c918,1060,_Z9DressAutov,DressAuto(),read_structural,NOTES §285
-001a2b44,1060,_Z9PoachSellv,PoachSell(),unread,
+001a2b44,1060,_Z9PoachSellv,PoachSell(),read_structural,NOTES §295
 002435f0,1060,_Z13vEnd_rollinitv,vEnd_rollinit(),read_structural,NOTES §288
 00199fd8,1056,_Z8BuyValuev,BuyValue(),read_structural,NOTES §290
 001bbe90,1052,_Z10ShopStatusv,ShopStatus(),read_structural,NOTES §287
-001a3f1c,1052,_Z4Sellv,Sell(),unread,
+001a3f1c,1052,_Z4Sellv,Sell(),read_structural,NOTES §296
 00177ed0,1048,_Z12bDrawTexFlipPsP5COLORciii,"bDrawTexFlip(short*, COLOR*, char, int, int, int)",unread,
 00283638,1048,_Z13GLIVON_F3_oldPmP10tagPOLY_F3sP15VECTOR_DATABASE,"GLIVON_F3_old(unsigned long*, tagPOLY_F3*, short, VECTOR_DATABASE*)",unread,
 001196ac,1040,_Z16Wdisp_waitwindowv,Wdisp_waitwindow(),read_structural,NOTES §291
@@ -353,7 +353,7 @@ address,size,mangled,demangled,status,section_ref
 00266f30,1040,_Z11wldinfo_putP4GsOT,wldinfo_put(GsOT*),read_full,NOTES §12.4
 000a5e98,1036,_ZN15CG2D_LOADER_TIM4SaveEPviiP9_G2D_SAVE,"CG2D_LOADER_TIM::Save(void*, int, int, _G2D_SAVE*)",mentioned_unverified,
 000feaa8,1036,_Z15Wallocatewindowv,Wallocatewindow(),read_structural,NOTES §291
-0026d318,1036,_Z18ctlnvcontinue_mainP7CTLINFO,ctlnvcontinue_main(CTLINFO*),unread,
+0026d318,1036,_Z18ctlnvcontinue_mainP7CTLINFO,ctlnvcontinue_main(CTLINFO*),read_structural,NOTES §297
 00218df4,1028,_Z24SetEffectAngleCameraWorkiiiP7SVECTOR,"SetEffectAngleCameraWork(int, int, int, SVECTOR*)",unread,
 000d6f84,1024,_Z14allocatewindowv,allocatewindow(),read_structural,NOTES §291
 0025e8d4,1024,_Z18iOSwldscr_snapshoti,iOSwldscr_snapshot(int),unread,

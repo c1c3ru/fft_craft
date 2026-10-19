@@ -10837,3 +10837,83 @@ IS_TEX_2X - inicializador de janela de baixo nivel. Wallocatewindow
 (0xfeaa8, 1.036 B) vs allocatewindow: Jaccard 0,45, chama
 Winitpolyft4/Winitsprtfield - confirma o padrao W mais uma vez.
 Todas marcadas read_structural.
+
+
+## Vigesimo-quarto lote paralelo (secoes 292-297): 6 funcoes lidas por forks simultaneos, usando jtable.py (2026-10-18, Fase 3)
+
+## 292. addzodiacback() - desenha icone/fundo de zodiaco, roda como task wasm (2026-10-18, Fase 3, lote paralelo)
+
+addzodiacback() (0x1579d4, 1.296 B) - descida recursiva via
+jtable.py: 311 de ~324 instrucoes possiveis (96%), sem tabela de
+salto; 10 branches, 5 de retrocesso. Chama wasmTaskEntry/
+wasmGetInput1/3, Wtask_killmyself, mais primitivo de desenho estilo
+PSP (pspGetpspPrimWorkBuf, pspPrimBackDrawRGB, AddPrim, SetPolyFT4,
+SetSemiTrans, SetShadeTex). Confirma ser o desenho de icone/fundo
+de zodiaco rodando como task wasm cooperativa. Marcada
+read_structural.
+
+## 293. create_rollline(unsigned char*) - parseia linha de credito, monta primitivo pra tagSTAFFROLL (2026-10-18, Fase 3, lote paralelo)
+
+create_rollline(unsigned char*) (0x244974, 1.140 B) - descida
+recursiva via jtable.py: 282 de ~285 instrucoes possiveis (99%),
+sem tabela de salto; 22 branches, 10 de retrocesso. Chama
+numword_chk(int) (x7, valida/formata token numerico embutido no
+texto), GetClut, SetPolyFT4 (x2). Confirma parsear uma linha crua
+de dado de credito e preparar o(s) primitivo(s) renderizavel(eis)
+que se tornam uma entrada tagSTAFFROLL, consumida depois por
+drawListStaffroll (secao 271) no pipeline ctlendroll_main/
+vEnd_rollproc. Marcada read_structural.
+
+## 294. loadClutDataCalcPlus(...) - variante auto-contida sem nenhuma chamada externa (2026-10-18, Fase 3, lote paralelo)
+
+loadClutDataCalcPlus(...) (0x2152f4, 1.368 B) - descida recursiva
+via jtable.py: 338 de ~342 instrucoes possiveis (99%), sem tabela
+de salto; 27 branches, 13 de retrocesso. **Zero chamadas bl** - nao
+delega pra loadClutData nem pra nenhuma outra funcao, faz o calculo
+extra (fade/blend/escala sugerido pelos parametros extras) inteiro
+inline via aritmetica/shift. Variante standalone otimizada a mao,
+mantida separada do loader base. Marcada read_structural.
+
+## 295. PoachSell() - controlador de UI da tela de venda poach, delega transacao pra PoachSellValue (2026-10-18, Fase 3, lote paralelo)
+
+PoachSell() (0x1a2b44, 1.060 B) - descida recursiva via jtable.py:
+239 de ~265 instrucoes possiveis (90%), sem tabela de salto; 22
+branches, 12 de retrocesso. 20 bl distintos.
+
+Dirige seu proprio menu de toque e exibicao de categoria de item/
+fundos (DrawItemCategory, DrawFunds, GetItemList, IsItem,
+DrawWindow2, WindowInit), acessores de lista de unidade, som, input
+de pad - SEM chamar PoachBuyValue/BuyValue/SellValue. Confirma ser
+o controlador de UI da tela de venda poach, que delega a mutacao
+real de preco/dinheiro pra PoachSellValue (ainda nao lida).
+Marcada read_structural.
+
+## 296. Sell() - controlador de UI generico, delega transacao pra SellValue (2026-10-18, Fase 3, lote paralelo)
+
+Sell() (0x1a3f1c, 1.052 B, termina exatamente onde SellValue
+comeca, secao 286) - descida recursiva via jtable.py: 237 de ~263
+instrucoes possiveis (90%), sem tabela de salto; 22 branches, 12 de
+retrocesso. 20 bl distintos.
+
+Catalogo quase identico ao de PoachSell (secao 295) mas SEM
+GetItemSellPrice/ChgMoney/ItemChg - confirma ser o controlador de
+UI/laco de menu de nivel superior (navegacao, desenho de lista,
+input) que entrega a mutacao real de preco/dinheiro/inventario pra
+SellValue - fecha o par Sell/SellValue, espelhando Buy/BuyValue.
+Marcada read_structural.
+
+## 297. ctlnvcontinue_main(CTLINFO*) - handler de continuar/avancar do modo Novel (2026-10-18, Fase 3, lote paralelo)
+
+ctlnvcontinue_main(CTLINFO*) (0x26d318, 1.036 B) - descida
+recursiva via jtable.py: 247 de ~259 instrucoes possiveis (95%),
+sem tabela de salto; 22 branches, 11 de retrocesso. 16 bl
+distintos.
+
+Chama **ctlnobel_init(int)** (liga ao sistema Novel/SSD ja
+documentado em ctlnobelstop_main, secao 269), Wtask_create/
+Wsend_taskparamater, a familia iOS_CMenuTouch completa, sound_request
+(x4), picsand_draw, GsGetTimInfo, ctltremes_init. Confirma ser o
+handler de estado "continuar/avancar" do sistema de narracao Novel -
+espera input de toque e avanca/dispensa a linha de texto atual,
+trabalhando junto com ctlnobelstop_main e ctlnobel_init. Marcada
+read_structural.
