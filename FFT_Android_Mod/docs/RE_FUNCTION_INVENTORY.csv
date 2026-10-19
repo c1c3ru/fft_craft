@@ -223,14 +223,14 @@ address,size,mangled,demangled,status,section_ref
 00261dac,1592,_Z17ctlmouketeam_initv,ctlmouketeam_init(),read_structural,NOTES §202
 001345d4,1588,_Z16Wdisp_parawindowv,Wdisp_parawindow(),read_structural,NOTES §181
 00173df8,1588,_Z7cGetPadv,cGetPad(),read_structural,NOTES §181
-0019e188,1580,_Z13NameChgSelectv,NameChgSelect(),unread,
+0019e188,1580,_Z13NameChgSelectv,NameChgSelect(),read_structural,NOTES §229
 00169aa4,1572,_Z19ASHURA_LMDL_DB_COPYPt,ASHURA_LMDL_DB_COPY(unsigned short*),read_structural,NOTES §188
 0018f374,1568,_Z7eGetPadv,eGetPad(),read_structural,NOTES §181
 00084790,1564,vorbis_bitrate_addblock,vorbis_bitrate_addblock,read_full,NOTES §182
 001965a4,1560,_Z7jGetPadv,jGetPad(),read_structural,NOTES §181
-00108568,1540,_Z17Wevent_status_settt,"Wevent_status_set(unsigned short, unsigned short)",unread,
-00280dfc,1540,_Z19iOS_setStatusHPMPCTP11IOS_STTSNUMiiiiiiiiiPvi,"iOS_setStatusHPMPCT(IOS_STTSNUM*, int, int, int, int, int, int, int, int, int, void*, int)",unread,
-001e6d74,1524,_Z16getreaction_postPt,getreaction_post(unsigned short*),mentioned_unverified,
+00108568,1540,_Z17Wevent_status_settt,"Wevent_status_set(unsigned short, unsigned short)",read_structural,NOTES §230
+00280dfc,1540,_Z19iOS_setStatusHPMPCTP11IOS_STTSNUMiiiiiiiiiPvi,"iOS_setStatusHPMPCT(IOS_STTSNUM*, int, int, int, int, int, int, int, int, int, void*, int)",read_structural,NOTES §231
+001e6d74,1524,_Z16getreaction_postPt,getreaction_post(unsigned short*),read_structural,NOTES §232
 0024b988,1524,_Z11ctlbar_mainP7CTLINFO,ctlbar_main(CTLINFO*),read_structural,NOTES §186
 002570f4,1516,_Z16ctltownmenu_mainP7CTLINFO,ctltownmenu_main(CTLINFO*),read_structural,NOTES §215
 00137524,1512,_Z12select_valuev,select_value(),read_structural,NOTES §183
@@ -239,8 +239,8 @@ address,size,mangled,demangled,status,section_ref
 00165520,1500,_Z15ASURA_FALL_INITh,ASURA_FALL_INIT(unsigned char),read_structural,NOTES §208
 001a6d00,1496,_Z7Dismissv,Dismiss(),read_structural,NOTES §209
 00094e54,1480,_vp_tonemask,_vp_tonemask,read_full,NOTES §189
-0019cd3c,1480,_Z14DressSellEquipv,DressSellEquip(),unread,
-00218060,1480,_Z22ExecuteEffectAnimationP15effectAnimationccc,"ExecuteEffectAnimation(effectAnimation*, char, char, char)",unread,
+0019cd3c,1480,_Z14DressSellEquipv,DressSellEquip(),read_structural,NOTES §233
+00218060,1480,_Z22ExecuteEffectAnimationP15effectAnimationccc,"ExecuteEffectAnimation(effectAnimation*, char, char, char)",read_structural,NOTES §234
 00199a1c,1468,_Z3Buyv,Buy(),read_structural,NOTES §224
 0027a3bc,1464,_Z16SetUnitParameteri,SetUnitParameter(int),read_structural,NOTES §196
 001dbcec,1456,_Z12set_unitdatai,set_unitdata(int),read_structural,NOTES §197

@@ -9958,3 +9958,89 @@ dois locais sem símbolo da faixa `0x714xx` — confirma ser código de
 terceiros genérico (a camada `minizip` usada pra ler o pacote
 `fftpack.bin`/OBB, já mencionada em seções anteriores). Marcada
 `read_full`.
+
+
+## Lote de checagens diretas (seções 229–234): mais 6 funções lidas pelo coordenador sem fork (2026-10-18, Fase 3)
+
+## 229. `NameChgSelect()` — tela de nomear unidade, exibe preço e usa o sistema de roster (2026-10-18, Fase 3, lote direto)
+
+`NameChgSelect()` (`0x19e188`, 1.580 B) — descida recursiva direta:
+**367 de ~395 instruções possíveis (93%)**, sem tabela de salto;
+**45 branches, 24 de retrocesso**. **31 `bl` distintos**.
+
+Chama **`DrawPrice()`**/**`DrawFunds()`** (exibição de preço e
+fundos), toda a família `iOSUnitList*` e `UnitTable`/
+`UnitTableInitFirst` (sistema de roster já documentado), `iOS_v2menu*`.
+Consistente com a tela de nomear uma unidade recém-adquirida —
+mostra preço/fundos durante o fluxo de nomeação (provavelmente
+antes de confirmar a compra). Marcada `read_structural`.
+
+## 230. `Wevent_status_set(unsigned short, unsigned short)` — liga status de evento a ID de trabalho de batalha via animação, contexto `wasm` (2026-10-18, Fase 3, lote direto)
+
+`Wevent_status_set(unsigned short, unsigned short)` (`0x108568`,
+1.540 B) — descida recursiva direta: **368 de ~385 instruções
+possíveis (96%)**, sem tabela de salto; **36 branches, 21 de
+retrocesso**. Chama **`wasm_function`** (×6, primitivo genérico de
+task `wasm`), `Wread_eventflag`/`Wtask_wait`, `get_bwp`,
+`search_controlID`, **`getBattleWorkIDFromAnimation`** — liga o
+status de evento ao ID de trabalho de batalha (`BWORK`) resolvido a
+partir de uma animação, tudo no contexto de task `wasm`. Três locais
+sem símbolo. Marcada `read_structural`.
+
+## 231. `iOS_setStatusHPMPCT(...)` — helper fino, só 21 chamadas ao mesmo primitivo de número (2026-10-18, Fase 3, lote direto)
+
+`iOS_setStatusHPMPCT(IOS_STTSNUM*, int,int,int,int,int,int,int,int,
+int, void*, int)` (`0x280dfc`, 1.540 B) — descida recursiva direta:
+**367 de ~385 instruções possíveis (95%)**, sem tabela de salto; só
+**5 branches, 1 de retrocesso**. **Único `bl`**: **`iOS_setNumPrim
+(tagPOLY_FT4*, int, int, int, int)`**, chamado **21 vezes** — função
+extremamente fina que só estampa os dígitos de HP/MP/CT na tela
+chamando o mesmo primitivo de número repetidamente (consistente com
+3 campos numéricos × ~7 dígitos possíveis cada). Marcada
+`read_structural`.
+
+## 232. `getreaction_post(unsigned short*)` — processamento pós-reação, liga à cadeia `calc_result`/`setskillresult` (2026-10-18, Fase 3, lote direto)
+
+`getreaction_post(unsigned short*)` (`0x1e6d74`, 1.524 B) — descida
+recursiva direta: **357 de ~381 instruções possíveis (94%)**; **uma
+tabela de salto resolvida** (9 casos, 8 handlers distintos); **38
+branches, 28 de retrocesso**.
+
+Chama `check_reaction_deny`, `get_reflection_coord`,
+`get_coord_address`, `check_act_ok`, `copyACTst` (×2), `setskilldata`,
+`get_rival` — todo o vocabulário já visto em `calc_result` (seção
+90) e `setskillresult` (seção 77). **Confirma ser o processamento
+PÓS-reação** na cadeia de resolução de ação de batalha (contra-
+ataque/reflexão depois que a checagem de reação já decidiu que uma
+reação vai acontecer) — provavelmente monta as coordenadas de
+reflexão e os dados de habilidade pro contra-ataque. Dois locais sem
+símbolo mais um chamado ×5. Marcada `read_structural`.
+
+## 233. `DressSellEquip()` — tela de vender equipamento, revela `ChgMoney` (2026-10-18, Fase 3, lote direto)
+
+`DressSellEquip()` (`0x19cd3c`, 1.480 B) — descida recursiva direta:
+**345 de ~370 instruções possíveis (93%)**, sem tabela de salto;
+**29 branches, 14 de retrocesso**. 22 `bl` distintos.
+
+**Achado chave**: chama **`ChgMoney(int)`** diretamente — a função
+real de mudança de dinheiro do jogador (primeira vez vista
+explicitamente, resolve a lacuna já sinalizada em `BuyUnit`, seção
+185). Também `GetItemSellPrice(short)`, `IsDark`, `CurChrChg2`, e a
+biblioteca `iOS_CMenuTouch` completa. Confirma ser a tela de vender
+equipamento, com dinheiro ganho creditado via `ChgMoney`. Marcada
+`read_structural`.
+
+## 234. `ExecuteEffectAnimation(...)` — executor real de ciclo de vida de `Shape2`, três tabelas de salto (2026-10-18, Fase 3, lote direto)
+
+`ExecuteEffectAnimation(effectAnimation*, char, char, char)`
+(`0x218060`, 1.480 B) — descida recursiva direta: **345 de ~370
+instruções possíveis (93%)**; **três tabelas de salto resolvidas**
+(7 casos/5 handlers; 5 casos/5 handlers; 5 casos/5 handlers); **23
+branches, 17 de retrocesso**.
+
+Chama **`NewShape2(unsigned char)`**/**`DisposeShape2(Shape2*)`**/
+**`drawShape2`** (×2, seção 109) e `iOS_getSkipAddPrim` (×4) —
+confirma ser o executor real que gerencia o ciclo de vida completo
+de um objeto `Shape2` (criar → desenhar → descartar) por quadro de
+animação de efeito, com três pontos de dispatch diferentes
+controlando o fluxo. Marcada `read_structural`.
