@@ -10363,3 +10363,47 @@ Desenha a linha/arco de trajetoria parabolica de mira de arco - o
 nome "test" mais `FntPrint` sugerem uma visualizacao de debug/dev
 pra validar a trajetoria, nao necessariamente uma feature de
 jogador final. Marcada read_structural.
+
+
+## Lote de checagens diretas (secoes 259-262): mais 4 funcoes lidas pelo coordenador sem fork (2026-10-18, Fase 3)
+
+## 259. eItemSort(int, short*) - confirma o padrao de contexto `e` pra familia ItemSort (2026-10-18, Fase 3, regra 2 da metodologia)
+
+family_sim.py contra ItemSort (secao 236): eItemSort (0x188fe4,
+1.200 B) tem Jaccard 0,50 - chama dois locais proprios
+(0x188e54/0x188f68, provavel equivalente a ItemChg no contexto `e`)
+em vez de ItemChg. Mais uma confirmacao do padrao de contexto de
+task completo (secao 181) pra familia ItemSort. Marcada
+read_structural.
+
+## 260. ov_raw_seek - interno de libvorbis/ogg reconhecido por nome (2026-10-18, Fase 3, regra 6 da metodologia)
+
+ov_raw_seek (0x9ebfc, 1.192 B) - checagem direta: 100% de
+cobertura, catalogo de bl inclui ogg_page_bos/eos/serialno - API
+real de posicionamento de pagina Ogg da libvorbisfile. Marcada
+read_full.
+
+## 261. InitAnimation() - carregamento real de recurso de animacao, quatro tabelas de salto por tipo (2026-10-18, Fase 3, lote direto, achado rico)
+
+InitAnimation() (0x1f45c0, 1.188 B) - descida recursiva direta: 251
+de ~297 instrucoes possiveis (85%); QUATRO tabelas de salto
+resolvidas (4 casos/4 handlers; 8 casos/5 handlers; 8 casos/8
+handlers; 8 casos/8 handlers); 32 branches, 28 de retrocesso.
+
+Chama mallocForFile/fileReadRequest/fileReadCheck/fileDispose
+(carregamento de arquivo real), loadClutData, LoadTPage - confirma
+ser o carregador real de recurso de animacao, com dispatch por tipo
+de formato/categoria em quatro pontos diferentes (provavelmente um
+por campo de cabecalho de animacao). Quatro locais sem simbolo.
+Marcada read_structural.
+
+## 262. DetailStatus() - alternador entre sub-modos de exibicao de status (2026-10-18, Fase 3, lote direto)
+
+DetailStatus() (0x1bb714, 1.188 B) - descida recursiva direta: 273
+de ~297 instrucoes possiveis (92%), sem tabela de salto; 40
+branches, 17 de retrocesso. Chama SetSttsA/SetSttsA2/SetSttsEqu/
+SetSttsAbi/SetSttsBoth (toda a familia de setter de categoria de
+status), WindowDel, CurChrChg, iOSUnitListCurSave_W - confirma ser
+o alternador real entre os varios sub-modos de exibicao de status
+detalhado (stats base, equipamento, habilidade, ambos). Dois locais
+sem simbolo. Marcada read_structural.

@@ -310,11 +310,11 @@ address,size,mangled,demangled,status,section_ref
 0021871c,1208,_Z15testBowLineDispi,testBowLineDisp(int),read_structural,NOTES §258
 000e1db8,1204,_Z14statusfigprintiiPcP9COPYFIELD,"statusfigprint(int, int, char*, COPYFIELD*)",read_structural,NOTES §254
 0027cf50,1204,_ZN14iOS_CMenuTouch4execEPiS0_S0_,"iOS_CMenuTouch::exec(int*, int*, int*)",read_structural,NOTES §253
-00188fe4,1200,_Z9eItemSortiPs,"eItemSort(int, short*)",unread,
+00188fe4,1200,_Z9eItemSortiPs,"eItemSort(int, short*)",read_structural,NOTES §259
 0024e0f8,1200,_Z15ctlkiromes_mainP7CTLINFO,ctlkiromes_main(CTLINFO*),unread,
-0009ebfc,1192,ov_raw_seek,ov_raw_seek,unread,
-001bb714,1188,_Z12DetailStatusv,DetailStatus(),unread,
-001f45c0,1188,_Z13InitAnimationv,InitAnimation(),unread,
+0009ebfc,1192,ov_raw_seek,ov_raw_seek,read_full,NOTES §260
+001bb714,1188,_Z12DetailStatusv,DetailStatus(),read_structural,NOTES §262
+001f45c0,1188,_Z13InitAnimationv,InitAnimation(),read_structural,NOTES §261
 00250ef8,1184,_Z12ctlwork_mainP7CTLINFO,ctlwork_main(CTLINFO*),unread,
 000a574c,1176,_ZN15CG2D_LOADER_TGA17TGA_AnalyzeHeaderEPv,CG2D_LOADER_TGA::TGA_AnalyzeHeader(void*),unread,
 001e3500,1160,_Z15search_force_mpiP7SVECTOR,"search_force_mp(int, SVECTOR*)",unread,
