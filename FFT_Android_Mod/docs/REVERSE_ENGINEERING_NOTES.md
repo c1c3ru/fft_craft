@@ -9848,3 +9848,76 @@ tutorial), `iOS_isMovedDist`/`isInGameArea` (validação de gesto de
 toque), `iOS_soundDirect`, `RETINA_SCALE`. Confirma ser o "exec"
 central chamado por toda tela que usa o widget de menu V2. Marcada
 `read_structural`.
+
+
+## Lote de checagens diretas (seções 221–226): mais 6 funções lidas pelo coordenador sem fork (2026-10-18, Fase 3)
+
+## 221. `DB_init(...)` (base, sem letra) — confirma o MESMO boilerplate PSYQ das variantes `b`/`e`/`j` (2026-10-18, Fase 3, regra 6 da metodologia)
+
+`DB_init(DB*, ...)` (`0x1a6764`, 1.328 B, a versão SEM letra) —
+checagem direta: **96% de cobertura**, zero tabela de salto, **11
+branches, só 2 de retrocesso**. Catálogo é só `Set<TipoPrimitivo>`
+(`SetPolyFT4`/`SetPolyG4`/`SetPolyGT4`/`SetLineF2`/`SetLineG2`/
+`SetTile`/`SetDrawMove`/`SetShadeTex`) mais `SetDefDispEnv`/
+`SetDefDrawEnv` — confirma que a versão base é o MESMO boilerplate
+`DB_Init`/`InitGeom` do PSYQ já visto em `b`/`e`/`j` (seções 113/
+153/182), fechando a família completa (`DB_init`/`bDB_init`/
+`eDB_init`/`jDB_init`). Marcada `read_full`.
+
+## 222. `ValueFunc(unsigned char*)` — widget de exibição de valor numérico, referência pra família `b`/`e` (2026-10-18, Fase 3, lote direto)
+
+`ValueFunc(unsigned char*)` (`0x1c4958`, 1.368 B) — descida
+recursiva direta: **325 de ~342 instruções possíveis (95%)**, sem
+tabela de salto; **28 branches, 14 de retrocesso**. Chama
+`DrawFT4RGB`/`DrawFT4RGB2`, `getClutNum`, `IS_TEX_2X` — widget de
+exibição de valor/dígito numérico. Serve de referência pra
+`ValueFuncShort`/`bValueFunc`/`bValueFuncShort`/`eValueFunc`
+(família de letra `b`/`e` ainda não lida). Dois locais sem símbolo.
+Marcada `read_structural`.
+
+## 223. `MakeSaveData(int)` — serialização real de save com bitstream compactado (2026-10-18, Fase 3, lote direto, achado rico)
+
+`MakeSaveData(int)` (`0x183c20`, 1.364 B) — descida recursiva
+direta: **305 de ~341 instruções possíveis (89%)**, sem tabela de
+salto; **7 branches, 5 de retrocesso**. 9 `bl` distintos.
+
+Espelha `load_loaddata` (seção 218) do lado da ESCRITA: chama
+`MakeHeader(int,int,CARD_HEADER*)`, **`SetBitStream`/`SetBitStream2`/
+`WriteBitStream`/`GetBitStream2`** (empacotamento de bitstream —
+confirma que o save é COMPACTADO bit a bit, não só uma estrutura
+plana), `sun_to_ivarisday` (conversão de data/calendário pro
+timestamp do save), `pspSaveDataMissionRateSave` (taxa de conclusão
+de missão salva), e `Wread_eventflag` (×3). Um local sem símbolo
+chamado **28 vezes** — provável helper de escrita de bit/campo
+reusado pra cada valor serializado. Marcada `read_structural`.
+
+## 224. `Buy()` — tela de compra genérica, mesmo catálogo de `PoachBuy` (2026-10-18, Fase 3, lote direto)
+
+`Buy()` (`0x199a1c`, 1.468 B) — descida recursiva direta: **325 de
+~367 instruções possíveis (89%)**; **uma tabela de salto resolvida**
+(4 casos, 4 handlers distintos); **33 branches, 18 de retrocesso**.
+
+Catálogo essencialmente idêntico ao de `PoachBuy` (seção 201):
+`DrawItemCategory`, `DrawFunds()`, `initMenuTouch`, `GetShopItemList`,
+biblioteca de janela completa, `iOS_CMenuTouch`, `iOS_setV2Icon`.
+Confirma ser a tela de compra genérica de item/loja (sem o contexto
+específico de "poach"). Marcada `read_structural`.
+
+## 225–226. `iOS_CMenuTouch::execTap`/`execPress` — internos de hit-test da classe de menu touch mais usada do jogo (2026-10-18, Fase 3, lote direto)
+
+`iOS_CMenuTouch::execTap(IOS_MENU_TOUCH_RESULT*, int*, int*, int*)`
+(`0x27c27c`, 1.324 B, **99% de cobertura**, 60 branches/35 de
+retrocesso) e `iOS_CMenuTouch::execPress(int*, int*, int*,
+IOS_MENU_TOUCH_RESULT*)` (`0x27c7a8`, 1.408 B, **100% de
+cobertura**, 41 branches/20 de retrocesso) — os métodos internos de
+hit-test da classe `iOS_CMenuTouch` (já vista em DEZENAS de telas
+através de `init`/`exec`/`setDispOffset`/etc.). Chamam
+`iOS_CMenuTouch::isInRect`/`isCanUp`/`isCanDown`/`isInAssist`/
+`isInMenu` (métodos de teste geométrico da própria classe),
+`iOS_getTouchPress`/`BeginX`/`BeginY`/`NowX`/`NowY`,
+`iOS_isInGameArea`, `iOS_GetKeyMask()`. **Confirma a arquitetura
+interna da classe mais central deste projeto**: `exec()` (já visto
+em todo lugar) provavelmente despacha pra `execTap`/`execPress`
+conforme o tipo de gesto, cada um fazendo seu próprio teste de
+retângulo/estado via os métodos `is*` internos. Marcadas
+`read_structural`.

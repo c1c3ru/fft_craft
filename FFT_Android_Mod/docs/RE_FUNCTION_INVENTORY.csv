@@ -241,7 +241,7 @@ address,size,mangled,demangled,status,section_ref
 00094e54,1480,_vp_tonemask,_vp_tonemask,read_full,NOTES §189
 0019cd3c,1480,_Z14DressSellEquipv,DressSellEquip(),unread,
 00218060,1480,_Z22ExecuteEffectAnimationP15effectAnimationccc,"ExecuteEffectAnimation(effectAnimation*, char, char, char)",unread,
-00199a1c,1468,_Z3Buyv,Buy(),unread,
+00199a1c,1468,_Z3Buyv,Buy(),read_structural,NOTES §224
 0027a3bc,1464,_Z16SetUnitParameteri,SetUnitParameter(int),read_structural,NOTES §196
 001dbcec,1456,_Z12set_unitdatai,set_unitdata(int),read_structural,NOTES §197
 0021f5e4,1456,_Z15p02_hitMarkFuncv,p02_hitMarkFunc(),unread,
@@ -253,7 +253,7 @@ address,size,mangled,demangled,status,section_ref
 001077f4,1420,_Z12Wmove_camerav,Wmove_camera(),read_structural,NOTES §211
 001ec8bc,1416,_Z16getPositionHightP7SVECTORh,"getPositionHight(SVECTOR*, unsigned char)",read_structural,NOTES §213
 00087700,1412,vorbis_book_decodev_add,vorbis_book_decodev_add,read_full,NOTES §210
-0027c7a8,1408,_ZN14iOS_CMenuTouch9execPressEPiS0_S0_P21IOS_MENU_TOUCH_RESULT,"iOS_CMenuTouch::execPress(int*, int*, int*, IOS_MENU_TOUCH_RESULT*)",unread,
+0027c7a8,1408,_ZN14iOS_CMenuTouch9execPressEPiS0_S0_P21IOS_MENU_TOUCH_RESULT,"iOS_CMenuTouch::execPress(int*, int*, int*, IOS_MENU_TOUCH_RESULT*)",read_structural,NOTES §226
 001e1a80,1404,_Z17search_reverse_mpiiiiiPii,"search_reverse_mp(int, int, int, int, int, int*, int)",unread,
 00191498,1400,_Z10eValueFuncPh,eValueFunc(unsigned char*),unread,
 00264458,1400,_Z17ctlnobelstop_mainP7CTLINFO,ctlnobelstop_main(CTLINFO*),unread,
@@ -263,16 +263,16 @@ address,size,mangled,demangled,status,section_ref
 001c5208,1384,_Z14ValueFuncShortPs,ValueFuncShort(short*),unread,
 0024ecd0,1384,_Z15ctlpersmes_mainP7CTLINFO,ctlpersmes_main(CTLINFO*),unread,
 00243c9c,1380,_Z17drawListStaffrolli,drawListStaffroll(int),unread,
-001c4958,1368,_Z9ValueFuncPh,ValueFunc(unsigned char*),unread,
+001c4958,1368,_Z9ValueFuncPh,ValueFunc(unsigned char*),read_structural,NOTES §222
 002152f4,1368,_Z20loadClutDataCalcPlusiPtjjisssi,"loadClutDataCalcPlus(int, unsigned short*, unsigned int, unsigned int, int, short, short, short, int)",unread,
-00183c20,1364,_Z12MakeSaveDatai,MakeSaveData(int),unread,
+00183c20,1364,_Z12MakeSaveDatai,MakeSaveData(int),read_structural,NOTES §223
 0019bfdc,1360,_Z11DressRemovev,DressRemove(),unread,
 00181578,1356,_Z10bValueFuncPh,bValueFunc(unsigned char*),unread,
 00256930,1344,_Z16ctltownmenu_initi,ctltownmenu_init(int),unread,
 0026cdd8,1344,_Z14ctltremes_mainP7CTLINFO,ctltremes_main(CTLINFO*),unread,
 00195910,1340,_Z13BattleJobSttsii,"BattleJobStts(int, int)",unread,
-001a6764,1328,_Z7DB_initP2DBPmP10tagPOLY_F3P11tagPOLY_FT3P10tagPOLY_F4P11tagPOLY_FT4P10tagPOLY_G3P11tagPOLY_GT3P10tagPOLY_G4P11tagPOLY_GT4P10tagLINE_F2P10tagLINE_F3P10tagLINE_F4P10tagLINE_G2P10tagLINE_G3P9tagLINEG4P7tagTILEP9tagTILE_1P9tagTILE_8P10tagTILE_16P7tagSPRTP9tagSPRT_8P10tagSPRT_16P7DR_MOVEP7DR_AREAP7DR_MODE,"DB_init(DB*, unsigned long*, tagPOLY_F3*, tagPOLY_FT3*, tagPOLY_F4*, tagPOLY_FT4*, tagPOLY_G3*, tagPOLY_GT3*, tagPOLY_G4*, tagPOLY_GT4*, tagLINE_F2*, tagLINE_F3*, tagLINE_F4*, tagLINE_G2*, tagLINE_G3*, tagLINEG4*, tagTILE*, tagTILE_1*, tagTILE_8*, tagTILE_16*, tagSPRT*, tagSPRT_8*, tagSPRT_16*, DR_MOVE*, DR_AREA*, DR_MODE*)",unread,
-0027c27c,1324,_ZN14iOS_CMenuTouch7execTapEP21IOS_MENU_TOUCH_RESULTPiS2_S2_,"iOS_CMenuTouch::execTap(IOS_MENU_TOUCH_RESULT*, int*, int*, int*)",unread,
+001a6764,1328,_Z7DB_initP2DBPmP10tagPOLY_F3P11tagPOLY_FT3P10tagPOLY_F4P11tagPOLY_FT4P10tagPOLY_G3P11tagPOLY_GT3P10tagPOLY_G4P11tagPOLY_GT4P10tagLINE_F2P10tagLINE_F3P10tagLINE_F4P10tagLINE_G2P10tagLINE_G3P9tagLINEG4P7tagTILEP9tagTILE_1P9tagTILE_8P10tagTILE_16P7tagSPRTP9tagSPRT_8P10tagSPRT_16P7DR_MOVEP7DR_AREAP7DR_MODE,"DB_init(DB*, unsigned long*, tagPOLY_F3*, tagPOLY_FT3*, tagPOLY_F4*, tagPOLY_FT4*, tagPOLY_G3*, tagPOLY_GT3*, tagPOLY_G4*, tagPOLY_GT4*, tagLINE_F2*, tagLINE_F3*, tagLINE_F4*, tagLINE_G2*, tagLINE_G3*, tagLINEG4*, tagTILE*, tagTILE_1*, tagTILE_8*, tagTILE_16*, tagSPRT*, tagSPRT_8*, tagSPRT_16*, DR_MOVE*, DR_AREA*, DR_MODE*)",read_full,NOTES §221
+0027c27c,1324,_ZN14iOS_CMenuTouch7execTapEP21IOS_MENU_TOUCH_RESULTPiS2_S2_,"iOS_CMenuTouch::execTap(IOS_MENU_TOUCH_RESULT*, int*, int*, int*)",read_structural,NOTES §225
 002247a0,1316,_Z14CheckBowResultiP7SVECTORi,"CheckBowResult(int, SVECTOR*, int)",unread,
 00081c9c,1300,unzOpenCurrentFile3,unzOpenCurrentFile3,unread,
 000cb4d0,1296,_Z17assumehelpmessagev,assumehelpmessage(),unread,
