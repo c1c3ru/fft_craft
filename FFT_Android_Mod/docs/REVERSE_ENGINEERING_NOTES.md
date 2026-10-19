@@ -10407,3 +10407,59 @@ status), WindowDel, CurChrChg, iOSUnitListCurSave_W - confirma ser
 o alternador real entre os varios sub-modos de exibicao de status
 detalhado (stats base, equipamento, habilidade, ambos). Dois locais
 sem simbolo. Marcada read_structural.
+
+
+## Lote de checagens diretas (secoes 263-266): ultimas 4 funcoes lidas pelo coordenador sem fork antes do limite de sessao liberar (2026-10-18, Fase 3)
+
+## 263. entryAnimations() - entrada real que cria e alimenta o laco ExecuteAnimations (2026-10-18, Fase 3, lote direto)
+
+entryAnimations() (0x1f4b2c, 1.260 B) - descida recursiva direta:
+292 de ~315 instrucoes possiveis (93%); uma tabela de salto
+resolvida (4 casos, 4 handlers distintos); 36 branches, 15 de
+retrocesso. Chama **ExecuteAnimations()** (x3) e **NewAnimation**
+(construtor completo de 10 parametros), mais carregamento de
+arquivo (mallocForFile/fileReadRequest/fileReadCheck/fileDispose) e
+CFFT_STATE::GetParam/AddParam. Confirma ser o ponto de entrada real
+que cria novas animacoes e alimenta o laco principal
+ExecuteAnimations. Dois locais sem simbolo. Marcada
+read_structural.
+
+## 264. ctlwork_main(CTLINFO*) - controlador que une init/working/end do indicador de "trabalhando" (2026-10-18, Fase 3, lote direto)
+
+ctlwork_main(CTLINFO*) (0x250ef8, 1.184 B) - descida recursiva
+direta: 278 de ~296 instrucoes possiveis (94%), sem tabela de
+salto; 24 branches, 11 de retrocesso. Chama ctlwork_deactive,
+**ctlworking_init()** (secao 216), **ctlworkend_init()**,
+wldctl_active, sound_request (x5), iOS_CMenuTouch::exec/setYLine/
+setDispAssist. Confirma unir os tres estagios (`ctlworking_init` ->
+este controlador principal -> `ctlworkend_init`) do indicador de
+"trabalhando"/carregando. Marcada read_structural.
+
+## 265. setShapeDataSub(...) - sub-rotina de setup de forma com checagem de tipo de movimento e handler de erro explicito (2026-10-18, Fase 3, lote direto)
+
+setShapeDataSub(tag_animation*, subAnimation*, unsigned short,
+unsigned short) (0x1f0550, 1.448 B) - descida recursiva direta: 357
+de ~362 instrucoes possiveis (99%), sem tabela de salto; 30
+branches, 14 de retrocesso. Catalogo minimo: get_mapstp,
+get_movetype(BWORK*), e **errorHandler(int)** - achado raro, uma
+chamada explicita de tratamento de erro (a maioria das funcoes
+deste projeto nao tem nenhum handler de erro visivel). Marcada
+read_structural.
+
+## 266. p02_hitMarkFunc() - efeito de impacto com camera e fisica de gravidade/densidade de ar customizada (2026-10-18, Fase 3, lote direto, achado rico)
+
+p02_hitMarkFunc() (0x21f5e4, 1.456 B) - descida recursiva direta:
+356 de ~364 instrucoes possiveis (98%), sem tabela de salto; 48
+branches, 28 de retrocesso. 16 bl distintos.
+
+Chama changeCharacterClut, AnimatePermanentObject,
+**SetDefaultCamera()**, **SetEffectTransCameraWork**/
+**SetEffectScaleCameraWork** (trabalho de camera de efeito —
+provavel zoom/corte dramatico no impacto), e, achado notavel, um
+par completo de empilhamento de fisica: **SetGravity**/
+**SetAirDensity** com **Push**/**PopGravity** e **Push**/
+**PopAirDensity** - confirma que o efeito de "marca de acerto"
+customiza temporariamente a gravidade e densidade do ar da
+simulacao de fisica (empilhando o valor original pra restaurar
+depois), junto com o sistema de objeto permanente ja documentado
+(createPermanentObject, secao 158). Marcada read_structural.

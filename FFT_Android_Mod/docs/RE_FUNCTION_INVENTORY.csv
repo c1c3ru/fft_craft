@@ -244,9 +244,9 @@ address,size,mangled,demangled,status,section_ref
 00199a1c,1468,_Z3Buyv,Buy(),read_structural,NOTES §224
 0027a3bc,1464,_Z16SetUnitParameteri,SetUnitParameter(int),read_structural,NOTES §196
 001dbcec,1456,_Z12set_unitdatai,set_unitdata(int),read_structural,NOTES §197
-0021f5e4,1456,_Z15p02_hitMarkFuncv,p02_hitMarkFunc(),unread,
+0021f5e4,1456,_Z15p02_hitMarkFuncv,p02_hitMarkFunc(),read_structural,NOTES §266
 000de724,1448,_Z11move_camerav,move_camera(),read_structural,NOTES §195
-001f0550,1448,_Z15setShapeDataSubP13tag_animationP12subAnimationtt,"setShapeDataSub(tag_animation*, subAnimation*, unsigned short, unsigned short)",unread,
+001f0550,1448,_Z15setShapeDataSubP13tag_animationP12subAnimationtt,"setShapeDataSub(tag_animation*, subAnimation*, unsigned short, unsigned short)",read_structural,NOTES §265
 0007d158,1436,inflate_table,inflate_table,read_full,NOTES §203
 00258528,1436,_Z12ctleeff_mainP7CTLINFO,ctleeff_main(CTLINFO*),read_structural,NOTES §207
 00202950,1424,_Z18generateAttackTeamv,generateAttackTeam(),read_structural,NOTES §206
@@ -287,7 +287,7 @@ address,size,mangled,demangled,status,section_ref
 001a96c8,1272,_Z8ItemSortiPs,"ItemSort(int, short*)",read_structural,NOTES §236
 0027426c,1272,_Z17MainBattleRoutinev,MainBattleRoutine(),read_structural,NOTES §235
 0016e2d8,1264,_Z14ASURA_WorkInitv,ASURA_WorkInit(),read_structural,NOTES §240
-001f4b2c,1260,_Z15entryAnimationsv,entryAnimations(),unread,
+001f4b2c,1260,_Z15entryAnimationsv,entryAnimations(),read_structural,NOTES §263
 0029b704,1256,GsSortPoly,GsSortPoly,read_structural,NOTES §246
 0025cd24,1256,_Z12wldpara_initv,wldpara_init(),read_full,NOTES §12.2
 0021abec,1252,_Z29SetCameraWorkWithMetaschedules,SetCameraWorkWithMetaschedule(short),unread,
@@ -315,7 +315,7 @@ address,size,mangled,demangled,status,section_ref
 0009ebfc,1192,ov_raw_seek,ov_raw_seek,read_full,NOTES §260
 001bb714,1188,_Z12DetailStatusv,DetailStatus(),read_structural,NOTES §262
 001f45c0,1188,_Z13InitAnimationv,InitAnimation(),read_structural,NOTES §261
-00250ef8,1184,_Z12ctlwork_mainP7CTLINFO,ctlwork_main(CTLINFO*),unread,
+00250ef8,1184,_Z12ctlwork_mainP7CTLINFO,ctlwork_main(CTLINFO*),read_structural,NOTES §264
 000a574c,1176,_ZN15CG2D_LOADER_TGA17TGA_AnalyzeHeaderEPv,CG2D_LOADER_TGA::TGA_AnalyzeHeader(void*),unread,
 001e3500,1160,_Z15search_force_mpiP7SVECTOR,"search_force_mp(int, SVECTOR*)",unread,
 00283a50,1160,_Z13GLIVON_F4_oldPmP10tagPOLY_F4sP15VECTOR_DATABASE,"GLIVON_F4_old(unsigned long*, tagPOLY_F4*, short, VECTOR_DATABASE*)",unread,
