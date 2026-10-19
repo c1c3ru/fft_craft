@@ -348,14 +348,14 @@ address,size,mangled,demangled,status,section_ref
 001a3f1c,1052,_Z4Sellv,Sell(),unread,
 00177ed0,1048,_Z12bDrawTexFlipPsP5COLORciii,"bDrawTexFlip(short*, COLOR*, char, int, int, int)",unread,
 00283638,1048,_Z13GLIVON_F3_oldPmP10tagPOLY_F3sP15VECTOR_DATABASE,"GLIVON_F3_old(unsigned long*, tagPOLY_F3*, short, VECTOR_DATABASE*)",unread,
-001196ac,1040,_Z16Wdisp_waitwindowv,Wdisp_waitwindow(),unread,
+001196ac,1040,_Z16Wdisp_waitwindowv,Wdisp_waitwindow(),read_structural,NOTES §291
 002191f8,1040,_Z24SetEffectTransCameraWorkiiiP6VECTOR,"SetEffectTransCameraWork(int, int, int, VECTOR*)",unread,
 00266f30,1040,_Z11wldinfo_putP4GsOT,wldinfo_put(GsOT*),read_full,NOTES §12.4
 000a5e98,1036,_ZN15CG2D_LOADER_TIM4SaveEPviiP9_G2D_SAVE,"CG2D_LOADER_TIM::Save(void*, int, int, _G2D_SAVE*)",mentioned_unverified,
-000feaa8,1036,_Z15Wallocatewindowv,Wallocatewindow(),unread,
+000feaa8,1036,_Z15Wallocatewindowv,Wallocatewindow(),read_structural,NOTES §291
 0026d318,1036,_Z18ctlnvcontinue_mainP7CTLINFO,ctlnvcontinue_main(CTLINFO*),unread,
 00218df4,1028,_Z24SetEffectAngleCameraWorkiiiP7SVECTOR,"SetEffectAngleCameraWork(int, int, int, SVECTOR*)",unread,
-000d6f84,1024,_Z14allocatewindowv,allocatewindow(),unread,
+000d6f84,1024,_Z14allocatewindowv,allocatewindow(),read_structural,NOTES §291
 0025e8d4,1024,_Z18iOSwldscr_snapshoti,iOSwldscr_snapshot(int),unread,
 00147e9c,1020,_Z22active_disp_waitwindowv,active_disp_waitwindow(),unread,
 0021101c,1016,_Z13initBattleMapiii,"initBattleMap(int, int, int)",unread,

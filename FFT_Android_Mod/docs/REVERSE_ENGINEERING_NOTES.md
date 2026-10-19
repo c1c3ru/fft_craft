@@ -10823,3 +10823,17 @@ GetTotalItem (em vez de GetItemSellPrice), ChgMoney, ItemChg,
 RefleshItemUserSort, mais UI de loja e toque. Confirma ser a
 contraparte de compra da logica de transacao generica. Marcada
 read_structural.
+
+
+## 291. Wdisp_waitwindow/allocatewindow/Wallocatewindow - mais confirmacoes do padrao W, inclui achado de debug (2026-10-18, Fase 3, checagem direta)
+
+Wdisp_waitwindow (0x1196ac, 1.040 B) vs disp_waitwindow (secao 289):
+Jaccard 0,24, confirma padrao W (wasmTaskEntry 0x161ef8, helpers W
+proprios). allocatewindow() (0xd6f84, 1.024 B, lida por inteiro):
+chama initpolyft4/initsprtfield (x3 cada), task_killmyself,
+**tDebugBreakCheck(int)** (achado: checagem de debug-break
+explicita neste helper), GetTPage/SetDrawMode/SetSemiTrans,
+IS_TEX_2X - inicializador de janela de baixo nivel. Wallocatewindow
+(0xfeaa8, 1.036 B) vs allocatewindow: Jaccard 0,45, chama
+Winitpolyft4/Winitsprtfield - confirma o padrao W mais uma vez.
+Todas marcadas read_structural.
