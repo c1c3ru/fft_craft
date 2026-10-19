@@ -224,7 +224,7 @@ address,size,mangled,demangled,status,section_ref
 001345d4,1588,_Z16Wdisp_parawindowv,Wdisp_parawindow(),read_structural,NOTES §181
 00173df8,1588,_Z7cGetPadv,cGetPad(),read_structural,NOTES §181
 0019e188,1580,_Z13NameChgSelectv,NameChgSelect(),unread,
-00169aa4,1572,_Z19ASHURA_LMDL_DB_COPYPt,ASHURA_LMDL_DB_COPY(unsigned short*),unread,
+00169aa4,1572,_Z19ASHURA_LMDL_DB_COPYPt,ASHURA_LMDL_DB_COPY(unsigned short*),read_structural,NOTES §188
 0018f374,1568,_Z7eGetPadv,eGetPad(),read_structural,NOTES §181
 00084790,1564,vorbis_bitrate_addblock,vorbis_bitrate_addblock,read_full,NOTES §182
 001965a4,1560,_Z7jGetPadv,jGetPad(),read_structural,NOTES §181

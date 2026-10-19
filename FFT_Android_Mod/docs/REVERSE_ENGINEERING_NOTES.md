@@ -9377,3 +9377,20 @@ versão sem prefixo). Confirma a regra da seção 181 por evidência de
 nome direto, sem precisar rodar `family_sim.py`. Também chama
 `iOS_getMasaCdbOt`/`pspMsgGet` (string localizada) e a família
 `iOS_CMenuTouch`. Marcada `read_structural`.
+
+
+## 188. `ASHURA_LMDL_DB_COPY(unsigned short*)` — laço de cópia com correção de UV de textura de mapa (2026-10-18, Fase 3, retry direto após limite de sessão do fork)
+
+`ASHURA_LMDL_DB_COPY(unsigned short*)` (`0x169aa4`, 1.572 B) — o
+sexto fork do lote anterior (seção 183-187) falhou por limite de
+sessão; rodado `jtable.py` direto sem subagente. Descida recursiva:
+**385 de ~393 instruções possíveis (98%)**, sem tabela de salto;
+**31 branches, 14 de retrocesso**.
+
+Catálogo mínimo: **`pspMapTexUVCorrect(...)`** (×2, assinatura de 11
+parâmetros com vários `unsigned char*`) — confirma a hipótese "cópia
+de banco de dado LMDL": é majoritariamente um laço de cópia (14
+retrocessos) com correção de coordenada UV de textura de mapa
+aplicada via `pspMapTexUVCorrect`, não uma cópia de memória pura —
+liga ao mesmo subsistema de textura de mapa já tocado por
+`ASHURA_MapProjectMem2Mem` (seção 112). Marcada `read_structural`.
