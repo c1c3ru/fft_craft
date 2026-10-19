@@ -10203,3 +10203,81 @@ medicao, nao codigo faltando. Catalogo minimo (so um local sem
 simbolo) - e o dispatcher real de ordenacao de primitivo GTE do PS1
 (233 codigos de tipo de primitivo/flag mapeados pra so 17 handlers
 reais). Marcada read_structural.
+
+
+## Lote de checagens diretas (secoes 247-252): mais 6 funcoes lidas pelo coordenador sem fork (2026-10-18, Fase 3)
+
+## 247. vorbis_lpc_from_data - mais um interno de libvorbis reconhecido por nome (2026-10-18, Fase 3, regra 6 da metodologia)
+
+vorbis_lpc_from_data (0x8d318, 1.224 B) - checagem direta: 98% de
+cobertura, zero tabela de salto, catalogo de bl e so runtime de
+ponto flutuante de precisao dupla do compilador (__adddf3/__muldf3
+x11/__divdf3/etc.) - calculo real de coeficiente LPC (linear
+predictive coding) da libvorbis, codigo de terceiros genuino.
+Marcada read_full.
+
+## 248. LearnJobStts() - tela real de navegacao de lista de emprego, confirma vinculo com WorldJobStts (2026-10-18, Fase 3, lote direto)
+
+LearnJobStts() (0x1b4c34, 1.232 B, ja referenciada por nome no
+catalogo de WorldJobStts, secao 146) - descida recursiva direta:
+282 de ~308 instrucoes possiveis (92%), sem tabela de salto; 24
+branches, 10 de retrocesso. 25 bl distintos.
+
+Chama GetLocalJobNumber(short), GetJobList(unsigned char,short*,
+int), a biblioteca de janela completa (WindowInit2/DrawWindow2/
+SetWindowPosition/GetWindowPosition), iOS_CMenuTouch, iOS_setV2Icon/
+getV2Icon - confirma ser a tela real de navegacao/aprendizado de
+lista de emprego chamada por WorldJobStts. Quatro locais sem
+simbolo. Marcada read_structural.
+
+## 249. SetTmp_UA(UnitAction*) - setter real de acao temporaria por categoria de item/habilidade (2026-10-18, Fase 3, lote direto, achado chave)
+
+SetTmp_UA(UnitAction*) (0x273378, 1.220 B, ja referenciada pelo
+nucleo de IA ForAutoCommand e por SetUnitParameter, secoes 150/196)
+- descida recursiva direta: 285 de ~305 instrucoes possiveis (93%);
+uma tabela de salto resolvida (10 casos, 8 handlers distintos); 22
+branches, 9 de retrocesso.
+
+Chama MemCpyB/MemClearDW e pspItemGetCommonData/OptionData/
+WeaponData/ItemDataByAbility - confirma ser o setter real que monta
+um UnitAction* temporario copiando dado de item/habilidade por
+categoria (10 vias de dispatch) - o primitivo central que
+ForAutoCommand usa pra preparar uma acao candidata antes de
+avaliar. Marcada read_structural.
+
+## 250. requestChangeGradation(...) - quarto membro da familia de fila de mudanca de cor (2026-10-18, Fase 3, lote direto)
+
+requestChangeGradation(int,int,int,int,int) (0x212c00, 1.220 B) -
+descida recursiva direta: 95% de cobertura; uma tabela de salto
+resolvida (11 casos, 10 handlers distintos); 13 branches, 9 de
+retrocesso. Catalogo identico aos outros tres: ASHURA_CVECTOR,
+__divsi3 (x3).
+
+**Confirma um QUARTO membro da familia de producao de fila de
+mudanca de cor** (junto com requestChangeClut/Anbient/Flat, secoes
+120/237/238) - mesmo formato exato de tabela de 11 casos. A
+arquitetura agora tem 4 filas paralelas confirmadas (CLUT, ambiente,
+cor plana, gradacao), todas alimentando consumidores do tipo
+executeChange* (so executeChangeClut, secao 70, foi lida até
+agora). Marcada read_structural.
+
+## 251. GsSortFlipSprite - rotina real de flip/ordenacao de sprite estilo PS1, matematica trigonometrica real (2026-10-18, Fase 3, lote direto)
+
+GsSortFlipSprite (0x29bbec, 1.876 B) - descida recursiva direta:
+466 de ~469 instrucoes possiveis (99%), sem tabela de salto; 9
+branches, 3 de retrocesso. Chama GsGetActiveBuff, rsin/rcos, mais
+runtime de ponto flutuante pesado (__floatsisf x12/__mulsf3 x10/
+__fixsfsi x8) - rotina real do motor (nao boilerplate) que
+calcula rotacao/flip de sprite usando trigonometria real antes de
+submeter ao buffer ativo do GPU estilo PS1. Marcada
+read_structural.
+
+## 252. extend_windowframemain(...) - animacao de extensao de moldura de janela (2026-10-18, Fase 3, lote direto)
+
+extend_windowframemain(int,int,RECT16*,int,int,int) (0x11d864,
+1.280 B) - descida recursiva direta: 307 de ~320 instrucoes
+possiveis (96%), sem tabela de salto; 22 branches, 11 de
+retrocesso. Chama allocatememorywait/disposememory, task_wait,
+asmBoxCopy, hook_win_tail, asmClearBuffer, PSX_LoadImage -
+consistente com a animacao comum de "esticar a moldura da janela ao
+abrir" rodando como task. Marcada read_structural.
