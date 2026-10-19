@@ -2109,15 +2109,13 @@ duas tabelas da passada 2, mas não o motivo do deslocamento de
 
 ### 21.5 O que ficou sem confirmar
 
-- **Três ponteiros GOT sem nome** usados no laço de validação de
-  terreno/subtipo: literal pools em `0x278bf8`/`0x278bd0`/`0x278bb8`
-  (offsets `[pc,#0x53c]`/`[pc,#0x2b0]`/`[pc,#0x288]` a partir de
-  `0x2786b4`/`0x278948`/`0x278968`) e mais dois em
-  `0x2789c8`-`0x2789d4`. Resolvidos estruturalmente (uma tabela de
-  terreno-por-caster, uma tabela de 8 B/tile, uma tabela de
-  lookup-por-subtipo) mas não cruzados com `.dynsym`/símbolo real —
-  ficou pendente para uma iteração futura caso algum desses vire
-  relevante de novo.
+- **Ponteiros GOT sem nome usados no laço de validação de
+  terreno/subtipo — resolvidos na seção 26**: a tabela
+  "terreno-por-caster" é `comtype` (já catalogada); a tabela de 8 B
+  por painel resolve pro endereço `0x565db8` (sem símbolo); a tabela
+  de lookup-por-subtipo resolve pro endereço `0x3d21bc` (sem
+  símbolo) — essas duas últimas continuam sem nome real, só com
+  endereço confirmado.
 - O significado exato de `g->h[2]` (campo de 16 bits com sinal, lido
   uma vez no início da passada de bits) — hipótese forte é "afinidade
   de terreno/elemento exigida pela habilidade atual", mas não
@@ -2138,3 +2136,448 @@ Com esta função, **todos os 4 itens de prioridade alta do
 loop passa agora para a prioridade 🟠 (parsers/motores já começados:
 `TIM_LoadMemory`, `CG2D_LOADER_TIM::Load`, opcodes de áudio do motor
 de eventos, e as ~50 funções pequenas restantes de `wld_*`).
+
+## 23. `MakeMapDanger()` lida por completo — fecha o item pendente da seção 18, primeiro item da Fase 2 (2026-10-16, Fase 2, iteração 1)
+
+A seção 18 tinha deixado pendente o corpo de `MakeMapDanger()`
+(chamada pela fase 1 interna de `BattleRoutine`). Lida agora por
+completo: `MakeMapDanger()` (`0x27b0b0`, 400 B, cobertura total: 98
+instruções reais pra 98 esperadas).
+
+### 23.1 Fase 1 da função: fecha "quem escreve" o array de alvos marcados #1
+
+```c
+void MakeMapDanger_Phase1() {
+    for (int idx = 0; idx < 21; idx++) {
+        g->b[0xc8d + idx] = 0;                       // zera o slot
+        if (IsAlmostNullUnit(idx)) continue;           // 0x273cc8 — unidade quase morta, ignora
+        if (!IsNeedlessToFear(idx))                      // 0x27afdc — "não há nada a temer"?
+            g->b[0xc8d + idx] = 1;                         // marca como "ameaça real"
+    }
+}
+```
+
+**Achado que fecha um buraco antigo**: o array `g->b[0xc8d..0xca1]`
+(21 bytes) — já usado como "array de alvo marcado #1" por
+`GetDestinationsAndMakeMaskTG`/seção 21 e por outras funções, mas
+nunca com a escrita confirmada — **é escrito exatamente aqui**: marca
+como "1" cada unidade que não está quase morta E que não é
+"dispensável de temer" (ou seja, uma ameaça real). `IsAlmostNullUnit`/
+`IsNeedlessToFear` não foram lidas por dentro, mas os nomes já
+confirmam o papel com alta confiança.
+
+### 23.2 Fase 2 da função: o "mapa de perigo" real — distância Manhattan com raio 10
+
+```c
+void MakeMapDanger_Phase2() {
+    int16_t gMapY = g->b[0xe3b], gMapX = g->b[0xe3a];     // seção 9.5
+    for (int pass = 0; pass < 2; pass++) {                  // sp8 = 0, depois 0x24 — 2 passadas
+        uint8_t* dangerBase = (uint8_t*)g + pass*8;            // ver 23.3, endereçamento não 100% resolvido
+        uint16_t* rowMaskPtr = (uint16_t*)((uint8_t*)g + 0xa72 + pass);
+        for (int row = 0; row < gMapY; row++) {
+            uint16_t rowMask = *++rowMaskPtr;                   // tabela em g+0xa70, mesma região da seção 21
+            if (rowMask == 0 || gMapX == 0) continue;
+            for (int col = 0; col < gMapX; col++) {
+                if (!(rowMask << col & 0x8000)) continue;          // só colunas com bit setado na máscara da linha
+                dangerBase[col + 0x174] = 0;                        // zera antes de acumular
+                for (int k = 0; k < 21; k++) {                       // mesmo array de "ameaça real" da fase 1!
+                    if (!g->b[0xc8d + k]) continue;
+                    int dx = abs(bwork[k].b[0x4f] - col);              // posição real da unidade (campos
+                    int dz = abs(bwork[k].b[0x50] - row);               // já confirmados em todo o resto do doc)
+                    int dist = dx + dz;                                  // distância Manhattan
+                    if (dist <= 10)
+                        dangerBase[col + 0x174] += (10 - dist);            // *** contribuição de perigo ***
+                }
+            }
+        }
+    }
+}
+```
+
+**Confirma o mecanismo real do "mapa de perigo" da IA**: cada unidade
+marcada como ameaça real (fase 1) contribui com perigo pra cada
+painel dentro de um raio de **10 (distância Manhattan)**, com a
+contribuição caindo linearmente (`10 - distância`) conforme a
+distância aumenta — exatamente o "mapa de calor de ameaça" clássico
+que uma IA de tática usa pra decidir painéis seguros de recuo/avanço.
+Confirma de novo o stride real de `bwork[]` (`0x1e6`) e os campos de
+posição `b[0x4f]`/`b[0x50]` (já usados em toda a investigação).
+
+### 23.3 O que ficou sem confirmar
+
+- **O endereçamento 2D exato do acumulador de perigo (`+0x174`)**: a
+  posição de escrita (`dangerBase + col`) depende da coluna e da
+  passada (`pass`, só 2 valores: `0`/`0x24`), mas **não da linha
+  (`row`)** dentro do loop — ou seja, cada coluna acumula
+  contribuições de TODAS as linhas onde o bit da máscara daquela
+  linha está setado, não um grid 2D completo linha×coluna. Não ficou
+  claro se isso é intencional (o "perigo" é por coluna, não por
+  painel completo) ou se há uma indireção que não enxerguei. Marcado
+  como ambíguo em vez de forçar uma leitura — exatamente o caso que a
+  metodologia do plano pede pra escalonar, não inventar.
+- `IsAlmostNullUnit`/`IsNeedlessToFear` não lidas por dentro — nomes
+  dão confiança alta no papel, mas não confirmado por instrução real.
+- Quem **consome** o mapa de perigo em `g+0x174` depois de calculado
+  (provavelmente a função de decisão de movimento da IA, não
+  localizada nesta passada).
+
+## 24. Quem toca `g+0x5e0` — achado: uma função de ~1200 B sem símbolo, nunca documentada antes (2026-10-16, Fase 2, iteração 2)
+
+Segundo item da Fase 2: "quem lê `g+0x5e0`" (tabela de ocupação de
+painel escrita por `GetDestinationsAndMakeMaskTG`, seção 21, mas nunca
+lida de volta na própria função). Escrevi um script novo
+(`find_imm.py`, mesma técnica de varredura linear do `find_bl.py`,
+mas procurando um **imediato** em vez de um alvo de `bl`) pra varrer
+`.text` inteiro por instruções usando o literal `0x5e0`. Filtrando os
+falsos positivos (a grande maioria é `ldr rX,[pc,#0x5e0]` — carga de
+literal pool, deslocamento coincidente, nada a ver com `g`) e
+restringindo à região de código da IA (`0x270000`–`0x280000`), sobrou
+**um único candidato real**: `0x278014`.
+
+Esse endereço cai dentro de uma função **sem símbolo no `.dynsym`**
+(local/`static`, como outras já vistas nesta investigação) — o `.so`
+não tem NENHUM nome pra ela. Chamo de `sub_277f78` (`0x277f78`,
+~1204 B, `0x277f78`–`0x27842c`). **Não lida por completo** — é grande
+demais pro escopo deste item específico — mas o suficiente pra
+confirmar o que importa pra esta pergunta:
+
+```c
+// sub_277f78() — parte do laço de avaliação/escolha de movimento da IA
+void sub_277f78() {
+    if (!(g->b[0x19b7] && g->b[0xc72])) { /* ...caminho alternativo, não lido... */ return; }
+
+    // lê g->h[0x28]/h[0x2a]/h[0x2c] (coordenadas candidatas X/Y/Z) e
+    // toggla um bit em g+0x5e0 (stride 18 halfwords, mesma tabela da
+    // seção 21!) usando essas coordenadas:
+    uint16_t* row = &g->h[(g->h[0x2a] * 18 + g->h[0x2c]) + (0x5e0/2) + 6];
+    *row ^= (0x8000 >> g->h[0x28]);     // *** idêntico ao idioma da seção 21 ***
+
+    SetBestMove();          // 0x277f1c — chamado ANTES deste trecho, no topo do laço
+    // ... segue um laço sobre as colunas do mapa (0..gMapX), testando
+    // bits de uma máscara de destino (r6) e, para cada bit setado,
+    // repetindo o ciclo "atualiza g->h[0x28/0x2a/0x2c] -> chama
+    // SetBestMove() de novo" -- claramente a ITERAÇÃO sobre painéis
+    // candidatos de destino que todo o resto do documento já citava
+    // de fora, mas nunca tinha sido localizada concretamente.
+}
+```
+
+**Achado principal**: `g+0x5e0` tem **dois pontos de contato
+confirmados**, não um: `GetDestinationsAndMakeMaskTG` (seção 21,
+constrói a ocupação a partir da posição real das unidades vivas) e
+este `sub_277f78` (togla bits durante a própria avaliação/iteração de
+movimento candidato, chamando `SetBestMove()` em laço). A varredura
+sistemática por imediato `0x5e0` em toda a região de código da IA
+**não achou nenhum terceiro ponto** — ou seja, não existe (ou não é
+visível por essa técnica) um "consumidor puro" que só lê a tabela pra
+filtrar destinos; os dois pontos encontrados são ambos
+leitura-modificação-escrita (XOR), não leitura simples.
+
+**Escalonado, não forçado**: `sub_277f78` é claramente uma função
+importante (provavelmente o verdadeiro "laço de escolha de melhor
+movimento" da IA, nunca documentado até agora) — grande demais pra
+ler por completo dentro do escopo deste item. Adicionada como novo
+item 🟠 no `RE_BACKLOG_PLAN_PHASE2.md` pra uma leitura dedicada futura.
+
+### 24.1 O que ficou sem confirmar
+- `sub_277f78` por completo (só a parte relevante pra `g+0x5e0` foi
+  lida com confiança).
+- `sub_224d4c`/`sub_224650`/`0x271e1c` (chamados por `sub_277f78`,
+  nomes/papéis não investigados).
+- Se existe um consumidor "read-only" de `g+0x5e0` que a técnica de
+  varredura por imediato não conseguiria achar (ex.: acessado via um
+  ponteiro computado em OUTRO lugar e só passado como parâmetro, sem
+  reconstruir o literal `0x5e0` de novo).
+
+## 25. `sub_277f78` lida por completo — o verdadeiro laço "iterar destinos candidatos e avaliar cada um" da IA (2026-10-16, Fase 2, iteração 5)
+
+A função sem símbolo achada na seção 24 (`0x277f78`–`0x27842c`,
+1204 B) foi lida por completo (301 instruções, cobertura total). É,
+com alta confiança, **o laço central que a seção 6.1 já citava de
+fora como "quem decide o melhor movimento"** — fecha esse buraco de
+vez, e amarra sozinha achados de 5 seções diferentes (18, 20, 21, 23,
+24) num único mecanismo coerente.
+
+### 25.1 Visão geral confirmada
+
+```c
+void sub_277f78() {   // nome de referência — sem símbolo no .dynsym
+    if (!(g->b[0x19b7] && g->b[0xc72])) goto COOLDOWN_OR_COMMIT;  // ver 25.4
+
+    // lê uma máscara de linha da tabela em g+0x5a0 (mesmo formato
+    // mla(row,0x12,z)+0x5a0 — tabela PARALELA à +0xa70, papel exato
+    // não isolado) usando a posição candidata atual
+    // (g->h[0x28]=coluna, g->h[0x2a]=linha, g->h[0x2c]=z)
+    int result = SetBestMove();          // 0x277f1c — AVALIA a posição candidata atual
+    if (result == -1) { g->b[0xc72] = 1; return; }   // sinaliza "tentar de novo"
+
+    if (!g->b[0x19bc]) return;             // flag irmã da "IA ativa" (+0x1980+0x3c) — sem ela, sai
+
+    if (g->b[0xe4e] != 0) {
+        // *** togla o bit em g+0x5e0 pra este candidato (seção 24) ***
+        g->h5e0row ^= (0x8000 >> col);
+        // *** decrementa o contador de painéis restantes! ***
+        if (--g->b[0xcbb] != 0) goto NEXT_CANDIDATE;    // 0xcbb = contagem da seção 21 (CountMap)!
+        // contagem zerou -> avança pra próxima "linha" de busca
+        g->b[0xcbb-ish state]; iteration_row++;
+    }
+    goto MAIN_SCAN_LOOP;   // ver 25.3
+}
+```
+
+**Confirma, com leitura real, quem consome `g->b[0xcbb]`** — o
+contador de painéis de destino que `GetDestinationsAndMakeMaskTG`
+calculava via `CountMap` (seção 21) e que ficava sem consumidor
+identificado: **é decrementado aqui, um por candidato avaliado**, até
+chegar a zero.
+
+### 25.2 `COOLDOWN_OR_COMMIT` — o watchdog de tempo real da IA, e o "commit" do destino escolhido
+
+Quando a IA não está "ativa" (ou não há mais candidatos pendentes,
+`g->b[0xc72]==0`), a função faz duas coisas bem diferentes:
+
+```c
+int vcount = VSync(1);                 // *** chamada real da lib gráfica do PS1! ***
+if (vcount > 0x1b8 /* 440 */) {         // *** watchdog de tempo: aborta se "pensar" demais ***
+    g->b[0xc72] = 0;
+    return -1;
+}
+
+g->b[0x19b7] = 0;                        // desliga a flag "IA ativa"
+void* dest = g->b[0x14] ? &g->b[0xe30] : &g->b[0x18];  // escolhe a origem do destino final
+SetThisDestination(dest);                 // *** COMMIT: grava o destino escolhido de verdade ***
+
+if (g->b[4] != 0) {                        // contexto de habilidade específica
+    if (getskillrange(&g->b[0x1c]) == 3) return 0;   // 0x1e03c8 — recalcula alcance, aborta se código 3
+}
+// (senão) zera o bit 0x40 de um registro de 8 B por painel num array
+// de 512 entradas (provável "tabela de ocupação/visitado de todo o
+// mapa", stride 8 B — tamanho MUITO maior que `bwork` — ver 25.5),
+// depois marca esse mesmo bit SÓ pro painel que acabou de ser
+// escolhido (`dest`) -- "desmarca tudo, marca só o escolhido".
+```
+
+**Achado maior: a IA tem um orçamento de tempo real, medido em
+contagens de `VSync` (biblioteca gráfica do PS1 de verdade), não em
+número de candidatos** — se passar de **440 VSyncs** avaliando
+candidatos, a busca é abortada (`g->b[0xc72]=0`, retorna `-1`). Isso é
+literalmente um watchdog de "não deixa a IA travar o jogo pensando
+demais", medido pelo mesmo relógio que o jogo usa pra desenhar
+quadros. E **`SetThisDestination` é a função real de "commit"** —
+grava o destino que `SetBestMove()` escolheu ao longo de todas as
+iterações anteriores.
+
+### 25.3 O laço principal de varredura — filtro de alcance de arma (arco/arma de fogo)
+
+O corpo central (`0x278104`–`0x278318`) é um laço duplo
+linha-por-linha/coluna-por-coluna sobre uma máscara construída a
+partir da região de `GetTargetBaseArea` (`g+0xb40`) **intersectada**
+com a tabela de 512 entradas mencionada em 25.2 (só considera painéis
+que foram marcados como "escolhidos" em alguma iteração anterior —
+mecanismo de deduplicação entre passadas, não isolado por completo).
+Pra cada bit setado (um painel candidato):
+
+```c
+g->h[0x2a] = row; g->h[0x28] = col; g->h[0x2c] = z;   // define a NOVA posição candidata
+
+if (g->b[0x26] == 6 || (g->b[0xf] & 0xc0)) {
+    // acha qual unidade de bwork[] (se alguma) ocupa este painel
+    // exatamente (bwork[k].b[0x4f]/b[0x50]/b[0x51]) e grava o índice
+    // em g->b[0x27]; se nenhuma, recomeça o fluxo de "próximo candidato"
+} else if (g->b[0xf] & 0x80) {                              // *** flag "arco" ***
+    if (!CheckBowReachable(g->b[0xe2e], g->b[0x27])) {        // 0x224650
+        continue;   // painel fora de alcance de arco -> descarta, próxima coluna
+    }
+} else if (g->b[0xf] & 0x40) {                              // *** flag "outra arma à distância" (arma de fogo?) ***
+    if (comtype[g->b[0]] == 1) {    // *** confirmado na seção 26: é `comtype`, não uma tabela nova ***
+        // caso especial: se a distância real (GetDistance, 0x271e1c)
+        // entre o invocador e o alvo for <= 1 (adjacente), PULA o
+        // teste de arma — só testa CheckGunReachable se for > 1
+        if (GetDistance(...) > 1 && !CheckGunReachable(g->b[0xe2e], g->b[0x27]))  // 0x224d4c
+            continue;
+    } else if (!CheckGunReachable(g->b[0xe2e], g->b[0x27])) {
+        continue;
+    }
+}
+// painel passou os filtros -> decide g->b[0xe4e] a partir de um bit
+// de g->b[0xcb7], e VOLTA PRO TOPO (chama SetBestMove() de novo pra
+// esta nova posição candidata)
+goto TOP;
+```
+
+**Confirma, com chamadas reais, os dois filtros de alcance de arma à
+distância da IA**: `CheckBowReachable`/`CheckGunReachable` (nomes
+reais do `.dynsym`) — a IA não considera um painel de destino válido
+pra uma habilidade de arco/arma de fogo sem antes confirmar
+alcançabilidade real, com um atalho de "se já está adjacente, nem
+precisa checar arma de fogo" via `GetDistance`.
+
+### 25.4/25.5 O que ficou sem confirmar
+- O papel exato da tabela em `g+0x5a0` (mesma fórmula de indexação da
+  `+0xa70`, mas base diferente — provavelmente um dado paralelo por
+  linha, não isolado).
+- A tabela de 512 entradas × 8 B (`bit 0x40` = "painel escolhido
+  nalguma iteração") — maior que `bwork` (21×486 B), provavelmente
+  cobre painéis de mapa, não unidades; papel exato de dedução
+  cruzada com a máscara de `GetTargetBaseArea` não fechado 100%.
+- `g->b[0x14]`, `g->b[4]`, `g->b[0x26]==6`, `g->b[0xcb7]` bit 1 — todos
+  usados como seletores de caminho, papel de negócio exato (que
+  categoria de ação/habilidade cada valor representa) não cravado.
+- `weaponCategoryTable` (lookup GOT por `g->b[0]`, caster) — **resolvido
+  na seção 26: é `comtype`**, não uma tabela nova.
+
+## 26. Resolução de literais GOT sem nome — primeiro item ⚪ da Fase 2 (2026-10-16, Fase 2, iteração 19)
+
+Primeiro item ⚪: fechar os literais GOT sem nome deixados abertos nas
+seções 21/25. Técnica: ler o valor bruto do pool de literais (o
+deslocamento somado ao `sl`/`r8`, a âncora GOT confirmada
+`0x347d58`), calcular o endereço final, e cruzar com os globais já
+nomeados na investigação.
+
+### 26.1 Achado principal: 3 referências antes isoladas eram todas `comtype`
+
+As 3 tabelas da seção 21 marcadas como "terrain-table A" (usada em
+`GetDestinationsAndMakeMaskTG`, comparada contra `4`) e a
+`weaponCategoryTable` da seção 25 (usada em `sub_277f78`, comparada
+contra `1`) resolvem **para o mesmo endereço**: `0x3cd9b8` = `comtype`
+(já catalogada, seção 9.3/tabela de globais, 256 B, indexada por
+`g->b[0]`). Confirmado comparando o deslocamento exato do literal
+(`-0x1910` relativo à âncora GOT, idêntico nos dois pontos de
+chamada).
+
+**Isso fecha 3 usos isolados de `comtype` em uma única tabela
+coerente**, usada com constantes de comparação diferentes conforme o
+contexto: `==10` (seção 9.3, achado original), `==3` (seção 14.4,
+`CheckCrystalAndTresureBox`), `==4` (seção 21, validação de
+terreno), `==1` (seção 25, decisão de pular checagem de arma de
+fogo). Isso é consistente com `comtype` ser uma pequena enumeração de
+categoria (provavelmente "tipo de movimento/interação com terreno"
+por unidade), onde cada chamador testa pelo valor específico que lhe
+interessa — mas o significado exato de cada valor numérico (0-255,
+quais correspondem a quê) continua sem ser cravado.
+
+### 26.2 Duas tabelas novas, endereço confirmado mas sem nome
+
+- **Tabela "8 B por painel"** (seção 21, usada em
+  `GetDestinationsAndMakeMaskTG` pra validar subtipo de tile) resolve
+  pro endereço **`0x565db8`** — fica logo depois do fim real de
+  `bwork[]` (`0x563560` + `0x27de` = `0x565d3e`, só 122 B de
+  distância) — provavelmente um array de registros por painel do
+  mapa (não confirmado o tamanho total nem o propósito de cada um dos
+  8 bytes por entrada, só que o byte `+3` é comparado contra `0x3f`).
+- **Tabela "lookup por subtipo"** (seção 21, usada tanto no caminho
+  simples quanto no caminho complexo da validação de terreno) resolve
+  pro endereço **`0x3d21bc`** — não adjacente a nenhum global já
+  nomeado nesta investigação (`aa`/`comtype`/`SV`/`area_data`).
+
+**O que ficou sem confirmar:** os literais GOT das seções 13.6/17.6
+(constantes `SL_IID_*` e layout de `SLDataFormat_PCM`, motor de
+áudio) e da seção 13.7 (tabela de subtipo de tile do `DecodeTexture`)
+não foram resolvidos nesta passada — ficou só a parte do lado da IA
+de batalha, que tinha os endereços de chamada mais concretos já
+documentados.
+
+## 27. Os 7 blocos de fallback do `BattleRoutine` — segundo item ⚪ da Fase 2, fecha a pendência da seção 18 (2026-10-16, Fase 2, iteração 20)
+
+A seção 18 tinha deixado pendentes 7 endereços de blocos de fallback
+nunca lidos (`0x275d84`/`0x275d30`/`0x275ba8`/`0x275d10`/`0x275dd0`/
+`0x275e18`/`0x275ae8`), fora do range de 1232 B lido na época. Lidos
+agora todos — e, como estão intercalados num intervalo contíguo de
+~816 B, a leitura revelou **mais ~10 blocos irmãos** que não tinham
+sido explicitamente pedidos, mas fazem parte do mesmo tecido de
+"saltos de volta pro meio do `BattleRoutine`".
+
+### 27.1 Achado principal: `g->b[0xed4]` é o código de motivo de saída da IA
+
+Confirmado por 3 blocos diferentes que convergem no mesmo padrão:
+antes de `BattleRoutine` retornar `-1` pelo seu epílogo real
+(`0x274c18`, bate com o range `0x274764`–`0x274c1c` já confirmado),
+sempre se grava `g->b[0x19b7]=1` (flag "IA ativa", já conhecida) **e**
+um valor diferente em `g->b[0xed4]`:
+
+| Bloco | `g->b[0xed4]` | Contexto |
+|---|---|---|
+| `0x275d84` | `1` | fallback direto (condição não decomposta) |
+| `0x275ddc` | `2` | depois de `sub_272aac()` retornar `-1` |
+| `0x275dfc` | `0` | fallback direto (condição não decomposta) |
+
+**Isso confirma que `g->b[0xed4]` é um código de "motivo pelo qual a
+IA parou de pensar"**, nunca identificado antes — um dado novo e
+concreto pra uma investigação futura que queira mapear os valores
+0/1/2 a motivos específicos.
+
+### 27.2 Outros achados confirmados
+
+- **Confirma mais um escritor da tabela `+0xa70`** (18 halfwords de
+  stride, mesma região das seções 21/23): o bloco `0x275b34` grava
+  direto a partir de `g->b[0xe30]/[0xe31]/[0xe32]` (campos de
+  posição-alvo já estabelecidos) via `(0x8000 >> col)`, mesmo idioma
+  de bit confirmado em várias outras seções.
+- **Confirma mais dois flags vizinhos da já conhecida "IA ativa"**
+  (`g->b[0x1980+0x37]`): `g->b[0x1980+0x36]` e `g->b[0x1980+0x39]` —
+  ambos usados nesses blocos de fallback, papel exato não cravado.
+- **Um bloco (`0x275ba8`) zera `g->b[0x1836]`(`+0x36`) e preenche o
+  array `g->b[0xc8d..0xca1]` (21 slots) com `1` incondicionalmente**
+  — diferente de `MakeMapDanger` (seção 23), que só marcava unidades
+  específicas; aqui é "marca todo mundo como ameaça", um caminho de
+  fallback mais agressivo/pessimista.
+- **Um bloco grande (`0x275bf4`–`0x275d0c`, ~280 B) implementa um
+  laço de busca duplo (até 256×256 iterações)**, chamando duas
+  funções nunca vistas (`sub_279b70`, `sub_28551c`), comparando bytes
+  de registro (`+5`/`+2`) e um campo de outro struct (`+0x1de`,
+  bits `0x30`) contra uma tabela GOT indexada por tipo — provável
+  busca de "melhor item/equipamento compatível" entre até 256
+  candidatos, mas **não decomposto por completo** (escala grande
+  demais pro escopo deste item; candidato a item próprio numa
+  iteração futura).
+- `0x275e18` confirma `GetPanelUnderUnit`/`IsAlmostNullUnit` (ambas já
+  nomeadas, seções AI anteriores) sendo chamadas em sequência pra
+  validar a posição de uma unidade específica antes de decidir o
+  próximo salto.
+- Revela 2 funções novas, não investigadas: `sub_272aac()` (chamada
+  em `0x275b7c`, resultado comparado contra `-1`/`0` pra escolher
+  entre 3 caminhos diferentes) e `sub_27207c(5)` (chamada em
+  `0x275dd4`).
+
+### 27.3 O que ficou sem confirmar
+- O laço de busca de `0x275bf4` por completo (ver 27.2).
+- `sub_272aac`/`sub_27207c` — só os pontos de chamada, não o corpo.
+- O significado exato dos valores `0`/`1`/`2` de `g->b[0xed4]` em
+  termos de jogo (que condição real cada um representa).
+
+## 28. `FundamentalRoutine()` — passe estrutural — o dispatcher central que amarra várias sub-rotinas de IA já lidas separadamente (2026-10-17, Fase 3, lote paralelo)
+
+`FundamentalRoutine()` (`0x278f84`, 2.880 B) — descida recursiva via
+`jtable.py` (ferramenta nova da Fase 3, validada contra o switch de
+`battle()`): **688 de ~720 instruções possíveis (96%)**, uma tabela
+de salto resolvida (9 casos, 9 endereços distintos); **100
+branches, 56 de retrocesso**.
+
+### Confirma ser o dispatcher central de fase da IA, amarrando sub-rotinas já lidas em seções anteriores
+
+```
+SetBestMoveAnywhereOK() / SetBMList()           — já citadas desde a seção 6.1
+CheckUnitActionOK(unsigned char*) / CheckUnitActionEffective(int,int)
+GetTargetBaseArea(int,int) / JudgeMovable(int) / SetThisDestination(unsigned char*)
+SetBestMove() / sub_277f78 (RecheckFlaggedTargets, §17.4) / sub_277f78 (§25)
+JudgeStatus(int, BWORK*, int) / GetPanelUnderUnit(int, unsigned char*)
+CheckCrystalAndTresureBox() / GetCountToDeath(BWORK*) / CheckAbilityGet(int,int,int)
+get_ability(int,int) / pspItemGetOptionData / pspRoutineCheckArithmeticPermission()
+```
+O switch de 9 casos (um "estado/fase" de decisão por caso) confirma
+que `FundamentalRoutine` é o **ponto de dispatch que várias
+sub-rotinas de IA já lidas nesta investigação (§6.1, §17.4, §25)
+tinham como contexto implícito, mas nunca com o chamador real
+identificado**. Dois achados novos concretos: **`CheckCrystalAndTresureBox()`**
+confirma que a IA considera explicitamente painéis de cristal/baú de
+tesouro (mecânica real do FFT quando uma unidade morre) na tomada de
+decisão; **`GetCountToDeath(BWORK*)`** confirma que a IA calcula
+quantos turnos faltam até uma unidade morrer (ex.: por veneno/
+contagem regressiva), informação usada pra priorizar alvos.
+`pspRoutineCheckArithmeticPermission()` é um nome estranho, não
+decifrado — tratado como está.
+
+**O que ficou sem confirmar**: os corpos dos 9 handlers da tabela
+(qual fase de decisão corresponde a qual caso); a ordem exata de
+chamada das sub-rotinas dentro de cada caso. Marcada
+`read_structural`.

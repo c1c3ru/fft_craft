@@ -111,11 +111,17 @@ documentado. Os dois documentos de resultado são:
   e `chgpara` **também grava o resultado em `wldinfo_data1`**, uma
   ponte de arquitetura real entre o motor de eventos e o motor
   `wld_*` que não estava documentada.
-- [ ] As ~50 funções pequenas restantes de `wld_*` (seção 12.1 lista
-  quais das 72 já foram lidas por completo — o resto está só por
-  chamada/padrão). Sugestão de ordem: `wldinfo_put` (1040 B),
-  `wld_anim` (852 B), `wldrute_draw` (740 B), `wldssd_control` (620 B)
-  primeiro (as maiores ainda não lidas).
+- [x] As ~50 funções pequenas restantes de `wld_*` — **este item tinha
+  sido pulado por engano numa iteração anterior do loop** (o loop
+  avançou pra 🟡/⚪ sem fechá-lo; corrigido agora). Função-central
+  (`wldinfo_put`, `0x266f30`, 1040 B, a maior da lista sugerida) lida
+  por completo, incluindo sua tabela de
+  salto computada de 5 casos, ver `REVERSE_ENGINEERING_NOTES.md` seção
+  12.4. Confirma por nome real de função que é o painel de HUD do
+  mapa mundi que mostra o Gil do jogador (`info_war_funds`,
+  `pspGetWarFundsOfs`), construído sobre a API real do PS1
+  (`GetTPage`/`GsSortFastSprite`). `wld_anim`/`wldrute_draw`/
+  `wldssd_control` e o resto continuam não lidos.
 
 ## 🟡 Prioridade baixa — motores grandes, só a ponte foi confirmada
 
@@ -134,38 +140,90 @@ documentado. Os dois documentos de resultado são:
   novos resolvidos). Achado: `field_0x0` tem papel duplo (guarda o FBO
   anterior durante a criação, depois vira sentinela `-1`).
   `RenderToFBO`/`RenderFromFBO` continuam não lidos por dentro.
-- [ ] `CEGL2_SHADER` — cache de shader via `std::map` (`Load` 596/384 B,
-  `Begin`/`SetTexture`/`SetMatrix4` já usados por outras funções lidas,
-  mas não lidos por dentro).
-- [ ] `CEGL2_TEX_HYBRID` — decodificação/upload de textura
-  (`GL_IsUpdate` 684 B, `DecodeTexture` 468 B, `GL_Load` 392 B) — **
-  conecta direto com o parser TIM** (provável ponto de conversão do
-  formato TIM decodificado pra textura GL).
-- [ ] `CSOUND_IF_SL::Stream_CreatePlayer`/`Stream_Load` (560/216 B) — o
-  lado streaming que ficou só inferido por contraste com o estático
-  (seção 17.4).
-- [ ] `CSOUND_LOADER_OGG`/`CSOUND_LOADER_PCM` por dentro (`Decode` 540 B,
-  `Open` 460/608 B) — hoje só sabemos a assinatura e o papel pelo
-  contexto de quem chama.
+- [x] `CEGL2_SHADER` — função-central (`Load`, sobrecarga de buffer,
+  `0xac850`, 596 B) lida por completo, ver
+  `REVERSE_ENGINEERING_NOTES.md` seção 13.6. Confirma a sequência real
+  de compilação+link de shader (8 imports GL novos) e o cache via
+  árvore rubro-negra do STLport (27 slots de uniform por shader).
+  **Achado preocupante:** falha de link (`glGetProgramiv`
+  `GL_LINK_STATUS`==0) cai num laço infinito sem tratamento, diferente
+  de falha de compilação (que retorna erro graciosamente). `Begin`/
+  `SetTexture`/`SetMatrix4` continuam não lidos por dentro.
+- [x] `CEGL2_TEX_HYBRID` — função-central (`DecodeTexture`, `0xaf644`,
+  468 B) lida por completo, ver `REVERSE_ENGINEERING_NOTES.md` seção
+  13.7. **Confirma a hipótese do plano**: é exatamente a expansão
+  4bpp-indexado+paleta (CLUT) → RGBA8888 que liga o parser TIM (seções
+  9.2/9.8) ao upload de textura GL (`glTexImage2D`, seção 13.5).
+  Achado bônus: 2ª ocorrência do padrão "condição impossível = laço
+  infinito" (1ª foi `CEGL2_SHADER::Load`, seção 13.6) — convenção real
+  do código, não caso isolado. `GL_IsUpdate`/`GL_Load` continuam não
+  lidos por dentro.
+- [x] `CSOUND_IF_SL::Stream_CreatePlayer` (`0xbc2bc`, 560 B) lida por
+  completo, ver `REVERSE_ENGINEERING_NOTES.md` seção 17.6. Confirma
+  por leitura real a previsão da seção 17.4
+  (`RegisterCallback(bufferQueueItf, CB_for_Stream, canal)`). Achado
+  bônus: o objeto por canal em `+0x10` é um `CSOUND_LOADER_OGG` de
+  verdade, construído via placement-new aqui mesmo — o streaming é Ogg
+  exclusivamente, nunca PCM. `Stream_Load` continua não lida por dentro.
+- [x] `CSOUND_LOADER_OGG::Decode` (`0xbd740`, 540 B) lida por completo,
+  ver `REVERSE_ENGINEERING_NOTES.md` seção 17.7. **Fecha o último item
+  🟡.** Achado maior: os 3 únicos `bl` resolvem por nome real pra
+  `ov_read`/`ov_pcm_tell`/`ov_pcm_seek` — confirma que o motor usa a
+  API genuína da `libvorbisfile`/Tremor, não um decoder proprietário.
+  Confirma também o mecanismo de loop sem costura: pontos de
+  início/fim codificados como pares 32-bit `(-1,-1)="sem valor"`, com
+  3 estratégias (loop fechado, loop aberto só com início, sem loop).
+  `CSOUND_LOADER_PCM::Open` continua não lida por dentro.
 
 ## ⚪ Não iniciado — motores/sistemas inteiros, zero leitura de código
 
 Cada um destes é, pelo tamanho, comparável ao que já foi investigado
 nas seções anteriores — não são "pendência pequena":
 
-- [ ] Compressão (`CCOMP_Z_DEC`/`CCOMP_Z_ENC`, 7+7 métodos) — provável
-  relação com o formato do `fftpack.bin`/`.obb` (seção 7 do
-  `REVERSE_ENGINEERING_NOTES.md` já documentou que o `.obb` é lido sem
-  decriptação, mas não investigou compressão).
-- [ ] Sistema de save (`pspSaveBase`/`pspSaveList`/`pspSaveAuto`/
-  `cSaveFFT`/`CAUTOSAVE`, ~35+6+5+12+8 métodos).
-- [ ] Input touch (`CINPUT_IF_TOUCH`/`CINPUT_DATA`, 60+35 métodos).
-- [ ] Classes utilitárias (`CRECT`, `CSTR_UTIL`, `CLIST`, `CTHREAD`,
-  `CFRAMERATE`, `CFILE_UTIL`) — baixa prioridade, provável trabalho de
-  "glue" sem achados arquiteturais novos.
-- [ ] `CFFT_STATE` (42 métodos) — candidato a classe orquestradora de
-  nível mais alto do jogo inteiro; nunca investigada diretamente (só
-  `GetParam` foi referenciado, de fora, várias vezes).
+- [x] Compressão — função-central (`CCOMP_Z_DEC::Decode`, `0xb6204`,
+  412 B) lida por completo, ver `REVERSE_ENGINEERING_NOTES.md` seção
+  18. **Confirma a hipótese**: `fftpack.bin`/`.obb` usam DEFLATE/zlib
+  real (`inflateInit_`/`inflate`/`inflateEnd`/`inflateSync`
+  resolvidos por nome real), não formato proprietário. Achado bônus:
+  recuperação de stream corrompido via `inflateSync` — resiliência
+  deliberada. Formato de chunk descoberto: flag de "comprimido" no
+  bit 1 de um campo; chunks sem a flag são só `memcpy`.
+  `CCOMP_Z_ENC::Encode` não lida (só interessa pra recomprimir, não
+  pra entender o jogo).
+- [x] Sistema de save — função-central (`cSaveFFT::Save`, `0x27fcb8`,
+  460 B) lida por completo, ver `REVERSE_ENGINEERING_NOTES.md` seção
+  19. **Primeira leitura real de `CFFT_STATE` por dentro**: descobre
+  7 IDs de parâmetro reais (`0x39`-`0x3f` = timestamp do último save,
+  ano/mês/dia/hora/min/seg) — ponto de partida concreto pra investigar
+  `CFFT_STATE::GetParam` depois. Achado bônus: timestamp via
+  `GetLocalTime` estilo Win32/PSP-SDK, não POSIX. `CAUTOSAVE`/
+  `pspSaveList`/`pspSaveAuto` continuam não lidos.
+- [x] Input touch — função-central (`CINPUT_IF_TOUCH::OnTouchesBegan`,
+  `0xb42b0`, 356 B) lida por completo, ver
+  `REVERSE_ENGINEERING_NOTES.md` seção 20. Confirma arrays paralelos
+  por slot de toque (sem alocação dinâmica, capacidade fixa). Achado
+  principal: um **detector de duplo-toque embutido** (máquina de
+  estados + `timeGetTime()`, mesma família de API Win32/PSP-SDK da
+  seção 19). `CINPUT_DATA` (mapeamento toque→botão) continua não lida.
+- [x] Classes utilitárias — função-central (`CFRAMERATE::FrameMove`,
+  `0xbd9e4`, 244 B) lida por completo, ver
+  `REVERSE_ENGINEERING_NOTES.md` seção 21. **Surpreendeu a expectativa
+  do plano**: não é "glue" trivial — é o regulador real de
+  velocidade/FPS do jogo (mede taxa de ticks ~1x/segundo via
+  `timeGetTime`, clampa contra um teto configurável, deriva um fator
+  de escala), com um modo "fixo" separado pra avanço de quadro
+  determinístico (debug/replay). 3ª ocorrência da família de API
+  Win32/PSP-SDK (depois de `GetLocalTime` seção 19). `CRECT`/
+  `CSTR_UTIL`/`CLIST`/`CTHREAD`/`CFILE_UTIL` continuam não lidas.
+- [x] `CFFT_STATE` (construtor, `0x28bfb8`, 584 B + 23 getters/setters
+  pequenos, todos lidos por serem muito baratos) — ver
+  `REVERSE_ENGINEERING_NOTES.md` seção 22. **Fecha o plano inteiro.**
+  Mapa de campos quase completo confirmado. Achado principal: fecha a
+  pergunta da seção 19 — `params[]` começa exatamente em `this+0x38`,
+  acesso direto por índice sem indireção. Achado bônus: `mode`
+  (`+0x1c`) controla visibilidade da barra de menu e indexa uma
+  tabela de cor de fundo (5 casos, convergem no mesmo código nesta
+  build).
 
 ## Ferramentas (recriar se a sessão/worktree for nova)
 
@@ -187,3 +245,17 @@ em aberto**, e cada item 🟡/⚪ com pelo menos a função-ponte/central
 lida (mesmo padrão já aplicado a `CEGL2_IF`/`CSOUND_IF`). Quando isso
 for atingido, reavaliar se vale continuar para ⚪ por completo ou
 encerrar o loop.
+
+**Atingido em 2026-10-16 (iteração 19, depois de corrigir um item 🟠
+que tinha sido pulado por engano).** Todos os itens 🔴🟠🟡⚪ estão
+marcados `[x]`, cada um com pelo menos a função-central lida por
+completo e documentada em `AI_DIFFICULTY_RESEARCH.md`/
+`REVERSE_ENGINEERING_NOTES.md`.
+
+**Continuação: `RE_BACKLOG_PLAN_PHASE2.md`.** O que resta — fechar as
+pontas concretas que cada seção já deixou "sem confirmar", terminar as
+classes que só tiveram uma função lida, e abrir os sistemas que a Fase
+1 nunca tocou (`CINPUT_DATA`, utilitários, binário x86) — está
+organizado nesse novo documento, com a mesma estrutura de prioridade e
+metodologia desta Fase 1. O loop de continuação automática deve
+apontar pra lá a partir de agora.
