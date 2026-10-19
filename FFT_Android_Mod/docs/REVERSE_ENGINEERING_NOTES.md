@@ -10917,3 +10917,112 @@ handler de estado "continuar/avancar" do sistema de narracao Novel -
 espera input de toque e avanca/dispensa a linha de texto atual,
 trabalhando junto com ctlnobelstop_main e ctlnobel_init. Marcada
 read_structural.
+
+
+## Vigesimo-quinto lote paralelo (secoes 298-303): 6 funcoes lidas por forks simultaneos, usando jtable.py (2026-10-18, Fase 3)
+
+## 298. PoachSellValue() - confirma a logica de transacao que faltava em PoachSell (2026-10-18, Fase 3, lote paralelo)
+
+PoachSellValue() (0x1a2f68, 1.080 B) - descida recursiva via
+jtable.py: 248 de ~270 instrucoes possiveis (92%), sem tabela de
+salto; 20 branches, 9 de retrocesso. 14 bl distintos.
+
+Chama **ChgMoney**, **ItemChg** (x2), **ChgShopStockItem** - o trio
+exato de mutacao de transacao que faltava no catalogo de PoachSell
+(secao 295). Confirma ser a logica de transacao real pro lado de
+venda poach, espelhando PoachBuyValue (secao 274) do lado de
+compra. GetItemSellPrice (x2) computa o payout antes do ChgMoney.
+Marcada read_structural.
+
+## 299. initBattleMap(...) - orquestrador real de startup de batalha, tabela de 13 casos (2026-10-18, Fase 3, lote paralelo, achado rico)
+
+initBattleMap(int,int,int) (0x21101c, 1.016 B, ja referenciada por
+generateAttackTeam, secao 206) - descida recursiva via jtable.py:
+227 de ~254 instrucoes possiveis (89%); uma tabela de salto
+resolvida (13 casos, 13 handlers distintos); 35 branches, 26 de
+retrocesso. 29 bl distintos.
+
+Orquestrador amplo de inicio de batalha: `attackteam_end`,
+`read`/`write_eventflag`, setup de cor/mapa (`loadClutData`,
+`loadBackGradation`, `loadAnbient`, `loadFlatColor`,
+`transferClutData`, `initChangeClut`), inicializacao de
+unidade/animacao (`InitAnimationInit`, `InitAnimation`,
+`initEntryEnemyAnimations`, `initEntryPlayerAnimations`,
+`entryAnimations`), para musica/efeito e dispara
+**`BattleRoutineInit()`** (init real da logica de batalha), mais
+RNG (`ps_rand`, `_pspNetRand`) e `CFFT_STATE::SetParam`. A tabela
+de 13 casos provavelmente despacha por passo de setup/tipo de
+modo de mapa de batalha. Quatro locais sem simbolo. Marcada
+read_structural.
+
+## 300. world_map() - e o proprio laco/dispatcher principal do modo mapa-mundo (2026-10-18, Fase 3, lote paralelo, achado chave)
+
+world_map() (0x25fbc4, 1.004 B) - descida recursiva via jtable.py:
+243 de ~251 instrucoes possiveis (97%), sem tabela de salto; 25
+branches, 10 de retrocesso. 31 bl distintos.
+
+Chama **world_init()**/**world_exit()** diretamente, junto com
+`wldctl_cur()`, os helpers de estado `wldfade_*`/`wldnormal_lop`/
+`wldfast_lop`, gerenciamento pesado de flag/buffer PSP-world
+(`pspWorldCheckFlg` x4, `pspWorldDataBackBufGet` x5), e
+**`iOS_setV2Icon`** (x18! - alvo dominante, forte indicio de laco
+de atualizacao de icone sobre nos/cidades do mapa). **Confirma ser
+o proprio laco/dispatcher principal do modo mapa-mundo** - possui o
+ciclo de vida do modo (init/exit), dirige o update por quadro via
+os `wld*_lop`, e atualiza icones do mapa a cada passada - nao e um
+stub de entrada fino nem um dispatcher generico. Marcada
+read_structural.
+
+## 301. Account() - corrige a hipotese de nome: nao e sistema de conta de usuario, e tela de balanco do inventario de traje (2026-10-18, Fase 3, lote paralelo)
+
+Account() (0x19c52c, 1.004 B, entre DressRemove e DressAuto, secoes
+273/285) - descida recursiva via jtable.py: 233 de ~251 instrucoes
+possiveis (93%), sem tabela de salto; 28 branches, 13 de
+retrocesso. 14 bl distintos.
+
+**Corrige a hipotese inicial**: zero chamada de login/perfil/
+credencial em todo o catalogo. Dominada por primitivos de task
+(`Wtask_create`/`Wtask_status`/`Wsend_taskparamater` x8),
+**RefleshItemUserSort** (x5), **ChgMoney** (x2), `CurChrChg2`,
+toggle de janela de lista de unidade. Dada sua posicao no cluster
+de Dress, "Account" mais plausivel e uma tela de balanco/resumo do
+inventario de traje (quantos itens de Dress sao possuidos/
+equipados, possivelmente deduzindo custo via ChgMoney) - NAO um
+sistema de conta/usuario. Tres locais sem simbolo. Marcada
+read_structural.
+
+## 302. ctlnobel_init(int) - setup linear real de inicio do modo Novel (2026-10-18, Fase 3, lote paralelo)
+
+ctlnobel_init(int) (0x263b08, 1.004 B) - descida recursiva via
+jtable.py: 234 de ~251 instrucoes possiveis (93%); **so 1 branch
+total, zero de retrocesso** (nenhum laco). 13 bl distintos.
+
+Toca o subsistema Novel/SSD diretamente (`iOSSdNovelClear`,
+`iOSSdNovelLogIcon`, `iOSNovelModeBackup`, `Ssd_AddEffectData`,
+`snpl_init`), carregamento de pacote de animacao/janela
+(`add_anmpac` x3, `add_winpac` x2), fade/limpeza de mundo
+(`wldfade_set`, `wldfrm_clr`, `wldpicwin_set`), e setup de icone/
+menu v2 (`iOS_setV2Icon` x8). A quase total ausencia de branch (1
+total, 0 laco) confirma ser uma rotina de setup linear de uma vez
+so ao entrar no modo Novel - a contraparte de inicio do teardown de
+`ctlnobelstop_main` (secao 269), chamada direto de
+`ctlnvcontinue_main` (secao 297). Marcada read_structural.
+
+## 303. active_disp_waitwindow() - driver ativo por quadro da janela de espera, polling de comando de rede e cancelamento (2026-10-18, Fase 3, lote paralelo, achado rico)
+
+active_disp_waitwindow() (0x147e9c, 1.020 B) - descida recursiva
+via jtable.py: 250 de ~255 instrucoes possiveis (98%), sem tabela
+de salto; 17 branches, 8 de retrocesso. 26 bl distintos.
+
+**Muito mais rico que uma simples checagem "esta ativa"**: dirige a
+pipeline multiwindow_* (packetinit/packetadd/packetanm/break),
+polling de comando de trap de rede (`pspNetTrapGetCommandNum`,
+`AddrgTrapCommandTable_forDraw`, `GetgTrapCancelCount`/`Result`) e
+desenho de icone de cancelamento (`draw_maru`/`draw_batu`,
+`Draw_TuusinIcon`, `Draw_Trap_CancelCommandList`), mais controle de
+task (`asmTaskEntry`/`asmGetInput1`/`2`, `task_killmyself`).
+Confirma ser o driver ATIVO por quadro que de fato roda/atualiza a
+janela de espera construida por `disp_waitwindow` (secao 289) -
+sonda comando de trap de rede, checa cancelamento do jogador, anima
+os pacotes do spinner, e desenha icones/texto de cancelamento.
+Marcada read_structural.

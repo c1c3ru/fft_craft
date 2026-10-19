@@ -337,7 +337,7 @@ address,size,mangled,demangled,status,section_ref
 000aceec,1080,_ZN12CEGL2_SPRITE5Draw8EffjPv,"CEGL2_SPRITE::Draw8(float, float, unsigned int, void*)",mentioned_unverified,
 000b1448,1080,_ZN14CEGL_COLLISION20IsVertexInTriangle3DEN4math7VECTOR3IfEES2_S2_S2_,"CEGL_COLLISION::IsVertexInTriangle3D(math::VECTOR3<float>, math::VECTOR3<float>, math::VECTOR3<float>, math::VECTOR3<float>)",unread,
 00285084,1080,_Z22pspBattleEntryAreaMakeii,"pspBattleEntryAreaMake(int, int)",unread,
-001a2f68,1080,_Z14PoachSellValuev,PoachSellValue(),unread,
+001a2f68,1080,_Z14PoachSellValuev,PoachSellValue(),read_structural,NOTES §298
 001b2560,1076,_Z8JobCicleiiii,"JobCicle(int, int, int, int)",read_structural,NOTES §284
 001a4338,1072,_Z9SellValuev,SellValue(),read_structural,NOTES §286
 0019c918,1060,_Z9DressAutov,DressAuto(),read_structural,NOTES §285
@@ -357,14 +357,14 @@ address,size,mangled,demangled,status,section_ref
 00218df4,1028,_Z24SetEffectAngleCameraWorkiiiP7SVECTOR,"SetEffectAngleCameraWork(int, int, int, SVECTOR*)",unread,
 000d6f84,1024,_Z14allocatewindowv,allocatewindow(),read_structural,NOTES §291
 0025e8d4,1024,_Z18iOSwldscr_snapshoti,iOSwldscr_snapshot(int),unread,
-00147e9c,1020,_Z22active_disp_waitwindowv,active_disp_waitwindow(),unread,
-0021101c,1016,_Z13initBattleMapiii,"initBattleMap(int, int, int)",unread,
+00147e9c,1020,_Z22active_disp_waitwindowv,active_disp_waitwindow(),read_structural,NOTES §303
+0021101c,1016,_Z13initBattleMapiii,"initBattleMap(int, int, int)",read_structural,NOTES §299
 00256500,1016,_Z14ctlsthelp_mainP7CTLINFO,ctlsthelp_main(CTLINFO*),unread,
 00289420,1016,_Z22pspPrimDirectPartsDrawiiPmPh,"pspPrimDirectPartsDraw(int, int, unsigned long*, unsigned char*)",unread,
-0019c52c,1004,_Z7Accountv,Account(),unread,
-0025fbc4,1004,_Z9world_mapv,world_map(),mentioned_unverified,
+0019c52c,1004,_Z7Accountv,Account(),read_structural,NOTES §301
+0025fbc4,1004,_Z9world_mapv,world_map(),read_structural,NOTES §300
 0024fdf4,1004,_Z18pspCtltutonet_mainP7CTLINFO,pspCtltutonet_main(CTLINFO*),unread,
-00263b08,1004,_Z13ctlnobel_initi,ctlnobel_init(int),unread,
+00263b08,1004,_Z13ctlnobel_initi,ctlnobel_init(int),read_structural,NOTES §302
 001a749c,1000,_Z13Bwork2ChrSttsP5BWORKP8CHR_STTSP7UM_WORK,"Bwork2ChrStts(BWORK*, CHR_STTS*, UM_WORK*)",unread,
 000b8414,988,_ZN10CFILE_UTIL14FileReplaceStrEPcS0_S0_Pi,"CFILE_UTIL::FileReplaceStr(char*, char*, char*, int*)",unread,
 002885f0,988,_Z15pspOpenIconDrawPmii18PSP_OPEN_ICON_TYPEi,"pspOpenIconDraw(unsigned long*, int, int, PSP_OPEN_ICON_TYPE, int)",unread,
