@@ -10281,3 +10281,85 @@ retrocesso. Chama allocatememorywait/disposememory, task_wait,
 asmBoxCopy, hook_win_tail, asmClearBuffer, PSX_LoadImage -
 consistente com a animacao comum de "esticar a moldura da janela ao
 abrir" rodando como task. Marcada read_structural.
+
+
+## Lote de checagens diretas (secoes 253-258): mais 6 funcoes lidas pelo coordenador sem fork (2026-10-18, Fase 3)
+
+## 253. iOS_CMenuTouch::exec(...) - confirma ser o dispatcher central por modo de toque, chamando execTap/execPress (2026-10-18, Fase 3, lote direto, achado chave)
+
+iOS_CMenuTouch::exec(int*,int*,int*) (0x27cf50, 1.204 B, chamada
+literalmente em dezenas de telas ja documentadas) - descida
+recursiva direta: 294 de ~301 instrucoes possiveis (98%); uma
+tabela de salto resolvida (6 casos, 6 handlers distintos); 49
+branches, 25 de retrocesso.
+
+**Confirma a arquitetura interna da classe mais usada do jogo**:
+despacha por modo de toque (6 vias) chamando `calcTapArea`,
+`isInRect`/`isInMenu`, e, confirmando a hipotese da secao 225-226,
+**chama `execTap`/`execPress` diretamente** conforme o modo. Tambem
+chama `drawDebug`/`drawDebug2` (visualizacao de debug da area de
+toque), `setMode`, toda a familia `iOS_getTouch*`, e
+`iOS_OrMenuTouchKeyInput` (x6, combina flags de input de teclado
+virtual). Fecha o entendimento completo de `iOS_CMenuTouch::init`/
+`exec`/`execTap`/`execPress` como uma unidade coesa. Marcada
+read_structural.
+
+## 254. statusfigprint(...) - impressora de figura/numero simples, gated por modo de rede (2026-10-18, Fase 3, lote direto)
+
+statusfigprint(int,int,char*,COPYFIELD*) (0xe1db8, 1.204 B, ja
+referenciada em dezenas de telas de status) - descida recursiva
+direta: 287 de ~301 instrucoes possiveis (95%), sem tabela de
+salto; 26 branches, 12 de retrocesso. **Unicos bl**: `asmBoxCopy`
+(x8) e `pspNetGetBattleModeFlag`. Confirma ser um impressor simples
+de figura/numero via copia de caixa, com uma checagem de modo de
+rede (provavelmente oculta/ajusta alguma figura quando em partida
+de rede). Marcada read_structural.
+
+## 255. vorbis_book_init_decode - interno de libvorbis reconhecido por nome (2026-10-18, Fase 3, regra 6 da metodologia)
+
+vorbis_book_init_decode (0x986d0, 1.212 B) - checagem direta: 100%
+de cobertura, catalogo de bl inclui `ov_ilog`/`_make_words`/
+`_book_unquantize`/`vorbis_book_clear` - inicializacao real de
+codebook de decodificacao da libvorbis, codigo de terceiros
+genuino. Marcada read_full.
+
+## 256. ctlhoukmes2_main(CTLINFO*) - segundo estagio real de ctlhoukmes_main, trata ponto de emprego e titulo "shogou" (2026-10-18, Fase 3, lote direto)
+
+ctlhoukmes2_main(CTLINFO*) (0x25b2d0, 1.212 B, o segundo estagio ja
+sinalizado por ctlhoukmes_main, secao 117) - descida recursiva
+direta: 286 de ~303 instrucoes possiveis (94%), sem tabela de
+salto; 36 branches, 17 de retrocesso. 14 bl distintos.
+
+Chama `add_jobpoint(int,int)`, `ctlhouk_init()`,
+**`shogou_check()`** (x3)/**`ctlshogou_init()`** ("shogou" = 称号,
+titulo/grau em japones), `get_unitwork_add_wld`, `wld_daywrite`
+(x3, escrita de dia/calendario), `Ssd_PlayEffects01`. Confirma que
+o segundo estagio do controlador de relatorio de batalha trata
+concessao de ponto de emprego e checagem de titulo honorifico apos
+o relatorio. Marcada read_structural.
+
+## 257. get_succession_data(BWORK*) - dado de "sucessao" com RNG sincronizado de rede (2026-10-18, Fase 3, lote direto)
+
+get_succession_data(BWORK*) (0x1d2394, 1.248 B) - descida
+recursiva direta: 304 de ~312 instrucoes possiveis (97%), sem
+tabela de salto; 37 branches, 23 de retrocesso. Chama
+`get_command_ability`, `check_prob`, `clear_cmemory`, `check_coord2`
+(secao 148), `pspItemIsExist`, `pspJobGetIndex2Job`, e
+**`_pspNetRand(char const*, int)`** (x2 - RNG sincronizado de
+REDE). "Sucessao" provavelmente se refere a heranca de item/dado
+entre unidades (ex.: successao de equipamento ao substituir
+unidade), usando RNG de rede pra manter resultado consistente entre
+jogadores numa partida online. Marcada read_structural.
+
+## 258. testBowLineDisp(int) - desenho da linha de trajetoria de arco com a mesma matematica parabolica de p01_bowFunc (2026-10-18, Fase 3, lote direto)
+
+testBowLineDisp(int) (0x21871c, 1.208 B) - descida recursiva
+direta: 290 de ~302 instrucoes possiveis (96%), sem tabela de
+salto; so 5 branches, 2 de retrocesso. Chama **GetParabolaYPos**
+(x3, mesma funcao de `p01_bowFunc`, secao 243), `AddPrim`,
+`FntPrint` (texto de debug?), `SetLineF2`, e a pipeline GTE
+completa (`SetRotMatrix`/`SetTransMatrix`/`RotTrans`, x6 cada).
+Desenha a linha/arco de trajetoria parabolica de mira de arco - o
+nome "test" mais `FntPrint` sugerem uma visualizacao de debug/dev
+pra validar a trajetoria, nao necessariamente uma feature de
+jogador final. Marcada read_structural.

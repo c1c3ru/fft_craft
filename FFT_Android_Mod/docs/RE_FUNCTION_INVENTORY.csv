@@ -294,7 +294,7 @@ address,size,mangled,demangled,status,section_ref
 00220ab0,1252,_Z15p22_shoukanFuncv,p22_shoukanFunc(),read_structural,NOTES §244
 0022416c,1252,_Z11p01_bowFuncv,p01_bowFunc(),read_structural,NOTES §243
 0025a424,1252,_Z16ctlhoukmes2_initi,ctlhoukmes2_init(int),unread,
-001d2394,1248,_Z19get_succession_dataP5BWORK,get_succession_data(BWORK*),unread,
+001d2394,1248,_Z19get_succession_dataP5BWORK,get_succession_data(BWORK*),read_structural,NOTES §257
 000ad324,1244,_ZN12CEGL2_SPRITE16AddPacketPartialEffffffP11CEGL_PACKET,"CEGL2_SPRITE::AddPacketPartial(float, float, float, float, float, float, CEGL_PACKET*)",read_full,NOTES §13.8
 0016a1c8,1244,_Z11ASHURA_FALLh,ASHURA_FALL(unsigned char),read_structural,NOTES §241
 002524d0,1244,_Z17ctlworkingst_mainP7CTLINFO,ctlworkingst_main(CTLINFO*),unread,
@@ -304,12 +304,12 @@ address,size,mangled,demangled,status,section_ref
 001e3f20,1224,_Z11search_rootiiii,"search_root(int, int, int, int)",unread,
 00212c00,1220,_Z22requestChangeGradationiiiii,"requestChangeGradation(int, int, int, int, int)",read_structural,NOTES §250
 00273378,1220,_Z9SetTmp_UAP10UnitAction,SetTmp_UA(UnitAction*),read_structural,NOTES §249
-000986d0,1212,vorbis_book_init_decode,vorbis_book_init_decode,unread,
+000986d0,1212,vorbis_book_init_decode,vorbis_book_init_decode,read_full,NOTES §255
 002010cc,1212,_Z25iOSBATTLE_scrollLandscapev,iOSBATTLE_scrollLandscape(),unread,
-0025b2d0,1212,_Z16ctlhoukmes2_mainP7CTLINFO,ctlhoukmes2_main(CTLINFO*),unread,
-0021871c,1208,_Z15testBowLineDispi,testBowLineDisp(int),unread,
-000e1db8,1204,_Z14statusfigprintiiPcP9COPYFIELD,"statusfigprint(int, int, char*, COPYFIELD*)",unread,
-0027cf50,1204,_ZN14iOS_CMenuTouch4execEPiS0_S0_,"iOS_CMenuTouch::exec(int*, int*, int*)",mentioned_unverified,
+0025b2d0,1212,_Z16ctlhoukmes2_mainP7CTLINFO,ctlhoukmes2_main(CTLINFO*),read_structural,NOTES §256
+0021871c,1208,_Z15testBowLineDispi,testBowLineDisp(int),read_structural,NOTES §258
+000e1db8,1204,_Z14statusfigprintiiPcP9COPYFIELD,"statusfigprint(int, int, char*, COPYFIELD*)",read_structural,NOTES §254
+0027cf50,1204,_ZN14iOS_CMenuTouch4execEPiS0_S0_,"iOS_CMenuTouch::exec(int*, int*, int*)",read_structural,NOTES §253
 00188fe4,1200,_Z9eItemSortiPs,"eItemSort(int, short*)",unread,
 0024e0f8,1200,_Z15ctlkiromes_mainP7CTLINFO,ctlkiromes_main(CTLINFO*),unread,
 0009ebfc,1192,ov_raw_seek,ov_raw_seek,unread,
