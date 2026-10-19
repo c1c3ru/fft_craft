@@ -9921,3 +9921,40 @@ em todo lugar) provavelmente despacha pra `execTap`/`execPress`
 conforme o tipo de gesto, cada um fazendo seu próprio teste de
 retângulo/estado via os métodos `is*` internos. Marcadas
 `read_structural`.
+
+
+## 227. Família `ValueFunc` — `ValueFuncShort` é duplicata exata, `b` confirma padrão de contexto completo, `eValueFunc` fica parcial por branch computado (2026-10-18, Fase 3, regra 2 da metodologia, checagem direta)
+
+`family_sim.py` contra `ValueFunc` (seção 222):
+
+```
+ValueFuncShort   0x1c5208  1.384 B   Jaccard 1,00 (CONFIRMADO POR SIMILARIDADE)
+bValueFunc       0x181578  1.356 B   Jaccard 0,50 (chama bDrawFT4RGB)
+bValueFuncShort  0x181e10  1.392 B   Jaccard 0,50 (chama bDrawFT4RGB)
+eValueFunc       0x191498  1.400 B   só 12% de cobertura — branch computado não resolvido
+```
+`ValueFuncShort` é duplicata EXATA de `ValueFunc` (só a variante
+`short` vs. `unsigned char*` de parâmetro) — confirmada por
+similaridade sem passe completo. `bValueFunc`/`bValueFuncShort`
+chamam `bDrawFT4RGB` (`0x1778a8`, já visto na seção 181) em vez da
+versão sem prefixo — mais uma confirmação do padrão "toda letra é
+contexto de task completo" pra esta família.
+
+**`eValueFunc` fica honestamente parcial**: `jtable.py` só alcança
+43 de ~350 instruções (12%) — a função termina um bloco em `bx` com
+um registrador carregado de memória (ponteiro de função/callback),
+não o idioma `add pc,pc,rX,lsl#2` que a ferramenta sabe resolver.
+Sem tabela de salto encontrada e sem chamada `bl` alcançada. Fica
+registrada como pendência honesta — precisaria de extração manual
+do alvo do `bx` pra completar. Todas marcadas `read_structural`
+(exceto `eValueFunc`, que fica como leitura parcial reconhecida).
+
+## 228. `unzOpenCurrentFile3` — interno de `minizip`/`zlib` reconhecido por nome (2026-10-18, Fase 3, regra 6 da metodologia)
+
+`unzOpenCurrentFile3` (`0x81c9c`, 1.300 B) — checagem direta: **99%
+de cobertura**, catálogo de `bl` é `inflateInit2_`/`call_zseek64`
+(API real de `minizip`, abertura de entrada de arquivo ZIP) mais
+dois locais sem símbolo da faixa `0x714xx` — confirma ser código de
+terceiros genérico (a camada `minizip` usada pra ler o pacote
+`fftpack.bin`/OBB, já mencionada em seções anteriores). Marcada
+`read_full`.
