@@ -194,7 +194,7 @@ address,size,mangled,demangled,status,section_ref
 00257e5c,1740,_Z12ctleeff_drawP4GsOT,ctleeff_draw(GsOT*),mentioned_unverified,
 0011661c,1736,_Z18Wdisp_selectwindowv,Wdisp_selectwindow(),unread,
 0017a42c,1732,_Z17bRoundHelpMessagesh,"bRoundHelpMessage(short, unsigned char)",unread,
-0019a3f8,1716,_Z7BuyUnitv,BuyUnit(),unread,
+0019a3f8,1716,_Z7BuyUnitv,BuyUnit(),read_structural,NOTES §185
 00233ed0,1712,_Z7Mdl0008siii,"Mdl0008(short, int, int, int)",read_structural,NOTES §101
 000d071c,1708,_Z16Ddisp_parawindowv,Ddisp_parawindow(),read_structural,NOTES §181
 000d140c,1700,_Z15chokobo_chrmenui,chokobo_chrmenu(int),read_structural,NOTES §170
@@ -211,8 +211,8 @@ address,size,mangled,demangled,status,section_ref
 00190b98,1652,_Z15eMakeWindowFuncPh,eMakeWindowFunc(unsigned char*),read_structural,NOTES §181
 0008cbf4,1648,vorbis_analysis_headerout,vorbis_analysis_headerout,read_full,NOTES §174
 00163348,1636,_Z16ASHURA_SetMatrixlP6MATRIXS0_t,"ASHURA_SetMatrix(long, MATRIX*, MATRIX*, unsigned short)",read_structural,NOTES §180
-00195270,1636,_Z7AbiSttsv,AbiStts(),unread,
-00121f88,1632,_Z19Edisp_abilitywindowv,Edisp_abilitywindow(),unread,
+00195270,1636,_Z7AbiSttsv,AbiStts(),read_structural,NOTES §187
+00121f88,1632,_Z19Edisp_abilitywindowv,Edisp_abilitywindow(),read_structural,NOTES §184
 0012c190,1632,_Z15disp_parawindowv,disp_parawindow(),read_structural,NOTES §177
 001f2f84,1624,_Z17DisplayAnimationsv,DisplayAnimations(),unread,
 0008c4fc,1612,vorbis_synthesis_headerin,vorbis_synthesis_headerin,read_full,NOTES §182
@@ -231,9 +231,9 @@ address,size,mangled,demangled,status,section_ref
 00108568,1540,_Z17Wevent_status_settt,"Wevent_status_set(unsigned short, unsigned short)",unread,
 00280dfc,1540,_Z19iOS_setStatusHPMPCTP11IOS_STTSNUMiiiiiiiiiPvi,"iOS_setStatusHPMPCT(IOS_STTSNUM*, int, int, int, int, int, int, int, int, int, void*, int)",unread,
 001e6d74,1524,_Z16getreaction_postPt,getreaction_post(unsigned short*),mentioned_unverified,
-0024b988,1524,_Z11ctlbar_mainP7CTLINFO,ctlbar_main(CTLINFO*),unread,
+0024b988,1524,_Z11ctlbar_mainP7CTLINFO,ctlbar_main(CTLINFO*),read_structural,NOTES §186
 002570f4,1516,_Z16ctltownmenu_mainP7CTLINFO,ctltownmenu_main(CTLINFO*),unread,
-00137524,1512,_Z12select_valuev,select_value(),unread,
+00137524,1512,_Z12select_valuev,select_value(),read_structural,NOTES §183
 0007a760,1504,inflate_fast,inflate_fast,read_full,NOTES §182
 00197a10,1504,_Z15jMakeWindowFuncPh,jMakeWindowFunc(unsigned char*),read_structural,NOTES §181
 00165520,1500,_Z15ASURA_FALL_INITh,ASURA_FALL_INIT(unsigned char),unread,

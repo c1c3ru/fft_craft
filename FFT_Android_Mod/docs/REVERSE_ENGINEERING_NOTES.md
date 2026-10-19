@@ -9281,3 +9281,99 @@ Cinco checagens rápidas via `jtable.py`, sem passe completo:
   do `zlib` de verdade, puramente inline, sem chamada de função.
 
 Marcadas `read_full` sem passe completo.
+
+
+## Décimo-nono lote paralelo (seções 183–187): 5 funções lidas por forks simultâneos, usando `jtable.py` (sexta função, `ASHURA_LMDL_DB_COPY`, falhou por limite de sessão — fica pra retry)
+
+## 183. `select_value()` — variante mais simples de `select_valuewithmessage`, mesma biblioteca `multiwindow_*` (2026-10-18, Fase 3, lote paralelo)
+
+`select_value()` (`0x137524`, 1.512 B, adjacente a
+`select_valuewithmessage`, seção 171) — descida recursiva via
+`jtable.py`: **369 de ~378 instruções possíveis (98%)**, sem tabela
+de salto; **18 branches, 7 de retrocesso**. 24 `bl` distintos.
+
+Confirma ser a variante sem mensagem: usa o MESMO conjunto
+`multiwindow_*`/primitivo/task (`multiwindow_keydown`/`break`/
+`loadcolor`/`packetcolor`/`packetanm`/`packetinit`/`keyright`,
+`addlocalprim`, `initpolyft4`, `task_wait`/`task_killmyself`/
+`asmTaskEntry`/`asmGetActiveF`) e chama `statusfigprint0` (×2, a
+mesma vizinha direta de `select_valuewithmessage`), sem nenhuma
+chamada específica de prompt de mensagem além dessa — confirma ser
+o widget de spinner numérico puro, sem o texto de mensagem anexado.
+Marcada `read_structural`.
+
+## 184. `Edisp_abilitywindow()` — variante de entrada fina da janela de habilidade, texto kanji (2026-10-18, Fase 3, lote paralelo)
+
+`Edisp_abilitywindow()` (`0x121f88`, 1.632 B) — descida recursiva
+via `jtable.py`: **391 de ~408 instruções possíveis (96%)**, sem
+tabela de salto; **19 branches, 11 de retrocesso**. 22 `bl`
+distintos.
+
+Dominada por `addlocalprim` (×14), com `initsprtfield`/`bgput`/
+`statuskanjiprint` (×2) e a família de fundo `addstatusback`/
+`initstatusback` — confirma o padrão "entrada fina" já esperado pra
+esta letra, especializado em exibir lista de habilidade/skill com
+texto kanji. Cinco locais sem símbolo. Marcada `read_structural`.
+
+## 185. `BuyUnit()` — liga direto ao sistema de roster "haken", cria unidade via `UnitTable` (2026-10-18, Fase 3, lote paralelo)
+
+`BuyUnit()` (`0x19a3f8`, 1.716 B) — descida recursiva via
+`jtable.py`: **392 de ~429 instruções possíveis (91%)**, sem tabela
+de salto; **46 branches, 23 de retrocesso**. 33 `bl` distintos.
+
+Uso pesado de `iOSUnitList*` (`OutWin`/`FlagGet`/`WinReset`/
+`MoveFlagSet`/`Clear`/`WinOnOff`/`StsMoveCheck`/`LRCur`/
+`AllStatusTapCheck`) — liga diretamente ao mesmo subsistema de
+roster/lista já documentado em `ctlmouketeam_main`/
+`hakenunit_status_main` (seções 167/169, "haken" = despacho). Chama
+`UnitTableInitFirst`/`UnitTable` (criação/instanciação de unidade
+na tabela) e `CurChrChg` (mudança de personagem atual) — confirma
+onde uma unidade recém-comprada é criada e inserida. Equipamento
+inicial via `GetItemType`/`IsAbleEquip`/`ItemEquip` e stats via
+`ChrPowerCompare`/`SetSttsPara2`/`SetRyoteFlag`/`Ryoute`. **Nota
+honesta**: nenhuma função de ouro/moeda aparece neste catálogo — a
+dedução de custo provavelmente está inline ou fora desta janela de
+1.716 B. `iOS_setV2Icon` (×10, a chamada mais pesada) sugere UI de
+confirmação de compra fortemente baseada no menu V2. Marcada
+`read_structural`.
+
+## 186. `ctlbar_main(CTLINFO*)` — corrige a hipótese: "bar" é barra/menu de navegação, não barra de progresso (2026-10-18, Fase 3, lote paralelo)
+
+`ctlbar_main(CTLINFO*)` (`0x24b988`, 1.524 B) — descida recursiva
+via `jtable.py`: **361 de ~381 instruções possíveis (95%)**; **uma
+tabela de salto resolvida** (7 casos, 7 handlers distintos); **36
+branches, 20 de retrocesso**. 26 `bl` distintos.
+
+**Corrige a hipótese inicial**: "bar" não é barra de progresso/
+gráfico — é uma barra/menu de navegação dirigida por toque com sua
+própria tabela de fase de 7 casos, carregamento de imagem, cues de
+música/som, e transição pra vários outros controladores
+`ctl*_init` (`ctlhelp_init`, `ctlhouk_init`, `ctlmouke_init`,
+`ctlret_init`, `ctluwa_init`). Usa a biblioteca `iOS_CMenuTouch`
+completa. Marcada `read_structural`.
+
+## 187. `AbiStts()` — é literalmente a cópia `j`-prefixada de `WorldJobStts` (seção 146), confirma o padrão da seção 181 por nome (2026-10-18, Fase 3, lote paralelo)
+
+`AbiStts()` (`0x195270`, 1.636 B) — descida recursiva via
+`jtable.py`: **370 de ~409 instruções possíveis (90%)**, sem tabela
+de salto; **26 branches, 12 de retrocesso**. 22 `bl` distintos.
+
+**Achado que confirma a seção 181 por nome explícito, sem precisar
+de `family_sim`**: o catálogo é dominado por chamadas
+`j`-prefixadas — **`jGetAbilityList`**, **`jDrawFT4RGB`**,
+**`jWindowPositionInitSingle`** (×4), **`jSetWindowPosition`**,
+**`jGetWindowPosition`**, **`jMakeTextureMessage`**,
+**`jMenuSelSide`** (×2), **`jWindowInit`**/**`jWindowInit2`**,
+**`jDrawWindow2`**, **`jSetWindowCount`** — é quase exatamente o
+mesmo catálogo de `WorldJobStts()` (seção 146: `GetAbilityList`,
+`DrawFT4RGB`, `WindowPositionInit*`, `SetWindowPosition`/
+`GetWindowPosition`, `MakeTextureMessage`, `MenuSelSide`,
+`WindowInit`/`Init2`, `DrawWindow2`, `SetWindowCount`), só que cada
+chamada tem o prefixo `j`. **`AbiStts()` é literalmente a cópia de
+contexto `j` de `WorldJobStts()`** — mesma tela de popup de status
+no mapa-mundo, mas no contexto de task `j` (provavelmente a tela de
+habilidade/skill acessada de um menu diferente do que invoca a
+versão sem prefixo). Confirma a regra da seção 181 por evidência de
+nome direto, sem precisar rodar `family_sim.py`. Também chama
+`iOS_getMasaCdbOt`/`pspMsgGet` (string localizada) e a família
+`iOS_CMenuTouch`. Marcada `read_structural`.
