@@ -10044,3 +10044,75 @@ confirma ser o executor real que gerencia o ciclo de vida completo
 de um objeto `Shape2` (criar → desenhar → descartar) por quadro de
 animação de efeito, com três pontos de dispatch diferentes
 controlando o fluxo. Marcada `read_structural`.
+
+
+## Lote de checagens diretas (secoes 235-240): mais 6 funcoes lidas pelo coordenador sem fork (2026-10-18, Fase 3)
+
+## 235. MainBattleRoutine() - o laco de decisao de IA de batalha central, chamado por ForAutoCommand (2026-10-18, Fase 3, lote direto, achado chave)
+
+MainBattleRoutine() (0x27426c, 1.272 B) - descida recursiva direta:
+306 de ~318 instrucoes possiveis (96%), sem tabela de salto; 44
+branches, 19 de retrocesso. 18 bl distintos.
+
+Catalogo central de decisao de IA: SetBaseTargetGroup,
+EvaluateAllUnitAction, SetMoveAreaSafePanelOnly, StayAtSafePanel,
+GetDestinationRange, SetThresholdDoNothing, SetSafePanel/InRange/
+Ahead, MakeMoveAreaNearByDestination, ForChantedAction, SetMove,
+GetUnitOnPanel, GetPanelUnderUnit, MemClearDW, MakeMapCostToDest,
+MakeMapChantedAction, ps_rand. Confirma ser a funcao real chamada
+por ForAutoCommand (secao 150, que ja mostrava MainBattleRoutine no
+seu catalogo) - o laco central de decisao de IA que avalia alvo,
+movimento seguro, e acao encantada/mapeada pra cada unidade.
+Marcada read_structural.
+
+## 236. ItemSort(int, short*) - ordenador real de lista de item, usado por toda a familia de equipamento (2026-10-18, Fase 3, lote direto)
+
+ItemSort(int, short*) (0x1a96c8, 1.272 B) - descida recursiva
+direta: 318 de ~318 instrucoes possiveis (100%), sem tabela de
+salto; 46 branches, 25 de retrocesso. Chama pspItemGetCommonData/
+WeaponData/ShieldData/AccessoryData (dado por categoria de item),
+pspItemIsExist, pspItemIsType (x14!), ItemChg. Confirma ser o
+ordenador real de lista de item usado por GetBestEquip/
+GetTryBestEquip/make_abilitylistmain (secoes 173/194/128) - ordena
+por categoria/tipo antes de avaliar qual e o melhor. Dois locais
+sem simbolo. Marcada read_structural.
+
+## 237-238. requestChangeAnbient/requestChangeFlat - irmas produtoras de fila de cor, mesmo formato de requestChangeClut (2026-10-18, Fase 3, lote direto)
+
+requestChangeAnbient(int,int,int,int,int) (0x213228, 1.292 B) e
+requestChangeFlat(int,int,int,int,int) (0x213898, 1.292 B) -
+descida recursiva direta: 93% de cobertura nas duas; cada uma com
+uma tabela de salto de 11 casos/10 handlers; 11 branches/10 de
+retrocesso nas duas. Catalogo minimo e identico nas duas:
+ASHURA_CVECTOR, __divsi3 (x3).
+
+Mesmo formato exato de requestChangeClut (secao 120: tabela de
+11 casos, poucas chamadas externas, produtor de fila) - confirma
+que existem filas de requisicao PARALELAS pra mudanca de cor
+ambiente e cor plana, alimentando o mesmo tipo de consumidor que
+executeChangeClut (secao 70) consome pra CLUT - provavelmente hajam
+executeChangeAmbient/executeChangeFlat irmas ainda nao lidas.
+Marcadas read_structural.
+
+## 239. math::MATRIX4::operator*=(math::MATRIX4 const&) - multiplicacao de matriz 4x4 pura, codigo do proprio motor (2026-10-18, Fase 3, lote direto)
+
+math::MATRIX4::operator*=(math::MATRIX4 const&) (0xa75ac, 1.904 B)
+- descida recursiva direta: 100% de cobertura, ZERO branches,
+catalogo de bl e so __addsf3 (x48)/__mulsf3 (x64) - multiplicacao
+de matriz 4x4 de ponto flutuante totalmente desenrolada (sem laco),
+consistente com 4x4 * 4x4 = 64 multiplicacoes/48 somas pro produto
+completo. E codigo real do motor (namespace math:: do toolkit
+moderno CEGL2/OpenGL ES ja visto nas telas de Configuracao), nao
+boilerplate de terceiros - mas e puramente matematico, sem logica
+de jogo, aceito direto pela regra 3. Marcada read_structural.
+
+## 240. ASURA_WorkInit() - chama ASHURA_FALL, liga ao par de inicializacao do efeito de queda (2026-10-18, Fase 3, lote direto)
+
+ASURA_WorkInit() (0x16e2d8, 1.264 B) - descida recursiva direta:
+293 de ~316 instrucoes possiveis (93%), sem tabela de salto; 12
+branches, TODOS de retrocesso. Chama **ASHURA_FALL(unsigned char)**
+e SetDrawMode (x4). Liga diretamente a ASURA_FALL_INIT (secao 208,
+que inicializa parametros randomizados do efeito de queda) -
+ASURA_WorkInit parece ser o passo que de fato DISPARA o efeito via
+ASHURA_FALL, separado da inicializacao de parametro. Marcada
+read_structural.

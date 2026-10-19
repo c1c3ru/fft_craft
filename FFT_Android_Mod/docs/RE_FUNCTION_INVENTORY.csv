@@ -167,7 +167,7 @@ address,size,mangled,demangled,status,section_ref
 00278480,1932,_Z28GetDestinationsAndMakeMaskTGv,GetDestinationsAndMakeMaskTG(),read_structural,NOTES §159
 002c5ddc,1908,_Z18Settings_FrameMovev,Settings_FrameMove(),read_structural,NOTES §162
 00091128,1904,mdct_backward,mdct_backward,read_full,NOTES §138
-000a75ac,1904,_ZN4math7MATRIX4mLERKS0_,math::MATRIX4::operator*=(math::MATRIX4 const&),unread,
+000a75ac,1904,_ZN4math7MATRIX4mLERKS0_,math::MATRIX4::operator*=(math::MATRIX4 const&),read_structural,NOTES §239
 000c478c,1896,_Z13load_loaddatav,load_loaddata(),read_structural,NOTES §218
 0019aec0,1888,_Z9DressMainv,DressMain(),read_structural,NOTES §178
 001c37dc,1884,_Z14MakeWindowFuncPh,MakeWindowFunc(unsigned char*),read_structural,NOTES §175
@@ -277,16 +277,16 @@ address,size,mangled,demangled,status,section_ref
 00081c9c,1300,unzOpenCurrentFile3,unzOpenCurrentFile3,read_full,NOTES §228
 000cb4d0,1296,_Z17assumehelpmessagev,assumehelpmessage(),unread,
 001579d4,1296,_Z13addzodiacbackv,addzodiacback(),unread,
-00213228,1292,_Z20requestChangeAnbientiiiii,"requestChangeAnbient(int, int, int, int, int)",unread,
-00213898,1292,_Z17requestChangeFlatiiiii,"requestChangeFlat(int, int, int, int, int)",unread,
+00213228,1292,_Z20requestChangeAnbientiiiii,"requestChangeAnbient(int, int, int, int, int)",read_structural,NOTES §237
+00213898,1292,_Z17requestChangeFlatiiiii,"requestChangeFlat(int, int, int, int, int)",read_structural,NOTES §238
 0011e160,1288,_Z23Wextend_windowframemainiiP6RECT16iii,"Wextend_windowframemain(int, int, RECT16*, int, int, int)",unread,
 0024c89c,1284,_Z12ctlbrst_initv,ctlbrst_init(),unread,
 0011d864,1280,_Z22extend_windowframemainiiP6RECT16iii,"extend_windowframemain(int, int, RECT16*, int, int, int)",unread,
 00156054,1276,_Z16disp_floatwindowv,disp_floatwindow(),unread,
 00184174,1276,_Z11SetLoadDatai,SetLoadData(int),unread,
-001a96c8,1272,_Z8ItemSortiPs,"ItemSort(int, short*)",unread,
-0027426c,1272,_Z17MainBattleRoutinev,MainBattleRoutine(),mentioned_unverified,
-0016e2d8,1264,_Z14ASURA_WorkInitv,ASURA_WorkInit(),unread,
+001a96c8,1272,_Z8ItemSortiPs,"ItemSort(int, short*)",read_structural,NOTES §236
+0027426c,1272,_Z17MainBattleRoutinev,MainBattleRoutine(),read_structural,NOTES §235
+0016e2d8,1264,_Z14ASURA_WorkInitv,ASURA_WorkInit(),read_structural,NOTES §240
 001f4b2c,1260,_Z15entryAnimationsv,entryAnimations(),unread,
 0029b704,1256,GsSortPoly,GsSortPoly,mentioned_unverified,
 0025cd24,1256,_Z12wldpara_initv,wldpara_init(),read_full,NOTES §12.2
