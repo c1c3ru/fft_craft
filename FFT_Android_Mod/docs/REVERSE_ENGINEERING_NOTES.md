@@ -10116,3 +10116,90 @@ que inicializa parametros randomizados do efeito de queda) -
 ASURA_WorkInit parece ser o passo que de fato DISPARA o efeito via
 ASHURA_FALL, separado da inicializacao de parametro. Marcada
 read_structural.
+
+
+## Lote de checagens diretas (secoes 241-246): mais 6 funcoes lidas pelo coordenador sem fork, lote rico (2026-10-18, Fase 3)
+
+## 241. ASHURA_FALL(unsigned char) - decodificador de opcode AUTO-RECURSIVO do efeito de queda, tabela de 58 casos (2026-10-18, Fase 3, lote direto, achado chave)
+
+ASHURA_FALL(unsigned char) (0x16a1c8, 1.244 B, chamada por
+ASURA_WorkInit, secao 240) - descida recursiva direta: 238 de ~311
+instrucoes possiveis (77%); uma tabela de salto resolvida (guarda
+cmp em 0x16a1e4, dispatch em 0x16a1e8, 58 casos, 12 handlers
+distintos - a maioria colapsa num handler default); 26 branches,
+15 de retrocesso.
+
+**Auto-recursao**: a propria funcao se chama de novo (x9) - mesmo
+padrao de ASHURA_MapProjectMem2Mem (secao 112), confirma ser outro
+decodificador de stream de opcode recursivo, aqui especificamente
+pro sistema de efeito de queda. Chama ASURA_soundStop (x6),
+callEnvEffect, ASHURA_CVECTOR, SetColorMatrix, read_eventflag.
+Marcada read_structural.
+
+## 242. CheckBowResult(int, SVECTOR*, int) - calculo de alcance/trajetoria de arco (2026-10-18, Fase 3, lote direto)
+
+CheckBowResult(int, SVECTOR*, int) (0x2247a0, 1.316 B) - descida
+recursiva direta: 314 de ~329 instrucoes possiveis (95%), sem
+tabela de salto; 14 branches, 6 de retrocesso. Chama
+**GetBowReachableTangent(BowCheckWork*, int*, int*)**,
+getAnimationPositionFromBattleWork, getAnimationHeightFromBattleID,
+get_bwp, get_mapstp, ratan2, SquareRoot12 - confirma calculo real
+de alcance/trajetoria de tiro de arco (tangente alcancavel, posicao/
+altura de animacao). Dois locais sem simbolo. Marcada
+read_structural.
+
+## 243. p01_bowFunc() - efeito de projetil de arco com trajetoria parabolica real (2026-10-18, Fase 3, lote direto)
+
+p01_bowFunc() (0x22416c, 1.252 B) - descida recursiva direta: 296 de
+~313 instrucoes possiveis (95%), sem tabela de salto; 15 branches, 7
+de retrocesso. 17 bl distintos.
+
+Chama **GetParabolaYPos(int,int)** (x3) e **GetBowFirstSpeed()** -
+confirma fisica de trajetoria PARABOLICA real pro voo da flecha,
+mais requestPhysicalDamage, RequestReboundEffect, dispPolygonObject
+(secao 108), e a pipeline GTE completa (RotMatrix/SetRotMatrix/
+SetTransMatrix/RotTrans). Marcada read_structural.
+
+## 244. p22_shoukanFunc() - efeito de habilidade de invocacao ("shoukan" = convocar), usa o sistema de objeto permanente (2026-10-18, Fase 3, lote direto)
+
+p22_shoukanFunc() (0x220ab0, 1.252 B, "shoukan" = invocacao/convocar
+em japones) - descida recursiva direta: 305 de ~313 instrucoes
+possiveis (97%), sem tabela de salto; 28 branches, 14 de retrocesso.
+
+Chama **createPermanentObject** (secao 158), **AnimatePermanentObject**,
+GetPermanentObject/DisposePermanentObject, GetAnimationPosition,
+Ssd_PlayEffect/StopEffect, rsin/rcos - confirma ser um efeito de
+habilidade de invocacao que usa o mesmo sistema de objeto permanente
+ja documentado (fisica + RNG na criacao, animacao, som). Marcada
+read_structural.
+
+## 245. BattleJobStts(int, int) - entrada de contexto de batalha que chama AbiStts diretamente, fecha o trio World/Battle/AbiStts (2026-10-18, Fase 3, lote direto, achado chave)
+
+BattleJobStts(int, int) (0x195910, 1.340 B) - descida recursiva
+direta: 296 de ~335 instrucoes possiveis (88%), sem tabela de salto;
+13 branches, 6 de retrocesso. 14 bl distintos.
+
+Usa a biblioteca completa do contexto `j` (jSwapDB, jDB_init,
+jGetChrSingle, jWaitLoadImage/StoreImage, jWindowPositionInit,
+jHelpMessage, jGetMaskedPad, jMenuSelInit, jSelectWindowClut) e,
+achado chave, **chama AbiStts() diretamente** (secao 187) e
+JobStatus(). **Fecha o trio da familia "status de emprego"**:
+WorldJobStts (mapa-mundo, secao 146) / AbiStts (copia de contexto
+`j`, secao 187) / BattleJobStts (entrada de contexto de batalha que
+ENCADEIA pra AbiStts). Marcada read_structural.
+
+## 246. GsSortPoly - dispatcher PS1 GTE real de 233 casos por tipo de primitivo, baixa cobertura e artefato de medicao (2026-10-18, Fase 3, lote direto)
+
+GsSortPoly (0x29b704, 1.256 B) - descida recursiva direta: so 78 de
+~314 instrucoes possiveis (25%); **uma tabela de salto resolvida**
+(guarda cmp em 0x29b720, dispatch em 0x29b724, **233 casos, 17
+handlers distintos**); 16 branches, TODOS de retrocesso.
+
+**Nota sobre a cobertura baixa**: a tabela de 233 entradas de 4 B
+cada ocupa ~932 B dos 1.256 B totais (74% da funcao) - a ferramenta
+conta esses bytes de DADO como "slots de instrucao possiveis" na
+estimativa de cobertura, entao os 25% refletidos sao um artefato de
+medicao, nao codigo faltando. Catalogo minimo (so um local sem
+simbolo) - e o dispatcher real de ordenacao de primitivo GTE do PS1
+(233 codigos de tipo de primitivo/flag mapeados pra so 17 handlers
+reais). Marcada read_structural.
