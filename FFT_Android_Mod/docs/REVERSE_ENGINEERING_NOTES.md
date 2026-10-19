@@ -9703,3 +9703,89 @@ Também `MessageDataSet`/`DrawMessage` (confirmação via mensagem),
 `sys_warning`, `ps_rand`, e `Wwrite_eventflag`/`Wread_eventflag`/
 `Wtask_status` (interação com o contexto de task `W`). Marcada
 `read_structural`.
+
+
+## Lote de checagens diretas (seções 210–216): mais 7 funções lidas pelo coordenador sem fork (2026-10-18, Fase 3)
+
+## 210. `vorbis_book_decodev_add` — mais um interno de `libvorbis` reconhecido por nome (2026-10-18, Fase 3, regra 6 da metodologia)
+
+`vorbis_book_decodev_add` (`0x87700`, 1.412 B) — checagem direta:
+**96% de cobertura**, uma tabela de salto de 8 casos, catálogo de
+`bl` é `oggpack_look`/`oggpack_adv` (API real de leitura de bitstream
+Ogg) e `__addsf3` — decodificador de codebook genuíno da
+`libvorbis`. Marcada `read_full`.
+
+## 211. `Wmove_camera()` — confirma o padrão `W` com Jaccard exatamente 0,00 (2026-10-18, Fase 3, regra 2 da metodologia)
+
+`family_sim.py` contra `move_camera` (seção 195): `Wmove_camera()`
+(`0x1077f4`, 1.420 B) tem **Jaccard 0,00** — zero overlap de `bl`.
+Chama `wasmTaskEntry` (`0x161ef8`) e seu próprio
+`Wsettaskkind`/`Wwrite_eventflag`/`Wread_eventflag` em vez das
+versões sem prefixo. Confirmação limpa do padrão de cópia real.
+Marcada `read_structural`.
+
+## 212. `drawDamage(tag_animation*, Point*)` — confirma ser chamada por `displayShape`, constrói número de dano por dígito (2026-10-18, Fase 3, lote direto)
+
+`drawDamage(tag_animation*, Point*)` (`0x1ee70c`, 1.388 B, já
+referenciada como chamada de `displayShape`, seção 192) — descida
+recursiva direta: **346 de ~347 instruções possíveis (100%)**, sem
+tabela de salto; **22 branches, 11 de retrocesso**.
+
+Chama `ASHURA_getOTptrZ` (×3), **`setShortVector`** (×8 — provável
+posicionamento de cada dígito do número de dano) e, achado
+interessante, **`requestChangeClut`** (`0x211f14`, seção 120 — o
+produtor da fila de troca de paleta) — sugere que o número de dano
+muda de cor/paleta conforme o tipo de dano (crítico, cura, etc.) via
+o mesmo mecanismo de fila de CLUT. Quatro locais sem símbolo.
+Marcada `read_structural`.
+
+## 213. `getPositionHight(SVECTOR*, unsigned char)` — consulta de altura de terreno em laço (2026-10-18, Fase 3, lote direto)
+
+`getPositionHight(SVECTOR*, unsigned char)` (`0x1ec8bc`, 1.416 B) —
+descida recursiva direta: **353 de ~354 instruções possíveis
+(100%)**, sem tabela de salto; **31 branches, 18 de retrocesso**.
+**Único `bl`**: `get_mapstp(int,int,int)` — consistente com
+interpolar altura entre tiles de mapa vizinhos pra posicionamento
+sub-tile preciso (não só altura discreta por tile). Marcada
+`read_structural`.
+
+## 214. `CDebugPrint::FrameStep(...)` — overlay de debug no toolkit `CEGL2_*`, cobertura baixa por branch computado (2026-10-18, Fase 3, lote direto)
+
+`CDebugPrint::FrameStep(int,int,int,int,unsigned int)` (`0x2b07ac`,
+1.980 B) — descida recursiva direta: **só 101 de ~495 instruções
+possíveis (20%)** — cobertura baixa, provavelmente branch(es)
+computado(s) não resolvido(s) deixando grande parte do corpo fora
+de alcance pra `jtable.py`; **9 branches, 4 de retrocesso**
+alcançados.
+
+Chama `CEGL2_IF::GetShader`/`Setup2D`, `CEGL2_SPRITE::
+GetTextureHandle` — confirma ser uma classe de overlay de debug (
+provavelmente exibição de FPS/texto de debug em tela) construída
+sobre o mesmo toolkit `CEGL2_*` das telas de Configuração (seções
+133-135/157/162-163). **Marcada `read_structural` com cobertura
+parcial** — os ~80% restantes ficam como pendência honesta pra uma
+extração manual de tabela de salto/branch computado se a classe de
+debug importar mais pra frente.
+
+## 215. `ctltownmenu_main(CTLINFO*)` — menu de modo cidade, inclui snapshot de tela (2026-10-18, Fase 3, lote direto)
+
+`ctltownmenu_main(CTLINFO*)` (`0x2570f4`, 1.516 B) — descida
+recursiva direta: **301 de ~379 instruções possíveis (79%)**; **uma
+tabela de salto resolvida** (4 casos, 4 handlers distintos); **29
+branches, 14 de retrocesso**. 18 `bl` distintos.
+
+Confirma o framework `ctl*_main`: `Wtask_create`/`Wtask_status`/
+`Wsend_taskparamater`, mais `IOSsTownModeSet` (×5), `ctltownmenu_
+deactive`/`exit`, **`wldscr_snapshot(int)`** (tira um snapshot de
+tela do mapa-mundo — provável uso de thumbnail/transição),
+`curhis_get`/`clr` (histórico atual), `wldfade_set`/`sound_request`/
+`ssd_request`/`wldmusic_change`. Marcada `read_structural`.
+
+## 216. `ctlworking_init()` — init simples de indicador de "trabalhando"/carregando (2026-10-18, Fase 3, lote direto)
+
+`ctlworking_init()` (`0x250984`, 1.396 B) — descida recursiva
+direta: **336 de ~349 instruções possíveis (96%)**, sem tabela de
+salto; **8 branches, 5 de retrocesso**. Registro de UI simples:
+`add_anmpac`/`add_winpac`, `wldwin_set`/`trans`, `wldmess_put` (×3)
+— consistente com um indicador de "trabalhando"/carregando simples
+no mapa-mundo. Marcada `read_structural`.

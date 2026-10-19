@@ -156,7 +156,7 @@ address,size,mangled,demangled,status,section_ref
 000f5898,1984,_Z9menu_callPmm,"menu_call(unsigned long*, unsigned long)",read_structural,NOTES §156
 002632ec,1984,_Z17ctlmouketeam_mainP7CTLINFO,ctlmouketeam_main(CTLINFO*),read_structural,NOTES §167
 001e5bac,1980,_Z19getskillresult_mainiP12SKILL_RESULT,"getskillresult_main(int, SKILL_RESULT*)",read_structural,NOTES §151
-002b07ac,1980,_ZN11CDebugPrint9FrameStepEiiiij,"CDebugPrint::FrameStep(int, int, int, int, unsigned int)",mentioned_unverified,
+002b07ac,1980,_ZN11CDebugPrint9FrameStepEiiiij,"CDebugPrint::FrameStep(int, int, int, int, unsigned int)",read_structural,NOTES §214
 002c562c,1968,_Z13Settings_Initv,Settings_Init(),read_structural,NOTES §157
 0007f4a8,1960,_tr_flush_block,_tr_flush_block,read_full,NOTES §138
 0010f124,1960,_Z10Wmenu_callPmm,"Wmenu_call(unsigned long*, unsigned long)",read_structural,NOTES §161
@@ -232,7 +232,7 @@ address,size,mangled,demangled,status,section_ref
 00280dfc,1540,_Z19iOS_setStatusHPMPCTP11IOS_STTSNUMiiiiiiiiiPvi,"iOS_setStatusHPMPCT(IOS_STTSNUM*, int, int, int, int, int, int, int, int, int, void*, int)",unread,
 001e6d74,1524,_Z16getreaction_postPt,getreaction_post(unsigned short*),mentioned_unverified,
 0024b988,1524,_Z11ctlbar_mainP7CTLINFO,ctlbar_main(CTLINFO*),read_structural,NOTES §186
-002570f4,1516,_Z16ctltownmenu_mainP7CTLINFO,ctltownmenu_main(CTLINFO*),unread,
+002570f4,1516,_Z16ctltownmenu_mainP7CTLINFO,ctltownmenu_main(CTLINFO*),read_structural,NOTES §215
 00137524,1512,_Z12select_valuev,select_value(),read_structural,NOTES §183
 0007a760,1504,inflate_fast,inflate_fast,read_full,NOTES §182
 00197a10,1504,_Z15jMakeWindowFuncPh,jMakeWindowFunc(unsigned char*),read_structural,NOTES §181
@@ -250,16 +250,16 @@ address,size,mangled,demangled,status,section_ref
 0007d158,1436,inflate_table,inflate_table,read_full,NOTES §203
 00258528,1436,_Z12ctleeff_mainP7CTLINFO,ctleeff_main(CTLINFO*),read_structural,NOTES §207
 00202950,1424,_Z18generateAttackTeamv,generateAttackTeam(),read_structural,NOTES §206
-001077f4,1420,_Z12Wmove_camerav,Wmove_camera(),unread,
-001ec8bc,1416,_Z16getPositionHightP7SVECTORh,"getPositionHight(SVECTOR*, unsigned char)",unread,
-00087700,1412,vorbis_book_decodev_add,vorbis_book_decodev_add,unread,
+001077f4,1420,_Z12Wmove_camerav,Wmove_camera(),read_structural,NOTES §211
+001ec8bc,1416,_Z16getPositionHightP7SVECTORh,"getPositionHight(SVECTOR*, unsigned char)",read_structural,NOTES §213
+00087700,1412,vorbis_book_decodev_add,vorbis_book_decodev_add,read_full,NOTES §210
 0027c7a8,1408,_ZN14iOS_CMenuTouch9execPressEPiS0_S0_P21IOS_MENU_TOUCH_RESULT,"iOS_CMenuTouch::execPress(int*, int*, int*, IOS_MENU_TOUCH_RESULT*)",unread,
 001e1a80,1404,_Z17search_reverse_mpiiiiiPii,"search_reverse_mp(int, int, int, int, int, int*, int)",unread,
 00191498,1400,_Z10eValueFuncPh,eValueFunc(unsigned char*),unread,
 00264458,1400,_Z17ctlnobelstop_mainP7CTLINFO,ctlnobelstop_main(CTLINFO*),unread,
-00250984,1396,_Z15ctlworking_initv,ctlworking_init(),unread,
+00250984,1396,_Z15ctlworking_initv,ctlworking_init(),read_structural,NOTES §216
 00181e10,1392,_Z15bValueFuncShortPs,bValueFuncShort(short*),unread,
-001ee70c,1388,_Z10drawDamageP13tag_animationP5Point,"drawDamage(tag_animation*, Point*)",unread,
+001ee70c,1388,_Z10drawDamageP13tag_animationP5Point,"drawDamage(tag_animation*, Point*)",read_structural,NOTES §212
 001c5208,1384,_Z14ValueFuncShortPs,ValueFuncShort(short*),unread,
 0024ecd0,1384,_Z15ctlpersmes_mainP7CTLINFO,ctlpersmes_main(CTLINFO*),unread,
 00243c9c,1380,_Z17drawListStaffrolli,drawListStaffroll(int),unread,
