@@ -10644,3 +10644,110 @@ vetor de direcao diretamente do dado de posicao de unidade
 (BWORK), sem delegar pra helper de probabilidade/copia -
 consistente com uma variante geometrica/vetorial da familia, nao
 uma variante de selecao de alvo. Marcada read_structural.
+
+
+## 279. Wextend_windowframemain/Wstatusfigprint - confirmam o padrao W mais duas vezes (2026-10-18, Fase 3, regra 2 da metodologia, checagem direta)
+
+family_sim.py contra as bases ja lidas: Wextend_windowframemain
+(0x11e160, 1.288 B) vs extend_windowframemain (secao 252) tem
+Jaccard 0,07; Wstatusfigprint (0x1108a4, 1.156 B) vs statusfigprint
+(secao 254) tem Jaccard 0,33. Ambas chamam seus proprios helpers
+(incluindo 0x161ef0, na mesma faixa de wasmTaskEntry) em vez das
+versoes sem prefixo - mais duas confirmacoes do padrao "W = copia
+real". Marcadas read_structural.
+
+
+## Vigesimo-segundo lote paralelo (secoes 280-285): 6 funcoes lidas por forks simultaneos, usando jtable.py (2026-10-18, Fase 3)
+
+## 280. assumehelpmessage() - tooltip de ajuda do preview de ataque, mesmo padrao de attack_assumechr/face (2026-10-18, Fase 3, lote paralelo)
+
+assumehelpmessage() (0xcb4d0, 1.296 B) - descida recursiva via
+jtable.py: 312 de ~324 instrucoes possiveis (96%), sem tabela de
+salto; 45 branches, 22 de retrocesso. 8 bl distintos.
+
+Dominada por **serchmessagepointer** (x6) mais `pushmessagepacket`/
+`popmessagepacket`, `mallocForFile`/`fileReadRequest`,
+`get_unitwork_add`, `iOS_hook_common`. Mesmo padrao de
+carregamento assincrono de recurso ja visto em `attack_assumechr`/
+`attack_assumeface` (secoes 121/122) - busca/carrega o pacote de
+mensagem de texto de ajuda via stream de arquivo, pra tooltip
+mostrado durante o preview de ataque. Marcada read_structural.
+
+## 281. set_monsterwork(...) - inicializador de BWORK de monstro, delega pra set_monsterwork_j (2026-10-18, Fase 3, lote paralelo)
+
+set_monsterwork(unsigned char*,unsigned char*) (0x1d35a0, 1.156 B)
+- descida recursiva via jtable.py: 279 de ~289 instrucoes possiveis
+(97%), sem tabela de salto; 34 branches, 20 de retrocesso. 17 bl
+distintos.
+
+Delega a maior parte do trabalho real a `set_monsterwork_j` (variante
+"j"), `copy_entry_coord` (x3, posicionamento), `unitwork_init2all`,
+`callSW` (x4, provavel dispatcher de callback de evento scriptado).
+Tambem toca estado de rede (`pspNetGetBattleModeFlag`,
+`_pspNetRand`, `get_netmodeadhoc`, `get_parent_child`), `NewEntry`
+(criacao de entidade no roster de batalha), `get_shape2_plus`/
+`get_pmaxlevel` (dado de forma/nivel de monstro). Confirma ser o
+inicializador real de BWORK de monstro. Tres locais sem simbolo.
+Marcada read_structural.
+
+## 282. SetLoadData(int) - dispatch de slot de save, confirma os primitivos de bitstream ja documentados (2026-10-18, Fase 3, lote paralelo)
+
+SetLoadData(int) (0x184174, 1.276 B) - descida recursiva via
+jtable.py: 283 de ~319 instrucoes possiveis (89%), sem tabela de
+salto; 13 branches, 8 de retrocesso.
+
+Dominada por um local quente (`sub_714b8`, x27 - provavel primitivo
+de copia/desempacote de campo por byte) mais `SetBitStream`/
+`SetBitStream2`/`GetBitStream`/`GetBitStream2` (os MESMOS primitivos
+de `MakeSaveData`/`load_loaddata`, secoes 223/218). Tambem chama
+`pspSaveDataMissionRateLoad` e `Ssd_SetStereo` - confirma ser a
+rotina real de preparacao/dispatch de slot de save, dado um indice,
+que puxa o blob de save pela MESMA API de stream compactado e
+aplica estado de taxa de missao e audio estereo ao finalizar o
+carregamento. Marcada read_structural.
+
+## 283. Link_FrameMove() - confirma a tela de links externos (chama Android_Web_Open) (2026-10-18, Fase 3, lote paralelo, achado chave)
+
+Link_FrameMove() (0x2b4200, 1.152 B) - descida recursiva via
+jtable.py: 271 de ~288 instrucoes possiveis (94%), sem tabela de
+salto; 30 branches, 15 de retrocesso. 27 bl distintos.
+
+**Confirma por nome direto**: chama **Android_Web_Open(char
+const*, int)** - laco de update dirigido a toque combinando
+sondagem de input de baixo nivel, widget de scroll
+(CRECT::FrameMove, CUI_SCROLLBAR::DragBegin/Update/End/FrameMove),
+animacao batched (CSTEP_BATCH), carregamento de texto
+(CFILE_TXT::GetDataAsStr), som, thread (CTHREAD::Register/Sync), e
+transicao (NowLoading_Init/onGotoNextMode). Confirma "Link" como a
+tela de lista rolavel de links (URLs/itens) cuja selecao abre o
+navegador externo Android - provavel tela de links sociais/site
+oficial comum em ports mobile. Tres locais sem simbolo. Marcada
+read_structural.
+
+## 284. JobCicle(...) - passo de animacao de rotacao da roda de emprego (2026-10-18, Fase 3, lote paralelo)
+
+JobCicle(int,int,int,int) (0x1b2560, 1.076 B, nome com erro de
+digitacao real, "cicle" por "cycle") - descida recursiva via
+jtable.py: 255 de ~269 instrucoes possiveis (95%), sem tabela de
+salto; 21 branches, 11 de retrocesso.
+
+Chama GetJobShape, DrawTexFlip, DrawShapeWithShadow, IS_TEX_2X,
+rsin/rcos, CFFT_STATE::GetParam, __divsi3. Confirma "cicle" = ciclo
+de rotacao: anima/avanca um passo da rotacao da roda de troca de
+emprego, recalculando forma, angulo (seno/cosseno), e redesenhando
+o icone de emprego com sombra e flip de textura a cada passo.
+Marcada read_structural.
+
+## 285. DressAuto() - confirma feature de auto-equipar melhor traje (2026-10-18, Fase 3, lote paralelo)
+
+DressAuto() (0x19c918, 1.060 B, termina exatamente onde
+DressSellEquip comeca, secao 233) - descida recursiva via
+jtable.py: 244 de ~265 instrucoes possiveis (92%), sem tabela de
+salto; 15 branches, 7 de retrocesso. 14 bl distintos.
+
+Confirma "auto-equipar melhor equipamento": chama
+**GetTryBestEquip** (secao 194), **ChrPowerCompare** (compara poder/
+stats entre candidatos), Ryoute/SetRyoteFlag (mao dupla), SetSttsEqu2/
+SetSttsPara2 (aplica stats resultantes), CurChrChg2, GetItemPrice,
+e os dialogos iOS_dispOkNg/iOS_getV2Icon/setV2Icon pra feedback de
+UI. Marcada read_structural.

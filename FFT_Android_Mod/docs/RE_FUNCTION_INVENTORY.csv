@@ -275,15 +275,15 @@ address,size,mangled,demangled,status,section_ref
 0027c27c,1324,_ZN14iOS_CMenuTouch7execTapEP21IOS_MENU_TOUCH_RESULTPiS2_S2_,"iOS_CMenuTouch::execTap(IOS_MENU_TOUCH_RESULT*, int*, int*, int*)",read_structural,NOTES §225
 002247a0,1316,_Z14CheckBowResultiP7SVECTORi,"CheckBowResult(int, SVECTOR*, int)",read_structural,NOTES §242
 00081c9c,1300,unzOpenCurrentFile3,unzOpenCurrentFile3,read_full,NOTES §228
-000cb4d0,1296,_Z17assumehelpmessagev,assumehelpmessage(),unread,
+000cb4d0,1296,_Z17assumehelpmessagev,assumehelpmessage(),read_structural,NOTES §280
 001579d4,1296,_Z13addzodiacbackv,addzodiacback(),unread,
 00213228,1292,_Z20requestChangeAnbientiiiii,"requestChangeAnbient(int, int, int, int, int)",read_structural,NOTES §237
 00213898,1292,_Z17requestChangeFlatiiiii,"requestChangeFlat(int, int, int, int, int)",read_structural,NOTES §238
-0011e160,1288,_Z23Wextend_windowframemainiiP6RECT16iii,"Wextend_windowframemain(int, int, RECT16*, int, int, int)",unread,
+0011e160,1288,_Z23Wextend_windowframemainiiP6RECT16iii,"Wextend_windowframemain(int, int, RECT16*, int, int, int)",read_structural,NOTES §279
 0024c89c,1284,_Z12ctlbrst_initv,ctlbrst_init(),unread,
 0011d864,1280,_Z22extend_windowframemainiiP6RECT16iii,"extend_windowframemain(int, int, RECT16*, int, int, int)",read_structural,NOTES §252
 00156054,1276,_Z16disp_floatwindowv,disp_floatwindow(),unread,
-00184174,1276,_Z11SetLoadDatai,SetLoadData(int),unread,
+00184174,1276,_Z11SetLoadDatai,SetLoadData(int),read_structural,NOTES §282
 001a96c8,1272,_Z8ItemSortiPs,"ItemSort(int, short*)",read_structural,NOTES §236
 0027426c,1272,_Z17MainBattleRoutinev,MainBattleRoutine(),read_structural,NOTES §235
 0016e2d8,1264,_Z14ASURA_WorkInitv,ASURA_WorkInit(),read_structural,NOTES §240
@@ -319,11 +319,11 @@ address,size,mangled,demangled,status,section_ref
 000a574c,1176,_ZN15CG2D_LOADER_TGA17TGA_AnalyzeHeaderEPv,CG2D_LOADER_TGA::TGA_AnalyzeHeader(void*),unread,
 001e3500,1160,_Z15search_force_mpiP7SVECTOR,"search_force_mp(int, SVECTOR*)",read_structural,NOTES §278
 00283a50,1160,_Z13GLIVON_F4_oldPmP10tagPOLY_F4sP15VECTOR_DATABASE,"GLIVON_F4_old(unsigned long*, tagPOLY_F4*, short, VECTOR_DATABASE*)",unread,
-001108a4,1156,_Z15WstatusfigprintiiPcP9COPYFIELD,"Wstatusfigprint(int, int, char*, COPYFIELD*)",unread,
+001108a4,1156,_Z15WstatusfigprintiiPcP9COPYFIELD,"Wstatusfigprint(int, int, char*, COPYFIELD*)",read_structural,NOTES §279
 001acf38,1156,_Z11DrawTexFlipPsP5COLORciii,"DrawTexFlip(short*, COLOR*, char, int, int, int)",unread,
-001d35a0,1156,_Z15set_monsterworkPhS_,"set_monsterwork(unsigned char*, unsigned char*)",unread,
+001d35a0,1156,_Z15set_monsterworkPhS_,"set_monsterwork(unsigned char*, unsigned char*)",read_structural,NOTES §281
 00241a60,1152,_Z11pmkprim_puti,pmkprim_put(int),unread,
-002b4200,1152,_Z14Link_FrameMovev,Link_FrameMove(),unread,
+002b4200,1152,_Z14Link_FrameMovev,Link_FrameMove(),read_structural,NOTES §283
 000a0df0,1140,ov_read_filter,ov_read_filter,read_full,NOTES §272
 00244974,1140,_Z15create_rolllinePh,create_rollline(unsigned char*),unread,
 00194e04,1132,_Z9JobStatusv,JobStatus(),read_structural,NOTES §277
@@ -338,9 +338,9 @@ address,size,mangled,demangled,status,section_ref
 000b1448,1080,_ZN14CEGL_COLLISION20IsVertexInTriangle3DEN4math7VECTOR3IfEES2_S2_S2_,"CEGL_COLLISION::IsVertexInTriangle3D(math::VECTOR3<float>, math::VECTOR3<float>, math::VECTOR3<float>, math::VECTOR3<float>)",unread,
 00285084,1080,_Z22pspBattleEntryAreaMakeii,"pspBattleEntryAreaMake(int, int)",unread,
 001a2f68,1080,_Z14PoachSellValuev,PoachSellValue(),unread,
-001b2560,1076,_Z8JobCicleiiii,"JobCicle(int, int, int, int)",unread,
+001b2560,1076,_Z8JobCicleiiii,"JobCicle(int, int, int, int)",read_structural,NOTES §284
 001a4338,1072,_Z9SellValuev,SellValue(),unread,
-0019c918,1060,_Z9DressAutov,DressAuto(),unread,
+0019c918,1060,_Z9DressAutov,DressAuto(),read_structural,NOTES §285
 001a2b44,1060,_Z9PoachSellv,PoachSell(),unread,
 002435f0,1060,_Z13vEnd_rollinitv,vEnd_rollinit(),unread,
 00199fd8,1056,_Z8BuyValuev,BuyValue(),unread,
