@@ -9394,3 +9394,134 @@ retrocessos) com correção de coordenada UV de textura de mapa
 aplicada via `pspMapTexUVCorrect`, não uma cópia de memória pura —
 liga ao mesmo subsistema de textura de mapa já tocado por
 `ASHURA_MapProjectMem2Mem` (seção 112). Marcada `read_structural`.
+
+
+## Lote de checagens diretas (seções 189–197): 9 funções lidas pelo coordenador sem fork, enquanto o limite de sessão de subagente não libera (2026-10-18, Fase 3)
+
+## 189. `_vp_tonemask` — mais um interno de `libvorbis` reconhecido por nome (2026-10-18, Fase 3, regra 6 da metodologia)
+
+`_vp_tonemask` (`0x94e54`, 1.480 B) — checagem direta via
+`jtable.py`: **100% de cobertura**, zero tabela de salto, catálogo
+de `bl` é só runtime de ponto flutuante do compilador
+(`__subdf3`/`__muldf3`/`__addsf3`/`__aeabi_fcmpgt`/etc.) e dois
+locais sem símbolo na faixa `0x7xxxx`/`0x9xxxx` — parte do modelo
+psicoacústico da `libvorbis` (mesma família de `_vp_psy_init`,
+seção 102). Marcada `read_full` sem passe completo.
+
+## 190. `RoundHelpMessage(short)` — navegação cíclica por mensagens de ajuda via cursor (2026-10-18, Fase 3, lote direto)
+
+`RoundHelpMessage(short)` (`0x1b7270`, 1.836 B) — descida recursiva
+direta: **422 de ~459 instruções possíveis (92%)**, sem tabela de
+salto; **56 branches, 31 de retrocesso**. 12 `bl` distintos.
+
+Chama **`HelpMessage(int)`** (delega a exibição real do texto),
+`CursolFunc`/`CursolDownFunc` (navegação de cursor), `WindowPrioritySet`,
+hit-rect de toque (`iOS_ClearRectHit`/`SetRectHit`), ícone V2. "Round"
+aqui parece significar percorrer um CICLO de mensagens de ajuda via
+cursor (próxima/anterior), não uma função de arredondamento
+numérico. Marcada `read_structural`.
+
+## 191. `displayDirection()` — indicador de direção ligado a arrasto de toque (2026-10-18, Fase 3, lote direto)
+
+`displayDirection()` (`0x1f5420`, 1.840 B) — descida recursiva
+direta: **450 de ~460 instruções possíveis (98%)**, sem tabela de
+salto; **9 branches, 6 de retrocesso**. 9 `bl` distintos.
+
+Chama `ASHURA_getOTptrZ`/`AddPrim`/`GetClut` (desenho via motor
+ASHURA), `searchCurrentAnimation`/`setPanelPriority`/
+`setShortVector`, `iOS_GetFrameRate`, e, achado chave,
+**`iOS_getDirectionTapDir()`** — confirma que é um indicador visual
+de direção amarrado ao input de arrasto de toque (provavelmente a
+seta/indicador de direção de movimento). Divisão inteira pesada
+(×10) consistente com normalização de ângulo/vetor. Marcada
+`read_structural`.
+
+## 192. `displayShape(tag_animation*)` — dispatcher real de desenho de forma de animação, com setup GTE completo (2026-10-18, Fase 3, lote direto)
+
+`displayShape(tag_animation*)` (`0x1f25d4`, 1.796 B) — descida
+recursiva direta: **441 de ~449 instruções possíveis (98%)**, sem
+tabela de salto; **34 branches, 14 de retrocesso**. 12 `bl`
+distintos.
+
+Chama **`drawItem(tag_animation*)`** e **`drawDamage(tag_animation*,
+Point*)`** — confirma ser o dispatcher real que decide desenhar
+ícone de item OU número de dano (entre outros) por quadro de
+animação — mais `ASHURA_matrix`/`ASHURA_getOTptrZ` (×9)/
+`searchAnimationByID`/`SetRotMatrix`/`SetTransMatrix`/
+`SetGeomOffset`/`SetGeomScreen` (setup de transformação GTE
+completo). Dois locais sem símbolo, um chamado ×8. Marcada
+`read_structural`.
+
+## 193. `executeAnimationStatus(tag_animation*)` — máquina de estado de física/altura por quadro, densidade de laço extrema (2026-10-18, Fase 3, lote direto)
+
+`executeAnimationStatus(tag_animation*)` (`0x1eda18`, 1.768 B) —
+descida recursiva direta: **420 de ~442 instruções possíveis
+(95%)**; **uma tabela de salto resolvida** (8 casos, 5 handlers
+distintos); **98 branches, 62 de retrocesso** — densidade de
+retrocesso altíssima (63%) pra um tamanho pequeno.
+
+Catálogo mínimo (`get_mapstp`, `getAnimationHight` ×2,
+`iOS_GetFrameRate` ×4) mas a proporção de laço extrema sugere uma
+máquina de estado de física/altura avançada quadro a quadro
+(checagem de altura de terreno vs. altura de animação — provável
+lógica de queda/pulo/aterrissagem). Dois locais sem símbolo.
+Marcada `read_structural`.
+
+## 194. `GetTryBestEquip(short, short, short*)` — variante de "tentar melhor equipamento" sobre inventário de LOJA, não o possuído (2026-10-18, Fase 3, lote direto)
+
+`GetTryBestEquip(short, short, short*)` (`0x1aaa24`, 1.760 B) —
+descida recursiva direta: **432 de ~440 instruções possíveis
+(98%)**, sem tabela de salto; **53 branches, 23 de retrocesso**. 7
+`bl` distintos.
+
+Catálogo quase idêntico ao de `GetBestEquip` (seção 173:
+`Nitoryu`/`Ryoute`/`ItemSort`/`pspItemIsBarehand`/
+`pspItemGetWeaponData`/`pspItemIsType`), mas troca `GetItemList`
+(inventário possuído) por **`GetShopItemList`** e NÃO chama
+`ItemChg` (não comita a troca). **Confirma ser a variante "tentar"**:
+avalia se um item de LOJA seria o melhor equipamento, sem aplicar a
+troca — provavelmente alimenta uma UI de recomendação de compra.
+Marcada `read_structural`.
+
+## 195. `move_camera()` — task real de movimento de câmera com matemática de ponto fixo 64-bit (2026-10-18, Fase 3, lote direto)
+
+`move_camera()` (`0xde724`, 1.448 B) — descida recursiva direta:
+**354 de ~362 instruções possíveis (98%)**, sem tabela de salto;
+**31 branches, 21 de retrocesso**. 8 `bl` distintos.
+
+Task real (`settaskkind`, `asmTaskEntry`, `asmGetInput1`) dominada
+por **`asmMUL64(long,long,long)`** (×9, multiplicação de ponto fixo
+64-bit — matemática de interpolação suave), com
+`write_eventflag`/`read_eventflag` (provavelmente sinaliza quando o
+movimento de câmera termina) e `iOS_GetFrameRate` (ciente de taxa
+de quadro). Confirma ser a task real de movimento de câmera de
+cutscene/evento. Marcada `read_structural`.
+
+## 196. `SetUnitParameter(int)` — setter de parâmetro de unidade por tipo, tabela de 5 casos (2026-10-18, Fase 3, lote direto)
+
+`SetUnitParameter(int)` (`0x27a3bc`, 1.464 B) — descida recursiva
+direta: **356 de ~366 instruções possíveis (97%)**; **uma tabela de
+salto resolvida** (5 casos, 5 handlers distintos); **42 branches, 22
+de retrocesso**. 6 `bl` distintos.
+
+Chama `SetTmp_UA(UnitAction*)` (já visto no núcleo de IA de
+`ForAutoCommand`, seção 150), `MemCpyB`, `pspItemIsEmpty` — setter
+de parâmetro de unidade despachado por tipo (5 casos), provavelmente
+usado na preparação de ação de IA/batalha. Três locais sem símbolo.
+Marcada `read_structural`.
+
+## 197. `set_unitdata(int)` — inicializa registro de dado de batalha de unidade, toca ponteiro de mensagem `W` (2026-10-18, Fase 3, lote direto)
+
+`set_unitdata(int)` (`0x1dbcec`, 1.456 B) — descida recursiva
+direta: **360 de ~364 instruções possíveis (99%)**, sem tabela de
+salto; **40 branches, 23 de retrocesso**. 5 `bl` distintos.
+
+Chama **`Wserchmessagepointer(int)`** (achado notável — uma função
+de batalha chamando um primitivo `W`-prefixado de busca de ponteiro
+de mensagem, cruzando pra o contexto de task `wasm` normalmente
+visto só em telas de UI), `get_unitwork_add(int)` (dado de trabalho
+de unidade de batalha), e `clear_cmemory(void*,int)` (×6, limpeza de
+memória). Dois locais sem símbolo, um chamado ×8. Consistente com
+inicializar o registro de dado de batalha de uma unidade, limpando
+memória e configurando ponteiro de mensagem de status. Marcada
+`read_structural`.

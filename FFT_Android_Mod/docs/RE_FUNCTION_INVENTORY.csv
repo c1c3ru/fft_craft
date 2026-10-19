@@ -178,17 +178,17 @@ address,size,mangled,demangled,status,section_ref
 0008b594,1860,floor1_encode,floor1_encode,read_full,NOTES §145
 000aa190,1860,_ZN8CEGL2_IF10DrawPacketEii,"CEGL2_IF::DrawPacket(int, int)",read_full,NOTES §13.1
 00231570,1852,_Z7Mdl0005siii,"Mdl0005(short, int, int, int)",read_structural,NOTES §101
-001f5420,1840,_Z16displayDirectionv,displayDirection(),unread,
-001b7270,1836,_Z16RoundHelpMessages,RoundHelpMessage(short),unread,
+001f5420,1840,_Z16displayDirectionv,displayDirection(),read_structural,NOTES §191
+001b7270,1836,_Z16RoundHelpMessages,RoundHelpMessage(short),read_structural,NOTES §190
 00276e4c,1828,_Z24CheckUnitActionEffectiveii,"CheckUnitActionEffective(int, int)",read_structural,NOTES §160
 00174aa0,1800,_Z15cMakeWindowFuncPh,cMakeWindowFunc(unsigned char*),read_structural,NOTES §181
-001f25d4,1796,_Z12displayShapeP13tag_animation,displayShape(tag_animation*),unread,
+001f25d4,1796,_Z12displayShapeP13tag_animation,displayShape(tag_animation*),read_structural,NOTES §192
 00187920,1784,_Z8eDB_initP2DBPmP10tagPOLY_F3P11tagPOLY_FT3P10tagPOLY_F4P11tagPOLY_FT4P10tagPOLY_G3P11tagPOLY_GT3P10tagPOLY_G4P11tagPOLY_GT4P10tagLINE_F2P10tagLINE_F3P10tagLINE_F4P10tagLINE_G2P10tagLINE_G3P9tagLINEG4P7tagTILEP9tagTILE_1P9tagTILE_8P10tagTILE_16P7tagSPRTP9tagSPRT_8P10tagSPRT_16P7DR_MOVEP7DR_AREAP7DR_MODE,"eDB_init(DB*, unsigned long*, tagPOLY_F3*, tagPOLY_FT3*, tagPOLY_F4*, tagPOLY_FT4*, tagPOLY_G3*, tagPOLY_GT3*, tagPOLY_G4*, tagPOLY_GT4*, tagLINE_F2*, tagLINE_F3*, tagLINE_F4*, tagLINE_G2*, tagLINE_G3*, tagLINEG4*, tagTILE*, tagTILE_1*, tagTILE_8*, tagTILE_16*, tagSPRT*, tagSPRT_8*, tagSPRT_16*, DR_MOVE*, DR_AREA*, DR_MODE*)",read_full,NOTES §153
 000a2c4c,1780,_ZN15CG2D_LOADER_BMP4SaveEPviiP9_G2D_SAVE,"CG2D_LOADER_BMP::Save(void*, int, int, _G2D_SAVE*)",mentioned_unverified,
 00282f48,1776,_Z14GLIVON_FT3_oldPmP11tagPOLY_GT3siPt,"GLIVON_FT3_old(unsigned long*, tagPOLY_GT3*, short, int, unsigned short*)",read_structural,NOTES §154
 001b7f68,1768,_Z6GetPadv,GetPad(),read_structural,NOTES §176
-001eda18,1768,_Z22executeAnimationStatusP13tag_animation,executeAnimationStatus(tag_animation*),unread,
-001aaa24,1760,_Z15GetTryBestEquipssPs,"GetTryBestEquip(short, short, short*)",unread,
+001eda18,1768,_Z22executeAnimationStatusP13tag_animation,executeAnimationStatus(tag_animation*),read_structural,NOTES §193
+001aaa24,1760,_Z15GetTryBestEquipssPs,"GetTryBestEquip(short, short, short*)",read_structural,NOTES §194
 000f07c0,1752,_Z17disp_selectwindowv,disp_selectwindow(),read_structural,NOTES §172
 00231cac,1744,_Z7Mdl0006siii,"Mdl0006(short, int, int, int)",read_structural,NOTES §101
 00257e5c,1740,_Z12ctleeff_drawP4GsOT,ctleeff_draw(GsOT*),mentioned_unverified,
@@ -238,14 +238,14 @@ address,size,mangled,demangled,status,section_ref
 00197a10,1504,_Z15jMakeWindowFuncPh,jMakeWindowFunc(unsigned char*),read_structural,NOTES §181
 00165520,1500,_Z15ASURA_FALL_INITh,ASURA_FALL_INIT(unsigned char),unread,
 001a6d00,1496,_Z7Dismissv,Dismiss(),unread,
-00094e54,1480,_vp_tonemask,_vp_tonemask,unread,
+00094e54,1480,_vp_tonemask,_vp_tonemask,read_full,NOTES §189
 0019cd3c,1480,_Z14DressSellEquipv,DressSellEquip(),unread,
 00218060,1480,_Z22ExecuteEffectAnimationP15effectAnimationccc,"ExecuteEffectAnimation(effectAnimation*, char, char, char)",unread,
 00199a1c,1468,_Z3Buyv,Buy(),unread,
-0027a3bc,1464,_Z16SetUnitParameteri,SetUnitParameter(int),mentioned_unverified,
-001dbcec,1456,_Z12set_unitdatai,set_unitdata(int),mentioned_unverified,
+0027a3bc,1464,_Z16SetUnitParameteri,SetUnitParameter(int),read_structural,NOTES §196
+001dbcec,1456,_Z12set_unitdatai,set_unitdata(int),read_structural,NOTES §197
 0021f5e4,1456,_Z15p02_hitMarkFuncv,p02_hitMarkFunc(),unread,
-000de724,1448,_Z11move_camerav,move_camera(),unread,
+000de724,1448,_Z11move_camerav,move_camera(),read_structural,NOTES §195
 001f0550,1448,_Z15setShapeDataSubP13tag_animationP12subAnimationtt,"setShapeDataSub(tag_animation*, subAnimation*, unsigned short, unsigned short)",unread,
 0007d158,1436,inflate_table,inflate_table,unread,
 00258528,1436,_Z12ctleeff_mainP7CTLINFO,ctleeff_main(CTLINFO*),unread,
