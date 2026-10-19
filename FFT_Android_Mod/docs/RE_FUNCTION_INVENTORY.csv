@@ -122,9 +122,9 @@ address,size,mangled,demangled,status,section_ref
 000d5d6c,2288,_Z20make_abilitylistmaini,make_abilitylistmain(int),read_structural,NOTES §128
 000fd318,2288,_Z21Wmake_abilitylistmaini,Wmake_abilitylistmain(int),read_structural,NOTES §130
 001d59fc,2288,_Z10time_fliesi,time_flies(int),read_structural,NOTES §136
-00124078,2284,_Z13Wselect_valuev,Wselect_value(),unread,
+00124078,2284,_Z13Wselect_valuev,Wselect_value(),read_structural,NOTES §198
 0024d068,2272,_Z12ctlbrst_mainP7CTLINFO,ctlbrst_main(CTLINFO*),read_structural,NOTES §125
-00124964,2260,_Z24Wselect_valuewithmessagev,Wselect_valuewithmessage(),unread,
+00124964,2260,_Z24Wselect_valuewithmessagev,Wselect_valuewithmessage(),read_structural,NOTES §198
 000a98c8,2248,_ZN8CEGL2_IF9DrawTile4EffffPjf,"CEGL2_IF::DrawTile4(float, float, float, float, unsigned int*, float)",read_full,NOTES §14.2
 000e062c,2240,_Z19drawmessagepolygonsv,drawmessagepolygons(),read_structural,NOTES §137
 001ebffc,2240,_Z13getShadowRectP13tag_animation,getShadowRect(tag_animation*),read_structural,NOTES §139
@@ -192,8 +192,8 @@ address,size,mangled,demangled,status,section_ref
 000f07c0,1752,_Z17disp_selectwindowv,disp_selectwindow(),read_structural,NOTES §172
 00231cac,1744,_Z7Mdl0006siii,"Mdl0006(short, int, int, int)",read_structural,NOTES §101
 00257e5c,1740,_Z12ctleeff_drawP4GsOT,ctleeff_draw(GsOT*),mentioned_unverified,
-0011661c,1736,_Z18Wdisp_selectwindowv,Wdisp_selectwindow(),unread,
-0017a42c,1732,_Z17bRoundHelpMessagesh,"bRoundHelpMessage(short, unsigned char)",unread,
+0011661c,1736,_Z18Wdisp_selectwindowv,Wdisp_selectwindow(),read_structural,NOTES §198
+0017a42c,1732,_Z17bRoundHelpMessagesh,"bRoundHelpMessage(short, unsigned char)",read_structural,NOTES §198
 0019a3f8,1716,_Z7BuyUnitv,BuyUnit(),read_structural,NOTES §185
 00233ed0,1712,_Z7Mdl0008siii,"Mdl0008(short, int, int, int)",read_structural,NOTES §101
 000d071c,1708,_Z16Ddisp_parawindowv,Ddisp_parawindow(),read_structural,NOTES §181
@@ -205,7 +205,7 @@ address,size,mangled,demangled,status,section_ref
 00137b10,1676,_Z23select_valuewithmessagev,select_valuewithmessage(),read_structural,NOTES §171
 0017aaf0,1672,_Z7bGetPadv,bGetPad(),read_structural,NOTES §181
 000c3d94,1668,_Z16Adisp_parawindowv,Adisp_parawindow(),read_structural,NOTES §181
-00133560,1668,_Z19Wdisp_abilitywindowv,Wdisp_abilitywindow(),unread,
+00133560,1668,_Z19Wdisp_abilitywindowv,Wdisp_abilitywindow(),read_structural,NOTES §198
 0014a834,1668,_Z16Cdisp_parawindowv,Cdisp_parawindow(),read_structural,NOTES §181
 00180b64,1652,_Z15bMakeWindowFuncPh,bMakeWindowFunc(unsigned char*),read_structural,NOTES §181
 00190b98,1652,_Z15eMakeWindowFuncPh,eMakeWindowFunc(unsigned char*),read_structural,NOTES §181

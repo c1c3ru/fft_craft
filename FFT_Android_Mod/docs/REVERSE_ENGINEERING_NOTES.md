@@ -9525,3 +9525,23 @@ memória). Dois locais sem símbolo, um chamado ×8. Consistente com
 inicializar o registro de dado de batalha de uma unidade, limpando
 memória e configurando ponteiro de mensagem de status. Marcada
 `read_structural`.
+
+
+## 198. `Wselect_value`/`Wselect_valuewithmessage`/`Wdisp_selectwindow`/`Wdisp_abilitywindow`/`bRoundHelpMessage` — cinco confirmações de letra via `family_sim.py` direto (2026-10-18, Fase 3, regra 2 da metodologia, checagem direta sem fork)
+
+```
+Wselect_value             0x124078  2.284 B   Jaccard 0,08 (vs select_value, §183)
+Wselect_valuewithmessage  0x124964  2.260 B   Jaccard 0,05 (vs select_valuewithmessage, §171)
+Wdisp_selectwindow        0x11661c  1.736 B   Jaccard 0,41 (vs disp_selectwindow, §172)
+Wdisp_abilitywindow       0x133560  1.668 B   Jaccard 0,10 (vs Edisp_abilitywindow, §184)
+bRoundHelpMessage         0x17a42c  1.732 B   Jaccard 0,20 (vs RoundHelpMessage, §190)
+```
+As quatro primeiras confirmam o padrão `W` = cópia real pela
+enésima vez (todas chamam `wasmTaskEntry`/helpers `W`-prefixados
+próprios em vez dos sem prefixo). **Nota**: `Wselect_value` e
+`Wselect_valuewithmessage` têm **uma tabela de salto NÃO resolvida**
+cada (`jt_unresolved=1`) — ficam como pendência pra extração manual
+futura se o detalhe importar. `bRoundHelpMessage` confirma o padrão
+"toda letra é cópia completa" da seção 181 pra mais uma família
+(`b`), com Jaccard baixo e conjunto de helper totalmente próprio.
+Todas marcadas `read_structural`.
