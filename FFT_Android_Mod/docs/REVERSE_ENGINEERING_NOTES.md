@@ -10463,3 +10463,85 @@ customiza temporariamente a gravidade e densidade do ar da
 simulacao de fisica (empilhando o valor original pra restaurar
 depois), junto com o sistema de objeto permanente ja documentado
 (createPermanentObject, secao 158). Marcada read_structural.
+
+
+## Vigesimo lote paralelo (secoes 267-271): 5 funcoes lidas por forks simultaneos, usando jtable.py (2026-10-18, Fase 3, primeiro lote apos o limite de sessao liberar)
+
+## 267. CG2D_LOADER_BMP::Save(...) - codificador BMP real, escritor de thumbnail de save (2026-10-18, Fase 3, lote paralelo)
+
+CG2D_LOADER_BMP::Save(void*,int,int,_G2D_SAVE*) (0xa2c4c, 1.780 B)
+- descida recursiva via jtable.py: 414 de ~445 instrucoes possiveis
+(93%); duas tabelas de salto resolvidas (4 casos/4 handlers; 7
+casos/7 handlers); 30 branches, 26 de retrocesso.
+
+Chama GetSavePixelFormatData (despacha por formato de pixel via as
+duas tabelas), e dirige I/O de arquivo real via CFILE_UTIL::
+FileCreate/FileDelete e CFILE::CFILE/Open/Write/~CFILE. Confirma
+ser o codificador BMP real - a contraparte de escrita de
+CG2D_LOADER_BMP::Copy (secao 205). Com _G2D_SAVE* como parametro,
+consistente com o escritor de thumbnail de save/screenshot. Cinco
+locais sem simbolo. Marcada read_structural.
+
+## 268. search_reverse_mp(...) - laco de busca de alvo pra efeito de MP revertido/refletido (2026-10-18, Fase 3, lote paralelo)
+
+search_reverse_mp(int,int,int,int,int,int*,int) (0x1e1a80, 1.404 B)
+- descida recursiva via jtable.py: 336 de ~351 instrucoes possiveis
+(96%), sem tabela de salto; 27 branches, 14 de retrocesso (>50% de
+retrocesso).
+
+Chama copy_struct_data (x2, copia dado de unidade candidata pra
+buffer de resultado), JudgeTimeOut() (guarda de limite de tempo
+tipico de laco de sequencia de batalha), mais varios locais sem
+simbolo (checagens de elegibilidade/distancia). Consistente com um
+laco de busca escaneando candidatos e copiando dado da unidade que
+bate pra fora - confirma a hipotese "buscar alvo pra aplicar efeito
+de MP revertido/refletido". Marcada read_structural.
+
+## 269. ctlnobelstop_main(CTLINFO*) - corrige a hipotese de nome: e o encerramento do modo "novel" (narracao de cutscene), nao um minigame de livro (2026-10-18, Fase 3, lote paralelo)
+
+ctlnobelstop_main(CTLINFO*) (0x264458, 1.400 B) - descida
+recursiva via jtable.py: 333 de ~350 instrucoes possiveis (95%),
+sem tabela de salto; 29 branches, 18 de retrocesso. 21 bl distintos.
+
+**Corrige a hipotese inicial**: "nobel" nao e um livro/biblioteca -
+o catalogo (iOSSdNovelClear, iOSNovelModeRestore,
+Ssd_DisposeEffectData, ssd_request, sound_request,
+stop_adventuremessage) confirma que e ligado ao sistema "Novel"/SSD
+do jogo (sequencias de narracao em modo texto com efeito sonoro
+associado) - "nobelstop" = "novel stop" (provavel transliteracao),
+o estagio de encerramento/limpeza do modo novel: limpa estado de
+novel, descarta dado de efeito SSD, para som/efeito, restaura modo
+novel, gerencia a UI de menu de toque, e transiciona pra
+sub-controladores (ctlzodiac_init, ctlhelp2_init, wldctl_active,
+ctlnblwldinfo_init), delegando limpeza final a
+ctlnobelstop_deactive. Marcada read_structural.
+
+## 270. ctlpersmes_main(CTLINFO*) - tela de mensagem pessoal/bio de personagem com retrato (2026-10-18, Fase 3, lote paralelo)
+
+ctlpersmes_main(CTLINFO*) (0x24ecd0, 1.384 B) - descida recursiva
+via jtable.py: 332 de ~346 instrucoes possiveis (96%), sem tabela
+de salto; 23 branches, 8 de retrocesso. 15 bl distintos.
+
+Reusa o subsistema generico de janela de texto `pagewin_init`/
+`pagewin_main`, toca renderizacao de rosto/retrato (Wfaceuvclut,
+iOS_setFaceDataID/CLUT, iOS_setV2Icon, CFFT_STATE::
+WorldFaceIDToFaceID), le/escreve flag de evento e status de
+aventura (gate de progresso de historia), e chama
+**ctlperson_init()**. Confirma "persmes" = "mensagem pessoal" - uma
+tela de bio/mensagem pessoal de personagem mostrada com retrato,
+sobre o sistema de janela de pagina compartilhado, com gate por
+flag de evento/status de aventura (provavel condicao de
+desbloqueio do texto de perfil). Marcada read_structural.
+
+## 271. drawListStaffroll(int) - rotina de desenho por quadro da lista de creditos (2026-10-18, Fase 3, lote paralelo)
+
+drawListStaffroll(int) (0x243c9c, 1.380 B) - descida recursiva via
+jtable.py: 334 de ~345 instrucoes possiveis (97%), sem tabela de
+salto; 24 branches, 12 de retrocesso. Opera direto sobre as
+estruturas `tagLIST_STAFFROLL`/`tagSTAFFROLL` (chama seu
+`DeleteData` diretamente), le/escreve `CFFT_STATE` (5 de 7
+chamadas), checa `IS_TEX_2X()`, libera memoria via `xpFree`.
+Confirma ser a rotina de desenho por quadro da lista de nome/funcao
+dos creditos que rola na tela, parte do mesmo subsistema de
+`ctlendroll_main`/`vEnd_rollproc` (secao 124). Marcada
+read_structural.
