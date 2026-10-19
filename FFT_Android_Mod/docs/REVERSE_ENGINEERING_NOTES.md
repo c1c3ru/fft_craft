@@ -10545,3 +10545,102 @@ Confirma ser a rotina de desenho por quadro da lista de nome/funcao
 dos creditos que rola na tela, parte do mesmo subsistema de
 `ctlendroll_main`/`vEnd_rollproc` (secao 124). Marcada
 read_structural.
+
+
+## 272. ov_read_filter - interno de libvorbisfile reconhecido por nome (2026-10-18, Fase 3, regra 6 da metodologia)
+
+ov_read_filter (0xa0df0, 1.140 B) - checagem direta: 100% de
+cobertura, catalogo de bl inclui vorbis_synthesis_pcmout/read/
+halfrate_p - API real de libvorbisfile. Marcada read_full.
+
+
+## Vigesimo-primeiro lote paralelo (secoes 273-278): 6 funcoes lidas por forks simultaneos, usando jtable.py (2026-10-18, Fase 3)
+
+## 273. DressRemove() - tela de desequipar traje, confirma a ausencia de ChgMoney (nao e venda) (2026-10-18, Fase 3, lote paralelo)
+
+DressRemove() (0x19bfdc, 1.360 B) - descida recursiva via
+jtable.py: 316 de ~340 instrucoes possiveis (93%), sem tabela de
+salto; 26 branches, 13 de retrocesso. 20 bl distintos.
+
+Toca checagem de validade de equipamento (IsItemEquip,
+PowerCompare, GetItemPrice), sistema de stats (SetSttsPara2 x3,
+IsDark), e o ciclo de vida completo de iOS_CMenuTouch, SEM chamar
+ChgMoney (diferente de DressSellEquip, secao 233). Confirma ser a
+tela de desequipar/remover traje - revalida/recalcula stats apos
+remover um item de Dress sem transacao monetaria. Marcada
+read_structural.
+
+## 274. PoachBuyValue() - helper real de preco/valor atras de PoachBuy, confirma ChgMoney/ChgShopStockItem (2026-10-18, Fase 3, lote paralelo)
+
+PoachBuyValue() (0x1a39dc, 1.240 B) - descida recursiva via
+jtable.py: 286 de ~310 instrucoes possiveis (92%), sem tabela de
+salto; 22 branches, 11 de retrocesso. 16 bl distintos.
+
+Chama ChgMoney(int) (x2), ItemChg, GetItemPrice (x2), GetTotalItem,
+**ChgShopStockItem(short,int)** (x2, atualiza estoque de loja!),
+RefleshItemUserSort, GetShopItemList, mais UI de janela/mensagem e
+a camada de task W. Confirma ser a logica real de preco/valor atras
+da tela PoachBuy (secao 201) - computa preco, aplica a mudanca de
+dinheiro e estoque, e atualiza a UI da transacao. Marcada
+read_structural.
+
+## 275. search_root(...) - busca de fonte raiz de efeito encadeado, gated por probabilidade (2026-10-18, Fase 3, lote paralelo)
+
+search_root(int,int,int,int) (0x1e3f20, 1.224 B) - descida
+recursiva via jtable.py: 291 de ~306 instrucoes possiveis (95%),
+sem tabela de salto; 27 branches, 8 de retrocesso. Unico bl
+nomeado: **check_prob(int,int)** (checagem de probabilidade/RNG) -
+os outros 5 sao locais sem simbolo, nenhum sobrepondo com
+copy_struct_data/JudgeTimeOut de search_reverse_mp (secao 268) -
+confirma usar um conjunto de helper DISTINTO (provavel navegacao de
+grade/lista encadeada), gated por probabilidade em vez do padrao de
+timeout explicito do irmao reverse_mp. Marcada read_structural.
+
+## 276. setskilldata_common(ACT*, ACT*, int) - helper compartilhado de copia/merge ACT-pra-ACT, tabela de 13 casos (2026-10-18, Fase 3, lote paralelo, achado chave)
+
+setskilldata_common(ACT*,ACT*,int) (0x1e64c4, 1.128 B) - descida
+recursiva via jtable.py: 259 de ~282 instrucoes possiveis (92%);
+uma tabela de salto resolvida (13 casos, 12 handlers distintos); 41
+branches, 22 de retrocesso.
+
+Dominada por **copyACTst(ACT*,ACT*)** (x8!) gated pela tabela de 13
+casos (switch no terceiro parametro int, provavel seletor de
+categoria de habilidade) - cada caso copia um subconjunto diferente
+de campo do ACT fonte pro ACT destino. Tambem chama
+set_casting_status, dec_party_item+pspItemGetCommonData (consumo de
+item pra habilidade baseada em item), get_fusui_ability. **Confirma
+ser o helper real de merge de dado por categoria invocado pela
+cadeia setskilldata de getreaction_post** (secao 232) - copia dado
+de habilidade de uma ACT original pra uma ACT derivada/de reacao,
+ramificando por categoria pra tambem disparar consumo de item e
+efeitos colaterais de status/habilidade. Marcada read_structural.
+
+## 277. JobStatus() - tela interativa real de status de emprego em batalha, familia de contexto `j` (2026-10-18, Fase 3, lote paralelo)
+
+JobStatus() (0x194e04, 1.132 B, termina exatamente onde AbiStts
+comeca, secao 187) - descida recursiva via jtable.py: 259 de ~283
+instrucoes possiveis (92%), sem tabela de salto; 18 branches, 10 de
+retrocesso. 21 bl distintos.
+
+Confirma pertencer a MESMA familia de contexto `j` (BattleJobStts/
+AbiStts, secoes 245/187): chama jGetJobList, jWindowInit2,
+jDrawWindow2, jSetWindowPosition/jGetWindowPosition, mais o ciclo
+completo de iOS_CMenuTouch, GetLocalJobNumber, iOS_getMasaCdbOt,
+iOS_setCursorDisp (x4), pspMsgGet. E a tela real interativa de
+status/selecao de emprego, distinta de AbiStts (exibicao de
+habilidade) - BattleJobStts invoca as duas como telas paralelas no
+fluxo de UI de status de emprego. Quatro locais sem simbolo.
+Marcada read_structural.
+
+## 278. search_force_mp(int, SVECTOR*) - variante geometrica/vetorial da familia search_*, quase auto-contida (2026-10-18, Fase 3, lote paralelo)
+
+search_force_mp(int,SVECTOR*) (0x1e3500, 1.160 B) - descida
+recursiva via jtable.py: 282 de ~290 instrucoes possiveis (97%),
+sem tabela de salto; 31 branches, 12 de retrocesso. **Unico bl**:
+get_coord_address(BWORK*). Diferente de search_reverse_mp
+(copy_struct_data/JudgeTimeOut) e search_root (check_prob), esta
+variante e quase totalmente auto-contida - deriva uma coordenada/
+vetor de direcao diretamente do dado de posicao de unidade
+(BWORK), sem delegar pra helper de probabilidade/copia -
+consistente com uma variante geometrica/vetorial da familia, nao
+uma variante de selecao de alvo. Marcada read_structural.
