@@ -144,7 +144,7 @@ address,size,mangled,demangled,status,section_ref
 0023837c,2096,_Z7Mdl0012siii,"Mdl0012(short, int, int, int)",read_structural,NOTES §101
 000a42d8,2084,_ZN15CG2D_LOADER_BMP4CopyEPv,CG2D_LOADER_BMP::Copy(void*),read_structural,NOTES §205
 002ac014,2084,sceGuTexImage,sceGuTexImage,read_structural,NOTES §204
-000a4ef8,2076,_ZN15CG2D_LOADER_TGA4CopyEPv,CG2D_LOADER_TGA::Copy(void*),mentioned_unverified,
+000a4ef8,2076,_ZN15CG2D_LOADER_TGA4CopyEPv,CG2D_LOADER_TGA::Copy(void*),read_structural,NOTES §217
 00085fe0,2068,vorbis_synthesis_blockin,vorbis_synthesis_blockin,read_full,NOTES §138
 0015f3b0,2044,_Z15iOSJobChangeRotPsS_,"iOSJobChangeRot(short*, short*)",read_structural,NOTES §149
 00272aac,2044,_Z14ForAutoCommandv,ForAutoCommand(),read_structural,NOTES §150
@@ -168,11 +168,11 @@ address,size,mangled,demangled,status,section_ref
 002c5ddc,1908,_Z18Settings_FrameMovev,Settings_FrameMove(),read_structural,NOTES §162
 00091128,1904,mdct_backward,mdct_backward,read_full,NOTES §138
 000a75ac,1904,_ZN4math7MATRIX4mLERKS0_,math::MATRIX4::operator*=(math::MATRIX4 const&),unread,
-000c478c,1896,_Z13load_loaddatav,load_loaddata(),unread,
+000c478c,1896,_Z13load_loaddatav,load_loaddata(),read_structural,NOTES §218
 0019aec0,1888,_Z9DressMainv,DressMain(),read_structural,NOTES §178
 001c37dc,1884,_Z14MakeWindowFuncPh,MakeWindowFunc(unsigned char*),read_structural,NOTES §175
-0028a76c,1880,_Z12ConvTutoDataP13FFT_SAVE_DATA,ConvTutoData(FFT_SAVE_DATA*),unread,
-00281a94,1880,_Z17iOS_v2menuExecuteP8V2_TOUCH,iOS_v2menuExecute(V2_TOUCH*),unread,
+0028a76c,1880,_Z12ConvTutoDataP13FFT_SAVE_DATA,ConvTutoData(FFT_SAVE_DATA*),read_structural,NOTES §219
+00281a94,1880,_Z17iOS_v2menuExecuteP8V2_TOUCH,iOS_v2menuExecute(V2_TOUCH*),read_structural,NOTES §220
 0029bbec,1876,GsSortFlipSprite,GsSortFlipSprite,mentioned_unverified,
 002c718c,1864,_Z16SettingsWnd_Initv,SettingsWnd_Init(),read_structural,NOTES §163
 0008b594,1860,floor1_encode,floor1_encode,read_full,NOTES §145

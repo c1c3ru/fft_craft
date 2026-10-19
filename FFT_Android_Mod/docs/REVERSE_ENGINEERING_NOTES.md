@@ -9789,3 +9789,62 @@ salto; **8 branches, 5 de retrocesso**. Registro de UI simples:
 `add_anmpac`/`add_winpac`, `wldwin_set`/`trans`, `wldmess_put` (×3)
 — consistente com um indicador de "trabalhando"/carregando simples
 no mapa-mundo. Marcada `read_structural`.
+
+
+## Lote de checagens diretas (seções 217–220): mais 4 funções lidas pelo coordenador sem fork (2026-10-18, Fase 3)
+
+## 217. `CG2D_LOADER_TGA::Copy(void*)` — decodificador TGA real do jogo, mesmo padrão do BMP (2026-10-18, Fase 3, lote direto)
+
+`CG2D_LOADER_TGA::Copy(void*)` (`0xa4ef8`, 2.076 B) — descida
+recursiva direta: **493 de ~519 instruções possíveis (95%)**; **uma
+tabela de salto resolvida** (25 casos, 5 handlers distintos); **51
+branches, 38 de retrocesso**. Chama `CG2D_COLOR::GetTone5To8` —
+confirma, no mesmo padrão de `CG2D_LOADER_BMP::Copy` (seção 205),
+ser o decodificador TGA real do próprio jogo (classe
+`CG2D_LOADER_TGA`), com dispatch por variante de formato. Marcada
+`read_structural`.
+
+## 218. `load_loaddata()` — orquestrador real de carregamento de save, restaura dezenas de event-flag e estado de filme/rede (2026-10-18, Fase 3, lote direto, achado rico)
+
+`load_loaddata()` (`0xc478c`, 1.896 B) — descida recursiva direta:
+**454 de ~474 instruções possíveis (96%)**, sem tabela de salto;
+**55 branches, 28 de retrocesso**. 10 `bl` distintos.
+
+Catálogo revelador: **`write_eventflag`** (×25!) e
+**`read_eventflag`** (×13!) — bookkeeping massivo de flag de
+evento, restaurando dezenas de flags individuais do save pro estado
+do jogo. Também `iOS_set_globalgamestartflag`, `erase_unit`,
+`getMoviePlayFlg`/`getMovieEventNum`/`iOS_InitMovie` (restauração de
+estado de cutscene/filme), `pspBattleForceParticipationInit`,
+`pspNetGetBattleModeFlag`/`get_netmodeadhoc` (restauração de estado
+de rede). **Confirma ser a rotina real de restauração de dado de
+save** — não só carrega bytes, EXPLICITAMENTE restaura flag por
+flag o estado completo do jogo (progresso de história, filme
+assistido, modo de rede). Marcada `read_structural`.
+
+## 219. `ConvTutoData(FFT_SAVE_DATA*)` — conversão/migração de dado de tutorial dentro do save (2026-10-18, Fase 3, lote direto)
+
+`ConvTutoData(FFT_SAVE_DATA*)` (`0x28a76c`, 1.880 B) — descida
+recursiva direta: **470 de ~470 instruções possíveis (100%)**, sem
+tabela de salto; **26 branches, 25 de retrocesso** — quase todo
+branch é de retrocesso, laço denso. Chama `GetSaveDataInit()` e dois
+locais sem símbolo (um ×5). Consistente com conversão/migração de
+flags de progresso de tutorial dentro da estrutura de save (talvez
+entre versões de formato de save). Marcada `read_structural`.
+
+## 220. `iOS_v2menuExecute(V2_TOUCH*)` — núcleo de execução do sistema de menu V2, fortemente ligado a gate de tutorial (2026-10-18, Fase 3, lote direto)
+
+`iOS_v2menuExecute(V2_TOUCH*)` (`0x281a94`, 1.880 B) — descida
+recursiva direta: **448 de ~470 instruções possíveis (95%)**, sem
+tabela de salto; **67 branches, 42 de retrocesso**. 15 `bl`
+distintos.
+
+Núcleo de execução/update do sistema de menu V2 já visto em várias
+telas (`iOS_v2menuSetEnable`/`SetType`/`GetType`): chama
+`iOS_v2menuGetItem`/`GetEnable`/`CheckSEError`/`IsInMenu`,
+`iOS_IsEnableMenuItemTouch` (×4), `iOS_getTutorialbreak`/
+`iOSTutoCheck` (gate de tutorial — menus V2 são bloqueados durante
+tutorial), `iOS_isMovedDist`/`isInGameArea` (validação de gesto de
+toque), `iOS_soundDirect`, `RETINA_SCALE`. Confirma ser o "exec"
+central chamado por toda tela que usa o widget de menu V2. Marcada
+`read_structural`.
