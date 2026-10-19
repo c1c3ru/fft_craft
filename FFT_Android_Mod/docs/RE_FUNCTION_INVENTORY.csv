@@ -142,8 +142,8 @@ address,size,mangled,demangled,status,section_ref
 001e2308,2152,_Z12check_coord2iiih,"check_coord2(int, int, int, unsigned char)",read_structural,NOTES §148
 00132cfc,2148,_Z17Wdisp_equipwindowv,Wdisp_equipwindow(),read_structural,NOTES §165
 0023837c,2096,_Z7Mdl0012siii,"Mdl0012(short, int, int, int)",read_structural,NOTES §101
-000a42d8,2084,_ZN15CG2D_LOADER_BMP4CopyEPv,CG2D_LOADER_BMP::Copy(void*),mentioned_unverified,
-002ac014,2084,sceGuTexImage,sceGuTexImage,unread,
+000a42d8,2084,_ZN15CG2D_LOADER_BMP4CopyEPv,CG2D_LOADER_BMP::Copy(void*),read_structural,NOTES §205
+002ac014,2084,sceGuTexImage,sceGuTexImage,read_structural,NOTES §204
 000a4ef8,2076,_ZN15CG2D_LOADER_TGA4CopyEPv,CG2D_LOADER_TGA::Copy(void*),mentioned_unverified,
 00085fe0,2068,vorbis_synthesis_blockin,vorbis_synthesis_blockin,read_full,NOTES §138
 0015f3b0,2044,_Z15iOSJobChangeRotPsS_,"iOSJobChangeRot(short*, short*)",read_structural,NOTES §149
@@ -236,8 +236,8 @@ address,size,mangled,demangled,status,section_ref
 00137524,1512,_Z12select_valuev,select_value(),read_structural,NOTES §183
 0007a760,1504,inflate_fast,inflate_fast,read_full,NOTES §182
 00197a10,1504,_Z15jMakeWindowFuncPh,jMakeWindowFunc(unsigned char*),read_structural,NOTES §181
-00165520,1500,_Z15ASURA_FALL_INITh,ASURA_FALL_INIT(unsigned char),unread,
-001a6d00,1496,_Z7Dismissv,Dismiss(),unread,
+00165520,1500,_Z15ASURA_FALL_INITh,ASURA_FALL_INIT(unsigned char),read_structural,NOTES §208
+001a6d00,1496,_Z7Dismissv,Dismiss(),read_structural,NOTES §209
 00094e54,1480,_vp_tonemask,_vp_tonemask,read_full,NOTES §189
 0019cd3c,1480,_Z14DressSellEquipv,DressSellEquip(),unread,
 00218060,1480,_Z22ExecuteEffectAnimationP15effectAnimationccc,"ExecuteEffectAnimation(effectAnimation*, char, char, char)",unread,
@@ -247,9 +247,9 @@ address,size,mangled,demangled,status,section_ref
 0021f5e4,1456,_Z15p02_hitMarkFuncv,p02_hitMarkFunc(),unread,
 000de724,1448,_Z11move_camerav,move_camera(),read_structural,NOTES §195
 001f0550,1448,_Z15setShapeDataSubP13tag_animationP12subAnimationtt,"setShapeDataSub(tag_animation*, subAnimation*, unsigned short, unsigned short)",unread,
-0007d158,1436,inflate_table,inflate_table,unread,
-00258528,1436,_Z12ctleeff_mainP7CTLINFO,ctleeff_main(CTLINFO*),unread,
-00202950,1424,_Z18generateAttackTeamv,generateAttackTeam(),unread,
+0007d158,1436,inflate_table,inflate_table,read_full,NOTES §203
+00258528,1436,_Z12ctleeff_mainP7CTLINFO,ctleeff_main(CTLINFO*),read_structural,NOTES §207
+00202950,1424,_Z18generateAttackTeamv,generateAttackTeam(),read_structural,NOTES §206
 001077f4,1420,_Z12Wmove_camerav,Wmove_camera(),unread,
 001ec8bc,1416,_Z16getPositionHightP7SVECTORh,"getPositionHight(SVECTOR*, unsigned char)",unread,
 00087700,1412,vorbis_book_decodev_add,vorbis_book_decodev_add,unread,

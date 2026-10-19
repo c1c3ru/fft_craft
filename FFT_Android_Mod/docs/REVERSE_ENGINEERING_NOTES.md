@@ -9611,3 +9611,95 @@ Registra elementos de UI de uma vez: `add_anmpac` (×7)/`add_winpac`
 (×3)/`scrwin_para_set` (parâmetro de janela de scroll),
 `mouketeam_scrollset`, `DrawSync` (×2) — setup de tela puro, sem
 nenhuma lógica condicional. Marcada `read_structural`.
+
+
+## Lote de checagens diretas (seções 203–209): mais 7 funções lidas pelo coordenador sem fork (2026-10-18, Fase 3)
+
+## 203. `inflate_table` — interno de `zlib` reconhecido por nome (2026-10-18, Fase 3, regra 6 da metodologia)
+
+`inflate_table` (`0x7d158`, 1.436 B) — checagem direta: **99% de
+cobertura, zero chamadas `bl`**, 44 branches (17 de retrocesso) —
+construção pura de tabela de código Huffman do `zlib`, só
+manipulação de array inline, nenhuma chamada externa. Marcada
+`read_full`.
+
+## 204. `sceGuTexImage` — confirma de novo que `sceGu*` é ponte real, não boilerplate (2026-10-18, Fase 3, lote direto)
+
+`sceGuTexImage` (`0x2ac014`, 2.084 B) — descida recursiva direta:
+**492 de ~521 instruções possíveis (94%)**, sem tabela de salto;
+**65 branches, 33 de retrocesso**. Chama `CFRAMERATE::GetRootCnt`,
+`CFFT_STATE::GetParam` (×3), `IS_TEX_2X`, mais vários locais sem
+símbolo — confirma pela segunda família (depois de
+`sceGuSendList`/`sceGuDrawArray`, seção 110) que `sceGu*` é a ponte
+real do PRÓPRIO jogo, não biblioteca PSP preservada. Marcada
+`read_structural`.
+
+## 205. `CG2D_LOADER_BMP::Copy(void*)` — decodificador BMP real do jogo, tabela de 32 casos por profundidade de bit (2026-10-18, Fase 3, lote direto)
+
+`CG2D_LOADER_BMP::Copy(void*)` (`0xa42d8`, 2.084 B) — descida
+recursiva direta: **488 de ~521 instruções possíveis (94%)**; **uma
+tabela de salto resolvida** (32 casos, 7 handlers distintos); **46
+branches, 33 de retrocesso**. Chama `CG2D_COLOR::GetTone4To8`/
+`5To8`/`6To8` (conversão de profundidade de cor) e
+**`CG2D_LOADER_BMP::BMP_DecodeRLE8`**/**`BMP_DecodeRLE4`** (RLE
+decode real) — é o decodificador BMP de verdade do próprio jogo
+(classe `CG2D_LOADER_BMP`), com dispatch por variante de formato
+(profundidade de bit/compressão). Marcada `read_structural`.
+
+## 206. `generateAttackTeam()` — setup real de batalha em rede, achado rico (2026-10-18, Fase 3, lote direto)
+
+`generateAttackTeam()` (`0x202950`, 1.424 B) — descida recursiva
+direta: **333 de ~356 instruções possíveis (94%)**, sem tabela de
+salto; **20 branches, 12 de retrocesso**. **29 `bl` distintos** —
+catálogo rico pra um tamanho pequeno.
+
+Chama `attackteam_call(unsigned long*, unsigned long)`,
+`initBattleMap`, `db_init`/`db_swap_generate`, `myPollhost()`,
+`padReadGenerate()`, `fftCdLoop(CDREC*)`, `pspNetGetBattleModeFlag`,
+`get_netmodeadhoc`, `get_vsBattle_bule_trap`, `ASHURA_clearOT`/
+`getOTptrZ` (×5), `loadClutData` (×6), e `CFFT_STATE::SetParam`.
+**Confirma ser o setup real de inicialização de batalha em rede**:
+inicializa mapa de batalha, double-buffer, hospedeiro de rede
+(`myPollhost`), geração de leitura de pad, loop de CD (música), e
+checa modo de rede ad-hoc/versus — a função que de fato monta o
+"time de ataque" pra uma partida em rede. Marcada `read_structural`.
+
+## 207. `ctleeff_main(CTLINFO*)` — controlador de efeito ligado a captura de tela e requisição de encontro (2026-10-18, Fase 3, lote direto)
+
+`ctleeff_main(CTLINFO*)` (`0x258528`, 1.436 B, companheiro de
+`ctleeff_draw`, seção 199) — descida recursiva direta: **338 de
+~359 instruções possíveis (94%)**, sem tabela de salto; **29
+branches, 15 de retrocesso**.
+
+Chama **`CFFT_STATE::SetCaptureDraw(int)`** e
+**`CFFT_STATE::SetEncountRequest(int)`** — achado notável: este
+controlador de efeito também dispara flag de CAPTURA DE TELA
+(provavelmente pra thumbnail de save) e flag de REQUISIÇÃO DE
+ENCONTRO (gatilho de batalha aleatória no mapa-mundo) — além de
+`sound_request`, `DrawSync`, `MoveImage`, `GetTPage`,
+`iOS_setV2Icon`. Marcada `read_structural`.
+
+## 208. `ASURA_FALL_INIT(unsigned char)` — init de efeito de queda com randomização pesada (2026-10-18, Fase 3, lote direto)
+
+`ASURA_FALL_INIT(unsigned char)` (`0x165520`, 1.500 B) — descida
+recursiva direta: **360 de ~375 instruções possíveis (96%)**, sem
+tabela de salto; **14 branches, 8 de retrocesso**. Dominada por
+**`ps_rand()`** (×13!) mais `GetTPage`/`GetClut`/`SetSemiTrans`
+(×3 cada). Consistente com inicialização de um efeito de "queda"
+fortemente randomizado (posição/velocidade/rotação inicial de
+partícula caindo — folhas, pétalas, neve). Marcada
+`read_structural`.
+
+## 209. `Dismiss()` — função real de dispensar unidade do roster (2026-10-18, Fase 3, lote direto)
+
+`Dismiss()` (`0x1a6d00`, 1.496 B) — descida recursiva direta: **343
+de ~374 instruções possíveis (92%)**, sem tabela de salto; **47
+branches, 24 de retrocesso**. 10 `bl` distintos.
+
+Chama **`IsDismiss(short)`**/**`UnitDismiss(short)`** diretamente —
+confirma ser a função real de dispensar (remover) uma unidade do
+roster, ligando à família `BuyUnit`/`PoachBuy` (seções 185/201).
+Também `MessageDataSet`/`DrawMessage` (confirmação via mensagem),
+`sys_warning`, `ps_rand`, e `Wwrite_eventflag`/`Wread_eventflag`/
+`Wtask_status` (interação com o contexto de task `W`). Marcada
+`read_structural`.
