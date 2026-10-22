@@ -11773,3 +11773,143 @@ logica especifica de FFT possivel num calculo de checksum padrao.
 Fast-tracked sem leitura individual. Marcadas read_structural:
 crc32 (0x73c74, 936B), crc32_combine (0x7401c, 4B), crc32_combine64
 (0x74020, 4B).
+
+## 338. MainEmploy() - dispatcher principal da tela de recrutamento do Soldier Office (2026-10-22, Fase 3, trigesimo primeiro lote paralelo)
+
+Familia *Employ confirmada: MainEmploy -> SttsEmploy -> BuyEmploy ->
+AccountEmploy -> SuccessEmploy, as 5 dispostas contiguamente no
+binario, mais employ_from_entry(unsigned char*,int,int,int) como
+ponto de entrada externo e employ_commanddata (struct global de 64
+bytes) como tabela de comando compartilhada. Globals irmas
+get/set_g_Soldier_Draw_flg confirmam a ligacao tematica com o
+Soldier Office (recrutamento de unidades genericas pagando ouro).
+MainEmploy desenha DrawPrice/DrawUnits/DrawFunds (preco, lista de
+unidades, fundos do jogador), popula icones de retrato via
+iOS_setV2Icon (x5) numa janela de lista rolavel
+(iOSUnitListWinOnOff/iOSWldUnitListWinSet), le toque via
+iOS_getTouchTap, e executa a transacao central "pagar ouro -> criar
+unidade": GetItemPrice -> ChgMoney -> ItemCheck -> MakeChr ->
+GetChrList/CurChrChg. Wsend_taskparamater (x5) despacha para os 4
+estados irmaos. Marcada read_structural.
+
+## 339. ctlworkinginf_main(CTLINFO*) - painel de controle interativo (nao so texto) que acompanha a tela "working/busy" (2026-10-22, Fase 3, trigesimo primeiro lote paralelo, refina secao 314)
+
+Refina a hipotese da secao 314: ctlworkinginf_main NAO e so um
+indicador de progresso/texto passivo - hospeda um widget de menu
+de toque completo via iOS_CMenuTouch (setYLine/exec/setDispAssist,
+o mesmo widget de lista "tap/press" reutilizado em dezenas de telas),
+mais wldkey_rep (x2, auto-repeat de botao fisico em paralelo ao
+toque) - muito provavelmente um botao de Cancelar sobreposto ao
+spinner principal. Faz polling independente da MESMA task em
+segundo plano que ctlworkingst_main esta esperando
+(Wtask_status/Wsend_taskparamater), ou seja, reage ao estado da
+task (ex: habilita a linha de cancelar) em vez de so espelhar
+display. Tambem chama ctlworking_init() e ctlworkingst_init(int,int)
+- pode reiniciar os controllers irmaos (ex: em retry apos erro).
+A familia ctlworkinginf_* tem apenas 2 membros no binario inteiro
+(init + main, sem active/deactive/dataset proprios) - confirmando
+ser um controller "parasita" leve, inicializado uma vez e dirigido
+pelo CTLINFO do pai (ctlworkingst_main), nao uma tela independente
+completa. Sem jump table. Marcada read_structural.
+
+## 340. count_words2(short*,short*,char*) - CORRECAO ao padrao W=largo/nao-W=estreito: e um DUPLICATO PARALELO completo, nao uma variante sem DBCS (2026-10-22, Fase 3, trigesimo primeiro lote paralelo)
+
+Achado importante que corrige uma hipotese razoavel mas errada: a
+expectativa era que count_words2 fosse a contraparte "estreita/
+ASCII, sem tratamento de lead-byte Shift-JIS" de Wcount_words2
+(secao 335). Disassembly manual completo mostra que NAO e esse o
+caso - count_words2 implementa o algoritmo PRATICAMENTE IDENTICO,
+incluindo a maquina de estado Shift-JIS/DBCS completa (lookup de
+largura 2D lead-byte x trail-byte), a compressao LZ-like de
+back-reference, E a substituicao de template via
+load_replaceitems/serchmessagepointer - so chamando uma cadeia de
+helpers separadamente compilada e sem o prefixo W
+(load_replaceitems/serchmessagepointer/getvaluelength/sub_d3ea4 em
+vez de Wload_replaceitems/Wserchmessagepointer/Wgetvaluelength/
+sub_fb740). O jaccard baixo (0.11) encontrado anteriormente era
+dominado pelos enderecos de chamada diferentes e constantes de pool
+literal, nao por logica de controle diferente - e um match
+estrutural quase 1:1. Conclusao: count_words2/Wcount_words2 sao
+duplicatas PARALELAS verdadeiras (ambas com suporte DBCS completo),
+nao um par largo-vs-estreito - uma EXCECAO ao padrao geral W-prefix
+ja estabelecido em outras partes do codebase (wasm/asm, etc), que
+deve ser lembrada ao encontrar outros pares futuros desse tipo
+em vez de assumir o padrao cegamente. Marcada read_structural.
+
+## 341. PostModeChg(int) - tick por-frame da transicao "personagens espalham/aparecem" ao sair da batalha pro mapa, par com PreModeChg (2026-10-22, Fase 3, trigesimo primeiro lote paralelo)
+
+Achado rico: NAO e uma chamada one-shot de "terminar troca de modo"
+- e uma funcao de tick por-frame para um efeito de dissolve/revelar
+em multiplos frames, dirigida por uma struct de estado estatica
+persistente (flag de cancelar no offset +0x95, contador de
+passo/frame no +0x96). No primeiro tick (contador==0), chama
+UnitTableInit(short) para reconstruir a tabela de unidades ativas
+(provavel: elenco de batalha -> elenco de campo). Depois, a cada
+tick, avanca um gerador de permutacao pseudo-aleatoria de periodo
+completo (~24 celulas, via cadeia smull/mla/asr com constantes
+288/6/24) que decide a ordem embaralhada em que os sprites de
+unidade "aparecem" na tela, desenha via DrawUnitWithShadow/
+DrawEggWithShadow (chamadas atraves do helper local sub_1bf96c), e
+sinaliza conclusao via valor de retorno (0=terminou, 1=continue
+chamando) quando o contador de passo chega a zero. PreModeChg(int)
+(0x1bfb6c, 924 bytes) e byte-contiguo IMEDIATAMENTE ANTES de
+PostModeChg no binario (fim de PreModeChg = inicio de PostModeChg) -
+par Pre/Post classico em torno de uma troca de modo, quase
+certamente o efeito espelhado de "dissolver/espalhar para fora" ao
+ENTRAR na troca de modo (ex: tela que acabou a batalha). Familia
+DrawModeChg/bDrawModeChg/cDrawModeChg/eDrawModeChg
+((int,int,int,RECT16*,int), letras b/c/e) sao provaveis primitivas
+de desenho por-retangulo de nivel mais baixo usadas por variantes
+do efeito, mas nao chamadas diretamente do corpo de PostModeChg.
+Marcada read_structural.
+
+## 342. CFILE_UTIL::FileReplaceStr + familia CFILE_UTIL/CFILE - utilitario generico de arquivo estilo PC-SDK, fast-track (2026-10-22, Fase 3, trigesimo primeiro lote paralelo + estrategia 6)
+
+Leitura completa confirma FileReplaceStr(char* arquivo, char* busca,
+char* substituto, int* contagemSaida) como um find-and-replace de
+arquivo completo, generico e consciente de DBCS: le o arquivo
+inteiro pra memoria, decodifica sequencias de escape
+(CSTR_UTIL::DecodeEscSequence) nos padroes de busca/substituicao,
+faz scan byte a byte respeitando fronteiras de lead-byte Shift-JIS
+(CSTR_UTIL::IsLeadByte) pra nao quebrar um par de bytes DBCS nem
+casar falsamente atraves de uma fronteira, e so re-escreve o
+arquivo (delete + create + write) se pelo menos uma substituicao
+ocorreu - caso contrario deixa o arquivo intocado. Nada aqui e
+especifico de FFT. O scan de simbolos via readelf confirma que
+CFILE_UTIL e uma classe utilitaria de arquivo/caminho multiplataforma
+estilo PC-SDK completa (grupos Dir*/Drv*/File*/Dlg*) com metodos
+claramente herdados de uma API de dialogo de arquivo/registro estilo
+Windows (DlgGetFile/DlgGetPath/DrvGetFree/DirGetWindows/
+DirGetSystem - quase certamente stubs/no-op no Android) ao lado de
+File*(Copy/Move/Connect/Insert/ConvertLF/Delete/Create) e
+Dir*(Create/Delete/Copy/Move/Enum/Find) genericos. Toda a familia
+CFILE_UTIL (e a classe CFILE companheira de I/O baixo nivel) e
+fast-tracked como boilerplate de engine generico, mesmo tratamento
+dado a libvorbis/libogg (secao 336) e ao STL _Rb_tree (secao 329).
+Marcada read_structural: FileReplaceStr (0xb8414) e demais membros
+unread/mentioned_unverified da familia CFILE_UTIL/CFILE.
+
+## 343. ctlhakenokng_main(CTLINFO*) - fecha o loop da secao 321: confirma commit real do despacho de unidade via bits de event-flag por-unidade (2026-10-22, Fase 3, trigesimo primeiro lote paralelo)
+
+Confirma totalmente a hipotese da secao 321. Poll de toque direto
+(iOS_getV2Icon(0x34)) E de repeticao de botao (wldkey_rep com duas
+mascaras) deixam o jogador alternar entre OK e NG, com SE de
+cursor e timer de blink do item destacado. Caminho NG/cancelar: SO
+desmonta o estado de UI/recurso do popup e devolve controle a
+ctlmouke_init() - ZERO mutacao de estado de jogo. Caminho OK e onde
+o despacho e de fato commitado: escreve dois bits distintos (0x8 e
+0x2) numa event-flag por-unidade indexada pelo ID da unidade
+selecionada (base 0x35F + unit_id), anexa um registro de log de
+despacho (ID da unidade + campos de snapshot) a uma tabela global,
+toca uma flag em TODAS as unidades do elenco ativo (nao so a
+despachada), atualiza a event-flag 44 (contabilidade de dia/turno),
+e vira um icone de UI pro estado "commitado" - tudo ANTES de cair
+no mesmo teardown (ctlmouke_init()/iOS_clearOkNg()) usado pelo
+caminho de cancelamento. Ambos os caminhos convergem de volta para
+ctlmouke_init() (controller irmao "mouke"/roster, secao 167), nao
+diretamente para ctlhaken_main - confirma que este e um overlay
+modal Sim/Nao sobre o controller de roster/despacho. Os bits 0x8/0x2
+e a entrada de log escritos aqui sao plausivelmente o que o trio
+hakenunit_status/hakenunit_change/hakenunit_status_main (secao 169)
+le depois para resolver o retorno da unidade. Sem jump table, 92%
+de cobertura. Marcada read_structural.

@@ -366,25 +366,25 @@ address,size,mangled,demangled,status,section_ref
 0024fdf4,1004,_Z18pspCtltutonet_mainP7CTLINFO,pspCtltutonet_main(CTLINFO*),read_structural,NOTES §333
 00263b08,1004,_Z13ctlnobel_initi,ctlnobel_init(int),read_structural,NOTES §302
 001a749c,1000,_Z13Bwork2ChrSttsP5BWORKP8CHR_STTSP7UM_WORK,"Bwork2ChrStts(BWORK*, CHR_STTS*, UM_WORK*)",read_structural,NOTES §304
-000b8414,988,_ZN10CFILE_UTIL14FileReplaceStrEPcS0_S0_Pi,"CFILE_UTIL::FileReplaceStr(char*, char*, char*, int*)",unread,
+000b8414,988,_ZN10CFILE_UTIL14FileReplaceStrEPcS0_S0_Pi,"CFILE_UTIL::FileReplaceStr(char*, char*, char*, int*)",read_structural,NOTES §342
 002885f0,988,_Z15pspOpenIconDrawPmii18PSP_OPEN_ICON_TYPEi,"pspOpenIconDraw(unsigned long*, int, int, PSP_OPEN_ICON_TYPE, int)",read_structural,NOTES §334
 00245f24,988,_Z17ctlopentitle_initi,ctlopentitle_init(int),read_structural,NOTES §330
-000d8270,984,_Z12count_words2PsS_Pc,"count_words2(short*, short*, char*)",unread,
+000d8270,984,_Z12count_words2PsS_Pc,"count_words2(short*, short*, char*)",read_structural,NOTES §340
 0023dc94,984,_Z7Mdl0022siii,"Mdl0022(short, int, int, int)",read_structural,NOTES §101
 0021e388,984,_Z18s29_doMetascheduleP10_EffectTCB,s29_doMetaschedule(_EffectTCB*),read_structural,NOTES §308
 000ffe58,980,_Z13Wcount_words2PsS_Pc,"Wcount_words2(short*, short*, char*)",read_structural,NOTES §335
-0019d83c,980,_Z10MainEmployv,MainEmploy(),unread,
-002520c8,980,_Z18ctlworkinginf_mainP7CTLINFO,ctlworkinginf_main(CTLINFO*),unread,
+0019d83c,980,_Z10MainEmployv,MainEmploy(),read_structural,NOTES §338
+002520c8,980,_Z18ctlworkinginf_mainP7CTLINFO,ctlworkinginf_main(CTLINFO*),read_structural,NOTES §339
 000abcd0,976,_ZNSt4priv10_Rb_globalIbE20_Rebalance_for_eraseEPNS_18_Rb_tree_node_baseERS3_S4_S4_,"std::priv::_Rb_global<bool>::_Rebalance_for_erase(std::priv::_Rb_tree_node_base*, std::priv::_Rb_tree_node_base*&, std::priv::_Rb_tree_node_base*&, std::priv::_Rb_tree_node_base*&)",read_structural,NOTES §329
 001604fc,976,_Z16iOSSlideYajiMainv,iOSSlideYajiMain(),unread,
-001bff08,972,_Z11PostModeChgi,PostModeChg(int),unread,
+001bff08,972,_Z11PostModeChgi,PostModeChg(int),read_structural,NOTES §341
 000b74d8,964,_ZN9CFILE_TXT4LoadEPcij,"CFILE_TXT::Load(char*, int, unsigned int)",mentioned_unverified,
 0026ca14,964,_Z18ctlnvcontinue_initi,ctlnvcontinue_init(int),unread,
 0009fe08,960,ov_pcm_seek,ov_pcm_seek,read_structural,NOTES §336
 00247eb4,960,_Z16ctlbirthday_mainP7CTLINFO,ctlbirthday_main(CTLINFO*),unread,
 00084060,952,ogg_stream_pagein,ogg_stream_pagein,read_structural,NOTES §336
 0021e7d8,948,_Z12doEffect_subv,doEffect_sub(),unread,
-00261728,948,_Z17ctlhakenokng_mainP7CTLINFO,ctlhakenokng_main(CTLINFO*),unread,
+00261728,948,_Z17ctlhakenokng_mainP7CTLINFO,ctlhakenokng_main(CTLINFO*),read_structural,NOTES §343
 001cd600,944,_Z14set_status_allii,"set_status_all(int, int)",unread,
 001a7a84,944,_Z7ChrSorti,ChrSort(int),unread,
 001c2ce0,944,_Z19MakeSmallWindowFuncPh,MakeSmallWindowFunc(unsigned char*),unread,
@@ -392,7 +392,7 @@ address,size,mangled,demangled,status,section_ref
 000e2698,936,_Z22iOS_statusfigprint_FT4P11tagPOLY_FT4itiiPviiP9COPYFIELDi,"iOS_statusfigprint_FT4(tagPOLY_FT4*, int, unsigned short, int, int, void*, int, int, COPYFIELD*, int)",unread,
 0021a648,932,_Z31SearchNextMetascheduleDividePosssPlS_,"SearchNextMetascheduleDividePos(short, short, long*, long*)",unread,
 00288a78,928,_Z16pspPrimAddDirectPmiiii,"pspPrimAddDirect(unsigned long*, int, int, int, int)",unread,
-001bfb6c,924,_Z10PreModeChgi,PreModeChg(int),unread,
+001bfb6c,924,_Z10PreModeChgi,PreModeChg(int),read_structural,NOTES §341
 002517cc,924,_Z15ctlworking_mainP7CTLINFO,ctlworking_main(CTLINFO*),unread,
 00085b94,920,vorbis_analysis_blockout,vorbis_analysis_blockout,read_structural,NOTES §336
 00134c08,920,_Z25Wdisp_selectrefleshwindowv,Wdisp_selectrefleshwindow(),unread,
@@ -611,7 +611,7 @@ address,size,mangled,demangled,status,section_ref
 0028c32c,612,_ZN10CFFT_STATE13SetRenderSizeEii,"CFFT_STATE::SetRenderSize(int, int)",unread,
 002b5988,612,_Z14Logo_FrameMovev,Logo_FrameMove(),unread,
 000a4078,608,_ZN15CG2D_LOADER_BMP14BMP_DecodeRLE4EPhS0_ii,"CG2D_LOADER_BMP::BMP_DecodeRLE4(unsigned char*, unsigned char*, int, int)",read_structural,NOTES §316
-000b81b4,608,_ZN10CFILE_UTIL13FileConvertLFEPc,CFILE_UTIL::FileConvertLF(char*),unread,
+000b81b4,608,_ZN10CFILE_UTIL13FileConvertLFEPc,CFILE_UTIL::FileConvertLF(char*),read_structural,NOTES §342
 000bced4,608,_ZN17CSOUND_LOADER_PCM4OpenEPcPhjj,"CSOUND_LOADER_PCM::Open(char*, unsigned char*, unsigned int, unsigned int)",mentioned_unverified,
 000bddd8,608,_ZN5CSTEP8GetDataFEv,CSTEP::GetDataF(),unread,
 002b1790,604,_Z19AppEngine_FrameStepv,AppEngine_FrameStep(),unread,
@@ -722,7 +722,7 @@ address,size,mangled,demangled,status,section_ref
 001753f4,516,_Z11cCursolFuncP7DVECTORPti,"cCursolFunc(DVECTOR*, unsigned short*, int)",unread,
 0028d854,516,_Z19tlGarbageCollectionv,tlGarbageCollection(),unread,
 002caebc,516,__divdf3,__divdf3,unread,
-000b7cd8,512,_ZN10CFILE_UTIL10FileInsertEPcS0_,"CFILE_UTIL::FileInsert(char*, char*)",unread,
+000b7cd8,512,_ZN10CFILE_UTIL10FileInsertEPcS0_,"CFILE_UTIL::FileInsert(char*, char*)",read_structural,NOTES §342
 00177cd0,512,_Z11bDrawGT4RGBPsP5COLORii,"bDrawGT4RGB(short*, COLOR*, int, int)",unread,
 001ad634,512,_Z10DrawGT4RGBPsP5COLORii,"DrawGT4RGB(short*, COLOR*, int, int)",unread,
 0021a9ec,512,_Z25SetCameraWorkWithSchedules,SetCameraWorkWithSchedule(short),unread,
@@ -1079,7 +1079,7 @@ address,size,mangled,demangled,status,section_ref
 00248cd0,340,_Z12ctlcard_mainP7CTLINFO,ctlcard_main(CTLINFO*),unread,
 0027dc00,340,_ZN17iOS_CMenuTouchNum7execTapEPiP25IOS_MENU_TOUCH_NUM_RESULT,"iOS_CMenuTouchNum::execTap(int*, IOS_MENU_TOUCH_NUM_RESULT*)",unread,
 000a1614,336,_vorbis_apply_window,_vorbis_apply_window,read_structural,NOTES §336
-000b7b88,336,_ZN10CFILE_UTIL11FileConnectEPcS0_i,"CFILE_UTIL::FileConnect(char*, char*, int)",unread,
+000b7b88,336,_ZN10CFILE_UTIL11FileConnectEPcS0_i,"CFILE_UTIL::FileConnect(char*, char*, int)",read_structural,NOTES §342
 000d9d84,336,_Z12request_helpv,request_help(),unread,
 00101a40,336,_Z13Wrequest_helpv,Wrequest_help(),unread,
 00224650,336,_Z17CheckBowReachablehh,"CheckBowReachable(unsigned char, unsigned char)",mentioned_unverified,
@@ -1106,7 +1106,7 @@ address,size,mangled,demangled,status,section_ref
 00269fd8,328,_Z11snpl_picputv,snpl_picput(),mentioned_unverified,
 0007f240,324,_tr_stored_block,_tr_stored_block,unread,
 000a258c,324,_ZN11CG2D_LOADER13CopyAsTextureEPjiiS0_P11_G2D_FORMATi,"CG2D_LOADER::CopyAsTexture(unsigned int*, int, int, unsigned int*, _G2D_FORMAT*, int)",read_structural,NOTES §316
-000b7eec,324,_ZN10CFILE_UTIL7DirCopyEPcS0_,"CFILE_UTIL::DirCopy(char*, char*)",unread,
+000b7eec,324,_ZN10CFILE_UTIL7DirCopyEPcS0_,"CFILE_UTIL::DirCopy(char*, char*)",read_structural,NOTES §342
 001612d0,324,_Z14iOSsTchBtlInitv,iOSsTchBtlInit(),unread,
 00286600,324,_Z18pspMapTexUVCorrectjhjPhS_S_S_S_S_S_S_,"pspMapTexUVCorrect(unsigned int, unsigned char, unsigned int, unsigned char*, unsigned char*, unsigned char*, unsigned char*, unsigned char*, unsigned char*, unsigned char*, unsigned char*)",unread,
 001ab17c,324,_Z11IsItemEquipsss,"IsItemEquip(short, short, short)",unread,
@@ -1357,7 +1357,7 @@ address,size,mangled,demangled,status,section_ref
 000b44a4,248,_ZN15CINPUT_IF_TOUCH14OnTouchesEndedEiiiii,"CINPUT_IF_TOUCH::OnTouchesEnded(int, int, int, int, int)",read_full,NOTES §26
 0009e624,248,ov_clear,ov_clear,read_structural,NOTES §336
 000a1f1c,248,_ZN11CG2D_LOADER22GetSavePixelFormatInfoEjP14_G2D_SAVE_INFO,"CG2D_LOADER::GetSavePixelFormatInfo(unsigned int, _G2D_SAVE_INFO*)",read_structural,NOTES §316
-000b8060,248,_ZN10CFILE_UTIL12FileEnum_AddEP5CLISTPcj,"CFILE_UTIL::FileEnum_Add(CLIST*, char*, unsigned int)",unread,
+000b8060,248,_ZN10CFILE_UTIL12FileEnum_AddEP5CLISTPcj,"CFILE_UTIL::FileEnum_Add(CLIST*, char*, unsigned int)",read_structural,NOTES §342
 000ba138,248,_Z16CompareLocalTimeP11_SYSTEMTIMES0_,"CompareLocalTime(_SYSTEMTIME*, _SYSTEMTIME*)",unread,
 0027ce58,248,_ZN14iOS_CMenuTouch4initEiiiiiiii,"iOS_CMenuTouch::init(int, int, int, int, int, int, int, int)",mentioned_unverified,
 0010fa1c,248,_Z11WinitdrmodeP7DR_MODEi,"Winitdrmode(DR_MODE*, int)",unread,
@@ -1575,7 +1575,7 @@ address,size,mangled,demangled,status,section_ref
 000a5d90,204,_ZN15CG2D_LOADER_TGA4LoadEPcPhjj,"CG2D_LOADER_TGA::Load(char*, unsigned char*, unsigned int, unsigned int)",read_structural,NOTES §316
 000a71f0,204,_ZN18CGX_SCREEN_CORRECT18Area_InitLandscapeEiiiiii,"CGX_SCREEN_CORRECT::Area_InitLandscape(int, int, int, int, int, int)",unread,
 000bdc6c,204,_ZN5CSTEP9FrameMoveEfj,"CSTEP::FrameMove(float, unsigned int)",mentioned_unverified,
-000b78b4,204,_ZN10CFILE_UTIL9DirCreateEPc,CFILE_UTIL::DirCreate(char*),mentioned_unverified,
+000b78b4,204,_ZN10CFILE_UTIL9DirCreateEPc,CFILE_UTIL::DirCreate(char*),read_structural,NOTES §342
 000dbba4,204,_Z14eventsetstatusiiii,"eventsetstatus(int, int, int, int)",unread,
 00103ff4,204,_Z15Weventsetstatusiiii,"Weventsetstatus(int, int, int, int)",unread,
 0014bedc,204,_Z14joinfaceuvclutP11tagPOLY_FT4iPi,"joinfaceuvclut(tagPOLY_FT4*, int, int*)",unread,
@@ -2135,8 +2135,8 @@ address,size,mangled,demangled,status,section_ref
 000a80f4,128,_ZN8CEGL2_IF12SetTexFilterEi,CEGL2_IF::SetTexFilter(int),unread,
 000ac3cc,128,_ZNSt4priv10_Rb_globalIbE12_M_decrementEPNS_18_Rb_tree_node_baseE,std::priv::_Rb_global<bool>::_M_decrement(std::priv::_Rb_tree_node_base*),read_structural,NOTES §329
 000b4808,128,_ZN15CINPUT_IF_TOUCH19GetGestureTapChanceEiiij,"CINPUT_IF_TOUCH::GetGestureTapChance(int, int, int, unsigned int)",unread,
-000b8800,128,_ZN10CFILE_UTIL11FileGetSizeEPc,CFILE_UTIL::FileGetSize(char*),unread,
-000b8880,128,_ZN10CFILE_UTIL11FileGetTimeEPcP11_SYSTEMTIME,"CFILE_UTIL::FileGetTime(char*, _SYSTEMTIME*)",unread,
+000b8800,128,_ZN10CFILE_UTIL11FileGetSizeEPc,CFILE_UTIL::FileGetSize(char*),read_structural,NOTES §342
+000b8880,128,_ZN10CFILE_UTIL11FileGetTimeEPcP11_SYSTEMTIME,"CFILE_UTIL::FileGetTime(char*, _SYSTEMTIME*)",read_structural,NOTES §342
 000be038,128,_ZN5CSTEP15InitFromCurrentEiiij,"CSTEP::InitFromCurrent(int, int, int, unsigned int)",unread,
 000d9790,128,_Z12wait_overlayi,wait_overlay(int),unread,
 000d9988,128,_Z13wait_loaddatai,wait_loaddata(int),unread,
@@ -2271,7 +2271,7 @@ address,size,mangled,demangled,status,section_ref
 00082ef0,116,oggpack_read1,oggpack_read1,unread,
 00082f64,116,oggpackB_read1,oggpackB_read1,unread,
 00088cfc,116,_ve_envelope_shift,_ve_envelope_shift,unread,
-000b6654,116,_ZN5CFILE4OpenEj,CFILE::Open(unsigned int),mentioned_unverified,
+000b6654,116,_ZN5CFILE4OpenEj,CFILE::Open(unsigned int),read_structural,NOTES §342
 000a6f38,116,_ZN18CGX_SCREEN_CORRECT8ToScreenEiiPiS0_,"CGX_SCREEN_CORRECT::ToScreen(int, int, int*, int*)",unread,
 000a731c,116,_ZN18CGX_SCREEN_CORRECT13Area_ToRenderEiiiPiS0_,"CGX_SCREEN_CORRECT::Area_ToRender(int, int, int, int*, int*)",unread,
 000aa8f8,116,_ZN9CEGL2_FBO6DeleteEv,CEGL2_FBO::Delete(),mentioned_unverified,
@@ -2323,7 +2323,7 @@ address,size,mangled,demangled,status,section_ref
 00097a48,112,res1_forward,res1_forward,unread,
 000b417c,112,_ZN15CINPUT_IF_TOUCH13GetTouchPointEiPiS0_i,"CINPUT_IF_TOUCH::GetTouchPoint(int, int*, int*, int)",unread,
 000b6e70,112,_ZN9CFILE_DAT6DecodeEiPhi,"CFILE_DAT::Decode(int, unsigned char*, int)",mentioned_unverified,
-000b8900,112,_ZN10CFILE_UTIL11FileSetTimeEPcP11_SYSTEMTIME,"CFILE_UTIL::FileSetTime(char*, _SYSTEMTIME*)",unread,
+000b8900,112,_ZN10CFILE_UTIL11FileSetTimeEPcP11_SYSTEMTIME,"CFILE_UTIL::FileSetTime(char*, _SYSTEMTIME*)",read_structural,NOTES §342
 000daa50,112,_Z13checktaskkindi,checktaskkind(int),unread,
 000db77c,112,_Z15write_eventflagii,"write_eventflag(int, int)",unread,
 002821f8,112,_Z12iOS_dispOkNgii,"iOS_dispOkNg(int, int)",unread,
@@ -2417,7 +2417,7 @@ address,size,mangled,demangled,status,section_ref
 00083c1c,104,ogg_stream_pageout_fill,ogg_stream_pageout_fill,read_structural,NOTES §336
 0008589c,104,vorbis_analysis_init,vorbis_analysis_init,read_structural,NOTES §336
 0009f390,104,ov_test_open,ov_test_open,read_structural,NOTES §336
-000b6708,104,_ZN5CFILE4ReadEPvjjPj,"CFILE::Read(void*, unsigned int, unsigned int, unsigned int*)",mentioned_unverified,
+000b6708,104,_ZN5CFILE4ReadEPvjjPj,"CFILE::Read(void*, unsigned int, unsigned int, unsigned int*)",read_structural,NOTES §342
 000ab440,104,_ZN9CEGL2_FBO10ReadPixelsEPjiiii,"CEGL2_FBO::ReadPixels(unsigned int*, int, int, int, int)",unread,
 000af50c,104,_ZN16CEGL2_TEX_HYBRIDD2Ev,CEGL2_TEX_HYBRID::~CEGL2_TEX_HYBRID(),unread,
 000af50c,104,_ZN16CEGL2_TEX_HYBRIDD1Ev,CEGL2_TEX_HYBRID::~CEGL2_TEX_HYBRID(),unread,
@@ -2856,7 +2856,7 @@ address,size,mangled,demangled,status,section_ref
 000b3bd8,76,_ZN15CINPUT_IF_TOUCHC1Ev,CINPUT_IF_TOUCH::CINPUT_IF_TOUCH(),mentioned_unverified,
 000b5bc4,76,_ZN13CUI_SCROLLBAR18IsEnableScrollDownEv,CUI_SCROLLBAR::IsEnableScrollDown(),unread,
 000b70d4,76,_ZN9CFILE_TXT13IsDataCommentEiij,"CFILE_TXT::IsDataComment(int, int, unsigned int)",unread,
-000b8158,76,_ZN10CFILE_UTIL8FileFindEPc,CFILE_UTIL::FileFind(char*),unread,
+000b8158,76,_ZN10CFILE_UTIL8FileFindEPc,CFILE_UTIL::FileFind(char*),read_structural,NOTES §342
 000b9554,76,_ZN9CSTR_UTIL4CmpNEPcS0_i,"CSTR_UTIL::CmpN(char*, char*, int)",unread,
 000bbe30,76,_ZN12CSOUND_IF_SL19Static_DeletePlayerEi,CSOUND_IF_SL::Static_DeletePlayer(int),mentioned_unverified,
 000bd998,76,_ZN10CFRAMERATEC2Eff,"CFRAMERATE::CFRAMERATE(float, float)",mentioned_unverified,
@@ -3115,7 +3115,7 @@ address,size,mangled,demangled,status,section_ref
 00080918,64,unzGetCurrentFileInfo64,unzGetCurrentFileInfo64,unread,
 00083284,64,ogg_page_packets,ogg_page_packets,read_structural,NOTES §336
 002cab9c,64,__aeabi_f2d,__aeabi_f2d,unread,
-000b6770,64,_ZN5CFILE5WriteEPvjj,"CFILE::Write(void*, unsigned int, unsigned int)",mentioned_unverified,
+000b6770,64,_ZN5CFILE5WriteEPvjj,"CFILE::Write(void*, unsigned int, unsigned int)",read_structural,NOTES §342
 000a5d50,64,_ZN15CG2D_LOADER_TGA14TGA_LoadMemoryEPh,CG2D_LOADER_TGA::TGA_LoadMemory(unsigned char*),read_structural,NOTES §316
 000b3780,64,_ZN11CINPUT_DATA7SetDownEiii,"CINPUT_DATA::SetDown(int, int, int)",unread,
 000b38a4,64,_ZN11CINPUT_DATA12SetDelayDownEiii,"CINPUT_DATA::SetDelayDown(int, int, int)",unread,
@@ -3441,12 +3441,12 @@ address,size,mangled,demangled,status,section_ref
 00086870,52,vorbis_synthesis_read,vorbis_synthesis_read,read_structural,NOTES §336
 0009d050,52,vorbis_synthesis_halfrate,vorbis_synthesis_halfrate,read_structural,NOTES §336
 000a23cc,52,_ZN11CG2D_LOADER4CopyEPv,CG2D_LOADER::Copy(void*),read_structural,NOTES §316
-000b6620,52,_ZN5CFILEC1EPc,CFILE::CFILE(char*),mentioned_unverified,
+000b6620,52,_ZN5CFILEC1EPc,CFILE::CFILE(char*),read_structural,NOTES §342
 000a91a0,52,_ZN8CEGL2_IF6SetWVPERKN4math7MATRIX4E,CEGL2_IF::SetWVP(math::MATRIX4 const&),unread,
 000b4728,52,_ZN15CINPUT_IF_TOUCH12GetTouchTimeEi,CINPUT_IF_TOUCH::GetTouchTime(int),unread,
 000b8a20,52,_ZN5CLIST7GetDataEi,CLIST::GetData(int),mentioned_unverified,
-000b6620,52,_ZN5CFILEC2EPc,CFILE::CFILE(char*),mentioned_unverified,
-000b67dc,52,_ZN5CFILE7GetTimeEP11_SYSTEMTIME,CFILE::GetTime(_SYSTEMTIME*),mentioned_unverified,
+000b6620,52,_ZN5CFILEC2EPc,CFILE::CFILE(char*),read_structural,NOTES §342
+000b67dc,52,_ZN5CFILE7GetTimeEP11_SYSTEMTIME,CFILE::GetTime(_SYSTEMTIME*),read_structural,NOTES §342
 000b6b04,52,_ZN9CFILE_DAT9CacheLoadEiji,"CFILE_DAT::CacheLoad(int, unsigned int, int)",unread,
 000b9b90,52,_ZN9CSTR_UTIL14GetHashValueExEPci,"CSTR_UTIL::GetHashValueEx(char*, int)",unread,
 000ba230,52,_ZN9CSOUND_IFC2Ei,CSOUND_IF::CSOUND_IF(int),mentioned_unverified,
@@ -3555,7 +3555,7 @@ address,size,mangled,demangled,status,section_ref
 000b6ad4,48,_ZN9CFILE_DAT11CacheUnloadEi,CFILE_DAT::CacheUnload(int),unread,
 000b6b7c,48,_ZN9CFILE_DAT9CacheFindEi,CFILE_DAT::CacheFind(int),unread,
 000b6bac,48,_ZN9CFILE_DAT13CacheFindFreeEv,CFILE_DAT::CacheFindFree(),unread,
-000b8030,48,_ZN10CFILE_UTIL7DirMoveEPcS0_,"CFILE_UTIL::DirMove(char*, char*)",unread,
+000b8030,48,_ZN10CFILE_UTIL7DirMoveEPcS0_,"CFILE_UTIL::DirMove(char*, char*)",read_structural,NOTES §342
 000b9d5c,48,_ZN9CWORK_MEM6DeleteEi,CWORK_MEM::Delete(int),mentioned_unverified,
 000b9da4,48,_ZN9CWORK_MEM3NewEi,CWORK_MEM::New(int),unread,
 000bb29c,48,_ZN9CSOUND_IF11GetPlayModeEi,CSOUND_IF::GetPlayMode(int),unread,
@@ -4017,8 +4017,8 @@ address,size,mangled,demangled,status,section_ref
 000a1594,36,ov_pcm_seek_page_lap,ov_pcm_seek_page_lap,read_structural,NOTES §336
 000a15b8,36,ov_time_seek_lap,ov_time_seek_lap,read_structural,NOTES §336
 000a15dc,36,ov_time_seek_page_lap,ov_time_seek_page_lap,read_structural,NOTES §336
-000b79b4,36,_ZN10CFILE_UTIL10FileDeleteEPci,"CFILE_UTIL::FileDelete(char*, int)",unread,
-000b67b8,36,_ZN5CFILE7GetSizeEv,CFILE::GetSize(),mentioned_unverified,
+000b79b4,36,_ZN10CFILE_UTIL10FileDeleteEPci,"CFILE_UTIL::FileDelete(char*, int)",read_structural,NOTES §342
+000b67b8,36,_ZN5CFILE7GetSizeEv,CFILE::GetSize(),read_structural,NOTES §342
 000a72f8,36,_ZN18CGX_SCREEN_CORRECT13Area_GetScaleEiPfS0_,"CGX_SCREEN_CORRECT::Area_GetScale(int, float*, float*)",unread,
 000a81ec,36,_ZN8CEGL2_IF10SetScissorEP9_RECT_S32,CEGL2_IF::SetScissor(_RECT_S32*),unread,
 000a853c,36,_ZN8CEGL2_IF13DeleteTextureEj,CEGL2_IF::DeleteTexture(unsigned int),unread,
@@ -4204,7 +4204,7 @@ address,size,mangled,demangled,status,section_ref
 000a0844,32,ov_raw_tell,ov_raw_tell,read_structural,NOTES §336
 000a0864,32,ov_pcm_tell,ov_pcm_tell,read_structural,NOTES §336
 000a27e4,32,_ZN11CG2D_LOADER12GetPixelByteEv,CG2D_LOADER::GetPixelByte(),read_structural,NOTES §316
-000b66e8,32,_ZN5CFILED1Ev,CFILE::~CFILE(),mentioned_unverified,
+000b66e8,32,_ZN5CFILED1Ev,CFILE::~CFILE(),read_structural,NOTES §342
 000a6fac,32,_ZN18CGX_SCREEN_CORRECT6ScaledEi,CGX_SCREEN_CORRECT::Scaled(int),unread,
 000a6fcc,32,_ZN18CGX_SCREEN_CORRECT9NonScaledEi,CGX_SCREEN_CORRECT::NonScaled(int),unread,
 000a7078,32,_ZN18CGX_SCREEN_CORRECT8CorrectXEf,CGX_SCREEN_CORRECT::CorrectX(float),unread,
@@ -4212,12 +4212,12 @@ address,size,mangled,demangled,status,section_ref
 000b1bc8,32,_ZN11CEGL_PACKET19GetVBOBufferCurrentEv,CEGL_PACKET::GetVBOBufferCurrent(),mentioned_unverified,
 000a93dc,32,_ZN8CEGL2_IF10SetViewDirERKN4math7VECTOR3IfEE,CEGL2_IF::SetViewDir(math::VECTOR3<float> const&),unread,
 000ab654,32,_ZN12CEGL2_SHADER4InitEv,CEGL2_SHADER::Init(),mentioned_unverified,
-000b66c8,32,_ZN5CFILE5CloseEv,CFILE::Close(),mentioned_unverified,
+000b66c8,32,_ZN5CFILE5CloseEv,CFILE::Close(),read_structural,NOTES §342
 000ad8e0,32,_ZN12CEGL2_SPRITE8SetColorEhhh,"CEGL2_SPRITE::SetColor(unsigned char, unsigned char, unsigned char)",unread,
 000b3674,32,_ZN11CINPUT_DATA11SetKeyGroupEiii,"CINPUT_DATA::SetKeyGroup(int, int, int)",unread,
 000b4708,32,_ZN15CINPUT_IF_TOUCHD2Ev,CINPUT_IF_TOUCH::~CINPUT_IF_TOUCH(),unread,
 000b4708,32,_ZN15CINPUT_IF_TOUCHD1Ev,CINPUT_IF_TOUCH::~CINPUT_IF_TOUCH(),unread,
-000b66e8,32,_ZN5CFILED2Ev,CFILE::~CFILE(),mentioned_unverified,
+000b66e8,32,_ZN5CFILED2Ev,CFILE::~CFILE(),read_structural,NOTES §342
 000b8bbc,32,_ZN5CLIST7SetDataEiPv,"CLIST::SetData(int, void*)",unread,
 000bbc2c,32,_ZN12CSOUND_IF_SL10GetSLStateEi,CSOUND_IF_SL::GetSLState(int),unread,
 002808f8,32,_Z18iOS_getTransFaceATi,iOS_getTransFaceAT(int),unread,
@@ -4388,7 +4388,7 @@ address,size,mangled,demangled,status,section_ref
 000b61e4,28,_ZN11CCOMP_Z_DECC1Ev,CCOMP_Z_DEC::CCOMP_Z_DEC(),mentioned_unverified,
 000b63b0,28,_ZN11CCOMP_Z_ENCC2Ev,CCOMP_Z_ENC::CCOMP_Z_ENC(),mentioned_unverified,
 000b63b0,28,_ZN11CCOMP_Z_ENCC1Ev,CCOMP_Z_ENC::CCOMP_Z_ENC(),mentioned_unverified,
-000b6810,28,_ZN5CFILE7SetTimeEP11_SYSTEMTIME,CFILE::SetTime(_SYSTEMTIME*),unread,
+000b6810,28,_ZN5CFILE7SetTimeEP11_SYSTEMTIME,CFILE::SetTime(_SYSTEMTIME*),read_structural,NOTES §342
 000b6b60,28,_ZN9CFILE_DATD2Ev,CFILE_DAT::~CFILE_DAT(),unread,
 000b6b60,28,_ZN9CFILE_DATD1Ev,CFILE_DAT::~CFILE_DAT(),unread,
 000b7090,28,_ZN9CFILE_TXT12GetDataAsIntEiij,"CFILE_TXT::GetDataAsInt(int, int, unsigned int)",unread,
@@ -4891,7 +4891,7 @@ address,size,mangled,demangled,status,section_ref
 000b6f6c,20,_ZN9CFILE_TXTD1Ev,CFILE_TXT::~CFILE_TXT(),unread,
 000b707c,20,_ZN9CFILE_TXT13GetDataAsCharEiij,"CFILE_TXT::GetDataAsChar(int, int, unsigned int)",unread,
 000b8980,20,_ZN5CLIST4InitEv,CLIST::Init(),mentioned_unverified,
-000b7ed8,20,_ZN10CFILE_UTIL8FileEnumEPcS0_P5CLISTS2_j,"CFILE_UTIL::FileEnum(char*, char*, CLIST*, CLIST*, unsigned int)",unread,
+000b7ed8,20,_ZN10CFILE_UTIL8FileEnumEPcS0_P5CLISTS2_j,"CFILE_UTIL::FileEnum(char*, char*, CLIST*, CLIST*, unsigned int)",read_structural,NOTES §342
 000b8994,20,_ZN5CLISTC2Ev,CLIST::CLIST(),mentioned_unverified,
 000b8a04,20,_ZN5CLISTD2Ev,CLIST::~CLIST(),unread,
 000b9d48,20,_ZN9CWORK_MEMC2Ev,CWORK_MEM::CWORK_MEM(),mentioned_unverified,
@@ -5547,7 +5547,7 @@ address,size,mangled,demangled,status,section_ref
 0009e984,8,ov_seekable,ov_seekable,read_structural,NOTES §336
 000a2820,8,_ZN11CG2D_LOADER19GetImageFormatCountEv,CG2D_LOADER::GetImageFormatCount(),read_structural,NOTES §316
 000a2a88,8,_ZN11CG2D_LOADER16GetImageExtCountEv,CG2D_LOADER::GetImageExtCount(),read_structural,NOTES §316
-000b79ac,8,_ZN10CFILE_UTIL10FileCreateEPc,CFILE_UTIL::FileCreate(char*),unread,
+000b79ac,8,_ZN10CFILE_UTIL10FileCreateEPc,CFILE_UTIL::FileCreate(char*),read_structural,NOTES §342
 000a7e28,8,_ZN8CEGL2_IF17GetMaxTextureSizeEv,CEGL2_IF::GetMaxTextureSize(),unread,
 000a8210,8,_ZN8CEGL2_IF9GetShaderEv,CEGL2_IF::GetShader(),unread,
 000b1adc,8,_ZN11CEGL_PACKET8GetCountEv,CEGL_PACKET::GetCount(),mentioned_unverified,
@@ -5587,8 +5587,8 @@ address,size,mangled,demangled,status,section_ref
 000b524c,8,_ZN5CRECT6SetRIDEi,CRECT::SetRID(int),unread,
 000b5b14,8,_ZN13CUI_SCROLLBAR10GetScissorEv,CUI_SCROLLBAR::GetScissor(),unread,
 000b8a18,8,_ZN5CLIST8GetCountEv,CLIST::GetCount(),mentioned_unverified,
-000b67b0,8,_ZN5CFILE12GetLastErrorEv,CFILE::GetLastError(),unread,
-000b682c,8,_ZN5CFILE9GetHandleEv,CFILE::GetHandle(),unread,
+000b67b0,8,_ZN5CFILE12GetLastErrorEv,CFILE::GetLastError(),read_structural,NOTES §342
+000b682c,8,_ZN5CFILE9GetHandleEv,CFILE::GetHandle(),read_structural,NOTES §342
 000b6ac4,8,_ZN9CFILE_DAT10GetFileNumEv,CFILE_DAT::GetFileNum(),unread,
 000b6acc,8,_ZN9CFILE_DAT11GetFileNameEv,CFILE_DAT::GetFileName(),unread,
 000b6c68,8,_ZN9CFILE_DAT9GetOffsetEi,CFILE_DAT::GetOffset(int),mentioned_unverified,
@@ -5596,19 +5596,19 @@ address,size,mangled,demangled,status,section_ref
 000b6ee0,8,_ZN9CFILE_DAT11GetCompressEi,CFILE_DAT::GetCompress(int),unread,
 000b6ee8,8,_ZN9CFILE_DAT9GetFormatEi,CFILE_DAT::GetFormat(int),unread,
 000b6f80,8,_ZN9CFILE_TXT10GetLineNumEv,CFILE_TXT::GetLineNum(),unread,
-000b78a4,8,_ZN10CFILE_UTIL14DrvGetDiscPathEPcS0_,"CFILE_UTIL::DrvGetDiscPath(char*, char*)",unread,
-000b78ac,8,_ZN10CFILE_UTIL10DrvGetFreeEPcPjS1_,"CFILE_UTIL::DrvGetFree(char*, unsigned int*, unsigned int*)",unread,
-000b7980,8,_ZN10CFILE_UTIL9DirDeleteEPci,"CFILE_UTIL::DirDelete(char*, int)",unread,
-000b7990,8,_ZN10CFILE_UTIL13DirGetSpecialEjiPc,"CFILE_UTIL::DirGetSpecial(unsigned int, int, char*)",unread,
-000b799c,8,_ZN10CFILE_UTIL7DirEnumEPcP5CLISTj,"CFILE_UTIL::DirEnum(char*, CLIST*, unsigned int)",unread,
-000b79a4,8,_ZN10CFILE_UTIL7DirFindEPc,CFILE_UTIL::DirFind(char*),unread,
-000b7b80,8,_ZN10CFILE_UTIL8FileMoveEPcS0_,"CFILE_UTIL::FileMove(char*, char*)",unread,
-000b81a4,8,_ZN10CFILE_UTIL15FileSetReadOnlyEPci,"CFILE_UTIL::FileSetReadOnly(char*, int)",unread,
-000b81ac,8,_ZN10CFILE_UTIL25FileSetExcludedFromBackupEPci,"CFILE_UTIL::FileSetExcludedFromBackup(char*, int)",unread,
-000b87f0,8,_ZN10CFILE_UTIL12FileOpenPropEPc,CFILE_UTIL::FileOpenProp(char*),unread,
-000b87f8,8,_ZN10CFILE_UTIL14FileCreateTempEPcS0_,"CFILE_UTIL::FileCreateTemp(char*, char*)",unread,
-000b8970,8,_ZN10CFILE_UTIL10DlgGetPathEjPcS0_S0_,"CFILE_UTIL::DlgGetPath(unsigned int, char*, char*, char*)",unread,
-000b8978,8,_ZN10CFILE_UTIL10DlgGetFileEjjPcS0_S0_iS0_S0_,"CFILE_UTIL::DlgGetFile(unsigned int, unsigned int, char*, char*, char*, int, char*, char*)",unread,
+000b78a4,8,_ZN10CFILE_UTIL14DrvGetDiscPathEPcS0_,"CFILE_UTIL::DrvGetDiscPath(char*, char*)",read_structural,NOTES §342
+000b78ac,8,_ZN10CFILE_UTIL10DrvGetFreeEPcPjS1_,"CFILE_UTIL::DrvGetFree(char*, unsigned int*, unsigned int*)",read_structural,NOTES §342
+000b7980,8,_ZN10CFILE_UTIL9DirDeleteEPci,"CFILE_UTIL::DirDelete(char*, int)",read_structural,NOTES §342
+000b7990,8,_ZN10CFILE_UTIL13DirGetSpecialEjiPc,"CFILE_UTIL::DirGetSpecial(unsigned int, int, char*)",read_structural,NOTES §342
+000b799c,8,_ZN10CFILE_UTIL7DirEnumEPcP5CLISTj,"CFILE_UTIL::DirEnum(char*, CLIST*, unsigned int)",read_structural,NOTES §342
+000b79a4,8,_ZN10CFILE_UTIL7DirFindEPc,CFILE_UTIL::DirFind(char*),read_structural,NOTES §342
+000b7b80,8,_ZN10CFILE_UTIL8FileMoveEPcS0_,"CFILE_UTIL::FileMove(char*, char*)",read_structural,NOTES §342
+000b81a4,8,_ZN10CFILE_UTIL15FileSetReadOnlyEPci,"CFILE_UTIL::FileSetReadOnly(char*, int)",read_structural,NOTES §342
+000b81ac,8,_ZN10CFILE_UTIL25FileSetExcludedFromBackupEPci,"CFILE_UTIL::FileSetExcludedFromBackup(char*, int)",read_structural,NOTES §342
+000b87f0,8,_ZN10CFILE_UTIL12FileOpenPropEPc,CFILE_UTIL::FileOpenProp(char*),read_structural,NOTES §342
+000b87f8,8,_ZN10CFILE_UTIL14FileCreateTempEPcS0_,"CFILE_UTIL::FileCreateTemp(char*, char*)",read_structural,NOTES §342
+000b8970,8,_ZN10CFILE_UTIL10DlgGetPathEjPcS0_S0_,"CFILE_UTIL::DlgGetPath(unsigned int, char*, char*, char*)",read_structural,NOTES §342
+000b8978,8,_ZN10CFILE_UTIL10DlgGetFileEjjPcS0_S0_iS0_S0_,"CFILE_UTIL::DlgGetFile(unsigned int, unsigned int, char*, char*, char*, int, char*, char*)",read_structural,NOTES §342
 000b89a8,8,_ZN5CLIST6InsertEiPv,"CLIST::Insert(int, void*)",unread,
 000b8e08,8,_ZN9CSTR_UTIL10IsRootPathEPc,CSTR_UTIL::IsRootPath(char*),unread,
 000b9dd4,8,_ZN9CWORK_MEM3GetEv,CWORK_MEM::Get(),mentioned_unverified,
@@ -6009,13 +6009,13 @@ address,size,mangled,demangled,status,section_ref
 000b6584,4,_ZN6CCRYPTD2Ev,CCRYPT::~CCRYPT(),unread,
 000b6584,4,_ZN6CCRYPTD1Ev,CCRYPT::~CCRYPT(),unread,
 000b661c,4,_ZN6CCRYPT7DecryptEPhij,"CCRYPT::Decrypt(unsigned char*, int, unsigned int)",mentioned_unverified,
-000b789c,4,_ZN10CFILE_UTILC2Ev,CFILE_UTIL::CFILE_UTIL(),mentioned_unverified,
-000b789c,4,_ZN10CFILE_UTILC1Ev,CFILE_UTIL::CFILE_UTIL(),mentioned_unverified,
-000b78a0,4,_ZN10CFILE_UTILD2Ev,CFILE_UTIL::~CFILE_UTIL(),unread,
-000b78a0,4,_ZN10CFILE_UTILD1Ev,CFILE_UTIL::~CFILE_UTIL(),unread,
-000b7988,4,_ZN10CFILE_UTIL13DirGetWindowsEPc,CFILE_UTIL::DirGetWindows(char*),unread,
-000b798c,4,_ZN10CFILE_UTIL12DirGetSystemEPc,CFILE_UTIL::DirGetSystem(char*),unread,
-000b7998,4,_ZN10CFILE_UTIL13DirGetExecuteEPcS0_,"CFILE_UTIL::DirGetExecute(char*, char*)",unread,
+000b789c,4,_ZN10CFILE_UTILC2Ev,CFILE_UTIL::CFILE_UTIL(),read_structural,NOTES §342
+000b789c,4,_ZN10CFILE_UTILC1Ev,CFILE_UTIL::CFILE_UTIL(),read_structural,NOTES §342
+000b78a0,4,_ZN10CFILE_UTILD2Ev,CFILE_UTIL::~CFILE_UTIL(),read_structural,NOTES §342
+000b78a0,4,_ZN10CFILE_UTILD1Ev,CFILE_UTIL::~CFILE_UTIL(),read_structural,NOTES §342
+000b7988,4,_ZN10CFILE_UTIL13DirGetWindowsEPc,CFILE_UTIL::DirGetWindows(char*),read_structural,NOTES §342
+000b798c,4,_ZN10CFILE_UTIL12DirGetSystemEPc,CFILE_UTIL::DirGetSystem(char*),read_structural,NOTES §342
+000b7998,4,_ZN10CFILE_UTIL13DirGetExecuteEPcS0_,"CFILE_UTIL::DirGetExecute(char*, char*)",read_structural,NOTES §342
 000b8a54,4,_ZN5CLIST12GetDataAsStrEi,CLIST::GetDataAsStr(int),unread,
 000b8bdc,4,_ZN9CSTR_UTILC2Ev,CSTR_UTIL::CSTR_UTIL(),mentioned_unverified,
 000b8bdc,4,_ZN9CSTR_UTILC1Ev,CSTR_UTIL::CSTR_UTIL(),mentioned_unverified,
