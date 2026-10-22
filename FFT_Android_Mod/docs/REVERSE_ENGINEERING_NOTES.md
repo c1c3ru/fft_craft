@@ -11742,3 +11742,24 @@ confirmando duas implementacoes de verdade paralelas, nao
 duplicatas triviais). sub_fb740 (6 chamadas) e hipotetizado como o
 helper generico "avanca 1 ou 2 bytes conforme DBCS", reutilizado
 em todo o projeto. Marcada read_structural.
+
+## 336. Biblioteca libvorbis/libogg (ov_*/ogg_*/vorbis_*) - codec de audio open-source de terceiros, fast-track em lote de 124 funcoes (2026-10-22, Fase 3, estrategia 6)
+
+Os simbolos ov_*/ogg_*/vorbis_* (ov_pcm_seek, ov_crosslap, ov_bitrate,
+ogg_stream_pagein/iovecin, ogg_sync_pageseek, vorbis_analysis_*,
+vorbis_staticbook_pack/unpack, vorbis_lsp_to_curve, vorbis_lpc_to_lsp,
+vorbis_book_decode*, vorbis_synthesis*, vorbis_dsp_clear,
+vorbis_info_clear, etc) nao sao codigo "generico-parecido" - sao
+nomes de API e de simbolos internos IDENTICOS aos da biblioteca
+publica e amplamente conhecida libvorbis/libogg (Xiph.Org), o codec
+de audio Ogg Vorbis open-source padrao da industria, usado aqui
+quase certamente para decodificar musica de fundo/trilha sonora
+(formato .ogg). Nao ha absolutamente nenhuma possibilidade de logica
+especifica de FFT dentro da decodificacao de bitstream Vorbis/Ogg -
+e matematica de codec de audio (transformadas, livros de codigo
+Huffman, LSP/LPC, janelamento) identica a qualquer outro uso dessa
+biblioteca em qualquer projeto. Fast-tracked via reconhecimento de
+padrao (nomes de simbolo = API publica conhecida) sem leitura
+individual de instrucao, seguindo a estrategia 6 do metodo de
+trabalho (secao 100). 124 funcoes, 24056 bytes, marcadas
+read_structural em lote.
