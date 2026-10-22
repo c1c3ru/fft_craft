@@ -376,18 +376,18 @@ address,size,mangled,demangled,status,section_ref
 0019d83c,980,_Z10MainEmployv,MainEmploy(),read_structural,NOTES §338
 002520c8,980,_Z18ctlworkinginf_mainP7CTLINFO,ctlworkinginf_main(CTLINFO*),read_structural,NOTES §339
 000abcd0,976,_ZNSt4priv10_Rb_globalIbE20_Rebalance_for_eraseEPNS_18_Rb_tree_node_baseERS3_S4_S4_,"std::priv::_Rb_global<bool>::_Rebalance_for_erase(std::priv::_Rb_tree_node_base*, std::priv::_Rb_tree_node_base*&, std::priv::_Rb_tree_node_base*&, std::priv::_Rb_tree_node_base*&)",read_structural,NOTES §329
-001604fc,976,_Z16iOSSlideYajiMainv,iOSSlideYajiMain(),unread,
+001604fc,976,_Z16iOSSlideYajiMainv,iOSSlideYajiMain(),read_structural,NOTES §345
 001bff08,972,_Z11PostModeChgi,PostModeChg(int),read_structural,NOTES §341
 000b74d8,964,_ZN9CFILE_TXT4LoadEPcij,"CFILE_TXT::Load(char*, int, unsigned int)",read_structural,NOTES §344
-0026ca14,964,_Z18ctlnvcontinue_initi,ctlnvcontinue_init(int),unread,
+0026ca14,964,_Z18ctlnvcontinue_initi,ctlnvcontinue_init(int),read_structural,NOTES §346
 0009fe08,960,ov_pcm_seek,ov_pcm_seek,read_structural,NOTES §336
-00247eb4,960,_Z16ctlbirthday_mainP7CTLINFO,ctlbirthday_main(CTLINFO*),unread,
+00247eb4,960,_Z16ctlbirthday_mainP7CTLINFO,ctlbirthday_main(CTLINFO*),read_structural,NOTES §347
 00084060,952,ogg_stream_pagein,ogg_stream_pagein,read_structural,NOTES §336
-0021e7d8,948,_Z12doEffect_subv,doEffect_sub(),unread,
+0021e7d8,948,_Z12doEffect_subv,doEffect_sub(),read_structural,NOTES §348
 00261728,948,_Z17ctlhakenokng_mainP7CTLINFO,ctlhakenokng_main(CTLINFO*),read_structural,NOTES §343
-001cd600,944,_Z14set_status_allii,"set_status_all(int, int)",unread,
+001cd600,944,_Z14set_status_allii,"set_status_all(int, int)",read_structural,NOTES §349
 001a7a84,944,_Z7ChrSorti,ChrSort(int),unread,
-001c2ce0,944,_Z19MakeSmallWindowFuncPh,MakeSmallWindowFunc(unsigned char*),unread,
+001c2ce0,944,_Z19MakeSmallWindowFuncPh,MakeSmallWindowFunc(unsigned char*),read_structural,NOTES §350
 00073c74,936,crc32,crc32,read_structural,NOTES §337
 000e2698,936,_Z22iOS_statusfigprint_FT4P11tagPOLY_FT4itiiPviiP9COPYFIELDi,"iOS_statusfigprint_FT4(tagPOLY_FT4*, int, unsigned short, int, int, void*, int, int, COPYFIELD*, int)",unread,
 0021a648,932,_Z31SearchNextMetascheduleDividePosssPlS_,"SearchNextMetascheduleDividePos(short, short, long*, long*)",unread,

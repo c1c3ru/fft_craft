@@ -11927,3 +11927,163 @@ regiao do binario (0xb6ef0-0xb7400, adjacente a CFILE_UTIL/CFILE em
 parser de texto delimitado generico. Fast-tracked por consistencia
 de padrao com os siblings ja confirmados, sem leitura individual.
 17 funcoes, 2512 bytes, marcadas read_structural.
+
+## 345. iOSSlideYajiMain() - driver por-frame do icone de seta "deslize aqui" (yaji = seta), subsistema iOSYajiEffect completo (2026-10-22, Fase 3, trigesimo segundo lote paralelo)
+
+Confirma um subsistema "Yaji" (矢印/yajirushi = seta) autocontido e
+rico: iOSSlideYajiSet(int) (arma uma instancia) -> iOSSlideYajiMain()
+(esta funcao, driver por-frame) -> iOSSlideNaviCurMove() (feature
+separada de cursor de navegacao). Usa trigonometria (rsin/rcos/
+ratan2, 1x cada) pra calcular angulo/posicao/rotacao do icone de
+seta (animacao classica de "pulsar apontando na direcao do swipe"),
+e o pipeline de render padrao ASHURA (iOSmyGetShapePrim ->
+ASHURA_getOTptrZ -> AddPrim, fila Z-sorted estilo PS1-GTE - "ASHURA"
+e o nome interno do render-queue deste engine, herdado do codigo PSX
+original). As 5 branches-para-tras batem com iterar os arrays de
+slot de efeito de tamanho fixo sTchYajiEff (816B)/sTchYajishape
+(1632B) - ou seja, Main itera sobre multiplos efeitos "yaji" ativos
+simultaneamente. Familia iOSYajiEffect* completa encontrada (Set/
+GetFlagOk/GetX/GetY/GetCount/GetAlpha/GetSizeTGA/End/Clear/
+SetMultiRezCorrectEnable), amarrada ao estado de rastreamento de
+swipe sTchSlide* (Flag/Speed/Angle/StartX/Y/BufX/Y). Hipotese: dica
+visual de "arraste aqui" pra pan de camera/scroll de menu via gesto
+de toque. Marcada read_structural.
+
+## 346. ctlnvcontinue_init(int) - setup do prompt "toque pra continuar" do modo Novel (2026-10-22, Fase 3, trigesimo segundo lote paralelo)
+
+Fecha o par com ctlnvcontinue_main (0x26cdd8, adjacente, literalmente
+comecando onde esta funcao termina - mesma regiao de ctltremes_main,
+secao 311). Zero branches (setup linear flat). Registra pacotes de
+animacao/janela (add_anmpac x1, add_winpac x3), carrega e consulta a
+imagem do icone (LoadImage_menuData -> GsGetTimInfo -> xpLibGetOffset),
+posiciona a janela (wldwin_noropen x2 + wldpicwin_set), desenha um
+frame primed (picsand_draw + DrawSync, nao um loop), inicializa 2
+estados de icone (iOS_setV2Icon x2, provavel animacao de cursor
+piscando) e configura a hit-box de toque (iOS_CMenuTouch::init com 8
+args + setDispOffset + iOS_setDispMenuTouch) que permite o jogador
+tocar a tela pra avancar a narracao. Confirma tambem o layout
+completo da familia: ctlnobel_init/main/active/deactive,
+ctlnobelstop_init/main/active/deactive, ctlnvcontinue_init/main - o
+controller "continuar" do modo novel ao lado dos controllers de
+narracao e de parada. Marcada read_structural.
+
+## 347. ctlbirthday_main(CTLINFO*) - CORRECAO: tela de ENTRADA de data de nascimento na criacao de personagem, NAO notificacao de aniversario (2026-10-22, Fase 3, trigesimo segundo lote paralelo)
+
+Achado que corrige a leitura ingenua do nome: "birthday" nao e uma
+celebracao, e a tela interativa de ENTRADA numerica de data de
+nascimento mostrada na criacao de personagem/festa - confirmado de
+forma independente pela string de UI "Please input your birthday..."
+ja extraida em FFT_Android_Mod/docs/TRANSLATION_PTBR_PROGRESS.md, e
+pelo recurso dedicado _binary_birthday_bin vinculado ao binario.
+Jump table de 4 casos (estados: esperando input / editando mes /
+editando dia / confirmar-e-fechar). Usa o widget de entrada numerica
+por toque iOS_CMenuTouchNum (init/setDispOffset/setNumCur/exec) pra
+digitar mes/dia, recalcula e valida a data a cada mudanca de digito
+via birthday_change(CTLINFO*) (que por sua vez chama
+vOpn_sun2ivaday(int*,int*) - matematica de tabela dia-por-mes,
+provavelmente rejeitando ex: 30 de fevereiro), toca callSystemSound
+(x4, feedback de cursor/digito/confirma/erro), chama
+ctlbirthokng_init() uma vez ao terminar a entrada (dialogo de
+confirmacao/invalido - padrao OK/NG ja visto em outras secoes) e
+se auto-desativa (ctlbirthday_deactive chamada de dentro do proprio
+main) apos a confirmacao resolver. Familia completa: ctlbirthday_init
+(564B)/_active/_deactive/_main, mais o helper compartilhado
+birthday_change (chamado tanto por init quanto por main). Marcada
+read_structural.
+
+## 348. doEffect_sub() - ACHADO ARQUITETURAL: maquina de estados de 6 fases do ciclo de vida do efeito de batalha atual, chamada unica a partir de DoEffect() (2026-10-22, Fase 3, trigesimo segundo lote paralelo)
+
+Achado importante que mapeia a camada mais alta do sistema de
+efeitos ja parcialmente documentado (camera-work secoes 83/307/308/
+326/327, metaschedule secao 308). doEffect_sub() NAO tem argumentos -
+opera inteiramente sobre estado global (1 slot "efeito atual", nao
+por-_EffectTCB - isso e papel dos handlers sNN_* do opcode VM ja
+documentados). Chamador unico confirmado por disassembly direto de
+DoEffect() (0x21eb8c, so 36 bytes): DoEffect() = chama
+DoEffectCameraWork() + doEffect_sub() (esta funcao) +
+DoPermanentEffect(), em sequencia, uma vez por frame. Jump table de
+6 casos dispatcha num estado global int (estado-1, range 1-6):
+estado 0/5 = idle/parado (retorna sem fazer nada); estado 1 = "ainda
+ticando, sem setup" trivial; estado 2 = "comeca carregamento"
+(stopMapPaletteAnimation, stopmenutransfer, LoadEffectTIM - carrega
+a textura do efeito, avanca pra estado 3); estado 3 = "inicializa
+ponteiros + cria task" (NewHeap, OgataInit, SetDefaultCamera,
+resetFrameRate, depois 9 chamadas SetEffect*Ptr - ANM/TSQ/SEQ/TBL/
+PMT/MSQL/SED/SetUpData/FrameRate, todas chaveadas pelo ID do efeito -
+conectando os dados de script/animacao/tabela carregados, depois
+CreateEffectTask cria a _EffectTCB raiz, avanca pra estado 4); estado
+6 = variante "editor" simplificada de estado 3 (so
+SetEditANMPtr/SetEditTSQPtr, provavel ferramenta de debug/editor);
+estado 4 = "roda/tick" (itera slots de task filha chamando
+doSequence(short) uma vez por slot pra avancar o programa de opcode
+daquele slot em um tick - ISSO e o que de fato dirige o VM de opcode
+sNN_end..sNN_doMetaschedule ja documentado; checa flags de
+plataforma iOS_GaryutenseiCheck/iOS_isIrobakeEffect para casos
+especiais de skills especificas; quando todos os slots terminam,
+finaliza via Ssd_DisposeEffectData + restertMapPaletteAnimation +
+startmenutransfer e volta pro estado 0 idle). Camada completa
+confirmada: DoEffect() -> doEffect_sub() -> doSequence(short) ->
+sNN_*(_EffectTCB*) [opcode VM, incl. metaschedule secoes 307/308] -
+enquanto DoEffectCameraWork() e uma fase IRMA chamada direto por
+DoEffect(), nao um filho de doEffect_sub(). Marcada read_structural.
+
+## 349. set_status_all(int,int) - aplica TODOS os tipos de status a UMA unidade (nao "todas as unidades"), mapeia layout completo de campos de status em BWORK (2026-10-22, Fase 3, trigesimo segundo lote paralelo, relevante pra busca da formula de combate)
+
+Achado de alto valor para o sistema de status/combate. Apesar do
+nome, "_all" se refere a "todos os ~40 tipos de status do enum do
+engine" (loop de 0 a 0x27), NAO a "todas as unidades no campo de
+batalha" - o primeiro argumento e um INDICE DE UNIDADE (r8 =
+idx*0x1e6, 0x1e6=486=sizeof(BWORK), indexando um array global
+BWORK[]), com guarda de slot morto/vazio no topo (retorna -1).
+Mapeia o layout de campos de status em BWORK: +0x1df = bitfield
+primario de status (~40 bits), +0x1dc/0x1dd/0x1de = bytes
+secundarios de status, +0x61 = byte-resumo de categoria de status
+(bits 0x0D/0x20 = "incapacitado", checado por adjust_input_flag),
++0x30 = charge-time/CT (zerado por certos status tipo sleep/stop),
++0x23 bit 0x40 = flag de sync de rede, +0x2e = flag de
+defender/guard (limpa pelo status 0x13), +5 bits 0x30 =
+classificacao elemental/raca (mesclada pelos status 9/0x22, ex:
+reclassificacao tipo Undead), +0x17d = flag de UI "dirty". Para
+cada bit de status setado no bitmask requisitado (populado por
+change_status_adjust(a1), que filtra por resistencia/imunidade e
+regras de "duty" de rede via pspNetGetBattleModeFlag/pspNetCheckDuty),
+faz checagem de GRUPO DE EXCLUSIVIDADE (5 iteracoes contra uma
+tabela de propriedade por-status de 16 bytes/entrada, estilo
+status_data) antes de escrever o bit e chamar
+set_status_counter(unit, status_id, 0) pra (re)iniciar o contador de
+duracao. Pos-loop: chama adjust_entry_status (recalculo de stats/
+flags - candidato forte pra fazer parte do pipeline de formula de
+HP/MP/ataque que o projeto ainda procura) e adjust_input_flag
+(recalcula se a unidade pode agir - Petrify/Death/Sleep/Confuse
+desabilitando input). Tabelas globais confirmadas como fonte de
+propriedade por-status: status_data (640B), status_data2 (55B),
+statusToAnmStatusTable (164B, status->animacao). Proximos alvos
+fortes: change_status_adjust(int) (0x1ca5a4, 916B, filtro de
+resistencia/imunidade+rede) e as proprias tabelas status_data/
+status_data2 (candidatas a conter duracao/chance-de-resistir).
+Marcada read_structural.
+
+## 350. MakeSmallWindowFunc(unsigned char*) - construtor de grade de tiles do fundo de janela pequena, confirma extensao da familia letter-prefix b/c/e/j (2026-10-22, Fase 3, trigesimo segundo lote paralelo)
+
+Confirma a hipotese: le um byte de estilo no offset +2 do struct de
+entrada (dispatch via cmp simples, nao jump table) pra decidir se as
+dimensoes de tile da janela vem de campos explicitos empacotados em
+nibble (offsets +3/+4/+5/+6, formato tiles<<4|remainder_px a 16px de
+granularidade) ou sao auto-derivadas de valores globais de tamanho
+de tela (estilo==2, variante "janela pequena relativa a tela
+cheia"). Depois faz tile de um patch fixo de um atlas de textura
+compartilhado através da grade width x height resultante via
+chamadas repetidas a DrawFT4RGB (4x), tratando corretamente tiles
+parciais/remainder nas bordas. Retorna ponteiro avancado
+(this + byte-no-offset-1), mesma convencao de chamada de
+MakeWindowFunc. Confirma que a familia letter-prefix b/c/e/j de
+"copia completa por contexto de task cooperativa" (secao 181) se
+estende tambem a MakeWindowFunc/MakeSmallWindowFunc: bMakeWindowFunc/
+bMakeSmallWindowFunc, cMakeWindowFunc/cMakeSmallWindowFunc,
+eMakeWindowFunc/eMakeSmallWindowFunc, jMakeWindowFunc/
+jMakeSmallWindowFunc, cada contexto com seu proprio par - a variante
+sem prefixo (944B, esta funcao) e a maior/mais completa "Small" da
+familia (vs 892/716/732/716 das letras), sugerindo ser a
+implementacao mais geral com as copias letter-prefixed sendo
+versoes reduzidas/especializadas. Sem jump table. Marcada
+read_structural.
