@@ -11026,3 +11026,95 @@ janela de espera construida por `disp_waitwindow` (secao 289) -
 sonda comando de trap de rede, checa cancelamento do jogador, anima
 os pacotes do spinner, e desenha icones/texto de cancelamento.
 Marcada read_structural.
+
+
+## Vigesimo-sexto lote paralelo (secoes 304-309): 6 funcoes lidas por forks simultaneos, sexta direto apos novo limite de sessao (2026-10-18/22, Fase 3)
+
+## 304. Bwork2ChrStts(...) - conversor real de equipamento/trabalho pra stats de personagem, NAO e a formula de dano (2026-10-18, Fase 3, lote paralelo)
+
+Bwork2ChrStts(BWORK*,CHR_STTS*,UM_WORK*) (0x1a749c, 1.000 B) -
+descida recursiva via jtable.py: 250 de ~250 instrucoes possiveis
+(100%), sem tabela de salto; 8 branches, 5 de retrocesso. 7 bl
+distintos.
+
+Chama SetRyoteFlag, get_ability, pspItemIsEmpty/IsExist,
+pspJobGetJobChangeFlag - confirma ser uma rotina de conversao
+equipamento/trabalho-pra-stats (resolve item equipado/emprego/
+habilidade pra montar CHR_STTS a partir de BWORK), nao a formula de
+dano numerica em si. Baixa densidade de branch (8 total) e 100% de
+cobertura sugerem marshaling de dado em laco, nao aritmetica densa
+inline. Um local sem simbolo (`sub_714b8`) chamado 7 vezes - alvo
+MUITO reusado em dezenas de outras funcoes ja lidas neste projeto
+(CDebugPrint::FrameStep, Wdisp_abilitywindow, disp_parawindow,
+etc.), provavel utilitario genuino compartilhado, nao especifico de
+dano. Marcada read_structural.
+
+## 305. disp_floatwindow() - janela flutuante real sobre a biblioteca `W`-prefixada compartilhada (2026-10-18, Fase 3, lote paralelo)
+
+disp_floatwindow() (0x156054, 1.276 B) - descida recursiva via
+jtable.py: 306 de ~319 instrucoes possiveis (96%), sem tabela de
+salto; 19 branches, 11 de retrocesso. 19 bl distintos.
+
+Construida inteiramente sobre a biblioteca `W`-prefixada
+(`Waddlocalprim`, `Wdisposememory`, `Wserchmessagepointer`,
+`Wcount_words2`, `Wloadcdst`, `Winitdrmode`/`2`,
+`Wstatuskanjiprint`, `Wextend_systemframe`, `Wtask_killmyself`) mais
+`multiwindow_windowbackinit`/`addinit` e o contexto `wasm`
+(`wasmTaskEntry`/`wasmGetInput1`/`3`). Confirma a hipotese de
+"janela flutuante de HP/nome seguindo unidade" - reusa a mesma
+biblioteca de janela central. Marcada read_structural.
+
+## 306. pspBattleEntryAreaMake(...) - escaneamento denso de area de entrada de batalha (2026-10-18, Fase 3, lote paralelo)
+
+pspBattleEntryAreaMake(int,int) (0x285084, 1.080 B) - descida
+recursiva via jtable.py: 266 de ~270 instrucoes possiveis (99%),
+sem tabela de salto; 42 branches, 26 de retrocesso - densissimo
+pra o tamanho. **Unico bl**: pspEntrySquareDataGet(). Rotina de
+escaneamento de grade auto-contida (laco aninhado provavel sobre
+x/y) que consulta dado de posicionamento por quadrado via
+pspEntrySquareDataGet pra determinar quadrados validos de
+deployment. Marcada read_structural.
+
+## 307. SetCameraWorkWithMetaschedule(short) - camada "meta" com busca de ponto de divisao de timeline (2026-10-18, Fase 3, lote paralelo)
+
+SetCameraWorkWithMetaschedule(short) (0x21abec, 1.252 B) - descida
+recursiva via jtable.py: 308 de ~313 instrucoes possiveis (98%),
+sem tabela de salto; 24 branches, 15 de retrocesso. 6 bl distintos.
+
+Chama os MESMOS setters de trabalho de camera de baixo nivel
+(SetEffectAngleCameraWork/TransCameraWork/ScaleCameraWork, x3 cada)
+usados pelo sistema de schedule plano, mais helpers de igualdade de
+vetor (EqualSVectorToVECTOR/SVECTOR) pra detectar convergencia, e
+**SearchNextMetascheduleDividePos** - o diferenciador chave.
+"Metaschedule" gerencia uma timeline de nivel mais alto dividida em
+sub-segmentos (um "schedule de schedules"), buscando o proximo
+ponto de divisao de segmento antes de despachar os mesmos setters
+por eixo. Marcada read_structural.
+
+## 308. s29_doMetaschedule(...) - efeito #29, fila MSQ paralela ao schedule base (2026-10-18, Fase 3, lote paralelo)
+
+s29_doMetaschedule(_EffectTCB*) (0x21e388, 984 B) - descida
+recursiva via jtable.py: 241 de ~246 instrucoes possiveis (98%),
+sem tabela de salto; 16 branches, 8 de retrocesso. 10 bl distintos.
+
+Chama **GetMSQFrameRate** ("MSQ" = metaschedule queue) e
+**SetCameraWorkWithMetaschedule** (secao 307) em vez dos
+equivalentes de schedule genericos, mais **CreateEffectTask**.
+Confirma "metaschedule" como uma fila paralela/de nivel mais alto
+(MSQ) com seus proprios pontos de entrada de taxa de quadro e
+trabalho de camera, construida sobre varios helpers locais
+compartilhados (`sub_21dedc` x6) - nao e so uma extensao do
+schedule base, e uma camada separada. Marcada read_structural.
+
+## 309. iOSBATTLE_scrollLandscape() - handler de rolagem/pan de camera, distinto do mecanismo de rotacao `iOSRot*` (2026-10-18, Fase 3, retry direto apos novo limite de sessao)
+
+iOSBATTLE_scrollLandscape() (0x2010cc, 1.212 B) - o sexto fork do
+lote falhou por limite de sessao; rodado jtable.py direto. Descida
+recursiva: 288 de ~303 instrucoes possiveis (95%), sem tabela de
+salto; 29 branches, 12 de retrocesso.
+
+Chama searchCurrentAnimation/searchAnimationByPositionBattle e
+**setLongVector** (x3) - confirma ser um handler de ROLAGEM/pan de
+camera (nao rotacao - nenhuma chamada `iOSRot*` aparece, diferente
+de `sBattleTouchRotation`/`iOSJobChangeRot`, secoes 143/149).
+Quatro locais sem simbolo. Marcada read_structural.

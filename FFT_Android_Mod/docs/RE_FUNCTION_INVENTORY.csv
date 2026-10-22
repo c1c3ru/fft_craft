@@ -282,7 +282,7 @@ address,size,mangled,demangled,status,section_ref
 0011e160,1288,_Z23Wextend_windowframemainiiP6RECT16iii,"Wextend_windowframemain(int, int, RECT16*, int, int, int)",read_structural,NOTES §279
 0024c89c,1284,_Z12ctlbrst_initv,ctlbrst_init(),unread,
 0011d864,1280,_Z22extend_windowframemainiiP6RECT16iii,"extend_windowframemain(int, int, RECT16*, int, int, int)",read_structural,NOTES §252
-00156054,1276,_Z16disp_floatwindowv,disp_floatwindow(),unread,
+00156054,1276,_Z16disp_floatwindowv,disp_floatwindow(),read_structural,NOTES §305
 00184174,1276,_Z11SetLoadDatai,SetLoadData(int),read_structural,NOTES §282
 001a96c8,1272,_Z8ItemSortiPs,"ItemSort(int, short*)",read_structural,NOTES §236
 0027426c,1272,_Z17MainBattleRoutinev,MainBattleRoutine(),read_structural,NOTES §235
@@ -290,7 +290,7 @@ address,size,mangled,demangled,status,section_ref
 001f4b2c,1260,_Z15entryAnimationsv,entryAnimations(),read_structural,NOTES §263
 0029b704,1256,GsSortPoly,GsSortPoly,read_structural,NOTES §246
 0025cd24,1256,_Z12wldpara_initv,wldpara_init(),read_full,NOTES §12.2
-0021abec,1252,_Z29SetCameraWorkWithMetaschedules,SetCameraWorkWithMetaschedule(short),unread,
+0021abec,1252,_Z29SetCameraWorkWithMetaschedules,SetCameraWorkWithMetaschedule(short),read_structural,NOTES §307
 00220ab0,1252,_Z15p22_shoukanFuncv,p22_shoukanFunc(),read_structural,NOTES §244
 0022416c,1252,_Z11p01_bowFuncv,p01_bowFunc(),read_structural,NOTES §243
 0025a424,1252,_Z16ctlhoukmes2_initi,ctlhoukmes2_init(int),unread,
@@ -305,7 +305,7 @@ address,size,mangled,demangled,status,section_ref
 00212c00,1220,_Z22requestChangeGradationiiiii,"requestChangeGradation(int, int, int, int, int)",read_structural,NOTES §250
 00273378,1220,_Z9SetTmp_UAP10UnitAction,SetTmp_UA(UnitAction*),read_structural,NOTES §249
 000986d0,1212,vorbis_book_init_decode,vorbis_book_init_decode,read_full,NOTES §255
-002010cc,1212,_Z25iOSBATTLE_scrollLandscapev,iOSBATTLE_scrollLandscape(),unread,
+002010cc,1212,_Z25iOSBATTLE_scrollLandscapev,iOSBATTLE_scrollLandscape(),read_structural,NOTES §309
 0025b2d0,1212,_Z16ctlhoukmes2_mainP7CTLINFO,ctlhoukmes2_main(CTLINFO*),read_structural,NOTES §256
 0021871c,1208,_Z15testBowLineDispi,testBowLineDisp(int),read_structural,NOTES §258
 000e1db8,1204,_Z14statusfigprintiiPcP9COPYFIELD,"statusfigprint(int, int, char*, COPYFIELD*)",read_structural,NOTES §254
@@ -336,7 +336,7 @@ address,size,mangled,demangled,status,section_ref
 000ae090,1088,_ZN12CEGL2_SPRITE11DrawPartialEffffff,"CEGL2_SPRITE::DrawPartial(float, float, float, float, float, float)",mentioned_unverified,
 000aceec,1080,_ZN12CEGL2_SPRITE5Draw8EffjPv,"CEGL2_SPRITE::Draw8(float, float, unsigned int, void*)",mentioned_unverified,
 000b1448,1080,_ZN14CEGL_COLLISION20IsVertexInTriangle3DEN4math7VECTOR3IfEES2_S2_S2_,"CEGL_COLLISION::IsVertexInTriangle3D(math::VECTOR3<float>, math::VECTOR3<float>, math::VECTOR3<float>, math::VECTOR3<float>)",unread,
-00285084,1080,_Z22pspBattleEntryAreaMakeii,"pspBattleEntryAreaMake(int, int)",unread,
+00285084,1080,_Z22pspBattleEntryAreaMakeii,"pspBattleEntryAreaMake(int, int)",read_structural,NOTES §306
 001a2f68,1080,_Z14PoachSellValuev,PoachSellValue(),read_structural,NOTES §298
 001b2560,1076,_Z8JobCicleiiii,"JobCicle(int, int, int, int)",read_structural,NOTES §284
 001a4338,1072,_Z9SellValuev,SellValue(),read_structural,NOTES §286
@@ -365,13 +365,13 @@ address,size,mangled,demangled,status,section_ref
 0025fbc4,1004,_Z9world_mapv,world_map(),read_structural,NOTES §300
 0024fdf4,1004,_Z18pspCtltutonet_mainP7CTLINFO,pspCtltutonet_main(CTLINFO*),unread,
 00263b08,1004,_Z13ctlnobel_initi,ctlnobel_init(int),read_structural,NOTES §302
-001a749c,1000,_Z13Bwork2ChrSttsP5BWORKP8CHR_STTSP7UM_WORK,"Bwork2ChrStts(BWORK*, CHR_STTS*, UM_WORK*)",unread,
+001a749c,1000,_Z13Bwork2ChrSttsP5BWORKP8CHR_STTSP7UM_WORK,"Bwork2ChrStts(BWORK*, CHR_STTS*, UM_WORK*)",read_structural,NOTES §304
 000b8414,988,_ZN10CFILE_UTIL14FileReplaceStrEPcS0_S0_Pi,"CFILE_UTIL::FileReplaceStr(char*, char*, char*, int*)",unread,
 002885f0,988,_Z15pspOpenIconDrawPmii18PSP_OPEN_ICON_TYPEi,"pspOpenIconDraw(unsigned long*, int, int, PSP_OPEN_ICON_TYPE, int)",unread,
 00245f24,988,_Z17ctlopentitle_initi,ctlopentitle_init(int),unread,
 000d8270,984,_Z12count_words2PsS_Pc,"count_words2(short*, short*, char*)",unread,
 0023dc94,984,_Z7Mdl0022siii,"Mdl0022(short, int, int, int)",read_structural,NOTES §101
-0021e388,984,_Z18s29_doMetascheduleP10_EffectTCB,s29_doMetaschedule(_EffectTCB*),unread,
+0021e388,984,_Z18s29_doMetascheduleP10_EffectTCB,s29_doMetaschedule(_EffectTCB*),read_structural,NOTES §308
 000ffe58,980,_Z13Wcount_words2PsS_Pc,"Wcount_words2(short*, short*, char*)",unread,
 0019d83c,980,_Z10MainEmployv,MainEmploy(),unread,
 002520c8,980,_Z18ctlworkinginf_mainP7CTLINFO,ctlworkinginf_main(CTLINFO*),unread,
