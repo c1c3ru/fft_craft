@@ -11118,3 +11118,123 @@ Chama searchCurrentAnimation/searchAnimationByPositionBattle e
 camera (nao rotacao - nenhuma chamada `iOSRot*` aparece, diferente
 de `sBattleTouchRotation`/`iOSJobChangeRot`, secoes 143/149).
 Quatro locais sem simbolo. Marcada read_structural.
+
+## 310. ctltownmenu_init(int) - setup do popup de interacao com cidade no world map (2026-10-22, Fase 3, vigesimo setimo lote paralelo)
+
+Init da ja documentada ctltownmenu_main (secao 215, 0x2570f4, "menu de
+modo cidade" acessado no world map). Chama townpic_load + dois pares
+GsGetTimInfo/LoadTPage/LoadClut (duas texturas: imagem da cidade e
+icone de janela), wldpicwin_set/scrwin_para_set (posiciona a janela
+de imagem), curhis_put (grava o historico de cursor que a _main
+depois le via curhis_get, ja documentado), add_anmpac/add_winpac
+(registro padrao CTLINFO) e Wserchmessagepointer/Wcount_words2 (prep
+de texto do nome da cidade). wldload_wait confirma que ainda roda no
+contexto do world map. Sem jump table (esperado para um _init). 95%
+de cobertura. Marcada read_structural.
+
+## 311. ctltremes_main(CTLINFO*) - hub/launcher que despacha para Novel, Tesouro e Continuar (2026-10-22, Fase 3, vigesimo setimo lote paralelo)
+
+Achado interessante: em vez de pertencer a uma unica tela de
+gameplay, esta funcao chama diretamente os _init de TRES outros
+controllers - ctlnobel_init (modo novel/narracao, secao 269),
+ctltresure_init (cacada ao tesouro) e ctlnvcontinue_init (fluxo de
+continuar jogo) - via Wtask_create/Wsend_taskparamater, o padrao de
+troca de task cooperativa usado em toda a familia ctl*. Usa
+isInRectUi/iOS_getTouchTap/iOS_getTouchBeginX/Y para hit-test de
+botoes, pagewin_main para uma lista paginada de opcoes, wldpicwin_set
++ picsand_draw (x3, efeito de "revelar areia") para a ilustracao de
+cada opcao, LoadClut/GsGetTimInfo (x3) para as texturas, wldfade_set
+para a transicao de saida e sound_request (x2) para o SE de cursor.
+Sem jump table (despacho via if/else). Hipotese: tela-hub (menu de
+"extras" do world/titulo) que deixa o jogador escolher entre ler
+conteudo em modo novel, fazer uma cacada ao tesouro ou continuar uma
+partida - e nao um modo de gameplay proprio, apesar do nome "tremes"
+nao bater com nenhum termo FFT conhecido. 95% de cobertura. Marcada
+read_structural.
+
+## 312. ctlbrst_init(int) - setup de popup modal de "Zodiac" no world map, NAO e burst de ataque (2026-10-22, Fase 3, vigesimo setimo lote paralelo)
+
+Achado que corrige a leitura ingenua do nome: "brst" aparentava
+sugerir efeito de "burst" de combate, mas o simbolo irmao
+ctlbrst_zodiac (0x2530b8) confirma que a familia inteira (
+ctlbrst_menu_set, ctlbrst_init, ctlbrst_active, ctlbrst_deactive,
+ctlbrst_main, iOS_BRST_CHECK, mais a tabela BRST_tbl de 7 bytes) e
+sobre um popup/checagem de Zodiaco no world map, nao um efeito
+visual de ataque. ctlbrst_init chama ctlbrst_menu_set diretamente
+(logo tem menu com opcoes), wldwin_set/wldwin_trans/wldmess_put/
+wldwin_noropen (janela modal padrao com transicao e texto),
+add_anmpac/add_winpac, pspWorldDisableFlg (trava o world map
+enquanto o popup esta ativo - confirma ser modal) e
+Wread_eventflag (gate de progresso de historia para o conteudo
+exibido). Hipotese: popup periodico de compatibilidade/fortuna de
+Zodiaco mostrado durante a viagem no world map, feature tipica de
+ports mobile de FFT. Sem jump table. 94% de cobertura. Proximo
+alvo de follow-up: ctlbrst_zodiac (0x2530b8) e ctlbrst_main
+(0x24d068), que devem conter a logica de decisao por signo.
+Marcada read_structural.
+
+## 313. ctlhoukmes2_init(int) - setup do popup de "relatorio" estagio 2 (concessao de titulo/shogou) (2026-10-22, Fase 3, vigesimo setimo lote paralelo)
+
+Init da ja documentada ctlhoukmes2_main (secao 256, 0x25b2d0).
+Confirma o par houk/houkmes2: ctlhoukmes_init (0x25a0f0, 312 bytes,
+ainda unread) -> ctlhoukmes2_init (0x25a424, esta funcao) ->
+ctlhoukmes_main (0x25a908, secao 117) -> ctlhoukmes2_main (0x25b2d0,
+secao 256), os quatro dispostos sequencialmente no binario (mesma
+unidade de traducao). Chama houkokumes_select (mesma chamada de
+selecao de mensagem usada por ctlhoukmes_main), Wtask_create/
+Wtask_status/Wsend_taskparamater (bootstrap de task padrao),
+Wserchmessagepointer/Wcount_words2 (localiza/mede o texto), unittoface
+(converte referencia de unidade em retrato - a tela mostra o retrato
+do personagem junto da mensagem de titulo/shogou concedido),
+add_winpac/wldwin_set/wldwin_trans/wldmess_put (x5, janela de
+mundo+texto padrao), Wwrite_eventflag (marca que o popup ja foi
+mostrado) e sound_request/Ssd_PlayEffects01 (x2, fanfarra de
+notificacao). Sem jump table. 96% de cobertura. Marcada
+read_structural.
+
+## 314. ctlworkingst_main(CTLINFO*) - segunda familia "working/busy" independente, mais rica que a ja documentada (2026-10-22, Fase 3, vigesimo setimo lote paralelo)
+
+Achado: existe uma familia ctlworkingst_* completa e distinta da
+familia ctlwork/ctlworking ja documentada (secoes 216/264,
+0x250984-0x251390, spinner simples sem polling de task nem jump
+table). A nova familia - ctlworkinginf_init (0x2514c4),
+ctlworkingst_dataset (0x251b68), ctlworkingst_init (0x251e34),
+ctlworkingst_active/_deactive (0x25249c/0x2524cc) e esta _main
+(0x2524d0) - fica logo em seguida no binario e e orientada a task
+assincrona: Wtask_create -> Wtask_status (poll) -> Wsend_taskparamater
+(x4), com jump table de 7 casos / 5 handlers (3 casos colapsam no
+mesmo handler de "poll", 0x252864). Chama ctlworkinginf_init (painel
+de info companheiro), ctlworkingst_dataset (dados por estado),
+ctlsthelp_init (overlay de ajuda, mesma chamada de
+hakenunit_status_main, secao 169), iOS_setV2Icon (x5) + 
+iOS_add_anmpac_max (icone animado de "ocupado"), iOS_ClearRectHitAll/
+GetRectHitNoTap/getTouchSwype (suprime toques, so le swipe),
+wldkey_rep (x2, auto-repeat de botao, provavel cancelar), 
+pspWorldDisableFlg (trava o world map durante a espera), sound_request
+(x3), DrawSync e MoveImage. Nenhuma referencia de chamador a
+ctlworkingst_init foi encontrada ainda nas notas - a feature que
+dispara esta tela de espera (save/load, rebuild de dados grande, etc)
+ainda nao foi identificada. 93% de cobertura. Marcada read_structural.
+
+## 315. ctlkiromes_main(CTLINFO*) - popup de mensagem do feature "kiroku" (registro), par direto do houk/houkmes (2026-10-22, Fase 3, vigesimo setimo lote paralelo)
+
+Confirmado via dynsym (nao so inferencia): a familia ctlkiroku_* /
+ctlkiromes_* espelha exatamente a familia ctlhouk_* / ctlhoukmes_*
+ja documentada - "houk" = houkoku (relatorio), "houkmes" = mensagem
+do relatorio; por paralelo direto, "kiroku" = registro e "kiromes" =
+mensagem do registro. Esta regra de nomenclatura (ctl*mes_* = popup
+de mensagem do feature ctl* base) deve se aplicar a qualquer outra
+familia *mes_* encontrada depois. ctlkiromes_main chama
+pagewin_init + pagewin_main diretamente (widget de texto paginado
+construido sob demanda, nao no _init), iOS_SetRectHit/
+ClearRectHitAll/GetRectHitNoTap (registra area de toque "toque para
+avancar"), iOS_setV2Icon/getV2Icon (icone de prompt), 
+Wwrite_eventflag/Wread_eventflag/Wtask_status/Wsend_taskparamater
+(sincronizacao cooperativa padrao com a task irma, provavelmente
+ctlkiroku_main), wldfade_set (transicao), sound_request/ssd_request
+(SE de abertura/confirmacao) e, de forma inesperada,
+getMovieEventNum - liga o popup de "registro" ao subsistema de
+eventos de filme/cutscene, sugerindo que o feature "kiroku" pode ser
+um log/galeria de cenas desbloqueadas em vez de um registro de save
+puro. Sem jump table (despacho se if/else apesar do padrao
+task_status). 93% de cobertura. Marcada read_structural.

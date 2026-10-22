@@ -268,8 +268,8 @@ address,size,mangled,demangled,status,section_ref
 00183c20,1364,_Z12MakeSaveDatai,MakeSaveData(int),read_structural,NOTES §223
 0019bfdc,1360,_Z11DressRemovev,DressRemove(),read_structural,NOTES §273
 00181578,1356,_Z10bValueFuncPh,bValueFunc(unsigned char*),read_structural,NOTES §227
-00256930,1344,_Z16ctltownmenu_initi,ctltownmenu_init(int),unread,
-0026cdd8,1344,_Z14ctltremes_mainP7CTLINFO,ctltremes_main(CTLINFO*),unread,
+00256930,1344,_Z16ctltownmenu_initi,ctltownmenu_init(int),read_structural,NOTES §310
+0026cdd8,1344,_Z14ctltremes_mainP7CTLINFO,ctltremes_main(CTLINFO*),read_structural,NOTES §311
 00195910,1340,_Z13BattleJobSttsii,"BattleJobStts(int, int)",read_structural,NOTES §245
 001a6764,1328,_Z7DB_initP2DBPmP10tagPOLY_F3P11tagPOLY_FT3P10tagPOLY_F4P11tagPOLY_FT4P10tagPOLY_G3P11tagPOLY_GT3P10tagPOLY_G4P11tagPOLY_GT4P10tagLINE_F2P10tagLINE_F3P10tagLINE_F4P10tagLINE_G2P10tagLINE_G3P9tagLINEG4P7tagTILEP9tagTILE_1P9tagTILE_8P10tagTILE_16P7tagSPRTP9tagSPRT_8P10tagSPRT_16P7DR_MOVEP7DR_AREAP7DR_MODE,"DB_init(DB*, unsigned long*, tagPOLY_F3*, tagPOLY_FT3*, tagPOLY_F4*, tagPOLY_FT4*, tagPOLY_G3*, tagPOLY_GT3*, tagPOLY_G4*, tagPOLY_GT4*, tagLINE_F2*, tagLINE_F3*, tagLINE_F4*, tagLINE_G2*, tagLINE_G3*, tagLINEG4*, tagTILE*, tagTILE_1*, tagTILE_8*, tagTILE_16*, tagSPRT*, tagSPRT_8*, tagSPRT_16*, DR_MOVE*, DR_AREA*, DR_MODE*)",read_full,NOTES §221
 0027c27c,1324,_ZN14iOS_CMenuTouch7execTapEP21IOS_MENU_TOUCH_RESULTPiS2_S2_,"iOS_CMenuTouch::execTap(IOS_MENU_TOUCH_RESULT*, int*, int*, int*)",read_structural,NOTES §225
@@ -280,7 +280,7 @@ address,size,mangled,demangled,status,section_ref
 00213228,1292,_Z20requestChangeAnbientiiiii,"requestChangeAnbient(int, int, int, int, int)",read_structural,NOTES §237
 00213898,1292,_Z17requestChangeFlatiiiii,"requestChangeFlat(int, int, int, int, int)",read_structural,NOTES §238
 0011e160,1288,_Z23Wextend_windowframemainiiP6RECT16iii,"Wextend_windowframemain(int, int, RECT16*, int, int, int)",read_structural,NOTES §279
-0024c89c,1284,_Z12ctlbrst_initv,ctlbrst_init(),unread,
+0024c89c,1284,_Z12ctlbrst_initv,ctlbrst_init(),read_structural,NOTES §312
 0011d864,1280,_Z22extend_windowframemainiiP6RECT16iii,"extend_windowframemain(int, int, RECT16*, int, int, int)",read_structural,NOTES §252
 00156054,1276,_Z16disp_floatwindowv,disp_floatwindow(),read_structural,NOTES §305
 00184174,1276,_Z11SetLoadDatai,SetLoadData(int),read_structural,NOTES §282
@@ -293,11 +293,11 @@ address,size,mangled,demangled,status,section_ref
 0021abec,1252,_Z29SetCameraWorkWithMetaschedules,SetCameraWorkWithMetaschedule(short),read_structural,NOTES §307
 00220ab0,1252,_Z15p22_shoukanFuncv,p22_shoukanFunc(),read_structural,NOTES §244
 0022416c,1252,_Z11p01_bowFuncv,p01_bowFunc(),read_structural,NOTES §243
-0025a424,1252,_Z16ctlhoukmes2_initi,ctlhoukmes2_init(int),unread,
+0025a424,1252,_Z16ctlhoukmes2_initi,ctlhoukmes2_init(int),read_structural,NOTES §313
 001d2394,1248,_Z19get_succession_dataP5BWORK,get_succession_data(BWORK*),read_structural,NOTES §257
 000ad324,1244,_ZN12CEGL2_SPRITE16AddPacketPartialEffffffP11CEGL_PACKET,"CEGL2_SPRITE::AddPacketPartial(float, float, float, float, float, float, CEGL_PACKET*)",read_full,NOTES §13.8
 0016a1c8,1244,_Z11ASHURA_FALLh,ASHURA_FALL(unsigned char),read_structural,NOTES §241
-002524d0,1244,_Z17ctlworkingst_mainP7CTLINFO,ctlworkingst_main(CTLINFO*),unread,
+002524d0,1244,_Z17ctlworkingst_mainP7CTLINFO,ctlworkingst_main(CTLINFO*),read_structural,NOTES §314
 001a39dc,1240,_Z13PoachBuyValuev,PoachBuyValue(),read_structural,NOTES §274
 001b4c34,1232,_Z12LearnJobSttsv,LearnJobStts(),read_structural,NOTES §248
 0008d318,1224,vorbis_lpc_from_data,vorbis_lpc_from_data,read_full,NOTES §247
@@ -311,7 +311,7 @@ address,size,mangled,demangled,status,section_ref
 000e1db8,1204,_Z14statusfigprintiiPcP9COPYFIELD,"statusfigprint(int, int, char*, COPYFIELD*)",read_structural,NOTES §254
 0027cf50,1204,_ZN14iOS_CMenuTouch4execEPiS0_S0_,"iOS_CMenuTouch::exec(int*, int*, int*)",read_structural,NOTES §253
 00188fe4,1200,_Z9eItemSortiPs,"eItemSort(int, short*)",read_structural,NOTES §259
-0024e0f8,1200,_Z15ctlkiromes_mainP7CTLINFO,ctlkiromes_main(CTLINFO*),unread,
+0024e0f8,1200,_Z15ctlkiromes_mainP7CTLINFO,ctlkiromes_main(CTLINFO*),read_structural,NOTES §315
 0009ebfc,1192,ov_raw_seek,ov_raw_seek,read_full,NOTES §260
 001bb714,1188,_Z12DetailStatusv,DetailStatus(),read_structural,NOTES §262
 001f45c0,1188,_Z13InitAnimationv,InitAnimation(),read_structural,NOTES §261
