@@ -11585,3 +11585,19 @@ esta mesma implementacao - ou seja, ha so uma implementacao real,
 compartilhada entre a nomenclatura "iOS"/camada de toque e a
 generica. Marcadas read_structural: iOSwldscr_snapshot (0x25e8d4),
 wldscr_snapshot (0x25ecd4).
+
+## 329. Familia std::priv::_Rb_tree/_Rb_global<bool> - internals genericos do libstdc++ do cache std::map<int,CEGL2_SHADER::DATA_SHADER>, fast-track em lote (2026-10-22, Fase 3, estrategia 6)
+
+Os 9 simbolos _Rb_tree/_Rb_global encontrados (insert_unique x2,
+_M_insert, _M_erase, _Rebalance_for_erase, _Rebalance, _M_decrement,
+_Rotate_left, _Rotate_right) sao a implementacao template-instanciada
+do libstdc++ (STLport-style, dado o namespace std::priv) de um unico
+container concreto: std::map<int, CEGL2_SHADER::DATA_SHADER> - um
+cache/registro de shaders indexado por int. Isso e maquinaria pura
+de arvore rubro-negra (insercao/remocao/rebalanceamento/rotacao de
+nodos), identica a qualquer outro uso de std::map no C++ - nenhuma
+logica de jogo e possivel nestas funcoes, sao template code gerado
+pelo compilador para o container, nao codigo FFT. Fast-tracked via
+quick pattern recognition sem leitura individual de instrucao,
+seguindo a estrategia 6 do metodo de trabalho (secao 100). Marcadas
+read_structural todas as 9 ocorrencias.

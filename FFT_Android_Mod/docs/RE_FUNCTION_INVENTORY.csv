@@ -375,7 +375,7 @@ address,size,mangled,demangled,status,section_ref
 000ffe58,980,_Z13Wcount_words2PsS_Pc,"Wcount_words2(short*, short*, char*)",unread,
 0019d83c,980,_Z10MainEmployv,MainEmploy(),unread,
 002520c8,980,_Z18ctlworkinginf_mainP7CTLINFO,ctlworkinginf_main(CTLINFO*),unread,
-000abcd0,976,_ZNSt4priv10_Rb_globalIbE20_Rebalance_for_eraseEPNS_18_Rb_tree_node_baseERS3_S4_S4_,"std::priv::_Rb_global<bool>::_Rebalance_for_erase(std::priv::_Rb_tree_node_base*, std::priv::_Rb_tree_node_base*&, std::priv::_Rb_tree_node_base*&, std::priv::_Rb_tree_node_base*&)",unread,
+000abcd0,976,_ZNSt4priv10_Rb_globalIbE20_Rebalance_for_eraseEPNS_18_Rb_tree_node_baseERS3_S4_S4_,"std::priv::_Rb_global<bool>::_Rebalance_for_erase(std::priv::_Rb_tree_node_base*, std::priv::_Rb_tree_node_base*&, std::priv::_Rb_tree_node_base*&, std::priv::_Rb_tree_node_base*&)",read_structural,NOTES §329
 001604fc,976,_Z16iOSSlideYajiMainv,iOSSlideYajiMain(),unread,
 001bff08,972,_Z11PostModeChgi,PostModeChg(int),unread,
 000b74d8,964,_ZN9CFILE_TXT4LoadEPcij,"CFILE_TXT::Load(char*, int, unsigned int)",mentioned_unverified,
@@ -458,7 +458,7 @@ address,size,mangled,demangled,status,section_ref
 00106448,792,_Z24Wmake_abilitycommandmainv,Wmake_abilitycommandmain(),unread,
 00262708,792,_Z16hakenunit_changeP7CTLINFO,hakenunit_change(CTLINFO*),unread,
 001d2ff4,788,_Z27set_playerwork_common_childP6PENTRYi,"set_playerwork_common_child(PENTRY*, int)",unread,
-000ac540,784,_ZNSt4priv8_Rb_treeIiSt4lessIiESt4pairIKiN12CEGL2_SHADER11DATA_SHADEREENS_10_Select1stIS7_EENS_11_MapTraitsTIS7_EESaIS7_EE13insert_uniqueENS_17_Rb_tree_iteratorIS7_SB_EERKS7_,"std::priv::_Rb_tree<int, std::less<int>, std::pair<int const, CEGL2_SHADER::DATA_SHADER>, std::priv::_Select1st<std::pair<int const, CEGL2_SHADER::DATA_SHADER> >, std::priv::_MapTraitsT<std::pair<int const, CEGL2_SHADER::DATA_SHADER> >, std::allocator<std::pair<int const, CEGL2_SHADER::DATA_SHADER> > >::insert_unique(std::priv::_Rb_tree_iterator<std::pair<int const, CEGL2_SHADER::DATA_SHADER>, std::priv::_MapTraitsT<std::pair<int const, CEGL2_SHADER::DATA_SHADER> > >, std::pair<int const, CEGL2_SHADER::DATA_SHADER> const&)",mentioned_unverified,
+000ac540,784,_ZNSt4priv8_Rb_treeIiSt4lessIiESt4pairIKiN12CEGL2_SHADER11DATA_SHADEREENS_10_Select1stIS7_EENS_11_MapTraitsTIS7_EESaIS7_EE13insert_uniqueENS_17_Rb_tree_iteratorIS7_SB_EERKS7_,"std::priv::_Rb_tree<int, std::less<int>, std::pair<int const, CEGL2_SHADER::DATA_SHADER>, std::priv::_Select1st<std::pair<int const, CEGL2_SHADER::DATA_SHADER> >, std::priv::_MapTraitsT<std::pair<int const, CEGL2_SHADER::DATA_SHADER> >, std::allocator<std::pair<int const, CEGL2_SHADER::DATA_SHADER> > >::insert_unique(std::priv::_Rb_tree_iterator<std::pair<int const, CEGL2_SHADER::DATA_SHADER>, std::priv::_MapTraitsT<std::pair<int const, CEGL2_SHADER::DATA_SHADER> > >, std::pair<int const, CEGL2_SHADER::DATA_SHADER> const&)",read_structural,NOTES §329
 0025bc78,784,_Z14mksuccess_calcv,mksuccess_calc(),unread,
 0008e038,776,vorbis_lsp_to_curve,vorbis_lsp_to_curve,unread,
 000bc67c,776,_ZN12CSOUND_IF_SL7LoadOGGEiPcPhjji,"CSOUND_IF_SL::LoadOGG(int, char*, unsigned char*, unsigned int, unsigned int, int)",mentioned_unverified,
@@ -1090,8 +1090,8 @@ address,size,mangled,demangled,status,section_ref
 000a0884,332,ov_time_tell,ov_time_tell,unread,
 000a6db4,332,_ZN18CGX_SCREEN_CORRECT4InitEiiii,"CGX_SCREEN_CORRECT::Init(int, int, int, int)",mentioned_unverified,
 000a977c,332,_ZN8CEGL2_IF8DrawTileEffffj,"CEGL2_IF::DrawTile(float, float, float, float, unsigned int)",read_full,NOTES §15
-000ac134,332,_ZNSt4priv10_Rb_globalIbE10_RebalanceEPNS_18_Rb_tree_node_baseERS3_,"std::priv::_Rb_global<bool>::_Rebalance(std::priv::_Rb_tree_node_base*, std::priv::_Rb_tree_node_base*&)",unread,
-000ac280,332,_ZNSt4priv8_Rb_treeIiSt4lessIiESt4pairIKiN12CEGL2_SHADER11DATA_SHADEREENS_10_Select1stIS7_EENS_11_MapTraitsTIS7_EESaIS7_EE9_M_insertEPNS_18_Rb_tree_node_baseERKS7_SF_SF_,"std::priv::_Rb_tree<int, std::less<int>, std::pair<int const, CEGL2_SHADER::DATA_SHADER>, std::priv::_Select1st<std::pair<int const, CEGL2_SHADER::DATA_SHADER> >, std::priv::_MapTraitsT<std::pair<int const, CEGL2_SHADER::DATA_SHADER> >, std::allocator<std::pair<int const, CEGL2_SHADER::DATA_SHADER> > >::_M_insert(std::priv::_Rb_tree_node_base*, std::pair<int const, CEGL2_SHADER::DATA_SHADER> const&, std::priv::_Rb_tree_node_base*, std::priv::_Rb_tree_node_base*)",unread,
+000ac134,332,_ZNSt4priv10_Rb_globalIbE10_RebalanceEPNS_18_Rb_tree_node_baseERS3_,"std::priv::_Rb_global<bool>::_Rebalance(std::priv::_Rb_tree_node_base*, std::priv::_Rb_tree_node_base*&)",read_structural,NOTES §329
+000ac280,332,_ZNSt4priv8_Rb_treeIiSt4lessIiESt4pairIKiN12CEGL2_SHADER11DATA_SHADEREENS_10_Select1stIS7_EENS_11_MapTraitsTIS7_EESaIS7_EE9_M_insertEPNS_18_Rb_tree_node_baseERKS7_SF_SF_,"std::priv::_Rb_tree<int, std::less<int>, std::pair<int const, CEGL2_SHADER::DATA_SHADER>, std::priv::_Select1st<std::pair<int const, CEGL2_SHADER::DATA_SHADER> >, std::priv::_MapTraitsT<std::pair<int const, CEGL2_SHADER::DATA_SHADER> >, std::allocator<std::pair<int const, CEGL2_SHADER::DATA_SHADER> > >::_M_insert(std::priv::_Rb_tree_node_base*, std::pair<int const, CEGL2_SHADER::DATA_SHADER> const&, std::priv::_Rb_tree_node_base*, std::priv::_Rb_tree_node_base*)",read_structural,NOTES §329
 000b50e8,332,_ZN5CRECT8DropTestEP9_RECT_S32,CRECT::DropTest(_RECT_S32*),unread,
 000bb6e8,332,_ZN12CSOUND_IF_SL10EngineInitEi,CSOUND_IF_SL::EngineInit(int),mentioned_unverified,
 000bac2c,332,_ZN9CSOUND_IF9FrameMoveEif,"CSOUND_IF::FrameMove(int, float)",mentioned_unverified,
@@ -1375,7 +1375,7 @@ address,size,mangled,demangled,status,section_ref
 00262a20,248,_Z16hakenunit_statusi,hakenunit_status(int),unread,
 00080958,244,unzGetCurrentFileInfo,unzGetCurrentFileInfo,unread,
 00085904,244,vorbis_analysis_buffer,vorbis_analysis_buffer,unread,
-000ac44c,244,_ZNSt4priv8_Rb_treeIiSt4lessIiESt4pairIKiN12CEGL2_SHADER11DATA_SHADEREENS_10_Select1stIS7_EENS_11_MapTraitsTIS7_EESaIS7_EE13insert_uniqueERKS7_,"std::priv::_Rb_tree<int, std::less<int>, std::pair<int const, CEGL2_SHADER::DATA_SHADER>, std::priv::_Select1st<std::pair<int const, CEGL2_SHADER::DATA_SHADER> >, std::priv::_MapTraitsT<std::pair<int const, CEGL2_SHADER::DATA_SHADER> >, std::allocator<std::pair<int const, CEGL2_SHADER::DATA_SHADER> > >::insert_unique(std::pair<int const, CEGL2_SHADER::DATA_SHADER> const&)",mentioned_unverified,
+000ac44c,244,_ZNSt4priv8_Rb_treeIiSt4lessIiESt4pairIKiN12CEGL2_SHADER11DATA_SHADEREENS_10_Select1stIS7_EENS_11_MapTraitsTIS7_EESaIS7_EE13insert_uniqueERKS7_,"std::priv::_Rb_tree<int, std::less<int>, std::pair<int const, CEGL2_SHADER::DATA_SHADER>, std::priv::_Select1st<std::pair<int const, CEGL2_SHADER::DATA_SHADER> >, std::priv::_MapTraitsT<std::pair<int const, CEGL2_SHADER::DATA_SHADER> >, std::allocator<std::pair<int const, CEGL2_SHADER::DATA_SHADER> > >::insert_unique(std::pair<int const, CEGL2_SHADER::DATA_SHADER> const&)",read_structural,NOTES §329
 000afa3c,244,_ZN7CCAMERA12SetProjOrthoEffff,"CCAMERA::SetProjOrtho(float, float, float, float)",unread,
 000bd9e4,244,_ZN10CFRAMERATE9FrameMoveEv,CFRAMERATE::FrameMove(),read_full,NOTES §21
 001728e0,244,_Z9cDrawTileP6RECT16P5COLORci,"cDrawTile(RECT16*, COLOR*, char, int)",unread,
@@ -2133,7 +2133,7 @@ address,size,mangled,demangled,status,section_ref
 002bf364,132,_Z21Debug_SetMapPolyChecki,Debug_SetMapPolyCheck(int),unread,
 00085028,128,_vorbis_block_alloc,_vorbis_block_alloc,unread,
 000a80f4,128,_ZN8CEGL2_IF12SetTexFilterEi,CEGL2_IF::SetTexFilter(int),unread,
-000ac3cc,128,_ZNSt4priv10_Rb_globalIbE12_M_decrementEPNS_18_Rb_tree_node_baseE,std::priv::_Rb_global<bool>::_M_decrement(std::priv::_Rb_tree_node_base*),unread,
+000ac3cc,128,_ZNSt4priv10_Rb_globalIbE12_M_decrementEPNS_18_Rb_tree_node_baseE,std::priv::_Rb_global<bool>::_M_decrement(std::priv::_Rb_tree_node_base*),read_structural,NOTES §329
 000b4808,128,_ZN15CINPUT_IF_TOUCH19GetGestureTapChanceEiiij,"CINPUT_IF_TOUCH::GetGestureTapChance(int, int, int, unsigned int)",unread,
 000b8800,128,_ZN10CFILE_UTIL11FileGetSizeEPc,CFILE_UTIL::FileGetSize(char*),unread,
 000b8880,128,_ZN10CFILE_UTIL11FileGetTimeEPcP11_SYSTEMTIME,"CFILE_UTIL::FileGetTime(char*, _SYSTEMTIME*)",unread,
@@ -2849,8 +2849,8 @@ address,size,mangled,demangled,status,section_ref
 000a7560,76,_ZN18CGX_SCREEN_CORRECT18Area_Y_ScalingDiffEiif,"CGX_SCREEN_CORRECT::Area_Y_ScalingDiff(int, int, float)",unread,
 000b1a80,76,_ZN11CEGL_PACKET3AddEi,CEGL_PACKET::Add(int),unread,
 000a9224,76,_ZN8CEGL2_IF9SetupFontEv,CEGL2_IF::SetupFont(),unread,
-000abc38,76,_ZNSt4priv10_Rb_globalIbE12_Rotate_leftEPNS_18_Rb_tree_node_baseERS3_,"std::priv::_Rb_global<bool>::_Rotate_left(std::priv::_Rb_tree_node_base*, std::priv::_Rb_tree_node_base*&)",unread,
-000abc84,76,_ZNSt4priv10_Rb_globalIbE13_Rotate_rightEPNS_18_Rb_tree_node_baseERS3_,"std::priv::_Rb_global<bool>::_Rotate_right(std::priv::_Rb_tree_node_base*, std::priv::_Rb_tree_node_base*&)",unread,
+000abc38,76,_ZNSt4priv10_Rb_globalIbE12_Rotate_leftEPNS_18_Rb_tree_node_baseERS3_,"std::priv::_Rb_global<bool>::_Rotate_left(std::priv::_Rb_tree_node_base*, std::priv::_Rb_tree_node_base*&)",read_structural,NOTES §329
+000abc84,76,_ZNSt4priv10_Rb_globalIbE13_Rotate_rightEPNS_18_Rb_tree_node_baseERS3_,"std::priv::_Rb_global<bool>::_Rotate_right(std::priv::_Rb_tree_node_base*, std::priv::_Rb_tree_node_base*&)",read_structural,NOTES §329
 000af574,76,_ZN16CEGL2_TEX_HYBRID12RAW_IsUpdateEi,CEGL2_TEX_HYBRID::RAW_IsUpdate(int),unread,
 000b3bd8,76,_ZN15CINPUT_IF_TOUCHC2Ev,CINPUT_IF_TOUCH::CINPUT_IF_TOUCH(),mentioned_unverified,
 000b3bd8,76,_ZN15CINPUT_IF_TOUCHC1Ev,CINPUT_IF_TOUCH::CINPUT_IF_TOUCH(),mentioned_unverified,
@@ -3223,7 +3223,7 @@ address,size,mangled,demangled,status,section_ref
 000a8648,60,_ZN8CEGL2_IF9AddSpriteEiP12CEGL2_SPRITEffh,"CEGL2_IF::AddSprite(int, CEGL2_SPRITE*, float, float, unsigned char)",unread,
 000ab8e8,60,_ZN12CEGL2_SHADER10SetTextureEi,CEGL2_SHADER::SetTexture(int),read_full,NOTES §13.10
 000ab9cc,60,_ZN12CEGL2_SHADERC2Ev,CEGL2_SHADER::CEGL2_SHADER(),mentioned_unverified,
-000abb88,60,_ZNSt4priv8_Rb_treeIiSt4lessIiESt4pairIKiN12CEGL2_SHADER11DATA_SHADEREENS_10_Select1stIS7_EENS_11_MapTraitsTIS7_EESaIS7_EE8_M_eraseEPNS_18_Rb_tree_node_baseE,"std::priv::_Rb_tree<int, std::less<int>, std::pair<int const, CEGL2_SHADER::DATA_SHADER>, std::priv::_Select1st<std::pair<int const, CEGL2_SHADER::DATA_SHADER> >, std::priv::_MapTraitsT<std::pair<int const, CEGL2_SHADER::DATA_SHADER> >, std::allocator<std::pair<int const, CEGL2_SHADER::DATA_SHADER> > >::_M_erase(std::priv::_Rb_tree_node_base*)",unread,
+000abb88,60,_ZNSt4priv8_Rb_treeIiSt4lessIiESt4pairIKiN12CEGL2_SHADER11DATA_SHADEREENS_10_Select1stIS7_EENS_11_MapTraitsTIS7_EESaIS7_EE8_M_eraseEPNS_18_Rb_tree_node_baseE,"std::priv::_Rb_tree<int, std::less<int>, std::pair<int const, CEGL2_SHADER::DATA_SHADER>, std::priv::_Select1st<std::pair<int const, CEGL2_SHADER::DATA_SHADER> >, std::priv::_MapTraitsT<std::pair<int const, CEGL2_SHADER::DATA_SHADER> >, std::allocator<std::pair<int const, CEGL2_SHADER::DATA_SHADER> > >::_M_erase(std::priv::_Rb_tree_node_base*)",read_structural,NOTES §329
 000af4d0,60,_ZN16CEGL2_TEX_HYBRID12GL_UnloadAllEv,CEGL2_TEX_HYBRID::GL_UnloadAll(),unread,
 000b52a0,60,_ZN5CRECT7SetRectEiP9_RECT_S32,"CRECT::SetRect(int, _RECT_S32*)",unread,
 000b52dc,60,_ZN5CRECT9SetRect16EiP9_RECT_S16,"CRECT::SetRect16(int, _RECT_S16*)",unread,
