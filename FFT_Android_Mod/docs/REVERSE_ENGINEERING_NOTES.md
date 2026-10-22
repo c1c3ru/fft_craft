@@ -11763,3 +11763,13 @@ padrao (nomes de simbolo = API publica conhecida) sem leitura
 individual de instrucao, seguindo a estrategia 6 do metodo de
 trabalho (secao 100). 124 funcoes, 24056 bytes, marcadas
 read_structural em lote.
+
+## 337. crc32/crc32_combine/crc32_combine64 - utilitario generico de checksum (provavel zlib), fast-track (2026-10-22, Fase 3, estrategia 6)
+
+Nomes de simbolo identicos a API publica zlib (crc32, crc32_combine,
+crc32_combine64). Checksum CRC-32 generico, usado tipicamente para
+verificacao de integridade de arquivo/asset ou save-data - nenhuma
+logica especifica de FFT possivel num calculo de checksum padrao.
+Fast-tracked sem leitura individual. Marcadas read_structural:
+crc32 (0x73c74, 936B), crc32_combine (0x7401c, 4B), crc32_combine64
+(0x74020, 4B).

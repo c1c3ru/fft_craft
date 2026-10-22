@@ -388,7 +388,7 @@ address,size,mangled,demangled,status,section_ref
 001cd600,944,_Z14set_status_allii,"set_status_all(int, int)",unread,
 001a7a84,944,_Z7ChrSorti,ChrSort(int),unread,
 001c2ce0,944,_Z19MakeSmallWindowFuncPh,MakeSmallWindowFunc(unsigned char*),unread,
-00073c74,936,crc32,crc32,unread,
+00073c74,936,crc32,crc32,read_structural,NOTES §337
 000e2698,936,_Z22iOS_statusfigprint_FT4P11tagPOLY_FT4itiiPviiP9COPYFIELDi,"iOS_statusfigprint_FT4(tagPOLY_FT4*, int, unsigned short, int, int, void*, int, int, COPYFIELD*, int)",unread,
 0021a648,932,_Z31SearchNextMetascheduleDividePosssPlS_,"SearchNextMetascheduleDividePos(short, short, long*, long*)",unread,
 00288a78,928,_Z16pspPrimAddDirectPmiiii,"pspPrimAddDirect(unsigned long*, int, int, int, int)",unread,
@@ -5964,8 +5964,8 @@ address,size,mangled,demangled,status,section_ref
 002cdf08,8,_Unwind_GetDataRelBase,_Unwind_GetDataRelBase,unread,
 002cdf10,8,_Unwind_GetTextRelBase,_Unwind_GetTextRelBase,unread,
 00072768,4,Java_com_square_1enix_FFT_1Android_GL2JNILib_step,Java_com_square_1enix_FFT_1Android_GL2JNILib_step,unread,
-0007401c,4,crc32_combine,crc32_combine,unread,
-00074020,4,crc32_combine64,crc32_combine64,unread,
+0007401c,4,crc32_combine,crc32_combine,read_structural,NOTES §337
+00074020,4,crc32_combine64,crc32_combine64,read_structural,NOTES §337
 0007f384,4,_tr_flush_bits,_tr_flush_bits,unread,
 00077494,4,gztell,gztell,unread,
 000774fc,4,gzoffset,gzoffset,unread,
