@@ -11238,3 +11238,192 @@ eventos de filme/cutscene, sugerindo que o feature "kiroku" pode ser
 um log/galeria de cenas desbloqueadas em vez de um registro de save
 puro. Sem jump table (despacho se if/else apesar do padrao
 task_status). 93% de cobertura. Marcada read_structural.
+
+## 316. Familia CG2D_LOADER (base + TGA/BMP/TIM) confirmada como framework generico de carregamento de imagem, fast-track em lote (2026-10-22, Fase 3, vigesimo oitavo lote paralelo)
+
+Aplicacao da estrategia 6 do metodo de trabalho (secao 100): leitura
+completa de CG2D_LOADER_TGA::TGA_AnalyzeHeader(void*) (0xa574c, 1176
+bytes) confirma ser um parser de header TGA generico - jump table de
+25 casos colapsando em so 5 handlers (campo de image-type do spec
+TGA, maioria caindo num handler "default/common"), chamando apenas
+sub_714b8 (helper local, 12x, leitura sequencial de campo por campo
+do header de 18 bytes) e TRACE_Empty (log de diagnostico). 87% de
+cobertura, zero logica especifica de FFT.
+
+O scan de simbolos via readelf confirma uma hierarquia completa:
+classe base CG2D_LOADER (ctor/dtor, Save/Load/Copy/CopyAsTexture/
+CalcAsTexture/GetFormat/GetPixelByte/GetPixelCount/
+GetImageFormat*/GetSavePixelFormat*) com tres subclasses paralelas -
+CG2D_LOADER_TGA, CG2D_LOADER_BMP, CG2D_LOADER_TIM (TIM = formato de
+textura PS1/PSX) - cada uma espelhando o mesmo conjunto de metodos
+virtuais quase byte a byte. Nenhuma CG2D_LOADER_PNG ou outro formato
+foi encontrada; o framework cobre apenas TGA/BMP/TIM.
+
+Dado que varios membros desta familia ja haviam sido lidos
+individualmente (CG2D_LOADER_BMP::Copy/Save secoes 205/267,
+CG2D_LOADER_TGA::Copy secao 217, CG2D_LOADER_TIM::TIM_LoadMemory/
+Load secoes 9.2/9.8/9.10) sem revelar nenhuma logica de jogo, e
+dado que a leitura completa de TGA_AnalyzeHeader confirma o padrao
+"parser de spec de formato de imagem generico, sem acoplamento a
+FFT", os 68 metodos remanescentes da familia (getters/setters/
+ctors/dtors triviais de poucas dezenas de bytes, mais os
+decodificadores RLE/bitmask/header especificos de cada formato -
+BMP_DecodeRLE4/8, BMP_AnalyzeInfoHeader/FileHeader/BitMask,
+TIM_AnalyzeFileHeader, TGA_LoadFile/LoadMemory, etc) sao aceitos
+como boilerplate reconhecido via quick pattern recognition, sem
+leitura individual de instrucao, e marcados read_structural em
+lote. Nenhum deles tem assinatura ou nome que sugira logica de
+combate, UI de battle ou qualquer sistema especifico do jogo - sao
+puramente I/O de formato de imagem compartilhado entre os tres
+tipos de arquivo.
+
+## 317. DrawTexFlip(short*, COLOR*, char, int, int, int) - desenha quad texturizado com 4 modos de flip via permutacao de UV, fecha a familia b/c/e/j (2026-10-22, Fase 3, vigesimo oitavo lote paralelo)
+
+Jump table totalmente resolvido: 4 casos, guarda "cmp sl,#3 / addls
+pc,pc,sl,lsl#2" (bounds-checked), com sl = r2 = o PROPRIO parametro
+char da funcao (NAO bit-depth de textura, hipotese inicial
+descartada). Isso confirma a leitura literal do nome: "TexFlip" =
+modo de flip (0=nenhum, 1=flip-H, 2=flip-V, 3=ambos). Cada um dos 4
+casos escreve os mesmos 4 pares de bytes U/V (offsets +0x10/11,
++0x18/19, +0x20/21, +0x28/29 de uma estrutura POLY_FT4-like estilo
+PS1) lendo os mesmos campos de origem (x/y/w/h do rect de textura em
+r5) - a unica diferenca entre os 4 casos e QUAL canto de origem vai
+para qual vertice de destino. Ou seja, o flip e implementado
+permutando qual canto fornece qual par UV, nao transformando pixels.
+
+Resolve tambem o "bl ausente" que o family_sim.py havia apontado
+(0x1ac88c, presente so na base): e addFT4num(), uma funcao trivial
+de 40 bytes que faz g_FT4count++ (contador global de primitivas
+FT4 enfileiradas, usado para indexar o slot de escrita). Disassembly
+direto dos prologos de bDrawTexFlip e eDrawTexFlip confirma que
+AMBOS fazem a mesma sequencia de 8 instrucoes (ldrh/add/lsl/lsr/mul/
+strh) só que INLINE em vez de via bl - artefato de codegen/inlining
+por unidade de compilacao, nao uma diferenca de comportamento. Logo
+DrawTexFlip/b/c/e/jDrawTexFlip sao duplicatas comportamentais
+verdadeiras, confirmando sem ressalvas o padrao arquitetural da
+secao 181 (copia completa por contexto de task cooperativa).
+
+Achado paralelo (fora do padrao, nao um bug): bDrawTexFlip
+especificamente tem 5 chamadas extras que os outros 3 irmaos (c/e/j)
+nao tem - CFFT_STATE::GetParam/SetParam, TexHybrid_Register,
+TexHybrid_RegistCLUTAddr, IS_TEX_2X() - um sistema de textura
+"hibrida" de alta resolucao especifico do port mobile. Isso sugere
+que o contexto de task "b" e o unico, entre os 5, que suporta pacote
+de textura em resolucao dobrada (2x) para este tipo de sprite - os
+outros 4 (base, c, e, j) usam apenas SetSemiTrans/SetShadeTex.
+
+Marcadas read_structural: DrawTexFlip (0x1acf38), bDrawTexFlip
+(0x177ed0), cDrawTexFlip (0x172f8c), eDrawTexFlip (0x18a3ac),
+jDrawTexFlip (0x194238). Marcada read_full: addFT4num (0x1ac88c,
+totalmente entendida - trivial).
+
+## 318. Caddzodiacback()/Cregist_zodiacot() - gemeo "asm" (narrow) de addzodiacback/regist_zodiacot, provavel orfao nesta build (2026-10-22, Fase 3, vigesimo oitavo lote paralelo)
+
+Caddzodiacback (0xcc270, 1128B) e estruturalmente quase identico a
+addzodiacback (secao 292, 0x1579d4, 1296B) - mesmas 6 chamadas de
+desenho PSP-prim (pspGetpspPrimWorkBuf, pspPrimBackDrawRGB, AddPrim,
+SetPolyFT4, SetSemiTrans, SetShadeTex), mesma forma de branches,
+97%/98% de cobertura - mas difere nas 4 chamadas de API de task:
+task_killmyself/asmTaskEntry/asmGetInput1/asmGetInput3 em vez de
+Wtask_killmyself/wasmTaskEntry/wasmGetInput1/wasmGetInput3. Isso NAO
+e um caso novo - e mais uma instancia do padrao de dupla-compilacao
+"wasm" (largo, provavelmente Shift-JIS/wide-char) vs "asm" (estreito,
+ASCII) ja confirmado em escala nas secoes 33/37.1/47/131 deste
+projeto.
+
+Evidencia de que sao gerenciadores paralelos de verdade, nao um
+stub chamando o outro: os irmaos de 20 bytes Cregist_zodiacot
+(0xcc25c) e regist_zodiacot (0x1579c0) cada um grava seu ponteiro de
+argumento num offset diferente de uma struct singleton GLOBAL
+DIFERENTE (+0x28 de uma base vs -0xa94 de outra base) - ou seja, sao
+dois gerenciadores de task distintos, um por familia.
+
+Achado relevante: NENHUM outro membro do cluster zodiac
+(ctlzodiac_init/_main, ctlbrst_zodiac, ctltuto_zodiac) tem variante
+C-prefixada - e ctlzodiac_main chama exclusivamente as primitivas
+Wtask_create/Wsend_taskparamater (familia W/wasm), nunca
+task_create/send_taskparamater puro. Ou seja, o unico caminho de
+controller zodiac visivel neste binario so alcanca addzodiacback (a
+versao wasm), nunca Caddzodiacback. Hipotese: Caddzodiacback/
+Cregist_zodiacot sao um par duplicado orfao/nao-alcancado nesta
+variante de build especifica, remanescente do titulo PS1/PSP
+original que carregava ambas as copias compiladas. Confirmar isso
+definitivamente exigiria uma busca de xref mais profunda ou tracing
+em runtime - fora do escopo deste pass.
+
+Marcadas read_structural: Caddzodiacback (0xcc270), Cregist_zodiacot
+(0xcc25c).
+
+## 319. pmkprim_put(int) - submissao por-frame de primitivas GPU do fundo da caixa de mensagem "arzmes" (2026-10-22, Fase 3, vigesimo oitavo lote paralelo)
+
+Loop duplo (externo por linha, interno construindo DOIS buffers de
+primitiva POLY_GT4 por iteracao a partir do array pmk_mesprim -
+1680 bytes = 2 registros de 840 bytes, confirmando double-buffer).
+Para cada tile: busca CLUT/TPage via GetClut/GetTPage usando campos
+de um descritor de linha, tinge uniformemente os 4 vertices de AMBOS
+os buffers a partir do argumento int (dividido em dois bytes via
+"and r0,#0xff" e "(r0/2)&0xff" - hipotese: nivel de brilho/alpha de
+fade do quadro), marca semi-transparente via SetSemiTrans, finaliza
+o header via SetPolyGT4 e enfileira ambos na ordering table via
+AddPrim (chamado 2x por linha). E vizinho direto no binario de
+vOpn_arzmes_init/_exit/_main (0x2419d4-0x241ee0), todas ainda
+unread - pmkprim_put e quase certamente chamada por
+vOpn_arzmes_main() a cada frame em que a janela de mensagem
+"arzmes" esta visivel, com o argumento int controlando o fade.
+Nenhum outro pmkprim_* existe no binario (familia de um unico
+membro, nao e uma familia maior). Proximo alvo natural de
+follow-up: vOpn_arzmes_main (904 bytes) para confirmar a hipotese de
+fade e descobrir o que dirige o argumento. Marcada read_structural.
+
+## 320. iOSCurHojyo(SVECTOR*) - overlay de mira da habilidade de Suporte (Hojyo) em batalha, parametro SVECTOR* morto/vestigial (2026-10-22, Fase 3, vigesimo oitavo lote paralelo)
+
+Achado rico: apos uma cadeia de 6 guardas de estado (icone #11
+inativo, toque de cursor engajado, nao em rotacao de camera, modo de
+toque de batalha correto, cursor visivel, profundidade de
+menu/submenu dentro do range), a funcao desenha um marcador em
+cruz/diamante cujos 4 cantos ficam sobre as 4 tiles ortogonalmente
+adjacentes a tile alvo - reprojetadas corretamente para o angulo de
+camera atual via produto escalar de ponto fixo contra a matriz de
+view/camera corrente (4 iteracoes, y sempre 0 = plano do chao).
+O marcador fica centrado num icone arrastavel (IDs 0x6a/0x6b) que
+"persegue" o dedo do jogador com velocidade limitada/clamped -
+mesmo padrao de cursor-de-toque usado em outros lugares do port.
+Submete a primitiva via ASHURA_getOTptrZ/AddPrim. Esta no mesmo
+cluster iOSCur* de predicados de cursor de batalha (iOSCurSameOK/
+iOSCurSameOKMove/iOSCurSameProcs/iOSCurIsInGame), sendo o unico
+membro que tambem desenha (nao e so um predicado). Hipotese: overlay
+de area-de-efeito de uma habilidade tipo Suporte (japones: 補助,
+hojyo), que afeta a tile alvo + suas 4 vizinhas ortogonais,
+adaptado para interacao via arrastar-o-dedo no touch screen no
+lugar do cursor D-pad original do PS1.
+
+Anomalia notavel: o unico parametro formal, SVECTOR*, e carregado em
+r0 na entrada mas imediatamente sobrescrito por "mov r0,#0xb" antes
+de ser salvo em qualquer lugar - em TODOS os caminhos, pois e a
+primeira instrucao apos o prologo. O parametro parece morto/nao-
+usado nesta implementacao portada; toda a posicao vem de globais
+(tabela de icones V2ICON_DATA, matriz de view cacheada, tabelas de
+offset PC-relative) em vez do SVECTOR* recebido do chamador -
+provavel vestigio de compatibilidade de ABI/call-site com o codigo
+PS1-era mais antigo. Marcada read_structural.
+
+## 321. ctlhakenokng_init() - popup de confirmacao Sim/Nao ("OK/NG") do fluxo de despacho de unidade (2026-10-22, Fase 3, vigesimo oitavo lote paralelo)
+
+Par interleaved com ctlhaken_init/_main no binario (ctlhaken_init
+0x261078 -> ctlhakenokng_init 0x261184, esta funcao -> ctlhaken_main
+0x2615cc -> ctlhakenokng_main 0x261728) - ctlhakenokng e um
+controller IRMAO, nao uma fase de ctlhaken. Chama iOS_dispOkNg(int,
+int), a assinatura confirmada em outros pontos das notas como o
+dialogo generico de confirmacao Sim/Nao do jogo (ja documentado para
+a tela de confirmacao do nome de personagem). Combinado com
+Wserchmessagepointer/Wcount_words2 (busca/quebra de linha de texto)
+alimentando wldmess_put (x4) e o setup padrao de janela (wldwin_set/
+_trans/_noropen), a hipotese mais forte e que este popup confirma
+"enviar esta unidade numa missao de despacho?" antes de comitar o
+despacho, disparado de dentro do fluxo de selecao de roster
+ctlhaken/ctlmouketeam (secao 167). O resultado/retorno de unidades
+despachadas e tratado por um trio separado (hakenunit_status/
+hakenunit_change/hakenunit_status_main, secao 169) - nao e a mesma
+tela. Nenhum call site (xref) foi localizado ainda para confirmar
+qual acao exata de UI dispara este popup. Sem jump table (esperado
+para um _init). 95% de cobertura. Marcada read_structural.
