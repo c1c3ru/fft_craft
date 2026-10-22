@@ -11601,3 +11601,144 @@ pelo compilador para o container, nao codigo FFT. Fast-tracked via
 quick pattern recognition sem leitura individual de instrucao,
 seguindo a estrategia 6 do metodo de trabalho (secao 100). Marcadas
 read_structural todas as 9 ocorrencias.
+
+## 330. ctlopentitle_init(int) - setup da tela de titulo de abertura do jogo, NAO e title-card de item/bau (2026-10-22, Fase 3, trigesimo lote paralelo)
+
+Confirma que "opentitle" se refere a tela de abertura/titulo do jogo
+(logo inicial), nao a um title-card de bau/item aberto. Evidencia:
+chama vOpn_scrinit/vOpn_fadein/vOpn_add_anmpac (x3, fila de
+animacoes/logos do titulo) - a mesma familia "vOpn" (video opening)
+ja confirmada na secao 87 como responsavel pela reproducao do filme
+de abertura via CD-XA (CdControl/CdControlB/CdSync, cdxa_stop,
+movie_exit) dentro de ctlopentitle_main (0x246450, ja documentada).
+Tambem chama PSX_LoadImage (imagem de fundo/logo), DrawSync,
+CFFT_STATE::SetParam (provavel flag de estado "na tela de titulo"),
+e configura iOS_CMenuTouch (init + setEnableUpDownRect, prompt de
+"toque para continuar"). Nenhuma chamada a sistema de
+inventario/item/bau - descarta definitivamente a hipotese
+alternativa. Familia completa confirmada via readelf:
+ctlopentitle_init/_active/_deactive/_main/_main3, seguindo o padrao
+polimorfico padrao da familia ctl*. Marcada read_structural.
+
+## 331. ctlsthelp_main(CTLINFO*) + familia ctlsthelp_init/_active/_deactive - driver do popup generico de ajuda reutilizavel (2026-10-22, Fase 3, trigesimo lote paralelo)
+
+Alvo de alto valor: ctlsthelp_init ja era referenciada por varias
+telas documentadas (hakenunit_status_main secao 169,
+ctlworkingst_main secao 314) como popup de ajuda generico, mas nunca
+lida diretamente. ctlsthelp_main faz polling completo de toque por
+frame (iOS_isTouchBegan/getTouchNowX/Y/getTouchTap x2/getTouchRelease)
+e re-estabelece rects de hit-test todo frame (ClearRectHitAll x2 +
+SetRectHit + GetRectHitNoTap/NoSlide), distinguindo tap-para-
+dispensar de swipe/arrastar. Chama sthelp_curpos_set (tambem usado
+no proprio _main, nao so no _init) - forte evidencia de que o popup
+PAGINA entre múltiplos topicos/entradas de ajuda, atualizando a
+posicao do cursor durante o ciclo de vida do overlay. Delega a
+renderizacao real do texto de ajuda a ctlhelp_init(int,int) (sub-
+controller generico e reutilizavel que tambem tem uma variante
+ctlhelp2_init mais rica) - ou seja, ctlsthelp e um wrapper fino de
+input/paginacao, enquanto ctlhelp/ctlhelp2 e o motor generico de
+exibicao de ajuda. sound_request e iOS_add_anmpac_max tocam
+feedback de interacao. Zero jump table (if/else + polling loops, mais
+simples que ctlworkingst_main que tem jump table de 7 casos).
+ctlsthelp_active/_deactive sao stubs triviais de flag (88B/24B, zero
+chamadas, zero branches). Marcadas read_structural: ctlsthelp_main
+(0x256500), ctlsthelp_init (0x256388), ctlsthelp_active (0x256490),
+ctlsthelp_deactive (0x2564e8).
+
+## 332. pspPrimDirectPartsDraw(int,int,unsigned long*,unsigned char*) - desenha icone largo como 3 quads texturizados lado a lado, com correcao de wrap de 256px (2026-10-22, Fase 3, trigesimo lote paralelo)
+
+100% de cobertura, loop fixo de exatamente 3 iteracoes ("Parts" = 3
+blocos). Os parametros int 1/2 sao pares de coordenadas empacotadas
+em 16 bits (x/y, largura/altura) via shift, mesmo esquema do sibling
+pspPrimDirectParamSet(int, RECT16*). O parametro unsigned char*
+NUNCA e desreferenciado - seu valor bruto e decomposto byte a byte
+(shifts/ANDs) e usado como cor RGBA empacotada de 32 bits, com NULL
+como sentinela de "pular desenho" (apesar da assinatura mangled
+sugerir um ponteiro real). O terceiro bloco (r5==2) soma +0x100
+(256px) a uma coordenada antes de escrever - o workaround classico
+de wrap de textura do PSP-GU (texturas limitadas a potencia de 2,
+entao um icone largo e dividido em blocos, e qualquer bloco cruzando
+a fronteira de 256px precisa de re-base de UV). Alocado via
+pspGetpspPrimWorkBuf(0x58) por iteracao a partir do ring buffer
+compartilhado da familia psp-Prim. Conclusao: variante "Direct" (de
+tiles fixos, nao table-driven) da familia de desenho de
+icone/sprite largo (pspOpenIconDraw, pspPrimBackDraw/RGB). Marcada
+read_structural.
+
+## 333. pspCtltutonet_main(CTLINFO*) - popup de nota/dica tutorial one-shot, "net" provavelmente abrevia "note" (NAO rede) (2026-10-22, Fase 3, trigesimo lote paralelo)
+
+Nenhuma chamada a API de socket/HTTP/conectividade/multiplayer foi
+encontrada - descarta a hipotese de "tutorial network check".
+Chama ctltips_deactive(CTLINFO*) explicitamente (desliga o popup
+irmao "Tips"), estabelecendo exclusao mutua entre os dois popups de
+mensagem one-shot - reforcado pela adjacencia direta no binario
+(pspCtltutonet_* fica logo apos a familia ctltips_*/ctltipsmes_*,
+sugerindo mesmo arquivo-fonte). wldmes_load(int) (x2) carrega o
+texto da nota por ID. curhis_get/curhis_clr fazem bookkeeping de
+estado (selecao/"ja mostrado"). sound_request (x4, chamada mais
+frequente) sugere multiplos eventos de UI (abrir, mover, confirmar,
+fechar) cada um com seu som. iOS_add_anmpac_max adiciona efeito de
+fade/slide-in do popup. Wtask_status confirma que segue o framework
+padrao de polling de task compartilhado por toda a familia ctl*_main.
+Zero jump table, 94% de cobertura. Hipotese: popup de nota/lembrete
+tutorial curto mostrado uma vez, quase um gemeo estrutural de
+ctltips_main mas para conteudo especifico de tutorial - "pspCtl"
+provavelmente um resquicio de nomenclatura herdado da base de codigo
+PSP "War of the Lions" original. Marcada read_structural.
+
+## 334. pspOpenIconDraw(unsigned long*,int,int,PSP_OPEN_ICON_TYPE,int) - provavel icone vestigial de status "acesso a midia" do PSP (2026-10-22, Fase 3, trigesimo lote paralelo)
+
+Familia PSP_OPEN autocontida com flags proprias (pspOpenEnableFlg/
+DisableFlg/CheckFlg) e dois buffers separados (BackBuf = placa de
+fundo, IconBuf = icone sobreposto) - um elemento composto. Sem jump
+table real: o enum PSP_OPEN_ICON_TYPE e usado como indice direto em
+__bpGetBinaryData(handle, tipo) (sistema de leitura de recurso
+binpack ja confirmado em outras secoes, ex: attack_assumeface
+secao 122), com apenas 1 caso especial (tipo==7) que de fato monta
+arte real: ate 4 quads texturizados via pspGetpspPrimWorkBuf(0x58) +
+memcpy (sub_714b8, ja confirmado como memcpy em outras secoes) +
+loop de calculo de UV/vertice. Todos os outros valores do enum
+pulam a construcao de textura e so devolvem um handle de buffer de
+primitiva vazio via o ponteiro de saida unsigned long*. Hipotese:
+resquicio de um indicador de status de acesso a midia (disco/
+Memory Stick) do hardware PSP original, mantido no port Android por
+compatibilidade de engine mas provavelmente desativado via
+pspOpenDisableFlg (sem porta fisica de midia removivel no Android).
+Marcada read_structural.
+
+## 335. Wcount_words2(short*,short*,char*) - scanner de largura de palavra/contagem para texto Shift-JIS largo, confirma substituicao de template e compressao LZ-like (2026-10-22, Fase 3, trigesimo lote paralelo)
+
+Alvo de altissimo valor: chamada por dezenas de funcoes ja
+documentadas ao longo do projeto (sempre apenas glosada como "busca/
+quebra de linha de texto") mas nunca lida diretamente. Leitura
+completa via disassembly manual (jtable.py nao resolveu jump table -
+e uma cadeia longa de cmp/beq, nao um switch) revela algoritmo
+completo: percorre o texto byte a byte, usando uma tabela de 15
+bytes copiada de get_unitwork_add(0)+0xdc (tabela de classe de
+byte-lider/largura) para decidir avanco de 1 ou 2 bytes (Shift-JIS).
+Bytes 0xFE/0xFF = quebra de linha/terminador (fecha a palavra atual,
+incrementa contador, zera acumulador); 0xF8 = espaco (fecha a
+palavra mas NAO incrementa o contador de linha - apenas marca fim de
+palavra); varios codigos de controle dedicados (0xFA=+10px fixo,
+0xEE=largura vinda de parametro, 0xE4/E6/E8=insercao numerica via
+Wgetvaluelength com largura=6*num_digitos - tag de template tipo
+{NUMERO}/{STAT}, 0xE2/E3/EC/F5/F6=skip sem largura). O caminho
+generico chama Wload_replaceitems(codigo,...); se retorna um ID
+valido, Wserchmessagepointer(id) REDIRECIONA o ponteiro de scan para
+uma string substituta (expansao de template tipo {NOME_JOGADOR}/
+{ITEM}) e a leitura continua atraves do texto substituido. Bytes
+0xD0-0xDF sao byte-lider Shift-JIS (ficam em estado pendente);
+combinados com o byte seguinte via `0xD0*estado+byte` indexam uma
+tabela 2D de largura em pixel para glifos de 2 bytes - a mecanica
+exata esperada da variante "W" (larga). Um codigo especial
+0xF0+nibble<=3 implementa um back-reference estilo LZ (rebobina o
+ponteiro de scan por um offset computado) - compressao de texto
+repetido. Retorna: *out1 = maior largura em pixel de uma unica
+palavra; *out2 = numero de quebras de linha+1. Confirma ser o par
+largo (Shift-JIS) do irmao count_words2 (0xd8270, estreito/ASCII,
+jaccard=0.11 contra este - bl targets completamente diferentes,
+0xd3ea4/0xd7e00/0xd7e78/0xd7ed8 vs 0xfb740/0xff9ec/0xffa64/0xffac4 -
+confirmando duas implementacoes de verdade paralelas, nao
+duplicatas triviais). sub_fb740 (6 chamadas) e hipotetizado como o
+helper generico "avanca 1 ou 2 bytes conforme DBCS", reutilizado
+em todo o projeto. Marcada read_structural.

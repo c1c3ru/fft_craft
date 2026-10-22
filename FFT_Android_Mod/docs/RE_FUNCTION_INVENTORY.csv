@@ -359,20 +359,20 @@ address,size,mangled,demangled,status,section_ref
 0025e8d4,1024,_Z18iOSwldscr_snapshoti,iOSwldscr_snapshot(int),read_structural,NOTES §328
 00147e9c,1020,_Z22active_disp_waitwindowv,active_disp_waitwindow(),read_structural,NOTES §303
 0021101c,1016,_Z13initBattleMapiii,"initBattleMap(int, int, int)",read_structural,NOTES §299
-00256500,1016,_Z14ctlsthelp_mainP7CTLINFO,ctlsthelp_main(CTLINFO*),unread,
-00289420,1016,_Z22pspPrimDirectPartsDrawiiPmPh,"pspPrimDirectPartsDraw(int, int, unsigned long*, unsigned char*)",unread,
+00256500,1016,_Z14ctlsthelp_mainP7CTLINFO,ctlsthelp_main(CTLINFO*),read_structural,NOTES §331
+00289420,1016,_Z22pspPrimDirectPartsDrawiiPmPh,"pspPrimDirectPartsDraw(int, int, unsigned long*, unsigned char*)",read_structural,NOTES §332
 0019c52c,1004,_Z7Accountv,Account(),read_structural,NOTES §301
 0025fbc4,1004,_Z9world_mapv,world_map(),read_structural,NOTES §300
-0024fdf4,1004,_Z18pspCtltutonet_mainP7CTLINFO,pspCtltutonet_main(CTLINFO*),unread,
+0024fdf4,1004,_Z18pspCtltutonet_mainP7CTLINFO,pspCtltutonet_main(CTLINFO*),read_structural,NOTES §333
 00263b08,1004,_Z13ctlnobel_initi,ctlnobel_init(int),read_structural,NOTES §302
 001a749c,1000,_Z13Bwork2ChrSttsP5BWORKP8CHR_STTSP7UM_WORK,"Bwork2ChrStts(BWORK*, CHR_STTS*, UM_WORK*)",read_structural,NOTES §304
 000b8414,988,_ZN10CFILE_UTIL14FileReplaceStrEPcS0_S0_Pi,"CFILE_UTIL::FileReplaceStr(char*, char*, char*, int*)",unread,
-002885f0,988,_Z15pspOpenIconDrawPmii18PSP_OPEN_ICON_TYPEi,"pspOpenIconDraw(unsigned long*, int, int, PSP_OPEN_ICON_TYPE, int)",unread,
-00245f24,988,_Z17ctlopentitle_initi,ctlopentitle_init(int),unread,
+002885f0,988,_Z15pspOpenIconDrawPmii18PSP_OPEN_ICON_TYPEi,"pspOpenIconDraw(unsigned long*, int, int, PSP_OPEN_ICON_TYPE, int)",read_structural,NOTES §334
+00245f24,988,_Z17ctlopentitle_initi,ctlopentitle_init(int),read_structural,NOTES §330
 000d8270,984,_Z12count_words2PsS_Pc,"count_words2(short*, short*, char*)",unread,
 0023dc94,984,_Z7Mdl0022siii,"Mdl0022(short, int, int, int)",read_structural,NOTES §101
 0021e388,984,_Z18s29_doMetascheduleP10_EffectTCB,s29_doMetaschedule(_EffectTCB*),read_structural,NOTES §308
-000ffe58,980,_Z13Wcount_words2PsS_Pc,"Wcount_words2(short*, short*, char*)",unread,
+000ffe58,980,_Z13Wcount_words2PsS_Pc,"Wcount_words2(short*, short*, char*)",read_structural,NOTES §335
 0019d83c,980,_Z10MainEmployv,MainEmploy(),unread,
 002520c8,980,_Z18ctlworkinginf_mainP7CTLINFO,ctlworkinginf_main(CTLINFO*),unread,
 000abcd0,976,_ZNSt4priv10_Rb_globalIbE20_Rebalance_for_eraseEPNS_18_Rb_tree_node_baseERS3_S4_S4_,"std::priv::_Rb_global<bool>::_Rebalance_for_erase(std::priv::_Rb_tree_node_base*, std::priv::_Rb_tree_node_base*&, std::priv::_Rb_tree_node_base*&, std::priv::_Rb_tree_node_base*&)",read_structural,NOTES §329
@@ -1293,7 +1293,7 @@ address,size,mangled,demangled,status,section_ref
 001ada4c,264,_Z6FadeInPi,FadeIn(int*),unread,
 001c067c,264,_Z13addlocalprim3P11tagPOLY_FT4i,"addlocalprim3(tagPOLY_FT4*, int)",unread,
 002404d8,264,_Z7Mdl0026siii,"Mdl0026(short, int, int, int)",read_structural,NOTES §101
-00256388,264,_Z14ctlsthelp_initv,ctlsthelp_init(),unread,
+00256388,264,_Z14ctlsthelp_initv,ctlsthelp_init(),read_structural,NOTES §331
 0025b8ec,264,_Z14houkoku_mesputP7CTLINFOi,"houkoku_mesput(CTLINFO*, int)",unread,
 000727f4,260,Java_com_square_1enix_FFT_1Android_GL2JNILib_onTouchEvent,Java_com_square_1enix_FFT_1Android_GL2JNILib_onTouchEvent,unread,
 00082ce0,260,oggpack_read,oggpack_read,unread,
@@ -2670,7 +2670,7 @@ address,size,mangled,demangled,status,section_ref
 00253ec8,88,_Z15wldctl_deactivev,wldctl_deactive(),unread,
 0029b678,88,GsSetDrawBuffClip,GsSetDrawBuffClip,unread,
 00253a10,88,_Z13wldctl_activev,wldctl_active(),unread,
-00256490,88,_Z16ctlsthelp_activeP7CTLINFO,ctlsthelp_active(CTLINFO*),unread,
+00256490,88,_Z16ctlsthelp_activeP7CTLINFO,ctlsthelp_active(CTLINFO*),read_structural,NOTES §331
 0025f63c,88,_Z10wldlop_chkv,wldlop_chk(),mentioned_unverified,
 0026b31c,88,_Z16snplread_parcalcv,snplread_parcalc(),unread,
 00270b04,88,_Z15pagenext_cursorP11PAGEWININFO,pagenext_cursor(PAGEWININFO*),unread,
@@ -4735,7 +4735,7 @@ address,size,mangled,demangled,status,section_ref
 0026df30,24,_Z19ctlhentuto_deactiveP7CTLINFO,ctlhentuto_deactive(CTLINFO*),unread,
 0026ec30,24,_Z19ctlsentuto_deactiveP7CTLINFO,ctlsentuto_deactive(CTLINFO*),unread,
 00259768,24,_Z19ctlhistory_deactiveP7CTLINFO,ctlhistory_deactive(CTLINFO*),unread,
-002564e8,24,_Z18ctlsthelp_deactiveP7CTLINFO,ctlsthelp_deactive(CTLINFO*),unread,
+002564e8,24,_Z18ctlsthelp_deactiveP7CTLINFO,ctlsthelp_deactive(CTLINFO*),read_structural,NOTES §331
 0025e294,24,_Z13mkadrtbl_calci,mkadrtbl_calc(int),unread,
 0029b6d0,24,GsSetWorkBase,GsSetWorkBase,unread,
 0025ffe0,24,_Z15iOS_IsTutoStartv,iOS_IsTutoStart(),unread,
