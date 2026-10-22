@@ -318,7 +318,7 @@ address,size,mangled,demangled,status,section_ref
 00250ef8,1184,_Z12ctlwork_mainP7CTLINFO,ctlwork_main(CTLINFO*),read_structural,NOTES §264
 000a574c,1176,_ZN15CG2D_LOADER_TGA17TGA_AnalyzeHeaderEPv,CG2D_LOADER_TGA::TGA_AnalyzeHeader(void*),read_structural,NOTES §316
 001e3500,1160,_Z15search_force_mpiP7SVECTOR,"search_force_mp(int, SVECTOR*)",read_structural,NOTES §278
-00283a50,1160,_Z13GLIVON_F4_oldPmP10tagPOLY_F4sP15VECTOR_DATABASE,"GLIVON_F4_old(unsigned long*, tagPOLY_F4*, short, VECTOR_DATABASE*)",unread,
+00283a50,1160,_Z13GLIVON_F4_oldPmP10tagPOLY_F4sP15VECTOR_DATABASE,"GLIVON_F4_old(unsigned long*, tagPOLY_F4*, short, VECTOR_DATABASE*)",read_structural,NOTES §322
 001108a4,1156,_Z15WstatusfigprintiiPcP9COPYFIELD,"Wstatusfigprint(int, int, char*, COPYFIELD*)",read_structural,NOTES §279
 001acf38,1156,_Z11DrawTexFlipPsP5COLORciii,"DrawTexFlip(short*, COLOR*, char, int, int, int)",read_structural,NOTES §317
 001d35a0,1156,_Z15set_monsterworkPhS_,"set_monsterwork(unsigned char*, unsigned char*)",read_structural,NOTES §281
@@ -347,7 +347,7 @@ address,size,mangled,demangled,status,section_ref
 001bbe90,1052,_Z10ShopStatusv,ShopStatus(),read_structural,NOTES §287
 001a3f1c,1052,_Z4Sellv,Sell(),read_structural,NOTES §296
 00177ed0,1048,_Z12bDrawTexFlipPsP5COLORciii,"bDrawTexFlip(short*, COLOR*, char, int, int, int)",read_structural,NOTES §317
-00283638,1048,_Z13GLIVON_F3_oldPmP10tagPOLY_F3sP15VECTOR_DATABASE,"GLIVON_F3_old(unsigned long*, tagPOLY_F3*, short, VECTOR_DATABASE*)",unread,
+00283638,1048,_Z13GLIVON_F3_oldPmP10tagPOLY_F3sP15VECTOR_DATABASE,"GLIVON_F3_old(unsigned long*, tagPOLY_F3*, short, VECTOR_DATABASE*)",read_structural,NOTES §322
 001196ac,1040,_Z16Wdisp_waitwindowv,Wdisp_waitwindow(),read_structural,NOTES §291
 002191f8,1040,_Z24SetEffectTransCameraWorkiiiP6VECTOR,"SetEffectTransCameraWork(int, int, int, VECTOR*)",unread,
 00266f30,1040,_Z11wldinfo_putP4GsOT,wldinfo_put(GsOT*),read_full,NOTES §12.4

@@ -11427,3 +11427,21 @@ hakenunit_change/hakenunit_status_main, secao 169) - nao e a mesma
 tela. Nenhum call site (xref) foi localizado ainda para confirmar
 qual acao exata de UI dispara este popup. Sem jump table (esperado
 para um _init). 95% de cobertura. Marcada read_structural.
+
+## 322. GLIVON_F3_old/GLIVON_F4_old - variantes flat (sem textura) do ja documentado par FT3_old/FT4_old (2026-10-22, Fase 3, aplicacao direta da estrategia 3/4)
+
+Leitura direta (sem fork, funcao grande sem jump table, estrategia 3
+do metodo de trabalho) confirma GLIVON_F3_old (0x283638, 1048B,
+97% cobertura) e GLIVON_F4_old (0x283a50, 1160B, 98% cobertura) como
+variantes "flat" (triangulo/quad sem textura, so VECTOR_DATABASE*
+em vez de int+unsigned short* de CLUT) dos ja documentados
+GLIVON_FT3_old/FT4_old (secoes 154/147, triangulo/quad TEXTURIZADO).
+Ambos sem jump table e com apenas 2 bl targets cada:
+CalcVectorFromID(VECTOR_DATABASE*, short) e ReadRotMatrix - o mesmo
+par de helpers de transformacao 3D que a familia FT3/FT4_old ja usa,
+confirmando que "F3_old"/"F4_old"/"FT3_old"/"FT4_old" sao as quatro
+variantes (triangulo vs quad) x (flat vs texturizado) do mesmo
+pipeline de desenho de primitiva GPU "old" (imediato, nao
+batch-table como GLIVON_F3/F4/FT3/FT4 sem sufixo, que sao tabelas de
+60 bytes e ja estao marcadas unread separadamente). Marcadas
+read_structural.
