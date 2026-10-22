@@ -11445,3 +11445,143 @@ pipeline de desenho de primitiva GPU "old" (imediato, nao
 batch-table como GLIVON_F3/F4/FT3/FT4 sem sufixo, que sao tabelas de
 60 bytes e ja estao marcadas unread separadamente). Marcadas
 read_structural.
+
+## 323. CEGL2_SPRITE::DrawPartial - draw imediato independente, CORRIGE hipotese da secao 13.8 (2026-10-22, Fase 3, vigesimo nono lote paralelo)
+
+Achado que corrige uma especulacao anterior: a secao 13.8 presumia
+que AddPacketPartial montava o lote que DrawPartial desenharia depois.
+Nao e verdade - DrawPartial NUNCA chama AddPacketPartial (0xad324 nao
+aparece em sua lista de bl targets) nem toca o sistema de batching
+CEGL_PACKET/GetVBOBufferCurrent. E um caminho de desenho imediato
+totalmente independente: monta 3 buffers de vertice na propria stack
+(posicao 72B = 6 vertices x3 floats, zerada via memset; UV via 4
+__divsf3; cor lendo os bytes RGBA de this+0x58..0x67) e emite
+chamadas GLES diretas via uma camada de thunks locais sem dynsym
+(glBindTexture, glVertexAttribPointer x5, glDrawArrays(GL_TRIANGLES,
+0,6) - o mesmo truque de "2 triangulos degenerados compartilhando
+diagonal" usado em DrawPacket/DrawScrollBG/AddPacketPartial).
+Ramifica em CEGL2_SPRITE::GetMultiTextureHandle() para decidir se
+faz bind de uma segunda textura. Resumo: AddPacketPartial =
+"enfileira um quad parcial no lote para desenhar depois";
+DrawPartial = "desenha um quad parcial agora mesmo" - dois caminhos
+de codigo genuinamente separados, nao um chamando o outro. Confirma
+classificacao de codigo de engine 2D generico e reutilizavel.
+Marcada read_structural.
+
+## 324. CEGL2_SPRITE::Draw8 - variante de dupla-textura do Draw(float,float) simples, desenha 1 unico quad (2026-10-22, Fase 3, vigesimo nono lote paralelo)
+
+Zero jump table, zero loop (apenas 1 branch forward no total) -
+descarta a hipotese inicial de "desenha 8 sub-elementos". O "8" no
+nome nao corresponde a nada contado em runtime (nenhuma tabela de 8,
+nenhum loop de 8 iteracoes); a classe nao tem Draw2/Draw4/Draw16
+siblings no symbol table, sugerindo ser apenas um identificador de
+origem/historico do codigo-fonte. Termina em um UNICO
+glDrawArrays(GL_TRIANGLES, 0, 6) (1 quad = 2 triangulos). O
+parametro unsigned int e literalmente um texture ID (glActiveTexture
+(GL_TEXTURE1); glBindTexture(GL_TEXTURE_2D, param)) - ou seja, Draw8
+e a variante de "Draw simples" que aceita uma SEGUNDA textura
+explicita via parametro (nao a MultiTextureHandle interna do
+sprite, que fica em offset 0x68 e nao e usada aqui), ligada a
+unidade de textura 1 enquanto a textura propria do sprite (offset
+0x28) vai pra unidade 0. O parametro void* e um objeto shader/
+material externo cujo slot de vtable +0x24 e chamado 2x (arg 1 e
+arg 0) pra alternar um flag de "dual-texture ativo". Hipotese:
+desenho de sprite com 2 texturas simultaneas (ex: paleta/overlay de
+recoloracao), mas isso e especulativo - o unico fato solido e a
+estrutura de bind-dupla + quad-unico. Marcada read_structural.
+
+## 325. CEGL_COLLISION::IsVertexInTriangle3D/2D - teste ponto-em-triangulo generico via soma-de-angulos, fast-track confirmado (2026-10-22, Fase 3, vigesimo nono lote paralelo)
+
+Leitura completa confirma matematica 3D pura e generica: todos os 10
+bl targets distintos sao libm (sqrt x3, acosf x3 - resolvidos a
+partir de stubs PLT sem dynsym via GOT) ou helpers soft-float do
+compilador (add/sub/mul/div sf3, extend/truncsf2, fcmplt/fcmpgt) -
+zero chamada a logica de jogo, grid de batalha, unidade ou camera.
+99% de cobertura, 0 branches para tras (sem loop). O padrao de
+chamada (3x sqrt + 3x acosf, sem loop) e a assinatura classica do
+teste "soma dos angulos subtendidos": normaliza os 3 vetores de
+arestas (vertice-consulta para cada vertice do triangulo, sqrt do
+comprimento ao quadrado), calcula o angulo entre pares consecutivos
+via acosf, soma os 3 angulos e compara contra 2*pi - NAO e
+baricentrico nem cross-product/same-side (esses nao usariam sqrt/
+acosf). O irmao 2D (IsVertexInTriangle2D, 0xb1190, 696B) tem
+assinatura de chamada IDENTICA (so com menos __mulsf3, consistente
+com remover o componente z). Ambos fast-tracked como utilitario de
+engine matematico generico confirmado - nenhuma logica especifica
+de FFT. Marcadas read_structural.
+
+## 326. SetEffectTransCameraWork(int,int,int,VECTOR*) - perna de TRANSLACAO do trio de setters de camera de efeito (2026-10-22, Fase 3, vigesimo nono lote paralelo)
+
+Resolve o parametro int1 como bitfield empacotado: bits 0x1e0
+selecionam 1 de 8 modos de origem do vetor de translacao (vetor
+absoluto do chamador, getMapScrollXYZ, getMapSize escalado,
+lookup de animacao de bone unico via tabela indexada pelo param2,
+lookup de bone unico via ponteiro global, MEDIA/centroide de
+varios bones via loop com __divsi3 - enquadramento de camera
+multi-alvo, copia de preset fixo, ou modo "finalizar" sem recalculo)
++ bits 0x1e00 armazenados verbatim num campo de flags compartilhado
+(offset 0xA4). Param3 e gravado incondicionalmente no offset 0xBC
+da struct compartilhada de camera-work - hipotese forte de
+duracao/contagem de frames da interpolacao. Param4 (VECTOR*) tem
+papel duplo: modo 0x40 o le como vetor absoluto de entrada; todos os
+outros modos escrevem o vetor recem-computado de volta nele via
+AddVECTORToVECTOR(out, v, v) (mesmo endereco duas vezes - idioma
+deliberado de "latch e devolve", nao bug). Confirma e expande a
+hipotese da secao 307: SetCameraWorkWithMetaschedule chama este +
+SetEffectAngleCameraWork + um presumido SetEffectScaleCameraWork
+(x3 cada) - este e exatamente a perna de posicao/translacao desse
+trio, par de SetEffectAngleCameraWork (secao 327) via o mesmo layout
+de struct compartilhada e a mesma familia de helper de convergencia
+(EqualRShift12VECTORToVECTOR, aqui; EqualSVectorToVECTOR, la).
+Marcada read_structural.
+
+## 327. SetEffectAngleCameraWork(int,int,int,SVECTOR*) - perna de ROTACAO do trio, "arma" um keyframe que DoEffectCameraWork executa por frame (2026-10-22, Fase 3, vigesimo nono lote paralelo)
+
+Par direto da secao 326 (translacao) - mesmo esquema de bitfield
+empacotado nos bits 0x1e0 do int1, agora selecionando a origem do
+angulo-alvo entre 8 modos: preset de tabela indexado por param2,
+dois presets globais adicionais via memcpy+sub_218c2c, delta
+relativo a getMapAngle() atual (modo 0x20), alvo absoluto de yaw com
+tratamento explicito de wraparound circular +-2048/4096 em 12 bits
+(modo 0x40 - calculo classico de "menor caminho" entre angulos),
+blend de baseline armazenado com Y/Z vivos (0x60), snapshot puro do
+angulo vivo (0xc0), ou continuacao suave de um alvo previamente
+armazenado com novo wrap-check (0x100, evita "pular pelo caminho
+longo" se re-disparado no meio da interpolacao). Param3 e gravado
+incondicionalmente como duracao em frames (offset +0xb4 da struct
+de camera-work), com +0xb8 (progresso) resetado a 0 no mesmo ponto.
+Param4 (SVECTOR*) e dual: entrada (delta/alvo absoluto) nos modos
+0x20/0x40, saida (AddSVECTORToSVECTOR(out,v,v), mesmo idioma de
+"latch-e-devolve" da secao 326) nos demais modos. Confirma a
+arquitetura completa: SetEffectAngleCameraWork "arma" um keyframe de
+rotacao (alvo + duracao + escolha de curva de easing, bits 0x1e00)
+que a ja documentada DoEffectCameraWork() (secao 83, 0x219728)
+consome por frame via a familia getSmoothSVECCosPai/Cos2Pai/Linear,
+aplicando o resultado final via setMapAngle. Fecha o trio
+rotacao/translacao/escala citado na secao 307
+(SetCameraWorkWithMetaschedule chama os tres, x3 cada) com dois dos
+tres membros agora lidos. Marcada read_structural.
+
+## 328. iOSwldscr_snapshot(int)/wldscr_snapshot(int) - captura em VRAM do frame completo do world map (2026-10-22, Fase 3, vigesimo nono lote paralelo)
+
+Renderiza a composicao completa da tela de world map off-screen
+(chama praticamente toda a familia wld*_draw/_put ja documentada -
+fundo, rota de viagem, sprites de personagem x3, cidades/simbolos,
+indicador de dia, nome da cidade, HUD de info, fog-of-war via
+pspWorldBlackSpotDraw) atraves do pipeline padrao de ordering-table
+(GsClearOt/xpLibgsAddOt/GsSortClear/GsDrawOt/GsSwapDispBuff),
+sincroniza explicitamente (VSync + DrawSync x3) antes de capturar via
+xpLibgpuStoreImage (transferencia VRAM->memoria principal) num
+buffer alocado (xpMallocAlign/xpFree), usando
+pspWorldDataRectSet/pspWorldDataBackBufGet para definir a area/slot
+de captura. As chamadas CFFT_STATE::SetCaptureRequest/SetCaptureDraw
+confirmam a semantica de "snapshot" no nivel de nomenclatura da API.
+Hipotese: congela a tela do world map como fundo estatico numa
+transicao para menu/subtela, ou como thumbnail de save - o
+parametro int provavelmente seleciona o slot/back-buffer de
+captura. wldscr_snapshot(int) (0x25ecd4, so 4 bytes) e confirmado
+como um trampolim de 1 instrucao (branch incondicional) direto para
+esta mesma implementacao - ou seja, ha so uma implementacao real,
+compartilhada entre a nomenclatura "iOS"/camada de toque e a
+generica. Marcadas read_structural: iOSwldscr_snapshot (0x25e8d4),
+wldscr_snapshot (0x25ecd4).

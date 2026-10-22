@@ -333,9 +333,9 @@ address,size,mangled,demangled,status,section_ref
 000ee61c,1112,_Z15disp_waitwindowv,disp_waitwindow(),read_structural,NOTES §289
 002691cc,1108,_Z12wldwalk_rutev,wldwalk_rute(),read_full,NOTES §12.2
 00261184,1096,_Z17ctlhakenokng_initv,ctlhakenokng_init(),read_structural,NOTES §321
-000ae090,1088,_ZN12CEGL2_SPRITE11DrawPartialEffffff,"CEGL2_SPRITE::DrawPartial(float, float, float, float, float, float)",mentioned_unverified,
-000aceec,1080,_ZN12CEGL2_SPRITE5Draw8EffjPv,"CEGL2_SPRITE::Draw8(float, float, unsigned int, void*)",mentioned_unverified,
-000b1448,1080,_ZN14CEGL_COLLISION20IsVertexInTriangle3DEN4math7VECTOR3IfEES2_S2_S2_,"CEGL_COLLISION::IsVertexInTriangle3D(math::VECTOR3<float>, math::VECTOR3<float>, math::VECTOR3<float>, math::VECTOR3<float>)",unread,
+000ae090,1088,_ZN12CEGL2_SPRITE11DrawPartialEffffff,"CEGL2_SPRITE::DrawPartial(float, float, float, float, float, float)",read_structural,NOTES §323
+000aceec,1080,_ZN12CEGL2_SPRITE5Draw8EffjPv,"CEGL2_SPRITE::Draw8(float, float, unsigned int, void*)",read_structural,NOTES §324
+000b1448,1080,_ZN14CEGL_COLLISION20IsVertexInTriangle3DEN4math7VECTOR3IfEES2_S2_S2_,"CEGL_COLLISION::IsVertexInTriangle3D(math::VECTOR3<float>, math::VECTOR3<float>, math::VECTOR3<float>, math::VECTOR3<float>)",read_structural,NOTES §325
 00285084,1080,_Z22pspBattleEntryAreaMakeii,"pspBattleEntryAreaMake(int, int)",read_structural,NOTES §306
 001a2f68,1080,_Z14PoachSellValuev,PoachSellValue(),read_structural,NOTES §298
 001b2560,1076,_Z8JobCicleiiii,"JobCicle(int, int, int, int)",read_structural,NOTES §284
@@ -349,14 +349,14 @@ address,size,mangled,demangled,status,section_ref
 00177ed0,1048,_Z12bDrawTexFlipPsP5COLORciii,"bDrawTexFlip(short*, COLOR*, char, int, int, int)",read_structural,NOTES §317
 00283638,1048,_Z13GLIVON_F3_oldPmP10tagPOLY_F3sP15VECTOR_DATABASE,"GLIVON_F3_old(unsigned long*, tagPOLY_F3*, short, VECTOR_DATABASE*)",read_structural,NOTES §322
 001196ac,1040,_Z16Wdisp_waitwindowv,Wdisp_waitwindow(),read_structural,NOTES §291
-002191f8,1040,_Z24SetEffectTransCameraWorkiiiP6VECTOR,"SetEffectTransCameraWork(int, int, int, VECTOR*)",unread,
+002191f8,1040,_Z24SetEffectTransCameraWorkiiiP6VECTOR,"SetEffectTransCameraWork(int, int, int, VECTOR*)",read_structural,NOTES §326
 00266f30,1040,_Z11wldinfo_putP4GsOT,wldinfo_put(GsOT*),read_full,NOTES §12.4
 000a5e98,1036,_ZN15CG2D_LOADER_TIM4SaveEPviiP9_G2D_SAVE,"CG2D_LOADER_TIM::Save(void*, int, int, _G2D_SAVE*)",read_structural,NOTES §316
 000feaa8,1036,_Z15Wallocatewindowv,Wallocatewindow(),read_structural,NOTES §291
 0026d318,1036,_Z18ctlnvcontinue_mainP7CTLINFO,ctlnvcontinue_main(CTLINFO*),read_structural,NOTES §297
-00218df4,1028,_Z24SetEffectAngleCameraWorkiiiP7SVECTOR,"SetEffectAngleCameraWork(int, int, int, SVECTOR*)",unread,
+00218df4,1028,_Z24SetEffectAngleCameraWorkiiiP7SVECTOR,"SetEffectAngleCameraWork(int, int, int, SVECTOR*)",read_structural,NOTES §327
 000d6f84,1024,_Z14allocatewindowv,allocatewindow(),read_structural,NOTES §291
-0025e8d4,1024,_Z18iOSwldscr_snapshoti,iOSwldscr_snapshot(int),unread,
+0025e8d4,1024,_Z18iOSwldscr_snapshoti,iOSwldscr_snapshot(int),read_structural,NOTES §328
 00147e9c,1020,_Z22active_disp_waitwindowv,active_disp_waitwindow(),read_structural,NOTES §303
 0021101c,1016,_Z13initBattleMapiii,"initBattleMap(int, int, int)",read_structural,NOTES §299
 00256500,1016,_Z14ctlsthelp_mainP7CTLINFO,ctlsthelp_main(CTLINFO*),unread,
@@ -526,7 +526,7 @@ address,size,mangled,demangled,status,section_ref
 00103c94,700,_Z19Wcnvglobaltolocalidi,Wcnvglobaltolocalid(int),unread,
 001e2efc,700,_Z15getweaponeffectP3ACT,getweaponeffect(ACT*),unread,
 0027f238,700,_Z18iOS_RectHitExecutev,iOS_RectHitExecute(),unread,
-000b1190,696,_ZN14CEGL_COLLISION20IsVertexInTriangle2DEN4math7VECTOR2IfEES2_S2_S2_,"CEGL_COLLISION::IsVertexInTriangle2D(math::VECTOR2<float>, math::VECTOR2<float>, math::VECTOR2<float>, math::VECTOR2<float>)",unread,
+000b1190,696,_ZN14CEGL_COLLISION20IsVertexInTriangle2DEN4math7VECTOR2IfEES2_S2_S2_,"CEGL_COLLISION::IsVertexInTriangle2D(math::VECTOR2<float>, math::VECTOR2<float>, math::VECTOR2<float>, math::VECTOR2<float>)",read_structural,NOTES §325
 001f024c,696,_Z22requestDamageAnimationP13tag_animationS0_,"requestDamageAnimation(tag_animation*, tag_animation*)",unread,
 00205694,696,_Z21iOS_RESUME_SET_BATTLEP22IOS_RESUME_DATA_BATTLE24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_BATTLE(IOS_RESUME_DATA_BATTLE*, IOS_RESUME_DATACOPY_MODE)",unread,
 0011dd88,692,_Z18extend_systemframeiiP6RECT16i,"extend_systemframe(int, int, RECT16*, int)",unread,
@@ -6249,7 +6249,7 @@ address,size,mangled,demangled,status,section_ref
 00252b68,4,_Z17ctlworkend_activeP7CTLINFO,ctlworkend_active(CTLINFO*),unread,
 00252b6c,4,_Z19ctlworkend_deactiveP7CTLINFO,ctlworkend_deactive(CTLINFO*),unread,
 0026c058,4,_Z23iOS_debugDispTownCircleii,"iOS_debugDispTownCircle(int, int)",unread,
-0025ecd4,4,_Z15wldscr_snapshoti,wldscr_snapshot(int),mentioned_unverified,
+0025ecd4,4,_Z15wldscr_snapshoti,wldscr_snapshot(int),read_structural,NOTES §328
 0025f354,4,_Z16wld_btlsect_seekv,wld_btlsect_seek(),mentioned_unverified,
 00258ac4,4,_Z9evt_skip0v,evt_skip0(),mentioned_unverified,
 0025e67c,4,_Z20get_unitwork_add_wldi,get_unitwork_add_wld(int),unread,
