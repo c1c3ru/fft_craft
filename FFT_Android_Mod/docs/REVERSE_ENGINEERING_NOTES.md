@@ -11913,3 +11913,17 @@ e a entrada de log escritos aqui sao plausivelmente o que o trio
 hakenunit_status/hakenunit_change/hakenunit_status_main (secao 169)
 le depois para resolver o retorno da unidade. Sem jump table, 92%
 de cobertura. Marcada read_structural.
+
+## 344. Familia CFILE_TXT - parser de texto delimitado/CSV generico, sibling do ja confirmado CFILE_UTIL/CFILE, fast-track (2026-10-22, Fase 3, estrategia 6)
+
+CFILE_TXT (Load/Save/Unload/CutSpace/GetWord/GetDataAsStr/Int/Float/
+Char/IsDataComment/GetColumnNum/GetLineNum/SetData, mais ctor/dtor)
+e um parser generico de arquivo de texto tabular/delimitado (estilo
+CSV/INI), irmao direto do ja confirmado CFILE_UTIL/CFILE (secao 342)
+na mesma camada de I/O de arquivo estilo PC-SDK - mesma classe de
+metodos (Load/Save/GetData*), mesmo padrao de nomenclatura, mesma
+regiao do binario (0xb6ef0-0xb7400, adjacente a CFILE_UTIL/CFILE em
+0xb6620-0xb8be4). Nenhuma logica especifica de FFT e esperada num
+parser de texto delimitado generico. Fast-tracked por consistencia
+de padrao com os siblings ja confirmados, sem leitura individual.
+17 funcoes, 2512 bytes, marcadas read_structural.

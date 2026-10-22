@@ -378,7 +378,7 @@ address,size,mangled,demangled,status,section_ref
 000abcd0,976,_ZNSt4priv10_Rb_globalIbE20_Rebalance_for_eraseEPNS_18_Rb_tree_node_baseERS3_S4_S4_,"std::priv::_Rb_global<bool>::_Rebalance_for_erase(std::priv::_Rb_tree_node_base*, std::priv::_Rb_tree_node_base*&, std::priv::_Rb_tree_node_base*&, std::priv::_Rb_tree_node_base*&)",read_structural,NOTES §329
 001604fc,976,_Z16iOSSlideYajiMainv,iOSSlideYajiMain(),unread,
 001bff08,972,_Z11PostModeChgi,PostModeChg(int),read_structural,NOTES §341
-000b74d8,964,_ZN9CFILE_TXT4LoadEPcij,"CFILE_TXT::Load(char*, int, unsigned int)",mentioned_unverified,
+000b74d8,964,_ZN9CFILE_TXT4LoadEPcij,"CFILE_TXT::Load(char*, int, unsigned int)",read_structural,NOTES §344
 0026ca14,964,_Z18ctlnvcontinue_initi,ctlnvcontinue_init(int),unread,
 0009fe08,960,ov_pcm_seek,ov_pcm_seek,read_structural,NOTES §336
 00247eb4,960,_Z16ctlbirthday_mainP7CTLINFO,ctlbirthday_main(CTLINFO*),unread,
@@ -809,7 +809,7 @@ address,size,mangled,demangled,status,section_ref
 000bd56c,460,_ZN17CSOUND_LOADER_OGG4OpenEPcPhjj,"CSOUND_LOADER_OGG::Open(char*, unsigned char*, unsigned int, unsigned int)",read_full,NOTES §17.9
 002608c0,460,_Z12ctlokng_init6_POINT,ctlokng_init(_POINT),unread,
 0027fcb8,460,_ZN8cSaveFFT4SaveEi,cSaveFFT::Save(int),read_full,NOTES §19
-000b7120,456,_ZN9CFILE_TXT4SaveEPcj,"CFILE_TXT::Save(char*, unsigned int)",mentioned_unverified,
+000b7120,456,_ZN9CFILE_TXT4SaveEPcj,"CFILE_TXT::Save(char*, unsigned int)",read_structural,NOTES §344
 000d8a34,456,_Z10faceuvclutP11tagPOLY_FT4iPi,"faceuvclut(tagPOLY_FT4*, int, int*)",unread,
 0018a1e4,456,_Z12eDrawFT4RGB2iiiiiiiiP5COLORitti,"eDrawFT4RGB2(int, int, int, int, int, int, int, int, COLOR*, int, unsigned short, unsigned short, int)",unread,
 0024cda0,456,_Z14ctlbrst_activeP7CTLINFO,ctlbrst_active(CTLINFO*),unread,
@@ -1508,7 +1508,7 @@ address,size,mangled,demangled,status,section_ref
 00094bfc,216,_vp_psy_clear,_vp_psy_clear,unread,
 00097970,216,res2_forward,res2_forward,unread,
 000a129c,216,ov_read_float,ov_read_float,read_structural,NOTES §336
-000b7400,216,_ZN9CFILE_TXT8CutSpaceEPci,"CFILE_TXT::CutSpace(char*, int)",unread,
+000b7400,216,_ZN9CFILE_TXT8CutSpaceEPci,"CFILE_TXT::CutSpace(char*, int)",read_structural,NOTES §344
 000bc5a4,216,_ZN12CSOUND_IF_SL11Stream_LoadEi,CSOUND_IF_SL::Stream_Load(int),read_full,NOTES §17.8
 002867a8,216,_Z16getMovieEventNumi,getMovieEventNum(int),unread,
 000cb9e0,216,_Z12readmaptitlev,readmaptitle(),unread,
@@ -1543,7 +1543,7 @@ address,size,mangled,demangled,status,section_ref
 002bb70c,212,_Z15iOSTutoMenuCtrlPi,iOSTutoMenuCtrl(int*),unread,
 00082b14,208,oggpackB_look,oggpackB_look,unread,
 00083d28,208,ogg_sync_buffer,ogg_sync_buffer,read_structural,NOTES §336
-000b6fac,208,_ZN9CFILE_TXT12GetDataAsStrEiij,"CFILE_TXT::GetDataAsStr(int, int, unsigned int)",unread,
+000b6fac,208,_ZN9CFILE_TXT12GetDataAsStrEiij,"CFILE_TXT::GetDataAsStr(int, int, unsigned int)",read_structural,NOTES §344
 000b96a8,208,_ZN9CSTR_UTIL8FindDBCSEPcS0_,"CSTR_UTIL::FindDBCS(char*, char*)",unread,
 000bb5fc,208,_ZN12CSOUND_IF_SL13CB_for_StreamEPKPK30SLAndroidSimpleBufferQueueItf_Pv,"CSOUND_IF_SL::CB_for_Stream(SLAndroidSimpleBufferQueueItf_ const* const*, void*)",mentioned_unverified,
 000da064,208,_Z19request_backtotitlev,request_backtotitle(),unread,
@@ -1994,7 +1994,7 @@ address,size,mangled,demangled,status,section_ref
 0008333c,144,ogg_stream_init,ogg_stream_init,read_structural,NOTES §336
 00097b70,144,_float32_pack,_float32_pack,unread,
 000a7160,144,_ZN18CGX_SCREEN_CORRECT17Area_InitPortraitEiiiii,"CGX_SCREEN_CORRECT::Area_InitPortrait(int, int, int, int, int)",unread,
-000b72e8,144,_ZN9CFILE_TXT7GetWordEPciP5CLISTc,"CFILE_TXT::GetWord(char*, int, CLIST*, char)",unread,
+000b72e8,144,_ZN9CFILE_TXT7GetWordEPciP5CLISTc,"CFILE_TXT::GetWord(char*, int, CLIST*, char)",read_structural,NOTES §344
 000b8ca4,144,_ZN9CSTR_UTIL7GetFileEPcS0_,"CSTR_UTIL::GetFile(char*, char*)",mentioned_unverified,
 000b8e10,144,_ZN9CSTR_UTIL15ToUpperAndConv3EcPcS0_,"CSTR_UTIL::ToUpperAndConv3(char, char*, char*)",unread,
 000b8fec,144,_ZN9CSTR_UTIL13CorrectToPathEPc,CSTR_UTIL::CorrectToPath(char*),unread,
@@ -2066,7 +2066,7 @@ address,size,mangled,demangled,status,section_ref
 000b39b4,136,_ZN11CINPUT_DATA10GetUpGroupEi,CINPUT_DATA::GetUpGroup(int),unread,
 000b4ee8,136,_ZN15CINPUT_IF_TOUCH8BeginAllEi,CINPUT_IF_TOUCH::BeginAll(int),unread,
 000b58d4,136,_ZN5CRECT15GetPrevEnableUIEii,"CRECT::GetPrevEnableUI(int, int)",unread,
-000b7378,136,_ZN9CFILE_TXT7SetDataEiiPc,"CFILE_TXT::SetData(int, int, char*)",unread,
+000b7378,136,_ZN9CFILE_TXT7SetDataEiiPc,"CFILE_TXT::SetData(int, int, char*)",read_structural,NOTES §344
 000b9778,136,_ZN9CSTR_UTIL13FindChar_DBCSEPcS0_P5CLIST,"CSTR_UTIL::FindChar_DBCS(char*, char*, CLIST*)",unread,
 000db83c,136,_Z14read_eventflagi,read_eventflag(int),mentioned_unverified,
 000e5680,136,_Z12disp_status2v,disp_status2(),unread,
@@ -2369,7 +2369,7 @@ address,size,mangled,demangled,status,section_ref
 0009ea44,108,ov_serialnumber,ov_serialnumber,read_structural,NOTES §336
 000ad858,108,_ZN12CEGL2_SPRITE15AddPacketLayoutEffP18_EGL_SPRITE_LAYOUTP11CEGL_PACKET,"CEGL2_SPRITE::AddPacketLayout(float, float, _EGL_SPRITE_LAYOUT*, CEGL_PACKET*)",unread,
 000b6a58,108,_ZN9CFILE_DAT5CloseEv,CFILE_DAT::Close(),mentioned_unverified,
-000b6f00,108,_ZN9CFILE_TXT6UnloadEv,CFILE_TXT::Unload(),mentioned_unverified,
+000b6f00,108,_ZN9CFILE_TXT6UnloadEv,CFILE_TXT::Unload(),read_structural,NOTES §344
 000b98c0,108,_ZN9CSTR_UTIL6InsertEPciS0_,"CSTR_UTIL::Insert(char*, int, char*)",unread,
 000baf08,108,_ZN9CSOUND_IF15SetMasterVolumeEiii,"CSOUND_IF::SetMasterVolume(int, int, int)",unread,
 000bb230,108,_ZN9CSOUND_IF8SetTransEifff,"CSOUND_IF::SetTrans(int, float, float, float)",unread,
@@ -2855,7 +2855,7 @@ address,size,mangled,demangled,status,section_ref
 000b3bd8,76,_ZN15CINPUT_IF_TOUCHC2Ev,CINPUT_IF_TOUCH::CINPUT_IF_TOUCH(),mentioned_unverified,
 000b3bd8,76,_ZN15CINPUT_IF_TOUCHC1Ev,CINPUT_IF_TOUCH::CINPUT_IF_TOUCH(),mentioned_unverified,
 000b5bc4,76,_ZN13CUI_SCROLLBAR18IsEnableScrollDownEv,CUI_SCROLLBAR::IsEnableScrollDown(),unread,
-000b70d4,76,_ZN9CFILE_TXT13IsDataCommentEiij,"CFILE_TXT::IsDataComment(int, int, unsigned int)",unread,
+000b70d4,76,_ZN9CFILE_TXT13IsDataCommentEiij,"CFILE_TXT::IsDataComment(int, int, unsigned int)",read_structural,NOTES §344
 000b8158,76,_ZN10CFILE_UTIL8FileFindEPc,CFILE_UTIL::FileFind(char*),read_structural,NOTES §342
 000b9554,76,_ZN9CSTR_UTIL4CmpNEPcS0_i,"CSTR_UTIL::CmpN(char*, char*, int)",unread,
 000bbe30,76,_ZN12CSOUND_IF_SL19Static_DeletePlayerEi,CSOUND_IF_SL::Static_DeletePlayer(int),mentioned_unverified,
@@ -3847,7 +3847,7 @@ address,size,mangled,demangled,status,section_ref
 000b50c0,40,_ZN5CRECT4InitEv,CRECT::Init(),mentioned_unverified,
 000b5254,40,_ZN5CRECT12GetChangeRIDEiii,"CRECT::GetChangeRID(int, int, int)",unread,
 000b6b38,40,_ZN9CFILE_DAT14CacheUnloadAllEv,CFILE_DAT::CacheUnloadAll(),unread,
-000b70ac,40,_ZN9CFILE_TXT14GetDataAsFloatEiij,"CFILE_TXT::GetDataAsFloat(int, int, unsigned int)",unread,
+000b70ac,40,_ZN9CFILE_TXT14GetDataAsFloatEiij,"CFILE_TXT::GetDataAsFloat(int, int, unsigned int)",read_structural,NOTES §344
 000ba584,40,_ZN9CSOUND_IF7SetAttrEih,"CSOUND_IF::SetAttr(int, unsigned char)",unread,
 000bceac,40,_ZN17CSOUND_LOADER_PCMC1Ev,CSOUND_LOADER_PCM::CSOUND_LOADER_PCM(),mentioned_unverified,
 000bcce4,40,_ZN13CSOUND_LOADERD0Ev,CSOUND_LOADER::~CSOUND_LOADER(),unread,
@@ -4041,7 +4041,7 @@ address,size,mangled,demangled,status,section_ref
 000b5acc,36,_ZN13CUI_SCROLLBARD2Ev,CUI_SCROLLBAR::~CUI_SCROLLBAR(),unread,
 000b5acc,36,_ZN13CUI_SCROLLBARD1Ev,CUI_SCROLLBAR::~CUI_SCROLLBAR(),unread,
 000b5af0,36,_ZN13CUI_SCROLLBAR13GetDragOffsetEPiS0_,"CUI_SCROLLBAR::GetDragOffset(int*, int*)",unread,
-000b6f88,36,_ZN9CFILE_TXT12GetColumnNumEi,CFILE_TXT::GetColumnNum(int),unread,
+000b6f88,36,_ZN9CFILE_TXT12GetColumnNumEi,CFILE_TXT::GetColumnNum(int),read_structural,NOTES §344
 000b8be4,36,_ZN9CSTR_UTIL10IsLeadByteEh,CSTR_UTIL::IsLeadByte(unsigned char),mentioned_unverified,
 000b8a74,36,_ZN5CLIST7ResetIDEi,CLIST::ResetID(int),unread,
 000b9f88,36,_ZN7CTHREADD2Ev,CTHREAD::~CTHREAD(),unread,
@@ -4391,7 +4391,7 @@ address,size,mangled,demangled,status,section_ref
 000b6810,28,_ZN5CFILE7SetTimeEP11_SYSTEMTIME,CFILE::SetTime(_SYSTEMTIME*),read_structural,NOTES §342
 000b6b60,28,_ZN9CFILE_DATD2Ev,CFILE_DAT::~CFILE_DAT(),unread,
 000b6b60,28,_ZN9CFILE_DATD1Ev,CFILE_DAT::~CFILE_DAT(),unread,
-000b7090,28,_ZN9CFILE_TXT12GetDataAsIntEiij,"CFILE_TXT::GetDataAsInt(int, int, unsigned int)",unread,
+000b7090,28,_ZN9CFILE_TXT12GetDataAsIntEiij,"CFILE_TXT::GetDataAsInt(int, int, unsigned int)",read_structural,NOTES §344
 000b8a58,28,_ZN5CLIST12GetDataAsIntEi,CLIST::GetDataAsInt(int),unread,
 000b9e78,28,_ZN7CTHREADC2Ev,CTHREAD::CTHREAD(),mentioned_unverified,
 000b9e78,28,_ZN7CTHREADC1Ev,CTHREAD::CTHREAD(),mentioned_unverified,
@@ -4887,9 +4887,9 @@ address,size,mangled,demangled,status,section_ref
 000b8a04,20,_ZN5CLISTD1Ev,CLIST::~CLIST(),unread,
 000b5b1c,20,_ZN13CUI_SCROLLBAR15GetScrollOffsetEPiS0_,"CUI_SCROLLBAR::GetScrollOffset(int*, int*)",unread,
 000b5c20,20,_ZN13CUI_SCROLLBAR12SetCellPressEii,"CUI_SCROLLBAR::SetCellPress(int, int)",unread,
-000b6f6c,20,_ZN9CFILE_TXTD2Ev,CFILE_TXT::~CFILE_TXT(),unread,
-000b6f6c,20,_ZN9CFILE_TXTD1Ev,CFILE_TXT::~CFILE_TXT(),unread,
-000b707c,20,_ZN9CFILE_TXT13GetDataAsCharEiij,"CFILE_TXT::GetDataAsChar(int, int, unsigned int)",unread,
+000b6f6c,20,_ZN9CFILE_TXTD2Ev,CFILE_TXT::~CFILE_TXT(),read_structural,NOTES §344
+000b6f6c,20,_ZN9CFILE_TXTD1Ev,CFILE_TXT::~CFILE_TXT(),read_structural,NOTES §344
+000b707c,20,_ZN9CFILE_TXT13GetDataAsCharEiij,"CFILE_TXT::GetDataAsChar(int, int, unsigned int)",read_structural,NOTES §344
 000b8980,20,_ZN5CLIST4InitEv,CLIST::Init(),mentioned_unverified,
 000b7ed8,20,_ZN10CFILE_UTIL8FileEnumEPcS0_P5CLISTS2_j,"CFILE_UTIL::FileEnum(char*, char*, CLIST*, CLIST*, unsigned int)",read_structural,NOTES §342
 000b8994,20,_ZN5CLISTC2Ev,CLIST::CLIST(),mentioned_unverified,
@@ -5312,8 +5312,8 @@ address,size,mangled,demangled,status,section_ref
 000b5b3c,16,_ZN13CUI_SCROLLBAR11GetCellRectEi,CUI_SCROLLBAR::GetCellRect(int),unread,
 000b5c10,16,_ZN13CUI_SCROLLBAR12GetCellPressEi,CUI_SCROLLBAR::GetCellPress(int),unread,
 000b6c58,16,_ZN9CFILE_DAT8GetTableEii,"CFILE_DAT::GetTable(int, int)",unread,
-000b6ef0,16,_ZN9CFILE_TXTC2Ec,CFILE_TXT::CFILE_TXT(char),unread,
-000b6ef0,16,_ZN9CFILE_TXTC1Ec,CFILE_TXT::CFILE_TXT(char),unread,
+000b6ef0,16,_ZN9CFILE_TXTC2Ec,CFILE_TXT::CFILE_TXT(char),read_structural,NOTES §344
+000b6ef0,16,_ZN9CFILE_TXTC1Ec,CFILE_TXT::CFILE_TXT(char),read_structural,NOTES §344
 000b8c08,16,_ZN9CSTR_UTIL10DBCSToWORDEPc,CSTR_UTIL::DBCSToWORD(char*),unread,
 000bb114,16,_ZN9CSOUND_IF11GetPositionEi,CSOUND_IF::GetPosition(int),unread,
 000bb220,16,_ZN9CSOUND_IF9GetLengthEi,CSOUND_IF::GetLength(int),unread,
@@ -5595,7 +5595,7 @@ address,size,mangled,demangled,status,section_ref
 000b6cd0,8,_ZN9CFILE_DAT7GetSizeEi,CFILE_DAT::GetSize(int),mentioned_unverified,
 000b6ee0,8,_ZN9CFILE_DAT11GetCompressEi,CFILE_DAT::GetCompress(int),unread,
 000b6ee8,8,_ZN9CFILE_DAT9GetFormatEi,CFILE_DAT::GetFormat(int),unread,
-000b6f80,8,_ZN9CFILE_TXT10GetLineNumEv,CFILE_TXT::GetLineNum(),unread,
+000b6f80,8,_ZN9CFILE_TXT10GetLineNumEv,CFILE_TXT::GetLineNum(),read_structural,NOTES §344
 000b78a4,8,_ZN10CFILE_UTIL14DrvGetDiscPathEPcS0_,"CFILE_UTIL::DrvGetDiscPath(char*, char*)",read_structural,NOTES §342
 000b78ac,8,_ZN10CFILE_UTIL10DrvGetFreeEPcPjS1_,"CFILE_UTIL::DrvGetFree(char*, unsigned int*, unsigned int*)",read_structural,NOTES §342
 000b7980,8,_ZN10CFILE_UTIL9DirDeleteEPci,"CFILE_UTIL::DirDelete(char*, int)",read_structural,NOTES §342
