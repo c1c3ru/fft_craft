@@ -14089,3 +14089,219 @@ ser o dispatcher — aponta pra `StartEffect` como próximo alvo),
 seções 158/378 (sistema de objeto permanente, contraste com
 `DynamicsAllObject`), seções 94/128 (`getskillrange`/
 `make_abilitylistmain`, confirmadas por `set_normability2`).
+
+## 420. `StartEffect`/`StartPermanentEffect`/`ConvertEffectAttribute` — fecham a cadeia de follow-up da seção 418, mas o dispatch real por ID ainda não foi localizado (2026-10-23, Fase 3, quadragésimo sexto lote)
+
+`StartEffect(long,long,EffectOrder*)` (`0x21cc84`, 500 B) —
+`jtable.py`: **91% de cobertura** (114/125), zero tabela de salto,
+15 branches/7 de retrocesso. 3 `bl`: 1 local sem símbolo
+(`sub_714b8`), **`StartPermanentEffect(long,long,EffectOrder*)`**
+×2, `ConvertEffectAttribute(int)`. `StartPermanentEffect` (`0x220f94`,
+só 148 B, 95% cob., 0 tabela, 0 branches): 2 `bl` — `sub_714b8` ×2,
+**`NewPEffectTCB()`** (construtor do "_EffectTCB", mesma struct já
+vista em `doMetaschedulePtclCommandOnce`, seção 393). `ConvertEffect
+Attribute(int)` (`0x2210c4`, 56 B, **só 14% de cobertura** — lacuna
+grande, provável tabela de lookup/salto não detectada pela descida
+recursiva).
+
+**Fecha o follow-up da seção 418, mas com um achado honesto**: a
+cadeia é `callEffect` → `StartEffect` → `StartPermanentEffect` →
+`NewPEffectTCB` (cria o bloco de controle de tarefa de efeito) +
+`ConvertEffectAttribute` (converte atributo/flag). **Nenhuma dessas
+três funções despacha diretamente pra alguma `p[NN]_*Func`** — o
+dispatch real por ID de habilidade continua não localizado. Hipótese
+revisada: o `_EffectTCB` criado por `NewPEffectTCB` provavelmente
+carrega um ponteiro de função/ID que é lido e despachado depois, de
+dentro do laço de execução de tarefas de efeito (candidato:
+`doMetaschedulePtclCommandOnce`, seção 393, ou um scheduler ainda
+não identificado) — não uma chamada direta em cadeia. `StartEffect`/
+`StartPermanentEffect` marcadas `read_structural`/`read_full`
+respectivamente (91%/95% ≥... critério: `StartEffect` 91%<95% fica
+`read_structural`; `StartPermanentEffect` 95%≥95% fica `read_full`);
+`ConvertEffectAttribute` marcada `read_structural` com cobertura
+muito parcial (14%, pendência honesta explícita).
+
+## 421. Família `SwapDB`/`bSwapDB`/`cSwapDB`/`eSwapDB`/`jSwapDB` — troca de double-buffer PSX clássico, 5 variantes letter-prefix por contexto de tela (2026-10-23, Fase 3, quadragésimo sexto lote)
+
+Família completa de 5 membros, todos nunca lidos antes. Catálogo
+nuclear compartilhado: `VSync`, `ClearOTag`, `DrawSync`,
+`PutDrawEnv`/`PutDispEnv`, `DrawOTag`, `GetDrawEnv`, `myPollhost()`,
+`IS_TEX_2X()` — o clássico ciclo de troca de buffer PSX (limpa
+ordering table, sincroniza, desenha a OT do frame anterior, troca
+ambientes de desenho/display). `SwapDB(int,int)` (`0x1a6588`, 476
+B, 86% cob., 0 tabela, 10 `bl` — catálogo completo +
+`CFFT_STATE::SetParam`): versão base/genérica. `bSwapDB(int,int)`
+(`0x1757d0`, 712 B, 82% cob., 0 tabela, 8 `bl` — sem `myPollhost`
+nem `SetParam` mas com os demais): variante "b". `cSwapDB(int,int)`
+(`0x172560`, 256 B, 88% cob., 0 tabela, 6 `bl` — subconjunto mais
+magro, sem `PutDispEnv`): variante "c", a mais simples. `eSwapDB
+(int,int)` (`0x1876b0`, 624 B, 80% cob., 0 tabela, apenas 4 `bl` —
+`SetParam`/`ClearOTag`/`GetDrawEnv`/`IS_TEX_2X`, sem o ciclo
+VSync/DrawSync completo): variante "e", possivelmente usa um caminho
+de sincronismo diferente (cutscene/evento?). `jSwapDB(int,int)`
+(`0x192f08`, 508 B, 78% cob., 0 tabela, só 2 `bl` —
+`ClearOTag`/`GetDrawEnv`): variante "j", a mais minimalista de
+todas. Confirma que cada contexto de tela/menu letter-prefix já
+mapeado neste projeto (base/b/c/e/j, mesmo padrão de `MakeSmallWindowFunc`
+§358, `GetAbilityList` §390, `CurChrChg` §402) mantém sua própria
+rotina de troca de double-buffer, com variações no conjunto de
+chamadas de sincronismo — provavelmente otimizações/caminhos
+distintos conforme a complexidade da tela. Todas marcadas
+`read_structural` (78-88%, todas abaixo do limiar de 95%, mas 0
+tabela de salto em todas — lacunas honestas, catálogo de `bl`
+pequeno e consistente entre variantes).
+
+## 422. `rute_find(int,int)`/`rutegrow_draw(GsOT*)` — busca e desenho de linha de rota (provável indicador de alcance de movimento "crescendo"), chama o loop de CD-XA de abertura (2026-10-23, Fase 3, quadragésimo sexto lote)
+
+`rute_find(int,int)` (`0x26883c`, 688 B, 94% cob., 0 tabela, 19
+branches/9 de retrocesso): 8 `bl` — `Wread_eventflag`,
+**`fftCdLoop(CDREC*)`** (mesma API de CD-XA vista em `fft_opening`/
+`roll_xaplay`, seções 387/394 — achado curioso: por que uma função
+de "achar rota" toca o loop de CD? hipótese: efeito colateral de
+manter o áudio de fundo rodando durante um cálculo pesado, ou nome
+genérico reusado por coincidência de endereço/vizinhança — não
+confirmado), reentrada em si mesma (`rute_find`), `wldssd_control()`/
+`wldtown_bright()` (controle de som ambiente/brilho de cidade do
+world map), `VSync`, `GsGetActiveBuff`/`GsSetWorkBase`.
+`rutegrow_draw(GsOT*)` (`0x26854c`, 752 B, 99% cob., 0 tabela, 7
+branches/4 de retrocesso): 8 `bl` — `GetTPage`/`GetClut`+
+`SetPolyFT4`+`SetSemiTrans` (primitiva texturizada semi-transparente),
+`xpLibGetOffset`, `GsSortPoly`, `RotTransSV`, `__divsi3` ×4. "Rute"
+(ルート = "rota"/"route") + "grow" sugere o indicador visual de
+rota/caminho que "cresce" (animação de desenho progressivo) — muito
+provavelmente o efeito visual que traça a rota de movimento no mapa
+do world map (estrada entre cidades), não o grid de alcance de
+batalha (que já tem sua própria família `MapCost*`). Marcadas
+`read_structural` (`rutegrow_draw` 99% quase atinge `read_full`
+automático, mas fica `read_structural` por não ter leitura manual;
+`rute_find` 94% < 95%, lacuna honesta).
+
+## 423. `set_event_table(TURN_TABLE*, int)` — fecha o follow-up da seção 419, agenda/consulta entrada da tabela de eventos de turno (2026-10-23, Fase 3, quadragésimo sexto lote)
+
+`set_event_table(TURN_TABLE*,int)` (`0x1d4600`, 832 B) — `jtable.py`:
+**99% de cobertura** (205/208), zero tabela de salto, 25 branches/7
+de retrocesso. 4 `bl`: local sem símbolo (`sub_1d3b3c`, ×4),
+`get_active_unit()`, `check_turn_frozen(BWORK*)`, `set_cco_SD
+(BWORK*)`. Fecha o follow-up direto deixado pela seção 419
+(`set_normability2` chama esta função como efeito colateral de
+agendamento). Confirma que `TURN_TABLE*` é a estrutura real de
+agenda de turno do sistema de batalha, consultada/atualizada aqui
+contra o estado de "turno congelado" (`check_turn_frozen` — provável
+gate pra status que impedem agir, como paralisia/sono) e a unidade
+atualmente ativa (`get_active_unit`). `set_cco_SD` sugere efeito
+colateral de "cancelar comando atual"/"status de dados" na mesma
+passada. Marcada `read_full` (99% ≥95%, 0 tabela de salto); corpo de
+`sub_1d3b3c` (chamado 4×) não lido.
+
+**Referências cruzadas (seções 420-423):** seção 393
+(`doMetaschedulePtclCommandOnce`, `_EffectTCB` compartilhado com
+`NewPEffectTCB` — candidato a scheduler real do dispatch por ID),
+seção 418 (`callEffect`, cadeia agora estendida até
+`StartPermanentEffect` sem achar o dispatch), seções 358/390/402
+(famílias letter-prefix, `SwapDB` é mais um membro do mesmo padrão
+arquitetural), seções 387/394 (`fftCdLoop`, reaparece de forma
+inesperada em `rute_find`), seção 419 (`set_normability2`, fecha o
+follow-up direto pra `set_event_table`).
+
+## 424. `requestDamageAnimation(tag_animation*,tag_animation*)` — dispatcher de reação de golpe (troca de animação/knockback/reorientação), elo de baixo nível do pipeline golpe→animação (2026-10-23, Fase 3, quadragésimo sétimo lote)
+
+`requestDamageAnimation(tag_animation*,tag_animation*)` (`0x1f024c`,
+696 B) — `jtable.py`: **92% de cobertura** (160/174), **1 tabela de
+salto resolvida** (13 casos → 5 handlers, agrupamento denso), 20
+branches/13 de retrocesso. 7 `bl`: `changeAnimation`/
+`forceChangeAnimation`, `NewWeaponEquip` (reaparece — seção 89),
+`startKnockBack(tag_animation*,tag_animation*)`, `setActionDirection
+(tag_animation*,tag_animation*)` ×3, `getAnimationHeight` ×2, 1
+local sem símbolo (`sub_1e7d28`). Hipótese: switch sobre um campo
+tipo-enum de "reação ao golpe" despachando entre troca de animação
+normal/forçada, recuo físico (`startKnockBack`) e reorientação do
+alvo (`setActionDirection`). Encaixa no pipeline golpe→animação já
+mapeado (seções 82/89/393) como a peça de nível mais baixo que
+aplica a reação visual da unidade atingida. Marcada `read_structural`
+(92% < 95%, apesar da tabela resolvida; `sub_1e7d28` não lido).
+
+## 425. `getDisplayPosition()` — posicionamento de exibição ordenado por profundidade/prioridade de painel, distinta de `getAnimationPosition` (2026-10-23, Fase 3, quadragésimo sétimo lote)
+
+`getDisplayPosition()` (`0x1f2cd8`, 684 B) — `jtable.py`: **98% de
+cobertura** (168/171), zero tabela de salto, 18 branches/8 de
+retrocesso. 7 `bl`: `get_mapstp` ×2, `get_movetype(BWORK*)`,
+`setPanelPriorityMove`/`setPanelPrioritySppMove`/`setPanelPriority`/
+`setPanelPrioritySpp` (4 variantes Move×Spp), `setAnimationRealVector
+(SVECTOR*,tag_animation*)` (seção 139). Começa exatamente onde
+termina `displayShape` (seção 192, 0x1f25d4+0x704=0x1f2cd8) —
+adjacência de compilação no mesmo arquivo-fonte de pipeline de
+desenho. Consulta tipo de movimento pra escolher entre as 4
+variantes de prioridade de painel, grava o vetor resultante via
+`setAnimationRealVector` — é a rotina de posicionamento Z-ordenado
+pro desenho do sprite, distinta de `getAnimationPosition`
+(interpolação de quadro). Marcada `read_full` (98% ≥95%, 0 tabela
+de salto).
+
+## 426. `extend_systemframe(int,int,RECT16*,int)` — variante especializada de "estender moldura" para a janela de sistema, implementação por trás do wrapper `Wextend_systemframe` (2026-10-23, Fase 3, quadragésimo sétimo lote)
+
+`extend_systemframe(int,int,RECT16*,int)` (`0x11dd88`, 692 B) —
+`jtable.py`: **98% de cobertura** (170/173), zero tabela de salto,
+18 branches/9 de retrocesso. 5 `bl`: `allocatememorywait(int)` ×2,
+`disposememory(char*)`, 1 local sem símbolo (`sub_11d740`, helper
+compartilhado anterior a `extend_windowframemain` no binário),
+`task_wait(long)` ×2, `PSX_LoadImage` ×2. Está colada em memória
+logo após `extend_windowframemain` (seção 252, termina em
+0x11dd64) e usa o mesmo par alocação/espera — confirma ser a
+implementação de engine por trás do wrapper `Wextend_systemframe`
+já citado (junto com `Wextend_windowframemain`/`Wextend_windowframe`)
+como "três variantes de estender moldura de janela" chamadas por
+`Wdisp_floateventwindow`. Marcada `read_structural` (98% ≥95%, 0
+tabela de salto — seguindo a convenção de alta cobertura automática
+sem leitura manual = `read_structural`, não `read_full`).
+
+## 427. `ASHURA_LightSwitch(long)` — folha pura sem `bl`, provável toggle de fontes de luz GTE usado por `ASHURA_set_Mesh` (2026-10-23, Fase 3, quadragésimo sétimo lote)
+
+`ASHURA_LightSwitch(long)` (`0x162e94`, 692 B) — `jtable.py`: **94%
+de cobertura** (163/173), zero tabela de salto, 10 branches/8 de
+retrocesso (compatível com iterar um array pequeno de luzes, até 3 —
+limite clássico do GTE do PS1). **Zero `bl`** — função folha pura,
+toda a lógica inline (sem delegar a nenhuma outra rotina ASHURA/
+libc). Hipótese: percorre um array pequeno de fontes de luz
+(contexto apontado pelo parâmetro `long`), ligando/desligando cada
+uma inline — provavelmente usado por `ASHURA_set_Mesh` (seção 68,
+que já cita "trocar iluminação" como uma de suas 2 únicas `bl`) ao
+configurar um dos 9 tipos de malha 3D. Marcada `read_structural`
+(94% < 95% — lacuna pequena, provável pool literal, não confirmado
+byte a byte).
+
+## 428. `iOS_RectHitExecute()` — motor central do sistema de hit-test de retângulos de toque, fecha o ciclo registro→execução→consulta (2026-10-23, Fase 3, quadragésimo sétimo lote)
+
+**Correção de nome**: o símbolo real (`.dynsym` demangled) é
+`iOS_RectHitExecute()` (sem parâmetros), não "iOS_RectHitExec" como
+hipotetizado ao despachar este alvo. `0x27f238`, 700 B — `jtable.py`:
+**92% de cobertura** (161/175), zero tabela de salto, 24 branches/11
+de retrocesso. 9 `bl`: 1 local sem símbolo (`sub_27f0a4`, 144 B,
+chamado 6×, 97% cobertura própria — formato consistente com teste
+"ponto dentro do retângulo"), `iOS_getTouchTap`, `iOS_getTouchRelease`
+×2, `iOS_getTouchPress`, `iOS_getTouchBeginX`/`Y` ×2 cada,
+`iOS_getTouchNowX`/`Y` ×3 cada, `iOS_isInGameArea` (gate de área de
+jogo ativa).
+
+**Achado estrutural**: a função ocupa o intervalo imediatamente
+anterior a toda a família `iOS_GetRectHitNo{Tap,Release,Slide,Touch,
+TouchTrg,TouchOld,TouchDirect,Begin}` (0x27f4f4..0x27f5d8) — forte
+evidência de coesão de módulo. `iOS_RectHitExecute()` varre os
+retângulos registrados desde o último `iOS_ClearRectHitAll`/
+`iOS_SetRectHit`, cruza cada um com o estado bruto de toque via
+`sub_27f0a4` e grava o resultado num estado interno estático; os 8
+`iOS_GetRectHitNo*` (sem `bl` próprios) são meros acessores que leem
+esse estado já calculado. Fecha o ciclo documentado na seção 331
+(`ctlsthelp_main`: `ClearRectHitAll`+`SetRectHit`+`GetRectHitNo*` por
+frame) — faltava exatamente a etapa "Execute" entre registro e
+consulta; esta função é essa etapa. Marcada `read_structural` (92% <
+95%, lacuna provavelmente pool de literais, não confirmado byte a
+byte).
+
+**Referências cruzadas (seções 424-428):** seções 82/89/393
+(pipeline golpe→animação, `requestDamageAnimation` fecha outro elo),
+seções 139/192 (`setAnimationRealVector`/`displayShape`, vizinhança
+e reuso confirmados por `getDisplayPosition`), seção 252
+(`extend_windowframemain`, par agora identificado com
+`extend_systemframe`), seção 68 (`ASHURA_set_Mesh`, provável
+chamadora de `ASHURA_LightSwitch`), seção 331 (`ctlsthelp_main`,
+ciclo de hit-test agora completo com `iOS_RectHitExecute`).
