@@ -96,7 +96,17 @@ def descend(md, data, start, end, seeds):
                     if m == 'b':
                         break
                 else:
-                    break
+                    # Register-target branch (bx/blx reg). Only an
+                    # UNCONDITIONAL one truly ends the block - a conditional
+                    # variant (bxle, bxeq, ...) falls through to the next
+                    # instruction when the condition is false. Plain 'bx' is
+                    # already caught above; anything reaching here ending in
+                    # a 2-letter ARM condition code is the conditional case.
+                    cond_suffixes = ('eq', 'ne', 'cs', 'hs', 'cc', 'lo', 'mi',
+                                      'pl', 'vs', 'vc', 'hi', 'ls', 'ge', 'lt',
+                                      'gt', 'le')
+                    if not (len(m) > 2 and m.endswith(cond_suffixes)):
+                        break
         order.append(block_order)
     return insns, jt_candidates
 

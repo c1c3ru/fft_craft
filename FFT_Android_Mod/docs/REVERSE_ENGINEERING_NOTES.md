@@ -16514,3 +16514,242 @@ quarto membro confirmado em `sceGuClutLoad_for_iOS`), seção 512
 (`iOS_DrawTexFlip`, mesmo padrão de nomes cross-platform legados),
 seção 292 (`addzodiacback`, pipeline de Zodíaco completo com
 `Zaddzod`).
+
+## 534. Classe `CEGL2_SPRITE` — 24 membros restantes fechados, confirma fachada fina sobre `CG2D_LOADER` (2026-10-23, Fase 3, septuagésimo lote paralelo)
+
+Lote paralelo (fork 1/3), `jtable.py` em cada um dos 24 endereços ainda
+`unread` da classe. **Todos 100% de cobertura, zero tabela de salto**
+— aceitos direto pela regra 3 da metodologia, sem leitura instrução-a-
+instrução. Agrupados por nível, não por função individual:
+
+**Nível 1 — acessores puros, 0 `bl`, 0 lógica (15 funções, 8–40 B):**
+`GetPixelByte`, `SetColor(int,uchar,uchar,uchar)`, `SetColor(uchar,uchar,
+uchar)`, `SetAlpha(uchar)`, `GetImageSize`, `GetTextureBuffer`, `IsLoad`,
+`SetVertexOffset`, `SetScale`, `SetAlpha(int,uchar)`, `SetVertexScale`,
+`GetImageBPP`, `GetScaleAlignCenter`, `SetScaleAlignCenter`,
+`SetMultiTextureHandle` — load/store direto em campo da struct, sem
+chamada nenhuma, exatamente o padrão já visto em `iOS_CMenuTouchSaveLoad`
+(seção 359). `read_full` em lote.
+
+**Nível 2 — wrappers de 1 `bl` só (3 funções):** `~CEGL2_SPRITE()` (24B)
+só chama `Unload(int)` — destrutor é trampolim puro, confirma que toda
+liberação real mora em `Unload` (ainda `mentioned_unverified`).
+`OnSuspend()` (56B, 1 branch retrocesso): 1 `bl` pra `sub_7177c` (local
+sem símbolo). `LoadBegin(uchar*,int,int,int,int,int,uchar,int)` (148B, 3
+branches retrocesso): 1 `bl` pra `Unload(int)` — variante de buffer bruto
+só limpa estado de textura anterior antes de armazenar o novo, sem passar
+pelo `CG2D_LOADER`. `read_full`.
+
+**Nível 3 — adaptadores "Layout" que delegam pro par "Partial"/"Draw" já
+lido (2 funções):** `AddPacketLayout(float,float,_EGL_SPRITE_LAYOUT*,
+CEGL_PACKET*)` (108B) delega pra `AddPacketPartial` (já `read_full`) +
+`__floatsisf`; `DrawLayout(float,float,_EGL_SPRITE_LAYOUT*)` (100B) delega
+pra `DrawPartial` (já `read_structural`). Confirma que toda a família
+"*Layout" é açúcar sintático sobre o par "*Partial" — sem lógica de
+desenho própria. `read_full`.
+
+**Nível 4 — pipeline de carga/edição real, via `CG2D_LOADER` (4
+funções):** `LoadBegin(char*,uchar*,uint,uint,int)` (264B, 100%): 10 `bl`
+— `CG2D_LOADER::CG2D_LOADER`/`~CG2D_LOADER`/`Load`/`CopyAsTexture`/
+`CalcAsTexture`/`GetFormat`, `Unload(int)`, e 3 locais sem símbolo. Caminho
+completo de carga de arquivo de imagem via o framework genérico
+`CG2D_LOADER` (seção 316). **Achado**: um desses locais, `sub_2cdf9c`, é
+exatamente o mesmo endereço sem identidade apontado como pendência na
+seção 531 (`xpLib_DebugExport`/`Import`) — agora aparece num segundo
+contexto completamente diferente (carga de textura, não dump de debug),
+reforçando que é algum helper de heap/alocador genérico (`xpLib`?) chamado
+de vários lugares, não específico de nenhum dos dois. `LoadBegin(int,int,
+int)` (292B, 100%): 7 `bl` — sobrecargas *diferentes* de `CopyAsTexture`/
+`CalcAsTexture` (variante baseada em inteiros, não buffer), `Unload`, e 4
+locais sem símbolo — variante "alocar textura vazia do tamanho X×Y" em vez
+de carregar de arquivo. `Overwrite(uchar*,int,int,int,int)` (224B, 100%, 1
+branch retrocesso): 3 `bl`, todos locais sem símbolo — edição de pixels
+**in-place** sem tocar `CG2D_LOADER`/`Unload`, caminho distinto do
+carregamento. `OnResume()` (360B, 100%, 4 branches retrocesso): 6 `bl`,
+todos locais sem símbolo na mesma faixa de `Overwrite`/`OnSuspend`
+(`0x7171c`–`0x7177c`) — cluster de helpers de contexto GL/textura
+reaproveitados por `OnResume`/`OnSuspend`/`Overwrite`, padrão clássico
+Android de recarregar texturas depois que o contexto GL foi perdido no
+`onPause`/`onResume` do app. Todas `read_full` (100%, zero tabela — regra
+3), ressalva honesta: identidade dos locais `sub_71xxx`/`sub_2cdfxx` não
+confirmada.
+
+**Síntese**: com estes 24, a classe `CEGL2_SPRITE` fecha por completo —
+fachada fina sobre `CG2D_LOADER` (carregamento) com caminho de atualização
+in-place (`Overwrite`) e ciclo de vida GL (`OnSuspend`/`OnResume`)
+separado; variantes "*Layout" não têm lógica própria.
+
+## 535. Classe `CRECT` (registro/foco de UI clicável) — 33 membros `unread` restantes fechados em lote, revela bug real em `jtable.py` (2026-10-23, Fase 3, septuagésimo lote paralelo)
+
+Lote paralelo (fork 2/3). `CRECT` já tinha 1 membro `read_full`
+(`MoveCursorFocus`, §482) e 5 `mentioned_unverified` (`FrameMove`/`Init`/
+`Clear`/`Register`/`SetEnable`, fora do recorte desta passada). Esta
+passada roda `jtable.py` nas 33 funções `unread` restantes (endereços
+`0xb4f70`–`0xb5a14`) — classe genérica de registro de elementos de UI
+clicáveis/focáveis por "RID" (rect ID), usada por todo o sistema de
+menus. Todas deram 100% de cobertura exceto uma (ver pendência abaixo),
+sem nenhuma tabela de salto.
+
+**Grupo A — getters/setters triviais em lote** (0 `bl`, 100% cobertura,
+leitura/escrita de campo por `rid*0x84`): `GetRect`/`SetRect`/`SetRect16`/
+`GetDrawRect`/`SetDrawRect`/`GetMouseCursorPos`/`GetScreenOffset`/
+`SetScreenOffset`/`SetScreenScale`/`GetEnable`/`GetVisible`/`SetVisible`/
+`GetNoFocus`/`SetNoFocus`/`GetGroup`/`SetGroup`/`GetRectNum`/`GetLastRID`/
+`GetRID`/`SetRID`/`MoveCursor`/`MoveCursorPos`/`CRECT()`/`~CRECT()` (24
+funções, 4–60B). Pares `Get*/Set*` são espelhos exatos (mesma aritmética
+de endereço, troca `ldr`↔`str`); `GetRect`/`SetDrawRect`/`GetDrawRect` têm
+1 branch retrocesso (laço pequeno copiando os 4 campos do `_RECT_S32`/
+`_RECT_S16`, semântica de `memcpy` de 16B); `CRECT()`/`~CRECT()` são
+literalmente `bx lr` — ctor/dtor vazios. `read_full` em lote (precedente
+seção 359).
+
+**Grupo B — trio de navegação `*EnableUI` + wrappers `MoveCursor*`**:
+`GetFirstEnableUI`/`GetNextEnableUI`/`GetPrevEnableUI` (136–140B) têm
+catálogo de `bl` idêntico nos três (`GetEnable`+`GetNoFocus`+`GetGroup` —
+o predicado "slot habilitado E sem no-focus E do grupo certo" montado a
+partir dos três getters do Grupo A), confirmando busca linear com ponto de
+partida/direção diferentes. `MoveCursorFirst`/`MoveCursorNext`/
+`MoveCursorPrev` (44B cada) são wrappers finos 1:1 sobre o trio acima —
+API pública que delega a busca e aplica o resultado ao cursor interno.
+Seis funções `read_full`.
+
+**Grupo C — escala aritmética via soft-float**: `MulRect(int,float)`
+(124B) e `MulAndAddRect(int,float,int,int)` (140B) têm catálogo de `bl`
+idêntico (`__floatsisf`/`__mulsf3`/`__fixsfsi`, helpers de runtime
+`libgcc`) — confirma ABI `softfp` nesta build para esta operação: escala
+um campo inteiro por um fator `float` convertendo manualmente em vez de
+VFP. `MulAndAddRect` soma os 2 parâmetros `int` extra após a escala.
+Ambas `read_full` (regra 3).
+
+**Grupo D — notáveis**: `GetChangeRID(int,int,int)` (40B, 100%, 0 `bl`, 1
+branch sem retrocesso) — lógica linear curta, provável remapeamento de
+índice RID com condição de borda (wraparound entre grupos); `read_full`
+(regra 3), sem extração manual campo-a-campo da condição exata.
+`DropTest(_RECT_S32*)` (332B, a maior do lote, 100%, 11 branches/5 de
+retrocesso = laço real): 1 `bl` pra `sub_714b8` (local, sem símbolo,
+não resolvido) — de longe a mais complexa da classe, sugere teste de
+"drop"/colisão de um rect contra algo (hit-test de arrastar-e-soltar ou
+validação de posição). `read_structural` (identidade de `sub_714b8` e
+semântica fina do laço pendentes).
+
+**Bug real encontrado e corrigido em `jtable.py`**: `SetEnableAll(int)`
+(`0xb5480`, 44B) reportou só 27% de cobertura (3/11) pelo `jtable.py`.
+Disassembly manual mostrou o motivo — a função é só `if (count<=0) return;
+end=base+count*0x84; loop: slot[i].enabled_flag@0x10=value; i+=0x84; if
+(i!=end) goto loop; return` (100% real, 0 `bl`, laço simples). A causa:
+`jtable.py` tratava **qualquer** `bx<cond>` (ex. `bxle lr`) como fim de
+bloco, igual ao `bx` incondicional, em vez de continuar o fluxo de queda
+(fall-through) quando a condição é falsa — bug real na ferramenta, não
+característica atípica da função. **Corrigido nesta mesma passada**
+(`docs/re-tools/jtable.py`, `descend()`: branches de registrador cujo
+mnemônico termina em código de condição ARM de 2 letras — `eq/ne/cs/hs/
+cc/lo/mi/pl/vs/vc/hi/ls/ge/lt/gt/le` — agora continuam o bloco em vez de
+`break`). Reverificado após o fix: `SetEnableAll` → 100% automático
+(confirma a leitura manual); regressão checada contra `Zaddzod` (§533,
+99%/6 `bl`, inalterado) e `battle()` (§32, 102 casos/70 handlers da tabela
+de salto, inalterado) — sem efeito colateral nas duas funções de
+referência já validadas. `SetEnableAll` marcada `read_full`.
+
+**Síntese**: `CRECT` confirma ser exatamente o que a seção 482 sugeria —
+registro genérico de elementos de UI indexados por RID, array de slots
+(stride `0x84`) guardando rect/draw-rect/enable/visible/no-focus/group/
+offset por slot. A trinca `Get{First,Next,Prev}EnableUI` implementa busca
+linear respeitando os três flags booleanos, `MoveCursor{First,Next,Prev}`
+é a camada pública que aplica o resultado ao cursor, e `Mul{Rect,
+AndAddRect}` confirmam escala por software (`libgcc`), não VFP. Resta só
+`DropTest` (corpo do laço + `sub_714b8`) e os 5 `mentioned_unverified`
+(`FrameMove`/`Init`/`Clear`/`Register`/`SetEnable`) como trabalho real
+pendente na classe.
+
+## 536. `iOS_CMenuTouch`/`iOS_CMenuTouchNum` — 35 membros restantes fechados em lote via comparação direta com a variante `SaveLoad` já lida (2026-10-23, Fase 3, septuagésimo lote paralelo)
+
+Lote paralelo (fork 3/3). `jtable.py` em todas as 35 funções `unread`
+restantes da dupla `iOS_CMenuTouch::`/`iOS_CMenuTouchNum::` (23 + 12):
+**34/35 com 100% de cobertura, zero tabelas de salto em qualquer uma** —
+confirma que toda a complexidade de despacho desta família já estava nos
+três métodos `exec`/`execTap`/`execPress` centrais (seções 225–226/253),
+não em nenhum destes membros menores. Catálogo de `bl` comparado direto
+contra os pares já lidos de `iOS_CMenuTouchSaveLoad` (seções 359/363) onde
+existe par 1:1 por nome.
+
+**Confirmados por similaridade direta com `SaveLoad`** (catálogo de `bl`
+idêntico por endereço, 15 funções): `isTaped`, `drawDebug2`,
+`getCursorPosLeft`/`Right`, `setDispOffset` (+ variante `Num`),
+`setMaxNumY`, `setDispNumY`, `setMode`, `setDisableHeightAdjust`,
+`setXIconRect`, `isInRect` (+ variante `Num`), `calcTapArea` (+ variante
+`Num`, tamanho reflete nº de zonas, não lógica distinta), `isInAssist`
+(delega a `isInRect` própria 1× em vez das 2× que `SaveLoad::isInAssist`
+testa). Todas `read_structural` (mesmo nível da referência — nenhum
+membro desta família passou de `read_structural`, nem os `exec*`
+centrais).
+
+**Triviais sem par em `SaveLoad`, auto-evidentes** (2 funções):
+`setEnableUpDownRect(uchar)`/`setMaxnumX(int)` (8B cada) — 0 `bl`, 0
+branch, store de campo puro idêntico a qualquer setter de 8B da família.
+`read_structural`.
+
+**Notáveis — divergência real da referência** (18 funções): `
+drawMenuAssist` (136B) ADICIONA 3 chamadas a `iOS_setV2Icon` que
+`SaveLoad::drawMenuAssist` não faz — base tem ícones de assist extras
+(cursor L/R) que `SaveLoad` não tem. `setLRCurEffect(int)` (100B): `
+iOS_setV2Icon` ×4 sem branch — exclusivo do menu "normal". `isCanDown`/
+`isCanUp` (84B/64B): cada um testa 1 bit via `iOS_GetKeyMask()` — par de
+teste de tecla analógica pro scroll de cursor. `isInMenu(int,int)` (76B):
+0 `bl`, bounding-box igual a `isInRect` mas contra a área TOTAL do menu —
+guarda de "toque começou dentro do menu". `setDispAssist(int)` (28B): 1
+`bl` a `iOS_IsEnableMenuItemTouch()` antes do store — setter
+condicionalmente guardado. `setYLine(int)` (44B): 1 `bl` a
+`chk_RefLine(int)`, diferente de `SaveLoad::setYLine` (0 `bl`) — base
+valida a linha de referência antes de armazenar. `Num::execTap` (340B):
+catálogo SUPERSET do de `SaveLoad::execTap` — mantém os mesmos 4 bl mas
+ADICIONA `isInRect` própria (×5) e `addNum` própria (×2) — só a variante
+`Num` aplica o delta de arrasto como incremento numérico. `Num::
+initPacket` (376B): mesmo núcleo de `iOS_CMenuTouch::initPacket` mas com
+metade do volume de chamadas e sem as 6 variantes `getClutActiveMenu{L,R,
+C,Name,Cursor,CursorShadow}` da base (Jaccard ≈0,45) — widget numérico só
+precisa do próprio cursor. `Num::setMenuAssistPosition` (132B): mesma
+forma de `SaveLoad::setMenuAssistPosition` (528B) mas 4× menor — spinner
+numérico tem muito menos posições possíveis. `Num::setNumCurEffect`/
+`setNumCur` (100B/84B): chamam `IOS_PSP2IOS_X`/`_Y` (conversão PSP→iOS) +
+`iOS_setV2Icon` — conversão de coordenada que `setLRCurEffect` da base não
+precisa (cursor numérico se desloca em posição de tela livre, não ícone
+fixo). `Num::drawDebug` (292B): mesmo trio `rprintfr`/`iOS_getTouchNowX`/
+`iOS_getTouchNowY` de `iOS_CMenuTouch::drawDebug`, não de `SaveLoad` (que
+não chama `rprintfr`) — só a família sem "SaveLoad" imprime debug via
+`rprintfr`. **Pendência honesta**: `Num::addNum(int*,int)` (60B) — só 60%
+de cobertura (9/15 slots), 0 `bl`/0 branch no trecho alcançado, provável
+aritmética de incremento/clamp cujo fim do bloco não foi alcançado pela
+descida linear (possível padding/literal pool, não confirmado) — mesmo
+precedente da seção 227 (`eValueFunc`). Todas `read_structural`.
+
+**Síntese**: com este lote, `iOS_CMenuTouch` (base) e `iOS_CMenuTouchNum`
+(variante numérica) ficam 100% cobertas em `status` (35/35
+`unread`→`read_structural`), fechando o trio junto com
+`iOS_CMenuTouchSaveLoad` (seções 359/363). Confirma-se a arquitetura de 3
+variantes por especialização de conteúdo (lista de menu genérico /
+save-load / spinner numérico) sobre o mesmo esqueleto de hit-test
+(`isInRect`/`isCanUp`/`isCanDown`/`isTaped`/`calcTapArea`), cada uma
+somando só a lógica específica do seu tipo de dado sobre o dispatcher
+comum (`exec`/`execTap`/`execPress`, seções 225/226/253). Nenhuma tabela
+de salto em nenhuma das 35 funções.
+
+**Referências cruzadas (seções 534-536):** seção 316 (`CG2D_LOADER`,
+consumido pelo pipeline real de carga do `CEGL2_SPRITE`), seção 531
+(`xpLib_DebugExport`/`Import`, `sub_2cdf9c` visto num segundo contexto),
+seção 482 (`CRECT::MoveCursorFocus`, classe confirmada como registro
+genérico de UI), seções 359/363 (`iOS_CMenuTouchSaveLoad`, referência
+direta de comparação pra `iOS_CMenuTouch`/`Num`), seções 225-226/253
+(dispatcher central `exec`/`execTap`/`execPress`, complexidade de
+despacho confirmada como já fechada), seção 227 (`eValueFunc`, mesmo
+precedente de cobertura parcial honesta aplicado a `Num::addNum`). Este
+lote 70 é o primeiro a trabalhar direto da fila `docs/
+alvos_prioritarios_nucleo.csv` (recorte "núcleo" do inventário, só
+funções pequenas/médias nunca tocadas, boilerplate de terceiros já
+excluído) em vez de `RE_FUNCTION_INVENTORY.csv` ordenado por tamanho —
+mesma metodologia, fonte de fila diferente. Também corrige um bug real em
+`jtable.py` (ver seção 535) que provavelmente afetou a % de cobertura
+reportada de qualquer função anterior com `bx<cond>` no corpo; não há
+indicação de que isso tenha mudado alguma decisão de status já tomada
+(nenhuma seção anterior documenta um `bx<cond>` como causa de cobertura
+baixa), mas vale ter em mente ao revisitar qualquer `read_structural`
+antigo com cobertura inexplicavelmente baixa e zero tabela de salto.
