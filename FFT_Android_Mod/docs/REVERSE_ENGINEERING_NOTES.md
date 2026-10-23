@@ -13310,3 +13310,269 @@ variante inline de `loadClutDataCalc`), seção 124 (`ctlendroll_main`/
 `Resume_Init_WORK_MU`), seção 105 (`iOS_RESUME_SET_WORK_MU`, par de
 serialização de `Resume_Init_WORK_MU`), `docs/AI_DIFFICULTY_RESEARCH.md`
 (`ForAbnormalStatus`, entrada atualizada com o passe estrutural).
+
+## 388. `ctlmusic_init()`/`ctlmusic_main(CTLINFO*)` — controller de seleção de música, confirma a biblioteca `loadMusic`/`disposeMusic`/`activateMusic` (2026-10-23, Fase 3, quadragésimo lote)
+
+`ctlmusic_init()` (`0x2485b0`, 368 B, 88% cob., 0 tabela): 6 `bl` —
+`Wchangeflame`, `vOpn_fadein`/`vOpn_loadwait`/`vOpn_bk_load`
+(biblioteca "vOpn" de telas de evento, seções 365/386),
+`CFFT_STATE::SetParam`, `iOS_setV2Icon` ×3. `ctlmusic_main(CTLINFO*)`
+(`0x248720`, 800 B, **95% cob.**, 0 tabela, 21 branches/10 de
+retrocesso): **17 `bl` distintos** — `worldcursormove` ×2,
+`loadMusic(int)`/`disposeMusic(int)` ×2/`activateMusic(int,int,int)`
+(primeira vez que esta tríade de API de música é vista completa),
+`ctlopentitle_init(int)` (confirma ligação com a sequência de
+abertura — ver seção 390), `vOpn_fadeout`/`vOpn_loadwait`/
+`vOpn_bk_load`/`vOpn_defscrwin_set`, `pspOpenDataBackBufGet`/
+`pspOpenDisableFlg`, `CFFT_STATE::SetRenderSize`/`SetParam`,
+`xpFree`, `iOS_setV2Icon` ×7. Confirma ser a tela de seleção/menu de
+música (jukebox) do jogo: carrega, dispõe e ativa faixas sob demanda
+conforme o cursor navega pela lista. Marcadas `read_structural`
+(`ctlmusic_init` 88% < 95%, `ctlmusic_main` 95% ≥95% — ambas sem
+tabela de salto, mas `init` fica honestamente abaixo do corte).
+
+## 389. `ctlbackpage_init()` — fecha o par com `ctlbackpage_main` (seção 168, já lida) (2026-10-23, Fase 3, quadragésimo lote)
+
+`ctlbackpage_init()` (`0x2649f0`, 776 B) — `jtable.py`: **93% de
+cobertura** (180/194), zero tabela de salto, 2 branches/0 de
+retrocesso. 7 `bl` distintos: `Wtask_stop`, `iOSSdNovelLogIconOff()`
+(desliga o ícone de log do modo Novel — confirma ligação com o
+sistema `ctlnobel_*`, seção 269/sgts), `add_anmpac`/`add_winpac`,
+`fastpage_print(int,int)`, `wldwin_set`, `iOS_setV2Icon`. Fecha o
+par init/main de "backpage" (provável tela de histórico/log textual
+de voltar página, já catalogada em detalhe na seção 168 pelo lado
+`_main`). Marcada `read_structural` (93% < 95%, 0 tabela de salto).
+
+## 390. `GetAbilityList`/`bGetAbilityList`/`jGetAbilityList` — família letter-prefix completa, consulta de lista de habilidades por job (2026-10-23, Fase 3, quadragésimo lote)
+
+`GetAbilityList(short,short,int,short*,int)` (`0x1a8620`, 756 B, 98%
+cob., 0 tabela, 28 branches/15 de retrocesso): 6 `bl` —
+`GetLocalJobNumber(short)`, `GetJobNumber(int)`,
+`GetCommandNumber(int)`, `SetBitStream`/`GetBitStream`,
+`get_ability(int,int)`. `bGetAbilityList` (`0x177088`, 752 B, 98%
+cob., 0 tabela, 33 branches/16 de retrocesso): catálogo análogo com
+prefixo "b" (`bGetJobNumber`/`bGetCommandNumber`/`bSetBitStream`/
+`bGetBitStream` ×3, mais `GetLocalJobNumber`/`get_ability`
+compartilhados sem prefixo). `jGetAbilityList` (`0x193a10`, 540 B,
+98% cob., 0 tabela, 21 branches/10 de retrocesso): catálogo com
+prefixo "j" (`jSetBitStream`/`jGetBitStream`), mais `get_jobdata
+(int)` ×2 — a única das três que consulta dados de job diretamente,
+não só número/comando. Confirma que o padrão letter-prefix já visto
+em outras famílias do projeto (`MakeSmallWindowFunc`, seção 358)
+também se aplica aqui — cada variante consulta a lista de
+habilidades disponíveis por job dentro de um contexto de tela
+diferente (base/"b"/"j" = provavelmente batalha/loja-de-habilidades/
+algum menu específico), construindo o bitstream de habilidades
+aprendidas via `*SetBitStream`/`*GetBitStream`. Todas três marcadas
+`read_structural` (98% ≥95%, 0 tabela de salto — critério automático
+satisfeito, mas sem leitura manual instrução-a-instrução).
+
+## 391. `statusfigprint16`/`Wstatusfigprint16`/`iOS_statusfigprint16_FT4`/`WiOS_statusfigprint16_FT4` — variante "16" da família de impressão de figura de status, mesmo padrão arquitetural já mapeado (2026-10-23, Fase 3, quadragésimo lote)
+
+Paralela à família `statusfigprint`/`iOS_statusfigprint_FT4` já
+mapeada (seções 46/49/50/51/360) — aqui a variante numerada "16"
+(provável tamanho de fonte/figura diferente, 16px). `statusfigprint16
+(int,int,char*,COPYFIELD*)` (`0xe1588`, 748 B, 95% cob., 0 tabela, 10
+branches/5 de retrocesso): **único `bl`**: `asmBoxCopy(char*,char*,
+COPYFIELD*,COPYFIELD*)` ×5 — exatamente o mesmo mecanismo de
+box-copy VRAM-to-VRAM do `statusfigprint` original (seção 254).
+`Wstatusfigprint16` (`0x11006c`, 748 B, 95% cob., 0 tabela, mesma
+topologia): único `bl` `wasmBoxCopy` ×5 (par "W"/task cooperativa).
+`iOS_statusfigprint16_FT4`/`WiOS_statusfigprint16_FT4` (`0xe1c0c`/
+`0x1106f8`, 428 B cada, 98% cob. ambas, 0 tabela, 8 branches/4 de
+retrocesso cada): único `bl` cada, um local sem símbolo
+(`sub_d4268`/`sub_fbb08` respectivamente, ×4) — mesmo padrão exato
+já confirmado na seção 360 (reimplementação via primitiva `FT4`
+texturizada em vez de box-copy de VRAM, com sub-rotina local de
+5 casos resolvendo o jump table interno). Confirma: a variante "16"
+é um clone estrutural completo da família original em 4 variantes
+(normal/W/FT4/WFT4), só trocando o tamanho de fonte/figura. Todas
+marcadas `read_structural`.
+
+## 392. `card_call(unsigned long*, unsigned long, int)` — dispatcher de task para "cartas"/menu de cartão, cobertura abaixo do limiar (2026-10-23, Fase 3, quadragésimo lote)
+
+`card_call(unsigned long*,unsigned long,int)` (`0xcbf7c`, 736 B) —
+`jtable.py`: **90% de cobertura** (165/184), zero tabela de salto, 9
+branches/5 de retrocesso. 5 `bl` distintos: `import_localpad(int)`/
+`export_localpad(long*)` (I/O de dados locais de controle — já visto
+em outros contextos de serialização de estado), `asmTaskEntry()`/
+`asmGetActiveTask(int)` ×2 (framework de task cooperativa de baixo
+nível), `__divsi3` ×3. Nome e assinatura (`unsigned long*` + task
+kind + int) sugerem ser um despachante de entrada de task genérico
+("card" pode se referir a "card" no sentido de registro/ficha, não
+necessariamente carta de jogo — hipótese não confirmada por falta de
+string/contexto). Marcada `read_structural` (90% < 95%, 0 tabela de
+salto — lacuna honesta, catálogo de `bl` pequeno demais pra fixar a
+semântica exata sem leitura manual).
+
+## 393. `doMetaschedulePtclCommandOnce(unsigned short, _EffectTCB*)` — dispatcher de partícula do sistema de metaschedule, fecha outro follow-up das seções 307/308/354 (2026-10-23, Fase 3, quadragésimo lote)
+
+`doMetaschedulePtclCommandOnce(unsigned short,_EffectTCB*)`
+(`0x21df6c`, 736 B) — `jtable.py`: **98% de cobertura** (181/184),
+zero tabela de salto, **44 branches, 24 de retrocesso** (densidade
+de laço muito alta pro tamanho da função — compatível com uma
+máquina de estado "step once" com muitos casos curtos em sequência,
+não um switch único). 4 `bl` distintos: `requestTargetAnimation(int)`
+×2, **`requestDamageNumber(int)`** ×2 (nome real de API — compare
+com a função vizinha de nome parecido na seção 370, que por
+engano/apelido tinha o nome `initializeDamageNumber` mas corpo de
+flags de status; esta aqui é a chamada real que dispara o popup de
+número de dano), `requestDamageResult(int)` ×2,
+`requestAnimation(unsigned int,unsigned int)` ×3. Confirma que o
+sistema de metaschedule (seções 307/308/354 — `SetCameraWorkWithMeta
+schedule`/`s29_doMetaschedule`/`SearchNextMetascheduleDividePos`) tem
+seu próprio dispatcher de comando de partícula "uma vez por tick",
+que aciona o pipeline de dano real (`requestDamageNumber`/
+`requestDamageResult`) e de animação (`requestTargetAnimation`/
+`requestAnimation`) a partir de scripts de efeito (`_EffectTCB*`).
+Marcada `read_structural` (98% ≥95%, 0 tabela de salto).
+
+**Referências cruzadas (seções 388-393):** seções 365/386 (biblioteca
+"vOpn", reusada por `ctlmusic_init`), seção 168 (`ctlbackpage_main`,
+par agora completo), seção 358 (família letter-prefix, mesmo padrão
+confirmado em `GetAbilityList`), seções 46/49/50/51/254/360 (família
+`statusfigprint`, variante "16" espelha exatamente a estrutura),
+seções 307/308/354 (sistema de metaschedule, `doMetaschedulePtcl
+CommandOnce` fecha outro follow-up), seção 370
+(`initializeDamageNumber`, contraste com o `requestDamageNumber` real
+visto aqui).
+
+## 394. `fft_opening(int)` — achado estrutural: corpo de frame da sequência de abertura (filme CD-XA), paralela a `roll_xaplay` (seção 387) (2026-10-23, Fase 3, quadragésimo primeiro lote)
+
+`fft_opening(int)` (`0x2450c4`, 736 B) — `jtable.py`: **95% de
+cobertura** (175/184), zero tabela de salto, 19 branches/8 de
+retrocesso. 28 `bl` distintos, agrupados: família **`vOpn_*`**
+("video-opening") — `vOpn_ctlprog()`/`vOpn_init`/`vOpn_loopinit`/
+`vOpn_swapbuff`/`vOpn_iwaprog`/`vOpn_SetCDVolume`/`vOpn_padread`/
+`vOpn_pacdraw` (state machine completa de abertura); **CD-XA**:
+`fftCdLoop(CDREC*)` (toca/loopa o filme — par conceitual direto de
+`fftCdReset`/`CdControl` vistos em `roll_xaplay`, seção 387);
+**libgpu PSX clássico**: `VSync`/`SetDispMask`/`DrawSync`/`DrawOTag`/
+`xpFree` (mesmo padrão double-buffer de `vOpn_scrinit`/
+`pspStartSaveCheck`, seções 386/387); **camada `pspOpen*`** (overlay
+de ícone, não hardware PSP real): `pspOpenDataBackBufGet` ×3,
+`pspOpenDataIconBufGet`, `pspOpenCheckFlg` ×3, `pspOpenDisableFlg`,
+`pspOpenIconDraw`, `pspgFreamBufCountCountReset`,
+`pspPrimBackDrawRGB` — provável ícone de "pular"/rede sobre o
+filme; `TEST_setClearOt`/`TEST_getClearOt` (flag de build de
+teste), `get_SoundOnly_Flg__Fv` ×2, `CFFT_STATE::GetParam`,
+`myPollhost` ×2; **ponte iOS**: `iOS_clearTutorialbreak`,
+`iOS_setV2Icon` ×6 (mesma camada de ícone que domina `mainLoop`,
+seção 376 — confirma ser subsistema de notificação genérico, não
+exclusivo da abertura).
+
+Confirma a hipótese do nome: corpo de frame real da cutscene de
+abertura, dirigindo a state machine, loopando o filme CD-XA com fade
+de volume, lendo input de pular e desenhando o frame, sobrepondo o
+ícone de "pular" via `pspOpen*`. Provavelmente invocada de dentro do
+ramo "toca filme" de `ctlopentitle_main`/`ctlopentitle_main3`
+(disparada por `mainLoop`, seção 376), paralela exata a `roll_xaplay`
+pros créditos finais. Marcada `read_structural` (seguindo o mesmo
+precedente conservador adotado pra `roll_xaplay`/`ctlendroll_main`,
+família de abertura/CD-XA onde a convenção do projeto preferiu não
+promover a `read_full` mesmo a cobertura ≥95% sem leitura manual
+byte a byte).
+
+## 395. `GuEmu_EngineInit()` — setup único da camada GuEmu (GU-sobre-GL), contraponto de boot do dispatcher de frame `GuEmu_libgu_to_gl` (2026-10-23, Fase 3, quadragésimo primeiro lote)
+
+`GuEmu_EngineInit()` (`0x2acb48`, 748 B) — `jtable.py`: **94% de
+cobertura** (176/187), zero tabela de salto, 6 branches/5 de
+retrocesso. 13 `bl` distintos: `CEGL2_IF::GetMaxTextureSize()`,
+`CEGL2_SPRITE::LoadBegin`/`LoadEnd` (upload/registro de sprite),
+`CWORK_MEM::New`/`Delete` (alocação de memória de trabalho),
+`CFFT_STATE::GetMode`/`SetMode`, `GuEmu_SetLineInterval`/
+`GuEmu_GetRAW` (já catalogadas na própria camada GuEmu), mais 4
+locais sem símbolo (`sub_714c4`, `sub_2ab33c`, `sub_2cdf7c`,
+`sub_2cdf8c`).
+
+Reforça a arquitetura já documentada (seções 59/110): `GuEmu_libgu_
+to_gl()` é a ponte real de despacho GU→GL em tempo de frame;
+`GuEmu_EngineInit` é o contraponto de **setup único** — consulta
+limites de textura, aloca buffers de trabalho e ajusta o modo de
+estado do jogo antes que o emulador de GU comece a traduzir
+`sceGu*`/`GuEmu_*` em chamadas `CEGL2_*`. Marcada `read_structural`
+(94% < 95%, 0 tabela de salto — lacuna honesta, 4 locais sem símbolo
+não resolvidos).
+
+## 396. `EggChk(int)` — checagem probabilística ligada ao sistema de "monstro-ovo" (evolução/crescimento), não ao ícone oval de retrato (2026-10-23, Fase 3, quadragésimo primeiro lote)
+
+`EggChk(int)` (`0x1abf20`, 772 B) — `jtable.py`: **96% de cobertura**
+(185/193), zero tabela de salto, 18 branches/13 de retrocesso. 10
+`bl` distintos: 2 locais sem símbolo (`sub_715cc`, `sub_71adc`),
+`Wread_eventflag` ×2, `GetCommandNumber`, `get_unitwork_add(int)`
+×3, **`levelup_eggmonster(UM_WORK*,int)`**, **`set_eggmonster(int,
+int,int)`**, `sun_to_ivarisday` (conversão de calendário), `ps_rand()`
+×5, `__aeabi_idivmod` ×3.
+
+**Resolve uma ambiguidade antiga**: as notas já citavam
+`DrawEggWithShadow`/`DrawUnitWithShadow` como hipótese de que "Egg"
+seria um ícone de retrato de formato oval desenhado com sombra
+própria. O catálogo de `bl` aqui — `levelup_eggmonster`/
+`set_eggmonster` em conjunto com `get_unitwork_add`, `sun_to_ivarisday`
+e sorteio pesado (`ps_rand` ×5 + `idivmod` ×3) — aponta fortemente
+para a leitura alternativa: "Egg" é nome de debug/dev pro sistema de
+**evolução/crescimento de monstro** ("monstro-ovo"), não um ícone
+literal visível ao jogador. `EggChk` decide, por unidade, se uma
+condição de evolução deve disparar, testando um intervalo de dias
+(`sun_to_ivarisday`) e uma flag de evento, sorteando probabilidade
+(`ps_rand`/`idivmod`), e então chamando `levelup_eggmonster`
+(evolução) ou `set_eggmonster` (configurar estado). Marcada
+`read_full` (96% ≥95%, 0 tabela de salto — critério automático
+satisfeito); pendência honesta: semântica exata ainda é inferência
+por nomenclatura dos `bl`, corpos de `sub_715cc`/`sub_71adc` não
+lidos.
+
+## 397. `loadname()` — rotina de bookkeeping de flags, distinta do widget de UI de nomear unidade (2026-10-23, Fase 3, quadragésimo primeiro lote)
+
+`loadname()` (`0xc449c`, 752 B) — `jtable.py`: **89% de cobertura**
+(168/188), **abaixo do limiar de 95%**, zero tabela de salto, 18
+branches/6 de retrocesso. Apenas 3 `bl` distintos: `write_eventflag`
+×4, `read_eventflag` ×3, `get_unitwork_add(int)` ×1.
+
+**Diferente de `GlobalName` (seção 84) e `Name` (seção 375)** — que
+chamam `iOS_SetScrollNameFunc`, `iOS_getV2Icon`/`iOS_setV2Icon` (×15),
+`LoadImage_menuData`, `iOS_getTouchPress`, todo o aparato gráfico/
+input do widget de rolagem de letras — `loadname()` não toca em
+nenhuma primitiva de desenho, input ou ícone. Hipótese: é uma rotina
+pequena de baixo nível que carrega/aplica um nome já persistido num
+slot de flags/work-data de uma unidade específica (ou resolve qual
+nome padrão usar via flags de evento), não a interface de digitar o
+nome — relação de chamada direta com `GlobalName`/`Name` não
+verificada por xref nesta passada, só por proximidade temática.
+Marcada `read_structural` com cobertura parcial (89% < 95%, 0 tabela
+de salto); pendência honesta: ~11% não cobertos, relação de
+chamada com `GlobalName`/`Name` não confirmada.
+
+## 398. `ASHURA_GNS_Read(unsigned short)` — parser de registro GNS individual, consumido pelo loader `ASHURA_GNS_Garage`, cobertura muito abaixo do limiar (2026-10-23, Fase 3, quadragésimo primeiro lote)
+
+`ASHURA_GNS_Read(unsigned short)` (`0x167d08`, 752 B) — `jtable.py`:
+**46% de cobertura** (86/188), **1 tabela de salto resolvida** (95
+casos → apenas 2 handlers distintos, `0x167ef4`/`0x167f88` — padrão
+"default dominante" já visto em `battle()`), 7 branches/5 de
+retrocesso. 8 `bl` distintos: local sem símbolo (`sub_714c4`),
+`read_eventflag`, `iOS_initTouchDisable`, `set_td(unsigned char*)`,
+`fileReadRequest` (I/O assíncrono, mesma família de `ASHURA_GNS_
+Garage`, seção 81), `iOS_setDisableMapClip`, `mapclip_load`,
+`iOS_setV2Icon`.
+
+Hipótese: parser de registro individual dentro de um arquivo GNS
+(formato de índice de geometria de mapa do FFT original de PS1, já
+confirmado na seção 81), chamado pelo loader assíncrono `ASHURA_GNS_
+Garage` durante a fase de análise — o `unsigned short` é o índice do
+registro, e o switch de 95 casos→2 handlers despacha por tipo de
+recurso (geometria/textura reconhecida vs. não mapeada/default).
+Pertence à família `ASHURA_GNS_*` de parsing/consumo de dados de
+mapa, distinta do restante de `ASHURA` (execução de animação/efeito,
+seções 82/139/192/193/212/369/370). **Marcada `read_structural` com
+cobertura muito parcial** — 46% é bem abaixo do limiar, os corpos
+completos dos dois handlers do switch não foram percorridos pela
+descida recursiva; pendência honesta explícita, candidata a passada
+dirigida futura.
+
+**Referências cruzadas (seções 394-398):** seção 387 (`roll_xaplay`/
+`ctlendroll_main`, par direto de `fft_opening`/CD-XA de abertura),
+seção 376 (`mainLoop`, dispara `ctlopentitle_main3`/aciona a mesma
+camada `iOS_setV2Icon`), seções 59/110 (`GuEmu_libgu_to_gl`, par de
+frame de `GuEmu_EngineInit`), seção 84/375 (`GlobalName`/`Name`,
+contraste com `loadname`), seção 81 (`ASHURA_GNS_Garage`, loader que
+consome `ASHURA_GNS_Read`).
