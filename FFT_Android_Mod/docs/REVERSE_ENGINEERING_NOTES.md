@@ -12281,3 +12281,248 @@ cursor/confirmação) e o trio de widget de toque
 controller de tela "working"/"carregando" dentro da família `ctl*`
 de controllers de UI já extensamente mapeada, sem achado novo de
 arquitetura. Marcada `read_structural`.
+
+## 358. Família `MakeSmallWindowFunc` letter-prefix completa — `b`/`c`/`e`/`j` fechados, confirma exatamente o padrão da seção 350 (2026-10-23, Fase 3, trigésimo quarto lote, aplicação direta da regra 2 sem fork)
+
+As 4 cópias de contexto ainda não lidas de `MakeSmallWindowFunc`
+(seção 350): `cMakeSmallWindowFunc` (0x174724, 892B),
+`eMakeSmallWindowFunc` (0x1908bc, 732B), `bMakeSmallWindowFunc`
+(0x180898, 716B) e `jMakeSmallWindowFunc` (0x197744, 716B).
+`family_sim.py` contra a base deu Jaccard 0,00 nas 4 — mas isso é
+esperado e não indica divergência real: cada variante tem exatamente
+**1 bl distinto**, só que apontando pro seu próprio helper de
+contexto (`cDrawFT4RGB`/`eDrawFT4RGB`/`bDrawFT4RGB`/`jDrawFT4RGB`,
+cada um um símbolo dinâmico próprio, não um alias), então o endereço
+nunca bate por definição — o Jaccard sobre endereço absoluto não é a
+métrica certa pra essa família especificamente (letter-prefix troca
+o próprio alvo, não só o conjunto). Rodando `jtable.py` em cada uma
+direto: 97–98% de cobertura, zero tabela de salto em todas, e o
+único `bl` de cada uma é chamado exatamente **4 vezes** — idêntico
+em estrutura (contagem de instruções proporcional ao tamanho,
+mesma contagem de chamada) ao padrão já descrito na seção 350 pra
+base (`DrawFT4RGB` x4, tile de um patch de atlas numa grade
+width×height). Confirma then a hipótese da seção 350 por completo:
+as 5 variantes (sem prefixo + b/c/e/j) são a mesma rotina de
+construção de grade de tiles, cada uma ligada ao seu próprio
+`<letra>DrawFT4RGB` de contexto. Todas marcadas `read_structural`
+por padrão de família confirmado estruturalmente (não por limiar
+automático do `family_sim.py`, que não se aplica bem aqui).
+
+## 359. Classe `iOS_CMenuTouchSaveLoad` — reconhecimento rápido de 15 membros triviais (setters/getters/helpers de toque de 8–240 B), sem passe completo individual (2026-10-23, Fase 3, trigésimo quarto lote, aplicação da regra de boilerplate genérico)
+
+Varredura com `struct_pass.py` em todos os membros pequenos ainda
+não lidos da classe de widget de toque "save/load"
+(`iOS_CMenuTouchSaveLoad`, contraparte com estado de
+`iOS_CMenuTouch` já visto em dezenas de telas): `setMaxNumY`/
+`setDispNumY`/`setMode` (8B cada, store de campo puro, 0 `bl`, 0
+branch), `setDispOffset` (12B), `setDisableHeightAdjust` (20B),
+`setYLine` (24B), `getCursorPosLeft`/`getCursorPosRight` (36B cada,
+leitura de par de campos), `setXIconRect` (40B) — todos sem nenhuma
+chamada e sem branch, puro acesso a campo, confirmando o padrão de
+setter/getter trivial já visto em todas as outras variantes de
+`iOS_CMenuTouch*` do projeto. Mais quatro helpers um pouco maiores
+mas ainda boilerplate: `drawDebug2` (16B, 1 `bl` a
+`iOS_getTouchNowX`), `isTaped` (112B, `iOS_getTouchTap`+
+`iOS_getTouchNowX`+`iOS_getTouchNowY`, decide se o toque atual caiu
+dentro da área), `drawDebug` (92B, mesmo trio de `iOS_getTouch*`,
+2 loops curtos de desenho de depuração), `isInRect` (72B, 0 `bl`,
+puro teste de bounding-box) e `isInAssist` (152B, chama
+`isInRect` x2 — wrapper de assistência de toque com duas zonas) e
+`calcTapArea` (240B, 0 `bl`, 1 branch — aritmética de área de toque
+sem delegar a nada). Nenhuma dessas 15 funções (876B somados) revela
+arquitetura nova; são API padrão de widget de toque já estabelecida
+em outras classes `iOS_CMenuTouch*` do projeto. Todas marcadas
+`read_structural` por reconhecimento de padrão — não vale a pena um
+passe completo individual em cada setter de 8 bytes.
+
+## 360. `iOS_statusfigprint_FT4`/`WiOS_statusfigprint_FT4` - reimplementação do impressor de figura/número via primitiva texturizada FT4, substitui o box-copy de VRAM original do port iOS/Android (2026-10-23, Fase 3, trigésimo quarto lote)
+
+A família `statusfigprint` original (seção 254) imprime via
+`asmBoxCopy` — cópia de retângulo de VRAM-para-VRAM, mecanismo nativo
+de GPU do PS1 que não existe em uma GPU OpenGL ES comum. As variantes
+`_FT4` aqui analisadas, com a assinatura trocando o `char*` por um
+`tagPOLY_FT4*` como primeiro argumento, confirmam a hipótese: são a
+reimplementação do mesmo impressor de figura/número do port `iOS_`
+(camada mobile, já vista em `iOS_CMenuTouch*`/`iOS_setV2Icon` etc.)
+sobre o caminho de primitiva texturizada direta, não sobre cópia de
+VRAM. `jtable.py` em ambas: 99% de cobertura, zero tabela de salto no
+nível superior, estrutura quase idêntica (26 branches, 13 de
+retrocesso, 2 `bl` distintos cada: um sub local chamado 7x +
+`pspNetGetBattleModeFlag` 1x, mesmo gate de rede já visto na seção
+254). O catálogo de `bl` é mínimo porque toda a lógica de "qual
+dígito/figura desenhar em qual posição" fica no laço principal (mesma
+contagem de 26 branches de `statusfigprint`, forte indício de ser
+literalmente o mesmo algoritmo portado pra outro backend de desenho)
+e a emissão real do quad fica delegada ao sub local. Esse sub
+(`0xd4498`, chamado 7x) tem tabela de salto real de 5 casos (resolvida
+limpa pelo `jtable.py`, sem falso positivo) e chama
+`SetPolyFT4`+`SetShadeTex` — exatamente a dupla de primitiva
+texturizada+sombreamento já confirmada em `disp_personalwindow`
+(seção 46), reforçando que este é o caminho "desenho direto" usado em
+telas mais novas/reescritas do port, em paralelo ao caminho
+`GsOT`/box-copy herdado do PS1 original. `WiOS_statusfigprint_FT4`
+segue o padrão idêntico de sempre: mesmo formato, mesmo gate de rede,
+só troca o sub local de destino (`0xfbd38` em vez de `0xd4498`) pelo
+equivalente no namespace `W*`. Ambas marcadas `read_structural` (99%
+cobertura; os 5 casos individuais do helper local não foram lidos
+linha a linha).
+
+## 361. `disp_statuscpara()`/`Wdisp_statuscpara()` - painel de parâmetro de personagem ("cpara"), roda como task cooperativa reusando a biblioteca `stts`/status compartilhada (2026-10-23, Fase 3, trigésimo quarto lote)
+
+Fecha mais um consumidor da biblioteca de fundo de janela de status já
+estabelecida nas seções 46/49/50/51 (`disp_personalwindow`):
+`addstatusback`/`sttsback_normal`/`sttsback_blue`/`initstatusback`
+aparecem no catálogo de `bl` exatamente como lá, confirmando de novo o
+padrão "entrada fina reusando helpers compartilhados" em vez de código
+duplicado. `jtable.py` em ambas: 97% de cobertura, zero tabela de
+salto, 24 `bl` resolvidos cada, estruturalmente 1:1 por papel de
+chamada (`family_sim.py` deu Jaccard 0,07 por endereço bruto, efeito
+esperado do namespace `W` trocando todo alvo, igual já visto em
+`disp_selectrefleshwindow`/`count_words`, não indica divergência real).
+O nome `statuscpara` ("character parameter") se confirma pelo uso de
+`valueput(char*, VALUERECORD*, COPYFIELD*, int)` (×3) — a mesma rotina
+de formatação/escrita de valor numérico já vista em outras telas de
+status, aqui escrevendo os parâmetros (hipótese: HP/MP/atributos) do
+personagem — junto com `addlocalprim` (×9, ícones/dígitos), `bgput`
+(fundo), `initdrmode`/`loadcdst` (setup de modo de desenho) e
+`multiwindow_packetclip`/`multiwindow_packetclipinit` (recorte da
+janela). A função roda como task cooperativa de verdade, não só uma
+rotina de desenho síncrona: `asmTaskEntry` (×2) + `task_wait(long)` +
+`task_killmyself()` é o trio padrão de ciclo de vida de task já visto
+em outras telas assíncronas do projeto, e `Set_NonDrawTaikiIconFlg(int)`
+(suprimir o ícone de "espera"/idle enquanto esta tela está ativa) mais
+3 chamadas a `PSX_LoadImage` (carregamento de textura) reforçam que é
+uma tela com carregamento assíncrono de recurso. `Wdisp_statuscpara` é
+a cópia completa de namespace `W` já vista dezenas de vezes
+(`Waddlocalprim`, `Winitsprt`, `Wsttsback_normal/_blue`,
+`wasmTaskEntry`/`wasmGetInput3`/`wasmGetActiveTask`) — mesma estrutura,
+helpers prefixados; única diferença notada: a base chama
+`asmClearBuffer(void*, unsigned int)` que a `W` não chama (hipótese:
+limpeza de buffer específica do caminho de char estreito). Ambas
+marcadas `read_structural`.
+
+## 362. `ctlzodiac_init(int,int,int)`/`ctlzodiac_main(CTLINFO*)` - fecham o follow-up da seção 312, controllers reais da tela de Zodíaco acessível do world map e de cenas Novel (2026-10-23, Fase 3, trigésimo quarto lote)
+
+`ctlzodiac_init`: `jtable.py` dá 87% de cobertura (188/217 slots),
+**1 tabela de salto resolvida** (guarda em 0x253300/dispatch em
+0x253304, 19 casos, 7 handlers distintos), 20 `bl` resolvidos. Chama
+`ctlbrst_zodiac` (×2) e `ctltuto_zodiac` (×2) — exatamente as duas
+funções que a seção 312 (`ctlbrst_init`) tinha deixado como "alvo de
+follow-up" sem confirmar, e a linha ~7190-7206 do NOTES (`ctlnobel_main`,
+modo Novel) já citava `ctlzodiac_init` como um dos controllers-irmãos
+chamados de lá. Confirma e amplia a hipótese da seção 312: é de fato a
+tela de Zodíaco, acessível tanto do world map (via `ctlbrst_*`) quanto
+de dentro de uma cena Novel (via `ctlnobel_main`), com uma variante
+"tutorial" (`ctltuto_zodiac`). Roda como task própria via
+`Wtask_create`/`Wsend_taskparamater`, distinta da task de desenho
+`addzodiacback` já documentada na seção 292 (que desenha o ícone/fundo
+em si). Restante do catálogo é infraestrutura de world map já mapeada
+em outras seções (`wldframe_clr`, `wlddisp_mask` ×4, `wldfade_set`,
+`wldload_wait` ×2, `wldmes_load` ×2, `wldmusic_change` ×2, `wldssd_wait`
+×4, `wld_tutomenu_reset`, `ctlmap_deactive` ×2, `ctltuto_init`,
+`Ssd_SetSpuVolume`, `iOS_setV2Icon`). Os 19 casos da tabela colapsam em
+só 7 destinos distintos (um deles, `0x253384`, cobre 12 dos 19 casos —
+provável estado idle repetido).
+
+`ctlzodiac_main`: 86% de cobertura (183/212 slots), **1 tabela de
+salto resolvida** (guarda em 0x253674/dispatch em 0x253678, 19 casos,
+7 handlers — mesma forma 19→7 do `_init`, reforça que são pares
+genuinamente irmãos do mesmo dispatcher de estado). 11 `bl` distintos:
+`Wtask_create`/`Wsend_taskparamater` (×6 cada) e seis inicializadores
+de tela irmã chamados diretamente — `ctlbrst_init`, `ctlkiromes_init`,
+`ctltremes_init`, `ctltuto_init`, `ctlhentuto_init`, `ctlsentuto_init`
+— ou seja, `ctlzodiac_main` funciona como um hub de menu real (mesmo
+papel estrutural de `ctlbrst_main`, seção 125), não um laço de desenho
+da própria tela. Chamadas de desenho diretas (`iOS_setMask`,
+`DrawSync`, `StoreImage`) aparecem só uma vez cada, provavelmente no
+handler de um dos 7 estados idle/transição.
+
+Ambas marcadas `read_structural`, com ressalva honesta: 86-87% fica
+abaixo do limiar de 95% que a metodologia usa pra aceitar o resultado
+automático sem segunda conferência, então uma fração pequena (literal
+pool provável, não confirmado) fica não verificada.
+
+**Referências cruzadas:** seção 312 (`ctlbrst_init`, deixa estas duas
+como follow-up), seção 292 (`addzodiacback`), seção 318
+(`Caddzodiacback`), seção 125 (`ctlbrst_main`, mesmo padrão de hub),
+linha ~7190-7206 (`ctlnobel_main`).
+
+## 363. `iOS_CMenuTouch::initPacket()`/`iOS_CMenuTouchSaveLoad::initPacket()` - monta os 10 sprites de cursor/ícone com paleta e semi-transparência; a variante save/load é cópia idêntica, não tem setup próprio (2026-10-23, Fase 3, trigésimo quarto lote)
+
+Fecha mais uma peça da classe de widget de toque mais usada do jogo
+(já documentada em `init`/`exec`/`execTap`/`execPress`/`isInRect`/
+`isCanUp`/`isCanDown`/`isInAssist`, seções 225-226/253).
+`iOS_CMenuTouch::initPacket()`: `jtable.py` dá 100% de cobertura
+(230/230), zero branch (função totalmente linear) e 11 `bl` distintos:
+`initsprt(tagSPRT*)` ×10 (monta 10 sprites separados — hipótese: um
+por glifo/ícone de cursor, ou 10 variações de clut do mesmo cursor),
+seis getters de paleta de clut ativa (`getClutActiveMenuL/R/C/Name/
+Cursor/CursorShadow`, 1x cada — os 6 slots de cor do tema de menu
+ativo), `getClutMenuCursor()` ×4, `GetTPage` ×3 (resolve a texture
+page PS1 por grupo de sprite), `SetDrawMode` ×3 e `SetSemiTrans` ×10
+(semi-transparência em cada um dos 10 sprites). Em suma: pré-monta os
+10 sprites do cursor/ícone com a paleta do tema atual e deixa todos
+com semi-transparência habilitada, sem nenhum desvio condicional —
+puro setup de recursos gráficos na inicialização do widget, coerente
+com o padrão `init()` já documentado nas seções 225/253.
+`iOS_CMenuTouchSaveLoad::initPacket()` tem exatamente o mesmo catálogo
+de 11 `bl` (mesmos endereços, mesmas contagens) e 100% de cobertura —
+`family_sim.py` confirma Jaccard 1,00. Ou seja, a variante "save/load"
+não tem um `initPacket` próprio de verdade: é a mesma rotina de setup
+de cursor/clut da classe base, compilada numa segunda cópia de código.
+Reforça a hipótese de que `iOS_CMenuTouchSaveLoad` é uma especialização
+leve de `iOS_CMenuTouch` (dados extras pra tela de save/load, mas a
+infraestrutura visual do cursor é idêntica). `iOS_CMenuTouch::initPacket`
+marcada `read_structural`; `iOS_CMenuTouchSaveLoad::initPacket` marcada
+`read_structural` por `CONFIRMED-BY-SIMILARITY` (Jaccard 1,00, sem
+leitura própria).
+
+**Referências cruzadas:** seções 225-226 (`execTap`/`execPress` da
+classe base), seção 253 (`exec` dispatcher), seção 364 (resto da
+classe `SaveLoad`, fork irmão desta mesma fila).
+
+## 364. `iOS_CMenuTouchSaveLoad::execPress`/`execTap`/`setMenuAssistPosition`/`drawMenuAssist` - a variante save/load NÃO faz hit-test por item, calcula o slot direto por divisão (arquitetura diferente da classe-base) (2026-10-23, Fase 3, trigésimo quarto lote)
+
+Fecha o restante da classe `iOS_CMenuTouchSaveLoad` (membros triviais
+já fechados na seção 359, `initPacket` na seção 363). `jtable.py` nas
+4 funções: cobertura 100% nas 4, zero tabela de salto. `execPress(int*,
+int*, IOS_MENU_TOUCH_SAVELOAD_RESULT*)` (916B, 21 branches/12 de
+retrocesso) chama só `iOS_getTouchNowX`/`iOS_getTouchNowY`/
+`iOS_isInGameArea`/`__divsi3`. `execTap(IOS_MENU_TOUCH_SAVELOAD_RESULT*,
+int*, int*)` (348B, 11 branches/5 de retrocesso) chama
+`iOS_IsEnableMenuItemTouch` (×2), `iOS_getTouchPress`,
+`iOS_getTouchBeginX`/`iOS_getTouchBeginY` (×2 cada). Isto é
+estruturalmente muito diferente do par equivalente da classe-base
+`iOS_CMenuTouch` (seções 225-226: `execTap`/`execPress`, que chamam os
+próprios métodos geométricos `isInRect`/`isCanUp`/`isCanDown`/
+`isInAssist`/`isInMenu` pra testar retângulo por retângulo) — a
+variante `SaveLoad` **não chama `isInRect` nem `isInAssist` em
+nenhum dos dois métodos**, apesar de a classe ter esses métodos (já
+catalogados como boilerplate puro na seção 359). Em vez de testar cada
+slot de save contra um retângulo individual, usa `__divsi3` (divisão
+inteira de software) sobre a coordenada de toque pra calcular DIRETO o
+índice de slot/linha numa grade uniforme — hipótese de alta confiança:
+a tela de save/load é uma lista/grade regular de slots de tamanho
+fixo, então dá pra ir direto de coordenada Y pra índice via divisão,
+sem iterar item por item como a classe genérica faz.
+`setMenuAssistPosition(int)` (528B, 100%, 0 `bl`, só 1 branch de
+retrocesso) é aritmética pura — calcula a posição de um overlay de
+"assistência" (provável seta/indicador de destino de arrasto) a partir
+do índice passado. `drawMenuAssist(int, long*)` (440B, 100%, só 1
+`bl` — chama `setMenuAssistPosition` uma vez, 0 branches de
+retrocesso) delega o cálculo de posição e, pelas ~400B restantes sem
+nenhuma outra chamada, deve montar o pacote de primitiva do indicador
+visual inline (escrita direta de campos) em vez de chamar uma rotina
+de desenho dedicada. Todas as 4 marcadas `read_structural` (cobertura
+100%, zero ambiguidade de fluxo; a semântica exata do layout do
+indicador em `drawMenuAssist` fica como hipótese razoável, não
+confirmada campo a campo).
+
+**Referências cruzadas:** seções 225-226 (arquitetura-base com
+hit-test por retângulo, contrastada aqui), seção 253 (`exec`
+dispatcher — hipótese de que `iOS_CMenuTouchSaveLoad::exec`, ainda
+`mentioned_unverified`, despacha do mesmo jeito pra `execTap`/
+`execPress`), seção 42 (`CardAccess`, onde esta classe já foi
+identificada como o widget real da tela de save/load — confirma a
+hipótese da grade uniforme de slots), seção 363 (`initPacket` da
+mesma classe, fork irmão desta fila).

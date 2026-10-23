@@ -389,7 +389,7 @@ address,size,mangled,demangled,status,section_ref
 001a7a84,944,_Z7ChrSorti,ChrSort(int),read_structural,NOTES §353
 001c2ce0,944,_Z19MakeSmallWindowFuncPh,MakeSmallWindowFunc(unsigned char*),read_structural,NOTES §350
 00073c74,936,crc32,crc32,read_structural,NOTES §337
-000e2698,936,_Z22iOS_statusfigprint_FT4P11tagPOLY_FT4itiiPviiP9COPYFIELDi,"iOS_statusfigprint_FT4(tagPOLY_FT4*, int, unsigned short, int, int, void*, int, int, COPYFIELD*, int)",unread,
+000e2698,936,_Z22iOS_statusfigprint_FT4P11tagPOLY_FT4itiiPviiP9COPYFIELDi,"iOS_statusfigprint_FT4(tagPOLY_FT4*, int, unsigned short, int, int, void*, int, int, COPYFIELD*, int)",read_structural,NOTES §360
 0021a648,932,_Z31SearchNextMetascheduleDividePosssPlS_,"SearchNextMetascheduleDividePos(short, short, long*, long*)",read_structural,NOTES §354
 00288a78,928,_Z16pspPrimAddDirectPmiiii,"pspPrimAddDirect(unsigned long*, int, int, int, int)",read_structural,NOTES §356
 001bfb6c,924,_Z10PreModeChgi,PreModeChg(int),read_structural,NOTES §341
@@ -397,21 +397,21 @@ address,size,mangled,demangled,status,section_ref
 00085b94,920,vorbis_analysis_blockout,vorbis_analysis_blockout,read_structural,NOTES §336
 00134c08,920,_Z25Wdisp_selectrefleshwindowv,Wdisp_selectrefleshwindow(),read_structural,NOTES §351
 001a1450,920,_Z4NamePhPs,"Name(unsigned char*, short*)",mentioned_unverified,
-0027b788,920,_ZN14iOS_CMenuTouch10initPacketEv,iOS_CMenuTouch::initPacket(),unread,
+0027b788,920,_ZN14iOS_CMenuTouch10initPacketEv,iOS_CMenuTouch::initPacket(),read_structural,NOTES §363
 00086e9c,916,vorbis_staticbook_unpack,vorbis_staticbook_unpack,read_structural,NOTES §336
 001ca5a4,916,_Z20change_status_adjusti,change_status_adjust(int),read_structural,NOTES §355
-0027dffc,916,_ZN22iOS_CMenuTouchSaveLoad10initPacketEv,iOS_CMenuTouchSaveLoad::initPacket(),unread,
-0027e900,916,_ZN22iOS_CMenuTouchSaveLoad9execPressEPiS0_P30IOS_MENU_TOUCH_SAVELOAD_RESULT,"iOS_CMenuTouchSaveLoad::execPress(int*, int*, IOS_MENU_TOUCH_SAVELOAD_RESULT*)",unread,
-000e2308,912,_Z16disp_statuscparav,disp_statuscpara(),unread,
+0027dffc,916,_ZN22iOS_CMenuTouchSaveLoad10initPacketEv,iOS_CMenuTouchSaveLoad::initPacket(),read_structural,NOTES §363
+0027e900,916,_ZN22iOS_CMenuTouchSaveLoad9execPressEPiS0_P30IOS_MENU_TOUCH_SAVELOAD_RESULT,"iOS_CMenuTouchSaveLoad::execPress(int*, int*, IOS_MENU_TOUCH_SAVELOAD_RESULT*)",read_structural,NOTES §364
+000e2308,912,_Z16disp_statuscparav,disp_statuscpara(),read_structural,NOTES §361
 00250440,912,_Z12ctlwork_initv,ctlwork_init(),unread,
 00260ce8,912,_Z10mouke_okngP7CTLINFO,mouke_okng(CTLINFO*),unread,
-00110dc4,908,_Z17Wdisp_statuscparav,Wdisp_statuscpara(),unread,
+00110dc4,908,_Z17Wdisp_statuscparav,Wdisp_statuscpara(),read_structural,NOTES §361
 00241ee0,904,_Z16vOpn_arzmes_mainv,vOpn_arzmes_main(),unread,
 001e2b78,900,_Z15CheckPoleResultiiiii,"CheckPoleResult(int, int, int, int, int)",unread,
 001ee278,900,_Z22initializeDamageNumberP13tag_animation,initializeDamageNumber(tag_animation*),unread,
 0024b09c,900,_Z13barmenu_resetP7CTLINFO,barmenu_reset(CTLINFO*),unread,
 0020023c,896,_Z19iOSexecuteMoveProcsP13tag_animation,iOSexecuteMoveProcs(tag_animation*),unread,
-00174724,892,_Z20cMakeSmallWindowFuncPh,cMakeSmallWindowFunc(unsigned char*),unread,
+00174724,892,_Z20cMakeSmallWindowFuncPh,cMakeSmallWindowFunc(unsigned char*),read_structural,NOTES §358
 002cdb20,892,__gnu_unwind_execute,__gnu_unwind_execute,unread,
 001aa6b0,884,_Z15GetShopItemListsssPsi,"GetShopItemList(short, short, short, short*, int)",unread,
 000d0dec,880,_Z25Ddisp_selectrefleshwindowv,Ddisp_selectrefleshwindow(),read_structural,NOTES §351
@@ -423,9 +423,9 @@ address,size,mangled,demangled,status,section_ref
 0024a0ac,872,_Z9vOpn_animP6ANMPACPm,"vOpn_anim(ANMPAC*, unsigned long*)",unread,
 000aae00,868,_ZN9CEGL2_FBO11RenderToFBOEffffffhhii,"CEGL2_FBO::RenderToFBO(float, float, float, float, float, float, unsigned char, unsigned char, int, int)",read_full,NOTES §13.9
 00222e4c,868,_Z14p18_reflecFuncv,p18_reflecFunc(),unread,
-002532b8,868,_Z14ctlzodiac_initiii,"ctlzodiac_init(int, int, int)",unread,
+002532b8,868,_Z14ctlzodiac_initiii,"ctlzodiac_init(int, int, int)",read_structural,NOTES §362
 000d7f10,864,_Z11count_wordsPsS_Pc,"count_words(short*, short*, char*)",read_structural,NOTES §352
-00111150,864,_Z23WiOS_statusfigprint_FT4P11tagPOLY_FT4itiiPviiP9COPYFIELDi,"WiOS_statusfigprint_FT4(tagPOLY_FT4*, int, unsigned short, int, int, void*, int, int, COPYFIELD*, int)",unread,
+00111150,864,_Z23WiOS_statusfigprint_FT4P11tagPOLY_FT4itiiPviiP9COPYFIELDi,"WiOS_statusfigprint_FT4(tagPOLY_FT4*, int, unsigned short, int, int, void*, int, int, COPYFIELD*, int)",read_structural,NOTES §360
 0028a340,864,_Z17pspStartSaveCheckv,pspStartSaveCheck(),unread,
 00086b40,860,vorbis_staticbook_pack,vorbis_staticbook_pack,read_structural,NOTES §336
 000ffafc,860,_Z12Wcount_wordsPsS_Pc,"Wcount_words(short*, short*, char*)",read_structural,NOTES §352
@@ -433,7 +433,7 @@ address,size,mangled,demangled,status,section_ref
 000736ac,856,adler32,adler32,unread,
 002cd594,856,_Unwind_VRS_Pop,_Unwind_VRS_Pop,unread,
 002660b8,852,_Z8wld_animP6ANMPACP4GsOT,"wld_anim(ANMPAC*, GsOT*)",read_full,NOTES §12.5
-0025361c,848,_Z14ctlzodiac_mainP7CTLINFO,ctlzodiac_main(CTLINFO*),unread,
+0025361c,848,_Z14ctlzodiac_mainP7CTLINFO,ctlzodiac_main(CTLINFO*),read_structural,NOTES §362
 000a4b38,844,_ZN15CG2D_LOADER_TGA4SaveEPviiP9_G2D_SAVE,"CG2D_LOADER_TGA::Save(void*, int, int, _G2D_SAVE*)",read_structural,NOTES §316
 0012c7f0,844,_Z24disp_selectrefleshwindowv,disp_selectrefleshwindow(),read_structural,NOTES §351
 00229dc8,844,_Z18DrawPermanentShapeP15PermanentObject,DrawPermanentShape(PermanentObject*),unread,
@@ -495,7 +495,7 @@ address,size,mangled,demangled,status,section_ref
 002450c4,736,_Z11fft_openingi,fft_opening(int),unread,
 00090e08,732,mdct_init,mdct_init,unread,
 000ab164,732,_ZN9CEGL2_FBO13RenderFromFBOEjffffffhhi,"CEGL2_FBO::RenderFromFBO(unsigned int, float, float, float, float, float, float, unsigned char, unsigned char, int)",mentioned_unverified,
-001908bc,732,_Z20eMakeSmallWindowFuncPh,eMakeSmallWindowFunc(unsigned char*),unread,
+001908bc,732,_Z20eMakeSmallWindowFuncPh,eMakeSmallWindowFunc(unsigned char*),read_structural,NOTES §358
 001bc5a0,732,_Z6Bottunssssss,"Bottun(short, short, short, short, short, short)",unread,
 001e6a98,732,_Z15getreaction_preiPt,"getreaction_pre(int, unsigned short*)",unread,
 000db4a4,728,_Z11calcformulaiiii,"calcformula(int, int, int, int)",unread,
@@ -506,8 +506,8 @@ address,size,mangled,demangled,status,section_ref
 0008742c,724,vorbis_book_decodevs_add,vorbis_book_decodevs_add,read_structural,NOTES §336
 0010fd08,720,_Z23Wmultiwindow_packetinitP6RECT16P9COMRECORDP10PRIMPACKET,"Wmultiwindow_packetinit(RECT16*, COMRECORD*, PRIMPACKET*)",unread,
 000a6314,716,_ZN15CG2D_LOADER_TIM4CopyEPv,CG2D_LOADER_TIM::Copy(void*),read_structural,NOTES §316
-00180898,716,_Z20bMakeSmallWindowFuncPh,bMakeSmallWindowFunc(unsigned char*),unread,
-00197744,716,_Z20jMakeSmallWindowFuncPh,jMakeSmallWindowFunc(unsigned char*),unread,
+00180898,716,_Z20bMakeSmallWindowFuncPh,bMakeSmallWindowFunc(unsigned char*),read_structural,NOTES §358
+00197744,716,_Z20jMakeSmallWindowFuncPh,jMakeSmallWindowFunc(unsigned char*),read_structural,NOTES §358
 00251b68,716,_Z20ctlworkingst_dataseti,ctlworkingst_dataset(int),unread,
 002abd34,716,sceGuClutLoad_for_iOS,sceGuClutLoad_for_iOS,unread,
 002b3f34,716,_Z9Link_Initv,Link_Init(),unread,
@@ -704,7 +704,7 @@ address,size,mangled,demangled,status,section_ref
 001a9e04,528,_Z11GetItemListssaPsth,"GetItemList(short, short, signed char, short*, unsigned short, unsigned char)",unread,
 001b8a28,528,_Z22iOS_RESUME_SET_RESERVEP23IOS_RESUME_DATA_RESERVE24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_RESERVE(IOS_RESUME_DATA_RESERVE*, IOS_RESUME_DATACOPY_MODE)",unread,
 00244200,528,_Z13vEnd_rollprocv,vEnd_rollproc(),unread,
-0027e470,528,_ZN22iOS_CMenuTouchSaveLoad21setMenuAssistPositionEi,iOS_CMenuTouchSaveLoad::setMenuAssistPosition(int),unread,
+0027e470,528,_ZN22iOS_CMenuTouchSaveLoad21setMenuAssistPositionEi,iOS_CMenuTouchSaveLoad::setMenuAssistPosition(int),read_structural,NOTES §364
 000ef5e0,524,_Z17make_statusscrollv,make_statusscroll(),unread,
 000df864,524,_Z16event_status_settt,"event_status_set(unsigned short, unsigned short)",unread,
 0024c070,524,_Z10wldbg_initv,wldbg_init(),read_full,NOTES §12.2
@@ -840,7 +840,7 @@ address,size,mangled,demangled,status,section_ref
 000d7bb4,440,_Z14initstatusbackP6RECT16P14STTSWINDOWBACK,"initstatusback(RECT16*, STTSWINDOWBACK*)",unread,
 000ff7a4,440,_Z15WinitstatusbackP6RECT16P14STTSWINDOWBACK,"Winitstatusback(RECT16*, STTSWINDOWBACK*)",unread,
 00188c6c,440,_Z11eSetChrListv,eSetChrList(),unread,
-0027edbc,440,_ZN22iOS_CMenuTouchSaveLoad14drawMenuAssistEiPl,"iOS_CMenuTouchSaveLoad::drawMenuAssist(int, long*)",unread,
+0027edbc,440,_ZN22iOS_CMenuTouchSaveLoad14drawMenuAssistEiPl,"iOS_CMenuTouchSaveLoad::drawMenuAssist(int, long*)",read_structural,NOTES §364
 00280c44,440,_Z25iOS_setStatusLVEXP_STATUSP11IOS_STTSNUMiiiiiPvi,"iOS_setStatusLVEXP_STATUS(IOS_STTSNUM*, int, int, int, int, int, void*, int)",unread,
 0015047c,436,_Z13setjoinus_netv,setjoinus_net(),unread,
 001eb124,436,_Z20loadAbilityAnimationP13tag_animationPv,"loadAbilityAnimation(tag_animation*, void*)",unread,
@@ -1056,7 +1056,7 @@ address,size,mangled,demangled,status,section_ref
 0024748c,348,_Z15ctlchrmake_initv,ctlchrmake_init(),unread,
 0024ac38,348,_Z18vOpn_defscrwin_setiiP6_POINTS0_,"vOpn_defscrwin_set(int, int, _POINT*, _POINT*)",unread,
 002615cc,348,_Z13ctlhaken_mainP7CTLINFO,ctlhaken_main(CTLINFO*),unread,
-0027e7a4,348,_ZN22iOS_CMenuTouchSaveLoad7execTapEP30IOS_MENU_TOUCH_SAVELOAD_RESULTPiS2_,"iOS_CMenuTouchSaveLoad::execTap(IOS_MENU_TOUCH_SAVELOAD_RESULT*, int*, int*)",unread,
+0027e7a4,348,_ZN22iOS_CMenuTouchSaveLoad7execTapEP30IOS_MENU_TOUCH_SAVELOAD_RESULTPiS2_,"iOS_CMenuTouchSaveLoad::execTap(IOS_MENU_TOUCH_SAVELOAD_RESULT*, int*, int*)",read_structural,NOTES §364
 0029aabc,348,ReadTIM,ReadTIM,unread,
 002b582c,348,_Z9Logo_Initv,Logo_Init(),unread,
 000b4d30,344,_ZN15CINPUT_IF_TOUCH13GetTouchStateEP19_INPUT_DEVICE_TOUCHP11_INPUT_DATA,"CINPUT_IF_TOUCH::GetTouchState(_INPUT_DEVICE_TOUCH*, _INPUT_DATA*)",unread,
@@ -1411,7 +1411,7 @@ address,size,mangled,demangled,status,section_ref
 0025c838,240,_Z14ctlshogou_initv,ctlshogou_init(),unread,
 0025c3ac,240,_Z12mkdaypt_calcv,mkdaypt_calc(),unread,
 00266b94,240,_Z14info_war_fundsP4GsOTP8GsSPRITEP6GsLINE,"info_war_funds(GsOT*, GsSPRITE*, GsLINE*)",mentioned_unverified,
-0027df0c,240,_ZN22iOS_CMenuTouchSaveLoad11calcTapAreaEv,iOS_CMenuTouchSaveLoad::calcTapArea(),unread,
+0027df0c,240,_ZN22iOS_CMenuTouchSaveLoad11calcTapAreaEv,iOS_CMenuTouchSaveLoad::calcTapArea(),read_structural,NOTES §359
 000b3e28,236,_ZN15CINPUT_IF_TOUCH8ClearAllEv,CINPUT_IF_TOUCH::ClearAll(),unread,
 000b4f94,236,_ZN5CRECT9FrameMoveEii,"CRECT::FrameMove(int, int)",mentioned_unverified,
 000ef4f4,236,_Z12hook_jobmenuv,hook_jobmenu(),unread,
@@ -1936,7 +1936,7 @@ address,size,mangled,demangled,status,section_ref
 00263254,152,_Z21ctlmouketeam_deactiveP7CTLINFO,ctlmouketeam_deactive(CTLINFO*),unread,
 0026b86c,152,_Z14wldsymbol_drawv,wldsymbol_draw(),mentioned_unverified,
 0026ff30,152,_Z15wldwintex_pointi6RECT16P6_POINT,"wldwintex_point(int, RECT16, _POINT*)",mentioned_unverified,
-0027e3d8,152,_ZN22iOS_CMenuTouchSaveLoad10isInAssistEiii,"iOS_CMenuTouchSaveLoad::isInAssist(int, int, int)",unread,
+0027e3d8,152,_ZN22iOS_CMenuTouchSaveLoad10isInAssistEiii,"iOS_CMenuTouchSaveLoad::isInAssist(int, int, int)",read_structural,NOTES §359
 0028dc58,152,_ZN8xpApiEnv9StartRCntEm,xpApiEnv::StartRCnt(unsigned long),unread,
 002a0e54,152,VectorNormalSS,VectorNormalSS,unread,
 002a1d34,152,RotTransPers3N,RotTransPers3N,unread,
@@ -2350,7 +2350,7 @@ address,size,mangled,demangled,status,section_ref
 0026fad8,112,_Z11ctluwa_exitP7CTLINFO,ctluwa_exit(CTLINFO*),unread,
 002727fc,112,_Z15StayAtSafePanelv,StayAtSafePanel(),unread,
 00276c28,112,_Z25CheckCrystalAndTresureBoxv,CheckCrystalAndTresureBox(),mentioned_unverified,
-0027ef74,112,_ZN22iOS_CMenuTouchSaveLoad7isTapedEv,iOS_CMenuTouchSaveLoad::isTaped(),unread,
+0027ef74,112,_ZN22iOS_CMenuTouchSaveLoad7isTapedEv,iOS_CMenuTouchSaveLoad::isTaped(),read_structural,NOTES §359
 0028d088,112,_Z9tlSetHeapPv,tlSetHeap(void*),unread,
 002a3240,112,_ZN11pspSaveAutoC1Ev,pspSaveAuto::pspSaveAuto(),mentioned_unverified,
 0028e25c,112,_Z9OpenEventmllPFlvE,"OpenEvent(unsigned long, long, long, long (*)())",unread,
@@ -2604,7 +2604,7 @@ address,size,mangled,demangled,status,section_ref
 00258d4c,92,_Z13evt_rute_growv,evt_rute_grow(),mentioned_unverified,
 0026adc0,92,_Z17snpl_jpageflg_subi,snpl_jpageflg_sub(int),unread,
 00277f1c,92,_Z11SetBestMovev,SetBestMove(),mentioned_unverified,
-0027e738,92,_ZN22iOS_CMenuTouchSaveLoad9drawDebugEv,iOS_CMenuTouchSaveLoad::drawDebug(),unread,
+0027e738,92,_ZN22iOS_CMenuTouchSaveLoad9drawDebugEv,iOS_CMenuTouchSaveLoad::drawDebug(),read_structural,NOTES §359
 00294924,92,xpLibgpuOffScreenRectSet,xpLibgpuOffScreenRectSet,unread,
 0028d43c,92,_Z14tlGetAllocSizePKv,tlGetAllocSize(void const*),unread,
 00291964,92,SetDrawTPage,SetDrawTPage,unread,
@@ -3006,7 +3006,7 @@ address,size,mangled,demangled,status,section_ref
 0027bb20,72,_ZN14iOS_CMenuTouch8isInRectEP6RECT16ii,"iOS_CMenuTouch::isInRect(RECT16*, int, int)",unread,
 002b8750,72,_Z15iOS_isMovedDistv,iOS_isMovedDist(),unread,
 0027d7c0,72,_ZN17iOS_CMenuTouchNum8isInRectEP6RECT16ii,"iOS_CMenuTouchNum::isInRect(RECT16*, int, int)",unread,
-0027e390,72,_ZN22iOS_CMenuTouchSaveLoad8isInRectEP6RECT16ii,"iOS_CMenuTouchSaveLoad::isInRect(RECT16*, int, int)",unread,
+0027e390,72,_ZN22iOS_CMenuTouchSaveLoad8isInRectEP6RECT16ii,"iOS_CMenuTouchSaveLoad::isInRect(RECT16*, int, int)",read_structural,NOTES §359
 00282288,72,_Z28iOS_disableClipFT4_getClipedv,iOS_disableClipFT4_getCliped(),unread,
 0028464c,72,_Z13delete_VectorP15VECTOR_DATABASEs,"delete_Vector(VECTOR_DATABASE*, short)",unread,
 0028674c,72,_Z18get_movie_filenamei,get_movie_filename(int),unread,
@@ -3942,7 +3942,7 @@ address,size,mangled,demangled,status,section_ref
 0026b0b8,40,_Z13snpl_musicreqv,snpl_musicreq(),mentioned_unverified,
 00273b10,40,_Z19SetSafePanelInRangei,SetSafePanelInRange(int),unread,
 0027383c,40,_Z9ClearMoveP4MOVE,ClearMove(MOVE*),mentioned_unverified,
-0027e710,40,_ZN22iOS_CMenuTouchSaveLoad12setXIconRectEhiiii,"iOS_CMenuTouchSaveLoad::setXIconRect(unsigned char, int, int, int, int)",unread,
+0027e710,40,_ZN22iOS_CMenuTouchSaveLoad12setXIconRectEhiiii,"iOS_CMenuTouchSaveLoad::setXIconRect(unsigned char, int, int, int, int)",read_structural,NOTES §359
 0027fbc8,40,_Z25iOS_WorldMapResumeGetDataPPhPj,"iOS_WorldMapResumeGetData(unsigned char**, unsigned int*)",mentioned_unverified,
 00295520,40,xpLibgpuDispListSetFromEdram,xpLibgpuDispListSetFromEdram,unread,
 0028dc30,40,SetRCnt,SetRCnt,unread,
@@ -4165,8 +4165,8 @@ address,size,mangled,demangled,status,section_ref
 00269b08,36,_Z12snpl_effmodev,snpl_effmode(),mentioned_unverified,
 00279c64,36,_Z7MemCpyBPhPKhi,"MemCpyB(unsigned char*, unsigned char const*, int)",mentioned_unverified,
 0027d92c,36,_ZN17iOS_CMenuTouchNum9setSpriteEv,iOS_CMenuTouchNum::setSprite(),unread,
-0027e680,36,_ZN22iOS_CMenuTouchSaveLoad16getCursorPosLeftEPiS0_,"iOS_CMenuTouchSaveLoad::getCursorPosLeft(int*, int*)",unread,
-0027e6a4,36,_ZN22iOS_CMenuTouchSaveLoad17getCursorPosRightEPiS0_,"iOS_CMenuTouchSaveLoad::getCursorPosRight(int*, int*)",unread,
+0027e680,36,_ZN22iOS_CMenuTouchSaveLoad16getCursorPosLeftEPiS0_,"iOS_CMenuTouchSaveLoad::getCursorPosLeft(int*, int*)",read_structural,NOTES §359
+0027e6a4,36,_ZN22iOS_CMenuTouchSaveLoad17getCursorPosRightEPiS0_,"iOS_CMenuTouchSaveLoad::getCursorPosRight(int*, int*)",read_structural,NOTES §359
 002806cc,36,_Z15iOS_HookAddPrimv,iOS_HookAddPrim(),unread,
 00281a08,36,_Z22iOS_v2menuCheckSEErrorv,iOS_v2menuCheckSEError(),unread,
 0028bad0,36,_Z14TE_is_task_endl,TE_is_task_end(long),unread,
@@ -4667,7 +4667,7 @@ address,size,mangled,demangled,status,section_ref
 00288f18,24,_Z27pspgFreamBufCountCountResetv,pspgFreamBufCountCountReset(),unread,
 00289c04,24,_Z25pspSaveDataCheckSystemFlg17FFTPSP_SYSTEM_FLG,pspSaveDataCheckSystemFlg(FFTPSP_SYSTEM_FLG),unread,
 00280540,24,_Z11iOS_fftSavev,iOS_fftSave(),unread,
-0027e6e4,24,_ZN22iOS_CMenuTouchSaveLoad8setYLineEi,iOS_CMenuTouchSaveLoad::setYLine(int),unread,
+0027e6e4,24,_ZN22iOS_CMenuTouchSaveLoad8setYLineEi,iOS_CMenuTouchSaveLoad::setYLine(int),read_structural,NOTES §359
 00183454,24,_Z17bScrollWindowInitPsiPhS0_,"bScrollWindowInit(short*, int, unsigned char*, unsigned char*)",unread,
 0018346c,24,_Z18bScrollWindowInit2PsiiPhS0_,"bScrollWindowInit2(short*, int, int, unsigned char*, unsigned char*)",unread,
 00188e54,24,_Z13eGetTotalItems,eGetTotalItem(short),unread,
@@ -5177,7 +5177,7 @@ address,size,mangled,demangled,status,section_ref
 0027b480,20,_Z14setDrawPrimNumi,setDrawPrimNum(int),unread,
 0027b514,20,_Z13getCmdKindNumv,getCmdKindNum(),unread,
 0027b528,20,_Z10getCmdKindj,getCmdKind(unsigned int),unread,
-0027e6fc,20,_ZN22iOS_CMenuTouchSaveLoad22setDisableHeightAdjustEhs,"iOS_CMenuTouchSaveLoad::setDisableHeightAdjust(unsigned char, short)",unread,
+0027e6fc,20,_ZN22iOS_CMenuTouchSaveLoad22setDisableHeightAdjustEhs,"iOS_CMenuTouchSaveLoad::setDisableHeightAdjust(unsigned char, short)",read_structural,NOTES §359
 0027f5c4,20,_Z21iOS_GetRectHitNoBeginv,iOS_GetRectHitNoBegin(),unread,
 0027fc14,20,_Z23chk_ucResumeDataSetAddrPh,chk_ucResumeDataSetAddr(unsigned char*),unread,
 0028a08c,20,_Z16Savedata_GetAddrv,Savedata_GetAddr(),mentioned_unverified,
@@ -5376,7 +5376,7 @@ address,size,mangled,demangled,status,section_ref
 00285a88,16,pspItemGetItemDataByAbility,pspItemGetItemDataByAbility,unread,
 0027b494,16,_Z14getDrawPrimNumv,getDrawPrimNum(),unread,
 0027c26c,16,_ZN14iOS_CMenuTouch10drawDebug2Ev,iOS_CMenuTouch::drawDebug2(),unread,
-0027e794,16,_ZN22iOS_CMenuTouchSaveLoad10drawDebug2Ev,iOS_CMenuTouchSaveLoad::drawDebug2(),unread,
+0027e794,16,_ZN22iOS_CMenuTouchSaveLoad10drawDebug2Ev,iOS_CMenuTouchSaveLoad::drawDebug2(),read_structural,NOTES §359
 00284d08,16,_Z16pspBattleDataGetv,pspBattleDataGet(),unread,
 00286a7c,16,_Z28pspNetCheckPlayerTeamCurrentv,pspNetCheckPlayerTeamCurrent(),unread,
 00286e14,16,_Z34pspNetEntranceDataMissionBufferGetv,pspNetEntranceDataMissionBufferGet(),unread,
@@ -5523,7 +5523,7 @@ address,size,mangled,demangled,status,section_ref
 002befe8,12,_Z16iOS_SetErrorCodei,iOS_SetErrorCode(int),unread,
 002b2cf8,12,_Z13SysSE_PlayDefi,SysSE_PlayDef(int),unread,
 0028a080,12,_Z24pspGetFftPspSaveDataSizev,pspGetFftPspSaveDataSize(),mentioned_unverified,
-0027e6d8,12,_ZN22iOS_CMenuTouchSaveLoad13setDispOffsetEii,"iOS_CMenuTouchSaveLoad::setDispOffset(int, int)",unread,
+0027e6d8,12,_ZN22iOS_CMenuTouchSaveLoad13setDispOffsetEii,"iOS_CMenuTouchSaveLoad::setDispOffset(int, int)",read_structural,NOTES §359
 00284410,12,_Z26Clear_VectorDataBaseObjectP15VECTOR_DATABASE,Clear_VectorDataBaseObject(VECTOR_DATABASE*),unread,
 0028afc4,12,__bpGetBinarySize,__bpGetBinarySize,unread,
 0028c22c,12,_ZN10CFFT_STATE16SetVertexScalingEff,"CFFT_STATE::SetVertexScaling(float, float)",mentioned_unverified,
@@ -5809,9 +5809,9 @@ address,size,mangled,demangled,status,section_ref
 0027b5a0,8,_Z14getClutBuyIconv,getClutBuyIcon(),unread,
 0027c114,8,_ZN14iOS_CMenuTouch10setMaxnumXEi,iOS_CMenuTouch::setMaxnumX(int),unread,
 0027ce50,8,_ZN14iOS_CMenuTouch7setModeE19IOS_MENU_TOUCH_MODE,iOS_CMenuTouch::setMode(IOS_MENU_TOUCH_MODE),unread,
-0027e6c8,8,_ZN22iOS_CMenuTouchSaveLoad10setMaxNumYEi,iOS_CMenuTouchSaveLoad::setMaxNumY(int),unread,
-0027e6d0,8,_ZN22iOS_CMenuTouchSaveLoad11setDispNumYEi,iOS_CMenuTouchSaveLoad::setDispNumY(int),unread,
-0027efe4,8,_ZN22iOS_CMenuTouchSaveLoad7setModeE28IOS_MENU_TOUCH_SAVELOAD_MODE,iOS_CMenuTouchSaveLoad::setMode(IOS_MENU_TOUCH_SAVELOAD_MODE),unread,
+0027e6c8,8,_ZN22iOS_CMenuTouchSaveLoad10setMaxNumYEi,iOS_CMenuTouchSaveLoad::setMaxNumY(int),read_structural,NOTES §359
+0027e6d0,8,_ZN22iOS_CMenuTouchSaveLoad11setDispNumYEi,iOS_CMenuTouchSaveLoad::setDispNumY(int),read_structural,NOTES §359
+0027efe4,8,_ZN22iOS_CMenuTouchSaveLoad7setModeE28IOS_MENU_TOUCH_SAVELOAD_MODE,iOS_CMenuTouchSaveLoad::setMode(IOS_MENU_TOUCH_SAVELOAD_MODE),read_structural,NOTES §359
 002b0508,8,_ZN9CAPP_INFO14GetStoragePathEv,CAPP_INFO::GetStoragePath(),mentioned_unverified,
 002b344c,8,_Z14iCloud_Receivev,iCloud_Receive(),unread,
 00280530,8,_ZN8cSaveFFT7GetModeEv,cSaveFFT::GetMode(),unread,
