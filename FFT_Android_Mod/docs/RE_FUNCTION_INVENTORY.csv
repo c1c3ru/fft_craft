@@ -570,22 +570,22 @@ address,size,mangled,demangled,status,section_ref
 0025da88,652,_Z10wldkey_repm,wldkey_rep(unsigned long),read_full,NOTES §12.2
 0024de6c,652,_Z14ctlkiroku_mainP7CTLINFO,ctlkiroku_main(CTLINFO*),read_structural,NOTES §365
 00255b88,652,_Z11ctlopt_mainP7CTLINFO,ctlopt_main(CTLINFO*),read_full,NOTES §450
-00289198,648,_Z18pspPrimBackDrawRGBiittPmPhhhhi,"pspPrimBackDrawRGB(int, int, unsigned short, unsigned short, unsigned long*, unsigned char*, unsigned char, unsigned char, unsigned char, int)",unread,
+00289198,648,_Z18pspPrimBackDrawRGBiittPmPhhhhi,"pspPrimBackDrawRGB(int, int, unsigned short, unsigned short, unsigned long*, unsigned char*, unsigned char, unsigned char, unsigned char, int)",read_full,NOTES §463
 000d7498,648,_Z15allocatetextureP6RECT16P11tagPOLY_FT4Pl,"allocatetexture(RECT16*, tagPOLY_FT4*, long*)",read_full,NOTES §452
 001c6ca4,648,_Z14CursolDownFuncP7DVECTORPti,"CursolDownFunc(DVECTOR*, unsigned short*, int)",read_structural,NOTES §451
 0025c124,648,_Z13mkbonus_checkv,mkbonus_check(),read_full,NOTES §454
-0026d9a8,644,_Z12ctltuto_initii,"ctltuto_init(int, int)",unread,
-00276930,644,_Z17GetTargetBaseAreaii,"GetTargetBaseArea(int, int)",mentioned_unverified,
+0026d9a8,644,_Z12ctltuto_initii,"ctltuto_init(int, int)",read_structural,NOTES §464
+00276930,644,_Z17GetTargetBaseAreaii,"GetTargetBaseArea(int, int)",read_structural,NOTES §465
 000851d0,640,vorbis_dsp_clear,vorbis_dsp_clear,read_structural,NOTES §336
-0009673c,640,res1_class,res1_class,unread,
-001da6f8,640,_Z16set_playerwork_jP5BWORKii,"set_playerwork_j(BWORK*, int, int)",unread,
-002b8378,640,_Z12IS_GAME_AREAii,"IS_GAME_AREA(int, int)",unread,
-002106e0,640,_Z12placeNameEndv,placeNameEnd(),unread,
+0009673c,640,res1_class,res1_class,read_structural,NOTES §467
+001da6f8,640,_Z16set_playerwork_jP5BWORKii,"set_playerwork_j(BWORK*, int, int)",read_structural,NOTES §460
+002b8378,640,_Z12IS_GAME_AREAii,"IS_GAME_AREA(int, int)",read_structural,NOTES §466
+002106e0,640,_Z12placeNameEndv,placeNameEnd(),read_full,NOTES §462
 00088978,636,_ve_envelope_search,_ve_envelope_search,unread,
 0024f238,632,_Z12ctltips_initi,ctltips_init(int),unread,
 00291c48,632,xpLibgpuInit,xpLibgpuInit,unread,
-0028ca3c,632,_ZN9CAUTOSAVE4LoadEv,CAUTOSAVE::Load(),mentioned_unverified,
-000d9b10,628,_Z15request_commandi,request_command(int),unread,
+0028ca3c,632,_ZN9CAUTOSAVE4LoadEv,CAUTOSAVE::Load(),read_structural,NOTES §458
+000d9b10,628,_Z15request_commandi,request_command(int),read_structural,NOTES §459
 001831e0,628,_Z15bCursolDownFuncP7DVECTORPti,"bCursolDownFunc(DVECTOR*, unsigned short*, int)",unread,
 001d3308,628,_Z21set_playerwork_commonP6PENTRYi,"set_playerwork_common(PENTRY*, int)",unread,
 001e180c,628,_Z9search_mpiiii,"search_mp(int, int, int, int)",unread,
@@ -659,7 +659,7 @@ address,size,mangled,demangled,status,section_ref
 0009734c,568,res2_inverse,res2_inverse,unread,
 00167a80,568,_Z17ASURA_PKT_AnalyzePm,ASURA_PKT_Analyze(unsigned long*),unread,
 001729d4,568,_Z17cDrawPluralFT4RGBPhP5COLORittii,"cDrawPluralFT4RGB(unsigned char*, COLOR*, int, unsigned short, unsigned short, int, int)",unread,
-0024f688,568,_Z12ctltips_mainP7CTLINFO,ctltips_main(CTLINFO*),unread,
+0024f688,568,_Z12ctltips_mainP7CTLINFO,ctltips_main(CTLINFO*),read_structural,NOTES §461
 00096508,564,res0_look,res0_look,unread,
 00189fb0,564,_Z11eDrawFT4RGBP6RECT16iiP5COLORitti,"eDrawFT4RGB(RECT16*, int, int, COLOR*, int, unsigned short, unsigned short, int)",unread,
 001ac8c8,564,_Z16DrawPluralFT4RGBPhP5COLORittii,"DrawPluralFT4RGB(unsigned char*, COLOR*, int, unsigned short, unsigned short, int, int)",unread,
@@ -941,7 +941,7 @@ address,size,mangled,demangled,status,section_ref
 001d7538,396,_Z19get_command_abilityii,"get_command_ability(int, int)",unread,
 0024e5a8,396,_Z21iOS_chkBraveEventFlagj,iOS_chkBraveEventFlag(unsigned int),unread,
 00259780,396,_Z14ctlhismes_initi,ctlhismes_init(int),unread,
-0028ccb4,396,_ZN9CAUTOSAVE7IsExistEv,CAUTOSAVE::IsExist(),unread,
+0028ccb4,396,_ZN9CAUTOSAVE7IsExistEv,CAUTOSAVE::IsExist(),read_full,NOTES §458
 000af818,392,_ZN16CEGL2_TEX_HYBRID7GL_LoadEiPjjiiiiPh,"CEGL2_TEX_HYBRID::GL_Load(int, unsigned int*, unsigned int, int, int, int, int, unsigned char*)",mentioned_unverified,
 000cbdf4,392,_Z21iOS_RESUME_SET_ATTACKP22IOS_RESUME_DATA_ATTACK24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_ATTACK(IOS_RESUME_DATA_ATTACK*, IOS_RESUME_DATACOPY_MODE)",unread,
 000da83c,392,_Z15calceffectangleii,"calceffectangle(int, int)",unread,
@@ -3570,7 +3570,7 @@ address,size,mangled,demangled,status,section_ref
 0020dbec,48,_Z16requestAnimationjj,"requestAnimation(unsigned int, unsigned int)",unread,
 001eb00c,48,_Z19searchAnimationByIDt,searchAnimationByID(unsigned short),unread,
 001536e4,48,_Z13Wwait_taskendl,Wwait_taskend(long),unread,
-00101a10,48,_Z16Wrequest_commandi,Wrequest_command(int),unread,
+00101a10,48,_Z16Wrequest_commandi,Wrequest_command(int),read_structural,NOTES §459
 001020f8,48,_Z18Wevent_init_systemv,Wevent_init_system(),unread,
 0010229c,48,_Z17Wgeteventcategoryv,Wgeteventcategory(),unread,
 0028ba54,48,_Z14TE_task_createiPFvvEi,"TE_task_create(int, void (*)(), int)",unread,
@@ -4724,7 +4724,7 @@ address,size,mangled,demangled,status,section_ref
 0028b3c4,24,_Z22pspWorldDataBackBufGeti,pspWorldDataBackBufGet(int),unread,
 0024dcc0,24,_Z18ctlkiroku_deactiveP7CTLINFO,ctlkiroku_deactive(CTLINFO*),unread,
 0024e904,24,_Z18ctlperson_deactiveP7CTLINFO,ctlperson_deactive(CTLINFO*),unread,
-0024f4d0,24,_Z16ctltips_deactiveP7CTLINFO,ctltips_deactive(CTLINFO*),unread,
+0024f4d0,24,_Z16ctltips_deactiveP7CTLINFO,ctltips_deactive(CTLINFO*),read_structural,NOTES §461
 00259750,24,_Z17ctlhistory_activeP7CTLINFO,ctlhistory_active(CTLINFO*),unread,
 0026fac0,24,_Z15ctluwa_deactiveP7CTLINFO,ctluwa_deactive(CTLINFO*),unread,
 002602f4,24,_Z17ctlmouke_deactiveP7CTLINFO,ctlmouke_deactive(CTLINFO*),unread,

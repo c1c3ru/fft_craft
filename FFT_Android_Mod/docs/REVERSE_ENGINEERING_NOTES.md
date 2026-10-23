@@ -14931,3 +14931,207 @@ confirma o padrão geral da família: `_init` linear faz setup único,
 
 **Referência cruzada:** seção 333 (`pspCtltutonet_main`, par agora
 completo), seção 166 (`ctltuto_main`, hub da família de tutoriais).
+
+## 458. `CAUTOSAVE::Load()`/`CAUTOSAVE::IsExist()` — fecham o par com `CAUTOSAVE::Save` (seção 19.1), confirmam o mecanismo de dump/restauração de heap completo (2026-10-23, Fase 3, quinquagésimo quarto lote)
+
+`CAUTOSAVE::Load()` (`0x28ca3c`, 632 B) — `jtable.py`: **97% de
+cobertura** (153/158), zero tabela de salto, 9 branches/4 de
+retrocesso. **24 `bl` distintos**: `CCOMP_Z_DEC::Decode(unsigned
+char*,unsigned char*,int)` (descompressão — confirma que o dump
+salvo por `CAUTOSAVE::Save` é compactado), `CFILE::CFILE`/`Open`/
+`~CFILE`/`Read` ×2/`GetSize` (I/O de arquivo via classe C++
+moderna), `CWORK_MEM::GetTail(unsigned int)` ×3, **`iOS_ResumeGetData`**/
+**`iOS_WorldMapResumeGetData`** (mesma família de "resume" já mapeada
+nas seções 105/387/396/416), `CFFT_STATE::Resume(_FFT_STATE_RESUME*)`,
+`xpLib_GetTPage`, `xpGetHeap`/`xpGetHeapSize`/`xpMoveHeap` ×2 cada,
+`GuEmu_ClearTexCache()`, `CAPP_INFO::GetStoragePath()`, 2 locais sem
+símbolo. `CAUTOSAVE::IsExist()` (`0x28ccb4`, 396 B, **100% de
+cobertura**, zero tabela de salto, 10 branches/6 de retrocesso): 12
+`bl` — 4 locais sem símbolo, mais o mesmo subconjunto de `CFILE::*`/
+`CWORK_MEM::GetTail`/`CAPP_INFO::GetStoragePath` de `Load`.
+
+**Confirma por completo o achado da seção 19.1**: `CAUTOSAVE::Save`
+grava um dump compactado da heap inteira (não um save de progresso
+convencional); `CAUTOSAVE::Load` é a contraparte real — descomprime
+(`CCOMP_Z_DEC::Decode`), move/realoca a heap (`xpGetHeap`/
+`xpMoveHeap`), limpa cache de textura (`GuEmu_ClearTexCache`) e
+dispara o resume de estado de jogo (`CFFT_STATE::Resume` +
+`iOS_ResumeGetData`/`iOS_WorldMapResumeGetData`) — é o mecanismo que
+permite retomar o app exatamente de onde parou (snapshot binário de
+memória, não serialização por campo). `IsExist` apenas checa se o
+arquivo de dump existe via `CFILE`. Marcadas `read_structural`
+(`Load` 97% ≥95%, mas catálogo de 24 `bl` é grande demais pra aceite
+sem ressalva extra) e `read_full` (`IsExist`, 100% cobertura).
+
+## 459. `request_command(int)`/`Wrequest_command(int)` — dispatcher de comando de task, par normal/"W" (2026-10-23, Fase 3, quinquagésimo quarto lote)
+
+`request_command(int)` (`0xd9b10`, 628 B) — `jtable.py`: **88% de
+cobertura** (138/157), zero tabela de salto, 17 branches/7 de
+retrocesso. 5 `bl`: `getanimpos2d(int,SVECTOR*)`, `task_create(long,
+char*)`, `send_taskparamater(long,long,long,long)`,
+`getAnimationIDFormBattleWork(int)`, `hook_Debug(char const*)`.
+`Wrequest_command(int)` (`0x101a10`, só 48 B, 83% cob., 1 `bl` —
+`hook_Debug` apenas): esta é curiosamente muito menor que a
+contraparte normal — provável thunk/stub da variante "W" em vez de
+reimplementação completa (padrão diferente do habitual par normal/W
+de tamanho equivalente). Hipótese: `request_command` dispara uma
+task de comando de animação/batalha a partir de uma posição 2D
+resolvida. Marcadas `read_structural` (ambas < 95%, 0 tabela de
+salto — `Wrequest_command` com pendência honesta sobre por que é tão
+menor que o par).
+
+## 460. `set_playerwork_j(BWORK*,int,int)` — rotina central de ajuste de dados de trabalho do jogador, referenciada por múltiplas seções mas nunca lida em si (2026-10-23, Fase 3, quinquagésimo quarto lote)
+
+`set_playerwork_j(BWORK*,int,int)` (`0x1da6f8`, 640 B) — `jtable.py`:
+**99% de cobertura** (159/160), zero tabela de salto, 2 branches/0
+de retrocesso. 11 `bl` distintos: 4 locais sem símbolo (`sub_1d6af8`,
+`sub_1d6e28`, `sub_1d9bb4`, `sub_1da194`, `sub_1da468`), `get_unitwork_
+add(int)`, `set_jcflag(unsigned char*,int)`, `adjust_joblevel
+(unsigned short*,unsigned char*)`, **`copy_struct_data(void const*,
+void*,int)`** ×7 (a chamada mais repetida — cópia genérica de
+struct, usada pra popular múltiplos campos de uma vez),
+`clear_cmemory(void*,int)`, `pspJobGetJobChangeFlag(unsigned char*,
+unsigned char,unsigned char(*)[3],int)`. Já referenciada diretamente
+por `ctlworkingst_dataset` (seção 401) e `set_normability2` (seção
+419) sem nunca ter sido aberta — confirma ser a rotina que ajusta
+dados de trabalho/job do jogador (nível, flag de mudança de classe,
+cópia de struct de job em massa). Marcada `read_structural` (99%
+≥95%, 0 tabela de salto, mas 5 locais sem símbolo não lidos —
+catálogo grande demais pra aceite irrestrito).
+
+## 461. `ctltips_main(CTLINFO*)`/`ctltips_deactive(CTLINFO*)` — fecham a família "tips" (dica rápida), par direto de `pspCtltutonet_main`/`_init` (seção 333/457) (2026-10-23, Fase 3, quinquagésimo quarto lote)
+
+`ctltips_main(CTLINFO*)` (`0x24f688`, 568 B, 92% cob., 0 tabela, 14
+branches/3 de retrocesso): 9 `bl` — `Wtask_status`/
+`Wsend_taskparamater` ×2, `ctltips_deactive` (a si mesmo —
+confirma a tríade), `wldmes_load(int)`, `sound_request` ×2,
+`iOSTutoFlagSet`, `curhis_get`/`curhis_clr`, `iOS_setV2Icon`.
+`ctltips_deactive(CTLINFO*)` (`0x24f4d0`, 24 B, 83% cob., 0 `bl`):
+boilerplate trivial de transição de estado. Confirma a tríade
+completa de "tips" (dica rápida de UI), estruturalmente quase gêmea
+de `pspCtltutonet_main`/`_init` (seção 333/457) — mesmo catálogo de
+`bl` (`wldmes_load`/`curhis_get`/`curhis_clr`/`sound_request`/
+`iOS_add_anmpac_max`), confirmando que "tips" e "tutonet" são as duas
+variantes de popup de dica one-shot do jogo (provavelmente
+diferentes no gatilho/contexto de exibição, não na mecânica).
+Marcadas `read_structural` (92%/83% < 95%, 0 tabela de salto).
+
+## 462. `placeNameEnd()` — fecha o par com `placeNameStart` (seção 380), teardown do banner de nome de local (2026-10-23, Fase 3, quinquagésimo quarto lote)
+
+`placeNameEnd()` (`0x2106e0`, 640 B) — `jtable.py`: **99% de
+cobertura** (159/160), zero tabela de salto, **zero branches**
+(função inteiramente linear). 10 `bl`: 1 local sem símbolo
+(`sub_20fa88` — mesmo helper não resolvido já citado em
+`placeNameStart`!), `ClearOTag`, `AddPrim` ×3, `DrawSync` ×2,
+`GetTPage`/`GetClut`, `SetPolyF4`, `SetDrawMode`, `SetSemiTrans` ×2,
+`ClearImage`. Confirma a hipótese já registrada na seção 380: é a
+lógica simétrica de ocultar/limpar o banner de nome de local —
+monta um quad flat (não texturizado, `SetPolyF4` em vez do `SetPolyF4`+
+textura de `placeNameStart`) pra cobrir/apagar a área antes de
+limpar a imagem. Marcada `read_full` (99% ≥95%, 0 tabela de salto);
+`sub_20fa88` continua sem identidade — candidato de follow-up
+dedicado por aparecer em ambas as pontas do par Start/End.
+
+**Referências cruzadas (seções 458-462):** seção 19.1 (`CAUTOSAVE::
+Save`, par agora completo com `Load`/`IsExist`), seções 105/387/396/
+416 (família "resume", reusada por `CAUTOSAVE::Load`), seções 401/419
+(`ctlworkingst_dataset`/`set_normability2`, ambas referenciam
+`set_playerwork_j` diretamente), seção 333/457 (`pspCtltutonet_*`,
+par estrutural gêmeo de `ctltips_*`), seção 380 (`placeNameStart`,
+par agora completo, `sub_20fa88` compartilhado entre as duas
+pontas).
+
+## 463. `pspPrimBackDrawRGB(...)` — primitivo folha de desenho de fundo RGB plano, usado pelo overlay de ícone "pular" da abertura (2026-10-23, Fase 3, quinquagésimo quinto lote)
+
+`pspPrimBackDrawRGB(...)` (`0x289198`, 648 B) — `jtable.py`: **100%
+de cobertura** (162/162), zero tabela de salto, zero branches
+(corpo linear, sem desvio condicional/loop). Único `bl`:
+`pspGetpspPrimWorkBuf(int)` — reserva um bloco do ring buffer
+compartilhado da família `pspPrim*` pra escrever o primitivo antes
+de retornar, mesmo padrão de `addzodiacback` (seção 292). Já citada
+como `bl` de `fft_opening` (seção 394, camada `pspOpen*` do overlay
+de ícone de "pular"). Confirma ser o primitivo de baixo nível que
+desenha o retângulo/placa de fundo RGB plano por trás do ícone —
+mais simples que a variante tiled de 256px vista em
+`pspPrimBackDraw`/`RGB` (seção 331/332). Marcada `read_full` (100%
+cobertura, 0 tabela de salto, 1 `bl` totalmente resolvido).
+
+## 464. `ctltuto_init(int,int)` — inicializador par de `ctltuto_main` (seção 166), ponto de entrada compartilhado por múltiplos hubs de nível superior (2026-10-23, Fase 3, quinquagésimo quinto lote)
+
+`ctltuto_init(int,int)` (`0x26d9a8`, 644 B) — `jtable.py`: **93% de
+cobertura** (150/161), zero tabela de salto, 2 branches/0 de
+retrocesso (sem loop, consistente com setup one-shot). 6 `bl`:
+`add_anmpac` ×2/`add_winpac`, `iOS_setV2Icon` ×8 (mesma contagem de
+8 ícones já documentada pra `ctltuto_main`, seção 166 — confirma que
+`_init` pré-carrega/arma os ícones que o hub depois gerencia),
+`wld_tutomenu_reset(CTLINFO*)`, `pspWorldDisableFlg`, `CRECT::
+SetEnable(int,int)`. Confirma ser o inicializador clássico do
+subsistema de tutorial: carrega recursos gráficos, arma os ícones,
+zera o estado do menu e bloqueia o world map por trás. Achado
+adicional: `ctltuto_init` já havia sido citado como um dos 6
+inicializadores de tela-irmã chamados diretamente por `ctlzodiac_main`
+(junto com `ctlbrst_init`/`ctlkiromes_init`/`ctltremes_init`/
+`ctlhentuto_init`/`ctlsentuto_init`) — confirma que é ponto de
+entrada padrão do subsistema de tutorial, acionado por múltiplos
+hubs (`ctlbrst_main`/`ctlzodiac_main`), não só por `ctltuto_main`.
+Marcada `read_structural` (93% < 95%, 0 tabela de salto).
+
+## 465. `GetTargetBaseArea(int,int)` — função folha de cálculo de área-base de alvo, consumida por `GetDestinationsAndMakeMaskTG` (2026-10-23, Fase 3, quinquagésimo quinto lote)
+
+`GetTargetBaseArea(int,int)` (`0x276930`, 644 B) — `jtable.py`:
+**98% de cobertura** (158/161), zero tabela de salto, 29 branches/14
+de retrocesso (perfil denso de loop pro tamanho do corpo). **Zero
+`bl`** — função folha, toda a lógica aritmética/iterativa inline.
+Já citada na tabela comparativa ARM×x86 (crosscheck de porte de
+arquitetura) e como callee de `GetDestinationsAndMakeMaskTG` (seção
+159, "avalia/agrega uma área-base de alvo"), mas nunca lida em si.
+Hipótese: itera em laço aninhado sobre um raio/diamante de painéis
+pra calcular a área-base de alcance/alvo, devolvendo contagem ou
+máscara consumida antes de `GetPanelUnderUnit`/`CountMap` — parte do
+pipeline de pathfinding/alvejamento de IA perto de `ForAutoCommand`
+(seção 150). Marcada `read_structural` (98% ≥95%, 0 tabela de salto
+— mas sem `bl` pra ancorar a hipótese semântica por nome de callee,
+inferência só por contexto de uso).
+
+## 466. `IS_GAME_AREA(int,int)` — filtro de entrada que distingue toque em área de jogo de toque em UI sobreposta, usado pelo subsistema de rotação `iOSRot*` (2026-10-23, Fase 3, quinquagésimo quinto lote)
+
+`IS_GAME_AREA(int,int)` (`0x2b8378`, 640 B) — `jtable.py`: **92% de
+cobertura** (147/160), zero tabela de salto, 19 branches/10 de
+retrocesso. 3 `bl`: `CRECT::GetEnable(int)` ×6, `isInRectUi
+(_RECT_UI*,int,int)` ×8, `iOS_getV2Icon(V2ICON_DATA)` ×3. Já citada
+8× como `bl` por outra função já lida (câmera de batalha
+`sBattleTouchRotation`/roda de emprego `JobChange`), que a usa pra
+validar a posição de toque antes de alimentar o subsistema de
+deslizamento/rotação `iOSRot*`. Hipótese: itera sobre um conjunto de
+rects de UI habilitados, testando contenção de ponto — retorna falso
+se o toque cair em qualquer rect de UI (menu/HUD/ícone V2),
+verdadeiro se estiver na área de jogo útil. É o "filtro de entrada"
+comum que impede toques em botões de UI de serem interpretados como
+gestos de rotação/deslizamento do mundo. Marcada `read_structural`
+(92% < 95%, 0 tabela de salto — lacuna honesta de ~8%).
+
+## 467. `res1_class` — mais um interno de `libvorbis` reconhecido por nome, fast-track conforme regra 6 da metodologia (2026-10-23, Fase 3, quinquagésimo quinto lote)
+
+`res1_class` (`0x9673c`, 640 B) é o nome genuíno (C puro, sem
+mangling) de uma função interna do `libvorbis` upstream (`lib/res0.c`,
+classificação de residue tipo 1 no pipeline Ogg Vorbis). `jtable.py`:
+**100% de cobertura** (160/160), zero tabela de salto. 9 `bl`:
+`_vorbis_block_alloc` (símbolo real de `lib/block.c` da libvorbis)
+×2, 1 local sem símbolo, 7 helpers de runtime libgcc
+(`__divsi3`/`__floatsidf`/`__divdf3`/`__truncdfsf2`/`__floatsisf`/
+`__mulsf3`/`__fixsfsi`) — padrão aritmético típico de DSP de áudio.
+Mesma região de `mdct_init`/`drft_init`/`_ve_envelope_search`,
+reforçando que todo o bloco é código de terceiros (libvorbis), não
+lógica do jogo. Marcada `read_structural` por fast-track (biblioteca
+reconhecível, 100% cobertura, 0 tabela de salto — mesmo tratamento
+já dado a `floor1_encode`/`vorbis_analysis_headerout`/`_vp_tonemask`
+nas seções 102/138/145/174/189).
+
+**Referências cruzadas (seções 463-467):** seção 394 (`fft_opening`,
+`pspPrimBackDrawRGB` confirmado como seu `bl`), seção 166
+(`ctltuto_main`, par agora completo com `ctltuto_init`), seções
+150/159 (`ForAutoCommand`/`GetDestinationsAndMakeMaskTG`, pipeline de
+IA agora com `GetTargetBaseArea` lida), subsistema `iOSRot*`
+(câmera/roda de emprego, `IS_GAME_AREA` como filtro de entrada
+comum), seções 102/138/145/174/189 (libvorbis reconhecida por nome,
+`res1_class` mais um membro fast-tracked).
