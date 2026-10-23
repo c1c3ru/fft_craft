@@ -7843,8 +7843,10 @@ distintos** — `0x25aeb0` domina como default em ~82 dos 101 casos);
 por fase/estado guardado em `CTLINFO*`, dirigindo: seleção de texto
 de mensagem (`houkokumes_select`), renderização da mensagem
 (`houkoku_mesput`, ×15, caminho mais quente), uma variante
-"yokoyari" (lança lateral, provavelmente relatório de um tipo
-específico de ataque: `yokoyari_mesput`), janelas de overlay de
+"yokoyari" (lança lateral, idiomaticamente "interromper uma
+conversa" — `yokoyari_mesput`, lida em detalhe na seção 489: é a
+variante de interjeição/interrupção do relatório por outra unidade,
+não um tipo de ataque), janelas de overlay de
 mundo (`wldwin_noropen`, `wldpicwin_set`, `add_winpac`), consultas de
 unidade/mundo (`get_unitwork_add_wld`, `wldmes_load`, `pic_load`),
 som (`sound_request`), checagem de traço de emprego
@@ -15500,3 +15502,213 @@ posicionado abaixo na cadeia de boot), seções 76/99/105/387/396/416/
 "leve"), seção 472 (`Logo_FrameRender`, provável chamadora de
 `CEGL2_FBO::RenderFromFBO`), seção 13.9 (`RenderToFBO`, par de
 produção confirmado).
+
+## 486. `ctlworkend_init()`/`ctlworkend_main(CTLINFO*)`/`ctlworkendmes_init(int)`/`ctlworkendmes_main(CTLINFO*)` — fecham o terceiro estágio do indicador "trabalhando", pipeline completo com `ctlworking_init` (2026-10-23, Fase 3, sexagésimo lote)
+
+Fecha o pipeline de 3 estágios já citado de passagem na seção sobre
+`ctlworking_init` (linha 10432-10435: "`ctlworking_init()` →
+este controlador principal → `ctlworkend_init()`"). `ctlworkend_init()`
+(`0x2529ac`, 444 B, 91% cob., 0 tabela, 2 branches/1 de retrocesso):
+4 `bl` — `Wread_eventflag`, `Wsend_taskparamater`, `defscrwin_set`/
+`curhis_put`. `ctlworkend_main(CTLINFO*)` (`0x252c80`, 476 B, 92%
+cob., 0 tabela, 12 branches/4 de retrocesso): 5 `bl` — `Wtask_status`/
+`Wsend_taskparamater` ×2, `sound_request` ×2, `curhis_get`/`curhis_clr`.
+`ctlworkendmes_init(int)` (`0x252b70`, 272 B, 88% cob., 0 tabela, 0
+branches): 2 `bl` — `Wsend_taskparamater`, `wldmes_load(int)`.
+`ctlworkendmes_main(CTLINFO*)` (`0x252e5c`, 604 B, 94% cob., 0
+tabela, 9 branches/3 de retrocesso): 7 `bl` — `ret_adventurestatus()`,
+`ctlworkend_init()` (reentra no controller pai), `sun_to_ivarisday`/
+`wld_dayread` (calendário Ivalice), `sound_request`,
+`pagewin_init`/`pagewin_main(PAGEWININFO*)`. Confirma o pipeline
+completo de 3 estágios do indicador "trabalhando": `ctlworking_init`
+(início) → controller principal → `ctlworkend_init`/`_main` (fim,
+com sub-estado de mensagem `ctlworkendmes_*` reusando o framework
+`PAGEWININFO`, seção 381). `ret_adventurestatus()` sugere que o
+resultado do "trabalho" afeta o status de aventura/progresso.
+Marcadas `read_structural`.
+
+## 487. `ctlmoumes_init(int)`/`ctlmoumes_main(CTLINFO*)`/`ctlmoumes_active`/`ctlmoumes_deactive` — fecham o sub-estado de mensagem do controller "mouke", reentra em `ctlokng_init` e no ecossistema de hit-test (2026-10-23, Fase 3, sexagésimo lote)
+
+`ctlmoumes_init(int)` (`0x26037c`, 504 B, 90% cob., 0 tabela, 3
+branches/1 de retrocesso): 5 `bl` — `Wsend_taskparamater`,
+`mouke_tbl_get(MOUINFO*,int)` (mesma tabela de roster já vista em
+`ctlworkinginf_init`/`ctlretokng_init`, seções 384/414), `add_winpac`,
+`wldwin_noropen`, `ps_rand()`. `ctlmoumes_main(CTLINFO*)`
+(`0x260a8c`, 604 B, 93% cob., 0 tabela, 14 branches/6 de retrocesso):
+**8 `bl`** — `Wsend_taskparamater` ×2, `ctlmouke_init()` (reentra no
+controller pai, seção 383), `ctlmoumes_deactive` (a si mesmo),
+`ctlokng_init(_POINT)` (reentra na raiz genérica OK/NG, seção 441!),
+`sound_request` ×2, `iOS_ClearRectHitAll` ×2, `iOS_SetRectHit(int,
+int,int,int,int,int)` ×2, `iOS_GetRectHitNoTap()` — confirma mais um
+consumidor real do ciclo registro→execução→consulta do sistema de
+hit-test (`iOS_RectHitExecute`, seção 428). `ctlmoumes_active`/
+`ctlmoumes_deactive` (`0x260878`/`0x26089c`, 36 B cada, 89% cob., 0
+`bl`): boilerplate trivial. Fecha o sub-estado de mensagem do
+controller de roster "mouke" por completo. Marcadas `read_structural`.
+
+## 488. Família `ctluwa_*`/`ctluwames_*` — sete funções, novo controller com integração profunda ao sistema de tutorial (2026-10-23, Fase 3, sexagésimo lote)
+
+Família completa de 7 funções, citada de passagem como sub-
+controlador irmão de `ctlret_init` (linha 9352) mas nunca lida.
+`ctluwa_init()` (`0x26f830`, 604 B, 91% cob., 0 tabela, 6 branches/3
+de retrocesso): 4 `bl` — `Wread_eventflag`, `Wsend_taskparamater`,
+`defscrwin_set`/`curhis_put` (mesmo padrão de init simples de várias
+famílias já vistas). `ctluwa_main(CTLINFO*)` (`0x26fca8`, 416 B, 94%
+cob., 0 tabela, 13 branches/4 de retrocesso): 8 `bl` — `Wtask_status`/
+`Wsend_taskparamater` ×2, `ctluwa_deactive`/`ctluwa_exit` (a si
+mesmo, tríade completa), `sound_request` ×2, `curhis_get`/`curhis_clr`,
+`iOS_setV2Icon`. `ctluwa_active`/`ctluwa_deactive`/`ctluwa_exit`
+(`0x26fa8c`/`0x26fac0`/`0x26fad8`, 52/24/112 B, 82-92% cob.,
+boilerplate, 0 `bl`). `ctluwames_init(int)` (`0x26fb48`, 352 B, 91%
+cob., 0 tabela, 0 branches): 2 `bl` — `Wsend_taskparamater`,
+`pagewin_init(PAGEWININFO*)`. `ctluwames_main(CTLINFO*)` (`0x26fe48`,
+228 B, 91% cob., 0 tabela, 3 branches/2 de retrocesso): 2 `bl` —
+`pagewin_main(PAGEWININFO*)`, `iOS_setV2Icon`. Confirma mais um
+sub-estado de mensagem (`uwames`) reusando o framework `PAGEWININFO`
+(seção 381), análogo em estrutura às famílias `ctlworkendmes`/
+`ctlunregmes`/`ctlretokng`. Todas marcadas `read_structural`.
+
+**Referências cruzadas (seções 486-488):** seção 216
+(`ctlworking_init`, pipeline de 3 estágios agora completo), seções
+383/384/414 (`ctlmouke_init`/`ctlworkinginf_init`/`ctlretokng_init`,
+mesma tabela `mouke_tbl_get` reusada), seção 441 (`ctlokng_init`,
+reentrada confirmada por `ctlmoumes_main`), seção 428
+(`iOS_RectHitExecute`, mais um consumidor real do ciclo de hit-test),
+seção 381 (`PAGEWININFO`, framework reusado por `ctlworkendmes`/
+`ctluwames`).
+
+## 489. `AppEngine_FrameStep()` — achado arquitetural central: é o verdadeiro tick por frame, dispatch de 9 vias pros pares `<Modo>_FrameMove`/`FrameRender` já mapeados (2026-10-23, Fase 3, sexagésimo primeiro lote)
+
+`AppEngine_FrameStep()` (`0x2b1790`, 604 B) — `jtable.py`: **86% de
+cobertura** (130/151), **1 tabela de salto resolvida** (9 casos → 9
+handlers distintos), zero tabela pendente. 27 `bl` distintos: os 8
+pares de dispatch por modo — `Boot_FrameMove`/`FrameRender`,
+`Error_FrameMove`/`FrameRender`, `Link_FrameMove`/`FrameRender`
+(seções 86/283/405), `Logo_FrameMove`/`FrameRender` (seções 472/477),
+`Main_FrameMove`/`FrameRender`, `Movie_FrameMove`/`FrameRender`,
+`Settings_FrameMove`/`FrameRender`, `SettingsWnd_FrameMove`/
+`FrameRender` — mais infra de frame: `CFRAMERATE::FrameMove`/
+`GetRate`, `CSOUND_IF::FrameMove(int,float)`, `CINPUT_IF_TOUCH::
+FrameEnd()` ×2, `musicPlayer_FrameMove()`, `CFFT_STATE::GetParam`/
+`SetParam`, `CAPP_INFO::GetDeviceType`/`GetActive`, `Android_Dialog_
+Open(...)`, 1 local sem símbolo.
+
+**Achado de maior valor arquitetural da sessão**: `AppEngine_
+FrameStep()` é o verdadeiro tick de frame do motor — nem `mainLoop()`
+(seção 376, dispatcher de transição entre modos de jogo) nem
+`padRead()` (seção 453, poll de input com detecção de reset/combo)
+são o tick real. É `AppEngine_FrameStep` quem lê o modo atual
+(`CFFT_STATE::GetParam`), despacha via switch de 9 casos pro par
+`<Modo>_FrameMove`+`FrameRender` correspondente, e em volta disso
+atualiza framerate, finaliza input de toque e avança música/som —
+fecha a peça que faltava entre `mainLoop()` (decide/transiciona) e
+as funções `<Tela>_FrameMove/FrameRender` individuais já mapeadas
+(seções 34/86/394/472/477). Marcada `read_structural` (86% < 95%,
+mas tabela de salto 100% resolvida — lacuna honesta na cauda da
+função, provável handler do último caso ou epílogo compartilhado).
+
+## 490. `AutoEquip()` — orquestrador de topo do auto-equipamento, fecha o elo que faltava com `GetBestEquip`/`ChrPowerCompare` (2026-10-23, Fase 3, sexagésimo primeiro lote)
+
+`AutoEquip()` (`0x1aea08`, 604 B) — `jtable.py`: **91% de cobertura**
+(137/151), zero tabela de salto, 9 branches/5 de retrocesso. 12
+`bl`: `Wtask_start`/`Wtask_stop`, `ItemChg(short,int)` ×2,
+`SetRyoteFlag(short*,int)`, `SetChrList()`, `Ryoute(short)`,
+`ChrPowerCompare(C_STTS*,A_STTS*,short*,short*)` (já citada no
+achado 39.1), **`GetBestEquip(short,short*)`** (seção 173, a chamada
+central), `DrawMessage`, `SetSttsEqu2`/`SetSttsPara2` ×2 cada,
+`CurChrChg()`. Fecha o elo da cadeia "ver lista → trocar → comparar
+poder → auto-equipar" (achado 39.1): por slot, ajusta flags de
+empunhadura, chama `GetBestEquip`, compara poder, aplica a troca via
+`ItemChg`, recalcula status derivado e atualiza contexto de
+personagem — confirma que `AutoEquip` é o chamador de `GetBestEquip`,
+não um duplicado, e justifica o "Auto" (decide e comita por slot
+sem intervenção manual, diferente do fluxo `Equip()` guiado por UI).
+Marcada `read_structural` (91% < 95%, 0 tabela de salto).
+
+## 491. `GetJobList(unsigned char,short*,int)` — montagem da lista de jobs disponíveis, consumida por `LearnJobStts` (2026-10-23, Fase 3, sexagésimo primeiro lote)
+
+`GetJobList(unsigned char,short*,int)` (`0x1a829c`, 604 B) —
+`jtable.py`: **99% de cobertura** (149/151), zero tabela de salto,
+23 branches/14 de retrocesso. 6 `bl`, todos resolvidos por símbolo:
+`GetLocalJobNumber(short)`, `GetSpecialJob(short)`, `SetBitStream`/
+`SetBitStream2`/`GetBitStream` ×2/`GetBitStream2` ×2 (primitivo
+genérico de bit-packing da biblioteca de janela/menu, seção 39).
+Já chamada diretamente por `LearnJobStts()` (seção 248, tela real de
+navegação de lista de emprego) — confirma `GetJobList` como provedor
+de dados dessa tela, mesma família de consulta job/habilidade de
+`GetAbilityList` (seção 390)/`jobnumber_conv` (seção 454), aqui do
+lado "lista de jobs" em vez de "lista de habilidades por job".
+Marcada `read_full` (99% ≥95%, 0 tabela de salto); pendência
+honesta: layout exato do bitstream de filtro não confirmado.
+
+## 492. `yokoyari_mesput(CTLINFO*,int,int)` — variante de interjeição/interrupção do relatório, corrige a hipótese "tipo de ataque" da seção 117 (2026-10-23, Fase 3, sexagésimo primeiro lote)
+
+`yokoyari_mesput(CTLINFO*,int,int)` (`0x25b9f4`, 604 B) —
+`jtable.py`: **91% de cobertura** (138/151), **1 tabela de salto
+resolvida** (6 casos → 6 handlers distintos), 13 branches/10 de
+retrocesso. 9 `bl`: `Wtask_status` ×2, `Wsend_taskparamater` ×3,
+`Wwrite_eventflag`, `Wtask_create`, `ret_adventurestatus()`,
+**`unittoface(int)`**, **`houkokumes_select(int,int)`** (mesmo
+seletor de texto da mensagem "normal" já visto em `ctlhoukmes_main`,
+seção 117), `ps_rand()`, `iOS_getTouchTap()`. **Corrige a hipótese
+original**: a seção 117 descrevia esta função como "provavelmente
+relatório de um tipo específico de ataque" — o catálogo de `bl`
+(`unittoface` pra obter o retrato de quem interrompe,
+`houkokumes_select` reaproveitando o seletor normal) sustenta melhor
+a leitura idiomática de "yokoyari" (横槧り, interromper uma conversa):
+é a variante de interjeição quando outra unidade interrompe o
+relatório/diálogo em campo, orquestrada como task assíncrona numa
+máquina de 6 estados. Marcada `read_structural` (91% < 95%, apesar
+da tabela resolvida).
+
+## 493. `CSTEP::GetDataF()` — variante float de `CSTEP::GetData`, dispatch de 6 vias por modo de curva de interpolação (2026-10-23, Fase 3, sexagésimo primeiro lote)
+
+`CSTEP::GetDataF()` (`0xbddd8`, 608 B) — `jtable.py`: **89% de
+cobertura** (136/152), **1 tabela de salto resolvida** (6 casos → 6
+handlers distintos), 6 branches/5 de retrocesso. 7 `bl`: 1 local sem
+símbolo (`sub_717d0`, ×2, candidato a helper de clamp/curva
+compartilhado), `__subsf3`/`__addsf3`/`__mulsf3`/`__divsf3`,
+`__floatsisf`, `__aeabi_fcmpeq`. Hipótese: variante que retorna
+`float` do já documentado `CSTEP::GetData()` (retorna `int`,
+usado em `CSTEP::FrameMove` pra avançar a curva de fade até zero) —
+o dispatch de 6 vias seleciona o tipo de curva/modo de interpolação,
+cada handler calculando o valor float via os helpers soft-float.
+Reforça o papel de `CSTEP`/`CSTEP_BATCH` como sistema de animação
+por passos já citado em `Logo_FrameRender` (seção 472)/`Link_Init`
+(seção 405). Marcada `read_structural` (89% < 95%, apesar da tabela
+resolvida; `sub_717d0` não identificado).
+
+**Referências cruzadas (seções 489-493):** seções 34/86/283/394/405/
+453/472/477 (arquitetura de "frame render"/dispatcher de modo, agora
+com o tick real identificado em `AppEngine_FrameStep`), seções 39.1/
+173 (`GetBestEquip`/`ChrPowerCompare`, elo fechado por `AutoEquip`),
+seções 248/390/454 (família de consulta job/habilidade, `GetJobList`
+confirmada como provedora de `LearnJobStts`), seção 117
+(`ctlhoukmes_main`, hipótese de `yokoyari_mesput` corrigida), seção
+405/472 (`CSTEP_BATCH`, `CSTEP::GetDataF` como variante float de
+`GetData`).
+
+## 494. `CFFT_STATE::SetRenderSize(int,int)` — fecha dezenas de referências diretas (mainLoop, ctlmusic_main, ctlchrmake_init), dispatch de 6 vias por modo de tela (2026-10-23, Fase 3, sexagésimo primeiro lote)
+
+`CFFT_STATE::SetRenderSize(int,int)` (`0x28c32c`, 612 B) —
+`jtable.py`: **91% de cobertura** (139/153), **1 tabela de salto
+resolvida** (6 casos → 6 handlers distintos), 11 branches/7 de
+retrocesso. 8 `bl`: 1 local sem símbolo (`sub_71b54`),
+`CFFT_STATE::GetMenuBarVisible()`, `CFFT_STATE::GetParam(int)` ×2,
+e 23 chamadas a helpers soft-float (`__subsf3` ×2, **`__floatsisf`
+×13** — a mais repetida, de longe —, `__mulsf3` ×2, `__divsf3` ×4,
+`__aeabi_fcmpgt` ×2). Fecha dezenas de referências diretas acumuladas
+ao longo da sessão (`mainLoop`, seção 376; `ctlmusic_main`, seção
+388; `ctlchrmake_init`, seção 442) sem nunca ter sido aberta. O
+switch de 6 vias sobre um modo/orientação de tela, combinado com o
+altíssimo uso de conversão int→float, confirma ser o cálculo de
+viewport/escala de renderização — ajusta a área de desenho conforme
+o modo de tela atual (6 variantes: provavelmente orientação/aspect-
+ratio/presença da barra de menu, consultada via
+`GetMenuBarVisible`), convertendo dimensões inteiras pra float pra
+fazer a aritmética de escala e reconvertendo o resultado. Marcada
+`read_structural` (91% < 95%, apesar da tabela resolvida).
+
+**Referência cruzada:** seções 376/388/442 (`mainLoop`/
+`ctlmusic_main`/`ctlchrmake_init`, todas com referência direta agora
+fechada).
