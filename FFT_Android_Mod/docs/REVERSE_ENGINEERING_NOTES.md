@@ -12789,3 +12789,284 @@ campo de `r1` são hipótese, não confirmação por símbolo/struct.
 **Referências cruzadas:** seção 212 (`drawDamage`, hipótese de
 ligação direta não confirmada — função vizinha mas sem call entre
 elas).
+
+## 371. `ctlunreg_init()`/`ctlunreg_main(CTLINFO*)`/`ctlunreg_active(CTLINFO*)`/`ctlunreg_deactive(CTLINFO*)`/`ctlunregmes_init(int)`/`ctlunregmes_main(CTLINFO*)` — fecham o último dos 8 sub-controladores pendentes da seção 312 (2026-10-23, Fase 3, trigésimo sexto lote)
+
+Fecha a última pendência explícita da seção 312 (`ctlbrst_init`,
+hub de 8 sub-controladores: restavam `ctlperson_init`, `ctlopt_init`,
+`ctlhistory_init`, `ctltresure_init`, `ctlunreg_init` — este lote fecha
+`ctlunreg_init` e toda a família "unreg" junto). `jtable.py` nas 6
+funções:
+
+- **`ctlunreg_init()`** (`0x26ef3c`, 308 B, 91% cob., 0 tabela): 4
+  `bl` — `Wread_eventflag`, `Wsend_taskparamater`, `defscrwin_set`
+  (janela de histórico), `curhis_put` — mesmo padrão de init simples
+  visto em `ctlkiroku_init` (seção 365).
+- **`ctlunreg_main(CTLINFO*)`** (`0x26f308`, 484 B, 93% cob., 0
+  tabela): 7 `bl` — `Wtask_status`/`Wsend_taskparamater`,
+  `wldctl_active`, `sound_request` ×2, `ctlunreg_deactive` (a si
+  mesmo), `curhis_get`/`curhis_clr`.
+- **`ctlunreg_active`** (`0x26f070`, 52 B, 92% cob.) e **`ctlunreg_
+  deactive`** (`0x26f0a4`, 24 B, 83% cob.): ambas 0 `bl`,
+  boilerplate puro de transição de estado (set/clear de flag),
+  tamanho condizente com a métrica de boilerplate do projeto.
+- **`ctlunregmes_init(int)`** (`0x26f0bc`, 588 B, 92% cob., 0
+  tabela): 6 `bl` — `Wsend_taskparamater`, `sun_to_ivarisday`/
+  `wld_dayread` (conversão de data do calendário "Ivalice", já
+  catalogadas em contexto de calendário do world map), `pic_load`,
+  `add_winpac`, `pagewin_init(PAGEWININFO*)`.
+- **`ctlunregmes_main(CTLINFO*)`** (`0x26f4ec`, 836 B, 95% cob., 0
+  tabela): 8 `bl` — `sound_request`, `ctlunreg_init()` (re-entrada no
+  controller pai, confirma a tríade), `wldpicwin_set`,
+  `pagewin_main(PAGEWININFO*)`, `LoadClut`/`LoadTPage`/`GsGetTimInfo`
+  (carga de imagem + paleta), `iOS_getTouchTap`.
+
+Confirma a família completa no mesmo padrão já visto em `ctlkiroku`/
+`ctlkiromes` (seção 365): "unreg" é o controller principal (um menu/
+tela com histórico), delegando pra um sub-estado de mensagem/imagem
+"unregmes" que usa o framework `pagewin_*` (`PAGEWININFO`, outro
+candidato de leitura — `iOSpagewin_main` segue na fila de alvos) pra
+exibir conteúdo paginado com data do calendário Ivalice. Hipótese:
+"unreg" pode ser "un-registered"/registro de algo ainda não
+catalogado no jogo (ex. bestiário incompleto, ou histórico de
+eventos não lidos) — não confirmado por falta de string/label
+associada nesta passada. Todas as seis marcadas `read_structural`.
+
+## 372. `ctlbirthokng_init()`/`ctlbirthokng_main(CTLINFO*)` — par OK/NG do diálogo de aniversário, mesmo padrão de `mouke_okng`/`ctlhakenokng_main` (2026-10-23, Fase 3, trigésimo sexto lote)
+
+Fecha o par `ctlbirthokng_init`/`_main`, já citado de passagem na
+seção sobre `ctlbirthday_main` (seção 347: "`ctlbirthday_main` chama
+`ctlbirthokng_init()` uma vez ao terminar a entrada [de diálogo],
+provável confirmação"). `ctlbirthokng_init()` (`0x247dc8`, 236 B, 88%
+cob., 0 tabela): 3 `bl` — `vOpn_add_anmpac`/`vOpn_add_winpac`
+(registro de pacote animação/janela da variante "vOpn", família de
+telas de evento do world map), `iOS_setV2Icon`. `ctlbirthokng_main
+(CTLINFO*)` (`0x248274`, 804 B, 95% cob., 0 tabela): **15 `bl`
+distintos** — `Wwrite_eventflag` ×2, `get_unitwork_add(int)`,
+`fadeMusic`/`stopMusic`/`callSystemSound` ×2 (áudio), `ctlopenmov_
+init` (dispara uma cutscene!), `ctlbirthday_active` (retorno ao
+controller pai), `vOpn_fadeout`/`vOpn_sun2ivaday`/`vOpn_month2day`
+(conversão de data — confirma que aniversário usa o mesmo sistema de
+calendário Ivalice visto em `ctlunregmes_init`), `iOS_ClearRectHitAll`
+×2, `iOS_setMask`, `iOS_clearOkNg()` ×2 (mesmo teardown de
+`mouke_okng`/`ctlhakenokng_main`), `iOS_getV2Icon`/`iOS_setV2Icon` ×6.
+
+Confirma com alta confiança o terceiro membro da família de overlays
+OK/NG já estabelecida (`ctlhakenokng_main`, seção 343; `mouke_okng`,
+seção 366): aqui é a confirmação de "hoje é aniversário de X" —
+`get_unitwork_add` resolve a unidade, `vOpn_month2day`/`sun2ivaday`
+calculam a data, e a resposta OK dispara `ctlopenmov_init` (uma
+cutscene/animação especial de celebração) antes de voltar pro fluxo
+normal via `ctlbirthday_active`. Ambas marcadas `read_structural`.
+
+## 373. `GetShopItemList(short,short,short,short*,int)` — primitiva de inventário de loja, reusada por pelo menos 5 telas já catalogadas (2026-10-23, Fase 3, trigésimo sexto lote)
+
+`GetShopItemList(short,short,short,short*,int)` (`0x1aa6b0`, 884 B)
+— referenciada direta ou indiretamente em pelo menos 5 seções
+anteriores (`PoachBuy`-like, `BuyUnit`, telas de equipar/loja — ver
+grep) sem nunca ter sido lida. `jtable.py`: **99% de cobertura**
+(218/221), zero tabela de salto, 33 branches/19 de retrocesso (laço
+denso, compatível com filtrar/montar uma lista por categoria). 6
+`bl` distintos: `Wread_eventflag`, **`ChgShopStockItem(short,int)`**
+×2 (também vista em contexto de preço/estoque), **`GetItemCategory
+(short)`** ×4, **`ItemSort(int,short*)`**, **`IsAbleEquip(short,
+short)`** ×2, `pspItemGetCommonData` ×2. Confirma ser a rotina real
+que monta a lista de itens disponíveis numa loja: itera o catálogo,
+filtra por categoria (`GetItemCategory`), valida equipabilidade por
+unidade (`IsAbleEquip`) e ordena o resultado (`ItemSort`) — a
+contraparte "venda" de `GetItemList` (inventário possuído, já citada
+em contraste na seção da variante "tentar"/PoachBuy). Marcada
+`read_structural`.
+
+## 374. `iOS_CMenuTouch::setMenuAssistPosition(int)` — versão da classe-base, pura aritmética como a variante SaveLoad mas maior (geometria por item, não por grade) (2026-10-23, Fase 3, trigésimo sexto lote)
+
+`iOS_CMenuTouch::setMenuAssistPosition(int)` (`0x27bd18`, 876 B) —
+contraparte da classe-base pro método já lido na variante `SaveLoad`
+(seção 364, 528 B, 0 `bl`). `jtable.py`: **99% de cobertura** (217/
+219), zero tabela de salto, **zero `bl`** (igual à variante SaveLoad
+— confirma que ambas são aritmética pura, sem delegar a nenhuma
+rotina de desenho), 10 branches/5 de retrocesso. É maior que a
+versão SaveLoad (876 B vs 528 B) com mais branches — consistente com
+a arquitetura já diferenciada na seção 364: a classe-base calcula
+posição por item individual (provavelmente iterando/selecionando
+entre múltiplos retângulos de item com casos de borda por índice),
+enquanto a SaveLoad usa divisão direta sobre uma grade uniforme (mais
+simples, menos branches). Marcada `read_structural` (sem `bl` pra
+cruzar contra outras seções, semântica exata do layout seria preciso
+leitura manual campo a campo — não feita nesta passada).
+
+## 375. `Name(unsigned char*, short*)` — cobertura abaixo do limiar, vizinha direta de `GlobalName` no binário (2026-10-23, Fase 3, trigésimo sexto lote)
+
+`Name(unsigned char*, short*)` (`0x1a1450`, 920 B) — termina exatamente
+onde `GlobalName(unsigned char*, unsigned char*)` (seção 84, `0x1a17e8`)
+começa, sugerindo papel relacionado (possivelmente a versão "local"/
+dentro de um menu específico do mesmo widget de nomear unidade, vs. a
+versão "global"). `jtable.py`: **65% de cobertura** (149/230),
+**abaixo do limiar de 95%** — lacuna real, não aceita automaticamente.
+Zero tabela de salto resolvida (não necessariamente ausente — pode
+haver uma não resolvida dentro da lacuna de 35%). 12 `bl` distintos,
+incluindo 3 locais sem símbolo (`sub_19fb24` ×3, `sub_19feb8`,
+`sub_1a05f0`) e os já conhecidos `unit_isdark`, `iOS_SetScrollNameFunc`
+(confirma ser o mesmo widget de rolagem de letras da seção 84),
+`LoadImage_menuData`, `iOS_ClearRectHitAll`, `GuEmu_SetLineInterval`
+×2, `iOS_getTouchPress`, `iOS_getV2Icon`, `iOS_setV2Icon` ×15 (uso
+intenso de ícones — tela complexa). **Marcada `read_structural` com
+cobertura parcial, pendência honesta**: os 35% restantes (prováveis
+sub-rotinas dos 3 `sub_*` locais ou uma tabela de salto não detectada)
+ficam como alvo de uma passada dirigida futura — a semântica "local
+vs. global" do nome não foi confirmada.
+
+**Referências cruzadas (seções 371-375):** seção 312 (`ctlbrst_init`,
+hub agora com todos os 8 sub-controladores fechados), seção 347
+(`ctlbirthday_main`, referência direta a `ctlbirthokng_init`), seções
+343/366 (`ctlhakenokng_main`/`mouke_okng`, família OK/NG), seção 364
+(`setMenuAssistPosition` SaveLoad, contraste com a versão base),
+seção 84 (`GlobalName`, vizinha de `Name`).
+
+## 376. `mainLoop()` — achado arquitetural: NÃO é o tick de frame, é o dispatcher central de transição entre modos do jogo (2026-10-23, Fase 3, trigésimo sétimo lote)
+
+`mainLoop()` (`0x215db8`, 828 B) — `jtable.py`: **97% de cobertura**
+(200/207), zero tabela de salto, 31 branches/15 de retrocesso. 26
+`bl` distintos (1 local sem símbolo, `sub_215d68`, chamado 3×, ~80 B
+antes do início da própria função).
+
+**O nome sugere um loop de frame clássico (input → física/animação
+→ render → áudio por tick); o catálogo de `bl` contradiz essa
+leitura.** Não há polling de input, update de animação por frame, ou
+chamada de render por frame — em vez disso, o padrão é de um
+**dispatcher de transição de alto nível entre estados/modos do
+jogo**: entrada/saída de batalha (`battle()` ×2, `battleFileRead()`
+×2, `iOS_setEnterBattleFlag` ×2), entrada no world map
+(`wldmapEntry`, `iOS_ResumeWorldMap`, `openEntry`/`endEntry`), título
+(`ctlopentitle_main3`), save/autosave (`pspStartSaveCheck`,
+`pspTitleSaveCheck`, `iOS_ResumeByAutoSave`), inicialização de
+recursos ao entrar num modo (`initFileBuffer`, `initializeStaticTexture`,
+`initializeMusicBuffer`, `InitializeHot`/`iOS_InitializeHot2`,
+`LoadImage_menuData`), flags globais (`write_eventflag` ×4,
+`iOS_set_globalgamestartflag` ×5, `iOS_directedit_clear` ×2), áudio
+(`stopAllEffect` ×2), render-state (`CFFT_STATE::SetRenderSize` ×3,
+não desenho em si), e gerenciamento intenso de ícones de UI
+(`iOS_setV2Icon` ×13 — o `bl` mais repetido da função, de longe).
+
+Hipótese: `mainLoop()` é chamada uma vez por mudança de modo/cena
+(possivelmente pelo laço externo real de renderização nativo
+Android/GL, fora do escopo deste `.so`), não o tick de frame
+propriamente dito — o verdadeiro loop de física/render deve estar em
+outra função chamada por fora, ou dentro de um dos alvos despachados
+aqui (`battle()`, `wldmapEntry`, etc.), cada um com seu próprio loop
+interno. Nenhum candidato óbvio de "tick por frame" aparece no
+catálogo de `bl` desta função. Marcada `read_full` (97% ≥95%, 0
+tabelas de salto — critério automático satisfeito); pendência
+honesta: os ~3% não cobertos (~7 slots) e `sub_215d68` não foram
+inspecionados manualmente — vale conferência futura dado o valor
+arquitetural do achado, e um levantamento de xrefs de quem chama
+`mainLoop()` seria o próximo passo natural pra mapear o loop real.
+
+## 377. `MainPoach()` — controlador/orquestrador da feature Poach, aplica a troca de estoque real que `PoachBuy` evita (2026-10-23, Fase 3, trigésimo sétimo lote)
+
+`MainPoach()` (`0x1a2710`, 832 B) — `jtable.py`: **93% de cobertura**
+(193/208), zero tabela de salto, 26 branches/15 de retrocesso. 13
+`bl` distintos: `Wsend_taskparamater` ×4, `SetFrameRate(int)`,
+`Mituryo(short)` (provável 密猟/"caça ilegal" em japonês — reforça
+ser a função-guarda-chuva do sistema Poach), `IsItem(int)`,
+`ChgShopStockItem(short,int)`, `DrawMessage(int,COMRECORD*)`,
+`SetMenuSelSide`, `WindowPositionInit()`, `iOS_AddClearItem()`,
+`pspSaveDataCheckSystemFlg(FFTPSP_SYSTEM_FLG)`, `iOS_getTouchTap`,
+`iOS_getV2Icon`, `iOS_setV2Icon` ×3.
+
+Achado notável: diferente de `PoachBuy()` (seção 201, que
+explicitamente NÃO chama `ChgShopStockItem`/`ItemChg` — só avalia
+upgrade de equipamento sem aplicar), `MainPoach()` chama
+`ChgShopStockItem` diretamente — sugere que `MainPoach` é o nível
+onde a mutação de estoque real é aplicada após a sub-tela de compra
+confirmar a escolha, orquestrando `PoachBuy`/`PoachSell` (seções 201,
+295, 298) via `Wsend_taskparamater` ×4 e efetivando a transação.
+`SetFrameRate`+`WindowPositionInit` sugerem inicialização de uma
+nova cena/janela; `pspSaveDataCheckSystemFlg` provável gate de
+disponibilidade da feature por progresso de save. Marcada
+`read_structural` — critério objetivo não satisfeito (93% < 95%,
+apesar de 0 tabelas de salto); pendência honesta: ~7% não cobertos
+(~15 instruções) não inspecionados manualmente.
+
+## 378. `DrawPermanentShape(PermanentObject*)` — fecha o ciclo de vida do objeto 3D persistente: requestParmanentEffect → createPermanentObject → DrawPermanentShape (2026-10-23, Fase 3, trigésimo sétimo lote)
+
+`DrawPermanentShape(PermanentObject*)` (`0x229dc8`, 844 B) —
+`jtable.py`: **95% de cobertura** (200/211), zero tabela de salto, 1
+branch total, 0 de retrocesso (sem laços). 10 `bl` distintos:
+`iOS_getSkipAddPrim` (flag de otimização iOS/Android),
+`AddPrim` ×3, `SetDrawMode` ×2, `rsin`/`rcos`, `SetRotMatrix` ×2,
+`SetTransMatrix` ×2, `RotTransPers`, `RotTransPers3`, `RotTrans`.
+
+Catálogo é pipeline de desenho GTE/PS1 puro (matriz de
+rotação+translação, transformação em perspectiva, submissão de 3
+primitivas alternando modo de desenho). Fecha o ciclo de vida do
+objeto 3D persistente já mapeado: `requestParmanentEffect`/ASURA
+(seção 82, aciona) → `createPermanentObject` (seção 158, física) →
+`DrawPermanentShape` (esta função, emite geometria na tela) →
+descarte (não catalogado ainda). Marcada `read_structural` —
+critério automático satisfeito (95% ≥95%, 0 tabelas de salto);
+lacuna honesta: ~5% dos slots (provável epílogo/padding) e layout
+exato dos campos de `PermanentObject` consumidos por
+`SetRotMatrix`/`SetTransMatrix` não confirmados.
+
+## 379. `p18_reflecFunc()` — efeito visual de reflexão de magia/ataque, confirma a família `p[NN]_*Func` de efeitos numerados por ID (2026-10-23, Fase 3, trigésimo sétimo lote)
+
+`p18_reflecFunc()` (`0x222e4c`, 868 B) — `jtable.py`: **98% de
+cobertura** (212/217), zero tabela de salto, 13 branches/6 de
+retrocesso. 10 `bl` distintos: `mallocForFile`/`PSX_LoadImage`/
+`freeForFile` (textura própria do efeito), `getAnimationPosition`
+×2/`getAnimationHeight` (ancoragem num objeto animado),
+`dispPolygonObject` (seção 108), `SetPolyGT3` ×2/`SetSemiTrans` ×2
+(primitivo texturizado semi-transparente), `ratan2` ×2/`SquareRoot0`
+(ângulo/distância GTE).
+
+**Achado importante**: o prefixo "p" + número NÃO é painel/contexto
+de tela como se poderia supor — confirma a mesma família de efeitos
+visuais de habilidade já catalogada por ID (`p01_bowFunc` seção 243,
+`p02_hitMarkFunc` seção 266, `p04_magicChantFunc` seção 88,
+`p20_gunFunc` seção 126, `p22_shoukanFunc` seção 244, todas no bloco
+0x21f000-0x224000). O vocabulário de chamadas é consistente com
+`get_reflection_coord(BWORK*,...)`, já visto na cadeia pós-reação de
+batalha (`getreaction_post`, seção 232) — hipótese: é o efeito visual
+(brilho/flash semi-transparente) que acompanha a reflexão de um
+ataque/magia de volta ao atacante. Ligação direta (via `bl` comum)
+com `get_reflection_coord` não confirmada nesta passada. Marcada
+`read_structural` (98% ≥95%, 0 tabelas de salto — seguindo a mesma
+convenção já usada em `p01_bowFunc`/`p22_shoukanFunc`: `read_full`
+fica reservado pra leitura manual instrução-a-instrução via capstone,
+não feita aqui).
+
+## 380. `placeNameStart()` — banner de nome de local ao entrar numa área/mapa, par Start/End confirmado por símbolo real (2026-10-23, Fase 3, trigésimo sétimo lote)
+
+`placeNameStart()` (`0x210384`, 860 B) — símbolo real do `.dynsym`
+(não hipótese): par imediato com **`placeNameEnd()`** (`0x2106e0`,
+640 B, ainda não lida), confirmando Start/End genuíno. `jtable.py`:
+**99% de cobertura** (212/215), zero tabela de salto, 1 branch
+total/1 de retrocesso (candidato a laço de espera de sincronismo).
+18 `bl` distintos, clássico setup PSX/PSYQ já confirmado em outras
+seções (`wldnormal_lop`, seção 11): `SetDefDispEnv`/`SetDefDrawEnv`
+×2 cada, `PutDispEnv`/`PutDrawEnv`, `SetDispMask` ×2, `SetGeomOffset`/
+`SetGeomScreen` (setup de ambiente de display/draw em duplo-buffer),
+`GetTPage`/`GetClut`+`SetPolyF4`+`SetDrawMode`/`SetSemiTrans` ×2
+(primitiva texturizada — a textura do texto do nome), `ClearOTag`/
+`ClearImage`, `AddPrim` ×3, `DrawSync` ×3, `pspOffScreenInit
+(RECT16*,RECT16*)` (par de retângulos origem/destino, compatível com
+transição/slide de uma região da tela), e 1 local sem símbolo
+(`sub_20fa88`).
+
+Hipótese de semântica: o banner clássico de "nome do local"
+(ex. "Igros", "Dorter") que aparece ao entrar numa área/mapa no FFT —
+`placeNameStart` configura o ambiente duplo-buffer, limpa OT e
+framebuffer, monta e insere a primitiva texturizada do texto, e
+sincroniza; `placeNameEnd` (não lida) deve conter a lógica simétrica
+de ocultar/limpar o mesmo banner. Marcada `read_structural` (99%
+≥95%, 0 tabelas de salto); pendências honestas: `sub_20fa88` não
+resolvido, `placeNameEnd()` como próximo alvo natural de follow-up.
+
+**Referências cruzadas (seções 376-380):** seção 82 (`executeShape`/
+ASURA, aciona o ciclo de `DrawPermanentShape`), seção 158
+(`createPermanentObject`), seção 201/295/298 (`PoachBuy`/`PoachSell`,
+orquestrados por `MainPoach`), seções 88/126/243/244/266 (família
+`p[NN]_*Func`), seção 232 (`getreaction_post`/`get_reflection_coord`,
+vocabulário compartilhado com `p18_reflecFunc`), seção 11
+(`wldnormal_lop`, mesmo setup PSX/PSYQ de `placeNameStart`).
