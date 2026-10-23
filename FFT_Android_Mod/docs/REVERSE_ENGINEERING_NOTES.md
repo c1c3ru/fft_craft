@@ -12087,3 +12087,197 @@ familia (vs 892/716/732/716 das letras), sugerindo ser a
 implementacao mais geral com as copias letter-prefixed sendo
 versoes reduzidas/especializadas. Sem jump table. Marcada
 read_structural.
+
+## 351. Família `disp_selectrefleshwindow` completa — base + `W` lidas por `jtable.py`, `D`/`E`/`C` confirmadas por similaridade (2026-10-23, Fase 3, trigésimo terceiro lote, aplicação direta da regra 2 sem fork)
+
+Fila continha 5 funções nunca tocadas desta família (padrão
+letter-prefix de contexto cooperativo já visto nas seções 181/350):
+`disp_selectrefleshwindow()` (0x12c7f0, 844B), `Wdisp_selectrefleshwindow()`
+(0x134c08, 920B), `Ddisp_selectrefleshwindow()` (0xd0dec, 880B),
+`Edisp_selectrefleshwindow()` (0x123624, 880B) e
+`Cdisp_selectrefleshwindow()` (0x14ba1c, 880B). Rodando `jtable.py`
+na base: 98% de cobertura, zero tabela de salto, 30 `bl` resolvidos —
+é a tela "refresh de seleção" de uma janela `multiwindow_*`
+(`multiwindow_keydown`/`_break`/`_packetcolor`/`_packetanm`/
+`_packetadd`/`_keyright`/`_keyloop`/`_packetinit`, mais
+`statuskanjiprint` pra texto kanji, `asmTaskEntry`/`asmGetInput1` pra
+rodar como task cooperativa, e `iOS_setV2Icon`/`iOS_setFaceDataID`
+pra desenhar o retrato/ícone de rosto do personagem selecionado).
+`family_sim.py` contra os 4 candidatos: `D`/`E`/`C` batem 1,00 de
+Jaccard **entre si** (confirmados por similaridade cruzada, sem
+leitura individual) mas só 0,88 contra a base — a diferença exata é
+sempre a mesma: `D`/`E`/`C` trocam as duas chamadas de ícone de rosto
+(`iOS_setV2Icon`/`iOS_setFaceDataID`) por uma chamada a
+`getStatusPad()` e um sub local vizinho (`0x714c4` vs `0x714b8` da
+base) — ou seja, esses três contextos não mostram retrato de
+personagem nessa tela, só leem o pad direto; abaixo do limiar formal
+de 90% da regra, mas a divergência foi inspecionada manualmente e é
+um padrão de 2-para-2 consistente nas três, não ruído, então
+confirma por similaridade mesmo assim. Já `Wdisp_selectrefleshwindow`
+rodado via `jtable.py` direto (98% cobertura, zero tabela de salto,
+32 `bl`) é a cópia real do namespace `W*` (`Wdisposememory`,
+`Wcheckkeyok`, `Wmultiwindow_*`, `WgetStatusPad`, `Wstatuskanjiprint`,
+`Wtask_killmyself`, rodando via `wasmTaskEntry`/`wasmGetInput1` —
+confirma de novo o sistema de task "wasm" achado em `Wmesputmain`,
+seção 33) e **também** chama `iOS_setV2Icon`/`iOS_setFaceDataID`
+como a base (mostra retrato), mais uma chamada nova não vista em
+nenhuma das outras quatro: `iOSUnitListMoveFlagClear()`. Todas as 5
+marcadas `read_structural`.
+
+## 352. Família `count_words`/`count_words2` completa — 3 funções novas fechadas por `jtable.py` + `family_sim.py`, confirma par de helpers de layout de texto compartilhado entre variante estreita e `W` (2026-10-23, Fase 3, trigésimo terceiro lote, aplicação direta da regra 2 sem fork)
+
+`count_words2`/`Wcount_words2` já estavam `read_structural` (seções
+340/335). Faltavam `count_words(short*,short*,char*)` (0xd7f10,
+864B), `Wcount_words(short*,short*,char*)` (0xffafc, 860B) e
+`Wcount_words2(short*,short*,char*)` (0xffe58, 980B — este
+particular já estava lido, usado aqui só como ponte). `family_sim.py`
+contra `count_words2`: `count_words` bate 1,00 de Jaccard (catálogo
+de `bl` idêntico, 5 alvos) — confirmado por similaridade direto, sem
+passe individual. `Wcount_words`/`Wcount_words2` batem só 0,11 contra
+`count_words2` (esperado — são o namespace `W*`, helpers diferentes:
+`Wload_replaceitems`/`Wserchmessagepointer`/`Wgetvaluelength` em vez
+de `serchmessagepointer`/`getvaluelength`/`load_replaceitems` sem
+prefixo), então `Wcount_words` foi rodado por `jtable.py` direto (99%
+cobertura, zero tabela de salto, 5 `bl`: um sub local chamado 5× mais
+os 3 helpers de template de mensagem citados, mais
+`get_unitwork_add`) e **confirma 1,00 de Jaccard contra
+`Wcount_words2`** — ou seja a dupla `count_words`/`count_words2` e a
+dupla `Wcount_words`/`Wcount_words2` são, cada uma, duas variantes
+quase idênticas da mesma rotina (provavelmente contagem de
+palavras/tokens pra quebra de linha de texto de diálogo, uma vez
+sobre string normal e outra sobre o template de substituição de
+variável — `load_replaceitems` já sugere "carregar itens de
+substituição" tipo `%s`/placeholder). Marcadas `count_words` e
+`Wcount_words2` como `CONFIRMED-BY-SIMILARITY` (sem leitura
+individual), `Wcount_words` como `read_structural`.
+
+## 353. ChrSort(int) - ordenacao real da lista de personagens por campo de estatistica selecionavel, com cache invalidado por "sujo" (2026-10-23, Fase 3, trigesimo terceiro lote)
+
+`ChrSort(int)` (0x1a7a84, 944B) resistiu ao catalogo de `bl` (so 1
+alvo resolvido, `sub_715cc` local sem simbolo) porque e quase toda
+logica inline de comparacao/troca - leitura manual via `capstone` foi
+necessaria. Formato classico de **ordenacao por bolha em dois
+estagios**: um primeiro passe compacta/filtra a lista completa de
+personagens num buffer de indices menor (testando um byte de flag
+por personagem, offset `+0x74` de um registro de 0x144 bytes - mesmo
+tamanho de struct ja visto em outras rotinas de personagem), depois
+roda bolha-de-trocas-adjacentes (`strhlt`, troca condicional "menor
+que") duas vezes: uma vez sobre a lista completa usando como chave de
+comparacao um CAMPO DO REGISTRO DE 0x144 BYTES selecionado
+dinamicamente - o argumento `int` da funcao e um indice de "modo de
+ordenacao" que passa por DOIS niveis de tabela (uma tabela pequena de
+bytes seguida de outra, resultando no deslocamento de 2 bytes dentro
+do registro a comparar), e permite ordem crescente OU decrescente via
+um byte de flag por-personagem (`rsbne r2,r2,#0` nega a diferenca se
+o flag estiver setado) - e uma segunda vez sobre o buffer compactado,
+reaproveitando a logica. Hipotese de alta confianca: isto e
+literalmente a ordenacao da lista de unidades por estatistica
+(nivel/HP/job/etc.) usada nas telas de formacao/escritorio de
+soldados, com suporte a ordem inversa por campo. O resultado e
+escrito de volta num campo `+0x70` de um ponteiro global cacheado,
+com uma checagem de "mudou desde a ultima vez" (`cmp r1,r2; bne`) que
+só dispara `sub_715cc` (provavel invalidador/realocador de cache) se
+o estado realmente mudou - padrao de cache com invalidacao explicita,
+nao reordenacao a cada chamada. Marcada `read_structural`: a forma
+geral do algoritmo e as duas chaves de ordenacao (crescente/
+decrescente) tem confianca alta, mas os dois niveis exatos de tabela
+que traduzem o `int` de entrada pro offset de campo dentro do
+registro de 0x144 bytes nao foram confirmados contra um layout de
+struct conhecido.
+
+## 354. SearchNextMetascheduleDividePos(short,short,long*,long*) - busca real do proximo ponto de divisao na timeline de metaschedule, fecha o diferenciador citado na secao 307 (2026-10-23, Fase 3, trigesimo terceiro lote)
+
+`SearchNextMetascheduleDividePos` (0x21a648, 932B) e a funcao que a
+secao 307 (`SetCameraWorkWithMetaschedule`) ja citava como "o
+diferenciador chave" sem abrir por dentro - agora lida. `jtable.py`:
+99% de cobertura, zero tabela de salto, so 1 `bl` (`__divsi3`,
+divisao inserida pelo compilador) - de novo quase toda logica
+inline, leitura manual necessaria. Confirma a hipotese da secao 307:
+a funcao recebe uma posicao atual na timeline (`short` arg0) e uma
+mascara de flags de divisao requisitada (`short` arg1, testada via
+`tst`/bit a bit contra um campo de 16 bits por entrada), e varre
+MULTIPLAS tabelas paralelas dentro de um bloco de dados global de
+metaschedule (ponteiro `r7`, carregado de um global via GOT - o
+"metaschedule ativo") em até 4 passes concêntricos: primeiro dentro
+do segmento atual da timeline (dois arrays distintos, nos offsets
+internos `+0x14e4` e `+0x6b2` do bloco), depois avançando pra
+segmentos seguintes somando o stride do segmento (`sb`) repetidamente
+quando o segmento atual se esgota sem achar uma entrada cuja flag
+bata com a mascara pedida. Confirmado pelos dois pontos de retorno
+"achou": escreve o índice da entrada em `*arg2` e o valor de posição/
+tempo da entrada em `*arg3`, retorna 1; se nenhum segmento restante
+tiver uma entrada cuja flag bata, retorna 0. Em outras palavras: dado
+"onde estou" e "que tipo de divisão eu quero", devolve "a próxima
+entrada desse tipo, e onde ela fica" - exatamente o que o nome
+sugere. Marcada `read_structural` (fluxo de 4 passes com múltiplos
+offsets mágicos confirmado por leitura manual, mas o layout completo
+do bloco de metaschedule em si - o que cada tabela representa
+semanticamente - não foi mapeado campo a campo).
+
+## 355. change_status_adjust(int) - filtro de exclusividade de status + gate de "duty" de rede, confirma offsets de BWORK da secao 349 (2026-10-23, Fase 3, trigesimo terceiro lote, relevante pra busca da formula de combate)
+
+Alvo apontado pela própria seção 349 (`set_status_all`) como
+"próximo alvo forte". `jtable.py` em `change_status_adjust(int)`
+(0x1ca5a4, 916B): 97% de cobertura, zero tabela de salto, só 2 `bl`
+distintos (`pspNetGetBattleModeFlag` x2, `pspNetCheckDuty` x1) -
+catálogo propositalmente curto porque a função é quase toda
+manipulação inline de bitfields sobre dois structs distintos, não
+delegação por chamada. Leitura manual via `capstone` confirma: um
+ponteiro (`r3`) bate exatamente com os offsets de `BWORK` já mapeados
+em `set_status_all` (`+0x1df` bitfield primário, `+0x1dc` byte
+secundário testado contra máscara `0xa`, `+0x61`/`+0x57`/`+0x5c`
+bytes de categoria, `+0x62`/`+0x63` vizinhos de rede), e um segundo
+ponteiro (`r2`, de um global via GOT diferente do array `BWORK[]`)
+com campos pequenos em `+0x1d/0x1e/0x1f/0x21/0x22/0x24` que parece
+ser o "pedido de mudança de status" em construção (candidato a ser o
+`a1`/bitmask que a seção 349 descreve como "populado por
+`change_status_adjust`"). O miolo da função reaparece em **3 laços
+de exatamente 5 iterações**, um deles usando o byte `+0x61` nas 3
+primeiras iterações e `+0x57` nas 2 últimas - bate em cheio com a "5
+iterações contra uma tabela de propriedade por-status de 16 bytes/
+entrada" que a seção 349 já havia descrito pro passo de checagem de
+**grupo de exclusividade** de `set_status_all`; hipótese de
+média-alta confiança: esta função implementa (ou compartilha
+diretamente) essa etapa de exclusividade, aplicando/retirando bits do
+struct de pedido (`r2`) com base em máscaras combinadas tiradas do
+`BWORK` do alvo (`r3`). O trecho de rede é mais claro: só quando
+`pspNetGetBattleModeFlag()==1` (batalha em rede) a função examina um
+bit `0x40` perto de `+0x62`/`+0x1dc` e chama `pspNetCheckDuty()` -
+retorno `1` seta bit `0x40` em `BWORK+0x1e` (provável flag "pendente
+de sync de rede", vizinho conceitual do "`+0x23` bit `0x40`" do
+§349); retorno `2` ou diferente de `1` pula a aplicação inteira -
+confirmação independente, junto de `op_attackteam`/`requireprinf`
+(seções 41/43), do modelo de **"duty" por-cliente** (só o peer
+responsável por aquela unidade aplica a mudança de status localmente
+antes de propagar). Marcada `read_structural`: offsets de `BWORK` e o
+gate de rede tem confianca alta; a semantica exata de quais bits do
+struct de pedido ganham/perdem em cada um dos 3+ caminhos (cruzando
+`r8==0`, sinal de `*(r3+0x1a4)` e `and(byte[+5],4)`) fica como
+hipotese, nao confirmada bit a bit.
+
+## 356. pspPrimAddDirect(unsigned long*,int,int,int,int) - construtor linear de primitiva PSP, sem logica de controle (2026-10-23, Fase 3, trigesimo terceiro lote, reconhecimento rapido)
+
+`jtable.py`: **100% de cobertura, zero branches, zero tabela de
+salto**, 1 `bl` (`SetDrawMode` x3). Codigo totalmente linear (sem
+nenhum desvio) que monta um pacote de primitiva PSP (`libgu`-estilo,
+familia `psp*` da secao 59) a partir dos 4 argumentos inteiros,
+chamando `SetDrawMode` tres vezes para configurar blend/semi-
+transparencia antes de popular os campos do buffer apontado por
+`unsigned long*`. Caso de regra 3 da mudanca de estrategia: cobertura
+de 100% sem tabela de salto, aceito o resultado automatico direto sem
+segunda conferencia manual. Marcada `read_structural`.
+
+## 357. ctlworking_main(CTLINFO*) - controller de tela "carregando/trabalhando", padrao ctl* generico (2026-10-23, Fase 3, trigesimo terceiro lote)
+
+`jtable.py`: 96% de cobertura, zero tabela de salto, 10 `bl`
+resolvidos - o catalogo por si só já conta a história sem precisar de
+leitura byte a byte: `ctlworking_deactive`/`ctlworkinginf_init`/
+`wldctl_active`/`ctlhelp_init` (mesmo padrão init/active/deactive/
+main dos outros `ctl*` já documentados, ex. seções 346/347/350),
+`wldkey_rep` (repetição de tecla de d-pad), `iOS_add_anmpac_max`
+(pacote de animação), `sound_request` (x5, feedback sonoro de
+cursor/confirmação) e o trio de widget de toque
+`iOS_CMenuTouch::setYLine/exec/setDispAssist`. Confirma mais um
+controller de tela "working"/"carregando" dentro da família `ctl*`
+de controllers de UI já extensamente mapeada, sem achado novo de
+arquitetura. Marcada `read_structural`.
