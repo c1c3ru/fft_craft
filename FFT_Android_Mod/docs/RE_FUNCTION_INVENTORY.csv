@@ -474,7 +474,7 @@ address,size,mangled,demangled,status,section_ref
 0009c9a0,764,drft_init,drft_init,unread,
 001fe718,764,_Z21changeAnimationStatusiii,"changeAnimationStatus(int, int, int)",read_structural,NOTES §411
 0025f694,764,_Z13wldnormal_lopv,wldnormal_lop(),read_full,NOTES §11.1
-0026a874,764,_Z9snpl_initi,snpl_init(int),unread,
+0026a874,764,_Z9snpl_initi,snpl_init(int),read_structural,NOTES §431
 0008e340,756,vorbis_lpc_to_lsp,vorbis_lpc_to_lsp,read_structural,NOTES §336
 00102b20,756,_Z11Wmove_lightv,Wmove_light(),read_structural,NOTES §385
 001a8620,756,_Z14GetAbilityListssiPsi,"GetAbilityList(short, short, int, short*, int)",read_structural,NOTES §390
@@ -517,7 +517,7 @@ address,size,mangled,demangled,status,section_ref
 000a67d8,708,_ZN15CG2D_LOADER_TIM12TIM_LoadFileEPcj,"CG2D_LOADER_TIM::TIM_LoadFile(char*, unsigned int)",read_structural,NOTES §316
 000ec644,708,_Z20multiwindow_keyrightP9COMRECORDi,"multiwindow_keyright(COMRECORD*, int)",read_structural,NOTES §413
 0010558c,708,_Z21Wmultiwindow_keyrightP9COMRECORDi,"Wmultiwindow_keyright(COMRECORD*, int)",read_structural,NOTES §413
-001981b0,708,_Z10jValueFuncPh,jValueFunc(unsigned char*),unread,
+001981b0,708,_Z10jValueFuncPh,jValueFunc(unsigned char*),read_structural,NOTES §438
 00267c74,708,_Z15ctlretokng_mainP7CTLINFO,ctlretokng_main(CTLINFO*),read_structural,NOTES §414
 00201ca4,704,_Z10callEffectiP13tag_animation,"callEffect(int, tag_animation*)",read_structural,NOTES §418
 0021ba18,704,_Z17DynamicsAllObjectP7_Object,DynamicsAllObject(_Object*),read_structural,NOTES §417
@@ -533,7 +533,7 @@ address,size,mangled,demangled,status,section_ref
 00162e94,692,_Z18ASHURA_LightSwitchl,ASHURA_LightSwitch(long),read_structural,NOTES §427
 0029b134,692,_Z17xpLib_DebugImportv,xpLib_DebugImport(),unread,
 002ca8a0,688,__aeabi_dsub,__aeabi_dsub,unread,
-00187264,688,_Z10MakeHeaderiiP11CARD_HEADER,"MakeHeader(int, int, CARD_HEADER*)",unread,
+00187264,688,_Z10MakeHeaderiiP11CARD_HEADER,"MakeHeader(int, int, CARD_HEADER*)",read_structural,NOTES §437
 0026883c,688,_Z9rute_findii,"rute_find(int, int)",read_structural,NOTES §422
 002ca8a0,688,__subdf3,__subdf3,unread,
 002ca8a4,684,__aeabi_dadd,__aeabi_dadd,unread,
@@ -541,15 +541,15 @@ address,size,mangled,demangled,status,section_ref
 001f2cd8,684,_Z18getDisplayPositionv,getDisplayPosition(),read_full,NOTES §425
 00270c90,684,_Z12pagewin_mainP11PAGEWININFO,pagewin_main(PAGEWININFO*),read_structural,NOTES §381
 002ca8a4,684,__adddf3,__adddf3,unread,
-001c245c,680,_Z8UnitSortv,UnitSort(),unread,
+001c245c,680,_Z8UnitSortv,UnitSort(),read_structural,NOTES §433
 00220548,680,_Z13p15_deathFuncv,p15_deathFunc(),read_structural,NOTES §410
-00263fcc,680,_Z17ctlnobelstop_initv,ctlnobelstop_init(),unread,
-000a1a5c,676,_ZN10CG2D_COLOR8HSBToRGBEtttPj,"CG2D_COLOR::HSBToRGB(unsigned short, unsigned short, unsigned short, unsigned int*)",unread,
-0021b5bc,676,_Z10LoadEffectv,LoadEffect(),unread,
+00263fcc,680,_Z17ctlnobelstop_initv,ctlnobelstop_init(),read_structural,NOTES §432
+000a1a5c,676,_ZN10CG2D_COLOR8HSBToRGBEtttPj,"CG2D_COLOR::HSBToRGB(unsigned short, unsigned short, unsigned short, unsigned int*)",read_full,NOTES §436
+0021b5bc,676,_Z10LoadEffectv,LoadEffect(),read_structural,NOTES §429
 0029ae90,676,_Z17xpLib_DebugExportv,xpLib_DebugExport(),unread,
-0015e144,672,_Z13iOSGetChrListv,iOSGetChrList(),unread,
+0015e144,672,_Z13iOSGetChrListv,iOSGetChrList(),read_full,NOTES §435
 001d15d8,672,_Z20iOS_RESUME_SET_BCALCP21IOS_RESUME_DATA_BCALC24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_BCALC(IOS_RESUME_DATA_BCALC*, IOS_RESUME_DATACOPY_MODE)",unread,
-0026df48,672,_Z15ctlhentuto_mainP7CTLINFO,ctlhentuto_main(CTLINFO*),unread,
+0026df48,672,_Z15ctlhentuto_mainP7CTLINFO,ctlhentuto_main(CTLINFO*),read_full,NOTES §434
 002ab9e8,672,sceGuScissor,sceGuScissor,unread,
 000dd9fc,668,_Z23make_abilitycommandmainv,make_abilitycommandmain(),unread,
 00160fb4,668,_Z21iOSYajiEffectSetLRTGAi,iOSYajiEffectSetLRTGA(int),unread,
@@ -1222,7 +1222,7 @@ address,size,mangled,demangled,status,section_ref
 001ac774,280,_Z10DrawLineG3P6RECT16P5COLORii,"DrawLineG3(RECT16*, COLOR*, int, int)",unread,
 001c0564,280,_Z11LRCurChrChgs,LRCurChrChg(short),read_structural,NOTES §402
 00200e2c,280,_Z16eventFukanChangei,eventFukanChange(int),unread,
-0021b108,280,_Z13LoadEffectTIMs,LoadEffectTIM(short),unread,
+0021b108,280,_Z13LoadEffectTIMs,LoadEffectTIM(short),read_structural,NOTES §429
 0024935c,280,_Z13vOpn_swapbuffv,vOpn_swapbuff(),unread,
 0024971c,280,_Z12vOpn_key_repm,vOpn_key_rep(unsigned long),unread,
 000a2014,276,_ZN11CG2D_LOADER22GetSavePixelFormatDataEjiPi,"CG2D_LOADER::GetSavePixelFormatData(unsigned int, int, int*)",read_structural,NOTES §316
@@ -1637,12 +1637,12 @@ address,size,mangled,demangled,status,section_ref
 002b1e70,200,_Z20NowLoading_FrameMovev,NowLoading_FrameMove(),unread,
 002b19ec,196,_Z16AppEngine_Uninitv,AppEngine_Uninit(),unread,
 000ad938,196,_ZN12CEGL2_SPRITE6UnloadEi,CEGL2_SPRITE::Unload(int),mentioned_unverified,
-000e2a40,196,_Z16iOS_valueput_FT4P11tagPOLY_FT4P11VALUERECORDP9COPYFIELDiPviii,"iOS_valueput_FT4(tagPOLY_FT4*, VALUERECORD*, COPYFIELD*, int, void*, int, int, int)",unread,
+000e2a40,196,_Z16iOS_valueput_FT4P11tagPOLY_FT4P11VALUERECORDP9COPYFIELDiPviii,"iOS_valueput_FT4(tagPOLY_FT4*, VALUERECORD*, COPYFIELD*, int, void*, int, int, int)",read_full,NOTES §430
 000da720,196,_Z17tutorial_hookfuncv,tutorial_hookfunc(),unread,
 002a0bc4,196,ScaleMatrixL,ScaleMatrixL,unread,
 00211e50,196,_Z27setPresentClutDataAsDefaultjji,"setPresentClutDataAsDefault(unsigned int, unsigned int, int)",unread,
 0021025c,196,_Z19InitializePartyItemv,InitializePartyItem(),unread,
-001114b0,196,_Z17WiOS_valueput_FT4P11tagPOLY_FT4P11VALUERECORDP9COPYFIELDiPviii,"WiOS_valueput_FT4(tagPOLY_FT4*, VALUERECORD*, COPYFIELD*, int, void*, int, int, int)",unread,
+001114b0,196,_Z17WiOS_valueput_FT4P11tagPOLY_FT4P11VALUERECORDP9COPYFIELDiPviii,"WiOS_valueput_FT4(tagPOLY_FT4*, VALUERECORD*, COPYFIELD*, int, void*, int, int, int)",read_full,NOTES §430
 001383a4,196,_Z7maptestv,maptest(),unread,
 0015ea80,196,_Z20iOSBtlStsButtonCheckv,iOSBtlStsButtonCheck(),unread,
 0015fdec,196,_Z15iOSJobChgRotActv,iOSJobChgRotAct(),unread,
@@ -1825,7 +1825,7 @@ address,size,mangled,demangled,status,section_ref
 002116f0,168,_Z15padReadGeneratev,padReadGenerate(),unread,
 00217e14,168,_Z19InitEffectAnimationv,InitEffectAnimation(),unread,
 00248b70,168,_Z14ctlpremov_initiiiiiPc,"ctlpremov_init(int, int, int, int, int, char*)",unread,
-00263ef4,168,_Z15ctlnobel_activeP7CTLINFO,ctlnobel_active(CTLINFO*),unread,
+00263ef4,168,_Z15ctlnobel_activeP7CTLINFO,ctlnobel_active(CTLINFO*),read_structural,NOTES §432
 00272598,168,_Z24SetMoveAreaSafePanelOnlyv,SetMoveAreaSafePanelOnly(),unread,
 0029e194,168,_Z9_gte_rtirv,_gte_rtir(),unread,
 002b3610,168,_Z16Boot_FrameRenderv,Boot_FrameRender(),unread,
@@ -1892,12 +1892,12 @@ address,size,mangled,demangled,status,section_ref
 000ba264,156,_ZN9CSOUND_IFD1Ev,CSOUND_IF::~CSOUND_IF(),unread,
 000bba00,156,_ZN12CSOUND_IF_SL9SetVolumeEii,"CSOUND_IF_SL::SetVolume(int, int)",mentioned_unverified,
 000baf74,156,_ZN9CSOUND_IF7SetMuteEii,"CSOUND_IF::SetMute(int, int)",unread,
-000e226c,156,_Z8valueputPcP11VALUERECORDP9COPYFIELDi,"valueput(char*, VALUERECORD*, COPYFIELD*, int)",unread,
+000e226c,156,_Z8valueputPcP11VALUERECORDP9COPYFIELDi,"valueput(char*, VALUERECORD*, COPYFIELD*, int)",read_full,NOTES §430
 00216458,156,_Z12disposeMusici,disposeMusic(int),mentioned_unverified,
 000d7a48,156,_Z13disposememoryPc,disposememory(char*),unread,
 000da280,156,_Z18recieve_statusinfov,recieve_statusinfo(),unread,
 000db3a4,156,_Z13envvolcontrolv,envvolcontrol(),unread,
-00110d28,156,_Z9WvalueputPcP11VALUERECORDP9COPYFIELDi,"Wvalueput(char*, VALUERECORD*, COPYFIELD*, int)",unread,
+00110d28,156,_Z9WvalueputPcP11VALUERECORDP9COPYFIELDi,"Wvalueput(char*, VALUERECORD*, COPYFIELD*, int)",read_full,NOTES §430
 002b6bd0,156,_Z23iOSUnitListAreaTapCheckv,iOSUnitListAreaTapCheck(),unread,
 001bb224,156,_Z11SetSttsEqu2i,SetSttsEqu2(int),unread,
 001bb590,156,_Z14AllSttsRefleshv,AllSttsReflesh(),unread,
@@ -2118,7 +2118,7 @@ address,size,mangled,demangled,status,section_ref
 001ed794,132,_Z17getAnimationHightP13tag_animation,getAnimationHight(tag_animation*),unread,
 0021a5c4,132,_Z27SearchNextScheduleDividePosssPlS_,"SearchNextScheduleDividePos(short, short, long*, long*)",unread,
 0024a414,132,_Z12vOpn_pacdrawPmS_i,"vOpn_pacdraw(unsigned long*, unsigned long*, int)",unread,
-002642f4,132,_Z21ctlnobelstop_deactiveP7CTLINFO,ctlnobelstop_deactive(CTLINFO*),unread,
+002642f4,132,_Z21ctlnobelstop_deactiveP7CTLINFO,ctlnobelstop_deactive(CTLINFO*),read_structural,NOTES §432
 0026dcbc,132,_Z16ctltuto_deactiveP7CTLINFO,ctltuto_deactive(CTLINFO*),unread,
 0026a120,132,_Z10snpl_rndjpv,snpl_rndjp(),mentioned_unverified,
 002b2714,132,_Z12EnvSE_SetVolii,"EnvSE_SetVol(int, int)",unread,
@@ -2166,7 +2166,7 @@ address,size,mangled,demangled,status,section_ref
 00266654,128,_Z10add_winpacPmPi,"add_winpac(unsigned long*, int*)",unread,
 002701a4,128,_Z14wldwin_noropeni6RECT16iiPm,"wldwin_noropen(int, RECT16, int, int, unsigned long*)",mentioned_unverified,
 0024fd74,128,_Z22pspCtltutonet_deactiveP7CTLINFO,pspCtltutonet_deactive(CTLINFO*),unread,
-00264274,128,_Z19ctlnobelstop_activeP7CTLINFO,ctlnobelstop_active(CTLINFO*),unread,
+00264274,128,_Z19ctlnobelstop_activeP7CTLINFO,ctlnobelstop_active(CTLINFO*),read_structural,NOTES §432
 0025f0b8,128,_Z8pic_loadi,pic_load(int),unread,
 0025f168,128,_Z7bk_loadi,bk_load(int),unread,
 0027b240,128,_Z15GetCountToDeathP5BWORK,GetCountToDeath(BWORK*),mentioned_unverified,
@@ -3514,7 +3514,7 @@ address,size,mangled,demangled,status,section_ref
 00258e08,52,_Z12evt_town_setv,evt_town_set(),mentioned_unverified,
 00258e3c,52,_Z12evt_town_clrv,evt_town_clr(),mentioned_unverified,
 0025d618,52,_Z15wldiwasaki_initv,wldiwasaki_init(),read_full,NOTES §12.2
-0026b2bc,52,_Z13snplflg_writePmii,"snplflg_write(unsigned long*, int, int)",unread,
+0026b2bc,52,_Z13snplflg_writePmii,"snplflg_write(unsigned long*, int, int)",read_full,NOTES §431
 00266efc,52,_Z17pspGetWarFundsOfsPsS_,"pspGetWarFundsOfs(short*, short*)",mentioned_unverified,
 002825e0,52,_Z22iOS_disableClipFT4_Seti,iOS_disableClipFT4_Set(int),unread,
 00282548,52,_Z22iOS_disableClipFT3_Seti,iOS_disableClipFT3_Set(int),unread,
@@ -3783,7 +3783,7 @@ address,size,mangled,demangled,status,section_ref
 00256e70,44,_Z18ctltownmenu_activeP7CTLINFO,ctltownmenu_active(CTLINFO*),unread,
 00256e9c,44,_Z20ctltownmenu_deactiveP7CTLINFO,ctltownmenu_deactive(CTLINFO*),unread,
 0025d7f0,44,_Z11wldfrm_rectiP6RECT16,"wldfrm_rect(int, RECT16*)",mentioned_unverified,
-0026b2f0,44,_Z12snplflg_readPmi,"snplflg_read(unsigned long*, int)",unread,
+0026b2f0,44,_Z12snplflg_readPmi,"snplflg_read(unsigned long*, int)",read_full,NOTES §431
 002a264c,44,RotTransSV,RotTransSV,mentioned_unverified,
 00269930,44,_Z12snpl_setparav,snpl_setpara(),mentioned_unverified,
 00269e6c,44,_Z12snpl_sndstopv,snpl_sndstop(),unread,

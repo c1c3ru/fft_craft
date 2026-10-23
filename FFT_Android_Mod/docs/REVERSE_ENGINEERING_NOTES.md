@@ -14305,3 +14305,230 @@ e reuso confirmados por `getDisplayPosition`), seção 252
 `extend_systemframe`), seção 68 (`ASHURA_set_Mesh`, provável
 chamadora de `ASHURA_LightSwitch`), seção 331 (`ctlsthelp_main`,
 ciclo de hit-test agora completo com `iOS_RectHitExecute`).
+
+## 429. `LoadEffect()`/`LoadEffectTIM(short)` — carregamento assíncrono de dados de efeito, confirma o estado "PEffect" mas ainda não localiza o dispatch por ID (2026-10-23, Fase 3, quadragésimo oitavo lote)
+
+`LoadEffect()` (`0x21b5bc`, 676 B) — `jtable.py`: **82% de
+cobertura** (139/169), **1 tabela de salto resolvida** (4 casos → 4
+handlers distintos), 15 branches/9 de retrocesso. 6 `bl`:
+`fileReadRequest`/`fileReadCheck` (I/O assíncrono, mesma família de
+`ASHURA_GNS_Garage`/`ASHURA_GNS_Read`, seção 81/398),
+`effectFadeoutMusic(int,int)`, `SetEffectSetUpDataPtr(short)`,
+**`GetPEffectStatus(unsigned char)`**, **`PermanentEffectEndRequest
+(unsigned char)`**. `LoadEffectTIM(short)` (`0x21b108`, 280 B, 97%
+cob., 0 tabela, 3 branches/1 de retrocesso): 3 `bl` — `loadClutData`
+×2, `PSX_LoadImage`, `ClearImage` (carrega a textura TIM + paleta de
+um efeito específico). Confirma mais uma peça do estado "PEffect"
+(`GetPEffectStatus`/`PermanentEffectEndRequest`, companheiras de
+`NewPEffectTCB`, seção 420) — `LoadEffect` é o carregador assíncrono
+de dados (arquivo + textura) de um efeito, com switch de 4 vias
+sobre o estágio de carregamento (não sobre ID de habilidade). **O
+dispatch por ID das 23 `p[NN]_*Func` continua não localizado** nesta
+cadeia (`callEffect`→`StartEffect`→`StartPermanentEffect`→
+`LoadEffect`, todas folhas de infraestrutura/carregamento, nenhuma
+delas despacha por ID de habilidade). Marcadas `read_structural`
+(`LoadEffect` 82% < 95% apesar da tabela resolvida; `LoadEffectTIM`
+97% ≥95%).
+
+## 430. Família `valueput`/`Wvalueput`/`iOS_valueput_FT4`/`WiOS_valueput_FT4` — wrappers finos que delegam pra `statusfigprint`/`statusfigprint16`, fecham a biblioteca de impressão de valor numérico (2026-10-23, Fase 3, quadragésimo oitavo lote)
+
+Quatro funções pequenas, todas **100% de cobertura**, zero tabela
+de salto: `valueput(char*,VALUERECORD*,COPYFIELD*,int)` (`0xe226c`,
+156 B, 2 `bl` — `statusfigprint16`/`statusfigprint`, seções 46/391),
+`Wvalueput` (`0x110d28`, 156 B, 2 `bl` — `Wstatusfigprint16`/
+`Wstatusfigprint`), `iOS_valueput_FT4(...)` (`0xe2a40`, 196 B, 2 `bl`
+— `iOS_statusfigprint16_FT4`/`iOS_statusfigprint_FT4`, seção 360/391),
+`WiOS_valueput_FT4` (`0x1114b0`, 196 B, 2 `bl` — as variantes "W"
+correspondentes). Confirma que `valueput`/`iOS_valueput_FT4` são só
+despachantes de 2 vias (provavelmente por tamanho de fonte/figura
+— 16px vs. padrão) sobre a biblioteca `statusfigprint` já mapeada
+extensivamente — fecha a família inteira de impressão de valor
+numérico formatado usada por `disp_statuscpara` (seção 361) e outras
+telas. Todas marcadas `read_full` (100% cobertura, catálogo mínimo
+totalmente resolvido).
+
+## 431. `snpl_init(int)`/`snplflg_read(unsigned long*,int)`/`snplflg_write(unsigned long*,int,int)` — confirma "snpl" como sistema de "sound novel" (modo narrativo com áudio), não um acrônimo qualquer (2026-10-23, Fase 3, quadragésimo oitavo lote)
+
+`snpl_init(int)` (`0x26a874`, 764 B, 16 `bl` distintos, 13
+branches/5 de retrocesso): catálogo extenso — `snpl_load(int)`,
+`snpl_putpara()`, `snpl_backput()`, `snpl_picput()`, `snplinf_clr
+(SNPLINFO*)`, **`snSound_play(int)`**, **`envSound_play(int)`**,
+`ssd_request(int,int)` ×2, `wldmusic_change(int)`, `wldssd_wait()`,
+`wldload_wait()`, `pspWorldEnableFlg`/`pspWorldDataRectSet`,
+`Wwrite_eventflag` ×3, `Wsend_taskparamater`. **Confirma a hipótese
+"sound novel"**: a combinação de `snSound_play`/`envSound_play` (som
+narrativo + som ambiente) com `wldssd_wait`/`ssd_request` (mesma API
+SSD — provavelmente "Sound/Speech Data" — já vista em outros
+contextos narrativos) é o padrão clássico de uma cena de novel
+visual com narração sonora, música e background de cena
+(`snpl_backput`/`snpl_picput`). `snplflg_read`/`snplflg_write`
+(`0x26b2f0`/`0x26b2bc`, 44/52 B, 100% cob., 0 `bl`) são
+getter/setter triviais de flag — fecham a referência deixada pela
+seção 404 (`ctlsentuto_main`, chama ambas). Marcadas `read_structural`
+(`snpl_init`, catálogo grande mas cobertura não 100% verificada
+manualmente) e `read_full` (as 2 triviais).
+
+## 432. `ctlnobelstop_init()`/`ctlnobelstop_active`/`ctlnobelstop_deactive` + `ctlnobel_active` — fecham as duas famílias "Novel" (ctlnobel/ctlnobelstop) por completo (2026-10-23, Fase 3, quadragésimo oitavo lote)
+
+`ctlnobelstop_init()` (`0x263fcc`, 680 B, 93% cob., 0 tabela, 0
+branches): 9 `bl` — `iOS_setDispMenuTouch`, `add_anmpac`/
+`add_winpac`, `wldwin_noropen`, `LoadImage_menuData`, `iOS_CMenuTouch::
+setDispOffset`/`init`, `xpLibGetOffset`, `iOS_setV2Icon` ×2.
+`ctlnobelstop_active`/`ctlnobelstop_deactive` (`0x264274`/`0x2642f4`,
+128/132 B, 94% cob. ambas, 0 `bl`) — boilerplate puro de transição
+de estado. Fecha a tríade com `ctlnobelstop_main` (seção 269, já
+lida) — família "parar modo Novel" completa. `ctlnobel_active
+(CTLINFO*)` (`0x263ef4`, 168 B, 93% cob., 0 tabela, 3 branches/0 de
+retrocesso): 3 `bl` — `Wtask_start`, `wldload_wait`, `bk_load(int)`
+— fecha a família "ctlnobel" (init/main já lidas, seções 302/96) por
+completo. Todas marcadas `read_structural` (93-94% < 95% em quase
+todas, mas 0 tabela de salto — famílias de controller agora
+totalmente fechadas).
+
+## 433. `UnitSort()` — wrapper de alto nível que invoca `ChrSort` diretamente, confirma ligação com `iOSUnitListWinOnOff`/`iOSWldUnitListWinSet` (já vistos em `UnitFlagInit`, seção 416) (2026-10-23, Fase 3, quadragésimo oitavo lote)
+
+`UnitSort()` (`0x1c245c`, 680 B) — `jtable.py`: **90% de cobertura**
+(153/170), zero tabela de salto, 9 branches/6 de retrocesso. 11 `bl`
+distintos: `iOSUnitListWinOnOff(int)`, **`ChrSort(int)`** (reentrada
+direta — seção 353, confirma que `UnitSort` é o wrapper de tela que
+chama o algoritmo de ordenação real), `GetSortCondition(int,short*)`/
+`SetSortCondition(int,short*)` (persistência do critério de
+ordenação escolhido), `MessageMake`/`WindowDel`/`DrawMessage` (UI de
+feedback — provável mensagem de confirmação "ordenado por X"),
+`iOSWldUnitListWinSet(int)` (mesma função já vista em `UnitFlagInit`,
+seção 416 — confirma que as duas fazem parte do mesmo módulo de UI
+de lista de unidades do world map), `unitans_init()` (inicialização
+de resposta de unidade), `iOS_getV2Icon`/`iOS_setV2Icon`. Fecha o
+ciclo: `UnitFlagInit` prepara a janela, `UnitSort` processa a escolha
+de critério e invoca `ChrSort` pra reordenar de fato. Marcada
+`read_structural` (90% < 95%, 0 tabela de salto).
+
+**Referências cruzadas (seções 429-433):** seção 420 (`NewPEffectTCB`/
+estado "PEffect", `LoadEffect` confirma mais peças sem achar o
+dispatch por ID), seções 46/360/391 (família `statusfigprint`,
+`valueput` é o wrapper fino de 2 vias), seção 404 (`ctlsentuto_main`,
+fecha a referência a `snplflg_read`/`write`), seções 96/269/302
+(famílias `ctlnobel`/`ctlnobelstop`, ambas agora completas), seção
+353 (`ChrSort`, chamada direta confirmada por `UnitSort`), seção 416
+(`UnitFlagInit`, mesmo módulo de UI de lista de unidades que
+`UnitSort`).
+
+## 434. `ctlhentuto_main(CTLINFO*)` — controller de tutorial "hen" (mudança/transição de cena), distinto tematicamente de `ctlsentuto_main` (2026-10-23, Fase 3, quadragésimo nono lote)
+
+`ctlhentuto_main(CTLINFO*)` (`0x26df48`, 672 B) — `jtable.py`: **95%
+de cobertura** (160/168), zero tabela de salto, 16 branches/7 de
+retrocesso. 15 `bl` distintos: `Wtask_status`, `Wsend_taskparamater`
+×3, `changewindowamb`, `hook_tuto`, `iOS_setTutorialbreak`,
+`wldctl_active`, `wldfade_set`, `snplflg_write` (seção 431),
+`sound_request` ×2, `iOSTutoFlagSet`, `ctlhentuto_deactive` (a si
+mesmo), `curhis_get`/`curhis_clr`, `iOS_setV2Icon`,
+`iOS_setTutorialType` ×2. Compartilha a mesma biblioteca de
+infraestrutura de `ctlsentuto_main` (seção 404:
+`iOSTutoFlagSet`/`snplflg_write`/`sound_request`/`curhis_get`/
+`curhis_clr`), mas adiciona uma camada de transição visual
+(`changewindowamb`, `wldfade_set`, `iOS_setTutorialType` ×2) ausente
+ali — indício de que "hen" (変, mudança) é tematicamente distinto de
+"sen" (戦, batalha), não variação de nomenclatura da mesma mecânica;
+candidato mais provável é o tutorial de mudança de job/classe.
+Marcada `read_full` (95% ≥95%, exatamente no limiar — critério
+automático satisfeito, mas por margem mínima).
+
+## 435. `iOSGetChrList()` — wrapper do port iOS/Android que monta o buffer de personagens a partir do `BWORK`, hipótese de alimentar `ChrSort`/`UnitSort` (2026-10-23, Fase 3, quadragésimo nono lote)
+
+`iOSGetChrList()` (`0x15e144`, 672 B) — `jtable.py`: **96% de
+cobertura** (161/168), zero tabela de salto, 17 branches/12 de
+retrocesso. 4 `bl`: 1 local sem símbolo (`sub_714c4`),
+`iOSAnimeIDCntGet2(BWORK*,int)` ×2, `iOSBwork2ChrStts(BWORK*,
+CHR_STTS*,int)`, `get_bwp(int)` (seção 43). Hipótese: converte
+`BWORK` bruto pra `CHR_STTS` (struct voltada a exibição) por slot,
+coletando também contagem/índice de IDs de animação por unidade —
+candidata natural a ser a função que monta o buffer que `ChrSort`
+(seção 353) depois ordena e `UnitSort` (seção 433) processa.
+**Pendência honesta**: a ligação direta com `ChrSort`/`UnitSort` é
+inferência temática/por tipo (`BWORK`→`CHR_STTS`), não confirmada
+por xref de chamada — nenhum `bl` aqui aponta para elas nem vice-
+versa. Marcada `read_full` (96% ≥95%, 0 tabela de salto).
+
+## 436. `CG2D_COLOR::HSBToRGB(...)` — folha matemática pura do toolkit CG2D, primeira nota dedicada à classe `CG2D_COLOR` (2026-10-23, Fase 3, quadragésimo nono lote)
+
+`CG2D_COLOR::HSBToRGB(unsigned short,unsigned char,unsigned char,
+unsigned int*)` (`0xa1a5c`, 676 B) — `jtable.py`: **99% de
+cobertura** (168/169), zero tabela de salto, 8 branches/4 de
+retrocesso. 7 `bl`, todos helpers de ponto flutuante do runtime do
+compilador (libgcc soft-float): `__addsf3`/`__subsf3`/`__mulsf3`/
+`__divsf3`, `__floatsisf`/`__floatunsisf`, `__fixunssfsi`. Confirma
+ser a conversão HSB→RGB real do toolkit CG2D (mesma família de
+`CG2D_COLOR::GetTone4To8`/`5To8`/`6To8`, já vistas como callees de
+`CG2D_LOADER_BMP::Copy`/`CG2D_LOADER_TGA::Copy`, seções 205/217) —
+algoritmo clássico de setor de matiz + interpolação linear em float,
+sem chamar nenhuma outra classe/símbolo do jogo. Marcada `read_full`
+(99% ≥95%, 0 tabela de salto, catálogo 100% resolvido contra runtime
+conhecido).
+
+## 437. `MakeHeader(int,int,CARD_HEADER*)` — monta o cabeçalho de save real, primeira leitura estrutural da função já citada na seção 45 (2026-10-23, Fase 3, quadragésimo nono lote)
+
+`MakeHeader(int,int,CARD_HEADER*)` (`0x187264`, 688 B) — `jtable.py`:
+**95% de cobertura** (164/172), zero tabela de salto, 4 branches/3
+de retrocesso. 6 `bl`, reconciliados contra identidades já
+confirmadas em outra tabela do projeto (seção de `DrawTile4`, L2690-
+2692): `memcpy` (`0x714b8`) ×3, `memset` (`0x714c4`),
+`__stack_chk_fail` (`0x715cc`, canário de stack — confirma montagem
+do header em buffer local antes de copiar pro `CARD_HEADER*` de
+saída), `read_eventflag(int)`, `__divsi3`/`__aeabi_idivmod` ×2 cada.
+Padrão: zera o buffer → copia 3 campos distintos (título, timestamp/
+checksum, bloco de progresso) → injeta flag de evento/progresso via
+`read_eventflag` → formata tempo/percentual via divisão. Conecta
+`MakeHeader` ao sistema de save já mapeado (seções 42/45:
+`pspSaveDataMissionRateSave`, `pspSaveInit`/`Update`/`Exit`) — o
+cabeçalho carrega indicador de progresso, não só metadado cru.
+Marcada `read_structural` (95% ≥95% satisfaz o critério automático,
+mas layout exato de campos de `CARD_HEADER` não confirmado — mesma
+ressalva já registrada na seção 45 original).
+
+## 438. `jValueFunc(unsigned char*)` — widget de dígito numérico da família `ValueFunc`/`bValueFunc`/`cValueFunc`/`eValueFunc`, cobertura automática baixa por dispatch indireto real via vetor de function-pointers em BSS, não bug de ferramenta (2026-10-23, Fase 3, quadragésimo nono lote)
+
+`jValueFunc(unsigned char*)` (`0x1981b0`, 708 B) — `jtable.py`:
+**23% de cobertura** (40/177), zero tabela de salto resolvida, 1
+bloco termina em branch computado não resolvido (`blx r2` em
+`0x198204`). **Nota de correção de diagnóstico**: o fork que
+analisou esta função inicialmente hipotetizou um "bug de modo ARM/
+Thumb" na ferramenta como causa da cobertura baixa — **verificação
+no código-fonte de `jtable.py` mostra que a ferramenta já usa
+`CS_MODE_ARM` exclusivamente** (não há modo Thumb configurado em
+lugar nenhum), então essa hipótese específica está incorreta e não
+deve ser propagada. A causa real da baixa cobertura é outra: o
+`blx r2` em `0x198204` carrega `r2` de um vetor de function-pointers
+residente em BSS (`jValueFuncList`, símbolo de 64 B/16 entradas,
+zerado no `.so` e populado só em runtime) — um dispatch indireto
+genuinamente irresolvível estaticamente sem dump de memória, não um
+erro de decodificação. A descida recursiva do `jtable.py` parar
+nesse ponto é o comportamento correto esperado, não uma falha.
+
+Com disassembly manual (Capstone, `CS_MODE_ARM`, mesma config da
+ferramenta) o fork recuperou o fluxo completo e resolveu os `bl`
+reais via GOT: `jDrawFT4RGB` (`0x194048`) ×2 (dígitos normais e
+ramo de valor negativo), `sprintf@plt` (formata o texto do sinal
+negativo), `__stack_chk_fail@plt` (canário). **Confirma a família**:
+`jValueFunc` é a variante "j" de `ValueFunc`/`bValueFunc`/
+`cValueFunc`/`eValueFunc`/`ValueFuncShort` (já vistas nas seções
+222/227), cada uma com seu próprio vetor paralelo de callbacks
+(`jValueFuncList`/`bValueFuncList`/etc.) — **sem relação com
+`valueput`/`VALUERECORD`/`iOS_valueput_FT4`** (seção 430, família
+diferente de impressão de campo formatado). Desenha um valor
+numérico dígito a dígito lendo campos do widget (`[r4+4]`=contagem
+de dígitos, `[r4+8/9]`=valor+flags, `[r4+5/7]`=stride/posição),
+disparando um callback de setup via `jValueFuncList[[r4+3]]` antes
+de iterar. Marcada `read_structural` (dispatch indireto real via
+BSS é pendência estrutural inerente a toda a família, mesmo
+tratamento já dado a `bValueFunc`/`eValueFunc` nas seções 222/227 —
+não é lacuna de análise).
+
+**Referências cruzadas (seções 434-438):** seção 404 (`ctlsentuto_main`,
+biblioteca de tutorial compartilhada com `ctlhentuto_main`), seções
+353/433 (`ChrSort`/`UnitSort`, candidata ligação com `iOSGetChrList`),
+seções 205/217 (`CG2D_LOADER_BMP/TGA::Copy`, família `CG2D_COLOR`
+agora com conversão HSB→RGB documentada), seção 45 (sistema de save,
+`MakeHeader` lida por completo pela primeira vez), seções 222/227
+(família `ValueFunc`, `jValueFunc` confirma o padrão de dispatch via
+BSS — nota de correção sobre modo ARM/Thumb da ferramenta registrada
+para não se propagar em sessões futuras).
