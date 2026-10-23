@@ -13840,3 +13840,252 @@ reusado por `doCursor`), seção 345 (família "Yaji", `iOSYajiEffect`
 novo membro), seção 317 (`DrawTexFlip`, reusada por `Bottun`), seções
 349/402 (`adjust_entry_status`/`CurChrChg2`, pipeline de recálculo de
 stats agora com o elo de equipamento confirmado).
+
+## 410. Sweep completo da família `p[NN]_*Func` (p00-p22) — dispatcher de efeito de habilidade por ID numérico, grande achado de uma vez só (2026-10-23, Fase 3, quadragésimo quarto lote)
+
+Descoberta de uma família inteira ainda não catalogada: além dos 6
+membros já lidos em lotes anteriores (`p01_bowFunc` §243,
+`p02_hitMarkFunc` §266, `p04_magicChantFunc` §88, `p18_reflecFunc`
+§379, `p20_gunFunc` §126, `p22_shoukanFunc` §244), existem **17
+membros adicionais** (`p00` a `p21`, faltando só `p23+`), a maioria
+nunca citada nas notas. Sweep completo via `jtable.py`:
+
+**6 stubs vazios (8 B cada, 100% cobertura, 0 `bl`, 0 branches)**:
+`p00_nullFunc()`, `p07_knockBackFunc()`, `p10_jumpFunc()`,
+`p11_waterjumpFunc()`, `p14_sweatFunc()`, `p16_reviveFunc()` — tipos
+de efeito sem callback físico especial, só `bx lr` (ou equivalente).
+Todas marcadas `read_full`.
+
+**`p05_reboundFunc()`** (`0x21ebbc`, 72 B, 94% cob., 0 `bl`, 2
+branches/0 de retrocesso) — pura lógica condicional sem chamada
+externa. Marcada `read_full`.
+
+**7 membros com o mesmo catálogo-base de física de gravidade**
+(97% cob. típica, 0 tabela de salto, 6-10 `bl`): `p03_golemFunc`
+(272B), `p06_chargeFunc` (284B), `p08_landingFunc` (272B),
+`p09_chakusuiFunc` (348B), `p12_poisonFunc` (284B), `p13_levelupFunc`
+(316B), `p19_telepoFunc`/`p21_breakFunc` (272B cada) — todos chamam
+o mesmo núcleo `SetGravity`/`SetAirDensity`/`PushGravity`/
+`PopGravity`/`PushAirDensity`/`PopAirDensity` + `iOS_getSkipAddPrim`
++ 2 locais sem símbolo (`sub_21f3c0`, `sub_21fb94`) — confirma que
+TODO efeito de habilidade, não só os "grandes" já lidos, empurra/
+restaura seu próprio contexto de gravidade/densidade de ar antes de
+rodar sua lógica específica (provavelmente pra suportar efeitos que
+alteram a física local, como golem pesado ou levitação em
+`p19_telepoFunc`). `p06_chargeFunc`/`p12_poisonFunc` adicionam
+`Ssd_PlayEffect(long)` (efeito sonoro SSD). `p09_chakusuiFunc`
+adiciona `getAnimationPosition`/`getMapIDFromAnimationPosition`.
+Todas marcadas `read_structural`.
+
+**`p15_deathFunc()`** (`0x220548`, 680 B, 95% cob., 0 tabela, 15
+branches/10 de retrocesso) e **`p17_crystalFunc()`** (`0x2207f0`,
+704 B, 95% cob., 0 tabela, 20 branches/12 de retrocesso) — **achado
+de alto valor**: ambas chamam `AnimatePermanentObject(int)`,
+`GetPermanentObject()`, `DisposePermanentObject(char)` e
+`createPermanentObject(_JochuParameter*,Physics*)` — fecham
+completamente o ciclo de vida do "objeto permanente" já mapeado nas
+seções 82/158/378 (`requestParmanentEffect`→`createPermanentObject`→
+`DrawPermanentShape`). Confirma que os efeitos visuais de "morte"
+(`p15`) e "cristalização" (`p17`, a unidade virando cristal ao
+morrer, mecânica clássica do FFT) são implementados como objetos 3D
+físicos persistentes no mundo, não sprites 2D — a mesma
+infraestrutura de física/renderização usada pra outros efeitos
+"permanentes" no mapa. Ambas marcadas `read_structural`.
+
+**Referência cruzada de dispatcher**: nenhuma das 23 funções `p[NN]_
+*Func` chama outra da mesma família ou aparece com `bl` apontando pra
+elas nesta passada — são todas folhas chamadas por um dispatcher
+externo ainda não identificado (provável tabela de ponteiros de
+função indexada por ID de habilidade, não uma cascata de `bl`/jump
+table dentro do próprio bloco). Candidato natural de follow-up:
+localizar essa tabela de dispatch (ver seção 411, `callEffect`).
+
+## 411. `changeAnimationStatus(int,int,int)`/`_changeAnimationStatus_(int,int,int)` — máquina de estado com 2 tabelas de salto de 32 casos, chama o `SetUnitParameter` ainda não decompilado em `AI_DIFFICULTY_RESEARCH.md` (2026-10-23, Fase 3, quadragésimo quarto lote)
+
+`changeAnimationStatus(int,int,int)` (`0x1fe718`, 764 B) —
+`jtable.py`: **64% de cobertura** (123/191), **2 tabelas de salto
+resolvidas** (32 casos → 7 handlers; 32 casos → 5 handlers),
+**abaixo do limiar de 95%** — lacuna honesta, apesar de ambas
+tabelas resolvidas. 13 branches/10 de retrocesso. Apenas 2 `bl`:
+`searchAnimationByBattleID(unsigned short)` e **`SetUnitParameter
+(int)`** ×2 — esta última é a mesma função citada em
+`AI_DIFFICULTY_RESEARCH.md` como "não decompilada ainda" (ver
+limitações do documento de IA). Confirma que `SetUnitParameter` é
+chamada de dentro do sistema de animação de status, não só da IA de
+batalha — pista nova pra quando alguém for finalmente abrir essa
+função. `_changeAnimationStatus_(int,int,int)` (`0x1cd548`, 28 B,
+71% cob., 0 `bl`) é provavelmente um thunk/wrapper trivial (nome com
+underscores na frente/atrás sugere versão "interna"/não-exportada da
+mesma lógica). Ambas marcadas `read_structural` (cobertura abaixo do
+limiar em ambas; `changeAnimationStatus` já teve as 2 tabelas
+resolvidas com sucesso, mas os handlers em si não foram percorridos
+por completo).
+
+## 412. `cnvglobaltolocalid(int)`/`Wcnvglobaltolocalid(int)` — conversão de ID global→local de unidade, par normal/task (2026-10-23, Fase 3, quadragésimo quarto lote)
+
+`cnvglobaltolocalid(int)` (`0xdb8c4`, 700 B, 99% cob., 0 tabela, 35
+branches/17 de retrocesso) e `Wcnvglobaltolocalid(int)` (`0x103c94`,
+700 B, 99% cob., 0 tabela, topologia idêntica): par normal/"W". 7
+`bl` cada: `read_eventflag`/`Wread_eventflag` ×3, `get_bwp(int)` ×5
+(busca ponteiro de work de batalha), `search_character_f(int)`,
+`search_controlID(int,int*)` ×3, `checkAnimationExist(int)`,
+`getBattleWorkIDFromAnimation(unsigned int)`,
+`getAnimationIDFormBattleWork(int)`. Confirma ser a rotina de
+tradução de um ID "global" (provável índice no roster completo de
+personagens) para o ID "local" de batalha (slot/work-ID dentro do
+`BWORK` da batalha atual) — ponte entre o sistema de roster
+persistente e o sistema de trabalho de batalha efêmero. Marcadas
+`read_full` (99% ≥95%, 0 tabela de salto).
+
+## 413. `multiwindow_keyright(COMRECORD*,int)`/`Wmultiwindow_keyright(...)` — navegação de cursor da janela múltipla, inclui um hook de debug homônimo (2026-10-23, Fase 3, quadragésimo quarto lote)
+
+`multiwindow_keyright(COMRECORD*,int)` (`0xec644`, 708 B, 93% cob.,
+0 tabela, 21 branches/14 de retrocesso) e `Wmultiwindow_keyright`
+(`0x10558c`, 708 B, 93% cob., mesma topologia): par normal/"W". 10
+`bl` cada: `checkkeyok`/`Wcheckkeyok`, `read_eventflag`/
+`Wread_eventflag`, `task_create`/`Wtask_create`, `send_taskparamater`/
+`Wsend_taskparamater`, `asmGetActiveTask`/`wasmGetActiveTask`,
+**`iOS_DEBUG_multiwindow_keyright_hook()`** (hook de debug com o
+mesmo nome da função — infraestrutura de depuração exposta no
+próprio dynsym), `iOS_clearOkNg`, `pspBattleDisableFlg`,
+`pspNetGetBattleModeFlag` (gate de rede — confirma que a navegação
+da janela múltipla é sensível ao estado de batalha em rede), `iOS_
+setV2Icon`. Fecha o par com `multiwindow_packetinit` (seção 400) —
+é a lógica de mover o cursor/seleção pra direita dentro da janela de
+múltiplas opções. Marcadas `read_structural` (93% < 95%, 0 tabela de
+salto).
+
+## 414. `ctlret_init()`/`ctlretokng_init(int)`/`ctlretokng_main(CTLINFO*)` — quarto membro confirmado da família OK/NG (retorno ao título/sair), espelha `mouke_okng`/`ctlhakenokng_main`/`ctlbirthokng_*` (2026-10-23, Fase 3, quadragésimo quarto lote)
+
+`ctlret_init()` (`0x267368`, 600 B, 92% cob., 0 tabela, 8 branches/4
+de retrocesso): 3 `bl` — `Wsend_taskparamater`, `defscrwin_set`/
+`curhis_put`. `ctlretokng_init(int)` (`0x267840`, 656 B, 93% cob., 0
+tabela, 1 branch/0 de retrocesso): 6 `bl` — `Wsend_taskparamater`,
+`mouke_tbl_get(MOUINFO*,int)` (mesma tabela de roster já vista em
+`ctlworkinginf_init`, seção 384), `add_anmpac`/`add_winpac`,
+`moukeevtinf_window`, `wldwin_noropen` (janela modal sem transição
+de abertura). `ctlretokng_main(CTLINFO*)` (`0x267c74`, 708 B, 95%
+cob., 0 tabela, 17 branches/5 de retrocesso): 9 `bl` —
+`Wsend_taskparamater`, `iOS_setDispMenuTouch` ×2,
+`iOS_add_anmpac_max`, `ctlret_init()` (reentra no pai — confirma a
+tríade), `sound_request` ×3, `iOS_CMenuTouch::setDispAssist` ×2,
+`iOS_clearOkNg()` (mesmo teardown das demais famílias OK/NG),
+`iOS_getTouchTap`/`iOS_getV2Icon`. Confirma: "ret" = retorno/voltar
+(provável confirmação de "Retornar ao Título"/sair do jogo), quarto
+membro confirmado da família OK/NG já estabelecida (`mouke_okng`
+§366, `ctlhakenokng_main` §343, `ctlbirthokng_*` §372). Marcadas
+`read_structural` (92-95%, 0 tabela de salto em todas).
+
+**Referências cruzadas (seções 410-414):** seções 82/158/378
+(`requestParmanentEffect`/`createPermanentObject`/
+`DrawPermanentShape`, ciclo agora confirmado por `p15_deathFunc`/
+`p17_crystalFunc`), `docs/AI_DIFFICULTY_RESEARCH.md`
+(`SetUnitParameter`, ainda não decompilada — nova pista via
+`changeAnimationStatus`), seção 400 (`multiwindow_packetinit`, par
+agora com navegação de cursor), seção 384 (`ctlworkinginf_init`,
+mesmo `mouke_tbl_get` reusado por `ctlretokng_init`), seções
+343/366/372 (família OK/NG, `ctlretokng_main` é o quarto membro
+confirmado).
+
+## 415. `getweaponeffect(ACT*)` — despachante físico por categoria de arma (Blade/Pole/Bow/Gun), fecha mais um elo da cadeia de contra-ataque (2026-10-23, Fase 3, quadragésimo quinto lote)
+
+`getweaponeffect(ACT*)` (`0x1e2efc`, 700 B) — `jtable.py`: **97% de
+cobertura** (170/175), zero tabela de salto, 25 branches/11 de
+retrocesso. 9 `bl` distintos, todos resolvidos por símbolo:
+`pspItemIsEmpty` ×3, `pspItemGetWeaponData`, `get_coord_address
+(BWORK*)`, `check_coord(int,int,int)`, `copyACTst(ACT*,ACT*)`, e os
+quatro checadores de categoria: `CheckBladeResult(int,int,int,int,
+int)`, `CheckPoleResult` (seção 367), `CheckBowResult(int,SVECTOR*,
+int)`, `CheckGunResult(int,SVECTOR*,int)`. Confirma a arma equipada,
+resolve a coordenada de colisão e despacha pro checador específico
+da categoria — mesmo padrão de despacho-por-categoria já visto em
+`getskilleffect` (seção 95)/`calc_result` (seção 90), mas restrito a
+armas físicas. Fecha mais um elo da cadeia `check_reaction_deny` →
+`bcp_roll` → **`getweaponeffect`** → `getreaction_post` (seções 232/
+403): é o passo que calcula qual efeito/dano um contra-ataque físico
+produz, condicionado ao tipo de arma. Marcada `read_structural` (97%
+≥95%, 0 tabela de salto, nenhum `bl` sem símbolo).
+
+## 416. `UnitFlagInit()` — inicialização de flag ligada à janela de lista de unidades do world map (2026-10-23, Fase 3, quadragésimo quinto lote)
+
+`UnitFlagInit()` (`0x1bd464`, 712 B) — `jtable.py`: **77% de
+cobertura** (137/178), **abaixo do limiar de 95%**, zero tabela de
+salto, 1 branch de retrocesso. 3 `bl`: `iOSUnitListWinOnOff(int)`,
+`iOSWldUnitListWinSet(int)`, `MasaDataInit()`. Já citada (sem seção
+própria) junto a `SttsAMovingChk`/`AllSttsDelete`/`world_stopnoend`/
+`iOSLRChgTap`/`iOSLRChgSwype` — grupo inteiro em torno da tela de
+seleção/lista de unidades do world map. Hipótese: inicializa flags
+de unidade associadas à janela de lista (abrir/fechar, trocar com
+L/R) antes de exibi-la, disparando também `MasaDataInit()` (estrutura
+auxiliar "Masa" não identificada). Marcada `read_structural` (77% <
+95% — lacuna honesta de ~23%, provável bloco condicional/early-return
+não alcançado).
+
+## 417. `DynamicsAllObject(_Object*)` — integrador físico genérico para objetos dinâmicos do mapa, distinto do sistema de objeto permanente (2026-10-23, Fase 3, quadragésimo quinto lote)
+
+`DynamicsAllObject(_Object*)` (`0x21ba18`, 704 B) — `jtable.py`:
+**98% de cobertura** (173/176), zero tabela de salto, 9 branches/2
+de retrocesso (laço de iteração sobre lista de objetos). Apenas 2
+`bl`: `VectorNormal` e `__divsi3`. Catálogo pequeno e puramente
+aritmético (sem desenho/áudio/alocação) — consistente com um
+integrador físico por-objeto/por-frame (normaliza vetor de
+direção/impulso, aplica divisão por massa/densidade/passo de tempo).
+**Nota honesta**: apesar de estar no mesmo bloco de endereços da
+família de gravidade (`SetGravity`/`PushGravity`/`PopGravity`,
+sweep da seção 410), não há `bl` direto a nenhuma delas — a ligação
+é por adjacência, não por chamada confirmada; distinto também do
+sistema de objeto permanente (seções 158/378, que tem ciclo
+criar→desenhar→descartar com `bl` de desenho/alocação, ausentes
+aqui). Marcada `read_structural` (98% ≥95%, 0 tabela de salto).
+
+## 418. `callEffect(int, tag_animation*)` — resolução/preparação de efeito antes do dispatch real; NÃO é o dispatcher da família `p[NN]_*Func` (2026-10-23, Fase 3, quadragésimo quinto lote)
+
+`callEffect(int,tag_animation*)` (`0x201ca4`, 704 B) — `jtable.py`:
+**98% de cobertura** (172/176), zero tabela de salto, 23-24
+branches/9 de retrocesso, convergências if/else em 0x201d7c (3
+ramos) e 0x201e1c (5 ramos) — cadeia de if/else sobre o parâmetro
+`int`, não um switch tabelado. 7 `bl`: `searchAnimationByID`/
+`searchAnimationByBattleID` (resolução de ID de animação),
+`setShortVector`, `pspItemGetWeaponData`/`pspItemIsMagicalGun`
+(consulta à arma equipada — provável decisão de variante visual
+arco/arma de fogo), **`StartEffect(long,long,EffectOrder*)`**
+(delega a execução real), 1 local sem símbolo (`sub_715cc`).
+
+**Corrige a hipótese que motivou este fork**: apesar do nome e
+assinatura sugerirem o dispatcher da família `p[NN]_*Func` (seção
+410, 23 funções p00-p22), **não há nenhuma chamada direta a elas
+nem tabela de salto com ~23 casos** — `callEffect` é uma função de
+resolução/preparação que delega a execução de fato pra `StartEffect`
+(`0x21cc84`, ainda não lida). O dispatch real por ID das 23 funções
+`p[NN]_*Func` provavelmente ocorre dentro de `StartEffect` ou via
+tabela de ponteiros de função em outro lugar — não confirmado.
+Candidato natural de follow-up: abrir `StartEffect`. Marcada
+`read_structural` (98% ≥95%, 0 tabela de salto).
+
+## 419. `set_normability2(...)` — acessor/populador de dados de habilidade normal por job, confirma efeito colateral de agendamento de turno (2026-10-23, Fase 3, quadragésimo quinto lote)
+
+`set_normability2(int,unsigned char,short*,unsigned char*,unsigned
+char*,int,unsigned char*,unsigned char*)` (`0x1d4940`, 748 B) —
+`jtable.py`: **99% de cobertura** (185/187), zero tabela de salto,
+22 branches/12 de retrocesso. 6 `bl`: `GetLocalJobNumber(short)`,
+1 local sem símbolo (`sub_1d3a88`), `gc_bwp(int)`, **`set_event_table
+(TURN_TABLE*,int)`**, `get_command_ability(int,int)`,
+`get_ability_flag(BWORK*,int)`. Reforça a leitura já registrada em
+`getskillrange`/`make_abilitylistmain` (seções 94/128): é o acessor/
+populador de dados de habilidade normal (classe/job, em contraste
+com reaction/support/movement) usado tanto no cálculo de alcance
+quanto no agregador de lista do menu — e confirma, via `set_event_table`,
+que a função não é só leitura/preenchimento passivo: tem efeito
+colateral de agendamento na tabela de eventos de turno. Marcada
+`read_full` (99% ≥95%, 0 tabela de salto, catálogo pequeno e quase
+totalmente resolvido — hipótese já corroborada por 3 fontes
+independentes); pendência honesta: corpo de `sub_1d3a88` e layout
+campo-a-campo dos 4 buffers de saída não verificados.
+
+**Referências cruzadas (seções 415-419):** seções 232/367/403
+(cadeia de contra-ataque, `getweaponeffect` fecha outro elo),
+seção 410 (sweep `p[NN]_*Func`, `callEffect` corrige a hipótese de
+ser o dispatcher — aponta pra `StartEffect` como próximo alvo),
+seções 158/378 (sistema de objeto permanente, contraste com
+`DynamicsAllObject`), seções 94/128 (`getskillrange`/
+`make_abilitylistmain`, confirmadas por `set_normability2`).
