@@ -15135,3 +15135,186 @@ IA agora com `GetTargetBaseArea` lida), subsistema `iOSRot*`
 (câmera/roda de emprego, `IS_GAME_AREA` como filtro de entrada
 comum), seções 102/138/145/174/189 (libvorbis reconhecida por nome,
 `res1_class` mais um membro fast-tracked).
+
+## 468. `ctltips_init(int)` — fecha a tríade "tips" por completo junto com `ctltips_main`/`_deactive` (seção 461) (2026-10-23, Fase 3, quinquagésimo sexto lote)
+
+`ctltips_init(int)` (`0x24f238`, 632 B) — `jtable.py`: **92% de
+cobertura** (145/158), zero tabela de salto, 8 branches/4 de
+retrocesso. 5 `bl`: `iOSTutoFlagSet(int,int)`, `defscrwin_set`/
+`curhis_put`, `iOS_setTutorialType(int)`, `iOS_setV2Icon`. Fecha a
+tríade completa de "tips" (dica rápida de UI, já estabelecida como
+gêmea estrutural de `pspCtltutonet_main`/`_init`, seção 333/457).
+Marcada `read_structural` (92% < 95%, 0 tabela de salto).
+
+## 469. `set_playerwork_common(PENTRY*,int)`/`set_playerwork_common_child(PENTRY*,int)` — rotina central de criação de entrada de unidade no work, chama `NewEntry` diretamente (2026-10-23, Fase 3, quinquagésimo sexto lote)
+
+`set_playerwork_common(PENTRY*,int)` (`0x1d3308`, 628 B, 99% cob., 0
+tabela, 11 branches/5 de retrocesso): 6 `bl` — 1 local sem símbolo
+(`sub_1d2e9c`), `get_shape2_plus(BWORK*,unsigned char*)`,
+`set_playerwork_j(BWORK*,int,int)` (seção 460, confirma chamada
+direta!), `unitwork_init2all(BWORK*,int)`, `callSW(int)` ×2,
+**`NewEntry(int,int,int,short,short,short,short,BWORK*,int)`**
+(cria a entrada de unidade de batalha propriamente dita).
+`set_playerwork_common_child(PENTRY*,int)` (`0x1d2ff4`, 788 B, 99%
+cob., 0 tabela, 14 branches/8 de retrocesso): mesmo catálogo-base
+mais `pspNetGetBattleModeFlag()` ×2 e `get_netmodeadhoc()` (gate de
+rede ad-hoc). Confirma ser a rotina central de popular um `BWORK`
+a partir de um `PENTRY*` (dados de entrada do jogador) — resolve
+shape, ajusta job via `set_playerwork_j`, inicializa o work completo
+e finalmente cria a entrada de batalha via `NewEntry`; a variante
+"_child" adiciona a checagem de modo de rede ad-hoc (provável suporte
+a unidade secundária/convidada em partida cooperativa local).
+Marcadas `read_full` (ambas 99% ≥95%, 0 tabela de salto, catálogo
+quase totalmente resolvido).
+
+## 470. `bCursolDownFunc(DVECTOR*,unsigned short*,int)` — variante "b" de `CursolDownFunc` (seção 451), mesmo mecanismo de textura livre (2026-10-23, Fase 3, quinquagésimo sexto lote)
+
+`bCursolDownFunc(DVECTOR*,unsigned short*,int)` (`0x1831e0`, 628 B)
+— `jtable.py`: **94% de cobertura** (148/157), zero tabela de
+salto, 10 branches/8 de retrocesso. Único `bl`: **`bDrawTexFree
+(short*,COLOR*,int,int)`** — mesmo mecanismo de desenho via textura
+livre já confirmado em `CursolDownFunc` (seção 451), aqui na
+variante letter-prefix "b". Confirma que o padrão letter-prefix se
+aplica também à variante "pressionado" do cursor, não só à variante
+normal (`CursolFunc`/`b`/`c`/`e`/`j`, seção 451) — mas, pela busca no
+inventário, só existe a variante "b" de `CursolDownFunc` (não há
+`c`/`e`/`j` equivalentes), sugerindo que o estado "pressionado" só é
+necessário num contexto de tela específico. Marcada `read_structural`
+(94% < 95%, 0 tabela de salto).
+
+## 471. `CG2D_COLOR::RGBToHSB(...)` + 7 getters `GetTone*` triviais — fecham a classe `CG2D_COLOR` por completo, par inverso de `HSBToRGB` (seção 436) (2026-10-23, Fase 3, quinquagésimo sexto lote)
+
+`CG2D_COLOR::RGBToHSB(unsigned int,unsigned short*,unsigned short*,
+unsigned short*)` (`0xa17ec`, 624 B) — `jtable.py`: **100% de
+cobertura** (156/156), zero tabela de salto, 13 branches/5 de
+retrocesso. 9 `bl`, todos helpers de ponto flutuante do runtime
+(libgcc soft-float): `__subsf3`/`__addsf3`/`__mulsf3`/`__divsf3`,
+`__floatunsisf`, `__aeabi_fcmpeq`/`fcmplt`/`fcmple`, `__fixunssfsi`
+— mesmo padrão de `HSBToRGB` (seção 436), confirmando ser o
+algoritmo inverso (RGB→HSB) da mesma classe, sem chamar nenhum outro
+símbolo do jogo. Fecha a classe `CG2D_COLOR` por completo junto com
+7 getters triviais de conversão de tom (`GetTone2To8`/`4To8`/`5To8`/
+`6To8`/`64To255`/`64To255Inv`/`64To255_Sll24`, 16-20 B cada, 75-80%
+cob., 0 `bl`, lookups/shifts puros) — já citados como callees de
+`CG2D_LOADER_BMP::Copy`/`CG2D_LOADER_TGA::Copy` (seções 205/217) mas
+nunca abertos em si. Marcadas `read_full` (`RGBToHSB` 100% cobertura,
+0 tabela de salto; os 7 getters fast-tracked como boilerplate
+trivial de conversão de bit-depth, cobertura ~80% mas corpo de 1-2
+instruções reais).
+
+**Referências cruzadas (seções 468-471):** seção 333/457
+(`pspCtltutonet_*`, gêmeo estrutural de `ctltips_*` agora completo),
+seção 460 (`set_playerwork_j`, chamada direta confirmada por
+`set_playerwork_common`), seção 451 (`CursolDownFunc`, `bCursolDownFunc`
+confirma o mesmo mecanismo de textura livre), seções 205/217/436
+(`CG2D_LOADER_BMP/TGA::Copy`/`HSBToRGB`, classe `CG2D_COLOR` agora
+completa).
+
+## 472. `Logo_FrameRender()` — tela de logo de boot, a mais simples e isolada das telas "frame render" fora do loop PS1-emulado (2026-10-23, Fase 3, quinquagésimo sétimo lote)
+
+`Logo_FrameRender()` (`0x2b5bec`, 620 B) — `jtable.py`: **93% de
+cobertura** (144/155), zero tabela de salto, apenas 2 branches/1 de
+retrocesso — extremamente linear comparada a `Link_FrameRender`
+(seção 86, 21 branches) e `fft_opening` (seção 394, 19 branches). 19
+`bl`: `CGX_SCREEN_CORRECT::GetCorrect`/`GetAppScreenSize`/
+`GetAppScaledScreenSize`, `CEGL2_IF::SetScreenSize`/`ClearBackdrop`/
+`InitRenderState2D`/`AddSprite`/`Setup2D`/`DrawPacket`,
+`CEGL2_FBO::Begin`/`End`/`RenderToFBO`, `CEGL2_SPRITE::GetImageSize`/
+`SetAlpha`, `CSTEP_BATCH::GetData()`, e **delegação direta a
+`NowLoading_FrameMove()`/`NowLoading_FrameRender()`**. Hipótese: tela
+de boot (logo da desenvolvedora) desenhada via FBO off-screen com
+fade controlado por `CSTEP_BATCH` (mesmo sistema de animação por
+passos das seções 16/17), que ao final cede diretamente para
+`NowLoading` — mesma arquitetura de "dispatcher de tela" já
+confirmada na seção 34 (`Main_FrameRender`). Marcada `read_structural`
+(93% < 95%, 0 tabela de salto — mesmo precedente conservador de
+`fft_opening`).
+
+## 473. `musicPlayer_Play(int,int,int,int)` — backend nativo real por trás de `loadMusic`/`activateMusic` (seção 388) (2026-10-23, Fase 3, quinquagésimo sétimo lote)
+
+`musicPlayer_Play(int,int,int,int)` (`0x2b2fe8`, 624 B) —
+`jtable.py`: **~95% de cobertura** (148/156, no limiar sem margem),
+zero tabela de salto, 6 branches/2 de retrocesso. 10 `bl`:
+`musicPlayer_Stop()` (confirma o par Stop/Play), `CAPP_INFO::
+GetRootPath()`, `CFILE_DAT::GetOffset(int)`/`GetSize(int)` (resolve
+offset+tamanho da faixa dentro do `.DAT` empacotado),
+**`CSOUND_IF::Load(...)`**/**`CSOUND_IF::Play(...)`** ×3, 4 locais
+sem símbolo. Hipótese: implementação nativa final da tríade
+`loadMusic`/`disposeMusic`/`activateMusic` (seção 388) — para,
+resolve caminho e faixa no DAT, carrega no subsistema de som e
+dispara a reprodução (possivelmente uma vez por canal/parte). Marcada
+`read_structural` (no limiar exato de 95% sem margem real — mesmo
+critério já usado em `ctlflagset_main`, seção 456).
+
+## 474. `xpLibpad::Update(int)` — camada de abstração sob `padRead`, polling direto de `sceCtrlPeekBufferPositive` (2026-10-23, Fase 3, quinquagésimo sétimo lote)
+
+`xpLibpad::Update(int)` (`0x2a27c4`, 624 B) — `jtable.py`: **100% de
+cobertura** (156/156), zero tabela de salto, 16 branches/8 de
+retrocesso. 2 `bl`: `sceCtrlPeekBufferPositive` (API nativa PSP de
+leitura não-bloqueante do buffer de controle) e `__aeabi_idivmod`
+(provável normalização/clamp de eixo analógico). Hipótese: classe
+C++ que encapsula o SDK nativo de controle por baixo da camada
+usada em `padRead()` (seção 453) — o parâmetro `int` é provável
+índice de porta/jogador. **Pendência honesta**: não há xref
+confirmada de `padRead`/`pspNetPadRead` chamando esta função nesta
+passada — vínculo arquitetural hipotetizado, não comprovado por
+cadeia de `bl` direta. Marcada `read_full` (100% cobertura, 0 tabela
+de salto).
+
+## 475. `iOS_CMenuTouchNum::execPress(...)` — variante híbrida de hit-test, combina `isInRect` E `__divsi3`, ponto intermediário entre a classe-base e `SaveLoad` (2026-10-23, Fase 3, quinquagésimo sétimo lote)
+
+`iOS_CMenuTouchNum::execPress(int*,IOS_MENU_TOUCH_NUM_RESULT*)`
+(`0x27d98c`, 628 B) — `jtable.py`: **100% de cobertura** (157/157),
+zero tabela de salto, 13 branches/3 de retrocesso. 6 `bl`:
+`iOS_CMenuTouchNum::isInRect(RECT16*,int,int)` ×2, **`iOS_CMenuTouchNum::
+addNum(int*,int)`** ×4, `iOS_getTouchNowX`/`Y`, `iOS_isInGameArea`,
+`__divsi3`. **Posição arquitetural intermediária**: ao contrário da
+classe-base `iOS_CMenuTouch::execPress` (seções 225-226, só
+`isInRect`/sem divisão) e ao contrário de `iOS_CMenuTouchSaveLoad::
+execPress` (seção 364, só `__divsi3`/sem `isInRect`), a variante
+`Num` usa as duas técnicas juntas — `isInRect` valida a área geral
+do widget, `__divsi3` resolve qual dígito/coluna foi tocado dentro
+dela (colunas de largura fixa). `addNum` (×4) é a contraparte que
+soma/subtrai um delta no contador — confirma o papel de
+`iOS_CMenuTouchNum` como widget de entrada numérica por toque
+(mês/dia de aniversário, seção 347; quantidade em loja). Marcada
+`read_structural` (100% cobertura/0 tabela de salto, mas semântica
+fina das 4 chamadas de `addNum` não confirmada campo a campo).
+
+## 476. `search_mp(int,int,int,int)` — flood-fill de alcance de movimento no grid de batalha, desmontado manualmente pra confirmar que o gap de cobertura é só pool literal (2026-10-23, Fase 3, quinquagésimo sétimo lote)
+
+`search_mp(int,int,int,int)` (`0x1e180c`, 628 B) — `jtable.py`: 94%
+bruto (148/157), zero tabela de salto, 5 `bl` (todos locais sem
+símbolo: `sub_1dca58`/`sub_1dd864`/`sub_1ddba0`/`sub_1df158`/
+`sub_1e1288`). Dump linear manual (Capstone, modo ARM) confirmou que
+os ~9 slots não cobertos são constantes de pool literal (~10
+literais `ldr rX,[pc,#imm]`), não lacuna de controle de fluxo real —
+**cobertura efetiva de código é 100%**.
+
+**Achado via desmontagem manual**: apenas o 1º parâmetro é usado
+(os outros 3 nunca são lidos — provável resquício de assinatura
+herdada). `r0` indexa um array global de registros de 486 bytes;
+sentinela `0xff` no byte `+1` retorna `-1` (sem entrada válida).
+Corpo é um **loop duplo aninhado** sobre os limites X/Y de Move/Jump
+de uma unidade (campos `+0x18`/`+0x19` de um ponteiro de ator),
+testando um bitfield de "tile visitado" num array de flags de mapa,
+calculando dois ponteiros derivados por tile (stride 5 e 8 —
+prováveis "custo de movimento" e "nó de caminho" pra reconstrução de
+rota) e despachando pro handler de tile novo (`sub_1dd864`) ou já
+tratado (`sub_1ddba0`). Finaliza gravando o ID da unidade e uma flag
+global "busca concluída". É o clássico **flood-fill de alcance de
+movimento de SRPG** — nome `search_mp` é "search Move Points/Panels"
+(alcance de movimento no grid), **não** "Magic Point" (nenhum campo
+de MP mágico é tocado). Marcada `read_structural` (94% bruto, mas
+~100% efetivo confirmado manualmente — pendência honesta: os 5
+`sub_*` ainda não têm nome/contexto documentado em outras seções).
+
+**Referências cruzadas (seções 472-476):** seções 34/86/394
+(`Main_FrameRender`/`Link_FrameRender`/`fft_opening`, mesma
+arquitetura de dispatcher de tela confirmada por `Logo_FrameRender`),
+seção 388 (`ctlmusic_main`, `musicPlayer_Play` como backend nativo),
+seção 453 (`padRead`, `xpLibpad::Update` como camada de hardware
+hipotetizada por baixo), seções 225-226/347/364 (família
+`iOS_CMenuTouch*`, `execPress` de `Num` confirma arquitetura
+híbrida), seções 232/403/415 (vizinhança de endereço com a cadeia de
+reação/arma, sem dependência de chamada confirmada com `search_mp`).

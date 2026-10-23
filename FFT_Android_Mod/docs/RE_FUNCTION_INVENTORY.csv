@@ -457,7 +457,7 @@ address,size,mangled,demangled,status,section_ref
 00194238,796,_Z12jDrawTexFlipP6RECT16PsP5COLORciii,"jDrawTexFlip(RECT16*, short*, COLOR*, char, int, int, int)",read_structural,NOTES §317
 00106448,792,_Z24Wmake_abilitycommandmainv,Wmake_abilitycommandmain(),read_structural,NOTES §439
 00262708,792,_Z16hakenunit_changeP7CTLINFO,hakenunit_change(CTLINFO*),read_structural,NOTES §382
-001d2ff4,788,_Z27set_playerwork_common_childP6PENTRYi,"set_playerwork_common_child(PENTRY*, int)",unread,
+001d2ff4,788,_Z27set_playerwork_common_childP6PENTRYi,"set_playerwork_common_child(PENTRY*, int)",read_full,NOTES §469
 000ac540,784,_ZNSt4priv8_Rb_treeIiSt4lessIiESt4pairIKiN12CEGL2_SHADER11DATA_SHADEREENS_10_Select1stIS7_EENS_11_MapTraitsTIS7_EESaIS7_EE13insert_uniqueENS_17_Rb_tree_iteratorIS7_SB_EERKS7_,"std::priv::_Rb_tree<int, std::less<int>, std::pair<int const, CEGL2_SHADER::DATA_SHADER>, std::priv::_Select1st<std::pair<int const, CEGL2_SHADER::DATA_SHADER> >, std::priv::_MapTraitsT<std::pair<int const, CEGL2_SHADER::DATA_SHADER> >, std::allocator<std::pair<int const, CEGL2_SHADER::DATA_SHADER> > >::insert_unique(std::priv::_Rb_tree_iterator<std::pair<int const, CEGL2_SHADER::DATA_SHADER>, std::priv::_MapTraitsT<std::pair<int const, CEGL2_SHADER::DATA_SHADER> > >, std::pair<int const, CEGL2_SHADER::DATA_SHADER> const&)",read_structural,NOTES §329
 0025bc78,784,_Z14mksuccess_calcv,mksuccess_calc(),read_full,NOTES §454
 0008e038,776,vorbis_lsp_to_curve,vorbis_lsp_to_curve,read_structural,NOTES §336
@@ -582,22 +582,22 @@ address,size,mangled,demangled,status,section_ref
 002b8378,640,_Z12IS_GAME_AREAii,"IS_GAME_AREA(int, int)",read_structural,NOTES §466
 002106e0,640,_Z12placeNameEndv,placeNameEnd(),read_full,NOTES §462
 00088978,636,_ve_envelope_search,_ve_envelope_search,unread,
-0024f238,632,_Z12ctltips_initi,ctltips_init(int),unread,
+0024f238,632,_Z12ctltips_initi,ctltips_init(int),read_structural,NOTES §468
 00291c48,632,xpLibgpuInit,xpLibgpuInit,unread,
 0028ca3c,632,_ZN9CAUTOSAVE4LoadEv,CAUTOSAVE::Load(),read_structural,NOTES §458
 000d9b10,628,_Z15request_commandi,request_command(int),read_structural,NOTES §459
-001831e0,628,_Z15bCursolDownFuncP7DVECTORPti,"bCursolDownFunc(DVECTOR*, unsigned short*, int)",unread,
-001d3308,628,_Z21set_playerwork_commonP6PENTRYi,"set_playerwork_common(PENTRY*, int)",unread,
-001e180c,628,_Z9search_mpiiii,"search_mp(int, int, int, int)",unread,
-0027d98c,628,_ZN17iOS_CMenuTouchNum9execPressEPiP25IOS_MENU_TOUCH_NUM_RESULT,"iOS_CMenuTouchNum::execPress(int*, IOS_MENU_TOUCH_NUM_RESULT*)",unread,
-000a17ec,624,_ZN10CG2D_COLOR8RGBToHSBEjPtS0_S0_,"CG2D_COLOR::RGBToHSB(unsigned int, unsigned short*, unsigned short*, unsigned short*)",unread,
+001831e0,628,_Z15bCursolDownFuncP7DVECTORPti,"bCursolDownFunc(DVECTOR*, unsigned short*, int)",read_structural,NOTES §470
+001d3308,628,_Z21set_playerwork_commonP6PENTRYi,"set_playerwork_common(PENTRY*, int)",read_full,NOTES §469
+001e180c,628,_Z9search_mpiiii,"search_mp(int, int, int, int)",read_structural,NOTES §476
+0027d98c,628,_ZN17iOS_CMenuTouchNum9execPressEPiP25IOS_MENU_TOUCH_NUM_RESULT,"iOS_CMenuTouchNum::execPress(int*, IOS_MENU_TOUCH_NUM_RESULT*)",read_structural,NOTES §475
+000a17ec,624,_ZN10CG2D_COLOR8RGBToHSBEjPtS0_S0_,"CG2D_COLOR::RGBToHSB(unsigned int, unsigned short*, unsigned short*, unsigned short*)",read_full,NOTES §471
 001876b0,624,_Z7eSwapDBii,"eSwapDB(int, int)",read_structural,NOTES §421
-002a27c4,624,_ZN8xpLibpad6UpdateEi,xpLibpad::Update(int),mentioned_unverified,
-002b2fe8,624,_Z16musicPlayer_Playiiii,"musicPlayer_Play(int, int, int, int)",unread,
+002a27c4,624,_ZN8xpLibpad6UpdateEi,xpLibpad::Update(int),read_full,NOTES §474
+002b2fe8,624,_Z16musicPlayer_Playiiii,"musicPlayer_Play(int, int, int, int)",read_structural,NOTES §473
 002cac50,620,__aeabi_dmul,__aeabi_dmul,unread,
 000868a4,620,vorbis_synthesis_lapout,vorbis_synthesis_lapout,read_structural,NOTES §336
 0026b378,620,_Z14wldssd_controlv,wldssd_control(),read_full,NOTES §12.7
-002b5bec,620,_Z16Logo_FrameRenderv,Logo_FrameRender(),unread,
+002b5bec,620,_Z16Logo_FrameRenderv,Logo_FrameRender(),read_structural,NOTES §472
 002cac50,620,__muldf3,__muldf3,unread,
 00083900,616,ogg_stream_iovecin,ogg_stream_iovecin,read_structural,NOTES §336
 00087ecc,616,vorbis_book_decodevv_add,vorbis_book_decodevv_add,read_structural,NOTES §336
@@ -4836,12 +4836,12 @@ address,size,mangled,demangled,status,section_ref
 002cb1c4,20,__aeabi_dcmpge,__aeabi_dcmpge,unread,
 002cb8c8,20,__aeabi_fcmpeq,__aeabi_fcmpeq,unread,
 002cb188,20,__aeabi_dcmpeq,__aeabi_dcmpeq,unread,
-000a1774,20,_ZN10CG2D_COLOR11GetTone4To8Ev,CG2D_COLOR::GetTone4To8(),unread,
-000a1788,20,_ZN10CG2D_COLOR11GetTone5To8Ev,CG2D_COLOR::GetTone5To8(),unread,
-000a179c,20,_ZN10CG2D_COLOR11GetTone6To8Ev,CG2D_COLOR::GetTone6To8(),unread,
-000a17b0,20,_ZN10CG2D_COLOR14GetTone64To255Ev,CG2D_COLOR::GetTone64To255(),unread,
-000a17c4,20,_ZN10CG2D_COLOR17GetTone64To255InvEv,CG2D_COLOR::GetTone64To255Inv(),unread,
-000a17d8,20,_ZN10CG2D_COLOR20GetTone64To255_Sll24Ev,CG2D_COLOR::GetTone64To255_Sll24(),unread,
+000a1774,20,_ZN10CG2D_COLOR11GetTone4To8Ev,CG2D_COLOR::GetTone4To8(),read_full,NOTES §471
+000a1788,20,_ZN10CG2D_COLOR11GetTone5To8Ev,CG2D_COLOR::GetTone5To8(),read_full,NOTES §471
+000a179c,20,_ZN10CG2D_COLOR11GetTone6To8Ev,CG2D_COLOR::GetTone6To8(),read_full,NOTES §471
+000a17b0,20,_ZN10CG2D_COLOR14GetTone64To255Ev,CG2D_COLOR::GetTone64To255(),read_full,NOTES §471
+000a17c4,20,_ZN10CG2D_COLOR17GetTone64To255InvEv,CG2D_COLOR::GetTone64To255Inv(),read_full,NOTES §471
+000a17d8,20,_ZN10CG2D_COLOR20GetTone64To255_Sll24Ev,CG2D_COLOR::GetTone64To255_Sll24(),read_full,NOTES §471
 000a5e5c,20,_ZN15CG2D_LOADER_TIMC1EP11_G2D_FORMATi,"CG2D_LOADER_TIM::CG2D_LOADER_TIM(_G2D_FORMAT*, int)",read_full,NOTES §9.2
 000a4afc,20,_ZN15CG2D_LOADER_TGAC1EP11_G2D_FORMATi,"CG2D_LOADER_TGA::CG2D_LOADER_TGA(_G2D_FORMAT*, int)",read_structural,NOTES §316
 000a2bd4,20,_ZN15CG2D_LOADER_BMPC1EP11_G2D_FORMATi,"CG2D_LOADER_BMP::CG2D_LOADER_BMP(_G2D_FORMAT*, int)",read_structural,NOTES §316
@@ -5293,7 +5293,7 @@ address,size,mangled,demangled,status,section_ref
 00083140,16,ogg_page_bos,ogg_page_bos,read_structural,NOTES §336
 00083150,16,ogg_page_eos,ogg_page_eos,read_structural,NOTES §336
 0008d308,16,vorbis_version_string,vorbis_version_string,read_structural,NOTES §336
-000a1764,16,_ZN10CG2D_COLOR11GetTone2To8Ev,CG2D_COLOR::GetTone2To8(),unread,
+000a1764,16,_ZN10CG2D_COLOR11GetTone2To8Ev,CG2D_COLOR::GetTone2To8(),read_full,NOTES §471
 000a6608,16,_ZN15CG2D_LOADER_TIM17GetImageFormatExtEi,CG2D_LOADER_TIM::GetImageFormatExt(int),read_structural,NOTES §316
 000a573c,16,_ZN15CG2D_LOADER_TGA17GetImageFormatExtEi,CG2D_LOADER_TGA::GetImageFormatExt(int),read_structural,NOTES §316
 000a6f28,16,_ZN18CGX_SCREEN_CORRECT8GetScaleEPf,CGX_SCREEN_CORRECT::GetScale(float*),unread,
