@@ -12526,3 +12526,266 @@ dispatcher — hipótese de que `iOS_CMenuTouchSaveLoad::exec`, ainda
 identificada como o widget real da tela de save/load — confirma a
 hipótese da grade uniforme de slots), seção 363 (`initPacket` da
 mesma classe, fork irmão desta fila).
+
+## 365. `vOpn_arzmes_main()`/`ctlbrst_menu_set()`/`ctlwork_init()`/`ctlkiroku_init()`/`ctlkiroku_main(CTLINFO*)`/`ctlkiromes_init(int)` - fecham quatro follow-ups explícitos deixados em aberto nas seções 312 e sobre a família `vOpn_arzmes`/`ctlbrst` (2026-10-23, Fase 3, trigésimo quinto lote)
+
+**`vOpn_arzmes_main()`** (`0x241ee0`, 904 B) — alvo explicitamente
+citado como "próximo alvo natural de follow-up" na nota sobre
+`pmkprim_put` (lote anterior). `jtable.py`: **98% de cobertura**
+(221/226), zero tabela de salto, 29 branches/12 de retrocesso.
+Chama `pmkprim_put(int)` ×3 (confirma a hipótese: a janela de
+mensagem "arzmes" monta a primitiva de fade a cada frame), além de
+`vOpn_arzpic_init`/`vOpn_arzpic_main` (irmãos "arzpic" — a imagem
+que acompanha a mensagem), `vOpn_loadwait()`, `CFFT_STATE::
+GetParam(int)` ×2, e a família de toque `iOS_getTouchTap`/
+`iOS_getV2Icon`/`iOS_setV2Icon`. Confirma que a janela de mensagem
+"arz" tem *input* de toque (provavelmente avançar texto/pular) além
+do fade visual. Marcada `read_structural`.
+
+**`ctlbrst_menu_set()`** (`0x24c554`, 840 B) — fecha a referência da
+seção 312 ("`ctlbrst_init` chama `ctlbrst_menu_set` diretamente, logo
+tem menu com opções", ainda não lida). `jtable.py`: **97% de
+cobertura** (204/210), zero tabela de salto, 11 branches/7 de
+retrocesso. Único `bl`: **`Wread_eventflag(int)`** ×6 — a função
+monta as opções do menu "brst"/Zodíaco consultando 6 flags de evento
+distintas (ou a mesma flag 6 vezes com índices diferentes), sem
+nenhuma chamada de desenho/janela própria — é pura lógica de
+habilitação de opções, delegando o desenho pra quem a chama
+(`ctlbrst_init`). Marcada `read_structural`.
+
+**`ctlwork_init()`** (`0x250440`, 912 B) — fecha outro dos 8
+sub-controladores citados no hub da seção 312 (`ctlbrst_main`
+transiciona pra `ctlwork_init` entre outros). `jtable.py`: **95% de
+cobertura** (217/228), zero tabela de salto, 5 branches/3 de
+retrocesso. Chama `add_anmpac`/`add_winpac` (registro de pacote de
+animação/janela, mesmo par visto em `ctlworking_init`, seção 216),
+`wldwin_set`/`wldwin_trans`/`wldmess_put` (janela modal padrão com
+transição e texto) e `Wread_eventflag`. Estruturalmente é um init de
+tela modal simples — confirma que "work" aqui é outro item de menu
+do hub `ctlbrst_main` (provavelmente "trabalho"/side-job), não
+relacionado ao indicador de "trabalhando" (`ctlworking_*`, família
+distinta apesar do nome parecido). Marcada `read_structural`.
+
+**`ctlkiroku_init()`** (`0x24d964`, 808 B), **`ctlkiroku_main
+(CTLINFO*)`** (`0x24de6c`, 652 B) e **`ctlkiromes_init(int)`**
+(`0x24dcd8`, 404 B) — terceiro sub-controlador do mesmo hub
+(`ctlkiroku_init`, "kiroku" = 記録/registro/histórico). `ctlkiroku_
+init`: `jtable.py` resolve **1 tabela de salto real** (guarda em
+`0x24d9ac`, dispatch em `0x24d9b0`, 64 casos → 2 handlers distintos,
+`0x24dab8`/`0x24dc28`). Nota de ferramenta: a métrica de cobertura
+bruta deu só 62% (126/202), mas inspeção direta dos bytes em
+`0x24d9b0..0x24dab4` mostra que os "64 casos" não são uma tabela de
+dados de endereços — são **64 instruções `b` individuais** (cada uma
+`ea0000XX`, opcode de branch incondicional ARM), ou seja, a tabela
+inteira já É código real e resolvido, só que o denominador de
+cobertura do `jtable.py` não soma essas 64 instruções à contagem de
+"instruções cobertas" por serem geradas via resolução de tabela e
+não via descida recursiva direta. Semanticamente a função está 100%
+resolvida (0 ambiguidade, 2 destinos distintos, ambos dentro do
+range). Chama `defscrwin_set`/`curhis_put` (janela de histórico +
+registro no histórico atual) e `Wsend_taskparamater`. `ctlkiroku_
+main`: 92% de cobertura, zero tabela de salto, chama `ctlkiroku_
+deactive`/`ctlkiromes_init` (a si mesmo, confirma a tríade init/
+main/deactive), `wldctl_active`, `ctlhelp_init`, `sound_request` ×2,
+`curhis_get`/`curhis_clr`. `ctlkiromes_init`: 92% de cobertura, zero
+tabela de salto, chama `wldmes_load(int)` (carrega texto/mensagem de
+histórico) e `Wsend_taskparamater`. Confirma a família completa:
+"kiroku" é a tela de histórico/registro (provavelmente histórico de
+batalhas ou eventos da história), com seu próprio sub-estado de
+mensagem (`kiromes`). Todas as três marcadas `read_structural`
+(a nota de cobertura de `ctlkiroku_init` é um artefato de métrica da
+ferramenta, não uma lacuna real de análise, e documentada aqui pra
+referência futura caso outras funções com tabela de salto via `b`
+individuais em vez de tabela de dados mostrem o mesmo padrão).
+
+**Referências cruzadas:** seção 312 (`ctlbrst_init`, deixa os 8
+sub-controladores do hub "brst"/Zodíaco como alvo — `ctlwork_init`,
+`ctlkiroku_init` e `ctlbrst_menu_set` fecham 3 dessas pendências;
+restam `ctlperson_init`, `ctlopt_init`, `ctlhelp_init` (já lida em
+outro contexto), `ctlhistory_init`, `ctltresure_init`, `ctlunreg_init`
+como pendências), seção 216 (`ctlworking_init`, família "trabalhando"
+distinta de `ctlwork_init` apesar do nome parecido), nota anterior
+sobre `pmkprim_put`/família `vOpn_arzmes` (fecha o follow-up direto).
+
+## 366. `mouke_okng(CTLINFO*)` — overlay OK/NG do roster "mouke", espelha o padrão já confirmado em `ctlhakenokng_main` (seção 343) (2026-10-23, Fase 3, trigésimo quinto lote)
+
+`mouke_okng(CTLINFO*)` (`0x260ce8`, 912 B) — `jtable.py`: **95% de
+cobertura** (217/228), zero tabela de salto, 12 `bl` distintos, 25
+branches/10 de retrocesso. Catálogo: `Wread_eventflag`,
+`Wsend_taskparamater`, `get_unitwork_add_wld(int)`, `ctlmouke_init()`
+(reentrada no controller irmão "roster", seção 167),
+`iOS_add_anmpac_max(int)`, `sound_request(int)`,
+`iOS_CMenuTouch::setDispAssist(int)`, `iOS_clearOkNg()` (mesmo
+teardown usado em `ctlhakenokng_main`), `pspJobIsSpecialJob(int)`,
+`iOS_getTouchTap()`, `iOS_getV2Icon`/`iOS_setV2Icon`. O nome "okng"
+(OK/NG) combinado com esse catálogo reproduz quase exatamente o
+padrão da seção 343 (`ctlhakenokng_main`, overlay modal Sim/Não do
+despacho "haken", que converge de volta pra `ctlmouke_init()`/
+`iOS_clearOkNg()`): é o overlay de confirmação de uma ação dentro do
+próprio controller de roster "mouke" (ex.: confirmar/cancelar
+seleção, remoção ou atribuição de unidade), não o controller do
+roster em si. `pspJobIsSpecialJob` sugere bloqueio da ação para
+unidades de job especial (personagens story-locked); `get_unitwork_
+add_wld` indica que a unidade-alvo já está resolvida antes da
+decisão. Marcada `read_structural`.
+
+## 367. `CheckPoleResult(int,int,int,int,int)` — verificação de resultado de ataque em linha com arma de alcance, combina validade de coordenada e diferença de altura (2026-10-23, Fase 3, trigésimo quinto lote)
+
+`CheckPoleResult(int,int,int,int,int)` (`0x1e2b78`, 900 B) —
+`jtable.py`: **99% de cobertura** (222/225), zero tabela de salto, 22
+branches/12 de retrocesso (laço pequeno, 2-3 iterações). Apenas 2
+`bl` distintos, ambos reusados de famílias de combate já confirmadas:
+**`get_unit_height(int)`** ×5 (já visto na seção 95, `getskilleffect`
+— diferença de altura entre atacante e alvo entra no cálculo de
+efeito) e **`check_coord(int,int,int)`** ×3 (já visto na seção 151,
+`getskillresult_main` — resolução/validação de coordenada de tile
+pra alvejamento). A combinação repetida coordenada+altura sem
+nenhuma chamada externa é consistente com validar o alcance de uma
+arma tipo lança/vara (polearm), que no FFT pode atingir um tile
+adicional na mesma direção do alvo principal se a geometria
+permitir. Os 5 argumentos int são compatíveis com coordenadas de
+origem/destino (x, y, altura) mais um ID de unidade ou flag de
+direção — não confirmado byte a byte. Marcada `read_full` (critério
+automático satisfeito: 99% cobertura, 0 jump tables).
+
+## 368. `barmenu_reset(CTLINFO*)` — rotina de reset/encerramento do menu de barra do world map (2026-10-23, Fase 3, trigésimo quinto lote)
+
+`barmenu_reset(CTLINFO*)` (`0x24b09c`, 900 B) — `jtable.py`: **96% de
+cobertura** (215/225), zero tabela de salto, 11 branches/6 de
+retrocesso. 7 `bl` distintos: `Wread_eventflag`, `endevent_count(int)`
+×2, `wldwin_set`/`wldwin_trans`/`wldmess_put` (janela modal padrão do
+world map), `pspWorldDisableFlg(PSP_WORLD_FLG)` ×2, `pspWorldCheckFlg
+(PSP_WORLD_FLG)` ×2. Apesar do nome parecido, não pertence à família
+`ctlbrst_*` (hub Zodíaco, seções 125/312) — grep por "barmenu" não
+retorna nenhuma outra ocorrência nas notas, então "bar menu" aqui é
+uma família própria ainda não catalogada em outro lugar. Padrão de
+chamadas consistente com: checar/limpar flags de estado do world map,
+fechar a transição visual da janela e zerar a mensagem exibida, e
+resetar o contador de eventos pendentes após ler o flag atual —
+contraparte de desativação/limpeza de estado pro controller do menu
+de barra, análoga em papel a `ctlbrst_deactive` mas de família
+diferente. Marcada `read_structural` (os 4% não cobertos não foram
+inspecionados instrução a instrução, mas critério automático de
+≥95%+0 jump tables está satisfeito).
+
+**Referências cruzadas (seções 366-368):** seção 167/343
+(`ctlmouke_init`/`ctlhakenokng_main`, padrão OK/NG espelhado por
+`mouke_okng`), seções 95/151 (`get_unit_height`/`check_coord`, reuso
+confirmado em `CheckPoleResult`), seções 125/312 (`ctlbrst_*`,
+família distinta de `barmenu_reset` apesar do nome parecido).
+
+## 369. `iOSexecuteMoveProcs(tag_animation*)` — interpretador de opcodes de movimento do sistema de animação, cobertura abaixo do limiar automático (2026-10-23, Fase 3, trigésimo quinto lote)
+
+`iOSexecuteMoveProcs(tag_animation*)` (`0x20023c`, 896 B) —
+`jtable.py`: **72% de cobertura** (161/224), **abaixo do limiar de
+95%** de aceitação automática — lacuna real (~28%), não artefato de
+métrica como na seção 365. **1 tabela de salto resolvida**: guarda
+`cmp@0x200270`, dispatch `@0x200274`, **60 casos → 14 handlers
+distintos**. 26 branches/16 de retrocesso (densidade de laço alta,
+compatível com processamento por quadro dentro de cada handler).
+
+16 `bl` distintos: `changeAnimation(int,int,tag_animation*)` (troca
+de animação a partir do move-proc atual), `rideOffChokoboS
+(tag_animation*)`/`rideOffChokobo(tag_animation*)` (handlers de
+monta/desmonta de chocobo dentro do switch), `callAnimationSound
+(tag_animation*,int)` (já catalogada na seção 82), e 10 `sub_*` sem
+símbolo dinâmico (0x1faad8, 0x1facfc, 0x1fb3f8, 0x1fb9e8, 0x1fc8cc,
+0x1fc980, 0x1fcbfc, 0x1fccf8, 0x1fed24, 0x1ff768, 0x1ff858,
+0x1ffb50) — cada um com peso ×1, compatível com um handler por caso
+do switch.
+
+**Hipótese de semântica**: interpretador de "procedimentos de
+movimento" do sistema de animação — switch de 60 opcodes/14 blocos
+resolvendo passos de movimento de uma `tag_animation*`
+(deslocamento, montar/desmontar chocobo, troca de animação, som).
+Estruturalmente é irmã de `executeShape` (seção 82, interpretador de
+forma) e `executeAnimationStatus` (seção 193, máquina de estado de
+física/altura) — as três parecem formar a camada de "micro-VMs" de
+opcode do sistema de animação (forma / movimento / status físico),
+provavelmente chamadas a partir de `executeAnimationProgram` (ver
+seção 82). Nenhuma menção prévia a "MoveProc" nas notas — função
+nova nesse mapeamento.
+
+**Marcada `read_structural`, não `read_full`** — critério objetivo
+não satisfeito (cobertura 72% < 95%, apesar da tabela de salto estar
+totalmente resolvida). Pendência honesta: nova passada dirigida aos
+14 endereços de handler antes de promover pra leitura completa, e
+nomear os `sub_*` restantes cruzando com handlers já identificados em
+`executeShape`/`executeAnimationStatus`.
+
+**Referências cruzadas:** seção 82 (`executeShape`/
+`executeAnimationProgram`), seção 193 (`executeAnimationStatus`).
+
+## 370. `initializeDamageNumber(tag_animation*)` — o corpo real contradiz o nome do símbolo: monta flags de status/ícone de condição, não dígitos de número de dano (2026-10-23, Fase 3, trigésimo quinto lote)
+
+`initializeDamageNumber(tag_animation*)` (`0x1ee278`, 900 B) — a
+hipótese inicial era que esta função preparasse a estrutura que
+`drawDamage` (seção 212) desenha, já que está imediatamente antes
+dela no binário. A leitura **não confirma essa hipótese**.
+
+`jtable.py`: **~100% de cobertura** (224/225), zero tabela de salto,
+35 branches/17 de retrocesso (laço real no meio da função). Achado
+atípico: **zero `bl`** — a função é inteiramente local, sem chamar
+nada, logo impossível cruzar contra `.dynsym`/catálogo de chamadas
+como nas demais entradas. Por isso esta função recebeu leitura
+manual instrução a instrução (dump via capstone, já que `jtable.py`/
+`struct_pass.py` só emitem o resumo) cobrindo as 225 instruções, não
+apenas o resumo automático.
+
+**O que o corpo faz de fato** (`r0` = `tag_animation*`, `r1 =
+*(r0+0x134)` = sub-struct de status/condição do personagem):
+1. Escreve `0x1f` (31) no halfword `+4` de 3 ponteiros em
+   `r0+0x2cc/0x2d0/0x2d4` — provável inicialização de altura/Y de 3
+   sub-objetos (ícones), não dígitos.
+2. Testa `r1+0x1ae`: se zero, dispara um switch sobre a categoria em
+   `r1+0x1b0` (valores 1/2/3/7/0xb/0xd) que liga bits específicos em
+   `r0+0x1c0` (`0x400000`/`0x800000`/`0x100000`/`0x1000000`/
+   `0x200000`) — padrão que lembra desfechos de eliminação de
+   unidade (cristal/tesouro/fuga), não dano.
+3. Se `r1+0x1ae != 0`: traduz bits de `r1+0x1d5`
+   (`0x80/0x40/0x20/0x10/0x1`) em bits 0-3 de `r0+0x1c0`; se o bit0
+   estiver ligado, examina 6 bytes sequenciais em `r1+0x1c2..0x1c7`
+   e liga pares de bits altos — padrão de flagword de
+   fraqueza/absorção/resistência elemental empacotado para exibição.
+4. Se o bit `0x8` de `r1+0x1d5` estiver ligado, entra num laço
+   (0x1ee490→0x1ee580) que percorre uma tabela embutida de ~3
+   entradas de 8 bytes (base PC-relativa) comparando contra máscaras
+   tiradas de `r1+0x1ac`, selecionando qual ícone escrever num array
+   em `r0+...+0x1c4` e incrementando um contador em `r0+0x1bd` —
+   seleção/montagem de **lista de ícones de status** (veneno/sono/
+   petrificação etc.), com supressões condicionais via
+   `r1+0x1cb`/`r1+0x1cc`/`r1+0x1d0`.
+5. Saídas: `bx lr` direto em `0x1ee444`, ou um **tail-call** (`pop`;
+   `b 0x1e7ddc`, não `bl`) em `0x1ee590-0x1ee594` — a função não
+   retorna ao chamador, pula direto pra `0x1e7ddc`, que continua a
+   lógica (não explorado nesta passada).
+
+**Relação com a seção 212 (`drawDamage`)**: nenhuma ligação real
+encontrada — sem `bl` entre as duas, sem proximidade de endereço
+contígua (há um hiato de ~272 B entre o fim do corpo coberto e
+`drawDamage`, provável pool de literais), e o conteúdo é construção
+de flags de status/seleção de ícones, não lógica de dígito/paleta de
+número de dano. **O nome do símbolo (`initializeDamageNumber`, do
+`.dynsym` real, não um chute nosso) não corresponde ao que o corpo
+faz** — hipótese de reconciliação mais plausível: no FFT original, o
+popup de dano por cima da unidade às vezes vem acompanhado de um
+ícone pequeno de status recém-aplicado (veneno, sono etc.) junto do
+número — então esta função pode ser a parte "ícone de status" desse
+mesmo popup combinado, e o nome do símbolo reflete o conceito mais
+amplo do popup (`DamageNumber` como entidade visual completa), não
+literalmente os dígitos. Alternativa mais fria: o símbolo pode estar
+associado ao endereço errado por desalinhamento de atribuição no
+`.dynsym` — não descartada, mas sem evidência direta. Nomes de campo
+de `r1` (offsets 0x1ac-0x1d5) são inferidos pelo padrão de bits, não
+confirmados por struct conhecida.
+
+**Marcada `read_full`** — cobertura ~100%, zero tabela de salto, e
+(diferente da maioria das entradas `read_structural` do lote, que só
+aceitam o resumo do `jtable.py`) leitura manual completa das 225
+instruções com fluxo de controle totalmente reconstruído. Pendência
+honesta: destino do tail-call (`0x1e7ddc`) não explorado; nomes de
+campo de `r1` são hipótese, não confirmação por símbolo/struct.
+
+**Referências cruzadas:** seção 212 (`drawDamage`, hipótese de
+ligação direta não confirmada — função vizinha mas sem call entre
+elas).

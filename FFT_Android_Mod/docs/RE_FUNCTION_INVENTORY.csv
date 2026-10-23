@@ -403,14 +403,14 @@ address,size,mangled,demangled,status,section_ref
 0027dffc,916,_ZN22iOS_CMenuTouchSaveLoad10initPacketEv,iOS_CMenuTouchSaveLoad::initPacket(),read_structural,NOTES §363
 0027e900,916,_ZN22iOS_CMenuTouchSaveLoad9execPressEPiS0_P30IOS_MENU_TOUCH_SAVELOAD_RESULT,"iOS_CMenuTouchSaveLoad::execPress(int*, int*, IOS_MENU_TOUCH_SAVELOAD_RESULT*)",read_structural,NOTES §364
 000e2308,912,_Z16disp_statuscparav,disp_statuscpara(),read_structural,NOTES §361
-00250440,912,_Z12ctlwork_initv,ctlwork_init(),unread,
-00260ce8,912,_Z10mouke_okngP7CTLINFO,mouke_okng(CTLINFO*),unread,
+00250440,912,_Z12ctlwork_initv,ctlwork_init(),read_structural,NOTES §365
+00260ce8,912,_Z10mouke_okngP7CTLINFO,mouke_okng(CTLINFO*),read_structural,NOTES §366
 00110dc4,908,_Z17Wdisp_statuscparav,Wdisp_statuscpara(),read_structural,NOTES §361
-00241ee0,904,_Z16vOpn_arzmes_mainv,vOpn_arzmes_main(),unread,
-001e2b78,900,_Z15CheckPoleResultiiiii,"CheckPoleResult(int, int, int, int, int)",unread,
-001ee278,900,_Z22initializeDamageNumberP13tag_animation,initializeDamageNumber(tag_animation*),unread,
-0024b09c,900,_Z13barmenu_resetP7CTLINFO,barmenu_reset(CTLINFO*),unread,
-0020023c,896,_Z19iOSexecuteMoveProcsP13tag_animation,iOSexecuteMoveProcs(tag_animation*),unread,
+00241ee0,904,_Z16vOpn_arzmes_mainv,vOpn_arzmes_main(),read_structural,NOTES §365
+001e2b78,900,_Z15CheckPoleResultiiiii,"CheckPoleResult(int, int, int, int, int)",read_full,NOTES §367
+001ee278,900,_Z22initializeDamageNumberP13tag_animation,initializeDamageNumber(tag_animation*),read_full,NOTES §370
+0024b09c,900,_Z13barmenu_resetP7CTLINFO,barmenu_reset(CTLINFO*),read_structural,NOTES §368
+0020023c,896,_Z19iOSexecuteMoveProcsP13tag_animation,iOSexecuteMoveProcs(tag_animation*),read_structural,NOTES §369
 00174724,892,_Z20cMakeSmallWindowFuncPh,cMakeSmallWindowFunc(unsigned char*),read_structural,NOTES §358
 002cdb20,892,__gnu_unwind_execute,__gnu_unwind_execute,unread,
 001aa6b0,884,_Z15GetShopItemListsssPsi,"GetShopItemList(short, short, short, short*, int)",unread,
@@ -437,7 +437,7 @@ address,size,mangled,demangled,status,section_ref
 000a4b38,844,_ZN15CG2D_LOADER_TGA4SaveEPviiP9_G2D_SAVE,"CG2D_LOADER_TGA::Save(void*, int, int, _G2D_SAVE*)",read_structural,NOTES §316
 0012c7f0,844,_Z24disp_selectrefleshwindowv,disp_selectrefleshwindow(),read_structural,NOTES §351
 00229dc8,844,_Z18DrawPermanentShapeP15PermanentObject,DrawPermanentShape(PermanentObject*),unread,
-0024c554,840,_Z16ctlbrst_menu_setv,ctlbrst_menu_set(),unread,
+0024c554,840,_Z16ctlbrst_menu_setv,ctlbrst_menu_set(),read_structural,NOTES §365
 00270f3c,840,_Z15iOSpagewin_mainP11PAGEWININFO,iOSpagewin_main(PAGEWININFO*),unread,
 0026f4ec,836,_Z16ctlunregmes_mainP7CTLINFO,ctlunregmes_main(CTLINFO*),unread,
 00272254,836,_Z17ForAbnormalStatusv,ForAbnormalStatus(),mentioned_unverified,
@@ -448,7 +448,7 @@ address,size,mangled,demangled,status,section_ref
 000db06c,824,_Z10move_lightv,move_light(),unread,
 0018a3ac,824,_Z12eDrawTexFlipPsP5COLORciii,"eDrawTexFlip(short*, COLOR*, char, int, int, int)",read_structural,NOTES §317
 00172f8c,816,_Z12cDrawTexFlipPsP5COLORciii,"cDrawTexFlip(short*, COLOR*, char, int, int, int)",read_structural,NOTES §317
-0024d964,808,_Z14ctlkiroku_initv,ctlkiroku_init(),unread,
+0024d964,808,_Z14ctlkiroku_initv,ctlkiroku_init(),read_structural,NOTES §365
 0008174c,804,unzReadCurrentFile,unzReadCurrentFile,unread,
 00153940,804,_Z7ZaddzodP9ZODRECORDP11tagPOLY_FT4,"Zaddzod(ZODRECORD*, tagPOLY_FT4*)",unread,
 00216b14,804,_Z19Resume_Init_WORK_MUv,Resume_Init_WORK_MU(),unread,
@@ -568,7 +568,7 @@ address,size,mangled,demangled,status,section_ref
 00211460,656,_Z7padReadv,padRead(),unread,
 00267840,656,_Z15ctlretokng_initi,ctlretokng_init(int),unread,
 0025da88,652,_Z10wldkey_repm,wldkey_rep(unsigned long),read_full,NOTES §12.2
-0024de6c,652,_Z14ctlkiroku_mainP7CTLINFO,ctlkiroku_main(CTLINFO*),unread,
+0024de6c,652,_Z14ctlkiroku_mainP7CTLINFO,ctlkiroku_main(CTLINFO*),read_structural,NOTES §365
 00255b88,652,_Z11ctlopt_mainP7CTLINFO,ctlopt_main(CTLINFO*),unread,
 00289198,648,_Z18pspPrimBackDrawRGBiittPmPhhhhi,"pspPrimBackDrawRGB(int, int, unsigned short, unsigned short, unsigned long*, unsigned char*, unsigned char, unsigned char, unsigned char, int)",unread,
 000d7498,648,_Z15allocatetextureP6RECT16P11tagPOLY_FT4Pl,"allocatetexture(RECT16*, tagPOLY_FT4*, long*)",unread,
@@ -915,7 +915,7 @@ address,size,mangled,demangled,status,section_ref
 0010fb74,404,_Z6WbgputP11tagPOLY_FT4P6RECT16S2_P8BGRECORD,"Wbgput(tagPOLY_FT4*, RECT16*, RECT16*, BGRECORD*)",unread,
 0015e5d4,404,_Z15iOSShiftUnitGetv,iOSShiftUnitGet(),unread,
 00284144,404,_Z12mapclip_loadi,mapclip_load(int),unread,
-0024dcd8,404,_Z15ctlkiromes_initi,ctlkiromes_init(int),unread,
+0024dcd8,404,_Z15ctlkiromes_initi,ctlkiromes_init(int),read_structural,NOTES §365
 00266a00,404,_Z19infonumber_put_zeroiiP8GsSPRITEP4GsOTi,"infonumber_put_zero(int, int, GsSPRITE*, GsOT*, int)",mentioned_unverified,
 00280304,404,_Z24Savedata_LoadGameClearedPhPi,"Savedata_LoadGameCleared(unsigned char*, int*)",unread,
 002cb2f0,404,__subsf3,__subsf3,mentioned_unverified,
