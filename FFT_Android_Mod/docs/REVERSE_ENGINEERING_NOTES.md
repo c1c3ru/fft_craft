@@ -16299,3 +16299,218 @@ seção 398/81 (`ASHURA_GNS_Read`/`ASHURA_GNS_Garage`, vizinhança com
 fechada por `ctleeff_init` — achado do acoplamento com random
 encounter), seção 396 (`EggChk`, ambiguidade "Egg" resolvida de vez
 por `DrawEggWithShadow`).
+
+## 523. `CheckGunResult(int,SVECTOR*,int)`/`CheckBladeResult(int,int,int,int,int)` — fecham o quarteto Blade/Pole/Bow/Gun de checagem de arma física, consumido por `getweaponeffect` (seção 415) (2026-10-23, Fase 3, sexagésimo oitavo lote)
+
+`CheckGunResult(int,SVECTOR*,int)` (`0x224e44`, 560 B, 96% cob., 0
+tabela, 4 branches/2 de retrocesso): 8 `bl` — `get_mapstp`,
+`getAnimationPositionFromBattleWork` ×3, `getAnimationHeightFromBattleID`
+×2, 2 locais sem símbolo, `ratan2`/`SquareRoot12`/`SquareRoot0`
+(trigonometria/distância GTE — consistente com trajetória de bala).
+`CheckBladeResult(int,int,int,int,int)` (`0x1e1ffc`, só 128 B, 100%
+cob., 0 tabela, 2 branches/1 de retrocesso): único `bl`
+`get_unit_height(int)` ×2 — função minúscula, checagem simples de
+diferença de altura (arma corpo-a-corpo não precisa de trajetória
+balística). Fecham o quarteto completo de checadores de categoria
+de arma física (`CheckPoleResult` seção 367, `CheckBowResult` seção
+242) já consumido por `getweaponeffect` (seção 415). Confirma que
+armas de longo alcance (Bow/Gun) usam trigonometria/distância GTE
+pra trajetória, enquanto armas corpo-a-corpo (Blade/Pole) só checam
+altura/coordenada. Marcadas `read_full` (96%/100% ≥95%, 0 tabela de
+salto em ambas).
+
+## 524. `make_statusscroll()`/`Wmake_statusscroll()` — par normal/"W" do menu de rolagem de status, chama o `hook_jobmenu` (2026-10-23, Fase 3, sexagésimo oitavo lote)
+
+`make_statusscroll()` (`0xef5e0`, 524 B, 92% cob., 0 tabela, 14
+branches/10 de retrocesso) e `Wmake_statusscroll()` (`0x118cdc`, 556
+B, 92% cob., mesma topologia): par normal/"W". 3 `bl` cada:
+`iOS_setsoundf(int*,int)`, `hook_jobmenu()`/`Whook_jobmenu()` (hook
+de debug nomeado explicitamente pro menu de job), `get_bwp(int)`.
+Confirma ser a rotina de montagem do menu de rolagem de status
+(provavelmente lista de atributos/parâmetros navegável por scroll)
+dentro do contexto do menu de job. Marcadas `read_structural` (92%
+< 95%, 0 tabela de salto).
+
+## 525. Família `direc1`/`direc2`/`Wdirec1`/`Wdirec2` — rotina de direção de animação por 16 vias, reusa `cnvglobaltolocalid`/`getanimpos3d` (2026-10-23, Fase 3, sexagésimo oitavo lote)
+
+`direc1(char*)` (`0xdc3d4`, 560 B, 95% cob., 0 tabela, 12 branches/5
+de retrocesso): 3 `bl` — 2 locais sem símbolo,
+`getAnimationDirection16(unsigned int)`. `direc2(char*,int)`
+(`0xdca14`, 536 B, 96% cob., 0 tabela, 7 branches/3 de retrocesso):
+5 `bl` — 2 locais sem símbolo, `getanimpos3d(int,short*)` ×2,
+**`cnvglobaltolocalid(int)`** (seção 412 — confirma reuso direto!),
+`ratan2`. `Wdirec1`/`Wdirec2` (`0x104798`/`0x1052e4`, 556 B cada,
+95-96% cob., mesmos catálogos com prefixo "W"). Confirma ser a
+família de cálculo de direção de animação discretizada em 16 vias
+(bússola de 16 pontos, padrão clássico de jogos PS1 pra sprites
+direcionais), usando o tradutor de ID global→local de batalha
+(seção 412) e a posição 3D da animação. Marcadas `read_structural`/
+`read_full` conforme cobertura (`direc2`/`Wdirec2` ≥95% sem
+ambiguidade → `read_full`; `direc1`/`Wdirec1` ligeiramente abaixo →
+`read_structural`).
+
+## 526. `DrawItemCategory(int,iOS_CMenuTouch*,int,IOS_MENU_TOUCH_RESULT)` — hub de desenho de categoria de item, reusa `GetItemList`/`GetShopItemList`/framework de janela completo (2026-10-23, Fase 3, sexagésimo oitavo lote)
+
+`DrawItemCategory(int,iOS_CMenuTouch*,int,IOS_MENU_TOUCH_RESULT)`
+(`0x1997f0`, 556 B) — `jtable.py`: cobertura não capturada no
+resumo truncado, 8 branches/4 de retrocesso. 10 `bl` distintos:
+`initMenuTouch(iOS_CMenuTouch*,int)`, `GetItemList`/`GetShopItemList`
+(seção 373 — confirma reuso pela mesma tela de categoria!),
+`DrawEquipCategory(int,int,int)`, `MenuSelSideWithSnd`/
+`MenuSelSideWithSndDirect`, `SetWindowPosition`/`GetWindowPosition`,
+`WindowInit2`, `SetWindowCount`. Já referenciada implicitamente por
+múltiplas telas de loja/equipamento já mapeadas (biblioteca de
+janela completa `WindowInit2`/`SetWindowPosition`/`CursolFunc`
+citada nas seções 7901+ etc.) — esta é a função real que desenha a
+categoria de itens, delegando a listagem pra `GetItemList`/
+`GetShopItemList` conforme o contexto (posse própria vs. loja).
+Marcada `read_structural` (cobertura numérica pendente de
+verificação nesta passada).
+
+## 527. `AppEngine_Init(int)` — achado arquitetural: o boot real do engine, par de `AppEngine_FrameStep` (seção 489) (2026-10-23, Fase 3, sexagésimo oitavo lote)
+
+`AppEngine_Init(int)` (`0x2b1be8`, 556 B) — `jtable.py`: cobertura
+não capturada no resumo truncado, 3 branches/3 de retrocesso. 14
+`bl` distintos: `CWORK_MEM::New(int)`, `CTHREAD::CTHREAD()`/`Create(int)`,
+`timeGetTime()`, `CSOUND_IF::CSOUND_IF(int)`/`Init(unsigned int,int,
+char*,int)`/`RegisterSavedata` ×2, `CFRAMERATE::CFRAMERATE(float,
+float)`, `CAPP_INFO::GetDeviceW`/`GetDeviceH`/`GetRootPath`,
+**`GX_Init(int)`**, **`AppEngineFFT_Init()`**, 4 stubs PLT. Fecha o
+par com `AppEngine_FrameStep` (seção 489, o tick real de frame) —
+confirma ser o **boot completo do engine**: aloca memória de
+trabalho, cria a thread principal, inicializa o subsistema de som
+(`CSOUND_IF`) com registro de savedata, configura o framerate,
+consulta dimensões do device e caminho raiz de assets, inicializa o
+contexto gráfico (`GX_Init`) e finalmente delega pro boot específico
+do jogo (`AppEngineFFT_Init`). É provavelmente a primeira função
+chamada pela JNI após o app abrir. Marcada `read_structural`
+(cobertura numérica pendente de verificação; achado arquitetural de
+alto valor mesmo sem o número exato).
+
+## 528. `wldfast_lop()` — achado arquitetural: o loop real de desenho por frame do world map, variante "rápida" do ciclo libgpu completo (2026-10-23, Fase 3, sexagésimo oitavo lote)
+
+`wldfast_lop()` (`0x25f990`, 564 B) — `jtable.py`: cobertura não
+capturada no resumo truncado, 10 branches/4 de retrocesso. 13 `bl`
+distintos: `wldinfo_put(GsOT*)`, `SetSpadStack(unsigned long)`/
+`ResetSpadStack()`, `pspPrimBackDraw`/`pspPrimDirectPartsDraw`
+(seções 463/480), `pspWorldCheckFlg` ×5, `pspWorldCallBackExec()`,
+`pspWorldDataBackBufGet` ×2/`pspWorldDataRectGet` ×2, `VSync`,
+`DrawSync` ×2, `GsClearOt`, `GsSwapDispBuff`, `GsSortClear`. Já
+citada de passagem (`mentioned_unverified`) em outra função. Confirma
+ser o loop real de desenho por frame do world map (análogo a
+`wldnormal_lop`, seção 11, mas a variante "rápida" — ciclo completo
+de double-buffer PSX: limpa OT, verifica flags de estado ×5,
+executa callbacks registrados, desenha primitivas de fundo e
+diretas, troca buffers de display e sincroniza). Marcada
+`read_structural` (cobertura numérica pendente de verificação nesta
+passada; achado arquitetural relevante).
+
+**Referências cruzadas (seções 523-528):** seção 415
+(`getweaponeffect`, quarteto Blade/Pole/Bow/Gun agora completo),
+seção 412 (`cnvglobaltolocalid`, reuso direto confirmado por
+`direc2`/`Wdirec2`), seção 373 (`GetShopItemList`/`GetItemList`,
+reuso confirmado por `DrawItemCategory`), seção 489
+(`AppEngine_FrameStep`, par de boot agora completo com
+`AppEngine_Init`), seção 11 (`wldnormal_lop`, variante "rápida" em
+`wldfast_lop`), seções 463/480 (`pspPrimBackDraw*`, consumidas pelo
+loop de desenho do world map).
+
+## 529. `iOS_RESUME_SET_BCALC(...)` — membro "misto" (DataCopy+DataCopyAddr) da família de resume, provável cache de cálculo de batalha (2026-10-23, Fase 3, sexagésimo nono lote)
+
+`iOS_RESUME_SET_BCALC(IOS_RESUME_DATA_BCALC*,IOS_RESUME_DATACOPY_
+MODE)` (`0x1d15d8`, 672 B) — `jtable.py`: **86% de cobertura real**
+(144/168), zero tabela de salto, 1 branch/0 de retrocesso (função
+linear, termina em tail-call `b` direto pra `iOS_Resume_DataCopy`).
+2 `bl`: `iOS_Resume_DataCopy`/`iOS_Resume_DataCopyAddr` — usa os
+**dois** primitivos (diferente de `iOS_RESUME_SET_BATTLE`, seção
+484, só `DataCopy`; mais parecido com `iOS_RESUME_SET_WORK_MU`,
+seção 105, que introduz helpers de endereço). "BCALC" = provável
+"Battle Calc" — um cache/estado de cálculo de batalha (resultado
+intermediário de dano/fórmula), não o estado completo (isso é
+`BATTLE`/`CAUTOSAVE`). A presença de `DataCopyAddr` sugere a struct
+guardar ao menos um ponteiro/endereço de trabalho, não só escalares
+planos. Marcada `read_structural` (86% real < 95%, seguindo o
+precedente da seção 484 de usar a fração exata, não o percentual
+arredondado).
+
+## 530. `unzReadCurrentFile` — leitura/descompressão de entrada ZIP, interno de `minizip`/zlib, fast-track de terceiros (2026-10-23, Fase 3, sexagésimo nono lote)
+
+`unzReadCurrentFile` (`0x8174c`, 804 B) — `jtable.py`: **93% de
+cobertura** (186/201), zero tabela de salto, 26 branches/11 de
+retrocesso. 3 `bl`: `crc32` ×2, `inflate`, `call_zseek64`. Vizinha
+de `unzOpenCurrentFile3` (já catalogada como terceiro `minizip`
+reconhecido) — mesma assinatura clássica de `unzip.c` (posiciona via
+`call_zseek64`, descomprime via `inflate`, valida integridade via
+`crc32` duplo/incremental) usada pra ler o pacote `fftpack.bin`/OBB
+empacotado. Marcada `read_structural` (93% < 95%, mas fast-tracked
+como terceiro reconhecível — regra 6 da metodologia, sem extração
+manual do remanescente).
+
+## 531. `xpLib_DebugExport`/`xpLib_DebugImport` — par simétrico de dump/restauração de debug, mais leve que `CAUTOSAVE::Save`/`Load` (2026-10-23, Fase 3, sexagésimo nono lote)
+
+`xpLib_DebugImport()` (`0x29b134`, 692 B, **100% de cobertura**,
+zero tabela de salto, 9 branches/0 de retrocesso): 11 `bl` —
+`CFILE::CFILE`/`Open`/`~CFILE`/`Read` ×4 cada, `CAPP_INFO::
+GetStoragePath()` ×4, mais locais já identificados em outras seções
+(`memcpy`, `strcpy`, `__stack_chk_fail`, `operator new`).
+`xpLib_DebugExport()` (`0x29ae90`, 676 B, **97% de cobertura**, zero
+tabela de salto, mesma topologia): catálogo quase idêntico, troca
+`Read` por `Write(void*,unsigned int,unsigned int)` — espelhamento
+perfeito do par import/export. **Achado notável**: nenhuma das duas
+chama `xpGetHeap`/`xpMoveHeap`, `CCOMP_Z_ENC`/`DEC`, `CFFT_STATE::
+Suspend`/`Resume`, ou `iOS_ResumeGetData` — todo o aparato que
+`CAUTOSAVE::Save`/`Load` (seções 19.1/458) usa pra dump/restauração
+da heap inteira comprimida. Confirma que este par é um mecanismo
+**mais leve** e distinto, provavelmente de uso interno do próprio
+`xpLib` (gerenciador de heap/alocador) pra serializar um único
+objeto/estrutura de controle de debug, não o heap completo. Marcadas
+`read_full` (ambas ≥95%, 0 tabela de salto); pendência honesta:
+identidade de `sub_2cdf9c` e `sub_71494`, tipo/tamanho exato da
+estrutura de debug não confirmado campo a campo.
+
+## 532. `sceGuClutLoad_for_iOS` — quarta confirmação da ponte real `sceGu*`↔`CEGL_PACKET`, sufixo "for_iOS" sugere variante de plataforma legada (2026-10-23, Fase 3, sexagésimo nono lote)
+
+`sceGuClutLoad_for_iOS` (`0x2abd34`, 716 B) — `jtable.py`: **84% de
+cobertura** (151/179), zero tabela de salto, 15 branches/10 de
+retrocesso. 3 `bl`: 1 local sem símbolo, `CFFT_STATE::GetParam(int)`,
+`IS_TEX_2X()` — subconjunto quase idêntico ao de `sceGuTexImage`
+(seção 204) e `sceGuScissor`/`sceGuTexWrap` (seção 511). Confirma
+pela quarta vez que `sceGu*` é a ponte real do motor contra
+`CEGL2_*`/`GuEmu_*` (seção 59), não boilerplate PSP preservado. O
+sufixo "for_iOS" sugere uma variante de plataforma legada do
+carregamento de CLUT (mesmo padrão de nomes cross-platform já visto
+em `iOS_DrawTexFlip`, seção 512), preservada tal-qual no port Android
+em vez de unificada com a rotina genérica. Um branch sai da faixa da
+função e cai no meio de outra rotina (perto de `CFFT_STATE::GetParam`,
+não resolvido como alvo próprio) — explica boa parte da lacuna de
+cobertura frente aos ~94-99% dos outros membros da família. Marcada
+`read_structural` (84% < 95%, ressalva explícita sobre o branch de
+saída não resolvido).
+
+## 533. `Zaddzod(ZODRECORD*,tagPOLY_FT4*)` — função-folha de montagem/push de primitivo de ícone de Zodíaco, completa o pipeline `ctlzodiac_*`→`addzodiacback`→`Zaddzod` (2026-10-23, Fase 3, sexagésimo nono lote)
+
+`Zaddzod(ZODRECORD*,tagPOLY_FT4*)` (`0x153940`, 804 B) —
+`jtable.py`: **99% de cobertura** (199/201), zero tabela de salto, 3
+branches/1 de retrocesso. 6 `bl`: `pspGetpspPrimWorkBuf`,
+`pspPrimBackDrawRGB`, `AddPrim`, `SetPolyFT4`, `SetSemiTrans`,
+`SetShadeTex` — catálogo idêntico ao de `addzodiacback` (seção 292),
+mas sem nenhuma chamada de orquestração de task (`wasmTaskEntry`/
+`Wtask_killmyself`). A assinatura (segundo parâmetro exatamente o
+tipo que `SetPolyFT4` consome) sugere ser a rotina de nível mais
+baixo que monta/preenche um único primitivo `tagPOLY_FT4` a partir
+de um registro `ZODRECORD` e o envia ao buffer PSP — completa o
+pipeline de desenho do ícone de Zodíaco: `ctlzodiac_init`/`_main`
+(seção 362) → `addzodiacback` (desenho do fundo/task) → `Zaddzod`
+(montagem/push do primitivo individual). Marcada `read_structural`
+(99% ≥95%, 0 tabela de salto — mesma convenção já usada em
+`addzodiacback`/seções 292-294, sem verificação semântica fina de
+campo nem confirmação de caller por xref).
+
+**Referências cruzadas (seções 529-533):** seções 105/484
+(família de resume, `iOS_RESUME_SET_BCALC` como membro "misto"),
+seção 19.1/458 (`CAUTOSAVE::Save`/`Load`, contraste com o par
+`xpLib_Debug*` mais leve), seções 59/110/204/511 (ponte `sceGu*`,
+quarto membro confirmado em `sceGuClutLoad_for_iOS`), seção 512
+(`iOS_DrawTexFlip`, mesmo padrão de nomes cross-platform legados),
+seção 292 (`addzodiacback`, pipeline de Zodíaco completo com
+`Zaddzod`).
