@@ -13070,3 +13070,243 @@ orquestrados por `MainPoach`), seções 88/126/243/244/266 (família
 `p[NN]_*Func`), seção 232 (`getreaction_post`/`get_reflection_coord`,
 vocabulário compartilhado com `p18_reflecFunc`), seção 11
 (`wldnormal_lop`, mesmo setup PSX/PSYQ de `placeNameStart`).
+
+## 381. `pagewin_init(PAGEWININFO*)`/`pagewin_main(PAGEWININFO*)`/`iOSpagewin_main(PAGEWININFO*)` — fecham o framework de janela paginada `PAGEWININFO` usado por `ctlunregmes_main` (2026-10-23, Fase 3, trigésimo oitavo lote)
+
+Fecha a referência direta da seção 371 (`ctlunregmes_main` chama
+`pagewin_init`/`pagewin_main` do tipo `PAGEWININFO*`). `jtable.py`
+nas 3 funções:
+
+- **`pagewin_init(PAGEWININFO*)`** (`0x2708fc`, 520 B, 96% cob., 0
+  tabela): 7 `bl` — `Wserchmessagepointer`/`Wcount_words` (já vistos
+  na família de texto, seção 352), `add_anmpac` ×4/`add_winpac`,
+  `pageanmpac_reset` ×4, `pagewinmes_put(PAGEWININFO*,int)`,
+  `__divsi3`. Monta o texto paginado e registra pacotes de UI.
+- **`pagewin_main(PAGEWININFO*)`** (`0x270c90`, 684 B, 96% cob., 0
+  tabela): 9 `bl` — `wldkey_rep` ×2, `iOS_add_anmpac_max`,
+  `sound_request` ×2, `iOSTutoCheck`, `pagewinmes_put` ×3,
+  `pagenext_cursor`/`pageupdown_cursor(PAGEWININFO*)` (navegação de
+  página), `iOS_getTouchTap`/`iOS_getTutorialPad`.
+- **`iOSpagewin_main(PAGEWININFO*)`** (`0x270f3c`, 840 B, 97% cob.,
+  0 tabela): 12 `bl` — mesmo catálogo de `pagewin_main` mais
+  `iOSTutoFlagCheck`/`iOSTutoFlagAdd` (gate de tutorial único-por-
+  flag) e `iOS_getV2Icon`. É a variante com integração touch/
+  tutorial completa — provavelmente a usada nas telas reais do port
+  iOS/Android, enquanto `pagewin_main` é a versão "crua" PSP/PSX.
+
+Confirma: `PAGEWININFO` é um framework genérico de janela com
+páginas de texto navegáveis (próximo/anterior cursor), reusado por
+pelo menos `ctlunregmes_main`/`ctlbirthday_*` (via telas que exibem
+conteúdo longo paginado — históricos, diários, etc.). Todas as três
+marcadas `read_structural`.
+
+## 382. `ctlhaken_init()`/`ctlhaken_main(CTLINFO*)`/`hakenunit_status(int)`/`hakenunit_change(CTLINFO*)` — fecham o restante do cluster "haken" (despacho/alocação de unidade), complementando seções 169/321/343 (2026-10-23, Fase 3, trigésimo oitavo lote)
+
+- **`ctlhaken_init()`** (`0x261078`, 268 B, 87% cob., 0 tabela): 3
+  `bl` — `Wsend_taskparamater`, `valnumwin_set(int,unsigned long,int,
+  _POINT*)` (janela de valor numérico), `iOS_setV2Icon`.
+- **`ctlhaken_main(CTLINFO*)`** (`0x2615cc`, 348 B, 89% cob., 0
+  tabela): 2 `bl` — `Wtask_status`, `sound_request` ×2. Controller
+  simples, delega a maior parte da lógica a sub-telas já catalogadas
+  (`ctlhakenokng_*`, seções 321/343).
+- **`hakenunit_status(int)`** (`0x262a20`, 248 B, 85% cob., 0
+  tabela): 4 `bl` — `Wtask_create`/`Wsend_taskparamater` ×3,
+  **`ctlworkingst_dataset(int)`** (reusa o indicador "trabalhando"
+  rico já visto na seção 339/357!), `pspWorldEnableFlg`. Confirma que
+  a tela de status de despacho mostra um indicador de progresso
+  compartilhado com o sistema de "trabalhando" geral.
+- **`hakenunit_change(CTLINFO*)`** (`0x262708`, 792 B, 95% cob., 0
+  tabela): 9 `bl` — `rewrite_worldscroll`, `iOS_setDispMenuTouch`,
+  `wldkey_rep` ×2, `mouketeam_scrollset`/`mouketeam_unitwin`/
+  `mouketeam_unitface` (a família "mouketeam" — roster do grupo
+  completo, já referenciada em `ctlmouketeam_init`), `sound_request`
+  ×4, `iOS_CMenuTouch::setYLine`/`exec`. É a tela de trocar a unidade
+  designada pro despacho, reusando o widget de roster do time
+  inteiro.
+
+Todas as quatro marcadas `read_structural` (coberturas 85-95%,
+consistentes com a métrica de boilerplate pequeno do projeto, zero
+tabela de salto não resolvida em todas).
+
+## 383. `ctlmouke_init()`/`ctlmouke_main(CTLINFO*)` — fecham o controller de roster "mouke" em si, referenciado por pelo menos 3 outras funções já lidas (2026-10-23, Fase 3, trigésimo oitavo lote)
+
+Fecha o próprio controller de roster já citado como alvo de teardown
+em `hakenunit_status_main` (seção 169), `barmenu_reset`-adjacente e
+`mouke_okng` (seção 366, que reentra via `ctlmouke_init()`).
+`ctlmouke_init()` (`0x25fff8`, 712 B, 93% cob., 0 tabela): 9 `bl` —
+`Wread_eventflag`, `Wsend_taskparamater` ×2, `barmenu_reset` (seção
+368 — confirma a relação direta entre os dois!), `ctlbar_deactive`,
+`wldctl_active`, `mouke_app_chk(int,int)`, `defscrwin_set`/
+`curhis_put`, `iOS_setFaceDataID`. `ctlmouke_main(CTLINFO*)`
+(`0x260574`, 772 B, 94% cob., 0 tabela): 8 `bl` — `Wread_eventflag`,
+`Wtask_status`/`Wsend_taskparamater` ×3, `ctlmouke_deactive`/
+`ctlmouke_exit` (completa a tríade init/main/deactive/exit),
+`sound_request` ×3, `curhis_get`/`curhis_clr`.
+
+Confirma: "mouke" é o controller de tela de roster geral, que
+delega a limpeza de UI pra `barmenu_reset` (seção 368, fecha a
+hipótese "família ainda não catalogada" levantada lá — agora
+catalogada: é chamada por `ctlmouke_init`). Ambas marcadas
+`read_structural`.
+
+## 384. `ctlworkinginf_init(int)` — fecha o par init/main do painel de informação "trabalhando" rico, complementa seção 339 (2026-10-23, Fase 3, trigésimo oitavo lote)
+
+`ctlworkinginf_init(int)` (`0x2514c4`, 776 B) — par de
+`ctlworkinginf_main` (já lida, seção 339). `jtable.py`: **92% de
+cobertura** (179/194), zero tabela de salto, 3 branches/2 de
+retrocesso. 12 `bl` distintos: `Wsend_taskparamater`,
+`iOS_setDispMenuTouch`, `mouke_tbl_get(MOUINFO*,int)` (tabela de
+roster — confirma ligação com a família "mouke"), `add_anmpac`,
+`moukeevtinf_window(CTLINFO*,int,int)` (janela de evento de roster),
+`LoadImage_menuData`, `iOS_CMenuTouch::setDispOffset`/`init` (widget
+de toque completo), `xpLibGetOffset`, `iOS_setV2Icon`, mais 2 locais
+sem símbolo (`sub_2cdfac`, `sub_2cdfbc`). Confirma que o painel de
+informação "trabalhando" tem seu próprio widget de toque dedicado
+(`iOS_CMenuTouch::init` com 8 parâmetros) e consulta diretamente a
+tabela de roster via `mouke_tbl_get` — mais uma ponte entre o
+sistema de despacho/trabalho e o roster "mouke". Marcada
+`read_structural` (92% < 95%, mas 0 tabela de salto não resolvida;
+diferença pequena, pendência honesta sobre os 2 `sub_*` locais e o
+restante não coberto).
+
+## 385. `move_light()`/`Wmove_light()` — par de funções de física de luz/câmera, reusam a biblioteca de matriz GTE compartilhada (2026-10-23, Fase 3, trigésimo oitavo lote)
+
+`move_light()` (`0xdb06c`, 824 B, 97% cob., 0 tabela, 8 branches/5
+de retrocesso) e sua contraparte de task `Wmove_light()` (`0x102b20`,
+756 B, 97% cob., 0 tabela, 4 branches/3 de retrocesso) — par "normal"
+vs. "W" (task cooperativa) já visto em múltiplas famílias do projeto.
+Catálogos quase idênticos (mesmo padrão `copymat`/`Wcopymat`,
+`settaskkind`/`Wsettaskkind`, `task_wait`/`Wtask_wait`,
+`task_killmyself`/`Wtask_killmyself`, `asmGetInput1`/`wasmGetInput1`,
+`ASHURA_SetMatrix`, `RotMatrix`/`MulMatrix`/`ScaleMatrixL`,
+`__divsi3` ×6 ambas); a versão não-W adiciona `CFFT_STATE::GetParam`
+e `iOS_getV2Icon`. "Light" aqui quase certamente não é iluminação de
+cena — é a biblioteca de matriz ASURA (`ASHURA_SetMatrix`/
+`RotMatrix`/`MulMatrix`) aplicada a algum objeto leve/rápido de
+física de câmera ou partícula (hipótese não confirmada por falta de
+cross-reference de quem chama). Ambas marcadas `read_structural`
+(97% ≥95%, 0 tabela de salto — critério automático satisfeito, mas
+sem leitura manual instrução-a-instrução, logo não promovidas a
+`read_full`).
+
+## 386. `vOpn_scrinit(int)`/`vOpn_anim(ANMPAC*, unsigned long*)` — dois novos membros da família "vOpn" de telas de evento do world map (2026-10-23, Fase 3, trigésimo oitavo lote)
+
+`vOpn_scrinit(int)` (`0x248e6c`, 776 B, 97% cob., 0 tabela, 9
+branches/4 de retrocesso): 9 `bl`, todos setup PSX/PSYQ clássico
+(`pspOffScreenInit` ×2, `SetDispMask`/`DrawSync`/`PutDrawEnv`/
+`PutDispEnv`/`ClearImage`/`SetDefDispEnv` ×4/`SetDefDrawEnv` ×4/
+`SetGeomOffset`) — mesmo padrão de inicialização de tela em
+duplo-buffer já visto em `placeNameStart` (seção 380). `vOpn_anim
+(ANMPAC*, unsigned long*)` (`0x24a0ac`, 872 B, 97% cob., 0 tabela, 14
+branches/5 de retrocesso): 6 `bl` — `AddPrim` ×2, `GetTPage`/
+`GetClut`, `SetSprt`, `SetDrawMode`/`SetSemiTrans` — monta e
+submete um sprite texturizado a partir de um `ANMPAC*` (pacote de
+animação, já visto em `add_anmpac`/`add_winpac` por toda a família
+"vOpn"/world map). Juntas, confirmam que `vOpn_scrinit` inicializa a
+tela da janela de evento (análoga a `placeNameStart`) e `vOpn_anim`
+desenha o sprite animado dentro dela — provavelmente a dupla usada
+pelas telas `vOpn_arzmes_*`/`vOpn_arzpic_*` (seção 365) ou por outras
+telas "vOpn" ainda não identificadas. Ambas marcadas `read_structural`.
+
+**Referências cruzadas (seções 381-386):** seção 371
+(`ctlunregmes_main`, referência direta ao framework `PAGEWININFO`),
+seções 169/321/343 (cluster "haken"/`ctlhakenokng_*`, agora
+completo), seção 366 (`mouke_okng`, reentra em `ctlmouke_init` —
+agora fechado), seção 368 (`barmenu_reset`, família agora
+identificada como chamada por `ctlmouke_init`), seção 339
+(`ctlworkinginf_main`, par agora completo), seção 357
+(`ctlworking_main`, mesmo `ctlworkingst_dataset` reusado por
+`hakenunit_status`), seção 365 (família `vOpn_arzmes_*`, possível
+usuária de `vOpn_scrinit`/`vOpn_anim`), seção 380 (`placeNameStart`,
+mesmo padrão de setup PSX/PSYQ de `vOpn_scrinit`).
+
+## 387. `loadCharacterClut(tag_animation*,int,int)`/`roll_xaplay()`/`pspStartSaveCheck()`/`Resume_Init_WORK_MU()`/`ForAbnormalStatus()` — cinco funções novas via forks paralelos, todas com cobertura honesta abaixo ou próxima do limiar automático (2026-10-23, Fase 3, trigésimo nono lote)
+
+**`loadCharacterClut(tag_animation*,int,int)`** (`0x1eef44`, 876 B)
+— `jtable.py`: **84% de cobertura** (184/219), **1 tabela de salto
+resolvida** (4 casos, 4 handlers distintos). 4 `bl`: `read_eventflag`
+×2, `getAnimationHight(tag_animation*)`, `loadClutData(...)`,
+`loadClutDataCalc(...)` ×2 (compare com `loadClutDataCalcPlus`,
+seção 294). Hipótese: dispatcher de 4 vias que escolhe qual rotina
+de paleta aplicar ao personagem, condicionado por estado de
+evento/altura de animação — ponte entre o sistema de animação
+(`tag_animation*`, seções 82/139/192/193/212/369/370) e o sistema de
+paleta/CLUT (seções 48/52/53/68/70). Marcada `read_structural`
+(84% < 95%, apesar da tabela resolvida — lacuna honesta, pode
+esconder um 5º branch ou bloco de `bl` fora de alcance).
+
+**`roll_xaplay()`** (`0x2445cc`, 876 B) — `jtable.py`: **89% de
+cobertura** (195/219), **2 tabelas de salto resolvidas** (10 casos/8
+handlers; 7 casos/5 handlers), 23 branches/17 de retrocesso (loops
+de polling). 9 `bl`: API clássica de CD-ROM PSYQ/BIOS do PS1 —
+`fftCdReset`, `CdControl`/`CdControlF` ×3/`CdStatus`/`CdIntToPos`/
+`CdPosToInt`, `vEnd_CdReady_Chk` ×4 (bate com os loops de
+retrocesso), `vOpn_SetCDVolume` ×2 (provável fade). Nome
+completamente confirmado: "roll" = staff roll/créditos finais (cf.
+`ctlendroll_main`/`vEnd_rollproc`, seção 124), "xaplay" = reprodução
+de áudio XA (streaming de CD-ROM do PS1). É a máquina de estado que
+toca/controla a trilha de CD-XA durante os créditos, acionada pelo
+framework de `ctlendroll_main`. Marcada `read_structural` (89% < 95%,
+mesmo com ambas tabelas resolvidas — lacuna plausivelmente é dado de
+tabela/literal pool, não confirmado byte a byte; nota: `ctlendroll_main`
+em si, seção 124, também ficou em `read_structural` mesmo a 95%, então
+a convenção do projeto pra esta família tende a não promover a
+`read_full` sem leitura manual).
+
+**`pspStartSaveCheck()`** (`0x28a340`, 864 B) — `jtable.py`: **93%
+de cobertura** (201/216), zero tabela de salto, 15 branches/6 de
+retrocesso. 18 `bl` distintos: ciclo de vida do save
+(`pspClearSaveEnv`/`pspSaveInit`/`pspSaveUpdate`/`pspSaveExit`/
+`pspFftSizeCheck`), um mini-loop de render/input próprio
+(`ClearOTag`→`DrawOTag`→`DrawSync`→`VSync`, `pspNetPadRead` no meio,
+`SetDefDispEnv`/`SetDefDrawEnv` ×2/`PutDrawEnv`/`PutDispEnv`,
+`pspOffScreenInit`), `DrawMessage`/`Witemmenu_call`/`worldmap_menuinit`.
+**Confirma e refina a seção 376 (`mainLoop`)**: `mainLoop()` só
+*dispara* o save check num ponto de transição de modo — é esta
+função que contém a lógica real de UI/I-O de save e o loop de
+frame/input associado ao diálogo modal (provável "salvando..."/
+"espaço insuficiente"), reforçando que o "tick de frame verdadeiro"
+vive disperso em funções como esta, não em `mainLoop`. Marcada
+`read_structural` (93% < 95%, 0 tabela de salto).
+
+**`Resume_Init_WORK_MU()`** (`0x216b14`, 804 B) — `jtable.py`: **85%
+de cobertura** (171/201), zero tabela de salto, 5 branches, todos de
+retrocesso (função dominada por um único laço). Único `bl`: um local
+sem símbolo (`sub_714c4`) chamado **13×** — vizinho de endereço
+(16 B antes) de `sub_714b8`, já citado na família de serialização de
+resume `iOS_RESUME_SET_WORK_MU` (seção 105). Hipótese: inicializa/
+zera o bloco `WORK_MU` (provável array de ~13 slots de animação/
+fonte, `BWorkFontID`/`BWorkAnimationID`) chamando um "init por slot"
+repetidamente, complementando `iOS_RESUME_SET_WORK_MU` (que salva,
+não inicializa) no fluxo de retomada de sessão mapeado pela seção 376
+(`iOS_ResumeWorldMap`/`iOS_ResumeByAutoSave`). Marcada
+`read_structural` (85% < 95%); pendência honesta: `sub_714c4` não
+lido isoladamente, relação de vizinhança com `sub_714b8` não
+confirmada por xref direta.
+
+**`ForAbnormalStatus()`** (`0x272254`, 836 B, antes
+`mentioned_unverified` — já citada em `docs/AI_DIFFICULTY_RESEARCH.md`
+como handler de IA de batalha pra unidades sob status alterado, nunca
+lida em si). `jtable.py`: **100% de cobertura** (208/209), zero tabela
+de salto, 27 branches/11 de retrocesso. 12 `bl` distintos:
+`GetNearestUnit` ×3, `SetTmp_UA(UnitAction*)` ×2, `SetSafePanel` ×2,
+`SetBaseTargetGroup`, `IsAlmostNullUnit`, `GetPanelUnderUnit`,
+`MemClearDW`, `MakeMapCostToDest`, `MakeMapChantedAction`, `ps_rand()`
+(confirma o achado prévio de desempate aleatório), `__aeabi_idivmod`,
+e um local sem símbolo (`sub_271628`, ×2 — rotina de "validar/
+comprometer-se com a ação": chama `GetDestinationsAndMakeMaskTG`,
+decrementa contador de tentativas em `unit[0xcbc]`, chama
+`SetThisDestination`). Refina a entrada já existente em
+`AI_DIFFICULTY_RESEARCH.md` (atualizada nesta passada): a função
+varre unidades próximas, constrói mapas de custo/alcance, escolhe um
+painel seguro, monta a ação candidata, desempata por `ps_rand()` e
+comete a decisão via `sub_271628`. Marcada `read_full` (critério
+automático satisfeito: 100% cobertura, 0 tabela de salto).
+
+**Referências cruzadas:** seção 294 (`loadClutDataCalcPlus`,
+variante inline de `loadClutDataCalc`), seção 124 (`ctlendroll_main`/
+`vEnd_rollproc`, framework que aciona `roll_xaplay`), seção 376
+(`mainLoop`, dispara `pspStartSaveCheck`/relação com
+`Resume_Init_WORK_MU`), seção 105 (`iOS_RESUME_SET_WORK_MU`, par de
+serialização de `Resume_Init_WORK_MU`), `docs/AI_DIFFICULTY_RESEARCH.md`
+(`ForAbnormalStatus`, entrada atualizada com o passe estrutural).
