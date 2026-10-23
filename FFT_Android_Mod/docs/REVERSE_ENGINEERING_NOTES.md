@@ -15318,3 +15318,185 @@ hipotetizada por baixo), seções 225-226/347/364 (família
 `iOS_CMenuTouch*`, `execPress` de `Num` confirma arquitetura
 híbrida), seções 232/403/415 (vizinhança de endereço com a cadeia de
 reação/arma, sem dependência de chamada confirmada com `search_mp`).
+
+## 477. `Logo_FrameMove()` — fecha o par com `Logo_FrameRender` (seção 472), usa o mesmo dispatcher `onGotoNextMode` já visto em outras telas (2026-10-23, Fase 3, quinquagésimo oitavo lote)
+
+`Logo_FrameMove()` (`0x2b5988`, 612 B) — `jtable.py`: cobertura não
+capturada no resumo truncado, zero tabela de salto, 17 branches/8 de
+retrocesso. 13 `bl` distintos: `CEGL2_SPRITE::LoadEnd`,
+`CINPUT_IF_TOUCH::EndAll`/`SetDown`/`GetTouchPoint`/`BeginAll`,
+`CRECT::FrameMove(int,int)`, `CTHREAD::Sync()`, `timeGetTime()` ×2,
+`CFRAMERATE::GetRate()`, `CSTEP_BATCH::FrameMove(float)` ×2,
+**`onGotoNextMode(int)`**, 2 locais sem símbolo (`sub_2b56b8` ×3,
+`sub_2b57ac` ×2). Fecha o par de `Logo_FrameRender` (seção 472) —
+`FrameMove` é a lógica de update/transição (polling de toque,
+atualização do passo de animação via `CSTEP_BATCH`, sincronismo de
+thread), enquanto `FrameRender` é só o desenho. A chamada a
+`onGotoNextMode(int)` confirma que a tela de logo usa o mesmo
+dispatcher de transição de modo já visto em outras telas "frame
+render" (seções 34/86/394) — ao final do fade, dispara a troca pra
+próxima tela (provavelmente `NowLoading` ou a abertura). Marcada
+`read_structural` (0 tabela de salto, mas cobertura não verificada
+nesta passada — pendência honesta de revisão numérica).
+
+## 478. `Wextend_systemframe(int,int,RECT16*,int)` — fecha o par com `extend_systemframe` (seção 426) (2026-10-23, Fase 3, quinquagésimo oitavo lote)
+
+`Wextend_systemframe(int,int,RECT16*,int)` (`0x11e68c`, 612 B) —
+`jtable.py`: **99% de cobertura** (152/153), zero tabela de salto,
+13 branches/6 de retrocesso. 5 `bl`: `Wallocatememorywait(int)`,
+`Wdisposememory(char*)`, 1 local sem símbolo (`sub_11e03c`),
+`Wtask_wait(long)` ×2, `PSX_LoadImage` ×2. Mesmo catálogo-base da
+contraparte normal `extend_systemframe` (seção 426), confirmando o
+par normal/"W" (task cooperativa) já visto em várias famílias do
+projeto. Marcada `read_full` (99% ≥95%, 0 tabela de salto).
+
+## 479. `ctltremes_init(int)` — controller de tela "tremes" (provável histórico/registro de tesouro, "tresure" + "mes"), reusa o framework `PAGEWININFO` (2026-10-23, Fase 3, quinquagésimo oitavo lote)
+
+`ctltremes_init(int)` (`0x26c418`, 636 B) — `jtable.py`: **89% de
+cobertura** (142/159), zero tabela de salto, **zero branches**
+(função inteiramente linear). 7 `bl`: `Wsend_taskparamater`,
+`sun_to_ivarisday`/`wld_dayread(unsigned long*,int,FINDDAY*)`
+(mesma conversão de calendário já vista em `ctlunregmes_init`/
+`ctlbirthokng_main`, seções 371/372), `pic_load(int)`, `add_winpac`,
+`pagewin_init(PAGEWININFO*)` (seção 381 — confirma mais um consumidor
+do framework de janela paginada), `iOS_setV2Icon` ×3. Já citada como
+um dos 6 sub-controladores irmãos chamados por `ctlzodiac_main`
+(seção 362: `ctlbrst_init`/`ctlkiromes_init`/`ctltremes_init`/
+`ctltuto_init`/`ctlhentuto_init`/`ctlsentuto_init`). "Tremes" é
+provável contração de "tresure" (tesouro) + "mes" (mensagem) — tela
+de histórico/mensagem do sistema de caça ao tesouro já citado em
+outras seções. Marcada `read_structural` (89% < 95%, 0 tabela de
+salto).
+
+## 480. `pspPrimBackDraw(int,int,unsigned short*,unsigned long*)` — par texturizado de `pspPrimBackDrawRGB` (seção 463), mesmo mecanismo de ring buffer (2026-10-23, Fase 3, quinquagésimo oitavo lote)
+
+`pspPrimBackDraw(int,int,unsigned short*,unsigned long*)`
+(`0x288f30`, 616 B) — `jtable.py`: **100% de cobertura** (154/154),
+zero tabela de salto, **zero branches** (corpo linear). Único `bl`:
+`pspGetpspPrimWorkBuf(int)` — exatamente o mesmo mecanismo de
+alocação do ring buffer `pspPrim*` já confirmado em
+`pspPrimBackDrawRGB` (seção 463). Diferença de assinatura
+(`unsigned short*` no lugar dos 3 `unsigned char`+flag de cor) —
+esta variante recebe um ponteiro de dados de textura/CLUT em vez de
+uma cor RGB sólida, confirmando ser a versão texturizada do mesmo
+primitivo de fundo. Marcada `read_full` (100% cobertura, 0 tabela de
+salto, 1 `bl` totalmente resolvido).
+
+**Referências cruzadas (seções 477-480):** seção 472
+(`Logo_FrameRender`, par agora completo com `Logo_FrameMove`), seção
+426 (`extend_systemframe`, par agora completo com a variante "W"),
+seção 362 (`ctlzodiac_main`, mais um dos 6 sub-controladores irmãos
+fechado), seção 381 (`pagewin_init`, mais um consumidor do framework
+`PAGEWININFO`), seção 463 (`pspPrimBackDrawRGB`, par texturizado
+confirmado em `pspPrimBackDraw`).
+
+## 481. `iOSTatchPanelCtrl(int,int)` — dispatcher central do painel de toque, fala direto com a classe `CINPUT_IF_TOUCH` em vez de usar a fachada `iOS_getTouch*` (2026-10-23, Fase 3, quinquagésimo nono lote)
+
+`iOSTatchPanelCtrl(int,int)` (`0x2bb910`, 612 B) — `jtable.py`: **97%
+de cobertura** (149/153), zero tabela de salto, 18 branches/9 de
+retrocesso. 11 `bl`: `CINPUT_IF_TOUCH::GetPress`/`GetUp`/
+`GetTouchPoint` ×2/`GetGestureTap`, `iOSTutoCheck` ×2/`iOSTutoFlagCheck`
+×2, `SysSE_PlayUI(int)`, `SCREEN_TO_RENDER(int,int,int*,int*)` ×2,
+`iOS_getV2Icon` ×2, `iOSMenuOkCancelHelpGet(int,int)`,
+`iOSTutoSkipKeyCheck()`. "Tatch" = romanização de "touch" (タッチ).
+**Achado estrutural**: diferente de toda a família `iOS_getTouch*`
+(Tap/Press/BeginX/Y/NowX/Y) já mapeada extensivamente, esta função
+chama a classe `CINPUT_IF_TOUCH` diretamente — candidata a ser a
+fonte real de onde `iOS_getTouch*` deriva seus valores, não mais uma
+consumidora da fachada. Hipótese: dispatcher central que consulta
+estado bruto de toque, converte coordenada para espaço de render,
+checa gate de tutorial, dispara som de UI, e decide entre encaminhar
+pra checagem de botões ok/cancel/help ou pra lógica de ícone V2.
+Marcada `read_structural` (97% ≥95%, 0 tabela de salto, mas sem
+verificação de xrefs de quem chama esta função).
+
+## 482. `CRECT::MoveCursorFocus(int,int,int,int)` — navegação de foco entre elementos de UI por grupo, ligada à mesma classe CRECT já mapeada (2026-10-23, Fase 3, quinquagésimo nono lote)
+
+`CRECT::MoveCursorFocus(int,int,int,int)` (`0xb55e4`, 752 B) —
+`jtable.py`: **100% de cobertura** (188/188), zero tabela de salto,
+45 branches, **33 de retrocesso** (73% backward — múltiplos laços de
+busca). 3 `bl`, todos membros de `CRECT`, cada um chamado 5×:
+`GetEnable(int)`, `GetNoFocus(int)`, `GetGroup(int)`. Hipótese:
+navegação de foco (D-pad/analógico) entre widgets de UI — percorre a
+coleção de `CRECT`s candidatos filtrando por habilitado+focável+
+mesmo grupo de navegação, repetindo o teste em múltiplos loops até
+achar o próximo candidato válido na direção pedida. Reforça que
+`CRECT` não é só hit-rect passivo (`Register`/`SetRect`/`SetEnable`
+já vistos), mas também implementa lógica de navegação de foco por
+grupo. Marcada `read_full` (100% cobertura, 0 tabela de salto, 3
+`bl` totalmente resolvidos — ordem exata dos 4 parâmetros fica como
+hipótese razoável, não confirmada).
+
+## 483. `xpLibgpuInit()` — inicializador de baixo nível do "libgpu", abaixo de `ASHURA_init` na cadeia de boot gráfico (2026-10-23, Fase 3, quinquagésimo nono lote)
+
+`xpLibgpuInit()` (`0x291c48`, 632 B) — `jtable.py`: **94% de
+cobertura** (148/158), zero tabela de salto, 10 branches/8 de
+retrocesso (múltiplas fases de setup). 8 `bl`: 2 locais sem símbolo,
+**`xpLibgpuEnableFlg`** (vizinha imediata no binário — padrão já
+visto em `pspWorldEnableFlg`, seção 450, provável setter de flag
+"driver habilitado"), e 15 chamadas a helpers soft-float
+(`__addsf3`/`__floatunsisf`/`__mulsf3`/`__divsf3`/`__fixunssfsi` ×3
+cada) — assinatura clássica de cálculo de fator de escala (viewport/
+aspect-ratio) feito em float e reconvertido. Hipótese: inicializador
+da camada "libgpu" (emulação do GPU PSX — VRAM, draw/display
+environment) que roda **antes** de `ASHURA_init` (seção 449) na
+cadeia de boot gráfico — prepara o hardware/estado abstrato e
+levanta o flag de "pronto" antes que `ASHURA_init` monte os templates
+de primitiva. Marcada `read_structural` (94% < 95%, 0 tabela de
+salto — lacuna honesta, provável pool de literais float não
+confirmado).
+
+## 484. `iOS_RESUME_SET_BATTLE(...)` — membro "puro" (linear, 29 chamadas a um único primitivo) da família de serialização de resume leve (2026-10-23, Fase 3, quinquagésimo nono lote)
+
+`iOS_RESUME_SET_BATTLE(IOS_RESUME_DATA_BATTLE*,IOS_RESUME_DATACOPY_
+MODE)` (`0x205694`, 696 B) — `jtable.py`: cobertura exibida 95%
+(165/174 = 94,8% real, abaixo do limiar estrito), zero tabela de
+salto, 1 branch/0 de retrocesso (função quase inteiramente linear).
+Único `bl`: `iOS_Resume_DataCopy(IOS_RESUME_DATACOPY_MODE,unsigned
+char*,unsigned char*,int)`, chamado **29 vezes** — sem chamadas a
+`iOS_Resume_DataCopyAddr` nem helpers de endereço (diferente de
+`iOS_RESUME_SET_WORK_MU`, seção 105). Mesmo subtipo "serializador
+puro" de `iOS_RESUME_SET_EVENT`/`_W` (seções 76/99) — despejo
+campo-a-campo de struct plana. A escala de 29 chamadas (bem menor
+que as 149/105 de outros membros da família) confirma `IOS_RESUME_
+DATA_BATTLE` como struct pequena (provável só índice/estado de turno
+e flags de modo), não o estado de batalha completo — coexiste com o
+mecanismo pesado `CAUTOSAVE::Save`/`Load` (seção 458, dump binário
+da heap) como camada leve do mesmo problema de "process death" do
+Android. Marcada `read_structural` (94,8% real < 95% — seguindo o
+precedente da seção 96 de usar a fração exata, não o percentual
+arredondado exibido pela ferramenta).
+
+## 485. `CEGL2_FBO::RenderFromFBO(...)` — blit genérico de textura por handle explícito pro framebuffer atual, par de consumo de `RenderToFBO` (2026-10-23, Fase 3, quinquagésimo nono lote)
+
+`CEGL2_FBO::RenderFromFBO(unsigned int,float,float,float,float,
+float,float,unsigned short,unsigned short,int)` (`0xab164`, 732 B)
+— `jtable.py`: **100% de cobertura** (183/183), zero tabela de
+salto. 12 `bl`, todos resolvidos manualmente via `.rel.plt`/`.got`
+(mesma técnica da seção 9): 8 stubs PLT de OpenGL
+(`glDisable`/`glEnable`/`glEnableVertexAttribArray` ×3/
+`glTexParameteri` ×6/`glBindTexture` ×2/`glVertexAttribPointer`
+×3/`glDrawArrays`/`glGenerateMipmap`) + 4 helpers soft-float.
+Desmontagem manual completa confirmou o pseudocódigo: recebe um
+handle de textura **explícito** (1º parâmetro, diferente de
+`RenderToFBO`, que lê `this->field_0x8`), monta um quad
+`GL_TRIANGLE_STRIP` de 4 vértices com posição/cor/UV, pula overhead
+de blend quando a cor é totalmente opaca, e trata 3 vias de filtro
+não fundidas (NEAREST/LINEAR sem mipmap/LINEAR com mipmap) via 6
+call-sites de `glTexParameteri` (vs. 4 em `RenderToFBO`). Confirma
+ser a função de "blit de textura qualquer pro framebuffer atual" —
+candidata forte a ser a chamada usada por `Logo_FrameRender` (seção
+472) pra apresentar na tela o conteúdo renderizado off-screen.
+Marcada `read_full` (100% cobertura, 0 tabela de salto, 12 `bl`
+totalmente resolvidos com leitura manual completa de fluxo e
+literais GL).
+
+**Referências cruzadas (seções 481-485):** família `iOS_getTouch*`
+(contraste com `iOSTatchPanelCtrl`, camada mais baixa hipotetizada),
+toolkit CRECT (seções 86/283/405/449, `MoveCursorFocus` revela mais
+uma capacidade da classe), seção 449 (`ASHURA_init`, `xpLibgpuInit`
+posicionado abaixo na cadeia de boot), seções 76/99/105/387/396/416/
+458 (família de resume, `iOS_RESUME_SET_BATTLE` mais um membro
+"leve"), seção 472 (`Logo_FrameRender`, provável chamadora de
+`CEGL2_FBO::RenderFromFBO`), seção 13.9 (`RenderToFBO`, par de
+produção confirmado).

@@ -478,7 +478,7 @@ address,size,mangled,demangled,status,section_ref
 0008e340,756,vorbis_lpc_to_lsp,vorbis_lpc_to_lsp,read_structural,NOTES §336
 00102b20,756,_Z11Wmove_lightv,Wmove_light(),read_structural,NOTES §385
 001a8620,756,_Z14GetAbilityListssiPsi,"GetAbilityList(short, short, int, short*, int)",read_structural,NOTES §390
-000b55e4,752,_ZN5CRECT15MoveCursorFocusEiiii,"CRECT::MoveCursorFocus(int, int, int, int)",unread,
+000b55e4,752,_ZN5CRECT15MoveCursorFocusEiiii,"CRECT::MoveCursorFocus(int, int, int, int)",read_full,NOTES §482
 000c449c,752,_Z8loadnamev,loadname(),read_structural,NOTES §397
 00167d08,752,_Z15ASHURA_GNS_Readt,ASHURA_GNS_Read(unsigned short),read_structural,NOTES §398
 00177088,752,_Z15bGetAbilityListssiPsi,"bGetAbilityList(short, short, int, short*, int)",read_structural,NOTES §390
@@ -494,7 +494,7 @@ address,size,mangled,demangled,status,section_ref
 0021df6c,736,_Z29doMetaschedulePtclCommandOncetP10_EffectTCB,"doMetaschedulePtclCommandOnce(unsigned short, _EffectTCB*)",read_structural,NOTES §393
 002450c4,736,_Z11fft_openingi,fft_opening(int),read_structural,NOTES §394
 00090e08,732,mdct_init,mdct_init,unread,
-000ab164,732,_ZN9CEGL2_FBO13RenderFromFBOEjffffffhhi,"CEGL2_FBO::RenderFromFBO(unsigned int, float, float, float, float, float, float, unsigned char, unsigned char, int)",mentioned_unverified,
+000ab164,732,_ZN9CEGL2_FBO13RenderFromFBOEjffffffhhi,"CEGL2_FBO::RenderFromFBO(unsigned int, float, float, float, float, float, float, unsigned char, unsigned char, int)",read_full,NOTES §485
 001908bc,732,_Z20eMakeSmallWindowFuncPh,eMakeSmallWindowFunc(unsigned char*),read_structural,NOTES §358
 001bc5a0,732,_Z6Bottunssssss,"Bottun(short, short, short, short, short, short)",read_structural,NOTES §408
 001e6a98,732,_Z15getreaction_preiPt,"getreaction_pre(int, unsigned short*)",read_structural,NOTES §403
@@ -528,7 +528,7 @@ address,size,mangled,demangled,status,section_ref
 0027f238,700,_Z18iOS_RectHitExecutev,iOS_RectHitExecute(),read_structural,NOTES §428
 000b1190,696,_ZN14CEGL_COLLISION20IsVertexInTriangle2DEN4math7VECTOR2IfEES2_S2_S2_,"CEGL_COLLISION::IsVertexInTriangle2D(math::VECTOR2<float>, math::VECTOR2<float>, math::VECTOR2<float>, math::VECTOR2<float>)",read_structural,NOTES §325
 001f024c,696,_Z22requestDamageAnimationP13tag_animationS0_,"requestDamageAnimation(tag_animation*, tag_animation*)",read_structural,NOTES §424
-00205694,696,_Z21iOS_RESUME_SET_BATTLEP22IOS_RESUME_DATA_BATTLE24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_BATTLE(IOS_RESUME_DATA_BATTLE*, IOS_RESUME_DATACOPY_MODE)",unread,
+00205694,696,_Z21iOS_RESUME_SET_BATTLEP22IOS_RESUME_DATA_BATTLE24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_BATTLE(IOS_RESUME_DATA_BATTLE*, IOS_RESUME_DATACOPY_MODE)",read_structural,NOTES §484
 0011dd88,692,_Z18extend_systemframeiiP6RECT16i,"extend_systemframe(int, int, RECT16*, int)",read_structural,NOTES §426
 00162e94,692,_Z18ASHURA_LightSwitchl,ASHURA_LightSwitch(long),read_structural,NOTES §427
 0029b134,692,_Z17xpLib_DebugImportv,xpLib_DebugImport(),unread,
@@ -583,7 +583,7 @@ address,size,mangled,demangled,status,section_ref
 002106e0,640,_Z12placeNameEndv,placeNameEnd(),read_full,NOTES §462
 00088978,636,_ve_envelope_search,_ve_envelope_search,unread,
 0024f238,632,_Z12ctltips_initi,ctltips_init(int),read_structural,NOTES §468
-00291c48,632,xpLibgpuInit,xpLibgpuInit,unread,
+00291c48,632,xpLibgpuInit,xpLibgpuInit,read_structural,NOTES §483
 0028ca3c,632,_ZN9CAUTOSAVE4LoadEv,CAUTOSAVE::Load(),read_structural,NOTES §458
 000d9b10,628,_Z15request_commandi,request_command(int),read_structural,NOTES §459
 001831e0,628,_Z15bCursolDownFuncP7DVECTORPti,"bCursolDownFunc(DVECTOR*, unsigned short*, int)",read_structural,NOTES §470
@@ -601,15 +601,15 @@ address,size,mangled,demangled,status,section_ref
 002cac50,620,__muldf3,__muldf3,unread,
 00083900,616,ogg_stream_iovecin,ogg_stream_iovecin,read_structural,NOTES §336
 00087ecc,616,vorbis_book_decodevv_add,vorbis_book_decodevv_add,read_structural,NOTES §336
-00288f30,616,_Z15pspPrimBackDrawiittPmPh,"pspPrimBackDraw(int, int, unsigned short, unsigned short, unsigned long*, unsigned char*)",unread,
-0026c418,616,_Z14ctltremes_initi,ctltremes_init(int),unread,
+00288f30,616,_Z15pspPrimBackDrawiittPmPh,"pspPrimBackDraw(int, int, unsigned short, unsigned short, unsigned long*, unsigned char*)",read_full,NOTES §480
+0026c418,616,_Z14ctltremes_initi,ctltremes_init(int),read_structural,NOTES §479
 000ba9c8,612,_ZN9CSOUND_IF4LoadEiPcPhjjiiiiii,"CSOUND_IF::Load(int, char*, unsigned char*, unsigned int, unsigned int, int, int, int, int, int, int)",mentioned_unverified,
-002bb910,612,_Z17iOSTatchPanelCtrlii,"iOSTatchPanelCtrl(int, int)",unread,
-0011e68c,612,_Z19Wextend_systemframeiiP6RECT16i,"Wextend_systemframe(int, int, RECT16*, int)",unread,
+002bb910,612,_Z17iOSTatchPanelCtrlii,"iOSTatchPanelCtrl(int, int)",read_structural,NOTES §481
+0011e68c,612,_Z19Wextend_systemframeiiP6RECT16i,"Wextend_systemframe(int, int, RECT16*, int)",read_full,NOTES §478
 0013cfe4,612,_Z18iOS_limitOptrecSubv,iOS_limitOptrecSub(),unread,
 00142f60,612,_Z19WiOS_limitOptrecSubv,WiOS_limitOptrecSub(),unread,
 0028c32c,612,_ZN10CFFT_STATE13SetRenderSizeEii,"CFFT_STATE::SetRenderSize(int, int)",unread,
-002b5988,612,_Z14Logo_FrameMovev,Logo_FrameMove(),unread,
+002b5988,612,_Z14Logo_FrameMovev,Logo_FrameMove(),read_structural,NOTES §477
 000a4078,608,_ZN15CG2D_LOADER_BMP14BMP_DecodeRLE4EPhS0_ii,"CG2D_LOADER_BMP::BMP_DecodeRLE4(unsigned char*, unsigned char*, int, int)",read_structural,NOTES §316
 000b81b4,608,_ZN10CFILE_UTIL13FileConvertLFEPc,CFILE_UTIL::FileConvertLF(char*),read_structural,NOTES §342
 000bced4,608,_ZN17CSOUND_LOADER_PCM4OpenEPcPhjj,"CSOUND_LOADER_PCM::Open(char*, unsigned char*, unsigned int, unsigned int)",mentioned_unverified,
