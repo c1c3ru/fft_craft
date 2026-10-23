@@ -26,7 +26,7 @@ Funções confirmadas (endereços no `.so` ARM, versão deste repositório):
 | `ClearForBattleRoutine` | `0x279ed4` | Reset de estado entre turnos |
 | `FundamentalRoutine` | `0x278f84` | **Dispatcher central da IA** (150 blocos básicos — ver seção 3) |
 | `EvaluateAllUnitAction` | `0x271da0` | Itera as 34 unidades do campo chamando `FundamentalRoutine` |
-| `ForAbnormalStatus` | `0x272254` | Decide ação quando a unidade está sob status alterado |
+| `ForAbnormalStatus` | `0x272254` | Decide ação quando a unidade está sob status alterado (passe estrutural completo via `jtable.py`: 100% cobertura, 0 tabelas de salto — ver `REVERSE_ENGINEERING_NOTES.md` seção 387) |
 | `GetNearestUnit` | `0x27207c` | Busca unidade mais próxima (alvo) |
 | `GetCountToDeath` | `0x27b240` | Estima turnos até a morte de uma unidade (heurística de prioridade de alvo) |
 | `SetDestUnit` / `GetPanelUnderUnit` | `0x27334c` / `0x278440` | Define/lê painel de destino do movimento |
@@ -50,7 +50,16 @@ Funções confirmadas (endereços no `.so` ARM, versão deste repositório):
   `ps_rand()` para **sortear entre candidatos com a mesma pontuação** quando
   há múltiplas opções igualmente boas de alvo/painel — ou seja, parte da
   "burrice" percebida da IA vem de desempate aleatório deliberado, não de
-  erro de cálculo.
+  erro de cálculo. Passe estrutural completo (100% cobertura, 0 tabelas de
+  salto) refina isto: a função varre unidades próximas (`GetNearestUnit`
+  ×3, `IsAlmostNullUnit` como filtro), constrói mapas de custo/alcance
+  (`MakeMapCostToDest`, `MakeMapChantedAction`), escolhe um painel seguro
+  (`SetSafePanel` ×2, `SetBaseTargetGroup`), monta a ação candidata
+  (`SetTmp_UA`), usa `ps_rand()` pra desempate, e comete a decisão final via
+  `sub_271628` (helper local sem símbolo — mesma rotina de "validar/
+  comprometer-se com a ação" usada por outros handlers de IA: chama
+  `GetDestinationsAndMakeMaskTG`, decrementa contador de tentativas em
+  `unit[0xcbc]`, chama `SetThisDestination`).
 - `IsNullUnit`/`IsAlmostNullUnit` são apenas filtros de validade (unidade
   morta, fora do campo, etc.), confirmando a estrutura normal de uma lista
   de atores de batalha.

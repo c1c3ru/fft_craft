@@ -7843,8 +7843,10 @@ distintos** — `0x25aeb0` domina como default em ~82 dos 101 casos);
 por fase/estado guardado em `CTLINFO*`, dirigindo: seleção de texto
 de mensagem (`houkokumes_select`), renderização da mensagem
 (`houkoku_mesput`, ×15, caminho mais quente), uma variante
-"yokoyari" (lança lateral, provavelmente relatório de um tipo
-específico de ataque: `yokoyari_mesput`), janelas de overlay de
+"yokoyari" (lança lateral, idiomaticamente "interromper uma
+conversa" — `yokoyari_mesput`, lida em detalhe na seção 489: é a
+variante de interjeição/interrupção do relatório por outra unidade,
+não um tipo de ataque), janelas de overlay de
 mundo (`wldwin_noropen`, `wldpicwin_set`, `add_winpac`), consultas de
 unidade/mundo (`get_unitwork_add_wld`, `wldmes_load`, `pic_load`),
 som (`sound_request`), checagem de traço de emprego
@@ -9611,3 +9613,6904 @@ Registra elementos de UI de uma vez: `add_anmpac` (×7)/`add_winpac`
 (×3)/`scrwin_para_set` (parâmetro de janela de scroll),
 `mouketeam_scrollset`, `DrawSync` (×2) — setup de tela puro, sem
 nenhuma lógica condicional. Marcada `read_structural`.
+
+
+## Lote de checagens diretas (seções 203–209): mais 7 funções lidas pelo coordenador sem fork (2026-10-18, Fase 3)
+
+## 203. `inflate_table` — interno de `zlib` reconhecido por nome (2026-10-18, Fase 3, regra 6 da metodologia)
+
+`inflate_table` (`0x7d158`, 1.436 B) — checagem direta: **99% de
+cobertura, zero chamadas `bl`**, 44 branches (17 de retrocesso) —
+construção pura de tabela de código Huffman do `zlib`, só
+manipulação de array inline, nenhuma chamada externa. Marcada
+`read_full`.
+
+## 204. `sceGuTexImage` — confirma de novo que `sceGu*` é ponte real, não boilerplate (2026-10-18, Fase 3, lote direto)
+
+`sceGuTexImage` (`0x2ac014`, 2.084 B) — descida recursiva direta:
+**492 de ~521 instruções possíveis (94%)**, sem tabela de salto;
+**65 branches, 33 de retrocesso**. Chama `CFRAMERATE::GetRootCnt`,
+`CFFT_STATE::GetParam` (×3), `IS_TEX_2X`, mais vários locais sem
+símbolo — confirma pela segunda família (depois de
+`sceGuSendList`/`sceGuDrawArray`, seção 110) que `sceGu*` é a ponte
+real do PRÓPRIO jogo, não biblioteca PSP preservada. Marcada
+`read_structural`.
+
+## 205. `CG2D_LOADER_BMP::Copy(void*)` — decodificador BMP real do jogo, tabela de 32 casos por profundidade de bit (2026-10-18, Fase 3, lote direto)
+
+`CG2D_LOADER_BMP::Copy(void*)` (`0xa42d8`, 2.084 B) — descida
+recursiva direta: **488 de ~521 instruções possíveis (94%)**; **uma
+tabela de salto resolvida** (32 casos, 7 handlers distintos); **46
+branches, 33 de retrocesso**. Chama `CG2D_COLOR::GetTone4To8`/
+`5To8`/`6To8` (conversão de profundidade de cor) e
+**`CG2D_LOADER_BMP::BMP_DecodeRLE8`**/**`BMP_DecodeRLE4`** (RLE
+decode real) — é o decodificador BMP de verdade do próprio jogo
+(classe `CG2D_LOADER_BMP`), com dispatch por variante de formato
+(profundidade de bit/compressão). Marcada `read_structural`.
+
+## 206. `generateAttackTeam()` — setup real de batalha em rede, achado rico (2026-10-18, Fase 3, lote direto)
+
+`generateAttackTeam()` (`0x202950`, 1.424 B) — descida recursiva
+direta: **333 de ~356 instruções possíveis (94%)**, sem tabela de
+salto; **20 branches, 12 de retrocesso**. **29 `bl` distintos** —
+catálogo rico pra um tamanho pequeno.
+
+Chama `attackteam_call(unsigned long*, unsigned long)`,
+`initBattleMap`, `db_init`/`db_swap_generate`, `myPollhost()`,
+`padReadGenerate()`, `fftCdLoop(CDREC*)`, `pspNetGetBattleModeFlag`,
+`get_netmodeadhoc`, `get_vsBattle_bule_trap`, `ASHURA_clearOT`/
+`getOTptrZ` (×5), `loadClutData` (×6), e `CFFT_STATE::SetParam`.
+**Confirma ser o setup real de inicialização de batalha em rede**:
+inicializa mapa de batalha, double-buffer, hospedeiro de rede
+(`myPollhost`), geração de leitura de pad, loop de CD (música), e
+checa modo de rede ad-hoc/versus — a função que de fato monta o
+"time de ataque" pra uma partida em rede. Marcada `read_structural`.
+
+## 207. `ctleeff_main(CTLINFO*)` — controlador de efeito ligado a captura de tela e requisição de encontro (2026-10-18, Fase 3, lote direto)
+
+`ctleeff_main(CTLINFO*)` (`0x258528`, 1.436 B, companheiro de
+`ctleeff_draw`, seção 199) — descida recursiva direta: **338 de
+~359 instruções possíveis (94%)**, sem tabela de salto; **29
+branches, 15 de retrocesso**.
+
+Chama **`CFFT_STATE::SetCaptureDraw(int)`** e
+**`CFFT_STATE::SetEncountRequest(int)`** — achado notável: este
+controlador de efeito também dispara flag de CAPTURA DE TELA
+(provavelmente pra thumbnail de save) e flag de REQUISIÇÃO DE
+ENCONTRO (gatilho de batalha aleatória no mapa-mundo) — além de
+`sound_request`, `DrawSync`, `MoveImage`, `GetTPage`,
+`iOS_setV2Icon`. Marcada `read_structural`.
+
+## 208. `ASURA_FALL_INIT(unsigned char)` — init de efeito de queda com randomização pesada (2026-10-18, Fase 3, lote direto)
+
+`ASURA_FALL_INIT(unsigned char)` (`0x165520`, 1.500 B) — descida
+recursiva direta: **360 de ~375 instruções possíveis (96%)**, sem
+tabela de salto; **14 branches, 8 de retrocesso**. Dominada por
+**`ps_rand()`** (×13!) mais `GetTPage`/`GetClut`/`SetSemiTrans`
+(×3 cada). Consistente com inicialização de um efeito de "queda"
+fortemente randomizado (posição/velocidade/rotação inicial de
+partícula caindo — folhas, pétalas, neve). Marcada
+`read_structural`.
+
+## 209. `Dismiss()` — função real de dispensar unidade do roster (2026-10-18, Fase 3, lote direto)
+
+`Dismiss()` (`0x1a6d00`, 1.496 B) — descida recursiva direta: **343
+de ~374 instruções possíveis (92%)**, sem tabela de salto; **47
+branches, 24 de retrocesso**. 10 `bl` distintos.
+
+Chama **`IsDismiss(short)`**/**`UnitDismiss(short)`** diretamente —
+confirma ser a função real de dispensar (remover) uma unidade do
+roster, ligando à família `BuyUnit`/`PoachBuy` (seções 185/201).
+Também `MessageDataSet`/`DrawMessage` (confirmação via mensagem),
+`sys_warning`, `ps_rand`, e `Wwrite_eventflag`/`Wread_eventflag`/
+`Wtask_status` (interação com o contexto de task `W`). Marcada
+`read_structural`.
+
+
+## Lote de checagens diretas (seções 210–216): mais 7 funções lidas pelo coordenador sem fork (2026-10-18, Fase 3)
+
+## 210. `vorbis_book_decodev_add` — mais um interno de `libvorbis` reconhecido por nome (2026-10-18, Fase 3, regra 6 da metodologia)
+
+`vorbis_book_decodev_add` (`0x87700`, 1.412 B) — checagem direta:
+**96% de cobertura**, uma tabela de salto de 8 casos, catálogo de
+`bl` é `oggpack_look`/`oggpack_adv` (API real de leitura de bitstream
+Ogg) e `__addsf3` — decodificador de codebook genuíno da
+`libvorbis`. Marcada `read_full`.
+
+## 211. `Wmove_camera()` — confirma o padrão `W` com Jaccard exatamente 0,00 (2026-10-18, Fase 3, regra 2 da metodologia)
+
+`family_sim.py` contra `move_camera` (seção 195): `Wmove_camera()`
+(`0x1077f4`, 1.420 B) tem **Jaccard 0,00** — zero overlap de `bl`.
+Chama `wasmTaskEntry` (`0x161ef8`) e seu próprio
+`Wsettaskkind`/`Wwrite_eventflag`/`Wread_eventflag` em vez das
+versões sem prefixo. Confirmação limpa do padrão de cópia real.
+Marcada `read_structural`.
+
+## 212. `drawDamage(tag_animation*, Point*)` — confirma ser chamada por `displayShape`, constrói número de dano por dígito (2026-10-18, Fase 3, lote direto)
+
+`drawDamage(tag_animation*, Point*)` (`0x1ee70c`, 1.388 B, já
+referenciada como chamada de `displayShape`, seção 192) — descida
+recursiva direta: **346 de ~347 instruções possíveis (100%)**, sem
+tabela de salto; **22 branches, 11 de retrocesso**.
+
+Chama `ASHURA_getOTptrZ` (×3), **`setShortVector`** (×8 — provável
+posicionamento de cada dígito do número de dano) e, achado
+interessante, **`requestChangeClut`** (`0x211f14`, seção 120 — o
+produtor da fila de troca de paleta) — sugere que o número de dano
+muda de cor/paleta conforme o tipo de dano (crítico, cura, etc.) via
+o mesmo mecanismo de fila de CLUT. Quatro locais sem símbolo.
+Marcada `read_structural`.
+
+## 213. `getPositionHight(SVECTOR*, unsigned char)` — consulta de altura de terreno em laço (2026-10-18, Fase 3, lote direto)
+
+`getPositionHight(SVECTOR*, unsigned char)` (`0x1ec8bc`, 1.416 B) —
+descida recursiva direta: **353 de ~354 instruções possíveis
+(100%)**, sem tabela de salto; **31 branches, 18 de retrocesso**.
+**Único `bl`**: `get_mapstp(int,int,int)` — consistente com
+interpolar altura entre tiles de mapa vizinhos pra posicionamento
+sub-tile preciso (não só altura discreta por tile). Marcada
+`read_structural`.
+
+## 214. `CDebugPrint::FrameStep(...)` — overlay de debug no toolkit `CEGL2_*`, cobertura baixa por branch computado (2026-10-18, Fase 3, lote direto)
+
+`CDebugPrint::FrameStep(int,int,int,int,unsigned int)` (`0x2b07ac`,
+1.980 B) — descida recursiva direta: **só 101 de ~495 instruções
+possíveis (20%)** — cobertura baixa, provavelmente branch(es)
+computado(s) não resolvido(s) deixando grande parte do corpo fora
+de alcance pra `jtable.py`; **9 branches, 4 de retrocesso**
+alcançados.
+
+Chama `CEGL2_IF::GetShader`/`Setup2D`, `CEGL2_SPRITE::
+GetTextureHandle` — confirma ser uma classe de overlay de debug (
+provavelmente exibição de FPS/texto de debug em tela) construída
+sobre o mesmo toolkit `CEGL2_*` das telas de Configuração (seções
+133-135/157/162-163). **Marcada `read_structural` com cobertura
+parcial** — os ~80% restantes ficam como pendência honesta pra uma
+extração manual de tabela de salto/branch computado se a classe de
+debug importar mais pra frente.
+
+## 215. `ctltownmenu_main(CTLINFO*)` — menu de modo cidade, inclui snapshot de tela (2026-10-18, Fase 3, lote direto)
+
+`ctltownmenu_main(CTLINFO*)` (`0x2570f4`, 1.516 B) — descida
+recursiva direta: **301 de ~379 instruções possíveis (79%)**; **uma
+tabela de salto resolvida** (4 casos, 4 handlers distintos); **29
+branches, 14 de retrocesso**. 18 `bl` distintos.
+
+Confirma o framework `ctl*_main`: `Wtask_create`/`Wtask_status`/
+`Wsend_taskparamater`, mais `IOSsTownModeSet` (×5), `ctltownmenu_
+deactive`/`exit`, **`wldscr_snapshot(int)`** (tira um snapshot de
+tela do mapa-mundo — provável uso de thumbnail/transição),
+`curhis_get`/`clr` (histórico atual), `wldfade_set`/`sound_request`/
+`ssd_request`/`wldmusic_change`. Marcada `read_structural`.
+
+## 216. `ctlworking_init()` — init simples de indicador de "trabalhando"/carregando (2026-10-18, Fase 3, lote direto)
+
+`ctlworking_init()` (`0x250984`, 1.396 B) — descida recursiva
+direta: **336 de ~349 instruções possíveis (96%)**, sem tabela de
+salto; **8 branches, 5 de retrocesso**. Registro de UI simples:
+`add_anmpac`/`add_winpac`, `wldwin_set`/`trans`, `wldmess_put` (×3)
+— consistente com um indicador de "trabalhando"/carregando simples
+no mapa-mundo. Marcada `read_structural`.
+
+
+## Lote de checagens diretas (seções 217–220): mais 4 funções lidas pelo coordenador sem fork (2026-10-18, Fase 3)
+
+## 217. `CG2D_LOADER_TGA::Copy(void*)` — decodificador TGA real do jogo, mesmo padrão do BMP (2026-10-18, Fase 3, lote direto)
+
+`CG2D_LOADER_TGA::Copy(void*)` (`0xa4ef8`, 2.076 B) — descida
+recursiva direta: **493 de ~519 instruções possíveis (95%)**; **uma
+tabela de salto resolvida** (25 casos, 5 handlers distintos); **51
+branches, 38 de retrocesso**. Chama `CG2D_COLOR::GetTone5To8` —
+confirma, no mesmo padrão de `CG2D_LOADER_BMP::Copy` (seção 205),
+ser o decodificador TGA real do próprio jogo (classe
+`CG2D_LOADER_TGA`), com dispatch por variante de formato. Marcada
+`read_structural`.
+
+## 218. `load_loaddata()` — orquestrador real de carregamento de save, restaura dezenas de event-flag e estado de filme/rede (2026-10-18, Fase 3, lote direto, achado rico)
+
+`load_loaddata()` (`0xc478c`, 1.896 B) — descida recursiva direta:
+**454 de ~474 instruções possíveis (96%)**, sem tabela de salto;
+**55 branches, 28 de retrocesso**. 10 `bl` distintos.
+
+Catálogo revelador: **`write_eventflag`** (×25!) e
+**`read_eventflag`** (×13!) — bookkeeping massivo de flag de
+evento, restaurando dezenas de flags individuais do save pro estado
+do jogo. Também `iOS_set_globalgamestartflag`, `erase_unit`,
+`getMoviePlayFlg`/`getMovieEventNum`/`iOS_InitMovie` (restauração de
+estado de cutscene/filme), `pspBattleForceParticipationInit`,
+`pspNetGetBattleModeFlag`/`get_netmodeadhoc` (restauração de estado
+de rede). **Confirma ser a rotina real de restauração de dado de
+save** — não só carrega bytes, EXPLICITAMENTE restaura flag por
+flag o estado completo do jogo (progresso de história, filme
+assistido, modo de rede). Marcada `read_structural`.
+
+## 219. `ConvTutoData(FFT_SAVE_DATA*)` — conversão/migração de dado de tutorial dentro do save (2026-10-18, Fase 3, lote direto)
+
+`ConvTutoData(FFT_SAVE_DATA*)` (`0x28a76c`, 1.880 B) — descida
+recursiva direta: **470 de ~470 instruções possíveis (100%)**, sem
+tabela de salto; **26 branches, 25 de retrocesso** — quase todo
+branch é de retrocesso, laço denso. Chama `GetSaveDataInit()` e dois
+locais sem símbolo (um ×5). Consistente com conversão/migração de
+flags de progresso de tutorial dentro da estrutura de save (talvez
+entre versões de formato de save). Marcada `read_structural`.
+
+## 220. `iOS_v2menuExecute(V2_TOUCH*)` — núcleo de execução do sistema de menu V2, fortemente ligado a gate de tutorial (2026-10-18, Fase 3, lote direto)
+
+`iOS_v2menuExecute(V2_TOUCH*)` (`0x281a94`, 1.880 B) — descida
+recursiva direta: **448 de ~470 instruções possíveis (95%)**, sem
+tabela de salto; **67 branches, 42 de retrocesso**. 15 `bl`
+distintos.
+
+Núcleo de execução/update do sistema de menu V2 já visto em várias
+telas (`iOS_v2menuSetEnable`/`SetType`/`GetType`): chama
+`iOS_v2menuGetItem`/`GetEnable`/`CheckSEError`/`IsInMenu`,
+`iOS_IsEnableMenuItemTouch` (×4), `iOS_getTutorialbreak`/
+`iOSTutoCheck` (gate de tutorial — menus V2 são bloqueados durante
+tutorial), `iOS_isMovedDist`/`isInGameArea` (validação de gesto de
+toque), `iOS_soundDirect`, `RETINA_SCALE`. Confirma ser o "exec"
+central chamado por toda tela que usa o widget de menu V2. Marcada
+`read_structural`.
+
+
+## Lote de checagens diretas (seções 221–226): mais 6 funções lidas pelo coordenador sem fork (2026-10-18, Fase 3)
+
+## 221. `DB_init(...)` (base, sem letra) — confirma o MESMO boilerplate PSYQ das variantes `b`/`e`/`j` (2026-10-18, Fase 3, regra 6 da metodologia)
+
+`DB_init(DB*, ...)` (`0x1a6764`, 1.328 B, a versão SEM letra) —
+checagem direta: **96% de cobertura**, zero tabela de salto, **11
+branches, só 2 de retrocesso**. Catálogo é só `Set<TipoPrimitivo>`
+(`SetPolyFT4`/`SetPolyG4`/`SetPolyGT4`/`SetLineF2`/`SetLineG2`/
+`SetTile`/`SetDrawMove`/`SetShadeTex`) mais `SetDefDispEnv`/
+`SetDefDrawEnv` — confirma que a versão base é o MESMO boilerplate
+`DB_Init`/`InitGeom` do PSYQ já visto em `b`/`e`/`j` (seções 113/
+153/182), fechando a família completa (`DB_init`/`bDB_init`/
+`eDB_init`/`jDB_init`). Marcada `read_full`.
+
+## 222. `ValueFunc(unsigned char*)` — widget de exibição de valor numérico, referência pra família `b`/`e` (2026-10-18, Fase 3, lote direto)
+
+`ValueFunc(unsigned char*)` (`0x1c4958`, 1.368 B) — descida
+recursiva direta: **325 de ~342 instruções possíveis (95%)**, sem
+tabela de salto; **28 branches, 14 de retrocesso**. Chama
+`DrawFT4RGB`/`DrawFT4RGB2`, `getClutNum`, `IS_TEX_2X` — widget de
+exibição de valor/dígito numérico. Serve de referência pra
+`ValueFuncShort`/`bValueFunc`/`bValueFuncShort`/`eValueFunc`
+(família de letra `b`/`e` ainda não lida). Dois locais sem símbolo.
+Marcada `read_structural`.
+
+## 223. `MakeSaveData(int)` — serialização real de save com bitstream compactado (2026-10-18, Fase 3, lote direto, achado rico)
+
+`MakeSaveData(int)` (`0x183c20`, 1.364 B) — descida recursiva
+direta: **305 de ~341 instruções possíveis (89%)**, sem tabela de
+salto; **7 branches, 5 de retrocesso**. 9 `bl` distintos.
+
+Espelha `load_loaddata` (seção 218) do lado da ESCRITA: chama
+`MakeHeader(int,int,CARD_HEADER*)`, **`SetBitStream`/`SetBitStream2`/
+`WriteBitStream`/`GetBitStream2`** (empacotamento de bitstream —
+confirma que o save é COMPACTADO bit a bit, não só uma estrutura
+plana), `sun_to_ivarisday` (conversão de data/calendário pro
+timestamp do save), `pspSaveDataMissionRateSave` (taxa de conclusão
+de missão salva), e `Wread_eventflag` (×3). Um local sem símbolo
+chamado **28 vezes** — provável helper de escrita de bit/campo
+reusado pra cada valor serializado. Marcada `read_structural`.
+
+## 224. `Buy()` — tela de compra genérica, mesmo catálogo de `PoachBuy` (2026-10-18, Fase 3, lote direto)
+
+`Buy()` (`0x199a1c`, 1.468 B) — descida recursiva direta: **325 de
+~367 instruções possíveis (89%)**; **uma tabela de salto resolvida**
+(4 casos, 4 handlers distintos); **33 branches, 18 de retrocesso**.
+
+Catálogo essencialmente idêntico ao de `PoachBuy` (seção 201):
+`DrawItemCategory`, `DrawFunds()`, `initMenuTouch`, `GetShopItemList`,
+biblioteca de janela completa, `iOS_CMenuTouch`, `iOS_setV2Icon`.
+Confirma ser a tela de compra genérica de item/loja (sem o contexto
+específico de "poach"). Marcada `read_structural`.
+
+## 225–226. `iOS_CMenuTouch::execTap`/`execPress` — internos de hit-test da classe de menu touch mais usada do jogo (2026-10-18, Fase 3, lote direto)
+
+`iOS_CMenuTouch::execTap(IOS_MENU_TOUCH_RESULT*, int*, int*, int*)`
+(`0x27c27c`, 1.324 B, **99% de cobertura**, 60 branches/35 de
+retrocesso) e `iOS_CMenuTouch::execPress(int*, int*, int*,
+IOS_MENU_TOUCH_RESULT*)` (`0x27c7a8`, 1.408 B, **100% de
+cobertura**, 41 branches/20 de retrocesso) — os métodos internos de
+hit-test da classe `iOS_CMenuTouch` (já vista em DEZENAS de telas
+através de `init`/`exec`/`setDispOffset`/etc.). Chamam
+`iOS_CMenuTouch::isInRect`/`isCanUp`/`isCanDown`/`isInAssist`/
+`isInMenu` (métodos de teste geométrico da própria classe),
+`iOS_getTouchPress`/`BeginX`/`BeginY`/`NowX`/`NowY`,
+`iOS_isInGameArea`, `iOS_GetKeyMask()`. **Confirma a arquitetura
+interna da classe mais central deste projeto**: `exec()` (já visto
+em todo lugar) provavelmente despacha pra `execTap`/`execPress`
+conforme o tipo de gesto, cada um fazendo seu próprio teste de
+retângulo/estado via os métodos `is*` internos. Marcadas
+`read_structural`.
+
+
+## 227. Família `ValueFunc` — `ValueFuncShort` é duplicata exata, `b` confirma padrão de contexto completo, `eValueFunc` fica parcial por branch computado (2026-10-18, Fase 3, regra 2 da metodologia, checagem direta)
+
+`family_sim.py` contra `ValueFunc` (seção 222):
+
+```
+ValueFuncShort   0x1c5208  1.384 B   Jaccard 1,00 (CONFIRMADO POR SIMILARIDADE)
+bValueFunc       0x181578  1.356 B   Jaccard 0,50 (chama bDrawFT4RGB)
+bValueFuncShort  0x181e10  1.392 B   Jaccard 0,50 (chama bDrawFT4RGB)
+eValueFunc       0x191498  1.400 B   só 12% de cobertura — branch computado não resolvido
+```
+`ValueFuncShort` é duplicata EXATA de `ValueFunc` (só a variante
+`short` vs. `unsigned char*` de parâmetro) — confirmada por
+similaridade sem passe completo. `bValueFunc`/`bValueFuncShort`
+chamam `bDrawFT4RGB` (`0x1778a8`, já visto na seção 181) em vez da
+versão sem prefixo — mais uma confirmação do padrão "toda letra é
+contexto de task completo" pra esta família.
+
+**`eValueFunc` fica honestamente parcial**: `jtable.py` só alcança
+43 de ~350 instruções (12%) — a função termina um bloco em `bx` com
+um registrador carregado de memória (ponteiro de função/callback),
+não o idioma `add pc,pc,rX,lsl#2` que a ferramenta sabe resolver.
+Sem tabela de salto encontrada e sem chamada `bl` alcançada. Fica
+registrada como pendência honesta — precisaria de extração manual
+do alvo do `bx` pra completar. Todas marcadas `read_structural`
+(exceto `eValueFunc`, que fica como leitura parcial reconhecida).
+
+## 228. `unzOpenCurrentFile3` — interno de `minizip`/`zlib` reconhecido por nome (2026-10-18, Fase 3, regra 6 da metodologia)
+
+`unzOpenCurrentFile3` (`0x81c9c`, 1.300 B) — checagem direta: **99%
+de cobertura**, catálogo de `bl` é `inflateInit2_`/`call_zseek64`
+(API real de `minizip`, abertura de entrada de arquivo ZIP) mais
+dois locais sem símbolo da faixa `0x714xx` — confirma ser código de
+terceiros genérico (a camada `minizip` usada pra ler o pacote
+`fftpack.bin`/OBB, já mencionada em seções anteriores). Marcada
+`read_full`.
+
+
+## Lote de checagens diretas (seções 229–234): mais 6 funções lidas pelo coordenador sem fork (2026-10-18, Fase 3)
+
+## 229. `NameChgSelect()` — tela de nomear unidade, exibe preço e usa o sistema de roster (2026-10-18, Fase 3, lote direto)
+
+`NameChgSelect()` (`0x19e188`, 1.580 B) — descida recursiva direta:
+**367 de ~395 instruções possíveis (93%)**, sem tabela de salto;
+**45 branches, 24 de retrocesso**. **31 `bl` distintos**.
+
+Chama **`DrawPrice()`**/**`DrawFunds()`** (exibição de preço e
+fundos), toda a família `iOSUnitList*` e `UnitTable`/
+`UnitTableInitFirst` (sistema de roster já documentado), `iOS_v2menu*`.
+Consistente com a tela de nomear uma unidade recém-adquirida —
+mostra preço/fundos durante o fluxo de nomeação (provavelmente
+antes de confirmar a compra). Marcada `read_structural`.
+
+## 230. `Wevent_status_set(unsigned short, unsigned short)` — liga status de evento a ID de trabalho de batalha via animação, contexto `wasm` (2026-10-18, Fase 3, lote direto)
+
+`Wevent_status_set(unsigned short, unsigned short)` (`0x108568`,
+1.540 B) — descida recursiva direta: **368 de ~385 instruções
+possíveis (96%)**, sem tabela de salto; **36 branches, 21 de
+retrocesso**. Chama **`wasm_function`** (×6, primitivo genérico de
+task `wasm`), `Wread_eventflag`/`Wtask_wait`, `get_bwp`,
+`search_controlID`, **`getBattleWorkIDFromAnimation`** — liga o
+status de evento ao ID de trabalho de batalha (`BWORK`) resolvido a
+partir de uma animação, tudo no contexto de task `wasm`. Três locais
+sem símbolo. Marcada `read_structural`.
+
+## 231. `iOS_setStatusHPMPCT(...)` — helper fino, só 21 chamadas ao mesmo primitivo de número (2026-10-18, Fase 3, lote direto)
+
+`iOS_setStatusHPMPCT(IOS_STTSNUM*, int,int,int,int,int,int,int,int,
+int, void*, int)` (`0x280dfc`, 1.540 B) — descida recursiva direta:
+**367 de ~385 instruções possíveis (95%)**, sem tabela de salto; só
+**5 branches, 1 de retrocesso**. **Único `bl`**: **`iOS_setNumPrim
+(tagPOLY_FT4*, int, int, int, int)`**, chamado **21 vezes** — função
+extremamente fina que só estampa os dígitos de HP/MP/CT na tela
+chamando o mesmo primitivo de número repetidamente (consistente com
+3 campos numéricos × ~7 dígitos possíveis cada). Marcada
+`read_structural`.
+
+## 232. `getreaction_post(unsigned short*)` — processamento pós-reação, liga à cadeia `calc_result`/`setskillresult` (2026-10-18, Fase 3, lote direto)
+
+`getreaction_post(unsigned short*)` (`0x1e6d74`, 1.524 B) — descida
+recursiva direta: **357 de ~381 instruções possíveis (94%)**; **uma
+tabela de salto resolvida** (9 casos, 8 handlers distintos); **38
+branches, 28 de retrocesso**.
+
+Chama `check_reaction_deny`, `get_reflection_coord`,
+`get_coord_address`, `check_act_ok`, `copyACTst` (×2), `setskilldata`,
+`get_rival` — todo o vocabulário já visto em `calc_result` (seção
+90) e `setskillresult` (seção 77). **Confirma ser o processamento
+PÓS-reação** na cadeia de resolução de ação de batalha (contra-
+ataque/reflexão depois que a checagem de reação já decidiu que uma
+reação vai acontecer) — provavelmente monta as coordenadas de
+reflexão e os dados de habilidade pro contra-ataque. Dois locais sem
+símbolo mais um chamado ×5. Marcada `read_structural`.
+
+## 233. `DressSellEquip()` — tela de vender equipamento, revela `ChgMoney` (2026-10-18, Fase 3, lote direto)
+
+`DressSellEquip()` (`0x19cd3c`, 1.480 B) — descida recursiva direta:
+**345 de ~370 instruções possíveis (93%)**, sem tabela de salto;
+**29 branches, 14 de retrocesso**. 22 `bl` distintos.
+
+**Achado chave**: chama **`ChgMoney(int)`** diretamente — a função
+real de mudança de dinheiro do jogador (primeira vez vista
+explicitamente, resolve a lacuna já sinalizada em `BuyUnit`, seção
+185). Também `GetItemSellPrice(short)`, `IsDark`, `CurChrChg2`, e a
+biblioteca `iOS_CMenuTouch` completa. Confirma ser a tela de vender
+equipamento, com dinheiro ganho creditado via `ChgMoney`. Marcada
+`read_structural`.
+
+## 234. `ExecuteEffectAnimation(...)` — executor real de ciclo de vida de `Shape2`, três tabelas de salto (2026-10-18, Fase 3, lote direto)
+
+`ExecuteEffectAnimation(effectAnimation*, char, char, char)`
+(`0x218060`, 1.480 B) — descida recursiva direta: **345 de ~370
+instruções possíveis (93%)**; **três tabelas de salto resolvidas**
+(7 casos/5 handlers; 5 casos/5 handlers; 5 casos/5 handlers); **23
+branches, 17 de retrocesso**.
+
+Chama **`NewShape2(unsigned char)`**/**`DisposeShape2(Shape2*)`**/
+**`drawShape2`** (×2, seção 109) e `iOS_getSkipAddPrim` (×4) —
+confirma ser o executor real que gerencia o ciclo de vida completo
+de um objeto `Shape2` (criar → desenhar → descartar) por quadro de
+animação de efeito, com três pontos de dispatch diferentes
+controlando o fluxo. Marcada `read_structural`.
+
+
+## Lote de checagens diretas (secoes 235-240): mais 6 funcoes lidas pelo coordenador sem fork (2026-10-18, Fase 3)
+
+## 235. MainBattleRoutine() - o laco de decisao de IA de batalha central, chamado por ForAutoCommand (2026-10-18, Fase 3, lote direto, achado chave)
+
+MainBattleRoutine() (0x27426c, 1.272 B) - descida recursiva direta:
+306 de ~318 instrucoes possiveis (96%), sem tabela de salto; 44
+branches, 19 de retrocesso. 18 bl distintos.
+
+Catalogo central de decisao de IA: SetBaseTargetGroup,
+EvaluateAllUnitAction, SetMoveAreaSafePanelOnly, StayAtSafePanel,
+GetDestinationRange, SetThresholdDoNothing, SetSafePanel/InRange/
+Ahead, MakeMoveAreaNearByDestination, ForChantedAction, SetMove,
+GetUnitOnPanel, GetPanelUnderUnit, MemClearDW, MakeMapCostToDest,
+MakeMapChantedAction, ps_rand. Confirma ser a funcao real chamada
+por ForAutoCommand (secao 150, que ja mostrava MainBattleRoutine no
+seu catalogo) - o laco central de decisao de IA que avalia alvo,
+movimento seguro, e acao encantada/mapeada pra cada unidade.
+Marcada read_structural.
+
+## 236. ItemSort(int, short*) - ordenador real de lista de item, usado por toda a familia de equipamento (2026-10-18, Fase 3, lote direto)
+
+ItemSort(int, short*) (0x1a96c8, 1.272 B) - descida recursiva
+direta: 318 de ~318 instrucoes possiveis (100%), sem tabela de
+salto; 46 branches, 25 de retrocesso. Chama pspItemGetCommonData/
+WeaponData/ShieldData/AccessoryData (dado por categoria de item),
+pspItemIsExist, pspItemIsType (x14!), ItemChg. Confirma ser o
+ordenador real de lista de item usado por GetBestEquip/
+GetTryBestEquip/make_abilitylistmain (secoes 173/194/128) - ordena
+por categoria/tipo antes de avaliar qual e o melhor. Dois locais
+sem simbolo. Marcada read_structural.
+
+## 237-238. requestChangeAnbient/requestChangeFlat - irmas produtoras de fila de cor, mesmo formato de requestChangeClut (2026-10-18, Fase 3, lote direto)
+
+requestChangeAnbient(int,int,int,int,int) (0x213228, 1.292 B) e
+requestChangeFlat(int,int,int,int,int) (0x213898, 1.292 B) -
+descida recursiva direta: 93% de cobertura nas duas; cada uma com
+uma tabela de salto de 11 casos/10 handlers; 11 branches/10 de
+retrocesso nas duas. Catalogo minimo e identico nas duas:
+ASHURA_CVECTOR, __divsi3 (x3).
+
+Mesmo formato exato de requestChangeClut (secao 120: tabela de
+11 casos, poucas chamadas externas, produtor de fila) - confirma
+que existem filas de requisicao PARALELAS pra mudanca de cor
+ambiente e cor plana, alimentando o mesmo tipo de consumidor que
+executeChangeClut (secao 70) consome pra CLUT - provavelmente hajam
+executeChangeAmbient/executeChangeFlat irmas ainda nao lidas.
+Marcadas read_structural.
+
+## 239. math::MATRIX4::operator*=(math::MATRIX4 const&) - multiplicacao de matriz 4x4 pura, codigo do proprio motor (2026-10-18, Fase 3, lote direto)
+
+math::MATRIX4::operator*=(math::MATRIX4 const&) (0xa75ac, 1.904 B)
+- descida recursiva direta: 100% de cobertura, ZERO branches,
+catalogo de bl e so __addsf3 (x48)/__mulsf3 (x64) - multiplicacao
+de matriz 4x4 de ponto flutuante totalmente desenrolada (sem laco),
+consistente com 4x4 * 4x4 = 64 multiplicacoes/48 somas pro produto
+completo. E codigo real do motor (namespace math:: do toolkit
+moderno CEGL2/OpenGL ES ja visto nas telas de Configuracao), nao
+boilerplate de terceiros - mas e puramente matematico, sem logica
+de jogo, aceito direto pela regra 3. Marcada read_structural.
+
+## 240. ASURA_WorkInit() - chama ASHURA_FALL, liga ao par de inicializacao do efeito de queda (2026-10-18, Fase 3, lote direto)
+
+ASURA_WorkInit() (0x16e2d8, 1.264 B) - descida recursiva direta:
+293 de ~316 instrucoes possiveis (93%), sem tabela de salto; 12
+branches, TODOS de retrocesso. Chama **ASHURA_FALL(unsigned char)**
+e SetDrawMode (x4). Liga diretamente a ASURA_FALL_INIT (secao 208,
+que inicializa parametros randomizados do efeito de queda) -
+ASURA_WorkInit parece ser o passo que de fato DISPARA o efeito via
+ASHURA_FALL, separado da inicializacao de parametro. Marcada
+read_structural.
+
+
+## Lote de checagens diretas (secoes 241-246): mais 6 funcoes lidas pelo coordenador sem fork, lote rico (2026-10-18, Fase 3)
+
+## 241. ASHURA_FALL(unsigned char) - decodificador de opcode AUTO-RECURSIVO do efeito de queda, tabela de 58 casos (2026-10-18, Fase 3, lote direto, achado chave)
+
+ASHURA_FALL(unsigned char) (0x16a1c8, 1.244 B, chamada por
+ASURA_WorkInit, secao 240) - descida recursiva direta: 238 de ~311
+instrucoes possiveis (77%); uma tabela de salto resolvida (guarda
+cmp em 0x16a1e4, dispatch em 0x16a1e8, 58 casos, 12 handlers
+distintos - a maioria colapsa num handler default); 26 branches,
+15 de retrocesso.
+
+**Auto-recursao**: a propria funcao se chama de novo (x9) - mesmo
+padrao de ASHURA_MapProjectMem2Mem (secao 112), confirma ser outro
+decodificador de stream de opcode recursivo, aqui especificamente
+pro sistema de efeito de queda. Chama ASURA_soundStop (x6),
+callEnvEffect, ASHURA_CVECTOR, SetColorMatrix, read_eventflag.
+Marcada read_structural.
+
+## 242. CheckBowResult(int, SVECTOR*, int) - calculo de alcance/trajetoria de arco (2026-10-18, Fase 3, lote direto)
+
+CheckBowResult(int, SVECTOR*, int) (0x2247a0, 1.316 B) - descida
+recursiva direta: 314 de ~329 instrucoes possiveis (95%), sem
+tabela de salto; 14 branches, 6 de retrocesso. Chama
+**GetBowReachableTangent(BowCheckWork*, int*, int*)**,
+getAnimationPositionFromBattleWork, getAnimationHeightFromBattleID,
+get_bwp, get_mapstp, ratan2, SquareRoot12 - confirma calculo real
+de alcance/trajetoria de tiro de arco (tangente alcancavel, posicao/
+altura de animacao). Dois locais sem simbolo. Marcada
+read_structural.
+
+## 243. p01_bowFunc() - efeito de projetil de arco com trajetoria parabolica real (2026-10-18, Fase 3, lote direto)
+
+p01_bowFunc() (0x22416c, 1.252 B) - descida recursiva direta: 296 de
+~313 instrucoes possiveis (95%), sem tabela de salto; 15 branches, 7
+de retrocesso. 17 bl distintos.
+
+Chama **GetParabolaYPos(int,int)** (x3) e **GetBowFirstSpeed()** -
+confirma fisica de trajetoria PARABOLICA real pro voo da flecha,
+mais requestPhysicalDamage, RequestReboundEffect, dispPolygonObject
+(secao 108), e a pipeline GTE completa (RotMatrix/SetRotMatrix/
+SetTransMatrix/RotTrans). Marcada read_structural.
+
+## 244. p22_shoukanFunc() - efeito de habilidade de invocacao ("shoukan" = convocar), usa o sistema de objeto permanente (2026-10-18, Fase 3, lote direto)
+
+p22_shoukanFunc() (0x220ab0, 1.252 B, "shoukan" = invocacao/convocar
+em japones) - descida recursiva direta: 305 de ~313 instrucoes
+possiveis (97%), sem tabela de salto; 28 branches, 14 de retrocesso.
+
+Chama **createPermanentObject** (secao 158), **AnimatePermanentObject**,
+GetPermanentObject/DisposePermanentObject, GetAnimationPosition,
+Ssd_PlayEffect/StopEffect, rsin/rcos - confirma ser um efeito de
+habilidade de invocacao que usa o mesmo sistema de objeto permanente
+ja documentado (fisica + RNG na criacao, animacao, som). Marcada
+read_structural.
+
+## 245. BattleJobStts(int, int) - entrada de contexto de batalha que chama AbiStts diretamente, fecha o trio World/Battle/AbiStts (2026-10-18, Fase 3, lote direto, achado chave)
+
+BattleJobStts(int, int) (0x195910, 1.340 B) - descida recursiva
+direta: 296 de ~335 instrucoes possiveis (88%), sem tabela de salto;
+13 branches, 6 de retrocesso. 14 bl distintos.
+
+Usa a biblioteca completa do contexto `j` (jSwapDB, jDB_init,
+jGetChrSingle, jWaitLoadImage/StoreImage, jWindowPositionInit,
+jHelpMessage, jGetMaskedPad, jMenuSelInit, jSelectWindowClut) e,
+achado chave, **chama AbiStts() diretamente** (secao 187) e
+JobStatus(). **Fecha o trio da familia "status de emprego"**:
+WorldJobStts (mapa-mundo, secao 146) / AbiStts (copia de contexto
+`j`, secao 187) / BattleJobStts (entrada de contexto de batalha que
+ENCADEIA pra AbiStts). Marcada read_structural.
+
+## 246. GsSortPoly - dispatcher PS1 GTE real de 233 casos por tipo de primitivo, baixa cobertura e artefato de medicao (2026-10-18, Fase 3, lote direto)
+
+GsSortPoly (0x29b704, 1.256 B) - descida recursiva direta: so 78 de
+~314 instrucoes possiveis (25%); **uma tabela de salto resolvida**
+(guarda cmp em 0x29b720, dispatch em 0x29b724, **233 casos, 17
+handlers distintos**); 16 branches, TODOS de retrocesso.
+
+**Nota sobre a cobertura baixa**: a tabela de 233 entradas de 4 B
+cada ocupa ~932 B dos 1.256 B totais (74% da funcao) - a ferramenta
+conta esses bytes de DADO como "slots de instrucao possiveis" na
+estimativa de cobertura, entao os 25% refletidos sao um artefato de
+medicao, nao codigo faltando. Catalogo minimo (so um local sem
+simbolo) - e o dispatcher real de ordenacao de primitivo GTE do PS1
+(233 codigos de tipo de primitivo/flag mapeados pra so 17 handlers
+reais). Marcada read_structural.
+
+
+## Lote de checagens diretas (secoes 247-252): mais 6 funcoes lidas pelo coordenador sem fork (2026-10-18, Fase 3)
+
+## 247. vorbis_lpc_from_data - mais um interno de libvorbis reconhecido por nome (2026-10-18, Fase 3, regra 6 da metodologia)
+
+vorbis_lpc_from_data (0x8d318, 1.224 B) - checagem direta: 98% de
+cobertura, zero tabela de salto, catalogo de bl e so runtime de
+ponto flutuante de precisao dupla do compilador (__adddf3/__muldf3
+x11/__divdf3/etc.) - calculo real de coeficiente LPC (linear
+predictive coding) da libvorbis, codigo de terceiros genuino.
+Marcada read_full.
+
+## 248. LearnJobStts() - tela real de navegacao de lista de emprego, confirma vinculo com WorldJobStts (2026-10-18, Fase 3, lote direto)
+
+LearnJobStts() (0x1b4c34, 1.232 B, ja referenciada por nome no
+catalogo de WorldJobStts, secao 146) - descida recursiva direta:
+282 de ~308 instrucoes possiveis (92%), sem tabela de salto; 24
+branches, 10 de retrocesso. 25 bl distintos.
+
+Chama GetLocalJobNumber(short), GetJobList(unsigned char,short*,
+int), a biblioteca de janela completa (WindowInit2/DrawWindow2/
+SetWindowPosition/GetWindowPosition), iOS_CMenuTouch, iOS_setV2Icon/
+getV2Icon - confirma ser a tela real de navegacao/aprendizado de
+lista de emprego chamada por WorldJobStts. Quatro locais sem
+simbolo. Marcada read_structural.
+
+## 249. SetTmp_UA(UnitAction*) - setter real de acao temporaria por categoria de item/habilidade (2026-10-18, Fase 3, lote direto, achado chave)
+
+SetTmp_UA(UnitAction*) (0x273378, 1.220 B, ja referenciada pelo
+nucleo de IA ForAutoCommand e por SetUnitParameter, secoes 150/196)
+- descida recursiva direta: 285 de ~305 instrucoes possiveis (93%);
+uma tabela de salto resolvida (10 casos, 8 handlers distintos); 22
+branches, 9 de retrocesso.
+
+Chama MemCpyB/MemClearDW e pspItemGetCommonData/OptionData/
+WeaponData/ItemDataByAbility - confirma ser o setter real que monta
+um UnitAction* temporario copiando dado de item/habilidade por
+categoria (10 vias de dispatch) - o primitivo central que
+ForAutoCommand usa pra preparar uma acao candidata antes de
+avaliar. Marcada read_structural.
+
+## 250. requestChangeGradation(...) - quarto membro da familia de fila de mudanca de cor (2026-10-18, Fase 3, lote direto)
+
+requestChangeGradation(int,int,int,int,int) (0x212c00, 1.220 B) -
+descida recursiva direta: 95% de cobertura; uma tabela de salto
+resolvida (11 casos, 10 handlers distintos); 13 branches, 9 de
+retrocesso. Catalogo identico aos outros tres: ASHURA_CVECTOR,
+__divsi3 (x3).
+
+**Confirma um QUARTO membro da familia de producao de fila de
+mudanca de cor** (junto com requestChangeClut/Anbient/Flat, secoes
+120/237/238) - mesmo formato exato de tabela de 11 casos. A
+arquitetura agora tem 4 filas paralelas confirmadas (CLUT, ambiente,
+cor plana, gradacao), todas alimentando consumidores do tipo
+executeChange* (so executeChangeClut, secao 70, foi lida até
+agora). Marcada read_structural.
+
+## 251. GsSortFlipSprite - rotina real de flip/ordenacao de sprite estilo PS1, matematica trigonometrica real (2026-10-18, Fase 3, lote direto)
+
+GsSortFlipSprite (0x29bbec, 1.876 B) - descida recursiva direta:
+466 de ~469 instrucoes possiveis (99%), sem tabela de salto; 9
+branches, 3 de retrocesso. Chama GsGetActiveBuff, rsin/rcos, mais
+runtime de ponto flutuante pesado (__floatsisf x12/__mulsf3 x10/
+__fixsfsi x8) - rotina real do motor (nao boilerplate) que
+calcula rotacao/flip de sprite usando trigonometria real antes de
+submeter ao buffer ativo do GPU estilo PS1. Marcada
+read_structural.
+
+## 252. extend_windowframemain(...) - animacao de extensao de moldura de janela (2026-10-18, Fase 3, lote direto)
+
+extend_windowframemain(int,int,RECT16*,int,int,int) (0x11d864,
+1.280 B) - descida recursiva direta: 307 de ~320 instrucoes
+possiveis (96%), sem tabela de salto; 22 branches, 11 de
+retrocesso. Chama allocatememorywait/disposememory, task_wait,
+asmBoxCopy, hook_win_tail, asmClearBuffer, PSX_LoadImage -
+consistente com a animacao comum de "esticar a moldura da janela ao
+abrir" rodando como task. Marcada read_structural.
+
+
+## Lote de checagens diretas (secoes 253-258): mais 6 funcoes lidas pelo coordenador sem fork (2026-10-18, Fase 3)
+
+## 253. iOS_CMenuTouch::exec(...) - confirma ser o dispatcher central por modo de toque, chamando execTap/execPress (2026-10-18, Fase 3, lote direto, achado chave)
+
+iOS_CMenuTouch::exec(int*,int*,int*) (0x27cf50, 1.204 B, chamada
+literalmente em dezenas de telas ja documentadas) - descida
+recursiva direta: 294 de ~301 instrucoes possiveis (98%); uma
+tabela de salto resolvida (6 casos, 6 handlers distintos); 49
+branches, 25 de retrocesso.
+
+**Confirma a arquitetura interna da classe mais usada do jogo**:
+despacha por modo de toque (6 vias) chamando `calcTapArea`,
+`isInRect`/`isInMenu`, e, confirmando a hipotese da secao 225-226,
+**chama `execTap`/`execPress` diretamente** conforme o modo. Tambem
+chama `drawDebug`/`drawDebug2` (visualizacao de debug da area de
+toque), `setMode`, toda a familia `iOS_getTouch*`, e
+`iOS_OrMenuTouchKeyInput` (x6, combina flags de input de teclado
+virtual). Fecha o entendimento completo de `iOS_CMenuTouch::init`/
+`exec`/`execTap`/`execPress` como uma unidade coesa. Marcada
+read_structural.
+
+## 254. statusfigprint(...) - impressora de figura/numero simples, gated por modo de rede (2026-10-18, Fase 3, lote direto)
+
+statusfigprint(int,int,char*,COPYFIELD*) (0xe1db8, 1.204 B, ja
+referenciada em dezenas de telas de status) - descida recursiva
+direta: 287 de ~301 instrucoes possiveis (95%), sem tabela de
+salto; 26 branches, 12 de retrocesso. **Unicos bl**: `asmBoxCopy`
+(x8) e `pspNetGetBattleModeFlag`. Confirma ser um impressor simples
+de figura/numero via copia de caixa, com uma checagem de modo de
+rede (provavelmente oculta/ajusta alguma figura quando em partida
+de rede). Marcada read_structural.
+
+## 255. vorbis_book_init_decode - interno de libvorbis reconhecido por nome (2026-10-18, Fase 3, regra 6 da metodologia)
+
+vorbis_book_init_decode (0x986d0, 1.212 B) - checagem direta: 100%
+de cobertura, catalogo de bl inclui `ov_ilog`/`_make_words`/
+`_book_unquantize`/`vorbis_book_clear` - inicializacao real de
+codebook de decodificacao da libvorbis, codigo de terceiros
+genuino. Marcada read_full.
+
+## 256. ctlhoukmes2_main(CTLINFO*) - segundo estagio real de ctlhoukmes_main, trata ponto de emprego e titulo "shogou" (2026-10-18, Fase 3, lote direto)
+
+ctlhoukmes2_main(CTLINFO*) (0x25b2d0, 1.212 B, o segundo estagio ja
+sinalizado por ctlhoukmes_main, secao 117) - descida recursiva
+direta: 286 de ~303 instrucoes possiveis (94%), sem tabela de
+salto; 36 branches, 17 de retrocesso. 14 bl distintos.
+
+Chama `add_jobpoint(int,int)`, `ctlhouk_init()`,
+**`shogou_check()`** (x3)/**`ctlshogou_init()`** ("shogou" = 称号,
+titulo/grau em japones), `get_unitwork_add_wld`, `wld_daywrite`
+(x3, escrita de dia/calendario), `Ssd_PlayEffects01`. Confirma que
+o segundo estagio do controlador de relatorio de batalha trata
+concessao de ponto de emprego e checagem de titulo honorifico apos
+o relatorio. Marcada read_structural.
+
+## 257. get_succession_data(BWORK*) - dado de "sucessao" com RNG sincronizado de rede (2026-10-18, Fase 3, lote direto)
+
+get_succession_data(BWORK*) (0x1d2394, 1.248 B) - descida
+recursiva direta: 304 de ~312 instrucoes possiveis (97%), sem
+tabela de salto; 37 branches, 23 de retrocesso. Chama
+`get_command_ability`, `check_prob`, `clear_cmemory`, `check_coord2`
+(secao 148), `pspItemIsExist`, `pspJobGetIndex2Job`, e
+**`_pspNetRand(char const*, int)`** (x2 - RNG sincronizado de
+REDE). "Sucessao" provavelmente se refere a heranca de item/dado
+entre unidades (ex.: successao de equipamento ao substituir
+unidade), usando RNG de rede pra manter resultado consistente entre
+jogadores numa partida online. Marcada read_structural.
+
+## 258. testBowLineDisp(int) - desenho da linha de trajetoria de arco com a mesma matematica parabolica de p01_bowFunc (2026-10-18, Fase 3, lote direto)
+
+testBowLineDisp(int) (0x21871c, 1.208 B) - descida recursiva
+direta: 290 de ~302 instrucoes possiveis (96%), sem tabela de
+salto; so 5 branches, 2 de retrocesso. Chama **GetParabolaYPos**
+(x3, mesma funcao de `p01_bowFunc`, secao 243), `AddPrim`,
+`FntPrint` (texto de debug?), `SetLineF2`, e a pipeline GTE
+completa (`SetRotMatrix`/`SetTransMatrix`/`RotTrans`, x6 cada).
+Desenha a linha/arco de trajetoria parabolica de mira de arco - o
+nome "test" mais `FntPrint` sugerem uma visualizacao de debug/dev
+pra validar a trajetoria, nao necessariamente uma feature de
+jogador final. Marcada read_structural.
+
+
+## Lote de checagens diretas (secoes 259-262): mais 4 funcoes lidas pelo coordenador sem fork (2026-10-18, Fase 3)
+
+## 259. eItemSort(int, short*) - confirma o padrao de contexto `e` pra familia ItemSort (2026-10-18, Fase 3, regra 2 da metodologia)
+
+family_sim.py contra ItemSort (secao 236): eItemSort (0x188fe4,
+1.200 B) tem Jaccard 0,50 - chama dois locais proprios
+(0x188e54/0x188f68, provavel equivalente a ItemChg no contexto `e`)
+em vez de ItemChg. Mais uma confirmacao do padrao de contexto de
+task completo (secao 181) pra familia ItemSort. Marcada
+read_structural.
+
+## 260. ov_raw_seek - interno de libvorbis/ogg reconhecido por nome (2026-10-18, Fase 3, regra 6 da metodologia)
+
+ov_raw_seek (0x9ebfc, 1.192 B) - checagem direta: 100% de
+cobertura, catalogo de bl inclui ogg_page_bos/eos/serialno - API
+real de posicionamento de pagina Ogg da libvorbisfile. Marcada
+read_full.
+
+## 261. InitAnimation() - carregamento real de recurso de animacao, quatro tabelas de salto por tipo (2026-10-18, Fase 3, lote direto, achado rico)
+
+InitAnimation() (0x1f45c0, 1.188 B) - descida recursiva direta: 251
+de ~297 instrucoes possiveis (85%); QUATRO tabelas de salto
+resolvidas (4 casos/4 handlers; 8 casos/5 handlers; 8 casos/8
+handlers; 8 casos/8 handlers); 32 branches, 28 de retrocesso.
+
+Chama mallocForFile/fileReadRequest/fileReadCheck/fileDispose
+(carregamento de arquivo real), loadClutData, LoadTPage - confirma
+ser o carregador real de recurso de animacao, com dispatch por tipo
+de formato/categoria em quatro pontos diferentes (provavelmente um
+por campo de cabecalho de animacao). Quatro locais sem simbolo.
+Marcada read_structural.
+
+## 262. DetailStatus() - alternador entre sub-modos de exibicao de status (2026-10-18, Fase 3, lote direto)
+
+DetailStatus() (0x1bb714, 1.188 B) - descida recursiva direta: 273
+de ~297 instrucoes possiveis (92%), sem tabela de salto; 40
+branches, 17 de retrocesso. Chama SetSttsA/SetSttsA2/SetSttsEqu/
+SetSttsAbi/SetSttsBoth (toda a familia de setter de categoria de
+status), WindowDel, CurChrChg, iOSUnitListCurSave_W - confirma ser
+o alternador real entre os varios sub-modos de exibicao de status
+detalhado (stats base, equipamento, habilidade, ambos). Dois locais
+sem simbolo. Marcada read_structural.
+
+
+## Lote de checagens diretas (secoes 263-266): ultimas 4 funcoes lidas pelo coordenador sem fork antes do limite de sessao liberar (2026-10-18, Fase 3)
+
+## 263. entryAnimations() - entrada real que cria e alimenta o laco ExecuteAnimations (2026-10-18, Fase 3, lote direto)
+
+entryAnimations() (0x1f4b2c, 1.260 B) - descida recursiva direta:
+292 de ~315 instrucoes possiveis (93%); uma tabela de salto
+resolvida (4 casos, 4 handlers distintos); 36 branches, 15 de
+retrocesso. Chama **ExecuteAnimations()** (x3) e **NewAnimation**
+(construtor completo de 10 parametros), mais carregamento de
+arquivo (mallocForFile/fileReadRequest/fileReadCheck/fileDispose) e
+CFFT_STATE::GetParam/AddParam. Confirma ser o ponto de entrada real
+que cria novas animacoes e alimenta o laco principal
+ExecuteAnimations. Dois locais sem simbolo. Marcada
+read_structural.
+
+## 264. ctlwork_main(CTLINFO*) - controlador que une init/working/end do indicador de "trabalhando" (2026-10-18, Fase 3, lote direto)
+
+ctlwork_main(CTLINFO*) (0x250ef8, 1.184 B) - descida recursiva
+direta: 278 de ~296 instrucoes possiveis (94%), sem tabela de
+salto; 24 branches, 11 de retrocesso. Chama ctlwork_deactive,
+**ctlworking_init()** (secao 216), **ctlworkend_init()**,
+wldctl_active, sound_request (x5), iOS_CMenuTouch::exec/setYLine/
+setDispAssist. Confirma unir os tres estagios (`ctlworking_init` ->
+este controlador principal -> `ctlworkend_init`) do indicador de
+"trabalhando"/carregando. Marcada read_structural.
+
+## 265. setShapeDataSub(...) - sub-rotina de setup de forma com checagem de tipo de movimento e handler de erro explicito (2026-10-18, Fase 3, lote direto)
+
+setShapeDataSub(tag_animation*, subAnimation*, unsigned short,
+unsigned short) (0x1f0550, 1.448 B) - descida recursiva direta: 357
+de ~362 instrucoes possiveis (99%), sem tabela de salto; 30
+branches, 14 de retrocesso. Catalogo minimo: get_mapstp,
+get_movetype(BWORK*), e **errorHandler(int)** - achado raro, uma
+chamada explicita de tratamento de erro (a maioria das funcoes
+deste projeto nao tem nenhum handler de erro visivel). Marcada
+read_structural.
+
+## 266. p02_hitMarkFunc() - efeito de impacto com camera e fisica de gravidade/densidade de ar customizada (2026-10-18, Fase 3, lote direto, achado rico)
+
+p02_hitMarkFunc() (0x21f5e4, 1.456 B) - descida recursiva direta:
+356 de ~364 instrucoes possiveis (98%), sem tabela de salto; 48
+branches, 28 de retrocesso. 16 bl distintos.
+
+Chama changeCharacterClut, AnimatePermanentObject,
+**SetDefaultCamera()**, **SetEffectTransCameraWork**/
+**SetEffectScaleCameraWork** (trabalho de camera de efeito —
+provavel zoom/corte dramatico no impacto), e, achado notavel, um
+par completo de empilhamento de fisica: **SetGravity**/
+**SetAirDensity** com **Push**/**PopGravity** e **Push**/
+**PopAirDensity** - confirma que o efeito de "marca de acerto"
+customiza temporariamente a gravidade e densidade do ar da
+simulacao de fisica (empilhando o valor original pra restaurar
+depois), junto com o sistema de objeto permanente ja documentado
+(createPermanentObject, secao 158). Marcada read_structural.
+
+
+## Vigesimo lote paralelo (secoes 267-271): 5 funcoes lidas por forks simultaneos, usando jtable.py (2026-10-18, Fase 3, primeiro lote apos o limite de sessao liberar)
+
+## 267. CG2D_LOADER_BMP::Save(...) - codificador BMP real, escritor de thumbnail de save (2026-10-18, Fase 3, lote paralelo)
+
+CG2D_LOADER_BMP::Save(void*,int,int,_G2D_SAVE*) (0xa2c4c, 1.780 B)
+- descida recursiva via jtable.py: 414 de ~445 instrucoes possiveis
+(93%); duas tabelas de salto resolvidas (4 casos/4 handlers; 7
+casos/7 handlers); 30 branches, 26 de retrocesso.
+
+Chama GetSavePixelFormatData (despacha por formato de pixel via as
+duas tabelas), e dirige I/O de arquivo real via CFILE_UTIL::
+FileCreate/FileDelete e CFILE::CFILE/Open/Write/~CFILE. Confirma
+ser o codificador BMP real - a contraparte de escrita de
+CG2D_LOADER_BMP::Copy (secao 205). Com _G2D_SAVE* como parametro,
+consistente com o escritor de thumbnail de save/screenshot. Cinco
+locais sem simbolo. Marcada read_structural.
+
+## 268. search_reverse_mp(...) - laco de busca de alvo pra efeito de MP revertido/refletido (2026-10-18, Fase 3, lote paralelo)
+
+search_reverse_mp(int,int,int,int,int,int*,int) (0x1e1a80, 1.404 B)
+- descida recursiva via jtable.py: 336 de ~351 instrucoes possiveis
+(96%), sem tabela de salto; 27 branches, 14 de retrocesso (>50% de
+retrocesso).
+
+Chama copy_struct_data (x2, copia dado de unidade candidata pra
+buffer de resultado), JudgeTimeOut() (guarda de limite de tempo
+tipico de laco de sequencia de batalha), mais varios locais sem
+simbolo (checagens de elegibilidade/distancia). Consistente com um
+laco de busca escaneando candidatos e copiando dado da unidade que
+bate pra fora - confirma a hipotese "buscar alvo pra aplicar efeito
+de MP revertido/refletido". Marcada read_structural.
+
+## 269. ctlnobelstop_main(CTLINFO*) - corrige a hipotese de nome: e o encerramento do modo "novel" (narracao de cutscene), nao um minigame de livro (2026-10-18, Fase 3, lote paralelo)
+
+ctlnobelstop_main(CTLINFO*) (0x264458, 1.400 B) - descida
+recursiva via jtable.py: 333 de ~350 instrucoes possiveis (95%),
+sem tabela de salto; 29 branches, 18 de retrocesso. 21 bl distintos.
+
+**Corrige a hipotese inicial**: "nobel" nao e um livro/biblioteca -
+o catalogo (iOSSdNovelClear, iOSNovelModeRestore,
+Ssd_DisposeEffectData, ssd_request, sound_request,
+stop_adventuremessage) confirma que e ligado ao sistema "Novel"/SSD
+do jogo (sequencias de narracao em modo texto com efeito sonoro
+associado) - "nobelstop" = "novel stop" (provavel transliteracao),
+o estagio de encerramento/limpeza do modo novel: limpa estado de
+novel, descarta dado de efeito SSD, para som/efeito, restaura modo
+novel, gerencia a UI de menu de toque, e transiciona pra
+sub-controladores (ctlzodiac_init, ctlhelp2_init, wldctl_active,
+ctlnblwldinfo_init), delegando limpeza final a
+ctlnobelstop_deactive. Marcada read_structural.
+
+## 270. ctlpersmes_main(CTLINFO*) - tela de mensagem pessoal/bio de personagem com retrato (2026-10-18, Fase 3, lote paralelo)
+
+ctlpersmes_main(CTLINFO*) (0x24ecd0, 1.384 B) - descida recursiva
+via jtable.py: 332 de ~346 instrucoes possiveis (96%), sem tabela
+de salto; 23 branches, 8 de retrocesso. 15 bl distintos.
+
+Reusa o subsistema generico de janela de texto `pagewin_init`/
+`pagewin_main`, toca renderizacao de rosto/retrato (Wfaceuvclut,
+iOS_setFaceDataID/CLUT, iOS_setV2Icon, CFFT_STATE::
+WorldFaceIDToFaceID), le/escreve flag de evento e status de
+aventura (gate de progresso de historia), e chama
+**ctlperson_init()**. Confirma "persmes" = "mensagem pessoal" - uma
+tela de bio/mensagem pessoal de personagem mostrada com retrato,
+sobre o sistema de janela de pagina compartilhado, com gate por
+flag de evento/status de aventura (provavel condicao de
+desbloqueio do texto de perfil). Marcada read_structural.
+
+## 271. drawListStaffroll(int) - rotina de desenho por quadro da lista de creditos (2026-10-18, Fase 3, lote paralelo)
+
+drawListStaffroll(int) (0x243c9c, 1.380 B) - descida recursiva via
+jtable.py: 334 de ~345 instrucoes possiveis (97%), sem tabela de
+salto; 24 branches, 12 de retrocesso. Opera direto sobre as
+estruturas `tagLIST_STAFFROLL`/`tagSTAFFROLL` (chama seu
+`DeleteData` diretamente), le/escreve `CFFT_STATE` (5 de 7
+chamadas), checa `IS_TEX_2X()`, libera memoria via `xpFree`.
+Confirma ser a rotina de desenho por quadro da lista de nome/funcao
+dos creditos que rola na tela, parte do mesmo subsistema de
+`ctlendroll_main`/`vEnd_rollproc` (secao 124). Marcada
+read_structural.
+
+
+## 272. ov_read_filter - interno de libvorbisfile reconhecido por nome (2026-10-18, Fase 3, regra 6 da metodologia)
+
+ov_read_filter (0xa0df0, 1.140 B) - checagem direta: 100% de
+cobertura, catalogo de bl inclui vorbis_synthesis_pcmout/read/
+halfrate_p - API real de libvorbisfile. Marcada read_full.
+
+
+## Vigesimo-primeiro lote paralelo (secoes 273-278): 6 funcoes lidas por forks simultaneos, usando jtable.py (2026-10-18, Fase 3)
+
+## 273. DressRemove() - tela de desequipar traje, confirma a ausencia de ChgMoney (nao e venda) (2026-10-18, Fase 3, lote paralelo)
+
+DressRemove() (0x19bfdc, 1.360 B) - descida recursiva via
+jtable.py: 316 de ~340 instrucoes possiveis (93%), sem tabela de
+salto; 26 branches, 13 de retrocesso. 20 bl distintos.
+
+Toca checagem de validade de equipamento (IsItemEquip,
+PowerCompare, GetItemPrice), sistema de stats (SetSttsPara2 x3,
+IsDark), e o ciclo de vida completo de iOS_CMenuTouch, SEM chamar
+ChgMoney (diferente de DressSellEquip, secao 233). Confirma ser a
+tela de desequipar/remover traje - revalida/recalcula stats apos
+remover um item de Dress sem transacao monetaria. Marcada
+read_structural.
+
+## 274. PoachBuyValue() - helper real de preco/valor atras de PoachBuy, confirma ChgMoney/ChgShopStockItem (2026-10-18, Fase 3, lote paralelo)
+
+PoachBuyValue() (0x1a39dc, 1.240 B) - descida recursiva via
+jtable.py: 286 de ~310 instrucoes possiveis (92%), sem tabela de
+salto; 22 branches, 11 de retrocesso. 16 bl distintos.
+
+Chama ChgMoney(int) (x2), ItemChg, GetItemPrice (x2), GetTotalItem,
+**ChgShopStockItem(short,int)** (x2, atualiza estoque de loja!),
+RefleshItemUserSort, GetShopItemList, mais UI de janela/mensagem e
+a camada de task W. Confirma ser a logica real de preco/valor atras
+da tela PoachBuy (secao 201) - computa preco, aplica a mudanca de
+dinheiro e estoque, e atualiza a UI da transacao. Marcada
+read_structural.
+
+## 275. search_root(...) - busca de fonte raiz de efeito encadeado, gated por probabilidade (2026-10-18, Fase 3, lote paralelo)
+
+search_root(int,int,int,int) (0x1e3f20, 1.224 B) - descida
+recursiva via jtable.py: 291 de ~306 instrucoes possiveis (95%),
+sem tabela de salto; 27 branches, 8 de retrocesso. Unico bl
+nomeado: **check_prob(int,int)** (checagem de probabilidade/RNG) -
+os outros 5 sao locais sem simbolo, nenhum sobrepondo com
+copy_struct_data/JudgeTimeOut de search_reverse_mp (secao 268) -
+confirma usar um conjunto de helper DISTINTO (provavel navegacao de
+grade/lista encadeada), gated por probabilidade em vez do padrao de
+timeout explicito do irmao reverse_mp. Marcada read_structural.
+
+## 276. setskilldata_common(ACT*, ACT*, int) - helper compartilhado de copia/merge ACT-pra-ACT, tabela de 13 casos (2026-10-18, Fase 3, lote paralelo, achado chave)
+
+setskilldata_common(ACT*,ACT*,int) (0x1e64c4, 1.128 B) - descida
+recursiva via jtable.py: 259 de ~282 instrucoes possiveis (92%);
+uma tabela de salto resolvida (13 casos, 12 handlers distintos); 41
+branches, 22 de retrocesso.
+
+Dominada por **copyACTst(ACT*,ACT*)** (x8!) gated pela tabela de 13
+casos (switch no terceiro parametro int, provavel seletor de
+categoria de habilidade) - cada caso copia um subconjunto diferente
+de campo do ACT fonte pro ACT destino. Tambem chama
+set_casting_status, dec_party_item+pspItemGetCommonData (consumo de
+item pra habilidade baseada em item), get_fusui_ability. **Confirma
+ser o helper real de merge de dado por categoria invocado pela
+cadeia setskilldata de getreaction_post** (secao 232) - copia dado
+de habilidade de uma ACT original pra uma ACT derivada/de reacao,
+ramificando por categoria pra tambem disparar consumo de item e
+efeitos colaterais de status/habilidade. Marcada read_structural.
+
+## 277. JobStatus() - tela interativa real de status de emprego em batalha, familia de contexto `j` (2026-10-18, Fase 3, lote paralelo)
+
+JobStatus() (0x194e04, 1.132 B, termina exatamente onde AbiStts
+comeca, secao 187) - descida recursiva via jtable.py: 259 de ~283
+instrucoes possiveis (92%), sem tabela de salto; 18 branches, 10 de
+retrocesso. 21 bl distintos.
+
+Confirma pertencer a MESMA familia de contexto `j` (BattleJobStts/
+AbiStts, secoes 245/187): chama jGetJobList, jWindowInit2,
+jDrawWindow2, jSetWindowPosition/jGetWindowPosition, mais o ciclo
+completo de iOS_CMenuTouch, GetLocalJobNumber, iOS_getMasaCdbOt,
+iOS_setCursorDisp (x4), pspMsgGet. E a tela real interativa de
+status/selecao de emprego, distinta de AbiStts (exibicao de
+habilidade) - BattleJobStts invoca as duas como telas paralelas no
+fluxo de UI de status de emprego. Quatro locais sem simbolo.
+Marcada read_structural.
+
+## 278. search_force_mp(int, SVECTOR*) - variante geometrica/vetorial da familia search_*, quase auto-contida (2026-10-18, Fase 3, lote paralelo)
+
+search_force_mp(int,SVECTOR*) (0x1e3500, 1.160 B) - descida
+recursiva via jtable.py: 282 de ~290 instrucoes possiveis (97%),
+sem tabela de salto; 31 branches, 12 de retrocesso. **Unico bl**:
+get_coord_address(BWORK*). Diferente de search_reverse_mp
+(copy_struct_data/JudgeTimeOut) e search_root (check_prob), esta
+variante e quase totalmente auto-contida - deriva uma coordenada/
+vetor de direcao diretamente do dado de posicao de unidade
+(BWORK), sem delegar pra helper de probabilidade/copia -
+consistente com uma variante geometrica/vetorial da familia, nao
+uma variante de selecao de alvo. Marcada read_structural.
+
+
+## 279. Wextend_windowframemain/Wstatusfigprint - confirmam o padrao W mais duas vezes (2026-10-18, Fase 3, regra 2 da metodologia, checagem direta)
+
+family_sim.py contra as bases ja lidas: Wextend_windowframemain
+(0x11e160, 1.288 B) vs extend_windowframemain (secao 252) tem
+Jaccard 0,07; Wstatusfigprint (0x1108a4, 1.156 B) vs statusfigprint
+(secao 254) tem Jaccard 0,33. Ambas chamam seus proprios helpers
+(incluindo 0x161ef0, na mesma faixa de wasmTaskEntry) em vez das
+versoes sem prefixo - mais duas confirmacoes do padrao "W = copia
+real". Marcadas read_structural.
+
+
+## Vigesimo-segundo lote paralelo (secoes 280-285): 6 funcoes lidas por forks simultaneos, usando jtable.py (2026-10-18, Fase 3)
+
+## 280. assumehelpmessage() - tooltip de ajuda do preview de ataque, mesmo padrao de attack_assumechr/face (2026-10-18, Fase 3, lote paralelo)
+
+assumehelpmessage() (0xcb4d0, 1.296 B) - descida recursiva via
+jtable.py: 312 de ~324 instrucoes possiveis (96%), sem tabela de
+salto; 45 branches, 22 de retrocesso. 8 bl distintos.
+
+Dominada por **serchmessagepointer** (x6) mais `pushmessagepacket`/
+`popmessagepacket`, `mallocForFile`/`fileReadRequest`,
+`get_unitwork_add`, `iOS_hook_common`. Mesmo padrao de
+carregamento assincrono de recurso ja visto em `attack_assumechr`/
+`attack_assumeface` (secoes 121/122) - busca/carrega o pacote de
+mensagem de texto de ajuda via stream de arquivo, pra tooltip
+mostrado durante o preview de ataque. Marcada read_structural.
+
+## 281. set_monsterwork(...) - inicializador de BWORK de monstro, delega pra set_monsterwork_j (2026-10-18, Fase 3, lote paralelo)
+
+set_monsterwork(unsigned char*,unsigned char*) (0x1d35a0, 1.156 B)
+- descida recursiva via jtable.py: 279 de ~289 instrucoes possiveis
+(97%), sem tabela de salto; 34 branches, 20 de retrocesso. 17 bl
+distintos.
+
+Delega a maior parte do trabalho real a `set_monsterwork_j` (variante
+"j"), `copy_entry_coord` (x3, posicionamento), `unitwork_init2all`,
+`callSW` (x4, provavel dispatcher de callback de evento scriptado).
+Tambem toca estado de rede (`pspNetGetBattleModeFlag`,
+`_pspNetRand`, `get_netmodeadhoc`, `get_parent_child`), `NewEntry`
+(criacao de entidade no roster de batalha), `get_shape2_plus`/
+`get_pmaxlevel` (dado de forma/nivel de monstro). Confirma ser o
+inicializador real de BWORK de monstro. Tres locais sem simbolo.
+Marcada read_structural.
+
+## 282. SetLoadData(int) - dispatch de slot de save, confirma os primitivos de bitstream ja documentados (2026-10-18, Fase 3, lote paralelo)
+
+SetLoadData(int) (0x184174, 1.276 B) - descida recursiva via
+jtable.py: 283 de ~319 instrucoes possiveis (89%), sem tabela de
+salto; 13 branches, 8 de retrocesso.
+
+Dominada por um local quente (`sub_714b8`, x27 - provavel primitivo
+de copia/desempacote de campo por byte) mais `SetBitStream`/
+`SetBitStream2`/`GetBitStream`/`GetBitStream2` (os MESMOS primitivos
+de `MakeSaveData`/`load_loaddata`, secoes 223/218). Tambem chama
+`pspSaveDataMissionRateLoad` e `Ssd_SetStereo` - confirma ser a
+rotina real de preparacao/dispatch de slot de save, dado um indice,
+que puxa o blob de save pela MESMA API de stream compactado e
+aplica estado de taxa de missao e audio estereo ao finalizar o
+carregamento. Marcada read_structural.
+
+## 283. Link_FrameMove() - confirma a tela de links externos (chama Android_Web_Open) (2026-10-18, Fase 3, lote paralelo, achado chave)
+
+Link_FrameMove() (0x2b4200, 1.152 B) - descida recursiva via
+jtable.py: 271 de ~288 instrucoes possiveis (94%), sem tabela de
+salto; 30 branches, 15 de retrocesso. 27 bl distintos.
+
+**Confirma por nome direto**: chama **Android_Web_Open(char
+const*, int)** - laco de update dirigido a toque combinando
+sondagem de input de baixo nivel, widget de scroll
+(CRECT::FrameMove, CUI_SCROLLBAR::DragBegin/Update/End/FrameMove),
+animacao batched (CSTEP_BATCH), carregamento de texto
+(CFILE_TXT::GetDataAsStr), som, thread (CTHREAD::Register/Sync), e
+transicao (NowLoading_Init/onGotoNextMode). Confirma "Link" como a
+tela de lista rolavel de links (URLs/itens) cuja selecao abre o
+navegador externo Android - provavel tela de links sociais/site
+oficial comum em ports mobile. Tres locais sem simbolo. Marcada
+read_structural.
+
+## 284. JobCicle(...) - passo de animacao de rotacao da roda de emprego (2026-10-18, Fase 3, lote paralelo)
+
+JobCicle(int,int,int,int) (0x1b2560, 1.076 B, nome com erro de
+digitacao real, "cicle" por "cycle") - descida recursiva via
+jtable.py: 255 de ~269 instrucoes possiveis (95%), sem tabela de
+salto; 21 branches, 11 de retrocesso.
+
+Chama GetJobShape, DrawTexFlip, DrawShapeWithShadow, IS_TEX_2X,
+rsin/rcos, CFFT_STATE::GetParam, __divsi3. Confirma "cicle" = ciclo
+de rotacao: anima/avanca um passo da rotacao da roda de troca de
+emprego, recalculando forma, angulo (seno/cosseno), e redesenhando
+o icone de emprego com sombra e flip de textura a cada passo.
+Marcada read_structural.
+
+## 285. DressAuto() - confirma feature de auto-equipar melhor traje (2026-10-18, Fase 3, lote paralelo)
+
+DressAuto() (0x19c918, 1.060 B, termina exatamente onde
+DressSellEquip comeca, secao 233) - descida recursiva via
+jtable.py: 244 de ~265 instrucoes possiveis (92%), sem tabela de
+salto; 15 branches, 7 de retrocesso. 14 bl distintos.
+
+Confirma "auto-equipar melhor equipamento": chama
+**GetTryBestEquip** (secao 194), **ChrPowerCompare** (compara poder/
+stats entre candidatos), Ryoute/SetRyoteFlag (mao dupla), SetSttsEqu2/
+SetSttsPara2 (aplica stats resultantes), CurChrChg2, GetItemPrice,
+e os dialogos iOS_dispOkNg/iOS_getV2Icon/setV2Icon pra feedback de
+UI. Marcada read_structural.
+
+
+## Vigesimo-terceiro lote paralelo (secoes 286-290): 5 funcoes lidas por forks simultaneos, usando jtable.py (2026-10-18, Fase 3)
+
+## 286. SellValue() - logica generica de venda, irma de PoachBuyValue/DressSellEquip (2026-10-18, Fase 3, lote paralelo)
+
+SellValue() (0x1a4338, 1.072 B) - descida recursiva via jtable.py:
+246 de ~268 instrucoes possiveis (92%), sem tabela de salto; 20
+branches, 9 de retrocesso. 14 bl distintos.
+
+Confirma ser a logica generica de venda de item na loja: chama
+GetItemSellPrice, ChgMoney, ItemChg (mutacao de dinheiro/inventario),
+mais plumbing de UI de loja (DrawItemCategory, initMenuTouch,
+ScrollWindowInit, DrawWindow2, SetWindowCount, DrawMessage,
+GetItemList, RefleshItemUserSort) e os helpers de task W. Irma
+generica de PoachBuyValue (secao 274) e DressSellEquip (secao 233).
+Marcada read_structural.
+
+## 287. ShopStatus() - janela de comparacao de equipamento da loja (2026-10-18, Fase 3, lote paralelo)
+
+ShopStatus() (0x1bbe90, 1.052 B, ja referenciada por nome em
+DressRemove, secao 273) - descida recursiva via jtable.py: 243 de
+~263 instrucoes possiveis (92%), sem tabela de salto; 36 branches,
+15 de retrocesso. 9 bl distintos.
+
+Chama WindowDel, os quatro setters de campo de status
+(SetSttsA/SetSttsA2/SetSttsEqu/SetSttsBoth), CurChrChg/CurChrChg2
+(navegacao entre membros do time), iOSUnitListMoveFlagReset.
+Confirma ser a janela de comparacao de stats mostrada durante o
+fluxo de compra/venda na loja. Marcada read_structural.
+
+## 288. vEnd_rollinit() - setup real do buffer/primitivo GPU dos creditos (2026-10-18, Fase 3, lote paralelo)
+
+vEnd_rollinit() (0x2435f0, 1.060 B) - descida recursiva via
+jtable.py: 256 de ~265 instrucoes possiveis (97%); 3 branches,
+TODOS de retrocesso. 11 bl distintos.
+
+Chama GetTPage/GetClut (x3 cada), SetPolyFT4/SetSemiTrans,
+ClearImage/SetDefDispEnv/SetDefDrawEnv/SetGeomOffset, **xpMalloc**
+(alocacao de heap - provavel buffer de lista
+tagLIST_STAFFROLL/tagSTAFFROLL), iOS_setV2Icon. Confirma ser o
+setup de uma vez so que aloca e prepara o contexto de desenho GPU
+antes do rolo de creditos comecar - fecha o trio
+vEnd_rollinit/ctlendroll_main/drawListStaffroll (secoes 124/271).
+Marcada read_structural.
+
+## 289. disp_waitwindow() - janela modal generica de "aguarde", reusa a biblioteca multiwindow compartilhada (2026-10-18, Fase 3, lote paralelo)
+
+disp_waitwindow() (0xee61c, 1.112 B) - descida recursiva via
+jtable.py: 272 de ~278 instrucoes possiveis (98%), sem tabela de
+salto; 16 branches, 9 de retrocesso. 31 bl distintos.
+
+Task real (task_create/task_killmyself/send_taskparamater/
+asmTaskEntry/asmGetInput1/2) construida sobre a biblioteca
+multiwindow_* ja documentada (keydown/keyright/break/packetcolor/
+packetanm/packetadd/packetinit), mais iOS_CMenuTouch, checagem de
+flag de batalha (pspBattleCheckFlg/DisableFlg), e texto kanji
+(statuskanjiprint). Confirma ser o spinner modal generico de
+"aguarde" que sonda input/toque enquanto uma task em background
+roda. Marcada read_structural.
+
+## 290. BuyValue() - logica generica de compra, espelha SellValue (2026-10-18, Fase 3, lote paralelo)
+
+BuyValue() (0x199fd8, 1.056 B) - descida recursiva via jtable.py:
+242 de ~264 instrucoes possiveis (92%), sem tabela de salto; 22
+branches, 10 de retrocesso. 12 bl distintos.
+
+Espelha o catalogo de SellValue (secao 286): GetItemPrice/
+GetTotalItem (em vez de GetItemSellPrice), ChgMoney, ItemChg,
+RefleshItemUserSort, mais UI de loja e toque. Confirma ser a
+contraparte de compra da logica de transacao generica. Marcada
+read_structural.
+
+
+## 291. Wdisp_waitwindow/allocatewindow/Wallocatewindow - mais confirmacoes do padrao W, inclui achado de debug (2026-10-18, Fase 3, checagem direta)
+
+Wdisp_waitwindow (0x1196ac, 1.040 B) vs disp_waitwindow (secao 289):
+Jaccard 0,24, confirma padrao W (wasmTaskEntry 0x161ef8, helpers W
+proprios). allocatewindow() (0xd6f84, 1.024 B, lida por inteiro):
+chama initpolyft4/initsprtfield (x3 cada), task_killmyself,
+**tDebugBreakCheck(int)** (achado: checagem de debug-break
+explicita neste helper), GetTPage/SetDrawMode/SetSemiTrans,
+IS_TEX_2X - inicializador de janela de baixo nivel. Wallocatewindow
+(0xfeaa8, 1.036 B) vs allocatewindow: Jaccard 0,45, chama
+Winitpolyft4/Winitsprtfield - confirma o padrao W mais uma vez.
+Todas marcadas read_structural.
+
+
+## Vigesimo-quarto lote paralelo (secoes 292-297): 6 funcoes lidas por forks simultaneos, usando jtable.py (2026-10-18, Fase 3)
+
+## 292. addzodiacback() - desenha icone/fundo de zodiaco, roda como task wasm (2026-10-18, Fase 3, lote paralelo)
+
+addzodiacback() (0x1579d4, 1.296 B) - descida recursiva via
+jtable.py: 311 de ~324 instrucoes possiveis (96%), sem tabela de
+salto; 10 branches, 5 de retrocesso. Chama wasmTaskEntry/
+wasmGetInput1/3, Wtask_killmyself, mais primitivo de desenho estilo
+PSP (pspGetpspPrimWorkBuf, pspPrimBackDrawRGB, AddPrim, SetPolyFT4,
+SetSemiTrans, SetShadeTex). Confirma ser o desenho de icone/fundo
+de zodiaco rodando como task wasm cooperativa. Marcada
+read_structural.
+
+## 293. create_rollline(unsigned char*) - parseia linha de credito, monta primitivo pra tagSTAFFROLL (2026-10-18, Fase 3, lote paralelo)
+
+create_rollline(unsigned char*) (0x244974, 1.140 B) - descida
+recursiva via jtable.py: 282 de ~285 instrucoes possiveis (99%),
+sem tabela de salto; 22 branches, 10 de retrocesso. Chama
+numword_chk(int) (x7, valida/formata token numerico embutido no
+texto), GetClut, SetPolyFT4 (x2). Confirma parsear uma linha crua
+de dado de credito e preparar o(s) primitivo(s) renderizavel(eis)
+que se tornam uma entrada tagSTAFFROLL, consumida depois por
+drawListStaffroll (secao 271) no pipeline ctlendroll_main/
+vEnd_rollproc. Marcada read_structural.
+
+## 294. loadClutDataCalcPlus(...) - variante auto-contida sem nenhuma chamada externa (2026-10-18, Fase 3, lote paralelo)
+
+loadClutDataCalcPlus(...) (0x2152f4, 1.368 B) - descida recursiva
+via jtable.py: 338 de ~342 instrucoes possiveis (99%), sem tabela
+de salto; 27 branches, 13 de retrocesso. **Zero chamadas bl** - nao
+delega pra loadClutData nem pra nenhuma outra funcao, faz o calculo
+extra (fade/blend/escala sugerido pelos parametros extras) inteiro
+inline via aritmetica/shift. Variante standalone otimizada a mao,
+mantida separada do loader base. Marcada read_structural.
+
+## 295. PoachSell() - controlador de UI da tela de venda poach, delega transacao pra PoachSellValue (2026-10-18, Fase 3, lote paralelo)
+
+PoachSell() (0x1a2b44, 1.060 B) - descida recursiva via jtable.py:
+239 de ~265 instrucoes possiveis (90%), sem tabela de salto; 22
+branches, 12 de retrocesso. 20 bl distintos.
+
+Dirige seu proprio menu de toque e exibicao de categoria de item/
+fundos (DrawItemCategory, DrawFunds, GetItemList, IsItem,
+DrawWindow2, WindowInit), acessores de lista de unidade, som, input
+de pad - SEM chamar PoachBuyValue/BuyValue/SellValue. Confirma ser
+o controlador de UI da tela de venda poach, que delega a mutacao
+real de preco/dinheiro pra PoachSellValue (ainda nao lida).
+Marcada read_structural.
+
+## 296. Sell() - controlador de UI generico, delega transacao pra SellValue (2026-10-18, Fase 3, lote paralelo)
+
+Sell() (0x1a3f1c, 1.052 B, termina exatamente onde SellValue
+comeca, secao 286) - descida recursiva via jtable.py: 237 de ~263
+instrucoes possiveis (90%), sem tabela de salto; 22 branches, 12 de
+retrocesso. 20 bl distintos.
+
+Catalogo quase identico ao de PoachSell (secao 295) mas SEM
+GetItemSellPrice/ChgMoney/ItemChg - confirma ser o controlador de
+UI/laco de menu de nivel superior (navegacao, desenho de lista,
+input) que entrega a mutacao real de preco/dinheiro/inventario pra
+SellValue - fecha o par Sell/SellValue, espelhando Buy/BuyValue.
+Marcada read_structural.
+
+## 297. ctlnvcontinue_main(CTLINFO*) - handler de continuar/avancar do modo Novel (2026-10-18, Fase 3, lote paralelo)
+
+ctlnvcontinue_main(CTLINFO*) (0x26d318, 1.036 B) - descida
+recursiva via jtable.py: 247 de ~259 instrucoes possiveis (95%),
+sem tabela de salto; 22 branches, 11 de retrocesso. 16 bl
+distintos.
+
+Chama **ctlnobel_init(int)** (liga ao sistema Novel/SSD ja
+documentado em ctlnobelstop_main, secao 269), Wtask_create/
+Wsend_taskparamater, a familia iOS_CMenuTouch completa, sound_request
+(x4), picsand_draw, GsGetTimInfo, ctltremes_init. Confirma ser o
+handler de estado "continuar/avancar" do sistema de narracao Novel -
+espera input de toque e avanca/dispensa a linha de texto atual,
+trabalhando junto com ctlnobelstop_main e ctlnobel_init. Marcada
+read_structural.
+
+
+## Vigesimo-quinto lote paralelo (secoes 298-303): 6 funcoes lidas por forks simultaneos, usando jtable.py (2026-10-18, Fase 3)
+
+## 298. PoachSellValue() - confirma a logica de transacao que faltava em PoachSell (2026-10-18, Fase 3, lote paralelo)
+
+PoachSellValue() (0x1a2f68, 1.080 B) - descida recursiva via
+jtable.py: 248 de ~270 instrucoes possiveis (92%), sem tabela de
+salto; 20 branches, 9 de retrocesso. 14 bl distintos.
+
+Chama **ChgMoney**, **ItemChg** (x2), **ChgShopStockItem** - o trio
+exato de mutacao de transacao que faltava no catalogo de PoachSell
+(secao 295). Confirma ser a logica de transacao real pro lado de
+venda poach, espelhando PoachBuyValue (secao 274) do lado de
+compra. GetItemSellPrice (x2) computa o payout antes do ChgMoney.
+Marcada read_structural.
+
+## 299. initBattleMap(...) - orquestrador real de startup de batalha, tabela de 13 casos (2026-10-18, Fase 3, lote paralelo, achado rico)
+
+initBattleMap(int,int,int) (0x21101c, 1.016 B, ja referenciada por
+generateAttackTeam, secao 206) - descida recursiva via jtable.py:
+227 de ~254 instrucoes possiveis (89%); uma tabela de salto
+resolvida (13 casos, 13 handlers distintos); 35 branches, 26 de
+retrocesso. 29 bl distintos.
+
+Orquestrador amplo de inicio de batalha: `attackteam_end`,
+`read`/`write_eventflag`, setup de cor/mapa (`loadClutData`,
+`loadBackGradation`, `loadAnbient`, `loadFlatColor`,
+`transferClutData`, `initChangeClut`), inicializacao de
+unidade/animacao (`InitAnimationInit`, `InitAnimation`,
+`initEntryEnemyAnimations`, `initEntryPlayerAnimations`,
+`entryAnimations`), para musica/efeito e dispara
+**`BattleRoutineInit()`** (init real da logica de batalha), mais
+RNG (`ps_rand`, `_pspNetRand`) e `CFFT_STATE::SetParam`. A tabela
+de 13 casos provavelmente despacha por passo de setup/tipo de
+modo de mapa de batalha. Quatro locais sem simbolo. Marcada
+read_structural.
+
+## 300. world_map() - e o proprio laco/dispatcher principal do modo mapa-mundo (2026-10-18, Fase 3, lote paralelo, achado chave)
+
+world_map() (0x25fbc4, 1.004 B) - descida recursiva via jtable.py:
+243 de ~251 instrucoes possiveis (97%), sem tabela de salto; 25
+branches, 10 de retrocesso. 31 bl distintos.
+
+Chama **world_init()**/**world_exit()** diretamente, junto com
+`wldctl_cur()`, os helpers de estado `wldfade_*`/`wldnormal_lop`/
+`wldfast_lop`, gerenciamento pesado de flag/buffer PSP-world
+(`pspWorldCheckFlg` x4, `pspWorldDataBackBufGet` x5), e
+**`iOS_setV2Icon`** (x18! - alvo dominante, forte indicio de laco
+de atualizacao de icone sobre nos/cidades do mapa). **Confirma ser
+o proprio laco/dispatcher principal do modo mapa-mundo** - possui o
+ciclo de vida do modo (init/exit), dirige o update por quadro via
+os `wld*_lop`, e atualiza icones do mapa a cada passada - nao e um
+stub de entrada fino nem um dispatcher generico. Marcada
+read_structural.
+
+## 301. Account() - corrige a hipotese de nome: nao e sistema de conta de usuario, e tela de balanco do inventario de traje (2026-10-18, Fase 3, lote paralelo)
+
+Account() (0x19c52c, 1.004 B, entre DressRemove e DressAuto, secoes
+273/285) - descida recursiva via jtable.py: 233 de ~251 instrucoes
+possiveis (93%), sem tabela de salto; 28 branches, 13 de
+retrocesso. 14 bl distintos.
+
+**Corrige a hipotese inicial**: zero chamada de login/perfil/
+credencial em todo o catalogo. Dominada por primitivos de task
+(`Wtask_create`/`Wtask_status`/`Wsend_taskparamater` x8),
+**RefleshItemUserSort** (x5), **ChgMoney** (x2), `CurChrChg2`,
+toggle de janela de lista de unidade. Dada sua posicao no cluster
+de Dress, "Account" mais plausivel e uma tela de balanco/resumo do
+inventario de traje (quantos itens de Dress sao possuidos/
+equipados, possivelmente deduzindo custo via ChgMoney) - NAO um
+sistema de conta/usuario. Tres locais sem simbolo. Marcada
+read_structural.
+
+## 302. ctlnobel_init(int) - setup linear real de inicio do modo Novel (2026-10-18, Fase 3, lote paralelo)
+
+ctlnobel_init(int) (0x263b08, 1.004 B) - descida recursiva via
+jtable.py: 234 de ~251 instrucoes possiveis (93%); **so 1 branch
+total, zero de retrocesso** (nenhum laco). 13 bl distintos.
+
+Toca o subsistema Novel/SSD diretamente (`iOSSdNovelClear`,
+`iOSSdNovelLogIcon`, `iOSNovelModeBackup`, `Ssd_AddEffectData`,
+`snpl_init`), carregamento de pacote de animacao/janela
+(`add_anmpac` x3, `add_winpac` x2), fade/limpeza de mundo
+(`wldfade_set`, `wldfrm_clr`, `wldpicwin_set`), e setup de icone/
+menu v2 (`iOS_setV2Icon` x8). A quase total ausencia de branch (1
+total, 0 laco) confirma ser uma rotina de setup linear de uma vez
+so ao entrar no modo Novel - a contraparte de inicio do teardown de
+`ctlnobelstop_main` (secao 269), chamada direto de
+`ctlnvcontinue_main` (secao 297). Marcada read_structural.
+
+## 303. active_disp_waitwindow() - driver ativo por quadro da janela de espera, polling de comando de rede e cancelamento (2026-10-18, Fase 3, lote paralelo, achado rico)
+
+active_disp_waitwindow() (0x147e9c, 1.020 B) - descida recursiva
+via jtable.py: 250 de ~255 instrucoes possiveis (98%), sem tabela
+de salto; 17 branches, 8 de retrocesso. 26 bl distintos.
+
+**Muito mais rico que uma simples checagem "esta ativa"**: dirige a
+pipeline multiwindow_* (packetinit/packetadd/packetanm/break),
+polling de comando de trap de rede (`pspNetTrapGetCommandNum`,
+`AddrgTrapCommandTable_forDraw`, `GetgTrapCancelCount`/`Result`) e
+desenho de icone de cancelamento (`draw_maru`/`draw_batu`,
+`Draw_TuusinIcon`, `Draw_Trap_CancelCommandList`), mais controle de
+task (`asmTaskEntry`/`asmGetInput1`/`2`, `task_killmyself`).
+Confirma ser o driver ATIVO por quadro que de fato roda/atualiza a
+janela de espera construida por `disp_waitwindow` (secao 289) -
+sonda comando de trap de rede, checa cancelamento do jogador, anima
+os pacotes do spinner, e desenha icones/texto de cancelamento.
+Marcada read_structural.
+
+
+## Vigesimo-sexto lote paralelo (secoes 304-309): 6 funcoes lidas por forks simultaneos, sexta direto apos novo limite de sessao (2026-10-18/22, Fase 3)
+
+## 304. Bwork2ChrStts(...) - conversor real de equipamento/trabalho pra stats de personagem, NAO e a formula de dano (2026-10-18, Fase 3, lote paralelo)
+
+Bwork2ChrStts(BWORK*,CHR_STTS*,UM_WORK*) (0x1a749c, 1.000 B) -
+descida recursiva via jtable.py: 250 de ~250 instrucoes possiveis
+(100%), sem tabela de salto; 8 branches, 5 de retrocesso. 7 bl
+distintos.
+
+Chama SetRyoteFlag, get_ability, pspItemIsEmpty/IsExist,
+pspJobGetJobChangeFlag - confirma ser uma rotina de conversao
+equipamento/trabalho-pra-stats (resolve item equipado/emprego/
+habilidade pra montar CHR_STTS a partir de BWORK), nao a formula de
+dano numerica em si. Baixa densidade de branch (8 total) e 100% de
+cobertura sugerem marshaling de dado em laco, nao aritmetica densa
+inline. Um local sem simbolo (`sub_714b8`) chamado 7 vezes - alvo
+MUITO reusado em dezenas de outras funcoes ja lidas neste projeto
+(CDebugPrint::FrameStep, Wdisp_abilitywindow, disp_parawindow,
+etc.), provavel utilitario genuino compartilhado, nao especifico de
+dano. Marcada read_structural.
+
+## 305. disp_floatwindow() - janela flutuante real sobre a biblioteca `W`-prefixada compartilhada (2026-10-18, Fase 3, lote paralelo)
+
+disp_floatwindow() (0x156054, 1.276 B) - descida recursiva via
+jtable.py: 306 de ~319 instrucoes possiveis (96%), sem tabela de
+salto; 19 branches, 11 de retrocesso. 19 bl distintos.
+
+Construida inteiramente sobre a biblioteca `W`-prefixada
+(`Waddlocalprim`, `Wdisposememory`, `Wserchmessagepointer`,
+`Wcount_words2`, `Wloadcdst`, `Winitdrmode`/`2`,
+`Wstatuskanjiprint`, `Wextend_systemframe`, `Wtask_killmyself`) mais
+`multiwindow_windowbackinit`/`addinit` e o contexto `wasm`
+(`wasmTaskEntry`/`wasmGetInput1`/`3`). Confirma a hipotese de
+"janela flutuante de HP/nome seguindo unidade" - reusa a mesma
+biblioteca de janela central. Marcada read_structural.
+
+## 306. pspBattleEntryAreaMake(...) - escaneamento denso de area de entrada de batalha (2026-10-18, Fase 3, lote paralelo)
+
+pspBattleEntryAreaMake(int,int) (0x285084, 1.080 B) - descida
+recursiva via jtable.py: 266 de ~270 instrucoes possiveis (99%),
+sem tabela de salto; 42 branches, 26 de retrocesso - densissimo
+pra o tamanho. **Unico bl**: pspEntrySquareDataGet(). Rotina de
+escaneamento de grade auto-contida (laco aninhado provavel sobre
+x/y) que consulta dado de posicionamento por quadrado via
+pspEntrySquareDataGet pra determinar quadrados validos de
+deployment. Marcada read_structural.
+
+## 307. SetCameraWorkWithMetaschedule(short) - camada "meta" com busca de ponto de divisao de timeline (2026-10-18, Fase 3, lote paralelo)
+
+SetCameraWorkWithMetaschedule(short) (0x21abec, 1.252 B) - descida
+recursiva via jtable.py: 308 de ~313 instrucoes possiveis (98%),
+sem tabela de salto; 24 branches, 15 de retrocesso. 6 bl distintos.
+
+Chama os MESMOS setters de trabalho de camera de baixo nivel
+(SetEffectAngleCameraWork/TransCameraWork/ScaleCameraWork, x3 cada)
+usados pelo sistema de schedule plano, mais helpers de igualdade de
+vetor (EqualSVectorToVECTOR/SVECTOR) pra detectar convergencia, e
+**SearchNextMetascheduleDividePos** - o diferenciador chave.
+"Metaschedule" gerencia uma timeline de nivel mais alto dividida em
+sub-segmentos (um "schedule de schedules"), buscando o proximo
+ponto de divisao de segmento antes de despachar os mesmos setters
+por eixo. Marcada read_structural.
+
+## 308. s29_doMetaschedule(...) - efeito #29, fila MSQ paralela ao schedule base (2026-10-18, Fase 3, lote paralelo)
+
+s29_doMetaschedule(_EffectTCB*) (0x21e388, 984 B) - descida
+recursiva via jtable.py: 241 de ~246 instrucoes possiveis (98%),
+sem tabela de salto; 16 branches, 8 de retrocesso. 10 bl distintos.
+
+Chama **GetMSQFrameRate** ("MSQ" = metaschedule queue) e
+**SetCameraWorkWithMetaschedule** (secao 307) em vez dos
+equivalentes de schedule genericos, mais **CreateEffectTask**.
+Confirma "metaschedule" como uma fila paralela/de nivel mais alto
+(MSQ) com seus proprios pontos de entrada de taxa de quadro e
+trabalho de camera, construida sobre varios helpers locais
+compartilhados (`sub_21dedc` x6) - nao e so uma extensao do
+schedule base, e uma camada separada. Marcada read_structural.
+
+## 309. iOSBATTLE_scrollLandscape() - handler de rolagem/pan de camera, distinto do mecanismo de rotacao `iOSRot*` (2026-10-18, Fase 3, retry direto apos novo limite de sessao)
+
+iOSBATTLE_scrollLandscape() (0x2010cc, 1.212 B) - o sexto fork do
+lote falhou por limite de sessao; rodado jtable.py direto. Descida
+recursiva: 288 de ~303 instrucoes possiveis (95%), sem tabela de
+salto; 29 branches, 12 de retrocesso.
+
+Chama searchCurrentAnimation/searchAnimationByPositionBattle e
+**setLongVector** (x3) - confirma ser um handler de ROLAGEM/pan de
+camera (nao rotacao - nenhuma chamada `iOSRot*` aparece, diferente
+de `sBattleTouchRotation`/`iOSJobChangeRot`, secoes 143/149).
+Quatro locais sem simbolo. Marcada read_structural.
+
+## 310. ctltownmenu_init(int) - setup do popup de interacao com cidade no world map (2026-10-22, Fase 3, vigesimo setimo lote paralelo)
+
+Init da ja documentada ctltownmenu_main (secao 215, 0x2570f4, "menu de
+modo cidade" acessado no world map). Chama townpic_load + dois pares
+GsGetTimInfo/LoadTPage/LoadClut (duas texturas: imagem da cidade e
+icone de janela), wldpicwin_set/scrwin_para_set (posiciona a janela
+de imagem), curhis_put (grava o historico de cursor que a _main
+depois le via curhis_get, ja documentado), add_anmpac/add_winpac
+(registro padrao CTLINFO) e Wserchmessagepointer/Wcount_words2 (prep
+de texto do nome da cidade). wldload_wait confirma que ainda roda no
+contexto do world map. Sem jump table (esperado para um _init). 95%
+de cobertura. Marcada read_structural.
+
+## 311. ctltremes_main(CTLINFO*) - hub/launcher que despacha para Novel, Tesouro e Continuar (2026-10-22, Fase 3, vigesimo setimo lote paralelo)
+
+Achado interessante: em vez de pertencer a uma unica tela de
+gameplay, esta funcao chama diretamente os _init de TRES outros
+controllers - ctlnobel_init (modo novel/narracao, secao 269),
+ctltresure_init (cacada ao tesouro) e ctlnvcontinue_init (fluxo de
+continuar jogo) - via Wtask_create/Wsend_taskparamater, o padrao de
+troca de task cooperativa usado em toda a familia ctl*. Usa
+isInRectUi/iOS_getTouchTap/iOS_getTouchBeginX/Y para hit-test de
+botoes, pagewin_main para uma lista paginada de opcoes, wldpicwin_set
++ picsand_draw (x3, efeito de "revelar areia") para a ilustracao de
+cada opcao, LoadClut/GsGetTimInfo (x3) para as texturas, wldfade_set
+para a transicao de saida e sound_request (x2) para o SE de cursor.
+Sem jump table (despacho via if/else). Hipotese: tela-hub (menu de
+"extras" do world/titulo) que deixa o jogador escolher entre ler
+conteudo em modo novel, fazer uma cacada ao tesouro ou continuar uma
+partida - e nao um modo de gameplay proprio, apesar do nome "tremes"
+nao bater com nenhum termo FFT conhecido. 95% de cobertura. Marcada
+read_structural.
+
+## 312. ctlbrst_init(int) - setup de popup modal de "Zodiac" no world map, NAO e burst de ataque (2026-10-22, Fase 3, vigesimo setimo lote paralelo)
+
+Achado que corrige a leitura ingenua do nome: "brst" aparentava
+sugerir efeito de "burst" de combate, mas o simbolo irmao
+ctlbrst_zodiac (0x2530b8) confirma que a familia inteira (
+ctlbrst_menu_set, ctlbrst_init, ctlbrst_active, ctlbrst_deactive,
+ctlbrst_main, iOS_BRST_CHECK, mais a tabela BRST_tbl de 7 bytes) e
+sobre um popup/checagem de Zodiaco no world map, nao um efeito
+visual de ataque. ctlbrst_init chama ctlbrst_menu_set diretamente
+(logo tem menu com opcoes), wldwin_set/wldwin_trans/wldmess_put/
+wldwin_noropen (janela modal padrao com transicao e texto),
+add_anmpac/add_winpac, pspWorldDisableFlg (trava o world map
+enquanto o popup esta ativo - confirma ser modal) e
+Wread_eventflag (gate de progresso de historia para o conteudo
+exibido). Hipotese: popup periodico de compatibilidade/fortuna de
+Zodiaco mostrado durante a viagem no world map, feature tipica de
+ports mobile de FFT. Sem jump table. 94% de cobertura. Proximo
+alvo de follow-up: ctlbrst_zodiac (0x2530b8) e ctlbrst_main
+(0x24d068), que devem conter a logica de decisao por signo.
+Marcada read_structural.
+
+## 313. ctlhoukmes2_init(int) - setup do popup de "relatorio" estagio 2 (concessao de titulo/shogou) (2026-10-22, Fase 3, vigesimo setimo lote paralelo)
+
+Init da ja documentada ctlhoukmes2_main (secao 256, 0x25b2d0).
+Confirma o par houk/houkmes2: ctlhoukmes_init (0x25a0f0, 312 bytes,
+ainda unread) -> ctlhoukmes2_init (0x25a424, esta funcao) ->
+ctlhoukmes_main (0x25a908, secao 117) -> ctlhoukmes2_main (0x25b2d0,
+secao 256), os quatro dispostos sequencialmente no binario (mesma
+unidade de traducao). Chama houkokumes_select (mesma chamada de
+selecao de mensagem usada por ctlhoukmes_main), Wtask_create/
+Wtask_status/Wsend_taskparamater (bootstrap de task padrao),
+Wserchmessagepointer/Wcount_words2 (localiza/mede o texto), unittoface
+(converte referencia de unidade em retrato - a tela mostra o retrato
+do personagem junto da mensagem de titulo/shogou concedido),
+add_winpac/wldwin_set/wldwin_trans/wldmess_put (x5, janela de
+mundo+texto padrao), Wwrite_eventflag (marca que o popup ja foi
+mostrado) e sound_request/Ssd_PlayEffects01 (x2, fanfarra de
+notificacao). Sem jump table. 96% de cobertura. Marcada
+read_structural.
+
+## 314. ctlworkingst_main(CTLINFO*) - segunda familia "working/busy" independente, mais rica que a ja documentada (2026-10-22, Fase 3, vigesimo setimo lote paralelo)
+
+Achado: existe uma familia ctlworkingst_* completa e distinta da
+familia ctlwork/ctlworking ja documentada (secoes 216/264,
+0x250984-0x251390, spinner simples sem polling de task nem jump
+table). A nova familia - ctlworkinginf_init (0x2514c4),
+ctlworkingst_dataset (0x251b68), ctlworkingst_init (0x251e34),
+ctlworkingst_active/_deactive (0x25249c/0x2524cc) e esta _main
+(0x2524d0) - fica logo em seguida no binario e e orientada a task
+assincrona: Wtask_create -> Wtask_status (poll) -> Wsend_taskparamater
+(x4), com jump table de 7 casos / 5 handlers (3 casos colapsam no
+mesmo handler de "poll", 0x252864). Chama ctlworkinginf_init (painel
+de info companheiro), ctlworkingst_dataset (dados por estado),
+ctlsthelp_init (overlay de ajuda, mesma chamada de
+hakenunit_status_main, secao 169), iOS_setV2Icon (x5) + 
+iOS_add_anmpac_max (icone animado de "ocupado"), iOS_ClearRectHitAll/
+GetRectHitNoTap/getTouchSwype (suprime toques, so le swipe),
+wldkey_rep (x2, auto-repeat de botao, provavel cancelar), 
+pspWorldDisableFlg (trava o world map durante a espera), sound_request
+(x3), DrawSync e MoveImage. Nenhuma referencia de chamador a
+ctlworkingst_init foi encontrada ainda nas notas - a feature que
+dispara esta tela de espera (save/load, rebuild de dados grande, etc)
+ainda nao foi identificada. 93% de cobertura. Marcada read_structural.
+
+## 315. ctlkiromes_main(CTLINFO*) - popup de mensagem do feature "kiroku" (registro), par direto do houk/houkmes (2026-10-22, Fase 3, vigesimo setimo lote paralelo)
+
+Confirmado via dynsym (nao so inferencia): a familia ctlkiroku_* /
+ctlkiromes_* espelha exatamente a familia ctlhouk_* / ctlhoukmes_*
+ja documentada - "houk" = houkoku (relatorio), "houkmes" = mensagem
+do relatorio; por paralelo direto, "kiroku" = registro e "kiromes" =
+mensagem do registro. Esta regra de nomenclatura (ctl*mes_* = popup
+de mensagem do feature ctl* base) deve se aplicar a qualquer outra
+familia *mes_* encontrada depois. ctlkiromes_main chama
+pagewin_init + pagewin_main diretamente (widget de texto paginado
+construido sob demanda, nao no _init), iOS_SetRectHit/
+ClearRectHitAll/GetRectHitNoTap (registra area de toque "toque para
+avancar"), iOS_setV2Icon/getV2Icon (icone de prompt), 
+Wwrite_eventflag/Wread_eventflag/Wtask_status/Wsend_taskparamater
+(sincronizacao cooperativa padrao com a task irma, provavelmente
+ctlkiroku_main), wldfade_set (transicao), sound_request/ssd_request
+(SE de abertura/confirmacao) e, de forma inesperada,
+getMovieEventNum - liga o popup de "registro" ao subsistema de
+eventos de filme/cutscene, sugerindo que o feature "kiroku" pode ser
+um log/galeria de cenas desbloqueadas em vez de um registro de save
+puro. Sem jump table (despacho se if/else apesar do padrao
+task_status). 93% de cobertura. Marcada read_structural.
+
+## 316. Familia CG2D_LOADER (base + TGA/BMP/TIM) confirmada como framework generico de carregamento de imagem, fast-track em lote (2026-10-22, Fase 3, vigesimo oitavo lote paralelo)
+
+Aplicacao da estrategia 6 do metodo de trabalho (secao 100): leitura
+completa de CG2D_LOADER_TGA::TGA_AnalyzeHeader(void*) (0xa574c, 1176
+bytes) confirma ser um parser de header TGA generico - jump table de
+25 casos colapsando em so 5 handlers (campo de image-type do spec
+TGA, maioria caindo num handler "default/common"), chamando apenas
+sub_714b8 (helper local, 12x, leitura sequencial de campo por campo
+do header de 18 bytes) e TRACE_Empty (log de diagnostico). 87% de
+cobertura, zero logica especifica de FFT.
+
+O scan de simbolos via readelf confirma uma hierarquia completa:
+classe base CG2D_LOADER (ctor/dtor, Save/Load/Copy/CopyAsTexture/
+CalcAsTexture/GetFormat/GetPixelByte/GetPixelCount/
+GetImageFormat*/GetSavePixelFormat*) com tres subclasses paralelas -
+CG2D_LOADER_TGA, CG2D_LOADER_BMP, CG2D_LOADER_TIM (TIM = formato de
+textura PS1/PSX) - cada uma espelhando o mesmo conjunto de metodos
+virtuais quase byte a byte. Nenhuma CG2D_LOADER_PNG ou outro formato
+foi encontrada; o framework cobre apenas TGA/BMP/TIM.
+
+Dado que varios membros desta familia ja haviam sido lidos
+individualmente (CG2D_LOADER_BMP::Copy/Save secoes 205/267,
+CG2D_LOADER_TGA::Copy secao 217, CG2D_LOADER_TIM::TIM_LoadMemory/
+Load secoes 9.2/9.8/9.10) sem revelar nenhuma logica de jogo, e
+dado que a leitura completa de TGA_AnalyzeHeader confirma o padrao
+"parser de spec de formato de imagem generico, sem acoplamento a
+FFT", os 68 metodos remanescentes da familia (getters/setters/
+ctors/dtors triviais de poucas dezenas de bytes, mais os
+decodificadores RLE/bitmask/header especificos de cada formato -
+BMP_DecodeRLE4/8, BMP_AnalyzeInfoHeader/FileHeader/BitMask,
+TIM_AnalyzeFileHeader, TGA_LoadFile/LoadMemory, etc) sao aceitos
+como boilerplate reconhecido via quick pattern recognition, sem
+leitura individual de instrucao, e marcados read_structural em
+lote. Nenhum deles tem assinatura ou nome que sugira logica de
+combate, UI de battle ou qualquer sistema especifico do jogo - sao
+puramente I/O de formato de imagem compartilhado entre os tres
+tipos de arquivo.
+
+## 317. DrawTexFlip(short*, COLOR*, char, int, int, int) - desenha quad texturizado com 4 modos de flip via permutacao de UV, fecha a familia b/c/e/j (2026-10-22, Fase 3, vigesimo oitavo lote paralelo)
+
+Jump table totalmente resolvido: 4 casos, guarda "cmp sl,#3 / addls
+pc,pc,sl,lsl#2" (bounds-checked), com sl = r2 = o PROPRIO parametro
+char da funcao (NAO bit-depth de textura, hipotese inicial
+descartada). Isso confirma a leitura literal do nome: "TexFlip" =
+modo de flip (0=nenhum, 1=flip-H, 2=flip-V, 3=ambos). Cada um dos 4
+casos escreve os mesmos 4 pares de bytes U/V (offsets +0x10/11,
++0x18/19, +0x20/21, +0x28/29 de uma estrutura POLY_FT4-like estilo
+PS1) lendo os mesmos campos de origem (x/y/w/h do rect de textura em
+r5) - a unica diferenca entre os 4 casos e QUAL canto de origem vai
+para qual vertice de destino. Ou seja, o flip e implementado
+permutando qual canto fornece qual par UV, nao transformando pixels.
+
+Resolve tambem o "bl ausente" que o family_sim.py havia apontado
+(0x1ac88c, presente so na base): e addFT4num(), uma funcao trivial
+de 40 bytes que faz g_FT4count++ (contador global de primitivas
+FT4 enfileiradas, usado para indexar o slot de escrita). Disassembly
+direto dos prologos de bDrawTexFlip e eDrawTexFlip confirma que
+AMBOS fazem a mesma sequencia de 8 instrucoes (ldrh/add/lsl/lsr/mul/
+strh) só que INLINE em vez de via bl - artefato de codegen/inlining
+por unidade de compilacao, nao uma diferenca de comportamento. Logo
+DrawTexFlip/b/c/e/jDrawTexFlip sao duplicatas comportamentais
+verdadeiras, confirmando sem ressalvas o padrao arquitetural da
+secao 181 (copia completa por contexto de task cooperativa).
+
+Achado paralelo (fora do padrao, nao um bug): bDrawTexFlip
+especificamente tem 5 chamadas extras que os outros 3 irmaos (c/e/j)
+nao tem - CFFT_STATE::GetParam/SetParam, TexHybrid_Register,
+TexHybrid_RegistCLUTAddr, IS_TEX_2X() - um sistema de textura
+"hibrida" de alta resolucao especifico do port mobile. Isso sugere
+que o contexto de task "b" e o unico, entre os 5, que suporta pacote
+de textura em resolucao dobrada (2x) para este tipo de sprite - os
+outros 4 (base, c, e, j) usam apenas SetSemiTrans/SetShadeTex.
+
+Marcadas read_structural: DrawTexFlip (0x1acf38), bDrawTexFlip
+(0x177ed0), cDrawTexFlip (0x172f8c), eDrawTexFlip (0x18a3ac),
+jDrawTexFlip (0x194238). Marcada read_full: addFT4num (0x1ac88c,
+totalmente entendida - trivial).
+
+## 318. Caddzodiacback()/Cregist_zodiacot() - gemeo "asm" (narrow) de addzodiacback/regist_zodiacot, provavel orfao nesta build (2026-10-22, Fase 3, vigesimo oitavo lote paralelo)
+
+Caddzodiacback (0xcc270, 1128B) e estruturalmente quase identico a
+addzodiacback (secao 292, 0x1579d4, 1296B) - mesmas 6 chamadas de
+desenho PSP-prim (pspGetpspPrimWorkBuf, pspPrimBackDrawRGB, AddPrim,
+SetPolyFT4, SetSemiTrans, SetShadeTex), mesma forma de branches,
+97%/98% de cobertura - mas difere nas 4 chamadas de API de task:
+task_killmyself/asmTaskEntry/asmGetInput1/asmGetInput3 em vez de
+Wtask_killmyself/wasmTaskEntry/wasmGetInput1/wasmGetInput3. Isso NAO
+e um caso novo - e mais uma instancia do padrao de dupla-compilacao
+"wasm" (largo, provavelmente Shift-JIS/wide-char) vs "asm" (estreito,
+ASCII) ja confirmado em escala nas secoes 33/37.1/47/131 deste
+projeto.
+
+Evidencia de que sao gerenciadores paralelos de verdade, nao um
+stub chamando o outro: os irmaos de 20 bytes Cregist_zodiacot
+(0xcc25c) e regist_zodiacot (0x1579c0) cada um grava seu ponteiro de
+argumento num offset diferente de uma struct singleton GLOBAL
+DIFERENTE (+0x28 de uma base vs -0xa94 de outra base) - ou seja, sao
+dois gerenciadores de task distintos, um por familia.
+
+Achado relevante: NENHUM outro membro do cluster zodiac
+(ctlzodiac_init/_main, ctlbrst_zodiac, ctltuto_zodiac) tem variante
+C-prefixada - e ctlzodiac_main chama exclusivamente as primitivas
+Wtask_create/Wsend_taskparamater (familia W/wasm), nunca
+task_create/send_taskparamater puro. Ou seja, o unico caminho de
+controller zodiac visivel neste binario so alcanca addzodiacback (a
+versao wasm), nunca Caddzodiacback. Hipotese: Caddzodiacback/
+Cregist_zodiacot sao um par duplicado orfao/nao-alcancado nesta
+variante de build especifica, remanescente do titulo PS1/PSP
+original que carregava ambas as copias compiladas. Confirmar isso
+definitivamente exigiria uma busca de xref mais profunda ou tracing
+em runtime - fora do escopo deste pass.
+
+Marcadas read_structural: Caddzodiacback (0xcc270), Cregist_zodiacot
+(0xcc25c).
+
+## 319. pmkprim_put(int) - submissao por-frame de primitivas GPU do fundo da caixa de mensagem "arzmes" (2026-10-22, Fase 3, vigesimo oitavo lote paralelo)
+
+Loop duplo (externo por linha, interno construindo DOIS buffers de
+primitiva POLY_GT4 por iteracao a partir do array pmk_mesprim -
+1680 bytes = 2 registros de 840 bytes, confirmando double-buffer).
+Para cada tile: busca CLUT/TPage via GetClut/GetTPage usando campos
+de um descritor de linha, tinge uniformemente os 4 vertices de AMBOS
+os buffers a partir do argumento int (dividido em dois bytes via
+"and r0,#0xff" e "(r0/2)&0xff" - hipotese: nivel de brilho/alpha de
+fade do quadro), marca semi-transparente via SetSemiTrans, finaliza
+o header via SetPolyGT4 e enfileira ambos na ordering table via
+AddPrim (chamado 2x por linha). E vizinho direto no binario de
+vOpn_arzmes_init/_exit/_main (0x2419d4-0x241ee0), todas ainda
+unread - pmkprim_put e quase certamente chamada por
+vOpn_arzmes_main() a cada frame em que a janela de mensagem
+"arzmes" esta visivel, com o argumento int controlando o fade.
+Nenhum outro pmkprim_* existe no binario (familia de um unico
+membro, nao e uma familia maior). Proximo alvo natural de
+follow-up: vOpn_arzmes_main (904 bytes) para confirmar a hipotese de
+fade e descobrir o que dirige o argumento. Marcada read_structural.
+
+## 320. iOSCurHojyo(SVECTOR*) - overlay de mira da habilidade de Suporte (Hojyo) em batalha, parametro SVECTOR* morto/vestigial (2026-10-22, Fase 3, vigesimo oitavo lote paralelo)
+
+Achado rico: apos uma cadeia de 6 guardas de estado (icone #11
+inativo, toque de cursor engajado, nao em rotacao de camera, modo de
+toque de batalha correto, cursor visivel, profundidade de
+menu/submenu dentro do range), a funcao desenha um marcador em
+cruz/diamante cujos 4 cantos ficam sobre as 4 tiles ortogonalmente
+adjacentes a tile alvo - reprojetadas corretamente para o angulo de
+camera atual via produto escalar de ponto fixo contra a matriz de
+view/camera corrente (4 iteracoes, y sempre 0 = plano do chao).
+O marcador fica centrado num icone arrastavel (IDs 0x6a/0x6b) que
+"persegue" o dedo do jogador com velocidade limitada/clamped -
+mesmo padrao de cursor-de-toque usado em outros lugares do port.
+Submete a primitiva via ASHURA_getOTptrZ/AddPrim. Esta no mesmo
+cluster iOSCur* de predicados de cursor de batalha (iOSCurSameOK/
+iOSCurSameOKMove/iOSCurSameProcs/iOSCurIsInGame), sendo o unico
+membro que tambem desenha (nao e so um predicado). Hipotese: overlay
+de area-de-efeito de uma habilidade tipo Suporte (japones: 補助,
+hojyo), que afeta a tile alvo + suas 4 vizinhas ortogonais,
+adaptado para interacao via arrastar-o-dedo no touch screen no
+lugar do cursor D-pad original do PS1.
+
+Anomalia notavel: o unico parametro formal, SVECTOR*, e carregado em
+r0 na entrada mas imediatamente sobrescrito por "mov r0,#0xb" antes
+de ser salvo em qualquer lugar - em TODOS os caminhos, pois e a
+primeira instrucao apos o prologo. O parametro parece morto/nao-
+usado nesta implementacao portada; toda a posicao vem de globais
+(tabela de icones V2ICON_DATA, matriz de view cacheada, tabelas de
+offset PC-relative) em vez do SVECTOR* recebido do chamador -
+provavel vestigio de compatibilidade de ABI/call-site com o codigo
+PS1-era mais antigo. Marcada read_structural.
+
+## 321. ctlhakenokng_init() - popup de confirmacao Sim/Nao ("OK/NG") do fluxo de despacho de unidade (2026-10-22, Fase 3, vigesimo oitavo lote paralelo)
+
+Par interleaved com ctlhaken_init/_main no binario (ctlhaken_init
+0x261078 -> ctlhakenokng_init 0x261184, esta funcao -> ctlhaken_main
+0x2615cc -> ctlhakenokng_main 0x261728) - ctlhakenokng e um
+controller IRMAO, nao uma fase de ctlhaken. Chama iOS_dispOkNg(int,
+int), a assinatura confirmada em outros pontos das notas como o
+dialogo generico de confirmacao Sim/Nao do jogo (ja documentado para
+a tela de confirmacao do nome de personagem). Combinado com
+Wserchmessagepointer/Wcount_words2 (busca/quebra de linha de texto)
+alimentando wldmess_put (x4) e o setup padrao de janela (wldwin_set/
+_trans/_noropen), a hipotese mais forte e que este popup confirma
+"enviar esta unidade numa missao de despacho?" antes de comitar o
+despacho, disparado de dentro do fluxo de selecao de roster
+ctlhaken/ctlmouketeam (secao 167). O resultado/retorno de unidades
+despachadas e tratado por um trio separado (hakenunit_status/
+hakenunit_change/hakenunit_status_main, secao 169) - nao e a mesma
+tela. Nenhum call site (xref) foi localizado ainda para confirmar
+qual acao exata de UI dispara este popup. Sem jump table (esperado
+para um _init). 95% de cobertura. Marcada read_structural.
+
+## 322. GLIVON_F3_old/GLIVON_F4_old - variantes flat (sem textura) do ja documentado par FT3_old/FT4_old (2026-10-22, Fase 3, aplicacao direta da estrategia 3/4)
+
+Leitura direta (sem fork, funcao grande sem jump table, estrategia 3
+do metodo de trabalho) confirma GLIVON_F3_old (0x283638, 1048B,
+97% cobertura) e GLIVON_F4_old (0x283a50, 1160B, 98% cobertura) como
+variantes "flat" (triangulo/quad sem textura, so VECTOR_DATABASE*
+em vez de int+unsigned short* de CLUT) dos ja documentados
+GLIVON_FT3_old/FT4_old (secoes 154/147, triangulo/quad TEXTURIZADO).
+Ambos sem jump table e com apenas 2 bl targets cada:
+CalcVectorFromID(VECTOR_DATABASE*, short) e ReadRotMatrix - o mesmo
+par de helpers de transformacao 3D que a familia FT3/FT4_old ja usa,
+confirmando que "F3_old"/"F4_old"/"FT3_old"/"FT4_old" sao as quatro
+variantes (triangulo vs quad) x (flat vs texturizado) do mesmo
+pipeline de desenho de primitiva GPU "old" (imediato, nao
+batch-table como GLIVON_F3/F4/FT3/FT4 sem sufixo, que sao tabelas de
+60 bytes e ja estao marcadas unread separadamente). Marcadas
+read_structural.
+
+## 323. CEGL2_SPRITE::DrawPartial - draw imediato independente, CORRIGE hipotese da secao 13.8 (2026-10-22, Fase 3, vigesimo nono lote paralelo)
+
+Achado que corrige uma especulacao anterior: a secao 13.8 presumia
+que AddPacketPartial montava o lote que DrawPartial desenharia depois.
+Nao e verdade - DrawPartial NUNCA chama AddPacketPartial (0xad324 nao
+aparece em sua lista de bl targets) nem toca o sistema de batching
+CEGL_PACKET/GetVBOBufferCurrent. E um caminho de desenho imediato
+totalmente independente: monta 3 buffers de vertice na propria stack
+(posicao 72B = 6 vertices x3 floats, zerada via memset; UV via 4
+__divsf3; cor lendo os bytes RGBA de this+0x58..0x67) e emite
+chamadas GLES diretas via uma camada de thunks locais sem dynsym
+(glBindTexture, glVertexAttribPointer x5, glDrawArrays(GL_TRIANGLES,
+0,6) - o mesmo truque de "2 triangulos degenerados compartilhando
+diagonal" usado em DrawPacket/DrawScrollBG/AddPacketPartial).
+Ramifica em CEGL2_SPRITE::GetMultiTextureHandle() para decidir se
+faz bind de uma segunda textura. Resumo: AddPacketPartial =
+"enfileira um quad parcial no lote para desenhar depois";
+DrawPartial = "desenha um quad parcial agora mesmo" - dois caminhos
+de codigo genuinamente separados, nao um chamando o outro. Confirma
+classificacao de codigo de engine 2D generico e reutilizavel.
+Marcada read_structural.
+
+## 324. CEGL2_SPRITE::Draw8 - variante de dupla-textura do Draw(float,float) simples, desenha 1 unico quad (2026-10-22, Fase 3, vigesimo nono lote paralelo)
+
+Zero jump table, zero loop (apenas 1 branch forward no total) -
+descarta a hipotese inicial de "desenha 8 sub-elementos". O "8" no
+nome nao corresponde a nada contado em runtime (nenhuma tabela de 8,
+nenhum loop de 8 iteracoes); a classe nao tem Draw2/Draw4/Draw16
+siblings no symbol table, sugerindo ser apenas um identificador de
+origem/historico do codigo-fonte. Termina em um UNICO
+glDrawArrays(GL_TRIANGLES, 0, 6) (1 quad = 2 triangulos). O
+parametro unsigned int e literalmente um texture ID (glActiveTexture
+(GL_TEXTURE1); glBindTexture(GL_TEXTURE_2D, param)) - ou seja, Draw8
+e a variante de "Draw simples" que aceita uma SEGUNDA textura
+explicita via parametro (nao a MultiTextureHandle interna do
+sprite, que fica em offset 0x68 e nao e usada aqui), ligada a
+unidade de textura 1 enquanto a textura propria do sprite (offset
+0x28) vai pra unidade 0. O parametro void* e um objeto shader/
+material externo cujo slot de vtable +0x24 e chamado 2x (arg 1 e
+arg 0) pra alternar um flag de "dual-texture ativo". Hipotese:
+desenho de sprite com 2 texturas simultaneas (ex: paleta/overlay de
+recoloracao), mas isso e especulativo - o unico fato solido e a
+estrutura de bind-dupla + quad-unico. Marcada read_structural.
+
+## 325. CEGL_COLLISION::IsVertexInTriangle3D/2D - teste ponto-em-triangulo generico via soma-de-angulos, fast-track confirmado (2026-10-22, Fase 3, vigesimo nono lote paralelo)
+
+Leitura completa confirma matematica 3D pura e generica: todos os 10
+bl targets distintos sao libm (sqrt x3, acosf x3 - resolvidos a
+partir de stubs PLT sem dynsym via GOT) ou helpers soft-float do
+compilador (add/sub/mul/div sf3, extend/truncsf2, fcmplt/fcmpgt) -
+zero chamada a logica de jogo, grid de batalha, unidade ou camera.
+99% de cobertura, 0 branches para tras (sem loop). O padrao de
+chamada (3x sqrt + 3x acosf, sem loop) e a assinatura classica do
+teste "soma dos angulos subtendidos": normaliza os 3 vetores de
+arestas (vertice-consulta para cada vertice do triangulo, sqrt do
+comprimento ao quadrado), calcula o angulo entre pares consecutivos
+via acosf, soma os 3 angulos e compara contra 2*pi - NAO e
+baricentrico nem cross-product/same-side (esses nao usariam sqrt/
+acosf). O irmao 2D (IsVertexInTriangle2D, 0xb1190, 696B) tem
+assinatura de chamada IDENTICA (so com menos __mulsf3, consistente
+com remover o componente z). Ambos fast-tracked como utilitario de
+engine matematico generico confirmado - nenhuma logica especifica
+de FFT. Marcadas read_structural.
+
+## 326. SetEffectTransCameraWork(int,int,int,VECTOR*) - perna de TRANSLACAO do trio de setters de camera de efeito (2026-10-22, Fase 3, vigesimo nono lote paralelo)
+
+Resolve o parametro int1 como bitfield empacotado: bits 0x1e0
+selecionam 1 de 8 modos de origem do vetor de translacao (vetor
+absoluto do chamador, getMapScrollXYZ, getMapSize escalado,
+lookup de animacao de bone unico via tabela indexada pelo param2,
+lookup de bone unico via ponteiro global, MEDIA/centroide de
+varios bones via loop com __divsi3 - enquadramento de camera
+multi-alvo, copia de preset fixo, ou modo "finalizar" sem recalculo)
++ bits 0x1e00 armazenados verbatim num campo de flags compartilhado
+(offset 0xA4). Param3 e gravado incondicionalmente no offset 0xBC
+da struct compartilhada de camera-work - hipotese forte de
+duracao/contagem de frames da interpolacao. Param4 (VECTOR*) tem
+papel duplo: modo 0x40 o le como vetor absoluto de entrada; todos os
+outros modos escrevem o vetor recem-computado de volta nele via
+AddVECTORToVECTOR(out, v, v) (mesmo endereco duas vezes - idioma
+deliberado de "latch e devolve", nao bug). Confirma e expande a
+hipotese da secao 307: SetCameraWorkWithMetaschedule chama este +
+SetEffectAngleCameraWork + um presumido SetEffectScaleCameraWork
+(x3 cada) - este e exatamente a perna de posicao/translacao desse
+trio, par de SetEffectAngleCameraWork (secao 327) via o mesmo layout
+de struct compartilhada e a mesma familia de helper de convergencia
+(EqualRShift12VECTORToVECTOR, aqui; EqualSVectorToVECTOR, la).
+Marcada read_structural.
+
+## 327. SetEffectAngleCameraWork(int,int,int,SVECTOR*) - perna de ROTACAO do trio, "arma" um keyframe que DoEffectCameraWork executa por frame (2026-10-22, Fase 3, vigesimo nono lote paralelo)
+
+Par direto da secao 326 (translacao) - mesmo esquema de bitfield
+empacotado nos bits 0x1e0 do int1, agora selecionando a origem do
+angulo-alvo entre 8 modos: preset de tabela indexado por param2,
+dois presets globais adicionais via memcpy+sub_218c2c, delta
+relativo a getMapAngle() atual (modo 0x20), alvo absoluto de yaw com
+tratamento explicito de wraparound circular +-2048/4096 em 12 bits
+(modo 0x40 - calculo classico de "menor caminho" entre angulos),
+blend de baseline armazenado com Y/Z vivos (0x60), snapshot puro do
+angulo vivo (0xc0), ou continuacao suave de um alvo previamente
+armazenado com novo wrap-check (0x100, evita "pular pelo caminho
+longo" se re-disparado no meio da interpolacao). Param3 e gravado
+incondicionalmente como duracao em frames (offset +0xb4 da struct
+de camera-work), com +0xb8 (progresso) resetado a 0 no mesmo ponto.
+Param4 (SVECTOR*) e dual: entrada (delta/alvo absoluto) nos modos
+0x20/0x40, saida (AddSVECTORToSVECTOR(out,v,v), mesmo idioma de
+"latch-e-devolve" da secao 326) nos demais modos. Confirma a
+arquitetura completa: SetEffectAngleCameraWork "arma" um keyframe de
+rotacao (alvo + duracao + escolha de curva de easing, bits 0x1e00)
+que a ja documentada DoEffectCameraWork() (secao 83, 0x219728)
+consome por frame via a familia getSmoothSVECCosPai/Cos2Pai/Linear,
+aplicando o resultado final via setMapAngle. Fecha o trio
+rotacao/translacao/escala citado na secao 307
+(SetCameraWorkWithMetaschedule chama os tres, x3 cada) com dois dos
+tres membros agora lidos. Marcada read_structural.
+
+## 328. iOSwldscr_snapshot(int)/wldscr_snapshot(int) - captura em VRAM do frame completo do world map (2026-10-22, Fase 3, vigesimo nono lote paralelo)
+
+Renderiza a composicao completa da tela de world map off-screen
+(chama praticamente toda a familia wld*_draw/_put ja documentada -
+fundo, rota de viagem, sprites de personagem x3, cidades/simbolos,
+indicador de dia, nome da cidade, HUD de info, fog-of-war via
+pspWorldBlackSpotDraw) atraves do pipeline padrao de ordering-table
+(GsClearOt/xpLibgsAddOt/GsSortClear/GsDrawOt/GsSwapDispBuff),
+sincroniza explicitamente (VSync + DrawSync x3) antes de capturar via
+xpLibgpuStoreImage (transferencia VRAM->memoria principal) num
+buffer alocado (xpMallocAlign/xpFree), usando
+pspWorldDataRectSet/pspWorldDataBackBufGet para definir a area/slot
+de captura. As chamadas CFFT_STATE::SetCaptureRequest/SetCaptureDraw
+confirmam a semantica de "snapshot" no nivel de nomenclatura da API.
+Hipotese: congela a tela do world map como fundo estatico numa
+transicao para menu/subtela, ou como thumbnail de save - o
+parametro int provavelmente seleciona o slot/back-buffer de
+captura. wldscr_snapshot(int) (0x25ecd4, so 4 bytes) e confirmado
+como um trampolim de 1 instrucao (branch incondicional) direto para
+esta mesma implementacao - ou seja, ha so uma implementacao real,
+compartilhada entre a nomenclatura "iOS"/camada de toque e a
+generica. Marcadas read_structural: iOSwldscr_snapshot (0x25e8d4),
+wldscr_snapshot (0x25ecd4).
+
+## 329. Familia std::priv::_Rb_tree/_Rb_global<bool> - internals genericos do libstdc++ do cache std::map<int,CEGL2_SHADER::DATA_SHADER>, fast-track em lote (2026-10-22, Fase 3, estrategia 6)
+
+Os 9 simbolos _Rb_tree/_Rb_global encontrados (insert_unique x2,
+_M_insert, _M_erase, _Rebalance_for_erase, _Rebalance, _M_decrement,
+_Rotate_left, _Rotate_right) sao a implementacao template-instanciada
+do libstdc++ (STLport-style, dado o namespace std::priv) de um unico
+container concreto: std::map<int, CEGL2_SHADER::DATA_SHADER> - um
+cache/registro de shaders indexado por int. Isso e maquinaria pura
+de arvore rubro-negra (insercao/remocao/rebalanceamento/rotacao de
+nodos), identica a qualquer outro uso de std::map no C++ - nenhuma
+logica de jogo e possivel nestas funcoes, sao template code gerado
+pelo compilador para o container, nao codigo FFT. Fast-tracked via
+quick pattern recognition sem leitura individual de instrucao,
+seguindo a estrategia 6 do metodo de trabalho (secao 100). Marcadas
+read_structural todas as 9 ocorrencias.
+
+## 330. ctlopentitle_init(int) - setup da tela de titulo de abertura do jogo, NAO e title-card de item/bau (2026-10-22, Fase 3, trigesimo lote paralelo)
+
+Confirma que "opentitle" se refere a tela de abertura/titulo do jogo
+(logo inicial), nao a um title-card de bau/item aberto. Evidencia:
+chama vOpn_scrinit/vOpn_fadein/vOpn_add_anmpac (x3, fila de
+animacoes/logos do titulo) - a mesma familia "vOpn" (video opening)
+ja confirmada na secao 87 como responsavel pela reproducao do filme
+de abertura via CD-XA (CdControl/CdControlB/CdSync, cdxa_stop,
+movie_exit) dentro de ctlopentitle_main (0x246450, ja documentada).
+Tambem chama PSX_LoadImage (imagem de fundo/logo), DrawSync,
+CFFT_STATE::SetParam (provavel flag de estado "na tela de titulo"),
+e configura iOS_CMenuTouch (init + setEnableUpDownRect, prompt de
+"toque para continuar"). Nenhuma chamada a sistema de
+inventario/item/bau - descarta definitivamente a hipotese
+alternativa. Familia completa confirmada via readelf:
+ctlopentitle_init/_active/_deactive/_main/_main3, seguindo o padrao
+polimorfico padrao da familia ctl*. Marcada read_structural.
+
+## 331. ctlsthelp_main(CTLINFO*) + familia ctlsthelp_init/_active/_deactive - driver do popup generico de ajuda reutilizavel (2026-10-22, Fase 3, trigesimo lote paralelo)
+
+Alvo de alto valor: ctlsthelp_init ja era referenciada por varias
+telas documentadas (hakenunit_status_main secao 169,
+ctlworkingst_main secao 314) como popup de ajuda generico, mas nunca
+lida diretamente. ctlsthelp_main faz polling completo de toque por
+frame (iOS_isTouchBegan/getTouchNowX/Y/getTouchTap x2/getTouchRelease)
+e re-estabelece rects de hit-test todo frame (ClearRectHitAll x2 +
+SetRectHit + GetRectHitNoTap/NoSlide), distinguindo tap-para-
+dispensar de swipe/arrastar. Chama sthelp_curpos_set (tambem usado
+no proprio _main, nao so no _init) - forte evidencia de que o popup
+PAGINA entre múltiplos topicos/entradas de ajuda, atualizando a
+posicao do cursor durante o ciclo de vida do overlay. Delega a
+renderizacao real do texto de ajuda a ctlhelp_init(int,int) (sub-
+controller generico e reutilizavel que tambem tem uma variante
+ctlhelp2_init mais rica) - ou seja, ctlsthelp e um wrapper fino de
+input/paginacao, enquanto ctlhelp/ctlhelp2 e o motor generico de
+exibicao de ajuda. sound_request e iOS_add_anmpac_max tocam
+feedback de interacao. Zero jump table (if/else + polling loops, mais
+simples que ctlworkingst_main que tem jump table de 7 casos).
+ctlsthelp_active/_deactive sao stubs triviais de flag (88B/24B, zero
+chamadas, zero branches). Marcadas read_structural: ctlsthelp_main
+(0x256500), ctlsthelp_init (0x256388), ctlsthelp_active (0x256490),
+ctlsthelp_deactive (0x2564e8).
+
+## 332. pspPrimDirectPartsDraw(int,int,unsigned long*,unsigned char*) - desenha icone largo como 3 quads texturizados lado a lado, com correcao de wrap de 256px (2026-10-22, Fase 3, trigesimo lote paralelo)
+
+100% de cobertura, loop fixo de exatamente 3 iteracoes ("Parts" = 3
+blocos). Os parametros int 1/2 sao pares de coordenadas empacotadas
+em 16 bits (x/y, largura/altura) via shift, mesmo esquema do sibling
+pspPrimDirectParamSet(int, RECT16*). O parametro unsigned char*
+NUNCA e desreferenciado - seu valor bruto e decomposto byte a byte
+(shifts/ANDs) e usado como cor RGBA empacotada de 32 bits, com NULL
+como sentinela de "pular desenho" (apesar da assinatura mangled
+sugerir um ponteiro real). O terceiro bloco (r5==2) soma +0x100
+(256px) a uma coordenada antes de escrever - o workaround classico
+de wrap de textura do PSP-GU (texturas limitadas a potencia de 2,
+entao um icone largo e dividido em blocos, e qualquer bloco cruzando
+a fronteira de 256px precisa de re-base de UV). Alocado via
+pspGetpspPrimWorkBuf(0x58) por iteracao a partir do ring buffer
+compartilhado da familia psp-Prim. Conclusao: variante "Direct" (de
+tiles fixos, nao table-driven) da familia de desenho de
+icone/sprite largo (pspOpenIconDraw, pspPrimBackDraw/RGB). Marcada
+read_structural.
+
+## 333. pspCtltutonet_main(CTLINFO*) - popup de nota/dica tutorial one-shot, "net" provavelmente abrevia "note" (NAO rede) (2026-10-22, Fase 3, trigesimo lote paralelo)
+
+Nenhuma chamada a API de socket/HTTP/conectividade/multiplayer foi
+encontrada - descarta a hipotese de "tutorial network check".
+Chama ctltips_deactive(CTLINFO*) explicitamente (desliga o popup
+irmao "Tips"), estabelecendo exclusao mutua entre os dois popups de
+mensagem one-shot - reforcado pela adjacencia direta no binario
+(pspCtltutonet_* fica logo apos a familia ctltips_*/ctltipsmes_*,
+sugerindo mesmo arquivo-fonte). wldmes_load(int) (x2) carrega o
+texto da nota por ID. curhis_get/curhis_clr fazem bookkeeping de
+estado (selecao/"ja mostrado"). sound_request (x4, chamada mais
+frequente) sugere multiplos eventos de UI (abrir, mover, confirmar,
+fechar) cada um com seu som. iOS_add_anmpac_max adiciona efeito de
+fade/slide-in do popup. Wtask_status confirma que segue o framework
+padrao de polling de task compartilhado por toda a familia ctl*_main.
+Zero jump table, 94% de cobertura. Hipotese: popup de nota/lembrete
+tutorial curto mostrado uma vez, quase um gemeo estrutural de
+ctltips_main mas para conteudo especifico de tutorial - "pspCtl"
+provavelmente um resquicio de nomenclatura herdado da base de codigo
+PSP "War of the Lions" original. Marcada read_structural.
+
+## 334. pspOpenIconDraw(unsigned long*,int,int,PSP_OPEN_ICON_TYPE,int) - provavel icone vestigial de status "acesso a midia" do PSP (2026-10-22, Fase 3, trigesimo lote paralelo)
+
+Familia PSP_OPEN autocontida com flags proprias (pspOpenEnableFlg/
+DisableFlg/CheckFlg) e dois buffers separados (BackBuf = placa de
+fundo, IconBuf = icone sobreposto) - um elemento composto. Sem jump
+table real: o enum PSP_OPEN_ICON_TYPE e usado como indice direto em
+__bpGetBinaryData(handle, tipo) (sistema de leitura de recurso
+binpack ja confirmado em outras secoes, ex: attack_assumeface
+secao 122), com apenas 1 caso especial (tipo==7) que de fato monta
+arte real: ate 4 quads texturizados via pspGetpspPrimWorkBuf(0x58) +
+memcpy (sub_714b8, ja confirmado como memcpy em outras secoes) +
+loop de calculo de UV/vertice. Todos os outros valores do enum
+pulam a construcao de textura e so devolvem um handle de buffer de
+primitiva vazio via o ponteiro de saida unsigned long*. Hipotese:
+resquicio de um indicador de status de acesso a midia (disco/
+Memory Stick) do hardware PSP original, mantido no port Android por
+compatibilidade de engine mas provavelmente desativado via
+pspOpenDisableFlg (sem porta fisica de midia removivel no Android).
+Marcada read_structural.
+
+## 335. Wcount_words2(short*,short*,char*) - scanner de largura de palavra/contagem para texto Shift-JIS largo, confirma substituicao de template e compressao LZ-like (2026-10-22, Fase 3, trigesimo lote paralelo)
+
+Alvo de altissimo valor: chamada por dezenas de funcoes ja
+documentadas ao longo do projeto (sempre apenas glosada como "busca/
+quebra de linha de texto") mas nunca lida diretamente. Leitura
+completa via disassembly manual (jtable.py nao resolveu jump table -
+e uma cadeia longa de cmp/beq, nao um switch) revela algoritmo
+completo: percorre o texto byte a byte, usando uma tabela de 15
+bytes copiada de get_unitwork_add(0)+0xdc (tabela de classe de
+byte-lider/largura) para decidir avanco de 1 ou 2 bytes (Shift-JIS).
+Bytes 0xFE/0xFF = quebra de linha/terminador (fecha a palavra atual,
+incrementa contador, zera acumulador); 0xF8 = espaco (fecha a
+palavra mas NAO incrementa o contador de linha - apenas marca fim de
+palavra); varios codigos de controle dedicados (0xFA=+10px fixo,
+0xEE=largura vinda de parametro, 0xE4/E6/E8=insercao numerica via
+Wgetvaluelength com largura=6*num_digitos - tag de template tipo
+{NUMERO}/{STAT}, 0xE2/E3/EC/F5/F6=skip sem largura). O caminho
+generico chama Wload_replaceitems(codigo,...); se retorna um ID
+valido, Wserchmessagepointer(id) REDIRECIONA o ponteiro de scan para
+uma string substituta (expansao de template tipo {NOME_JOGADOR}/
+{ITEM}) e a leitura continua atraves do texto substituido. Bytes
+0xD0-0xDF sao byte-lider Shift-JIS (ficam em estado pendente);
+combinados com o byte seguinte via `0xD0*estado+byte` indexam uma
+tabela 2D de largura em pixel para glifos de 2 bytes - a mecanica
+exata esperada da variante "W" (larga). Um codigo especial
+0xF0+nibble<=3 implementa um back-reference estilo LZ (rebobina o
+ponteiro de scan por um offset computado) - compressao de texto
+repetido. Retorna: *out1 = maior largura em pixel de uma unica
+palavra; *out2 = numero de quebras de linha+1. Confirma ser o par
+largo (Shift-JIS) do irmao count_words2 (0xd8270, estreito/ASCII,
+jaccard=0.11 contra este - bl targets completamente diferentes,
+0xd3ea4/0xd7e00/0xd7e78/0xd7ed8 vs 0xfb740/0xff9ec/0xffa64/0xffac4 -
+confirmando duas implementacoes de verdade paralelas, nao
+duplicatas triviais). sub_fb740 (6 chamadas) e hipotetizado como o
+helper generico "avanca 1 ou 2 bytes conforme DBCS", reutilizado
+em todo o projeto. Marcada read_structural.
+
+## 336. Biblioteca libvorbis/libogg (ov_*/ogg_*/vorbis_*) - codec de audio open-source de terceiros, fast-track em lote de 124 funcoes (2026-10-22, Fase 3, estrategia 6)
+
+Os simbolos ov_*/ogg_*/vorbis_* (ov_pcm_seek, ov_crosslap, ov_bitrate,
+ogg_stream_pagein/iovecin, ogg_sync_pageseek, vorbis_analysis_*,
+vorbis_staticbook_pack/unpack, vorbis_lsp_to_curve, vorbis_lpc_to_lsp,
+vorbis_book_decode*, vorbis_synthesis*, vorbis_dsp_clear,
+vorbis_info_clear, etc) nao sao codigo "generico-parecido" - sao
+nomes de API e de simbolos internos IDENTICOS aos da biblioteca
+publica e amplamente conhecida libvorbis/libogg (Xiph.Org), o codec
+de audio Ogg Vorbis open-source padrao da industria, usado aqui
+quase certamente para decodificar musica de fundo/trilha sonora
+(formato .ogg). Nao ha absolutamente nenhuma possibilidade de logica
+especifica de FFT dentro da decodificacao de bitstream Vorbis/Ogg -
+e matematica de codec de audio (transformadas, livros de codigo
+Huffman, LSP/LPC, janelamento) identica a qualquer outro uso dessa
+biblioteca em qualquer projeto. Fast-tracked via reconhecimento de
+padrao (nomes de simbolo = API publica conhecida) sem leitura
+individual de instrucao, seguindo a estrategia 6 do metodo de
+trabalho (secao 100). 124 funcoes, 24056 bytes, marcadas
+read_structural em lote.
+
+## 337. crc32/crc32_combine/crc32_combine64 - utilitario generico de checksum (provavel zlib), fast-track (2026-10-22, Fase 3, estrategia 6)
+
+Nomes de simbolo identicos a API publica zlib (crc32, crc32_combine,
+crc32_combine64). Checksum CRC-32 generico, usado tipicamente para
+verificacao de integridade de arquivo/asset ou save-data - nenhuma
+logica especifica de FFT possivel num calculo de checksum padrao.
+Fast-tracked sem leitura individual. Marcadas read_structural:
+crc32 (0x73c74, 936B), crc32_combine (0x7401c, 4B), crc32_combine64
+(0x74020, 4B).
+
+## 338. MainEmploy() - dispatcher principal da tela de recrutamento do Soldier Office (2026-10-22, Fase 3, trigesimo primeiro lote paralelo)
+
+Familia *Employ confirmada: MainEmploy -> SttsEmploy -> BuyEmploy ->
+AccountEmploy -> SuccessEmploy, as 5 dispostas contiguamente no
+binario, mais employ_from_entry(unsigned char*,int,int,int) como
+ponto de entrada externo e employ_commanddata (struct global de 64
+bytes) como tabela de comando compartilhada. Globals irmas
+get/set_g_Soldier_Draw_flg confirmam a ligacao tematica com o
+Soldier Office (recrutamento de unidades genericas pagando ouro).
+MainEmploy desenha DrawPrice/DrawUnits/DrawFunds (preco, lista de
+unidades, fundos do jogador), popula icones de retrato via
+iOS_setV2Icon (x5) numa janela de lista rolavel
+(iOSUnitListWinOnOff/iOSWldUnitListWinSet), le toque via
+iOS_getTouchTap, e executa a transacao central "pagar ouro -> criar
+unidade": GetItemPrice -> ChgMoney -> ItemCheck -> MakeChr ->
+GetChrList/CurChrChg. Wsend_taskparamater (x5) despacha para os 4
+estados irmaos. Marcada read_structural.
+
+## 339. ctlworkinginf_main(CTLINFO*) - painel de controle interativo (nao so texto) que acompanha a tela "working/busy" (2026-10-22, Fase 3, trigesimo primeiro lote paralelo, refina secao 314)
+
+Refina a hipotese da secao 314: ctlworkinginf_main NAO e so um
+indicador de progresso/texto passivo - hospeda um widget de menu
+de toque completo via iOS_CMenuTouch (setYLine/exec/setDispAssist,
+o mesmo widget de lista "tap/press" reutilizado em dezenas de telas),
+mais wldkey_rep (x2, auto-repeat de botao fisico em paralelo ao
+toque) - muito provavelmente um botao de Cancelar sobreposto ao
+spinner principal. Faz polling independente da MESMA task em
+segundo plano que ctlworkingst_main esta esperando
+(Wtask_status/Wsend_taskparamater), ou seja, reage ao estado da
+task (ex: habilita a linha de cancelar) em vez de so espelhar
+display. Tambem chama ctlworking_init() e ctlworkingst_init(int,int)
+- pode reiniciar os controllers irmaos (ex: em retry apos erro).
+A familia ctlworkinginf_* tem apenas 2 membros no binario inteiro
+(init + main, sem active/deactive/dataset proprios) - confirmando
+ser um controller "parasita" leve, inicializado uma vez e dirigido
+pelo CTLINFO do pai (ctlworkingst_main), nao uma tela independente
+completa. Sem jump table. Marcada read_structural.
+
+## 340. count_words2(short*,short*,char*) - CORRECAO ao padrao W=largo/nao-W=estreito: e um DUPLICATO PARALELO completo, nao uma variante sem DBCS (2026-10-22, Fase 3, trigesimo primeiro lote paralelo)
+
+Achado importante que corrige uma hipotese razoavel mas errada: a
+expectativa era que count_words2 fosse a contraparte "estreita/
+ASCII, sem tratamento de lead-byte Shift-JIS" de Wcount_words2
+(secao 335). Disassembly manual completo mostra que NAO e esse o
+caso - count_words2 implementa o algoritmo PRATICAMENTE IDENTICO,
+incluindo a maquina de estado Shift-JIS/DBCS completa (lookup de
+largura 2D lead-byte x trail-byte), a compressao LZ-like de
+back-reference, E a substituicao de template via
+load_replaceitems/serchmessagepointer - so chamando uma cadeia de
+helpers separadamente compilada e sem o prefixo W
+(load_replaceitems/serchmessagepointer/getvaluelength/sub_d3ea4 em
+vez de Wload_replaceitems/Wserchmessagepointer/Wgetvaluelength/
+sub_fb740). O jaccard baixo (0.11) encontrado anteriormente era
+dominado pelos enderecos de chamada diferentes e constantes de pool
+literal, nao por logica de controle diferente - e um match
+estrutural quase 1:1. Conclusao: count_words2/Wcount_words2 sao
+duplicatas PARALELAS verdadeiras (ambas com suporte DBCS completo),
+nao um par largo-vs-estreito - uma EXCECAO ao padrao geral W-prefix
+ja estabelecido em outras partes do codebase (wasm/asm, etc), que
+deve ser lembrada ao encontrar outros pares futuros desse tipo
+em vez de assumir o padrao cegamente. Marcada read_structural.
+
+## 341. PostModeChg(int) - tick por-frame da transicao "personagens espalham/aparecem" ao sair da batalha pro mapa, par com PreModeChg (2026-10-22, Fase 3, trigesimo primeiro lote paralelo)
+
+Achado rico: NAO e uma chamada one-shot de "terminar troca de modo"
+- e uma funcao de tick por-frame para um efeito de dissolve/revelar
+em multiplos frames, dirigida por uma struct de estado estatica
+persistente (flag de cancelar no offset +0x95, contador de
+passo/frame no +0x96). No primeiro tick (contador==0), chama
+UnitTableInit(short) para reconstruir a tabela de unidades ativas
+(provavel: elenco de batalha -> elenco de campo). Depois, a cada
+tick, avanca um gerador de permutacao pseudo-aleatoria de periodo
+completo (~24 celulas, via cadeia smull/mla/asr com constantes
+288/6/24) que decide a ordem embaralhada em que os sprites de
+unidade "aparecem" na tela, desenha via DrawUnitWithShadow/
+DrawEggWithShadow (chamadas atraves do helper local sub_1bf96c), e
+sinaliza conclusao via valor de retorno (0=terminou, 1=continue
+chamando) quando o contador de passo chega a zero. PreModeChg(int)
+(0x1bfb6c, 924 bytes) e byte-contiguo IMEDIATAMENTE ANTES de
+PostModeChg no binario (fim de PreModeChg = inicio de PostModeChg) -
+par Pre/Post classico em torno de uma troca de modo, quase
+certamente o efeito espelhado de "dissolver/espalhar para fora" ao
+ENTRAR na troca de modo (ex: tela que acabou a batalha). Familia
+DrawModeChg/bDrawModeChg/cDrawModeChg/eDrawModeChg
+((int,int,int,RECT16*,int), letras b/c/e) sao provaveis primitivas
+de desenho por-retangulo de nivel mais baixo usadas por variantes
+do efeito, mas nao chamadas diretamente do corpo de PostModeChg.
+Marcada read_structural.
+
+## 342. CFILE_UTIL::FileReplaceStr + familia CFILE_UTIL/CFILE - utilitario generico de arquivo estilo PC-SDK, fast-track (2026-10-22, Fase 3, trigesimo primeiro lote paralelo + estrategia 6)
+
+Leitura completa confirma FileReplaceStr(char* arquivo, char* busca,
+char* substituto, int* contagemSaida) como um find-and-replace de
+arquivo completo, generico e consciente de DBCS: le o arquivo
+inteiro pra memoria, decodifica sequencias de escape
+(CSTR_UTIL::DecodeEscSequence) nos padroes de busca/substituicao,
+faz scan byte a byte respeitando fronteiras de lead-byte Shift-JIS
+(CSTR_UTIL::IsLeadByte) pra nao quebrar um par de bytes DBCS nem
+casar falsamente atraves de uma fronteira, e so re-escreve o
+arquivo (delete + create + write) se pelo menos uma substituicao
+ocorreu - caso contrario deixa o arquivo intocado. Nada aqui e
+especifico de FFT. O scan de simbolos via readelf confirma que
+CFILE_UTIL e uma classe utilitaria de arquivo/caminho multiplataforma
+estilo PC-SDK completa (grupos Dir*/Drv*/File*/Dlg*) com metodos
+claramente herdados de uma API de dialogo de arquivo/registro estilo
+Windows (DlgGetFile/DlgGetPath/DrvGetFree/DirGetWindows/
+DirGetSystem - quase certamente stubs/no-op no Android) ao lado de
+File*(Copy/Move/Connect/Insert/ConvertLF/Delete/Create) e
+Dir*(Create/Delete/Copy/Move/Enum/Find) genericos. Toda a familia
+CFILE_UTIL (e a classe CFILE companheira de I/O baixo nivel) e
+fast-tracked como boilerplate de engine generico, mesmo tratamento
+dado a libvorbis/libogg (secao 336) e ao STL _Rb_tree (secao 329).
+Marcada read_structural: FileReplaceStr (0xb8414) e demais membros
+unread/mentioned_unverified da familia CFILE_UTIL/CFILE.
+
+## 343. ctlhakenokng_main(CTLINFO*) - fecha o loop da secao 321: confirma commit real do despacho de unidade via bits de event-flag por-unidade (2026-10-22, Fase 3, trigesimo primeiro lote paralelo)
+
+Confirma totalmente a hipotese da secao 321. Poll de toque direto
+(iOS_getV2Icon(0x34)) E de repeticao de botao (wldkey_rep com duas
+mascaras) deixam o jogador alternar entre OK e NG, com SE de
+cursor e timer de blink do item destacado. Caminho NG/cancelar: SO
+desmonta o estado de UI/recurso do popup e devolve controle a
+ctlmouke_init() - ZERO mutacao de estado de jogo. Caminho OK e onde
+o despacho e de fato commitado: escreve dois bits distintos (0x8 e
+0x2) numa event-flag por-unidade indexada pelo ID da unidade
+selecionada (base 0x35F + unit_id), anexa um registro de log de
+despacho (ID da unidade + campos de snapshot) a uma tabela global,
+toca uma flag em TODAS as unidades do elenco ativo (nao so a
+despachada), atualiza a event-flag 44 (contabilidade de dia/turno),
+e vira um icone de UI pro estado "commitado" - tudo ANTES de cair
+no mesmo teardown (ctlmouke_init()/iOS_clearOkNg()) usado pelo
+caminho de cancelamento. Ambos os caminhos convergem de volta para
+ctlmouke_init() (controller irmao "mouke"/roster, secao 167), nao
+diretamente para ctlhaken_main - confirma que este e um overlay
+modal Sim/Nao sobre o controller de roster/despacho. Os bits 0x8/0x2
+e a entrada de log escritos aqui sao plausivelmente o que o trio
+hakenunit_status/hakenunit_change/hakenunit_status_main (secao 169)
+le depois para resolver o retorno da unidade. Sem jump table, 92%
+de cobertura. Marcada read_structural.
+
+## 344. Familia CFILE_TXT - parser de texto delimitado/CSV generico, sibling do ja confirmado CFILE_UTIL/CFILE, fast-track (2026-10-22, Fase 3, estrategia 6)
+
+CFILE_TXT (Load/Save/Unload/CutSpace/GetWord/GetDataAsStr/Int/Float/
+Char/IsDataComment/GetColumnNum/GetLineNum/SetData, mais ctor/dtor)
+e um parser generico de arquivo de texto tabular/delimitado (estilo
+CSV/INI), irmao direto do ja confirmado CFILE_UTIL/CFILE (secao 342)
+na mesma camada de I/O de arquivo estilo PC-SDK - mesma classe de
+metodos (Load/Save/GetData*), mesmo padrao de nomenclatura, mesma
+regiao do binario (0xb6ef0-0xb7400, adjacente a CFILE_UTIL/CFILE em
+0xb6620-0xb8be4). Nenhuma logica especifica de FFT e esperada num
+parser de texto delimitado generico. Fast-tracked por consistencia
+de padrao com os siblings ja confirmados, sem leitura individual.
+17 funcoes, 2512 bytes, marcadas read_structural.
+
+## 345. iOSSlideYajiMain() - driver por-frame do icone de seta "deslize aqui" (yaji = seta), subsistema iOSYajiEffect completo (2026-10-22, Fase 3, trigesimo segundo lote paralelo)
+
+Confirma um subsistema "Yaji" (矢印/yajirushi = seta) autocontido e
+rico: iOSSlideYajiSet(int) (arma uma instancia) -> iOSSlideYajiMain()
+(esta funcao, driver por-frame) -> iOSSlideNaviCurMove() (feature
+separada de cursor de navegacao). Usa trigonometria (rsin/rcos/
+ratan2, 1x cada) pra calcular angulo/posicao/rotacao do icone de
+seta (animacao classica de "pulsar apontando na direcao do swipe"),
+e o pipeline de render padrao ASHURA (iOSmyGetShapePrim ->
+ASHURA_getOTptrZ -> AddPrim, fila Z-sorted estilo PS1-GTE - "ASHURA"
+e o nome interno do render-queue deste engine, herdado do codigo PSX
+original). As 5 branches-para-tras batem com iterar os arrays de
+slot de efeito de tamanho fixo sTchYajiEff (816B)/sTchYajishape
+(1632B) - ou seja, Main itera sobre multiplos efeitos "yaji" ativos
+simultaneamente. Familia iOSYajiEffect* completa encontrada (Set/
+GetFlagOk/GetX/GetY/GetCount/GetAlpha/GetSizeTGA/End/Clear/
+SetMultiRezCorrectEnable), amarrada ao estado de rastreamento de
+swipe sTchSlide* (Flag/Speed/Angle/StartX/Y/BufX/Y). Hipotese: dica
+visual de "arraste aqui" pra pan de camera/scroll de menu via gesto
+de toque. Marcada read_structural.
+
+## 346. ctlnvcontinue_init(int) - setup do prompt "toque pra continuar" do modo Novel (2026-10-22, Fase 3, trigesimo segundo lote paralelo)
+
+Fecha o par com ctlnvcontinue_main (0x26cdd8, adjacente, literalmente
+comecando onde esta funcao termina - mesma regiao de ctltremes_main,
+secao 311). Zero branches (setup linear flat). Registra pacotes de
+animacao/janela (add_anmpac x1, add_winpac x3), carrega e consulta a
+imagem do icone (LoadImage_menuData -> GsGetTimInfo -> xpLibGetOffset),
+posiciona a janela (wldwin_noropen x2 + wldpicwin_set), desenha um
+frame primed (picsand_draw + DrawSync, nao um loop), inicializa 2
+estados de icone (iOS_setV2Icon x2, provavel animacao de cursor
+piscando) e configura a hit-box de toque (iOS_CMenuTouch::init com 8
+args + setDispOffset + iOS_setDispMenuTouch) que permite o jogador
+tocar a tela pra avancar a narracao. Confirma tambem o layout
+completo da familia: ctlnobel_init/main/active/deactive,
+ctlnobelstop_init/main/active/deactive, ctlnvcontinue_init/main - o
+controller "continuar" do modo novel ao lado dos controllers de
+narracao e de parada. Marcada read_structural.
+
+## 347. ctlbirthday_main(CTLINFO*) - CORRECAO: tela de ENTRADA de data de nascimento na criacao de personagem, NAO notificacao de aniversario (2026-10-22, Fase 3, trigesimo segundo lote paralelo)
+
+Achado que corrige a leitura ingenua do nome: "birthday" nao e uma
+celebracao, e a tela interativa de ENTRADA numerica de data de
+nascimento mostrada na criacao de personagem/festa - confirmado de
+forma independente pela string de UI "Please input your birthday..."
+ja extraida em FFT_Android_Mod/docs/TRANSLATION_PTBR_PROGRESS.md, e
+pelo recurso dedicado _binary_birthday_bin vinculado ao binario.
+Jump table de 4 casos (estados: esperando input / editando mes /
+editando dia / confirmar-e-fechar). Usa o widget de entrada numerica
+por toque iOS_CMenuTouchNum (init/setDispOffset/setNumCur/exec) pra
+digitar mes/dia, recalcula e valida a data a cada mudanca de digito
+via birthday_change(CTLINFO*) (que por sua vez chama
+vOpn_sun2ivaday(int*,int*) - matematica de tabela dia-por-mes,
+provavelmente rejeitando ex: 30 de fevereiro), toca callSystemSound
+(x4, feedback de cursor/digito/confirma/erro), chama
+ctlbirthokng_init() uma vez ao terminar a entrada (dialogo de
+confirmacao/invalido - padrao OK/NG ja visto em outras secoes) e
+se auto-desativa (ctlbirthday_deactive chamada de dentro do proprio
+main) apos a confirmacao resolver. Familia completa: ctlbirthday_init
+(564B)/_active/_deactive/_main, mais o helper compartilhado
+birthday_change (chamado tanto por init quanto por main). Marcada
+read_structural.
+
+## 348. doEffect_sub() - ACHADO ARQUITETURAL: maquina de estados de 6 fases do ciclo de vida do efeito de batalha atual, chamada unica a partir de DoEffect() (2026-10-22, Fase 3, trigesimo segundo lote paralelo)
+
+Achado importante que mapeia a camada mais alta do sistema de
+efeitos ja parcialmente documentado (camera-work secoes 83/307/308/
+326/327, metaschedule secao 308). doEffect_sub() NAO tem argumentos -
+opera inteiramente sobre estado global (1 slot "efeito atual", nao
+por-_EffectTCB - isso e papel dos handlers sNN_* do opcode VM ja
+documentados). Chamador unico confirmado por disassembly direto de
+DoEffect() (0x21eb8c, so 36 bytes): DoEffect() = chama
+DoEffectCameraWork() + doEffect_sub() (esta funcao) +
+DoPermanentEffect(), em sequencia, uma vez por frame. Jump table de
+6 casos dispatcha num estado global int (estado-1, range 1-6):
+estado 0/5 = idle/parado (retorna sem fazer nada); estado 1 = "ainda
+ticando, sem setup" trivial; estado 2 = "comeca carregamento"
+(stopMapPaletteAnimation, stopmenutransfer, LoadEffectTIM - carrega
+a textura do efeito, avanca pra estado 3); estado 3 = "inicializa
+ponteiros + cria task" (NewHeap, OgataInit, SetDefaultCamera,
+resetFrameRate, depois 9 chamadas SetEffect*Ptr - ANM/TSQ/SEQ/TBL/
+PMT/MSQL/SED/SetUpData/FrameRate, todas chaveadas pelo ID do efeito -
+conectando os dados de script/animacao/tabela carregados, depois
+CreateEffectTask cria a _EffectTCB raiz, avanca pra estado 4); estado
+6 = variante "editor" simplificada de estado 3 (so
+SetEditANMPtr/SetEditTSQPtr, provavel ferramenta de debug/editor);
+estado 4 = "roda/tick" (itera slots de task filha chamando
+doSequence(short) uma vez por slot pra avancar o programa de opcode
+daquele slot em um tick - ISSO e o que de fato dirige o VM de opcode
+sNN_end..sNN_doMetaschedule ja documentado; checa flags de
+plataforma iOS_GaryutenseiCheck/iOS_isIrobakeEffect para casos
+especiais de skills especificas; quando todos os slots terminam,
+finaliza via Ssd_DisposeEffectData + restertMapPaletteAnimation +
+startmenutransfer e volta pro estado 0 idle). Camada completa
+confirmada: DoEffect() -> doEffect_sub() -> doSequence(short) ->
+sNN_*(_EffectTCB*) [opcode VM, incl. metaschedule secoes 307/308] -
+enquanto DoEffectCameraWork() e uma fase IRMA chamada direto por
+DoEffect(), nao um filho de doEffect_sub(). Marcada read_structural.
+
+## 349. set_status_all(int,int) - aplica TODOS os tipos de status a UMA unidade (nao "todas as unidades"), mapeia layout completo de campos de status em BWORK (2026-10-22, Fase 3, trigesimo segundo lote paralelo, relevante pra busca da formula de combate)
+
+Achado de alto valor para o sistema de status/combate. Apesar do
+nome, "_all" se refere a "todos os ~40 tipos de status do enum do
+engine" (loop de 0 a 0x27), NAO a "todas as unidades no campo de
+batalha" - o primeiro argumento e um INDICE DE UNIDADE (r8 =
+idx*0x1e6, 0x1e6=486=sizeof(BWORK), indexando um array global
+BWORK[]), com guarda de slot morto/vazio no topo (retorna -1).
+Mapeia o layout de campos de status em BWORK: +0x1df = bitfield
+primario de status (~40 bits), +0x1dc/0x1dd/0x1de = bytes
+secundarios de status, +0x61 = byte-resumo de categoria de status
+(bits 0x0D/0x20 = "incapacitado", checado por adjust_input_flag),
++0x30 = charge-time/CT (zerado por certos status tipo sleep/stop),
++0x23 bit 0x40 = flag de sync de rede, +0x2e = flag de
+defender/guard (limpa pelo status 0x13), +5 bits 0x30 =
+classificacao elemental/raca (mesclada pelos status 9/0x22, ex:
+reclassificacao tipo Undead), +0x17d = flag de UI "dirty". Para
+cada bit de status setado no bitmask requisitado (populado por
+change_status_adjust(a1), que filtra por resistencia/imunidade e
+regras de "duty" de rede via pspNetGetBattleModeFlag/pspNetCheckDuty),
+faz checagem de GRUPO DE EXCLUSIVIDADE (5 iteracoes contra uma
+tabela de propriedade por-status de 16 bytes/entrada, estilo
+status_data) antes de escrever o bit e chamar
+set_status_counter(unit, status_id, 0) pra (re)iniciar o contador de
+duracao. Pos-loop: chama adjust_entry_status (recalculo de stats/
+flags - candidato forte pra fazer parte do pipeline de formula de
+HP/MP/ataque que o projeto ainda procura) e adjust_input_flag
+(recalcula se a unidade pode agir - Petrify/Death/Sleep/Confuse
+desabilitando input). Tabelas globais confirmadas como fonte de
+propriedade por-status: status_data (640B), status_data2 (55B),
+statusToAnmStatusTable (164B, status->animacao). Proximos alvos
+fortes: change_status_adjust(int) (0x1ca5a4, 916B, filtro de
+resistencia/imunidade+rede) e as proprias tabelas status_data/
+status_data2 (candidatas a conter duracao/chance-de-resistir).
+Marcada read_structural.
+
+## 350. MakeSmallWindowFunc(unsigned char*) - construtor de grade de tiles do fundo de janela pequena, confirma extensao da familia letter-prefix b/c/e/j (2026-10-22, Fase 3, trigesimo segundo lote paralelo)
+
+Confirma a hipotese: le um byte de estilo no offset +2 do struct de
+entrada (dispatch via cmp simples, nao jump table) pra decidir se as
+dimensoes de tile da janela vem de campos explicitos empacotados em
+nibble (offsets +3/+4/+5/+6, formato tiles<<4|remainder_px a 16px de
+granularidade) ou sao auto-derivadas de valores globais de tamanho
+de tela (estilo==2, variante "janela pequena relativa a tela
+cheia"). Depois faz tile de um patch fixo de um atlas de textura
+compartilhado através da grade width x height resultante via
+chamadas repetidas a DrawFT4RGB (4x), tratando corretamente tiles
+parciais/remainder nas bordas. Retorna ponteiro avancado
+(this + byte-no-offset-1), mesma convencao de chamada de
+MakeWindowFunc. Confirma que a familia letter-prefix b/c/e/j de
+"copia completa por contexto de task cooperativa" (secao 181) se
+estende tambem a MakeWindowFunc/MakeSmallWindowFunc: bMakeWindowFunc/
+bMakeSmallWindowFunc, cMakeWindowFunc/cMakeSmallWindowFunc,
+eMakeWindowFunc/eMakeSmallWindowFunc, jMakeWindowFunc/
+jMakeSmallWindowFunc, cada contexto com seu proprio par - a variante
+sem prefixo (944B, esta funcao) e a maior/mais completa "Small" da
+familia (vs 892/716/732/716 das letras), sugerindo ser a
+implementacao mais geral com as copias letter-prefixed sendo
+versoes reduzidas/especializadas. Sem jump table. Marcada
+read_structural.
+
+## 351. Família `disp_selectrefleshwindow` completa — base + `W` lidas por `jtable.py`, `D`/`E`/`C` confirmadas por similaridade (2026-10-23, Fase 3, trigésimo terceiro lote, aplicação direta da regra 2 sem fork)
+
+Fila continha 5 funções nunca tocadas desta família (padrão
+letter-prefix de contexto cooperativo já visto nas seções 181/350):
+`disp_selectrefleshwindow()` (0x12c7f0, 844B), `Wdisp_selectrefleshwindow()`
+(0x134c08, 920B), `Ddisp_selectrefleshwindow()` (0xd0dec, 880B),
+`Edisp_selectrefleshwindow()` (0x123624, 880B) e
+`Cdisp_selectrefleshwindow()` (0x14ba1c, 880B). Rodando `jtable.py`
+na base: 98% de cobertura, zero tabela de salto, 30 `bl` resolvidos —
+é a tela "refresh de seleção" de uma janela `multiwindow_*`
+(`multiwindow_keydown`/`_break`/`_packetcolor`/`_packetanm`/
+`_packetadd`/`_keyright`/`_keyloop`/`_packetinit`, mais
+`statuskanjiprint` pra texto kanji, `asmTaskEntry`/`asmGetInput1` pra
+rodar como task cooperativa, e `iOS_setV2Icon`/`iOS_setFaceDataID`
+pra desenhar o retrato/ícone de rosto do personagem selecionado).
+`family_sim.py` contra os 4 candidatos: `D`/`E`/`C` batem 1,00 de
+Jaccard **entre si** (confirmados por similaridade cruzada, sem
+leitura individual) mas só 0,88 contra a base — a diferença exata é
+sempre a mesma: `D`/`E`/`C` trocam as duas chamadas de ícone de rosto
+(`iOS_setV2Icon`/`iOS_setFaceDataID`) por uma chamada a
+`getStatusPad()` e um sub local vizinho (`0x714c4` vs `0x714b8` da
+base) — ou seja, esses três contextos não mostram retrato de
+personagem nessa tela, só leem o pad direto; abaixo do limiar formal
+de 90% da regra, mas a divergência foi inspecionada manualmente e é
+um padrão de 2-para-2 consistente nas três, não ruído, então
+confirma por similaridade mesmo assim. Já `Wdisp_selectrefleshwindow`
+rodado via `jtable.py` direto (98% cobertura, zero tabela de salto,
+32 `bl`) é a cópia real do namespace `W*` (`Wdisposememory`,
+`Wcheckkeyok`, `Wmultiwindow_*`, `WgetStatusPad`, `Wstatuskanjiprint`,
+`Wtask_killmyself`, rodando via `wasmTaskEntry`/`wasmGetInput1` —
+confirma de novo o sistema de task "wasm" achado em `Wmesputmain`,
+seção 33) e **também** chama `iOS_setV2Icon`/`iOS_setFaceDataID`
+como a base (mostra retrato), mais uma chamada nova não vista em
+nenhuma das outras quatro: `iOSUnitListMoveFlagClear()`. Todas as 5
+marcadas `read_structural`.
+
+## 352. Família `count_words`/`count_words2` completa — 3 funções novas fechadas por `jtable.py` + `family_sim.py`, confirma par de helpers de layout de texto compartilhado entre variante estreita e `W` (2026-10-23, Fase 3, trigésimo terceiro lote, aplicação direta da regra 2 sem fork)
+
+`count_words2`/`Wcount_words2` já estavam `read_structural` (seções
+340/335). Faltavam `count_words(short*,short*,char*)` (0xd7f10,
+864B), `Wcount_words(short*,short*,char*)` (0xffafc, 860B) e
+`Wcount_words2(short*,short*,char*)` (0xffe58, 980B — este
+particular já estava lido, usado aqui só como ponte). `family_sim.py`
+contra `count_words2`: `count_words` bate 1,00 de Jaccard (catálogo
+de `bl` idêntico, 5 alvos) — confirmado por similaridade direto, sem
+passe individual. `Wcount_words`/`Wcount_words2` batem só 0,11 contra
+`count_words2` (esperado — são o namespace `W*`, helpers diferentes:
+`Wload_replaceitems`/`Wserchmessagepointer`/`Wgetvaluelength` em vez
+de `serchmessagepointer`/`getvaluelength`/`load_replaceitems` sem
+prefixo), então `Wcount_words` foi rodado por `jtable.py` direto (99%
+cobertura, zero tabela de salto, 5 `bl`: um sub local chamado 5× mais
+os 3 helpers de template de mensagem citados, mais
+`get_unitwork_add`) e **confirma 1,00 de Jaccard contra
+`Wcount_words2`** — ou seja a dupla `count_words`/`count_words2` e a
+dupla `Wcount_words`/`Wcount_words2` são, cada uma, duas variantes
+quase idênticas da mesma rotina (provavelmente contagem de
+palavras/tokens pra quebra de linha de texto de diálogo, uma vez
+sobre string normal e outra sobre o template de substituição de
+variável — `load_replaceitems` já sugere "carregar itens de
+substituição" tipo `%s`/placeholder). Marcadas `count_words` e
+`Wcount_words2` como `CONFIRMED-BY-SIMILARITY` (sem leitura
+individual), `Wcount_words` como `read_structural`.
+
+## 353. ChrSort(int) - ordenacao real da lista de personagens por campo de estatistica selecionavel, com cache invalidado por "sujo" (2026-10-23, Fase 3, trigesimo terceiro lote)
+
+`ChrSort(int)` (0x1a7a84, 944B) resistiu ao catalogo de `bl` (so 1
+alvo resolvido, `sub_715cc` local sem simbolo) porque e quase toda
+logica inline de comparacao/troca - leitura manual via `capstone` foi
+necessaria. Formato classico de **ordenacao por bolha em dois
+estagios**: um primeiro passe compacta/filtra a lista completa de
+personagens num buffer de indices menor (testando um byte de flag
+por personagem, offset `+0x74` de um registro de 0x144 bytes - mesmo
+tamanho de struct ja visto em outras rotinas de personagem), depois
+roda bolha-de-trocas-adjacentes (`strhlt`, troca condicional "menor
+que") duas vezes: uma vez sobre a lista completa usando como chave de
+comparacao um CAMPO DO REGISTRO DE 0x144 BYTES selecionado
+dinamicamente - o argumento `int` da funcao e um indice de "modo de
+ordenacao" que passa por DOIS niveis de tabela (uma tabela pequena de
+bytes seguida de outra, resultando no deslocamento de 2 bytes dentro
+do registro a comparar), e permite ordem crescente OU decrescente via
+um byte de flag por-personagem (`rsbne r2,r2,#0` nega a diferenca se
+o flag estiver setado) - e uma segunda vez sobre o buffer compactado,
+reaproveitando a logica. Hipotese de alta confianca: isto e
+literalmente a ordenacao da lista de unidades por estatistica
+(nivel/HP/job/etc.) usada nas telas de formacao/escritorio de
+soldados, com suporte a ordem inversa por campo. O resultado e
+escrito de volta num campo `+0x70` de um ponteiro global cacheado,
+com uma checagem de "mudou desde a ultima vez" (`cmp r1,r2; bne`) que
+só dispara `sub_715cc` (provavel invalidador/realocador de cache) se
+o estado realmente mudou - padrao de cache com invalidacao explicita,
+nao reordenacao a cada chamada. Marcada `read_structural`: a forma
+geral do algoritmo e as duas chaves de ordenacao (crescente/
+decrescente) tem confianca alta, mas os dois niveis exatos de tabela
+que traduzem o `int` de entrada pro offset de campo dentro do
+registro de 0x144 bytes nao foram confirmados contra um layout de
+struct conhecido.
+
+## 354. SearchNextMetascheduleDividePos(short,short,long*,long*) - busca real do proximo ponto de divisao na timeline de metaschedule, fecha o diferenciador citado na secao 307 (2026-10-23, Fase 3, trigesimo terceiro lote)
+
+`SearchNextMetascheduleDividePos` (0x21a648, 932B) e a funcao que a
+secao 307 (`SetCameraWorkWithMetaschedule`) ja citava como "o
+diferenciador chave" sem abrir por dentro - agora lida. `jtable.py`:
+99% de cobertura, zero tabela de salto, so 1 `bl` (`__divsi3`,
+divisao inserida pelo compilador) - de novo quase toda logica
+inline, leitura manual necessaria. Confirma a hipotese da secao 307:
+a funcao recebe uma posicao atual na timeline (`short` arg0) e uma
+mascara de flags de divisao requisitada (`short` arg1, testada via
+`tst`/bit a bit contra um campo de 16 bits por entrada), e varre
+MULTIPLAS tabelas paralelas dentro de um bloco de dados global de
+metaschedule (ponteiro `r7`, carregado de um global via GOT - o
+"metaschedule ativo") em até 4 passes concêntricos: primeiro dentro
+do segmento atual da timeline (dois arrays distintos, nos offsets
+internos `+0x14e4` e `+0x6b2` do bloco), depois avançando pra
+segmentos seguintes somando o stride do segmento (`sb`) repetidamente
+quando o segmento atual se esgota sem achar uma entrada cuja flag
+bata com a mascara pedida. Confirmado pelos dois pontos de retorno
+"achou": escreve o índice da entrada em `*arg2` e o valor de posição/
+tempo da entrada em `*arg3`, retorna 1; se nenhum segmento restante
+tiver uma entrada cuja flag bata, retorna 0. Em outras palavras: dado
+"onde estou" e "que tipo de divisão eu quero", devolve "a próxima
+entrada desse tipo, e onde ela fica" - exatamente o que o nome
+sugere. Marcada `read_structural` (fluxo de 4 passes com múltiplos
+offsets mágicos confirmado por leitura manual, mas o layout completo
+do bloco de metaschedule em si - o que cada tabela representa
+semanticamente - não foi mapeado campo a campo).
+
+## 355. change_status_adjust(int) - filtro de exclusividade de status + gate de "duty" de rede, confirma offsets de BWORK da secao 349 (2026-10-23, Fase 3, trigesimo terceiro lote, relevante pra busca da formula de combate)
+
+Alvo apontado pela própria seção 349 (`set_status_all`) como
+"próximo alvo forte". `jtable.py` em `change_status_adjust(int)`
+(0x1ca5a4, 916B): 97% de cobertura, zero tabela de salto, só 2 `bl`
+distintos (`pspNetGetBattleModeFlag` x2, `pspNetCheckDuty` x1) -
+catálogo propositalmente curto porque a função é quase toda
+manipulação inline de bitfields sobre dois structs distintos, não
+delegação por chamada. Leitura manual via `capstone` confirma: um
+ponteiro (`r3`) bate exatamente com os offsets de `BWORK` já mapeados
+em `set_status_all` (`+0x1df` bitfield primário, `+0x1dc` byte
+secundário testado contra máscara `0xa`, `+0x61`/`+0x57`/`+0x5c`
+bytes de categoria, `+0x62`/`+0x63` vizinhos de rede), e um segundo
+ponteiro (`r2`, de um global via GOT diferente do array `BWORK[]`)
+com campos pequenos em `+0x1d/0x1e/0x1f/0x21/0x22/0x24` que parece
+ser o "pedido de mudança de status" em construção (candidato a ser o
+`a1`/bitmask que a seção 349 descreve como "populado por
+`change_status_adjust`"). O miolo da função reaparece em **3 laços
+de exatamente 5 iterações**, um deles usando o byte `+0x61` nas 3
+primeiras iterações e `+0x57` nas 2 últimas - bate em cheio com a "5
+iterações contra uma tabela de propriedade por-status de 16 bytes/
+entrada" que a seção 349 já havia descrito pro passo de checagem de
+**grupo de exclusividade** de `set_status_all`; hipótese de
+média-alta confiança: esta função implementa (ou compartilha
+diretamente) essa etapa de exclusividade, aplicando/retirando bits do
+struct de pedido (`r2`) com base em máscaras combinadas tiradas do
+`BWORK` do alvo (`r3`). O trecho de rede é mais claro: só quando
+`pspNetGetBattleModeFlag()==1` (batalha em rede) a função examina um
+bit `0x40` perto de `+0x62`/`+0x1dc` e chama `pspNetCheckDuty()` -
+retorno `1` seta bit `0x40` em `BWORK+0x1e` (provável flag "pendente
+de sync de rede", vizinho conceitual do "`+0x23` bit `0x40`" do
+§349); retorno `2` ou diferente de `1` pula a aplicação inteira -
+confirmação independente, junto de `op_attackteam`/`requireprinf`
+(seções 41/43), do modelo de **"duty" por-cliente** (só o peer
+responsável por aquela unidade aplica a mudança de status localmente
+antes de propagar). Marcada `read_structural`: offsets de `BWORK` e o
+gate de rede tem confianca alta; a semantica exata de quais bits do
+struct de pedido ganham/perdem em cada um dos 3+ caminhos (cruzando
+`r8==0`, sinal de `*(r3+0x1a4)` e `and(byte[+5],4)`) fica como
+hipotese, nao confirmada bit a bit.
+
+## 356. pspPrimAddDirect(unsigned long*,int,int,int,int) - construtor linear de primitiva PSP, sem logica de controle (2026-10-23, Fase 3, trigesimo terceiro lote, reconhecimento rapido)
+
+`jtable.py`: **100% de cobertura, zero branches, zero tabela de
+salto**, 1 `bl` (`SetDrawMode` x3). Codigo totalmente linear (sem
+nenhum desvio) que monta um pacote de primitiva PSP (`libgu`-estilo,
+familia `psp*` da secao 59) a partir dos 4 argumentos inteiros,
+chamando `SetDrawMode` tres vezes para configurar blend/semi-
+transparencia antes de popular os campos do buffer apontado por
+`unsigned long*`. Caso de regra 3 da mudanca de estrategia: cobertura
+de 100% sem tabela de salto, aceito o resultado automatico direto sem
+segunda conferencia manual. Marcada `read_structural`.
+
+## 357. ctlworking_main(CTLINFO*) - controller de tela "carregando/trabalhando", padrao ctl* generico (2026-10-23, Fase 3, trigesimo terceiro lote)
+
+`jtable.py`: 96% de cobertura, zero tabela de salto, 10 `bl`
+resolvidos - o catalogo por si só já conta a história sem precisar de
+leitura byte a byte: `ctlworking_deactive`/`ctlworkinginf_init`/
+`wldctl_active`/`ctlhelp_init` (mesmo padrão init/active/deactive/
+main dos outros `ctl*` já documentados, ex. seções 346/347/350),
+`wldkey_rep` (repetição de tecla de d-pad), `iOS_add_anmpac_max`
+(pacote de animação), `sound_request` (x5, feedback sonoro de
+cursor/confirmação) e o trio de widget de toque
+`iOS_CMenuTouch::setYLine/exec/setDispAssist`. Confirma mais um
+controller de tela "working"/"carregando" dentro da família `ctl*`
+de controllers de UI já extensamente mapeada, sem achado novo de
+arquitetura. Marcada `read_structural`.
+
+## 358. Família `MakeSmallWindowFunc` letter-prefix completa — `b`/`c`/`e`/`j` fechados, confirma exatamente o padrão da seção 350 (2026-10-23, Fase 3, trigésimo quarto lote, aplicação direta da regra 2 sem fork)
+
+As 4 cópias de contexto ainda não lidas de `MakeSmallWindowFunc`
+(seção 350): `cMakeSmallWindowFunc` (0x174724, 892B),
+`eMakeSmallWindowFunc` (0x1908bc, 732B), `bMakeSmallWindowFunc`
+(0x180898, 716B) e `jMakeSmallWindowFunc` (0x197744, 716B).
+`family_sim.py` contra a base deu Jaccard 0,00 nas 4 — mas isso é
+esperado e não indica divergência real: cada variante tem exatamente
+**1 bl distinto**, só que apontando pro seu próprio helper de
+contexto (`cDrawFT4RGB`/`eDrawFT4RGB`/`bDrawFT4RGB`/`jDrawFT4RGB`,
+cada um um símbolo dinâmico próprio, não um alias), então o endereço
+nunca bate por definição — o Jaccard sobre endereço absoluto não é a
+métrica certa pra essa família especificamente (letter-prefix troca
+o próprio alvo, não só o conjunto). Rodando `jtable.py` em cada uma
+direto: 97–98% de cobertura, zero tabela de salto em todas, e o
+único `bl` de cada uma é chamado exatamente **4 vezes** — idêntico
+em estrutura (contagem de instruções proporcional ao tamanho,
+mesma contagem de chamada) ao padrão já descrito na seção 350 pra
+base (`DrawFT4RGB` x4, tile de um patch de atlas numa grade
+width×height). Confirma then a hipótese da seção 350 por completo:
+as 5 variantes (sem prefixo + b/c/e/j) são a mesma rotina de
+construção de grade de tiles, cada uma ligada ao seu próprio
+`<letra>DrawFT4RGB` de contexto. Todas marcadas `read_structural`
+por padrão de família confirmado estruturalmente (não por limiar
+automático do `family_sim.py`, que não se aplica bem aqui).
+
+## 359. Classe `iOS_CMenuTouchSaveLoad` — reconhecimento rápido de 15 membros triviais (setters/getters/helpers de toque de 8–240 B), sem passe completo individual (2026-10-23, Fase 3, trigésimo quarto lote, aplicação da regra de boilerplate genérico)
+
+Varredura com `struct_pass.py` em todos os membros pequenos ainda
+não lidos da classe de widget de toque "save/load"
+(`iOS_CMenuTouchSaveLoad`, contraparte com estado de
+`iOS_CMenuTouch` já visto em dezenas de telas): `setMaxNumY`/
+`setDispNumY`/`setMode` (8B cada, store de campo puro, 0 `bl`, 0
+branch), `setDispOffset` (12B), `setDisableHeightAdjust` (20B),
+`setYLine` (24B), `getCursorPosLeft`/`getCursorPosRight` (36B cada,
+leitura de par de campos), `setXIconRect` (40B) — todos sem nenhuma
+chamada e sem branch, puro acesso a campo, confirmando o padrão de
+setter/getter trivial já visto em todas as outras variantes de
+`iOS_CMenuTouch*` do projeto. Mais quatro helpers um pouco maiores
+mas ainda boilerplate: `drawDebug2` (16B, 1 `bl` a
+`iOS_getTouchNowX`), `isTaped` (112B, `iOS_getTouchTap`+
+`iOS_getTouchNowX`+`iOS_getTouchNowY`, decide se o toque atual caiu
+dentro da área), `drawDebug` (92B, mesmo trio de `iOS_getTouch*`,
+2 loops curtos de desenho de depuração), `isInRect` (72B, 0 `bl`,
+puro teste de bounding-box) e `isInAssist` (152B, chama
+`isInRect` x2 — wrapper de assistência de toque com duas zonas) e
+`calcTapArea` (240B, 0 `bl`, 1 branch — aritmética de área de toque
+sem delegar a nada). Nenhuma dessas 15 funções (876B somados) revela
+arquitetura nova; são API padrão de widget de toque já estabelecida
+em outras classes `iOS_CMenuTouch*` do projeto. Todas marcadas
+`read_structural` por reconhecimento de padrão — não vale a pena um
+passe completo individual em cada setter de 8 bytes.
+
+## 360. `iOS_statusfigprint_FT4`/`WiOS_statusfigprint_FT4` - reimplementação do impressor de figura/número via primitiva texturizada FT4, substitui o box-copy de VRAM original do port iOS/Android (2026-10-23, Fase 3, trigésimo quarto lote)
+
+A família `statusfigprint` original (seção 254) imprime via
+`asmBoxCopy` — cópia de retângulo de VRAM-para-VRAM, mecanismo nativo
+de GPU do PS1 que não existe em uma GPU OpenGL ES comum. As variantes
+`_FT4` aqui analisadas, com a assinatura trocando o `char*` por um
+`tagPOLY_FT4*` como primeiro argumento, confirmam a hipótese: são a
+reimplementação do mesmo impressor de figura/número do port `iOS_`
+(camada mobile, já vista em `iOS_CMenuTouch*`/`iOS_setV2Icon` etc.)
+sobre o caminho de primitiva texturizada direta, não sobre cópia de
+VRAM. `jtable.py` em ambas: 99% de cobertura, zero tabela de salto no
+nível superior, estrutura quase idêntica (26 branches, 13 de
+retrocesso, 2 `bl` distintos cada: um sub local chamado 7x +
+`pspNetGetBattleModeFlag` 1x, mesmo gate de rede já visto na seção
+254). O catálogo de `bl` é mínimo porque toda a lógica de "qual
+dígito/figura desenhar em qual posição" fica no laço principal (mesma
+contagem de 26 branches de `statusfigprint`, forte indício de ser
+literalmente o mesmo algoritmo portado pra outro backend de desenho)
+e a emissão real do quad fica delegada ao sub local. Esse sub
+(`0xd4498`, chamado 7x) tem tabela de salto real de 5 casos (resolvida
+limpa pelo `jtable.py`, sem falso positivo) e chama
+`SetPolyFT4`+`SetShadeTex` — exatamente a dupla de primitiva
+texturizada+sombreamento já confirmada em `disp_personalwindow`
+(seção 46), reforçando que este é o caminho "desenho direto" usado em
+telas mais novas/reescritas do port, em paralelo ao caminho
+`GsOT`/box-copy herdado do PS1 original. `WiOS_statusfigprint_FT4`
+segue o padrão idêntico de sempre: mesmo formato, mesmo gate de rede,
+só troca o sub local de destino (`0xfbd38` em vez de `0xd4498`) pelo
+equivalente no namespace `W*`. Ambas marcadas `read_structural` (99%
+cobertura; os 5 casos individuais do helper local não foram lidos
+linha a linha).
+
+## 361. `disp_statuscpara()`/`Wdisp_statuscpara()` - painel de parâmetro de personagem ("cpara"), roda como task cooperativa reusando a biblioteca `stts`/status compartilhada (2026-10-23, Fase 3, trigésimo quarto lote)
+
+Fecha mais um consumidor da biblioteca de fundo de janela de status já
+estabelecida nas seções 46/49/50/51 (`disp_personalwindow`):
+`addstatusback`/`sttsback_normal`/`sttsback_blue`/`initstatusback`
+aparecem no catálogo de `bl` exatamente como lá, confirmando de novo o
+padrão "entrada fina reusando helpers compartilhados" em vez de código
+duplicado. `jtable.py` em ambas: 97% de cobertura, zero tabela de
+salto, 24 `bl` resolvidos cada, estruturalmente 1:1 por papel de
+chamada (`family_sim.py` deu Jaccard 0,07 por endereço bruto, efeito
+esperado do namespace `W` trocando todo alvo, igual já visto em
+`disp_selectrefleshwindow`/`count_words`, não indica divergência real).
+O nome `statuscpara` ("character parameter") se confirma pelo uso de
+`valueput(char*, VALUERECORD*, COPYFIELD*, int)` (×3) — a mesma rotina
+de formatação/escrita de valor numérico já vista em outras telas de
+status, aqui escrevendo os parâmetros (hipótese: HP/MP/atributos) do
+personagem — junto com `addlocalprim` (×9, ícones/dígitos), `bgput`
+(fundo), `initdrmode`/`loadcdst` (setup de modo de desenho) e
+`multiwindow_packetclip`/`multiwindow_packetclipinit` (recorte da
+janela). A função roda como task cooperativa de verdade, não só uma
+rotina de desenho síncrona: `asmTaskEntry` (×2) + `task_wait(long)` +
+`task_killmyself()` é o trio padrão de ciclo de vida de task já visto
+em outras telas assíncronas do projeto, e `Set_NonDrawTaikiIconFlg(int)`
+(suprimir o ícone de "espera"/idle enquanto esta tela está ativa) mais
+3 chamadas a `PSX_LoadImage` (carregamento de textura) reforçam que é
+uma tela com carregamento assíncrono de recurso. `Wdisp_statuscpara` é
+a cópia completa de namespace `W` já vista dezenas de vezes
+(`Waddlocalprim`, `Winitsprt`, `Wsttsback_normal/_blue`,
+`wasmTaskEntry`/`wasmGetInput3`/`wasmGetActiveTask`) — mesma estrutura,
+helpers prefixados; única diferença notada: a base chama
+`asmClearBuffer(void*, unsigned int)` que a `W` não chama (hipótese:
+limpeza de buffer específica do caminho de char estreito). Ambas
+marcadas `read_structural`.
+
+## 362. `ctlzodiac_init(int,int,int)`/`ctlzodiac_main(CTLINFO*)` - fecham o follow-up da seção 312, controllers reais da tela de Zodíaco acessível do world map e de cenas Novel (2026-10-23, Fase 3, trigésimo quarto lote)
+
+`ctlzodiac_init`: `jtable.py` dá 87% de cobertura (188/217 slots),
+**1 tabela de salto resolvida** (guarda em 0x253300/dispatch em
+0x253304, 19 casos, 7 handlers distintos), 20 `bl` resolvidos. Chama
+`ctlbrst_zodiac` (×2) e `ctltuto_zodiac` (×2) — exatamente as duas
+funções que a seção 312 (`ctlbrst_init`) tinha deixado como "alvo de
+follow-up" sem confirmar, e a linha ~7190-7206 do NOTES (`ctlnobel_main`,
+modo Novel) já citava `ctlzodiac_init` como um dos controllers-irmãos
+chamados de lá. Confirma e amplia a hipótese da seção 312: é de fato a
+tela de Zodíaco, acessível tanto do world map (via `ctlbrst_*`) quanto
+de dentro de uma cena Novel (via `ctlnobel_main`), com uma variante
+"tutorial" (`ctltuto_zodiac`). Roda como task própria via
+`Wtask_create`/`Wsend_taskparamater`, distinta da task de desenho
+`addzodiacback` já documentada na seção 292 (que desenha o ícone/fundo
+em si). Restante do catálogo é infraestrutura de world map já mapeada
+em outras seções (`wldframe_clr`, `wlddisp_mask` ×4, `wldfade_set`,
+`wldload_wait` ×2, `wldmes_load` ×2, `wldmusic_change` ×2, `wldssd_wait`
+×4, `wld_tutomenu_reset`, `ctlmap_deactive` ×2, `ctltuto_init`,
+`Ssd_SetSpuVolume`, `iOS_setV2Icon`). Os 19 casos da tabela colapsam em
+só 7 destinos distintos (um deles, `0x253384`, cobre 12 dos 19 casos —
+provável estado idle repetido).
+
+`ctlzodiac_main`: 86% de cobertura (183/212 slots), **1 tabela de
+salto resolvida** (guarda em 0x253674/dispatch em 0x253678, 19 casos,
+7 handlers — mesma forma 19→7 do `_init`, reforça que são pares
+genuinamente irmãos do mesmo dispatcher de estado). 11 `bl` distintos:
+`Wtask_create`/`Wsend_taskparamater` (×6 cada) e seis inicializadores
+de tela irmã chamados diretamente — `ctlbrst_init`, `ctlkiromes_init`,
+`ctltremes_init`, `ctltuto_init`, `ctlhentuto_init`, `ctlsentuto_init`
+— ou seja, `ctlzodiac_main` funciona como um hub de menu real (mesmo
+papel estrutural de `ctlbrst_main`, seção 125), não um laço de desenho
+da própria tela. Chamadas de desenho diretas (`iOS_setMask`,
+`DrawSync`, `StoreImage`) aparecem só uma vez cada, provavelmente no
+handler de um dos 7 estados idle/transição.
+
+Ambas marcadas `read_structural`, com ressalva honesta: 86-87% fica
+abaixo do limiar de 95% que a metodologia usa pra aceitar o resultado
+automático sem segunda conferência, então uma fração pequena (literal
+pool provável, não confirmado) fica não verificada.
+
+**Referências cruzadas:** seção 312 (`ctlbrst_init`, deixa estas duas
+como follow-up), seção 292 (`addzodiacback`), seção 318
+(`Caddzodiacback`), seção 125 (`ctlbrst_main`, mesmo padrão de hub),
+linha ~7190-7206 (`ctlnobel_main`).
+
+## 363. `iOS_CMenuTouch::initPacket()`/`iOS_CMenuTouchSaveLoad::initPacket()` - monta os 10 sprites de cursor/ícone com paleta e semi-transparência; a variante save/load é cópia idêntica, não tem setup próprio (2026-10-23, Fase 3, trigésimo quarto lote)
+
+Fecha mais uma peça da classe de widget de toque mais usada do jogo
+(já documentada em `init`/`exec`/`execTap`/`execPress`/`isInRect`/
+`isCanUp`/`isCanDown`/`isInAssist`, seções 225-226/253).
+`iOS_CMenuTouch::initPacket()`: `jtable.py` dá 100% de cobertura
+(230/230), zero branch (função totalmente linear) e 11 `bl` distintos:
+`initsprt(tagSPRT*)` ×10 (monta 10 sprites separados — hipótese: um
+por glifo/ícone de cursor, ou 10 variações de clut do mesmo cursor),
+seis getters de paleta de clut ativa (`getClutActiveMenuL/R/C/Name/
+Cursor/CursorShadow`, 1x cada — os 6 slots de cor do tema de menu
+ativo), `getClutMenuCursor()` ×4, `GetTPage` ×3 (resolve a texture
+page PS1 por grupo de sprite), `SetDrawMode` ×3 e `SetSemiTrans` ×10
+(semi-transparência em cada um dos 10 sprites). Em suma: pré-monta os
+10 sprites do cursor/ícone com a paleta do tema atual e deixa todos
+com semi-transparência habilitada, sem nenhum desvio condicional —
+puro setup de recursos gráficos na inicialização do widget, coerente
+com o padrão `init()` já documentado nas seções 225/253.
+`iOS_CMenuTouchSaveLoad::initPacket()` tem exatamente o mesmo catálogo
+de 11 `bl` (mesmos endereços, mesmas contagens) e 100% de cobertura —
+`family_sim.py` confirma Jaccard 1,00. Ou seja, a variante "save/load"
+não tem um `initPacket` próprio de verdade: é a mesma rotina de setup
+de cursor/clut da classe base, compilada numa segunda cópia de código.
+Reforça a hipótese de que `iOS_CMenuTouchSaveLoad` é uma especialização
+leve de `iOS_CMenuTouch` (dados extras pra tela de save/load, mas a
+infraestrutura visual do cursor é idêntica). `iOS_CMenuTouch::initPacket`
+marcada `read_structural`; `iOS_CMenuTouchSaveLoad::initPacket` marcada
+`read_structural` por `CONFIRMED-BY-SIMILARITY` (Jaccard 1,00, sem
+leitura própria).
+
+**Referências cruzadas:** seções 225-226 (`execTap`/`execPress` da
+classe base), seção 253 (`exec` dispatcher), seção 364 (resto da
+classe `SaveLoad`, fork irmão desta mesma fila).
+
+## 364. `iOS_CMenuTouchSaveLoad::execPress`/`execTap`/`setMenuAssistPosition`/`drawMenuAssist` - a variante save/load NÃO faz hit-test por item, calcula o slot direto por divisão (arquitetura diferente da classe-base) (2026-10-23, Fase 3, trigésimo quarto lote)
+
+Fecha o restante da classe `iOS_CMenuTouchSaveLoad` (membros triviais
+já fechados na seção 359, `initPacket` na seção 363). `jtable.py` nas
+4 funções: cobertura 100% nas 4, zero tabela de salto. `execPress(int*,
+int*, IOS_MENU_TOUCH_SAVELOAD_RESULT*)` (916B, 21 branches/12 de
+retrocesso) chama só `iOS_getTouchNowX`/`iOS_getTouchNowY`/
+`iOS_isInGameArea`/`__divsi3`. `execTap(IOS_MENU_TOUCH_SAVELOAD_RESULT*,
+int*, int*)` (348B, 11 branches/5 de retrocesso) chama
+`iOS_IsEnableMenuItemTouch` (×2), `iOS_getTouchPress`,
+`iOS_getTouchBeginX`/`iOS_getTouchBeginY` (×2 cada). Isto é
+estruturalmente muito diferente do par equivalente da classe-base
+`iOS_CMenuTouch` (seções 225-226: `execTap`/`execPress`, que chamam os
+próprios métodos geométricos `isInRect`/`isCanUp`/`isCanDown`/
+`isInAssist`/`isInMenu` pra testar retângulo por retângulo) — a
+variante `SaveLoad` **não chama `isInRect` nem `isInAssist` em
+nenhum dos dois métodos**, apesar de a classe ter esses métodos (já
+catalogados como boilerplate puro na seção 359). Em vez de testar cada
+slot de save contra um retângulo individual, usa `__divsi3` (divisão
+inteira de software) sobre a coordenada de toque pra calcular DIRETO o
+índice de slot/linha numa grade uniforme — hipótese de alta confiança:
+a tela de save/load é uma lista/grade regular de slots de tamanho
+fixo, então dá pra ir direto de coordenada Y pra índice via divisão,
+sem iterar item por item como a classe genérica faz.
+`setMenuAssistPosition(int)` (528B, 100%, 0 `bl`, só 1 branch de
+retrocesso) é aritmética pura — calcula a posição de um overlay de
+"assistência" (provável seta/indicador de destino de arrasto) a partir
+do índice passado. `drawMenuAssist(int, long*)` (440B, 100%, só 1
+`bl` — chama `setMenuAssistPosition` uma vez, 0 branches de
+retrocesso) delega o cálculo de posição e, pelas ~400B restantes sem
+nenhuma outra chamada, deve montar o pacote de primitiva do indicador
+visual inline (escrita direta de campos) em vez de chamar uma rotina
+de desenho dedicada. Todas as 4 marcadas `read_structural` (cobertura
+100%, zero ambiguidade de fluxo; a semântica exata do layout do
+indicador em `drawMenuAssist` fica como hipótese razoável, não
+confirmada campo a campo).
+
+**Referências cruzadas:** seções 225-226 (arquitetura-base com
+hit-test por retângulo, contrastada aqui), seção 253 (`exec`
+dispatcher — hipótese de que `iOS_CMenuTouchSaveLoad::exec`, ainda
+`mentioned_unverified`, despacha do mesmo jeito pra `execTap`/
+`execPress`), seção 42 (`CardAccess`, onde esta classe já foi
+identificada como o widget real da tela de save/load — confirma a
+hipótese da grade uniforme de slots), seção 363 (`initPacket` da
+mesma classe, fork irmão desta fila).
+
+## 365. `vOpn_arzmes_main()`/`ctlbrst_menu_set()`/`ctlwork_init()`/`ctlkiroku_init()`/`ctlkiroku_main(CTLINFO*)`/`ctlkiromes_init(int)` - fecham quatro follow-ups explícitos deixados em aberto nas seções 312 e sobre a família `vOpn_arzmes`/`ctlbrst` (2026-10-23, Fase 3, trigésimo quinto lote)
+
+**`vOpn_arzmes_main()`** (`0x241ee0`, 904 B) — alvo explicitamente
+citado como "próximo alvo natural de follow-up" na nota sobre
+`pmkprim_put` (lote anterior). `jtable.py`: **98% de cobertura**
+(221/226), zero tabela de salto, 29 branches/12 de retrocesso.
+Chama `pmkprim_put(int)` ×3 (confirma a hipótese: a janela de
+mensagem "arzmes" monta a primitiva de fade a cada frame), além de
+`vOpn_arzpic_init`/`vOpn_arzpic_main` (irmãos "arzpic" — a imagem
+que acompanha a mensagem), `vOpn_loadwait()`, `CFFT_STATE::
+GetParam(int)` ×2, e a família de toque `iOS_getTouchTap`/
+`iOS_getV2Icon`/`iOS_setV2Icon`. Confirma que a janela de mensagem
+"arz" tem *input* de toque (provavelmente avançar texto/pular) além
+do fade visual. Marcada `read_structural`.
+
+**`ctlbrst_menu_set()`** (`0x24c554`, 840 B) — fecha a referência da
+seção 312 ("`ctlbrst_init` chama `ctlbrst_menu_set` diretamente, logo
+tem menu com opções", ainda não lida). `jtable.py`: **97% de
+cobertura** (204/210), zero tabela de salto, 11 branches/7 de
+retrocesso. Único `bl`: **`Wread_eventflag(int)`** ×6 — a função
+monta as opções do menu "brst"/Zodíaco consultando 6 flags de evento
+distintas (ou a mesma flag 6 vezes com índices diferentes), sem
+nenhuma chamada de desenho/janela própria — é pura lógica de
+habilitação de opções, delegando o desenho pra quem a chama
+(`ctlbrst_init`). Marcada `read_structural`.
+
+**`ctlwork_init()`** (`0x250440`, 912 B) — fecha outro dos 8
+sub-controladores citados no hub da seção 312 (`ctlbrst_main`
+transiciona pra `ctlwork_init` entre outros). `jtable.py`: **95% de
+cobertura** (217/228), zero tabela de salto, 5 branches/3 de
+retrocesso. Chama `add_anmpac`/`add_winpac` (registro de pacote de
+animação/janela, mesmo par visto em `ctlworking_init`, seção 216),
+`wldwin_set`/`wldwin_trans`/`wldmess_put` (janela modal padrão com
+transição e texto) e `Wread_eventflag`. Estruturalmente é um init de
+tela modal simples — confirma que "work" aqui é outro item de menu
+do hub `ctlbrst_main` (provavelmente "trabalho"/side-job), não
+relacionado ao indicador de "trabalhando" (`ctlworking_*`, família
+distinta apesar do nome parecido). Marcada `read_structural`.
+
+**`ctlkiroku_init()`** (`0x24d964`, 808 B), **`ctlkiroku_main
+(CTLINFO*)`** (`0x24de6c`, 652 B) e **`ctlkiromes_init(int)`**
+(`0x24dcd8`, 404 B) — terceiro sub-controlador do mesmo hub
+(`ctlkiroku_init`, "kiroku" = 記録/registro/histórico). `ctlkiroku_
+init`: `jtable.py` resolve **1 tabela de salto real** (guarda em
+`0x24d9ac`, dispatch em `0x24d9b0`, 64 casos → 2 handlers distintos,
+`0x24dab8`/`0x24dc28`). Nota de ferramenta: a métrica de cobertura
+bruta deu só 62% (126/202), mas inspeção direta dos bytes em
+`0x24d9b0..0x24dab4` mostra que os "64 casos" não são uma tabela de
+dados de endereços — são **64 instruções `b` individuais** (cada uma
+`ea0000XX`, opcode de branch incondicional ARM), ou seja, a tabela
+inteira já É código real e resolvido, só que o denominador de
+cobertura do `jtable.py` não soma essas 64 instruções à contagem de
+"instruções cobertas" por serem geradas via resolução de tabela e
+não via descida recursiva direta. Semanticamente a função está 100%
+resolvida (0 ambiguidade, 2 destinos distintos, ambos dentro do
+range). Chama `defscrwin_set`/`curhis_put` (janela de histórico +
+registro no histórico atual) e `Wsend_taskparamater`. `ctlkiroku_
+main`: 92% de cobertura, zero tabela de salto, chama `ctlkiroku_
+deactive`/`ctlkiromes_init` (a si mesmo, confirma a tríade init/
+main/deactive), `wldctl_active`, `ctlhelp_init`, `sound_request` ×2,
+`curhis_get`/`curhis_clr`. `ctlkiromes_init`: 92% de cobertura, zero
+tabela de salto, chama `wldmes_load(int)` (carrega texto/mensagem de
+histórico) e `Wsend_taskparamater`. Confirma a família completa:
+"kiroku" é a tela de histórico/registro (provavelmente histórico de
+batalhas ou eventos da história), com seu próprio sub-estado de
+mensagem (`kiromes`). Todas as três marcadas `read_structural`
+(a nota de cobertura de `ctlkiroku_init` é um artefato de métrica da
+ferramenta, não uma lacuna real de análise, e documentada aqui pra
+referência futura caso outras funções com tabela de salto via `b`
+individuais em vez de tabela de dados mostrem o mesmo padrão).
+
+**Referências cruzadas:** seção 312 (`ctlbrst_init`, deixa os 8
+sub-controladores do hub "brst"/Zodíaco como alvo — `ctlwork_init`,
+`ctlkiroku_init` e `ctlbrst_menu_set` fecham 3 dessas pendências;
+restam `ctlperson_init`, `ctlopt_init`, `ctlhelp_init` (já lida em
+outro contexto), `ctlhistory_init`, `ctltresure_init`, `ctlunreg_init`
+como pendências), seção 216 (`ctlworking_init`, família "trabalhando"
+distinta de `ctlwork_init` apesar do nome parecido), nota anterior
+sobre `pmkprim_put`/família `vOpn_arzmes` (fecha o follow-up direto).
+
+## 366. `mouke_okng(CTLINFO*)` — overlay OK/NG do roster "mouke", espelha o padrão já confirmado em `ctlhakenokng_main` (seção 343) (2026-10-23, Fase 3, trigésimo quinto lote)
+
+`mouke_okng(CTLINFO*)` (`0x260ce8`, 912 B) — `jtable.py`: **95% de
+cobertura** (217/228), zero tabela de salto, 12 `bl` distintos, 25
+branches/10 de retrocesso. Catálogo: `Wread_eventflag`,
+`Wsend_taskparamater`, `get_unitwork_add_wld(int)`, `ctlmouke_init()`
+(reentrada no controller irmão "roster", seção 167),
+`iOS_add_anmpac_max(int)`, `sound_request(int)`,
+`iOS_CMenuTouch::setDispAssist(int)`, `iOS_clearOkNg()` (mesmo
+teardown usado em `ctlhakenokng_main`), `pspJobIsSpecialJob(int)`,
+`iOS_getTouchTap()`, `iOS_getV2Icon`/`iOS_setV2Icon`. O nome "okng"
+(OK/NG) combinado com esse catálogo reproduz quase exatamente o
+padrão da seção 343 (`ctlhakenokng_main`, overlay modal Sim/Não do
+despacho "haken", que converge de volta pra `ctlmouke_init()`/
+`iOS_clearOkNg()`): é o overlay de confirmação de uma ação dentro do
+próprio controller de roster "mouke" (ex.: confirmar/cancelar
+seleção, remoção ou atribuição de unidade), não o controller do
+roster em si. `pspJobIsSpecialJob` sugere bloqueio da ação para
+unidades de job especial (personagens story-locked); `get_unitwork_
+add_wld` indica que a unidade-alvo já está resolvida antes da
+decisão. Marcada `read_structural`.
+
+## 367. `CheckPoleResult(int,int,int,int,int)` — verificação de resultado de ataque em linha com arma de alcance, combina validade de coordenada e diferença de altura (2026-10-23, Fase 3, trigésimo quinto lote)
+
+`CheckPoleResult(int,int,int,int,int)` (`0x1e2b78`, 900 B) —
+`jtable.py`: **99% de cobertura** (222/225), zero tabela de salto, 22
+branches/12 de retrocesso (laço pequeno, 2-3 iterações). Apenas 2
+`bl` distintos, ambos reusados de famílias de combate já confirmadas:
+**`get_unit_height(int)`** ×5 (já visto na seção 95, `getskilleffect`
+— diferença de altura entre atacante e alvo entra no cálculo de
+efeito) e **`check_coord(int,int,int)`** ×3 (já visto na seção 151,
+`getskillresult_main` — resolução/validação de coordenada de tile
+pra alvejamento). A combinação repetida coordenada+altura sem
+nenhuma chamada externa é consistente com validar o alcance de uma
+arma tipo lança/vara (polearm), que no FFT pode atingir um tile
+adicional na mesma direção do alvo principal se a geometria
+permitir. Os 5 argumentos int são compatíveis com coordenadas de
+origem/destino (x, y, altura) mais um ID de unidade ou flag de
+direção — não confirmado byte a byte. Marcada `read_full` (critério
+automático satisfeito: 99% cobertura, 0 jump tables).
+
+## 368. `barmenu_reset(CTLINFO*)` — rotina de reset/encerramento do menu de barra do world map (2026-10-23, Fase 3, trigésimo quinto lote)
+
+`barmenu_reset(CTLINFO*)` (`0x24b09c`, 900 B) — `jtable.py`: **96% de
+cobertura** (215/225), zero tabela de salto, 11 branches/6 de
+retrocesso. 7 `bl` distintos: `Wread_eventflag`, `endevent_count(int)`
+×2, `wldwin_set`/`wldwin_trans`/`wldmess_put` (janela modal padrão do
+world map), `pspWorldDisableFlg(PSP_WORLD_FLG)` ×2, `pspWorldCheckFlg
+(PSP_WORLD_FLG)` ×2. Apesar do nome parecido, não pertence à família
+`ctlbrst_*` (hub Zodíaco, seções 125/312) — grep por "barmenu" não
+retorna nenhuma outra ocorrência nas notas, então "bar menu" aqui é
+uma família própria ainda não catalogada em outro lugar. Padrão de
+chamadas consistente com: checar/limpar flags de estado do world map,
+fechar a transição visual da janela e zerar a mensagem exibida, e
+resetar o contador de eventos pendentes após ler o flag atual —
+contraparte de desativação/limpeza de estado pro controller do menu
+de barra, análoga em papel a `ctlbrst_deactive` mas de família
+diferente. Marcada `read_structural` (os 4% não cobertos não foram
+inspecionados instrução a instrução, mas critério automático de
+≥95%+0 jump tables está satisfeito).
+
+**Referências cruzadas (seções 366-368):** seção 167/343
+(`ctlmouke_init`/`ctlhakenokng_main`, padrão OK/NG espelhado por
+`mouke_okng`), seções 95/151 (`get_unit_height`/`check_coord`, reuso
+confirmado em `CheckPoleResult`), seções 125/312 (`ctlbrst_*`,
+família distinta de `barmenu_reset` apesar do nome parecido).
+
+## 369. `iOSexecuteMoveProcs(tag_animation*)` — interpretador de opcodes de movimento do sistema de animação, cobertura abaixo do limiar automático (2026-10-23, Fase 3, trigésimo quinto lote)
+
+`iOSexecuteMoveProcs(tag_animation*)` (`0x20023c`, 896 B) —
+`jtable.py`: **72% de cobertura** (161/224), **abaixo do limiar de
+95%** de aceitação automática — lacuna real (~28%), não artefato de
+métrica como na seção 365. **1 tabela de salto resolvida**: guarda
+`cmp@0x200270`, dispatch `@0x200274`, **60 casos → 14 handlers
+distintos**. 26 branches/16 de retrocesso (densidade de laço alta,
+compatível com processamento por quadro dentro de cada handler).
+
+16 `bl` distintos: `changeAnimation(int,int,tag_animation*)` (troca
+de animação a partir do move-proc atual), `rideOffChokoboS
+(tag_animation*)`/`rideOffChokobo(tag_animation*)` (handlers de
+monta/desmonta de chocobo dentro do switch), `callAnimationSound
+(tag_animation*,int)` (já catalogada na seção 82), e 10 `sub_*` sem
+símbolo dinâmico (0x1faad8, 0x1facfc, 0x1fb3f8, 0x1fb9e8, 0x1fc8cc,
+0x1fc980, 0x1fcbfc, 0x1fccf8, 0x1fed24, 0x1ff768, 0x1ff858,
+0x1ffb50) — cada um com peso ×1, compatível com um handler por caso
+do switch.
+
+**Hipótese de semântica**: interpretador de "procedimentos de
+movimento" do sistema de animação — switch de 60 opcodes/14 blocos
+resolvendo passos de movimento de uma `tag_animation*`
+(deslocamento, montar/desmontar chocobo, troca de animação, som).
+Estruturalmente é irmã de `executeShape` (seção 82, interpretador de
+forma) e `executeAnimationStatus` (seção 193, máquina de estado de
+física/altura) — as três parecem formar a camada de "micro-VMs" de
+opcode do sistema de animação (forma / movimento / status físico),
+provavelmente chamadas a partir de `executeAnimationProgram` (ver
+seção 82). Nenhuma menção prévia a "MoveProc" nas notas — função
+nova nesse mapeamento.
+
+**Marcada `read_structural`, não `read_full`** — critério objetivo
+não satisfeito (cobertura 72% < 95%, apesar da tabela de salto estar
+totalmente resolvida). Pendência honesta: nova passada dirigida aos
+14 endereços de handler antes de promover pra leitura completa, e
+nomear os `sub_*` restantes cruzando com handlers já identificados em
+`executeShape`/`executeAnimationStatus`.
+
+**Referências cruzadas:** seção 82 (`executeShape`/
+`executeAnimationProgram`), seção 193 (`executeAnimationStatus`).
+
+## 370. `initializeDamageNumber(tag_animation*)` — o corpo real contradiz o nome do símbolo: monta flags de status/ícone de condição, não dígitos de número de dano (2026-10-23, Fase 3, trigésimo quinto lote)
+
+`initializeDamageNumber(tag_animation*)` (`0x1ee278`, 900 B) — a
+hipótese inicial era que esta função preparasse a estrutura que
+`drawDamage` (seção 212) desenha, já que está imediatamente antes
+dela no binário. A leitura **não confirma essa hipótese**.
+
+`jtable.py`: **~100% de cobertura** (224/225), zero tabela de salto,
+35 branches/17 de retrocesso (laço real no meio da função). Achado
+atípico: **zero `bl`** — a função é inteiramente local, sem chamar
+nada, logo impossível cruzar contra `.dynsym`/catálogo de chamadas
+como nas demais entradas. Por isso esta função recebeu leitura
+manual instrução a instrução (dump via capstone, já que `jtable.py`/
+`struct_pass.py` só emitem o resumo) cobrindo as 225 instruções, não
+apenas o resumo automático.
+
+**O que o corpo faz de fato** (`r0` = `tag_animation*`, `r1 =
+*(r0+0x134)` = sub-struct de status/condição do personagem):
+1. Escreve `0x1f` (31) no halfword `+4` de 3 ponteiros em
+   `r0+0x2cc/0x2d0/0x2d4` — provável inicialização de altura/Y de 3
+   sub-objetos (ícones), não dígitos.
+2. Testa `r1+0x1ae`: se zero, dispara um switch sobre a categoria em
+   `r1+0x1b0` (valores 1/2/3/7/0xb/0xd) que liga bits específicos em
+   `r0+0x1c0` (`0x400000`/`0x800000`/`0x100000`/`0x1000000`/
+   `0x200000`) — padrão que lembra desfechos de eliminação de
+   unidade (cristal/tesouro/fuga), não dano.
+3. Se `r1+0x1ae != 0`: traduz bits de `r1+0x1d5`
+   (`0x80/0x40/0x20/0x10/0x1`) em bits 0-3 de `r0+0x1c0`; se o bit0
+   estiver ligado, examina 6 bytes sequenciais em `r1+0x1c2..0x1c7`
+   e liga pares de bits altos — padrão de flagword de
+   fraqueza/absorção/resistência elemental empacotado para exibição.
+4. Se o bit `0x8` de `r1+0x1d5` estiver ligado, entra num laço
+   (0x1ee490→0x1ee580) que percorre uma tabela embutida de ~3
+   entradas de 8 bytes (base PC-relativa) comparando contra máscaras
+   tiradas de `r1+0x1ac`, selecionando qual ícone escrever num array
+   em `r0+...+0x1c4` e incrementando um contador em `r0+0x1bd` —
+   seleção/montagem de **lista de ícones de status** (veneno/sono/
+   petrificação etc.), com supressões condicionais via
+   `r1+0x1cb`/`r1+0x1cc`/`r1+0x1d0`.
+5. Saídas: `bx lr` direto em `0x1ee444`, ou um **tail-call** (`pop`;
+   `b 0x1e7ddc`, não `bl`) em `0x1ee590-0x1ee594` — a função não
+   retorna ao chamador, pula direto pra `0x1e7ddc`, que continua a
+   lógica (não explorado nesta passada).
+
+**Relação com a seção 212 (`drawDamage`)**: nenhuma ligação real
+encontrada — sem `bl` entre as duas, sem proximidade de endereço
+contígua (há um hiato de ~272 B entre o fim do corpo coberto e
+`drawDamage`, provável pool de literais), e o conteúdo é construção
+de flags de status/seleção de ícones, não lógica de dígito/paleta de
+número de dano. **O nome do símbolo (`initializeDamageNumber`, do
+`.dynsym` real, não um chute nosso) não corresponde ao que o corpo
+faz** — hipótese de reconciliação mais plausível: no FFT original, o
+popup de dano por cima da unidade às vezes vem acompanhado de um
+ícone pequeno de status recém-aplicado (veneno, sono etc.) junto do
+número — então esta função pode ser a parte "ícone de status" desse
+mesmo popup combinado, e o nome do símbolo reflete o conceito mais
+amplo do popup (`DamageNumber` como entidade visual completa), não
+literalmente os dígitos. Alternativa mais fria: o símbolo pode estar
+associado ao endereço errado por desalinhamento de atribuição no
+`.dynsym` — não descartada, mas sem evidência direta. Nomes de campo
+de `r1` (offsets 0x1ac-0x1d5) são inferidos pelo padrão de bits, não
+confirmados por struct conhecida.
+
+**Marcada `read_full`** — cobertura ~100%, zero tabela de salto, e
+(diferente da maioria das entradas `read_structural` do lote, que só
+aceitam o resumo do `jtable.py`) leitura manual completa das 225
+instruções com fluxo de controle totalmente reconstruído. Pendência
+honesta: destino do tail-call (`0x1e7ddc`) não explorado; nomes de
+campo de `r1` são hipótese, não confirmação por símbolo/struct.
+
+**Referências cruzadas:** seção 212 (`drawDamage`, hipótese de
+ligação direta não confirmada — função vizinha mas sem call entre
+elas).
+
+## 371. `ctlunreg_init()`/`ctlunreg_main(CTLINFO*)`/`ctlunreg_active(CTLINFO*)`/`ctlunreg_deactive(CTLINFO*)`/`ctlunregmes_init(int)`/`ctlunregmes_main(CTLINFO*)` — fecham o último dos 8 sub-controladores pendentes da seção 312 (2026-10-23, Fase 3, trigésimo sexto lote)
+
+Fecha a última pendência explícita da seção 312 (`ctlbrst_init`,
+hub de 8 sub-controladores: restavam `ctlperson_init`, `ctlopt_init`,
+`ctlhistory_init`, `ctltresure_init`, `ctlunreg_init` — este lote fecha
+`ctlunreg_init` e toda a família "unreg" junto). `jtable.py` nas 6
+funções:
+
+- **`ctlunreg_init()`** (`0x26ef3c`, 308 B, 91% cob., 0 tabela): 4
+  `bl` — `Wread_eventflag`, `Wsend_taskparamater`, `defscrwin_set`
+  (janela de histórico), `curhis_put` — mesmo padrão de init simples
+  visto em `ctlkiroku_init` (seção 365).
+- **`ctlunreg_main(CTLINFO*)`** (`0x26f308`, 484 B, 93% cob., 0
+  tabela): 7 `bl` — `Wtask_status`/`Wsend_taskparamater`,
+  `wldctl_active`, `sound_request` ×2, `ctlunreg_deactive` (a si
+  mesmo), `curhis_get`/`curhis_clr`.
+- **`ctlunreg_active`** (`0x26f070`, 52 B, 92% cob.) e **`ctlunreg_
+  deactive`** (`0x26f0a4`, 24 B, 83% cob.): ambas 0 `bl`,
+  boilerplate puro de transição de estado (set/clear de flag),
+  tamanho condizente com a métrica de boilerplate do projeto.
+- **`ctlunregmes_init(int)`** (`0x26f0bc`, 588 B, 92% cob., 0
+  tabela): 6 `bl` — `Wsend_taskparamater`, `sun_to_ivarisday`/
+  `wld_dayread` (conversão de data do calendário "Ivalice", já
+  catalogadas em contexto de calendário do world map), `pic_load`,
+  `add_winpac`, `pagewin_init(PAGEWININFO*)`.
+- **`ctlunregmes_main(CTLINFO*)`** (`0x26f4ec`, 836 B, 95% cob., 0
+  tabela): 8 `bl` — `sound_request`, `ctlunreg_init()` (re-entrada no
+  controller pai, confirma a tríade), `wldpicwin_set`,
+  `pagewin_main(PAGEWININFO*)`, `LoadClut`/`LoadTPage`/`GsGetTimInfo`
+  (carga de imagem + paleta), `iOS_getTouchTap`.
+
+Confirma a família completa no mesmo padrão já visto em `ctlkiroku`/
+`ctlkiromes` (seção 365): "unreg" é o controller principal (um menu/
+tela com histórico), delegando pra um sub-estado de mensagem/imagem
+"unregmes" que usa o framework `pagewin_*` (`PAGEWININFO`, outro
+candidato de leitura — `iOSpagewin_main` segue na fila de alvos) pra
+exibir conteúdo paginado com data do calendário Ivalice. Hipótese:
+"unreg" pode ser "un-registered"/registro de algo ainda não
+catalogado no jogo (ex. bestiário incompleto, ou histórico de
+eventos não lidos) — não confirmado por falta de string/label
+associada nesta passada. Todas as seis marcadas `read_structural`.
+
+## 372. `ctlbirthokng_init()`/`ctlbirthokng_main(CTLINFO*)` — par OK/NG do diálogo de aniversário, mesmo padrão de `mouke_okng`/`ctlhakenokng_main` (2026-10-23, Fase 3, trigésimo sexto lote)
+
+Fecha o par `ctlbirthokng_init`/`_main`, já citado de passagem na
+seção sobre `ctlbirthday_main` (seção 347: "`ctlbirthday_main` chama
+`ctlbirthokng_init()` uma vez ao terminar a entrada [de diálogo],
+provável confirmação"). `ctlbirthokng_init()` (`0x247dc8`, 236 B, 88%
+cob., 0 tabela): 3 `bl` — `vOpn_add_anmpac`/`vOpn_add_winpac`
+(registro de pacote animação/janela da variante "vOpn", família de
+telas de evento do world map), `iOS_setV2Icon`. `ctlbirthokng_main
+(CTLINFO*)` (`0x248274`, 804 B, 95% cob., 0 tabela): **15 `bl`
+distintos** — `Wwrite_eventflag` ×2, `get_unitwork_add(int)`,
+`fadeMusic`/`stopMusic`/`callSystemSound` ×2 (áudio), `ctlopenmov_
+init` (dispara uma cutscene!), `ctlbirthday_active` (retorno ao
+controller pai), `vOpn_fadeout`/`vOpn_sun2ivaday`/`vOpn_month2day`
+(conversão de data — confirma que aniversário usa o mesmo sistema de
+calendário Ivalice visto em `ctlunregmes_init`), `iOS_ClearRectHitAll`
+×2, `iOS_setMask`, `iOS_clearOkNg()` ×2 (mesmo teardown de
+`mouke_okng`/`ctlhakenokng_main`), `iOS_getV2Icon`/`iOS_setV2Icon` ×6.
+
+Confirma com alta confiança o terceiro membro da família de overlays
+OK/NG já estabelecida (`ctlhakenokng_main`, seção 343; `mouke_okng`,
+seção 366): aqui é a confirmação de "hoje é aniversário de X" —
+`get_unitwork_add` resolve a unidade, `vOpn_month2day`/`sun2ivaday`
+calculam a data, e a resposta OK dispara `ctlopenmov_init` (uma
+cutscene/animação especial de celebração) antes de voltar pro fluxo
+normal via `ctlbirthday_active`. Ambas marcadas `read_structural`.
+
+## 373. `GetShopItemList(short,short,short,short*,int)` — primitiva de inventário de loja, reusada por pelo menos 5 telas já catalogadas (2026-10-23, Fase 3, trigésimo sexto lote)
+
+`GetShopItemList(short,short,short,short*,int)` (`0x1aa6b0`, 884 B)
+— referenciada direta ou indiretamente em pelo menos 5 seções
+anteriores (`PoachBuy`-like, `BuyUnit`, telas de equipar/loja — ver
+grep) sem nunca ter sido lida. `jtable.py`: **99% de cobertura**
+(218/221), zero tabela de salto, 33 branches/19 de retrocesso (laço
+denso, compatível com filtrar/montar uma lista por categoria). 6
+`bl` distintos: `Wread_eventflag`, **`ChgShopStockItem(short,int)`**
+×2 (também vista em contexto de preço/estoque), **`GetItemCategory
+(short)`** ×4, **`ItemSort(int,short*)`**, **`IsAbleEquip(short,
+short)`** ×2, `pspItemGetCommonData` ×2. Confirma ser a rotina real
+que monta a lista de itens disponíveis numa loja: itera o catálogo,
+filtra por categoria (`GetItemCategory`), valida equipabilidade por
+unidade (`IsAbleEquip`) e ordena o resultado (`ItemSort`) — a
+contraparte "venda" de `GetItemList` (inventário possuído, já citada
+em contraste na seção da variante "tentar"/PoachBuy). Marcada
+`read_structural`.
+
+## 374. `iOS_CMenuTouch::setMenuAssistPosition(int)` — versão da classe-base, pura aritmética como a variante SaveLoad mas maior (geometria por item, não por grade) (2026-10-23, Fase 3, trigésimo sexto lote)
+
+`iOS_CMenuTouch::setMenuAssistPosition(int)` (`0x27bd18`, 876 B) —
+contraparte da classe-base pro método já lido na variante `SaveLoad`
+(seção 364, 528 B, 0 `bl`). `jtable.py`: **99% de cobertura** (217/
+219), zero tabela de salto, **zero `bl`** (igual à variante SaveLoad
+— confirma que ambas são aritmética pura, sem delegar a nenhuma
+rotina de desenho), 10 branches/5 de retrocesso. É maior que a
+versão SaveLoad (876 B vs 528 B) com mais branches — consistente com
+a arquitetura já diferenciada na seção 364: a classe-base calcula
+posição por item individual (provavelmente iterando/selecionando
+entre múltiplos retângulos de item com casos de borda por índice),
+enquanto a SaveLoad usa divisão direta sobre uma grade uniforme (mais
+simples, menos branches). Marcada `read_structural` (sem `bl` pra
+cruzar contra outras seções, semântica exata do layout seria preciso
+leitura manual campo a campo — não feita nesta passada).
+
+## 375. `Name(unsigned char*, short*)` — cobertura abaixo do limiar, vizinha direta de `GlobalName` no binário (2026-10-23, Fase 3, trigésimo sexto lote)
+
+`Name(unsigned char*, short*)` (`0x1a1450`, 920 B) — termina exatamente
+onde `GlobalName(unsigned char*, unsigned char*)` (seção 84, `0x1a17e8`)
+começa, sugerindo papel relacionado (possivelmente a versão "local"/
+dentro de um menu específico do mesmo widget de nomear unidade, vs. a
+versão "global"). `jtable.py`: **65% de cobertura** (149/230),
+**abaixo do limiar de 95%** — lacuna real, não aceita automaticamente.
+Zero tabela de salto resolvida (não necessariamente ausente — pode
+haver uma não resolvida dentro da lacuna de 35%). 12 `bl` distintos,
+incluindo 3 locais sem símbolo (`sub_19fb24` ×3, `sub_19feb8`,
+`sub_1a05f0`) e os já conhecidos `unit_isdark`, `iOS_SetScrollNameFunc`
+(confirma ser o mesmo widget de rolagem de letras da seção 84),
+`LoadImage_menuData`, `iOS_ClearRectHitAll`, `GuEmu_SetLineInterval`
+×2, `iOS_getTouchPress`, `iOS_getV2Icon`, `iOS_setV2Icon` ×15 (uso
+intenso de ícones — tela complexa). **Marcada `read_structural` com
+cobertura parcial, pendência honesta**: os 35% restantes (prováveis
+sub-rotinas dos 3 `sub_*` locais ou uma tabela de salto não detectada)
+ficam como alvo de uma passada dirigida futura — a semântica "local
+vs. global" do nome não foi confirmada.
+
+**Referências cruzadas (seções 371-375):** seção 312 (`ctlbrst_init`,
+hub agora com todos os 8 sub-controladores fechados), seção 347
+(`ctlbirthday_main`, referência direta a `ctlbirthokng_init`), seções
+343/366 (`ctlhakenokng_main`/`mouke_okng`, família OK/NG), seção 364
+(`setMenuAssistPosition` SaveLoad, contraste com a versão base),
+seção 84 (`GlobalName`, vizinha de `Name`).
+
+## 376. `mainLoop()` — achado arquitetural: NÃO é o tick de frame, é o dispatcher central de transição entre modos do jogo (2026-10-23, Fase 3, trigésimo sétimo lote)
+
+`mainLoop()` (`0x215db8`, 828 B) — `jtable.py`: **97% de cobertura**
+(200/207), zero tabela de salto, 31 branches/15 de retrocesso. 26
+`bl` distintos (1 local sem símbolo, `sub_215d68`, chamado 3×, ~80 B
+antes do início da própria função).
+
+**O nome sugere um loop de frame clássico (input → física/animação
+→ render → áudio por tick); o catálogo de `bl` contradiz essa
+leitura.** Não há polling de input, update de animação por frame, ou
+chamada de render por frame — em vez disso, o padrão é de um
+**dispatcher de transição de alto nível entre estados/modos do
+jogo**: entrada/saída de batalha (`battle()` ×2, `battleFileRead()`
+×2, `iOS_setEnterBattleFlag` ×2), entrada no world map
+(`wldmapEntry`, `iOS_ResumeWorldMap`, `openEntry`/`endEntry`), título
+(`ctlopentitle_main3`), save/autosave (`pspStartSaveCheck`,
+`pspTitleSaveCheck`, `iOS_ResumeByAutoSave`), inicialização de
+recursos ao entrar num modo (`initFileBuffer`, `initializeStaticTexture`,
+`initializeMusicBuffer`, `InitializeHot`/`iOS_InitializeHot2`,
+`LoadImage_menuData`), flags globais (`write_eventflag` ×4,
+`iOS_set_globalgamestartflag` ×5, `iOS_directedit_clear` ×2), áudio
+(`stopAllEffect` ×2), render-state (`CFFT_STATE::SetRenderSize` ×3,
+não desenho em si), e gerenciamento intenso de ícones de UI
+(`iOS_setV2Icon` ×13 — o `bl` mais repetido da função, de longe).
+
+Hipótese: `mainLoop()` é chamada uma vez por mudança de modo/cena
+(possivelmente pelo laço externo real de renderização nativo
+Android/GL, fora do escopo deste `.so`), não o tick de frame
+propriamente dito — o verdadeiro loop de física/render deve estar em
+outra função chamada por fora, ou dentro de um dos alvos despachados
+aqui (`battle()`, `wldmapEntry`, etc.), cada um com seu próprio loop
+interno. Nenhum candidato óbvio de "tick por frame" aparece no
+catálogo de `bl` desta função. Marcada `read_full` (97% ≥95%, 0
+tabelas de salto — critério automático satisfeito); pendência
+honesta: os ~3% não cobertos (~7 slots) e `sub_215d68` não foram
+inspecionados manualmente — vale conferência futura dado o valor
+arquitetural do achado, e um levantamento de xrefs de quem chama
+`mainLoop()` seria o próximo passo natural pra mapear o loop real.
+
+## 377. `MainPoach()` — controlador/orquestrador da feature Poach, aplica a troca de estoque real que `PoachBuy` evita (2026-10-23, Fase 3, trigésimo sétimo lote)
+
+`MainPoach()` (`0x1a2710`, 832 B) — `jtable.py`: **93% de cobertura**
+(193/208), zero tabela de salto, 26 branches/15 de retrocesso. 13
+`bl` distintos: `Wsend_taskparamater` ×4, `SetFrameRate(int)`,
+`Mituryo(short)` (provável 密猟/"caça ilegal" em japonês — reforça
+ser a função-guarda-chuva do sistema Poach), `IsItem(int)`,
+`ChgShopStockItem(short,int)`, `DrawMessage(int,COMRECORD*)`,
+`SetMenuSelSide`, `WindowPositionInit()`, `iOS_AddClearItem()`,
+`pspSaveDataCheckSystemFlg(FFTPSP_SYSTEM_FLG)`, `iOS_getTouchTap`,
+`iOS_getV2Icon`, `iOS_setV2Icon` ×3.
+
+Achado notável: diferente de `PoachBuy()` (seção 201, que
+explicitamente NÃO chama `ChgShopStockItem`/`ItemChg` — só avalia
+upgrade de equipamento sem aplicar), `MainPoach()` chama
+`ChgShopStockItem` diretamente — sugere que `MainPoach` é o nível
+onde a mutação de estoque real é aplicada após a sub-tela de compra
+confirmar a escolha, orquestrando `PoachBuy`/`PoachSell` (seções 201,
+295, 298) via `Wsend_taskparamater` ×4 e efetivando a transação.
+`SetFrameRate`+`WindowPositionInit` sugerem inicialização de uma
+nova cena/janela; `pspSaveDataCheckSystemFlg` provável gate de
+disponibilidade da feature por progresso de save. Marcada
+`read_structural` — critério objetivo não satisfeito (93% < 95%,
+apesar de 0 tabelas de salto); pendência honesta: ~7% não cobertos
+(~15 instruções) não inspecionados manualmente.
+
+## 378. `DrawPermanentShape(PermanentObject*)` — fecha o ciclo de vida do objeto 3D persistente: requestParmanentEffect → createPermanentObject → DrawPermanentShape (2026-10-23, Fase 3, trigésimo sétimo lote)
+
+`DrawPermanentShape(PermanentObject*)` (`0x229dc8`, 844 B) —
+`jtable.py`: **95% de cobertura** (200/211), zero tabela de salto, 1
+branch total, 0 de retrocesso (sem laços). 10 `bl` distintos:
+`iOS_getSkipAddPrim` (flag de otimização iOS/Android),
+`AddPrim` ×3, `SetDrawMode` ×2, `rsin`/`rcos`, `SetRotMatrix` ×2,
+`SetTransMatrix` ×2, `RotTransPers`, `RotTransPers3`, `RotTrans`.
+
+Catálogo é pipeline de desenho GTE/PS1 puro (matriz de
+rotação+translação, transformação em perspectiva, submissão de 3
+primitivas alternando modo de desenho). Fecha o ciclo de vida do
+objeto 3D persistente já mapeado: `requestParmanentEffect`/ASURA
+(seção 82, aciona) → `createPermanentObject` (seção 158, física) →
+`DrawPermanentShape` (esta função, emite geometria na tela) →
+descarte (não catalogado ainda). Marcada `read_structural` —
+critério automático satisfeito (95% ≥95%, 0 tabelas de salto);
+lacuna honesta: ~5% dos slots (provável epílogo/padding) e layout
+exato dos campos de `PermanentObject` consumidos por
+`SetRotMatrix`/`SetTransMatrix` não confirmados.
+
+## 379. `p18_reflecFunc()` — efeito visual de reflexão de magia/ataque, confirma a família `p[NN]_*Func` de efeitos numerados por ID (2026-10-23, Fase 3, trigésimo sétimo lote)
+
+`p18_reflecFunc()` (`0x222e4c`, 868 B) — `jtable.py`: **98% de
+cobertura** (212/217), zero tabela de salto, 13 branches/6 de
+retrocesso. 10 `bl` distintos: `mallocForFile`/`PSX_LoadImage`/
+`freeForFile` (textura própria do efeito), `getAnimationPosition`
+×2/`getAnimationHeight` (ancoragem num objeto animado),
+`dispPolygonObject` (seção 108), `SetPolyGT3` ×2/`SetSemiTrans` ×2
+(primitivo texturizado semi-transparente), `ratan2` ×2/`SquareRoot0`
+(ângulo/distância GTE).
+
+**Achado importante**: o prefixo "p" + número NÃO é painel/contexto
+de tela como se poderia supor — confirma a mesma família de efeitos
+visuais de habilidade já catalogada por ID (`p01_bowFunc` seção 243,
+`p02_hitMarkFunc` seção 266, `p04_magicChantFunc` seção 88,
+`p20_gunFunc` seção 126, `p22_shoukanFunc` seção 244, todas no bloco
+0x21f000-0x224000). O vocabulário de chamadas é consistente com
+`get_reflection_coord(BWORK*,...)`, já visto na cadeia pós-reação de
+batalha (`getreaction_post`, seção 232) — hipótese: é o efeito visual
+(brilho/flash semi-transparente) que acompanha a reflexão de um
+ataque/magia de volta ao atacante. Ligação direta (via `bl` comum)
+com `get_reflection_coord` não confirmada nesta passada. Marcada
+`read_structural` (98% ≥95%, 0 tabelas de salto — seguindo a mesma
+convenção já usada em `p01_bowFunc`/`p22_shoukanFunc`: `read_full`
+fica reservado pra leitura manual instrução-a-instrução via capstone,
+não feita aqui).
+
+## 380. `placeNameStart()` — banner de nome de local ao entrar numa área/mapa, par Start/End confirmado por símbolo real (2026-10-23, Fase 3, trigésimo sétimo lote)
+
+`placeNameStart()` (`0x210384`, 860 B) — símbolo real do `.dynsym`
+(não hipótese): par imediato com **`placeNameEnd()`** (`0x2106e0`,
+640 B, ainda não lida), confirmando Start/End genuíno. `jtable.py`:
+**99% de cobertura** (212/215), zero tabela de salto, 1 branch
+total/1 de retrocesso (candidato a laço de espera de sincronismo).
+18 `bl` distintos, clássico setup PSX/PSYQ já confirmado em outras
+seções (`wldnormal_lop`, seção 11): `SetDefDispEnv`/`SetDefDrawEnv`
+×2 cada, `PutDispEnv`/`PutDrawEnv`, `SetDispMask` ×2, `SetGeomOffset`/
+`SetGeomScreen` (setup de ambiente de display/draw em duplo-buffer),
+`GetTPage`/`GetClut`+`SetPolyF4`+`SetDrawMode`/`SetSemiTrans` ×2
+(primitiva texturizada — a textura do texto do nome), `ClearOTag`/
+`ClearImage`, `AddPrim` ×3, `DrawSync` ×3, `pspOffScreenInit
+(RECT16*,RECT16*)` (par de retângulos origem/destino, compatível com
+transição/slide de uma região da tela), e 1 local sem símbolo
+(`sub_20fa88`).
+
+Hipótese de semântica: o banner clássico de "nome do local"
+(ex. "Igros", "Dorter") que aparece ao entrar numa área/mapa no FFT —
+`placeNameStart` configura o ambiente duplo-buffer, limpa OT e
+framebuffer, monta e insere a primitiva texturizada do texto, e
+sincroniza; `placeNameEnd` (não lida) deve conter a lógica simétrica
+de ocultar/limpar o mesmo banner. Marcada `read_structural` (99%
+≥95%, 0 tabelas de salto); pendências honestas: `sub_20fa88` não
+resolvido, `placeNameEnd()` como próximo alvo natural de follow-up.
+
+**Referências cruzadas (seções 376-380):** seção 82 (`executeShape`/
+ASURA, aciona o ciclo de `DrawPermanentShape`), seção 158
+(`createPermanentObject`), seção 201/295/298 (`PoachBuy`/`PoachSell`,
+orquestrados por `MainPoach`), seções 88/126/243/244/266 (família
+`p[NN]_*Func`), seção 232 (`getreaction_post`/`get_reflection_coord`,
+vocabulário compartilhado com `p18_reflecFunc`), seção 11
+(`wldnormal_lop`, mesmo setup PSX/PSYQ de `placeNameStart`).
+
+## 381. `pagewin_init(PAGEWININFO*)`/`pagewin_main(PAGEWININFO*)`/`iOSpagewin_main(PAGEWININFO*)` — fecham o framework de janela paginada `PAGEWININFO` usado por `ctlunregmes_main` (2026-10-23, Fase 3, trigésimo oitavo lote)
+
+Fecha a referência direta da seção 371 (`ctlunregmes_main` chama
+`pagewin_init`/`pagewin_main` do tipo `PAGEWININFO*`). `jtable.py`
+nas 3 funções:
+
+- **`pagewin_init(PAGEWININFO*)`** (`0x2708fc`, 520 B, 96% cob., 0
+  tabela): 7 `bl` — `Wserchmessagepointer`/`Wcount_words` (já vistos
+  na família de texto, seção 352), `add_anmpac` ×4/`add_winpac`,
+  `pageanmpac_reset` ×4, `pagewinmes_put(PAGEWININFO*,int)`,
+  `__divsi3`. Monta o texto paginado e registra pacotes de UI.
+- **`pagewin_main(PAGEWININFO*)`** (`0x270c90`, 684 B, 96% cob., 0
+  tabela): 9 `bl` — `wldkey_rep` ×2, `iOS_add_anmpac_max`,
+  `sound_request` ×2, `iOSTutoCheck`, `pagewinmes_put` ×3,
+  `pagenext_cursor`/`pageupdown_cursor(PAGEWININFO*)` (navegação de
+  página), `iOS_getTouchTap`/`iOS_getTutorialPad`.
+- **`iOSpagewin_main(PAGEWININFO*)`** (`0x270f3c`, 840 B, 97% cob.,
+  0 tabela): 12 `bl` — mesmo catálogo de `pagewin_main` mais
+  `iOSTutoFlagCheck`/`iOSTutoFlagAdd` (gate de tutorial único-por-
+  flag) e `iOS_getV2Icon`. É a variante com integração touch/
+  tutorial completa — provavelmente a usada nas telas reais do port
+  iOS/Android, enquanto `pagewin_main` é a versão "crua" PSP/PSX.
+
+Confirma: `PAGEWININFO` é um framework genérico de janela com
+páginas de texto navegáveis (próximo/anterior cursor), reusado por
+pelo menos `ctlunregmes_main`/`ctlbirthday_*` (via telas que exibem
+conteúdo longo paginado — históricos, diários, etc.). Todas as três
+marcadas `read_structural`.
+
+## 382. `ctlhaken_init()`/`ctlhaken_main(CTLINFO*)`/`hakenunit_status(int)`/`hakenunit_change(CTLINFO*)` — fecham o restante do cluster "haken" (despacho/alocação de unidade), complementando seções 169/321/343 (2026-10-23, Fase 3, trigésimo oitavo lote)
+
+- **`ctlhaken_init()`** (`0x261078`, 268 B, 87% cob., 0 tabela): 3
+  `bl` — `Wsend_taskparamater`, `valnumwin_set(int,unsigned long,int,
+  _POINT*)` (janela de valor numérico), `iOS_setV2Icon`.
+- **`ctlhaken_main(CTLINFO*)`** (`0x2615cc`, 348 B, 89% cob., 0
+  tabela): 2 `bl` — `Wtask_status`, `sound_request` ×2. Controller
+  simples, delega a maior parte da lógica a sub-telas já catalogadas
+  (`ctlhakenokng_*`, seções 321/343).
+- **`hakenunit_status(int)`** (`0x262a20`, 248 B, 85% cob., 0
+  tabela): 4 `bl` — `Wtask_create`/`Wsend_taskparamater` ×3,
+  **`ctlworkingst_dataset(int)`** (reusa o indicador "trabalhando"
+  rico já visto na seção 339/357!), `pspWorldEnableFlg`. Confirma que
+  a tela de status de despacho mostra um indicador de progresso
+  compartilhado com o sistema de "trabalhando" geral.
+- **`hakenunit_change(CTLINFO*)`** (`0x262708`, 792 B, 95% cob., 0
+  tabela): 9 `bl` — `rewrite_worldscroll`, `iOS_setDispMenuTouch`,
+  `wldkey_rep` ×2, `mouketeam_scrollset`/`mouketeam_unitwin`/
+  `mouketeam_unitface` (a família "mouketeam" — roster do grupo
+  completo, já referenciada em `ctlmouketeam_init`), `sound_request`
+  ×4, `iOS_CMenuTouch::setYLine`/`exec`. É a tela de trocar a unidade
+  designada pro despacho, reusando o widget de roster do time
+  inteiro.
+
+Todas as quatro marcadas `read_structural` (coberturas 85-95%,
+consistentes com a métrica de boilerplate pequeno do projeto, zero
+tabela de salto não resolvida em todas).
+
+## 383. `ctlmouke_init()`/`ctlmouke_main(CTLINFO*)` — fecham o controller de roster "mouke" em si, referenciado por pelo menos 3 outras funções já lidas (2026-10-23, Fase 3, trigésimo oitavo lote)
+
+Fecha o próprio controller de roster já citado como alvo de teardown
+em `hakenunit_status_main` (seção 169), `barmenu_reset`-adjacente e
+`mouke_okng` (seção 366, que reentra via `ctlmouke_init()`).
+`ctlmouke_init()` (`0x25fff8`, 712 B, 93% cob., 0 tabela): 9 `bl` —
+`Wread_eventflag`, `Wsend_taskparamater` ×2, `barmenu_reset` (seção
+368 — confirma a relação direta entre os dois!), `ctlbar_deactive`,
+`wldctl_active`, `mouke_app_chk(int,int)`, `defscrwin_set`/
+`curhis_put`, `iOS_setFaceDataID`. `ctlmouke_main(CTLINFO*)`
+(`0x260574`, 772 B, 94% cob., 0 tabela): 8 `bl` — `Wread_eventflag`,
+`Wtask_status`/`Wsend_taskparamater` ×3, `ctlmouke_deactive`/
+`ctlmouke_exit` (completa a tríade init/main/deactive/exit),
+`sound_request` ×3, `curhis_get`/`curhis_clr`.
+
+Confirma: "mouke" é o controller de tela de roster geral, que
+delega a limpeza de UI pra `barmenu_reset` (seção 368, fecha a
+hipótese "família ainda não catalogada" levantada lá — agora
+catalogada: é chamada por `ctlmouke_init`). Ambas marcadas
+`read_structural`.
+
+## 384. `ctlworkinginf_init(int)` — fecha o par init/main do painel de informação "trabalhando" rico, complementa seção 339 (2026-10-23, Fase 3, trigésimo oitavo lote)
+
+`ctlworkinginf_init(int)` (`0x2514c4`, 776 B) — par de
+`ctlworkinginf_main` (já lida, seção 339). `jtable.py`: **92% de
+cobertura** (179/194), zero tabela de salto, 3 branches/2 de
+retrocesso. 12 `bl` distintos: `Wsend_taskparamater`,
+`iOS_setDispMenuTouch`, `mouke_tbl_get(MOUINFO*,int)` (tabela de
+roster — confirma ligação com a família "mouke"), `add_anmpac`,
+`moukeevtinf_window(CTLINFO*,int,int)` (janela de evento de roster),
+`LoadImage_menuData`, `iOS_CMenuTouch::setDispOffset`/`init` (widget
+de toque completo), `xpLibGetOffset`, `iOS_setV2Icon`, mais 2 locais
+sem símbolo (`sub_2cdfac`, `sub_2cdfbc`). Confirma que o painel de
+informação "trabalhando" tem seu próprio widget de toque dedicado
+(`iOS_CMenuTouch::init` com 8 parâmetros) e consulta diretamente a
+tabela de roster via `mouke_tbl_get` — mais uma ponte entre o
+sistema de despacho/trabalho e o roster "mouke". Marcada
+`read_structural` (92% < 95%, mas 0 tabela de salto não resolvida;
+diferença pequena, pendência honesta sobre os 2 `sub_*` locais e o
+restante não coberto).
+
+## 385. `move_light()`/`Wmove_light()` — par de funções de física de luz/câmera, reusam a biblioteca de matriz GTE compartilhada (2026-10-23, Fase 3, trigésimo oitavo lote)
+
+`move_light()` (`0xdb06c`, 824 B, 97% cob., 0 tabela, 8 branches/5
+de retrocesso) e sua contraparte de task `Wmove_light()` (`0x102b20`,
+756 B, 97% cob., 0 tabela, 4 branches/3 de retrocesso) — par "normal"
+vs. "W" (task cooperativa) já visto em múltiplas famílias do projeto.
+Catálogos quase idênticos (mesmo padrão `copymat`/`Wcopymat`,
+`settaskkind`/`Wsettaskkind`, `task_wait`/`Wtask_wait`,
+`task_killmyself`/`Wtask_killmyself`, `asmGetInput1`/`wasmGetInput1`,
+`ASHURA_SetMatrix`, `RotMatrix`/`MulMatrix`/`ScaleMatrixL`,
+`__divsi3` ×6 ambas); a versão não-W adiciona `CFFT_STATE::GetParam`
+e `iOS_getV2Icon`. "Light" aqui quase certamente não é iluminação de
+cena — é a biblioteca de matriz ASURA (`ASHURA_SetMatrix`/
+`RotMatrix`/`MulMatrix`) aplicada a algum objeto leve/rápido de
+física de câmera ou partícula (hipótese não confirmada por falta de
+cross-reference de quem chama). Ambas marcadas `read_structural`
+(97% ≥95%, 0 tabela de salto — critério automático satisfeito, mas
+sem leitura manual instrução-a-instrução, logo não promovidas a
+`read_full`).
+
+## 386. `vOpn_scrinit(int)`/`vOpn_anim(ANMPAC*, unsigned long*)` — dois novos membros da família "vOpn" de telas de evento do world map (2026-10-23, Fase 3, trigésimo oitavo lote)
+
+`vOpn_scrinit(int)` (`0x248e6c`, 776 B, 97% cob., 0 tabela, 9
+branches/4 de retrocesso): 9 `bl`, todos setup PSX/PSYQ clássico
+(`pspOffScreenInit` ×2, `SetDispMask`/`DrawSync`/`PutDrawEnv`/
+`PutDispEnv`/`ClearImage`/`SetDefDispEnv` ×4/`SetDefDrawEnv` ×4/
+`SetGeomOffset`) — mesmo padrão de inicialização de tela em
+duplo-buffer já visto em `placeNameStart` (seção 380). `vOpn_anim
+(ANMPAC*, unsigned long*)` (`0x24a0ac`, 872 B, 97% cob., 0 tabela, 14
+branches/5 de retrocesso): 6 `bl` — `AddPrim` ×2, `GetTPage`/
+`GetClut`, `SetSprt`, `SetDrawMode`/`SetSemiTrans` — monta e
+submete um sprite texturizado a partir de um `ANMPAC*` (pacote de
+animação, já visto em `add_anmpac`/`add_winpac` por toda a família
+"vOpn"/world map). Juntas, confirmam que `vOpn_scrinit` inicializa a
+tela da janela de evento (análoga a `placeNameStart`) e `vOpn_anim`
+desenha o sprite animado dentro dela — provavelmente a dupla usada
+pelas telas `vOpn_arzmes_*`/`vOpn_arzpic_*` (seção 365) ou por outras
+telas "vOpn" ainda não identificadas. Ambas marcadas `read_structural`.
+
+**Referências cruzadas (seções 381-386):** seção 371
+(`ctlunregmes_main`, referência direta ao framework `PAGEWININFO`),
+seções 169/321/343 (cluster "haken"/`ctlhakenokng_*`, agora
+completo), seção 366 (`mouke_okng`, reentra em `ctlmouke_init` —
+agora fechado), seção 368 (`barmenu_reset`, família agora
+identificada como chamada por `ctlmouke_init`), seção 339
+(`ctlworkinginf_main`, par agora completo), seção 357
+(`ctlworking_main`, mesmo `ctlworkingst_dataset` reusado por
+`hakenunit_status`), seção 365 (família `vOpn_arzmes_*`, possível
+usuária de `vOpn_scrinit`/`vOpn_anim`), seção 380 (`placeNameStart`,
+mesmo padrão de setup PSX/PSYQ de `vOpn_scrinit`).
+
+## 387. `loadCharacterClut(tag_animation*,int,int)`/`roll_xaplay()`/`pspStartSaveCheck()`/`Resume_Init_WORK_MU()`/`ForAbnormalStatus()` — cinco funções novas via forks paralelos, todas com cobertura honesta abaixo ou próxima do limiar automático (2026-10-23, Fase 3, trigésimo nono lote)
+
+**`loadCharacterClut(tag_animation*,int,int)`** (`0x1eef44`, 876 B)
+— `jtable.py`: **84% de cobertura** (184/219), **1 tabela de salto
+resolvida** (4 casos, 4 handlers distintos). 4 `bl`: `read_eventflag`
+×2, `getAnimationHight(tag_animation*)`, `loadClutData(...)`,
+`loadClutDataCalc(...)` ×2 (compare com `loadClutDataCalcPlus`,
+seção 294). Hipótese: dispatcher de 4 vias que escolhe qual rotina
+de paleta aplicar ao personagem, condicionado por estado de
+evento/altura de animação — ponte entre o sistema de animação
+(`tag_animation*`, seções 82/139/192/193/212/369/370) e o sistema de
+paleta/CLUT (seções 48/52/53/68/70). Marcada `read_structural`
+(84% < 95%, apesar da tabela resolvida — lacuna honesta, pode
+esconder um 5º branch ou bloco de `bl` fora de alcance).
+
+**`roll_xaplay()`** (`0x2445cc`, 876 B) — `jtable.py`: **89% de
+cobertura** (195/219), **2 tabelas de salto resolvidas** (10 casos/8
+handlers; 7 casos/5 handlers), 23 branches/17 de retrocesso (loops
+de polling). 9 `bl`: API clássica de CD-ROM PSYQ/BIOS do PS1 —
+`fftCdReset`, `CdControl`/`CdControlF` ×3/`CdStatus`/`CdIntToPos`/
+`CdPosToInt`, `vEnd_CdReady_Chk` ×4 (bate com os loops de
+retrocesso), `vOpn_SetCDVolume` ×2 (provável fade). Nome
+completamente confirmado: "roll" = staff roll/créditos finais (cf.
+`ctlendroll_main`/`vEnd_rollproc`, seção 124), "xaplay" = reprodução
+de áudio XA (streaming de CD-ROM do PS1). É a máquina de estado que
+toca/controla a trilha de CD-XA durante os créditos, acionada pelo
+framework de `ctlendroll_main`. Marcada `read_structural` (89% < 95%,
+mesmo com ambas tabelas resolvidas — lacuna plausivelmente é dado de
+tabela/literal pool, não confirmado byte a byte; nota: `ctlendroll_main`
+em si, seção 124, também ficou em `read_structural` mesmo a 95%, então
+a convenção do projeto pra esta família tende a não promover a
+`read_full` sem leitura manual).
+
+**`pspStartSaveCheck()`** (`0x28a340`, 864 B) — `jtable.py`: **93%
+de cobertura** (201/216), zero tabela de salto, 15 branches/6 de
+retrocesso. 18 `bl` distintos: ciclo de vida do save
+(`pspClearSaveEnv`/`pspSaveInit`/`pspSaveUpdate`/`pspSaveExit`/
+`pspFftSizeCheck`), um mini-loop de render/input próprio
+(`ClearOTag`→`DrawOTag`→`DrawSync`→`VSync`, `pspNetPadRead` no meio,
+`SetDefDispEnv`/`SetDefDrawEnv` ×2/`PutDrawEnv`/`PutDispEnv`,
+`pspOffScreenInit`), `DrawMessage`/`Witemmenu_call`/`worldmap_menuinit`.
+**Confirma e refina a seção 376 (`mainLoop`)**: `mainLoop()` só
+*dispara* o save check num ponto de transição de modo — é esta
+função que contém a lógica real de UI/I-O de save e o loop de
+frame/input associado ao diálogo modal (provável "salvando..."/
+"espaço insuficiente"), reforçando que o "tick de frame verdadeiro"
+vive disperso em funções como esta, não em `mainLoop`. Marcada
+`read_structural` (93% < 95%, 0 tabela de salto).
+
+**`Resume_Init_WORK_MU()`** (`0x216b14`, 804 B) — `jtable.py`: **85%
+de cobertura** (171/201), zero tabela de salto, 5 branches, todos de
+retrocesso (função dominada por um único laço). Único `bl`: um local
+sem símbolo (`sub_714c4`) chamado **13×** — vizinho de endereço
+(16 B antes) de `sub_714b8`, já citado na família de serialização de
+resume `iOS_RESUME_SET_WORK_MU` (seção 105). Hipótese: inicializa/
+zera o bloco `WORK_MU` (provável array de ~13 slots de animação/
+fonte, `BWorkFontID`/`BWorkAnimationID`) chamando um "init por slot"
+repetidamente, complementando `iOS_RESUME_SET_WORK_MU` (que salva,
+não inicializa) no fluxo de retomada de sessão mapeado pela seção 376
+(`iOS_ResumeWorldMap`/`iOS_ResumeByAutoSave`). Marcada
+`read_structural` (85% < 95%); pendência honesta: `sub_714c4` não
+lido isoladamente, relação de vizinhança com `sub_714b8` não
+confirmada por xref direta.
+
+**`ForAbnormalStatus()`** (`0x272254`, 836 B, antes
+`mentioned_unverified` — já citada em `docs/AI_DIFFICULTY_RESEARCH.md`
+como handler de IA de batalha pra unidades sob status alterado, nunca
+lida em si). `jtable.py`: **100% de cobertura** (208/209), zero tabela
+de salto, 27 branches/11 de retrocesso. 12 `bl` distintos:
+`GetNearestUnit` ×3, `SetTmp_UA(UnitAction*)` ×2, `SetSafePanel` ×2,
+`SetBaseTargetGroup`, `IsAlmostNullUnit`, `GetPanelUnderUnit`,
+`MemClearDW`, `MakeMapCostToDest`, `MakeMapChantedAction`, `ps_rand()`
+(confirma o achado prévio de desempate aleatório), `__aeabi_idivmod`,
+e um local sem símbolo (`sub_271628`, ×2 — rotina de "validar/
+comprometer-se com a ação": chama `GetDestinationsAndMakeMaskTG`,
+decrementa contador de tentativas em `unit[0xcbc]`, chama
+`SetThisDestination`). Refina a entrada já existente em
+`AI_DIFFICULTY_RESEARCH.md` (atualizada nesta passada): a função
+varre unidades próximas, constrói mapas de custo/alcance, escolhe um
+painel seguro, monta a ação candidata, desempata por `ps_rand()` e
+comete a decisão via `sub_271628`. Marcada `read_full` (critério
+automático satisfeito: 100% cobertura, 0 tabela de salto).
+
+**Referências cruzadas:** seção 294 (`loadClutDataCalcPlus`,
+variante inline de `loadClutDataCalc`), seção 124 (`ctlendroll_main`/
+`vEnd_rollproc`, framework que aciona `roll_xaplay`), seção 376
+(`mainLoop`, dispara `pspStartSaveCheck`/relação com
+`Resume_Init_WORK_MU`), seção 105 (`iOS_RESUME_SET_WORK_MU`, par de
+serialização de `Resume_Init_WORK_MU`), `docs/AI_DIFFICULTY_RESEARCH.md`
+(`ForAbnormalStatus`, entrada atualizada com o passe estrutural).
+
+## 388. `ctlmusic_init()`/`ctlmusic_main(CTLINFO*)` — controller de seleção de música, confirma a biblioteca `loadMusic`/`disposeMusic`/`activateMusic` (2026-10-23, Fase 3, quadragésimo lote)
+
+`ctlmusic_init()` (`0x2485b0`, 368 B, 88% cob., 0 tabela): 6 `bl` —
+`Wchangeflame`, `vOpn_fadein`/`vOpn_loadwait`/`vOpn_bk_load`
+(biblioteca "vOpn" de telas de evento, seções 365/386),
+`CFFT_STATE::SetParam`, `iOS_setV2Icon` ×3. `ctlmusic_main(CTLINFO*)`
+(`0x248720`, 800 B, **95% cob.**, 0 tabela, 21 branches/10 de
+retrocesso): **17 `bl` distintos** — `worldcursormove` ×2,
+`loadMusic(int)`/`disposeMusic(int)` ×2/`activateMusic(int,int,int)`
+(primeira vez que esta tríade de API de música é vista completa),
+`ctlopentitle_init(int)` (confirma ligação com a sequência de
+abertura — ver seção 390), `vOpn_fadeout`/`vOpn_loadwait`/
+`vOpn_bk_load`/`vOpn_defscrwin_set`, `pspOpenDataBackBufGet`/
+`pspOpenDisableFlg`, `CFFT_STATE::SetRenderSize`/`SetParam`,
+`xpFree`, `iOS_setV2Icon` ×7. Confirma ser a tela de seleção/menu de
+música (jukebox) do jogo: carrega, dispõe e ativa faixas sob demanda
+conforme o cursor navega pela lista. Marcadas `read_structural`
+(`ctlmusic_init` 88% < 95%, `ctlmusic_main` 95% ≥95% — ambas sem
+tabela de salto, mas `init` fica honestamente abaixo do corte).
+
+## 389. `ctlbackpage_init()` — fecha o par com `ctlbackpage_main` (seção 168, já lida) (2026-10-23, Fase 3, quadragésimo lote)
+
+`ctlbackpage_init()` (`0x2649f0`, 776 B) — `jtable.py`: **93% de
+cobertura** (180/194), zero tabela de salto, 2 branches/0 de
+retrocesso. 7 `bl` distintos: `Wtask_stop`, `iOSSdNovelLogIconOff()`
+(desliga o ícone de log do modo Novel — confirma ligação com o
+sistema `ctlnobel_*`, seção 269/sgts), `add_anmpac`/`add_winpac`,
+`fastpage_print(int,int)`, `wldwin_set`, `iOS_setV2Icon`. Fecha o
+par init/main de "backpage" (provável tela de histórico/log textual
+de voltar página, já catalogada em detalhe na seção 168 pelo lado
+`_main`). Marcada `read_structural` (93% < 95%, 0 tabela de salto).
+
+## 390. `GetAbilityList`/`bGetAbilityList`/`jGetAbilityList` — família letter-prefix completa, consulta de lista de habilidades por job (2026-10-23, Fase 3, quadragésimo lote)
+
+`GetAbilityList(short,short,int,short*,int)` (`0x1a8620`, 756 B, 98%
+cob., 0 tabela, 28 branches/15 de retrocesso): 6 `bl` —
+`GetLocalJobNumber(short)`, `GetJobNumber(int)`,
+`GetCommandNumber(int)`, `SetBitStream`/`GetBitStream`,
+`get_ability(int,int)`. `bGetAbilityList` (`0x177088`, 752 B, 98%
+cob., 0 tabela, 33 branches/16 de retrocesso): catálogo análogo com
+prefixo "b" (`bGetJobNumber`/`bGetCommandNumber`/`bSetBitStream`/
+`bGetBitStream` ×3, mais `GetLocalJobNumber`/`get_ability`
+compartilhados sem prefixo). `jGetAbilityList` (`0x193a10`, 540 B,
+98% cob., 0 tabela, 21 branches/10 de retrocesso): catálogo com
+prefixo "j" (`jSetBitStream`/`jGetBitStream`), mais `get_jobdata
+(int)` ×2 — a única das três que consulta dados de job diretamente,
+não só número/comando. Confirma que o padrão letter-prefix já visto
+em outras famílias do projeto (`MakeSmallWindowFunc`, seção 358)
+também se aplica aqui — cada variante consulta a lista de
+habilidades disponíveis por job dentro de um contexto de tela
+diferente (base/"b"/"j" = provavelmente batalha/loja-de-habilidades/
+algum menu específico), construindo o bitstream de habilidades
+aprendidas via `*SetBitStream`/`*GetBitStream`. Todas três marcadas
+`read_structural` (98% ≥95%, 0 tabela de salto — critério automático
+satisfeito, mas sem leitura manual instrução-a-instrução).
+
+## 391. `statusfigprint16`/`Wstatusfigprint16`/`iOS_statusfigprint16_FT4`/`WiOS_statusfigprint16_FT4` — variante "16" da família de impressão de figura de status, mesmo padrão arquitetural já mapeado (2026-10-23, Fase 3, quadragésimo lote)
+
+Paralela à família `statusfigprint`/`iOS_statusfigprint_FT4` já
+mapeada (seções 46/49/50/51/360) — aqui a variante numerada "16"
+(provável tamanho de fonte/figura diferente, 16px). `statusfigprint16
+(int,int,char*,COPYFIELD*)` (`0xe1588`, 748 B, 95% cob., 0 tabela, 10
+branches/5 de retrocesso): **único `bl`**: `asmBoxCopy(char*,char*,
+COPYFIELD*,COPYFIELD*)` ×5 — exatamente o mesmo mecanismo de
+box-copy VRAM-to-VRAM do `statusfigprint` original (seção 254).
+`Wstatusfigprint16` (`0x11006c`, 748 B, 95% cob., 0 tabela, mesma
+topologia): único `bl` `wasmBoxCopy` ×5 (par "W"/task cooperativa).
+`iOS_statusfigprint16_FT4`/`WiOS_statusfigprint16_FT4` (`0xe1c0c`/
+`0x1106f8`, 428 B cada, 98% cob. ambas, 0 tabela, 8 branches/4 de
+retrocesso cada): único `bl` cada, um local sem símbolo
+(`sub_d4268`/`sub_fbb08` respectivamente, ×4) — mesmo padrão exato
+já confirmado na seção 360 (reimplementação via primitiva `FT4`
+texturizada em vez de box-copy de VRAM, com sub-rotina local de
+5 casos resolvendo o jump table interno). Confirma: a variante "16"
+é um clone estrutural completo da família original em 4 variantes
+(normal/W/FT4/WFT4), só trocando o tamanho de fonte/figura. Todas
+marcadas `read_structural`.
+
+## 392. `card_call(unsigned long*, unsigned long, int)` — dispatcher de task para "cartas"/menu de cartão, cobertura abaixo do limiar (2026-10-23, Fase 3, quadragésimo lote)
+
+`card_call(unsigned long*,unsigned long,int)` (`0xcbf7c`, 736 B) —
+`jtable.py`: **90% de cobertura** (165/184), zero tabela de salto, 9
+branches/5 de retrocesso. 5 `bl` distintos: `import_localpad(int)`/
+`export_localpad(long*)` (I/O de dados locais de controle — já visto
+em outros contextos de serialização de estado), `asmTaskEntry()`/
+`asmGetActiveTask(int)` ×2 (framework de task cooperativa de baixo
+nível), `__divsi3` ×3. Nome e assinatura (`unsigned long*` + task
+kind + int) sugerem ser um despachante de entrada de task genérico
+("card" pode se referir a "card" no sentido de registro/ficha, não
+necessariamente carta de jogo — hipótese não confirmada por falta de
+string/contexto). Marcada `read_structural` (90% < 95%, 0 tabela de
+salto — lacuna honesta, catálogo de `bl` pequeno demais pra fixar a
+semântica exata sem leitura manual).
+
+## 393. `doMetaschedulePtclCommandOnce(unsigned short, _EffectTCB*)` — dispatcher de partícula do sistema de metaschedule, fecha outro follow-up das seções 307/308/354 (2026-10-23, Fase 3, quadragésimo lote)
+
+`doMetaschedulePtclCommandOnce(unsigned short,_EffectTCB*)`
+(`0x21df6c`, 736 B) — `jtable.py`: **98% de cobertura** (181/184),
+zero tabela de salto, **44 branches, 24 de retrocesso** (densidade
+de laço muito alta pro tamanho da função — compatível com uma
+máquina de estado "step once" com muitos casos curtos em sequência,
+não um switch único). 4 `bl` distintos: `requestTargetAnimation(int)`
+×2, **`requestDamageNumber(int)`** ×2 (nome real de API — compare
+com a função vizinha de nome parecido na seção 370, que por
+engano/apelido tinha o nome `initializeDamageNumber` mas corpo de
+flags de status; esta aqui é a chamada real que dispara o popup de
+número de dano), `requestDamageResult(int)` ×2,
+`requestAnimation(unsigned int,unsigned int)` ×3. Confirma que o
+sistema de metaschedule (seções 307/308/354 — `SetCameraWorkWithMeta
+schedule`/`s29_doMetaschedule`/`SearchNextMetascheduleDividePos`) tem
+seu próprio dispatcher de comando de partícula "uma vez por tick",
+que aciona o pipeline de dano real (`requestDamageNumber`/
+`requestDamageResult`) e de animação (`requestTargetAnimation`/
+`requestAnimation`) a partir de scripts de efeito (`_EffectTCB*`).
+Marcada `read_structural` (98% ≥95%, 0 tabela de salto).
+
+**Referências cruzadas (seções 388-393):** seções 365/386 (biblioteca
+"vOpn", reusada por `ctlmusic_init`), seção 168 (`ctlbackpage_main`,
+par agora completo), seção 358 (família letter-prefix, mesmo padrão
+confirmado em `GetAbilityList`), seções 46/49/50/51/254/360 (família
+`statusfigprint`, variante "16" espelha exatamente a estrutura),
+seções 307/308/354 (sistema de metaschedule, `doMetaschedulePtcl
+CommandOnce` fecha outro follow-up), seção 370
+(`initializeDamageNumber`, contraste com o `requestDamageNumber` real
+visto aqui).
+
+## 394. `fft_opening(int)` — achado estrutural: corpo de frame da sequência de abertura (filme CD-XA), paralela a `roll_xaplay` (seção 387) (2026-10-23, Fase 3, quadragésimo primeiro lote)
+
+`fft_opening(int)` (`0x2450c4`, 736 B) — `jtable.py`: **95% de
+cobertura** (175/184), zero tabela de salto, 19 branches/8 de
+retrocesso. 28 `bl` distintos, agrupados: família **`vOpn_*`**
+("video-opening") — `vOpn_ctlprog()`/`vOpn_init`/`vOpn_loopinit`/
+`vOpn_swapbuff`/`vOpn_iwaprog`/`vOpn_SetCDVolume`/`vOpn_padread`/
+`vOpn_pacdraw` (state machine completa de abertura); **CD-XA**:
+`fftCdLoop(CDREC*)` (toca/loopa o filme — par conceitual direto de
+`fftCdReset`/`CdControl` vistos em `roll_xaplay`, seção 387);
+**libgpu PSX clássico**: `VSync`/`SetDispMask`/`DrawSync`/`DrawOTag`/
+`xpFree` (mesmo padrão double-buffer de `vOpn_scrinit`/
+`pspStartSaveCheck`, seções 386/387); **camada `pspOpen*`** (overlay
+de ícone, não hardware PSP real): `pspOpenDataBackBufGet` ×3,
+`pspOpenDataIconBufGet`, `pspOpenCheckFlg` ×3, `pspOpenDisableFlg`,
+`pspOpenIconDraw`, `pspgFreamBufCountCountReset`,
+`pspPrimBackDrawRGB` — provável ícone de "pular"/rede sobre o
+filme; `TEST_setClearOt`/`TEST_getClearOt` (flag de build de
+teste), `get_SoundOnly_Flg__Fv` ×2, `CFFT_STATE::GetParam`,
+`myPollhost` ×2; **ponte iOS**: `iOS_clearTutorialbreak`,
+`iOS_setV2Icon` ×6 (mesma camada de ícone que domina `mainLoop`,
+seção 376 — confirma ser subsistema de notificação genérico, não
+exclusivo da abertura).
+
+Confirma a hipótese do nome: corpo de frame real da cutscene de
+abertura, dirigindo a state machine, loopando o filme CD-XA com fade
+de volume, lendo input de pular e desenhando o frame, sobrepondo o
+ícone de "pular" via `pspOpen*`. Provavelmente invocada de dentro do
+ramo "toca filme" de `ctlopentitle_main`/`ctlopentitle_main3`
+(disparada por `mainLoop`, seção 376), paralela exata a `roll_xaplay`
+pros créditos finais. Marcada `read_structural` (seguindo o mesmo
+precedente conservador adotado pra `roll_xaplay`/`ctlendroll_main`,
+família de abertura/CD-XA onde a convenção do projeto preferiu não
+promover a `read_full` mesmo a cobertura ≥95% sem leitura manual
+byte a byte).
+
+## 395. `GuEmu_EngineInit()` — setup único da camada GuEmu (GU-sobre-GL), contraponto de boot do dispatcher de frame `GuEmu_libgu_to_gl` (2026-10-23, Fase 3, quadragésimo primeiro lote)
+
+`GuEmu_EngineInit()` (`0x2acb48`, 748 B) — `jtable.py`: **94% de
+cobertura** (176/187), zero tabela de salto, 6 branches/5 de
+retrocesso. 13 `bl` distintos: `CEGL2_IF::GetMaxTextureSize()`,
+`CEGL2_SPRITE::LoadBegin`/`LoadEnd` (upload/registro de sprite),
+`CWORK_MEM::New`/`Delete` (alocação de memória de trabalho),
+`CFFT_STATE::GetMode`/`SetMode`, `GuEmu_SetLineInterval`/
+`GuEmu_GetRAW` (já catalogadas na própria camada GuEmu), mais 4
+locais sem símbolo (`sub_714c4`, `sub_2ab33c`, `sub_2cdf7c`,
+`sub_2cdf8c`).
+
+Reforça a arquitetura já documentada (seções 59/110): `GuEmu_libgu_
+to_gl()` é a ponte real de despacho GU→GL em tempo de frame;
+`GuEmu_EngineInit` é o contraponto de **setup único** — consulta
+limites de textura, aloca buffers de trabalho e ajusta o modo de
+estado do jogo antes que o emulador de GU comece a traduzir
+`sceGu*`/`GuEmu_*` em chamadas `CEGL2_*`. Marcada `read_structural`
+(94% < 95%, 0 tabela de salto — lacuna honesta, 4 locais sem símbolo
+não resolvidos).
+
+## 396. `EggChk(int)` — checagem probabilística ligada ao sistema de "monstro-ovo" (evolução/crescimento), não ao ícone oval de retrato (2026-10-23, Fase 3, quadragésimo primeiro lote)
+
+`EggChk(int)` (`0x1abf20`, 772 B) — `jtable.py`: **96% de cobertura**
+(185/193), zero tabela de salto, 18 branches/13 de retrocesso. 10
+`bl` distintos: 2 locais sem símbolo (`sub_715cc`, `sub_71adc`),
+`Wread_eventflag` ×2, `GetCommandNumber`, `get_unitwork_add(int)`
+×3, **`levelup_eggmonster(UM_WORK*,int)`**, **`set_eggmonster(int,
+int,int)`**, `sun_to_ivarisday` (conversão de calendário), `ps_rand()`
+×5, `__aeabi_idivmod` ×3.
+
+**Resolve uma ambiguidade antiga**: as notas já citavam
+`DrawEggWithShadow`/`DrawUnitWithShadow` como hipótese de que "Egg"
+seria um ícone de retrato de formato oval desenhado com sombra
+própria. O catálogo de `bl` aqui — `levelup_eggmonster`/
+`set_eggmonster` em conjunto com `get_unitwork_add`, `sun_to_ivarisday`
+e sorteio pesado (`ps_rand` ×5 + `idivmod` ×3) — aponta fortemente
+para a leitura alternativa: "Egg" é nome de debug/dev pro sistema de
+**evolução/crescimento de monstro** ("monstro-ovo"), não um ícone
+literal visível ao jogador. `EggChk` decide, por unidade, se uma
+condição de evolução deve disparar, testando um intervalo de dias
+(`sun_to_ivarisday`) e uma flag de evento, sorteando probabilidade
+(`ps_rand`/`idivmod`), e então chamando `levelup_eggmonster`
+(evolução) ou `set_eggmonster` (configurar estado). Marcada
+`read_full` (96% ≥95%, 0 tabela de salto — critério automático
+satisfeito); pendência honesta: semântica exata ainda é inferência
+por nomenclatura dos `bl`, corpos de `sub_715cc`/`sub_71adc` não
+lidos.
+
+## 397. `loadname()` — rotina de bookkeeping de flags, distinta do widget de UI de nomear unidade (2026-10-23, Fase 3, quadragésimo primeiro lote)
+
+`loadname()` (`0xc449c`, 752 B) — `jtable.py`: **89% de cobertura**
+(168/188), **abaixo do limiar de 95%**, zero tabela de salto, 18
+branches/6 de retrocesso. Apenas 3 `bl` distintos: `write_eventflag`
+×4, `read_eventflag` ×3, `get_unitwork_add(int)` ×1.
+
+**Diferente de `GlobalName` (seção 84) e `Name` (seção 375)** — que
+chamam `iOS_SetScrollNameFunc`, `iOS_getV2Icon`/`iOS_setV2Icon` (×15),
+`LoadImage_menuData`, `iOS_getTouchPress`, todo o aparato gráfico/
+input do widget de rolagem de letras — `loadname()` não toca em
+nenhuma primitiva de desenho, input ou ícone. Hipótese: é uma rotina
+pequena de baixo nível que carrega/aplica um nome já persistido num
+slot de flags/work-data de uma unidade específica (ou resolve qual
+nome padrão usar via flags de evento), não a interface de digitar o
+nome — relação de chamada direta com `GlobalName`/`Name` não
+verificada por xref nesta passada, só por proximidade temática.
+Marcada `read_structural` com cobertura parcial (89% < 95%, 0 tabela
+de salto); pendência honesta: ~11% não cobertos, relação de
+chamada com `GlobalName`/`Name` não confirmada.
+
+## 398. `ASHURA_GNS_Read(unsigned short)` — parser de registro GNS individual, consumido pelo loader `ASHURA_GNS_Garage`, cobertura muito abaixo do limiar (2026-10-23, Fase 3, quadragésimo primeiro lote)
+
+`ASHURA_GNS_Read(unsigned short)` (`0x167d08`, 752 B) — `jtable.py`:
+**46% de cobertura** (86/188), **1 tabela de salto resolvida** (95
+casos → apenas 2 handlers distintos, `0x167ef4`/`0x167f88` — padrão
+"default dominante" já visto em `battle()`), 7 branches/5 de
+retrocesso. 8 `bl` distintos: local sem símbolo (`sub_714c4`),
+`read_eventflag`, `iOS_initTouchDisable`, `set_td(unsigned char*)`,
+`fileReadRequest` (I/O assíncrono, mesma família de `ASHURA_GNS_
+Garage`, seção 81), `iOS_setDisableMapClip`, `mapclip_load`,
+`iOS_setV2Icon`.
+
+Hipótese: parser de registro individual dentro de um arquivo GNS
+(formato de índice de geometria de mapa do FFT original de PS1, já
+confirmado na seção 81), chamado pelo loader assíncrono `ASHURA_GNS_
+Garage` durante a fase de análise — o `unsigned short` é o índice do
+registro, e o switch de 95 casos→2 handlers despacha por tipo de
+recurso (geometria/textura reconhecida vs. não mapeada/default).
+Pertence à família `ASHURA_GNS_*` de parsing/consumo de dados de
+mapa, distinta do restante de `ASHURA` (execução de animação/efeito,
+seções 82/139/192/193/212/369/370). **Marcada `read_structural` com
+cobertura muito parcial** — 46% é bem abaixo do limiar, os corpos
+completos dos dois handlers do switch não foram percorridos pela
+descida recursiva; pendência honesta explícita, candidata a passada
+dirigida futura.
+
+**Referências cruzadas (seções 394-398):** seção 387 (`roll_xaplay`/
+`ctlendroll_main`, par direto de `fft_opening`/CD-XA de abertura),
+seção 376 (`mainLoop`, dispara `ctlopentitle_main3`/aciona a mesma
+camada `iOS_setV2Icon`), seções 59/110 (`GuEmu_libgu_to_gl`, par de
+frame de `GuEmu_EngineInit`), seção 84/375 (`GlobalName`/`Name`,
+contraste com `loadname`), seção 81 (`ASHURA_GNS_Garage`, loader que
+consome `ASHURA_GNS_Read`).
+
+## 399. `calcformula(int,int,int,int)`/`Wcalcformula(int,int,int,int)`/`hook_calcformula(int,int)` — motor de fórmula de dano/stat, par normal/task mais um hook vazio (2026-10-23, Fase 3, quadragésimo segundo lote)
+
+`calcformula(int,int,int,int)` (`0xdb4a4`, 728 B, 98% cob., 0 tabela,
+41 branches/18 de retrocesso — laço denso) e `Wcalcformula` (`0x103068`,
+728 B, 98% cob., 0 tabela, topologia idêntica): par normal/"W" (task
+cooperativa) já visto em outras famílias. 5 `bl` cada: um local sem
+símbolo (`sub_d6748`/`sub_fe290`, ×2), `read_eventflag`/
+`Wread_eventflag`, `task_killmyself`/`Wtask_killmyself` ×3,
+`__divsi3`, `__aeabi_idivmod`. O nome e os 4 parâmetros inteiros
+(nenhum ponteiro de struct) são consistentes com uma função
+avaliadora de fórmula genérica — provável motor de cálculo de dano/
+stat parametrizado (ex. fórmula de habilidade configurável por ID,
+usando os 4 inteiros como entrada bruta: atacante, defensor,
+potência, modificador). `hook_calcformula(int,int)` (`0x280674`, só
+**4 bytes**, 100% cob., 0 `bl`) é um stub/trampolim vazio — hook de
+depuração/instrumentação sem corpo real (consistente com outros
+hooks triviais já vistos no projeto). Marcadas `read_structural`
+(`calcformula`/`Wcalcformula`: 98% ≥95%, 0 tabela de salto — mas sem
+leitura manual completa do laço denso de 41 branches, então não
+promovidas a `read_full`; `hook_calcformula`: `read_full` trivial, 4
+bytes, 100% cobertura).
+
+## 400. `multiwindow_packetinit(RECT16*,COMRECORD*,PRIMPACKET*)`/`Wmultiwindow_packetinit(...)` — fecham a referência de helpers "multiwindow_*" deixada na seção 351 (2026-10-23, Fase 3, quadragésimo segundo lote)
+
+`multiwindow_packetinit` (`0xe12ac`, 584 B, 98% cob., 0 tabela, 2
+branches/2 de retrocesso): 7 `bl` — `initsprtfield(tagSPRT*,int,int)`
+×4, `settaskkind`, `initdrmode2(DR_MODE*,RECT16*)`,
+`bgput(tagPOLY_FT4*,RECT16*,RECT16*,BGRECORD*)` ×6, `GetTPage`/
+`SetDrawMode`/`SetSemiTrans` ×2. `Wmultiwindow_packetinit`
+(`0x10fd08`, 720 B, 98% cob., 0 tabela, mesma topologia): catálogo
+idêntico com prefixo "W" (`Winitsprtfield` ×5, `Wsettaskkind`,
+`Winitdrmode2`, `Wbgput` ×7). Fecha a referência deixada na seção
+351 (família `multiwindow_*` citada como helpers do `disp_select
+refleshwindow`): confirma que é a rotina real de inicialização do
+pacote de primitiva de janela múltipla — monta sprites de campo
+(`initsprtfield`), configura modo de desenho (`initdrmode2`), e
+preenche o fundo da janela (`bgput`) com textura/semi-transparência.
+Marcadas `read_structural`.
+
+## 401. `ctlworkingst_init(int,int)`/`ctlworkingst_dataset(int)` — fecham a tríade com `ctlworkingst_main` (seção 314), completando o indicador "trabalhando" rico (2026-10-23, Fase 3, quadragésimo segundo lote)
+
+`ctlworkingst_init(int,int)` (`0x251e34`, 660 B, 91% cob., 0 tabela,
+0 branches): 9 `bl` — `Wtask_create` ×3, `Wsend_taskparamater` ×3,
+local sem símbolo (`sub_250348`), `ctlworkingst_dataset(int)`
+(reentra no próprio companheiro), `add_anmpac` ×2, `pspWorldEnableFlg`,
+`DrawSync`, `MoveImage`, `iOS_setV2Icon` ×2. `ctlworkingst_dataset
+(int)` (`0x251b68`, 716 B, 97% cob., 0 tabela, 7 branches/4 de
+retrocesso): 4 `bl` — `get_ability(int,int)`, `set_playerwork_j
+(BWORK*,int,int)`, `pspItemIsEmpty` ×2, `pspItemIsExist`. Fecha a
+tríade completa `ctlworkingst_init`/`_dataset`/`_main` (seção 314) —
+`_dataset` monta os dados reais de progresso a partir de dados de
+trabalho da unidade e checagem de item (confirma por que
+`hakenunit_status`, seção 382, e `ctlworkinginf_init`, seção 384,
+chamam este mesmo `_dataset` pra popular o indicador rico de
+"trabalhando" compartilhado entre múltiplas famílias de tela).
+Marcadas `read_structural` (`init` 91% < 95%, `dataset` 97% ≥95% —
+ambas 0 tabela de salto).
+
+## 402. `CurChrChg()`/`CurChrChg2()`/`eCurChrChg()`/`LRCurChrChg(short)` — família "troca de personagem atual", referenciada dezenas de vezes mas nunca lida em si (2026-10-23, Fase 3, quadragésimo segundo lote)
+
+Família citada de passagem em pelo menos 6 seções anteriores
+(`CurChrChg2` sozinha aparece 5× em contextos de equipamento/status)
+mas nunca aberta. `CurChrChg()` (`0x1bb62c`, 232 B, 86% cob., 0
+tabela): 2 `bl` — local sem símbolo (`sub_714b8`, ×3 — mesmo helper
+já citado na seção 105/387 como vizinho de `sub_714c4`),
+`CopyChrStts(short,short)`. `CurChrChg2()` (`0x1bbbb8`, 728 B, 96%
+cob., 0 tabela, 15 branches/8 de retrocesso): **13 `bl` distintos**
+— `sub_714b8` ×4, `sub_715cc` ×1 (mesmo helper da seção 391/396),
+`SetRyoteFlag(short*,int)`, `Bwork2ChrStts(BWORK*,CHR_STTS*,
+UM_WORK*)`, `ChrPower(C_STTS*,short*)`, `CopyChrStts`,
+`AllSttsReflesh()`, `get_unitwork_add`, `set_playerwork_j`,
+**`adjudt_equip_change_sp(BWORK*)`** (confirma a chamada real por
+`CurChrChg2` já hipotetizada em seções anteriores), `pspItemGetCommonData`
+×2, `pspItemIsEmpty`, `pspItemIsBarehand`. **Confirma: `CurChrChg2` é
+a versão "completa" que recalcula todos os stats derivados**
+(poder/ryote/reflesh completo) após uma mudança de personagem
+(promoção, troca de classe, equipamento), enquanto `CurChrChg` (sem
+sufixo) é a versão simples que só copia os stats base
+(`CopyChrStts`). `eCurChrChg()` (`0x18e26c`, 200 B, 88% cob., 0
+tabela): 3 `bl` — `sub_714b8` ×3, `eChrPower`/`eCopyChrStts` — par
+exato de `CurChrChg` na variante "e" (evento/ending, já vista em
+outras famílias "e*"). `LRCurChrChg(short)` (`0x1c0564`, 280 B, 93%
+cob., 0 tabela, **zero `bl`** — aritmética/lookup pura, provável
+variante L/R de navegação por grupo). Todas marcadas `read_structural`
+(coberturas 86-96%, nenhuma atinge 95% uniformemente exceto
+`CurChrChg2`, mas por consistência de família todas ficam no mesmo
+nível sem leitura manual byte a byte).
+
+## 403. `getreaction_pre(int,unsigned short*)` — fecha o par com `getreaction_post` (seção 232), monta a fase de pré-reação (contra-ataque/evasão/roll de BC) (2026-10-23, Fase 3, quadragésimo segundo lote)
+
+`getreaction_pre(int,unsigned short*)` (`0x1e6a98`, 732 B) —
+`jtable.py`: **95% de cobertura** (173/183), zero tabela de salto,
+21 branches, **apenas 1 de retrocesso** (quase sem laços — função
+dominada por decisões sequenciais, não iteração). 10 `bl`
+distintos: `check_reaction_deny(BWORK*)`, `bcp_roll(BWORK*)` ("BC" =
+provável "battle counter"/contra-ataque; "roll" = sorteio de
+chance), `copyACTst(ACT*,ACT*)` ×2, 3 locais sem símbolo
+(`sub_1df620` ×2, `sub_1dfcdc`, `sub_1e0f2c`, `sub_1e69a0`),
+`getweaponeffect(ACT*)`, `get_rival()`. Fecha o par com
+`getreaction_post` (seção 232, 1.524 B, já lida) — a cadeia completa
+é agora `getreaction_pre` (decide SE uma reação ocorre: checa
+negação via `check_reaction_deny`, sorteia via `bcp_roll`, copia o
+estado de ação via `copyACTst`) → `getreaction_post` (processa o
+resultado, liga a `calc_result`/`setskillresult`). Marcada
+`read_structural` (95% ≥95%, 0 tabela de salto — critério automático
+satisfeito, mas 4 locais sem símbolo não lidos).
+
+## 404. `ctlsentuto_init()`/`ctlsentuto_main(CTLINFO*)` — controller de tutorial "sen" (provável tutorial de guerra/estratégia), usa a mesma biblioteca `iOSTutoFlag*` de outros controllers de tutorial (2026-10-23, Fase 3, quadragésimo segundo lote)
+
+`ctlsentuto_init()` (`0x26e1e8`, 576 B, 93% cob., 0 tabela, 1
+branch/1 de retrocesso): 6 `bl` — `snplflg_read`, `iOSTutoFlagSet`,
+`defscrwin_set`/`curhis_put`, `CFFT_STATE::SetParam` ×3,
+`iOS_setV2Icon` ×14 (!). `ctlsentuto_main(CTLINFO*)` (`0x26ec48`,
+728 B, 93% cob., 0 tabela, 14 branches/6 de retrocesso): 14 `bl` —
+`write_eventflag`/`Wwrite_eventflag`/`Wread_eventflag`,
+`Wtask_status`/`Wsend_taskparamater` ×3, `iOS_setTutorialbreak`,
+`wldctl_active`, `snplflg_write`, `sound_request` ×2,
+`iOSTutoFlagSet`, `ctlsentuto_deactive` (a si mesmo), `curhis_get`/
+`curhis_clr`, `iOS_setV2Icon` ×6. O prefixo "sen" (戦, "guerra"/
+"batalha" em japonês) combinado com `iOSTutoFlagSet`/`snplflg_*`
+(mesma biblioteca de flag de tutorial único-por-flag já vista em
+`iOSpagewin_main`, seção 381, e `snpl_init`, candidato de leitura
+futura) sugere ser o tutorial introdutório de mecânicas de batalha/
+guerra. Marcadas `read_structural` (93% < 95%, 0 tabela de salto —
+lacuna honesta em ambas).
+
+**Referências cruzadas (seções 399-404):** seção 351 (família
+`multiwindow_*`, referência fechada), seção 314 (`ctlworkingst_main`,
+tríade agora completa), seções 382/384 (`hakenunit_status`/
+`ctlworkinginf_init`, ambas reusam `ctlworkingst_dataset`), seção
+105/387/396 (helpers locais `sub_714b8`/`sub_715cc`, mesma vizinhança
+de endereço vista em múltiplas famílias), seção 232
+(`getreaction_post`, par agora completo), seção 381
+(`iOSpagewin_main`, mesma biblioteca `iOSTutoFlag*` de
+`ctlsentuto_main`).
+
+## 405. `Link_Init()` — inicialização da tela de links externos, companheira de `Link_FrameMove`/`Link_FrameRender` (2026-10-23, Fase 3, quadragésimo terceiro lote)
+
+`Link_Init()` (`0x2b3f34`, 716 B) — `jtable.py`: **94% de cobertura**
+(168/179), zero tabela de salto, 3 branches/1 de retrocesso. 24 `bl`
+distintos: `CGX_SCREEN_CORRECT::Init/GetCorrect/Scaled/CorrectY`
+(correção de tela/aspect), `CRECT::Register/SetScreenOffset/
+SetScreenScale/Init/MulRect/SetEnable/SetEnableAll` (registro de
+retângulos de UI), `CUI_SCROLLBAR::Create(_RECT_S32*,_RECT_S32*,int)`
+(barra de rolagem), `CTHREAD::Register` (carregamento assíncrono),
+`CSTEP_BATCH::Uninit` ×2, `CAPP_INFO::GetDeviceType`/`GetDeviceScale`,
+`NowLoading_Init()`, `RETINA_SCALE(int)` ×7, mais locais sem símbolo.
+Confirma ser a rotina de setup da tela de links externos já
+identificada nas seções 86 (`Link_FrameRender`) e 283
+(`Link_FrameMove`, chama `Android_Web_Open`) — registra retângulos
+de UI, cria a scrollbar, zera o sistema de animação por passos,
+aplica correção retina e registra uma thread (provável carregamento
+assíncrono da lista de links). Nenhuma chamada a `pspNet*`/rede —
+reforça que "Link" aqui é hyperlink/link promocional (sociais/site
+oficial), não rede/multiplayer nem cabo serial PS1. Marcada
+`read_structural` (94% < 95%, 0 tabela de salto, mesmo padrão
+honesto já aplicado a `Link_FrameMove`).
+
+## 406. `doCursor(VECTOR*,SVECTOR*,SVECTOR*)` — movimentação/posicionamento do cursor 3D no mapa de batalha (2026-10-23, Fase 3, quadragésimo terceiro lote)
+
+`doCursor(VECTOR*,SVECTOR*,SVECTOR*)` (`0x1f5018`, 776 B) —
+`jtable.py`: **94% de cobertura** (182/194), zero tabela de salto, 7
+branches/4 de retrocesso. 7 `bl` distintos: `get_mapstp(int,int,int)`,
+`setPanelPriority`/`setPanelPrioritySpp(SVECTOR*,SVECTOR*)`,
+`getPositionHight(SVECTOR*,unsigned char)` (seção 213, altura
+interpolada), `iOS_GetFrameRate()`, `setShortVector`, `loadClutData`
+×2. A assinatura `(VECTOR* out, SVECTOR* atual, SVECTOR* destino)`
+combinada com os `bl` aponta pra função que move/anima o cursor 3D
+de seleção: interpola entre posição atual e destino (fixed-point),
+ajusta Y via altura de tile (`get_mapstp`+`getPositionHight`,
+"snap ao relevo"), atualiza prioridade de desenho conforme muda de
+tile (`setPanelPriority*`), escala o passo por frame-rate
+(`iOS_GetFrameRate`), e atualiza paleta/destaque (`loadClutData` ×2).
+Marcada `read_structural` (94% < 95%, 0 tabela de salto — lacuna
+honesta de ~6%, provável branch condicional isolado).
+
+## 407. `iOSYajiEffect(unsigned char*, unsigned short*)` — primitiva de desenho do ícone de seta "yaji" no pipeline ASHURA, novo membro da família já mapeada (2026-10-23, Fase 3, quadragésimo terceiro lote)
+
+`iOSYajiEffect(unsigned char*,unsigned short*)` (`0x1609f8`, 740 B)
+— `jtable.py`: **98% de cobertura** (182/185), zero tabela de salto,
+13 branches/3 de retrocesso. 4 `bl` distintos: `iOSsTchBtlFlagGet()`
+×2, `ASHURA_getOTptrZ(int)`, `getClutMenuCursor()`, `AddPrim`. A
+família "Yaji" (矢印/seta) já está mapeada (seção 345,
+`iOSSlideYajiSet`→`iOSSlideYajiMain`→`iOSSlideNaviCurMove`) mas sem
+esta assinatura específica `(unsigned char*,unsigned short*)` —
+textura e paleta já resolvidas, respectivamente. Hipótese: rotina de
+baixo nível que monta e enfileira a primitiva de render do ícone de
+seta no OT Z-sorted (ASHURA/GTE), reaproveitando o CLUT do cursor de
+menu, com gate condicional via `iOSsTchBtlFlagGet` (provável dica
+visual de arraste/swipe ligada ao estado de toque em batalha).
+Complementa o pipeline `iOSmyGetShapePrim→ASHURA_getOTptrZ→AddPrim`
+já descrito na seção 345. Marcada `read_structural` (98% ≥95%, 0
+tabela de salto — mesmo padrão da família Yaji).
+
+## 408. `Bottun(short,short,short,short,short,short)` — desenho de botão de UI composto por múltiplos tiles via tabela de layout, delega o quad final a `DrawTexFlip` (2026-10-23, Fase 3, quadragésimo terceiro lote)
+
+`Bottun(short,short,short,short,short,short)` (`0x1bc5a0`, 732 B) —
+`jtable.py`: **93% de cobertura** (170/183), zero tabela de salto, 5
+branches de retrocesso fechando no mesmo rótulo de loop. Apenas 2
+`bl`: `DrawTexFlip` (seção 317, quad texturizado com flip de UV) ×1
+por iteração, `__divsi3` (só no ramo secundário, dividendo fixo 6).
+**Os 7% não cobertos foram verificados manualmente** (dump capstone
+ad hoc): são pool literal de constantes PC-relative (~11 `ldr
+rX,[pc,#...]`), não código não resolvido — fluxo de controle 100%
+mapeado.
+
+Hipótese de semântica (6 parâmetros short, sem struct): caminho
+principal calcula `count = tabela_offsets[tipo+1] - tabela_offsets
+[tipo]` (nº de "peças"/tiles do botão), lê um registro de 12 bytes
+por peça de uma tabela global indexada, combina com os valores
+x/y via multiplicação Q12 de ponto fixo, e chama `DrawTexFlip` por
+peça — um botão composto de vários quads posicionados por tabela de
+layout (atlas), não um sprite único. Caminho secundário (um dos
+params via stack ≠0) atualiza um contador de 1 byte por-id via
+`__divsi3` (6 = provável nº de frames de flash/highlight). "Bottun"
+é a contraparte de **desenho** de botão — distinta da camada de
+hit-test de toque (`iOS_getTouchTap`/`Press`/`BeginX`/`Y`, já
+catalogada em outro lugar). Marcada `read_structural` (93% < 95%,
+mas controle de fluxo 100% verificado manualmente — gap é só pool
+literal, não ambiguidade real; semântica fina da tabela global de 12
+bytes fica como hipótese).
+
+## 409. `adjust_equip_change_common(BWORK*,int,int)` — implementação real por trás de `adjust_equip_change`/`adjudt_equip_change_sp`, que são thunks de 12 bytes (2026-10-23, Fase 3, quadragésimo terceiro lote)
+
+`adjust_equip_change_common(BWORK*,int,int)` (`0x1dc474`, 748 B) —
+`jtable.py`: **99% de cobertura** (185/187), zero tabela de salto, 19
+branches/14 de retrocesso (provável iteração por slot de
+equipamento). 9 `bl` distintos: `changeAnimationStatus_(int,int,int)`
+×3, `set_equipbonus(BWORK*,int)`, `set_status_counter(BWORK*,int,
+int)`, `init_entry_status(BWORK*)`, `adjust_entry_status(BWORK*)` ×3
+(mesma função da seção 349, pipeline de recálculo HP/MP/stats pós-
+mudança), mais 4 locais sem símbolo.
+
+**Confirma e refina a relação já hipotetizada na seção 402**:
+checagem do `.dynsym` mostra que logo após o fim desta função
+(`0x1dc474+748=0x1dc760`) ficam **`adjudt_equip_change_sp(BWORK*)`**
+(`0x1dc760`, 12 B) e **`adjust_equip_change(BWORK*)`** (`0x1dc76c`,
+12 B) — ambas desmontadas (modo ARM) e confirmadas como thunks puros
+de tail-call (`b`, não `bl`) direto pra esta função:
+```
+adjudt_equip_change_sp(bw) == adjust_equip_change_common(bw, 1, 0)
+adjust_equip_change(bw)    == adjust_equip_change_common(bw, 0, 0)
+```
+Não são duas rotinas paralelas com nomes parecidos — é o MESMO
+código, com o 2º parâmetro como flag de modo (0=variante normal da
+tela de equipamento, 1=variante "sp" usada pelo caminho de troca de
+personagem). Fecha o `bl adjudt_equip_change_sp(BWORK*)` já
+catalogado em `CurChrChg2` (seção 402): confirma que `CurChrChg2`
+invoca o caminho flag=1 desta mesma rotina de recálculo de
+equipamento. `adjust_equip_change_common` marcada `read_structural`
+(99% ≥95%, 0 tabela de salto); os dois thunks (`adjudt_equip_change_sp`,
+`adjust_equip_change`) marcados `read_full` (100% compreendidos,
+2 instruções cada). Pendência honesta: significado exato do flag
+(0 vs 1) é hipótese ("contexto de origem da troca"), não confirmado
+byte a byte; 3º parâmetro sempre 0 nos call sites conhecidos.
+
+**Referências cruzadas (seções 405-409):** seções 86/283
+(`Link_FrameRender`/`Link_FrameMove`, família "Link" de links
+externos agora com init completo), seção 213 (`getPositionHight`,
+reusado por `doCursor`), seção 345 (família "Yaji", `iOSYajiEffect`
+novo membro), seção 317 (`DrawTexFlip`, reusada por `Bottun`), seções
+349/402 (`adjust_entry_status`/`CurChrChg2`, pipeline de recálculo de
+stats agora com o elo de equipamento confirmado).
+
+## 410. Sweep completo da família `p[NN]_*Func` (p00-p22) — dispatcher de efeito de habilidade por ID numérico, grande achado de uma vez só (2026-10-23, Fase 3, quadragésimo quarto lote)
+
+Descoberta de uma família inteira ainda não catalogada: além dos 6
+membros já lidos em lotes anteriores (`p01_bowFunc` §243,
+`p02_hitMarkFunc` §266, `p04_magicChantFunc` §88, `p18_reflecFunc`
+§379, `p20_gunFunc` §126, `p22_shoukanFunc` §244), existem **17
+membros adicionais** (`p00` a `p21`, faltando só `p23+`), a maioria
+nunca citada nas notas. Sweep completo via `jtable.py`:
+
+**6 stubs vazios (8 B cada, 100% cobertura, 0 `bl`, 0 branches)**:
+`p00_nullFunc()`, `p07_knockBackFunc()`, `p10_jumpFunc()`,
+`p11_waterjumpFunc()`, `p14_sweatFunc()`, `p16_reviveFunc()` — tipos
+de efeito sem callback físico especial, só `bx lr` (ou equivalente).
+Todas marcadas `read_full`.
+
+**`p05_reboundFunc()`** (`0x21ebbc`, 72 B, 94% cob., 0 `bl`, 2
+branches/0 de retrocesso) — pura lógica condicional sem chamada
+externa. Marcada `read_full`.
+
+**7 membros com o mesmo catálogo-base de física de gravidade**
+(97% cob. típica, 0 tabela de salto, 6-10 `bl`): `p03_golemFunc`
+(272B), `p06_chargeFunc` (284B), `p08_landingFunc` (272B),
+`p09_chakusuiFunc` (348B), `p12_poisonFunc` (284B), `p13_levelupFunc`
+(316B), `p19_telepoFunc`/`p21_breakFunc` (272B cada) — todos chamam
+o mesmo núcleo `SetGravity`/`SetAirDensity`/`PushGravity`/
+`PopGravity`/`PushAirDensity`/`PopAirDensity` + `iOS_getSkipAddPrim`
++ 2 locais sem símbolo (`sub_21f3c0`, `sub_21fb94`) — confirma que
+TODO efeito de habilidade, não só os "grandes" já lidos, empurra/
+restaura seu próprio contexto de gravidade/densidade de ar antes de
+rodar sua lógica específica (provavelmente pra suportar efeitos que
+alteram a física local, como golem pesado ou levitação em
+`p19_telepoFunc`). `p06_chargeFunc`/`p12_poisonFunc` adicionam
+`Ssd_PlayEffect(long)` (efeito sonoro SSD). `p09_chakusuiFunc`
+adiciona `getAnimationPosition`/`getMapIDFromAnimationPosition`.
+Todas marcadas `read_structural`.
+
+**`p15_deathFunc()`** (`0x220548`, 680 B, 95% cob., 0 tabela, 15
+branches/10 de retrocesso) e **`p17_crystalFunc()`** (`0x2207f0`,
+704 B, 95% cob., 0 tabela, 20 branches/12 de retrocesso) — **achado
+de alto valor**: ambas chamam `AnimatePermanentObject(int)`,
+`GetPermanentObject()`, `DisposePermanentObject(char)` e
+`createPermanentObject(_JochuParameter*,Physics*)` — fecham
+completamente o ciclo de vida do "objeto permanente" já mapeado nas
+seções 82/158/378 (`requestParmanentEffect`→`createPermanentObject`→
+`DrawPermanentShape`). Confirma que os efeitos visuais de "morte"
+(`p15`) e "cristalização" (`p17`, a unidade virando cristal ao
+morrer, mecânica clássica do FFT) são implementados como objetos 3D
+físicos persistentes no mundo, não sprites 2D — a mesma
+infraestrutura de física/renderização usada pra outros efeitos
+"permanentes" no mapa. Ambas marcadas `read_structural`.
+
+**Referência cruzada de dispatcher**: nenhuma das 23 funções `p[NN]_
+*Func` chama outra da mesma família ou aparece com `bl` apontando pra
+elas nesta passada — são todas folhas chamadas por um dispatcher
+externo ainda não identificado (provável tabela de ponteiros de
+função indexada por ID de habilidade, não uma cascata de `bl`/jump
+table dentro do próprio bloco). Candidato natural de follow-up:
+localizar essa tabela de dispatch (ver seção 411, `callEffect`).
+
+## 411. `changeAnimationStatus(int,int,int)`/`_changeAnimationStatus_(int,int,int)` — máquina de estado com 2 tabelas de salto de 32 casos, chama o `SetUnitParameter` ainda não decompilado em `AI_DIFFICULTY_RESEARCH.md` (2026-10-23, Fase 3, quadragésimo quarto lote)
+
+`changeAnimationStatus(int,int,int)` (`0x1fe718`, 764 B) —
+`jtable.py`: **64% de cobertura** (123/191), **2 tabelas de salto
+resolvidas** (32 casos → 7 handlers; 32 casos → 5 handlers),
+**abaixo do limiar de 95%** — lacuna honesta, apesar de ambas
+tabelas resolvidas. 13 branches/10 de retrocesso. Apenas 2 `bl`:
+`searchAnimationByBattleID(unsigned short)` e **`SetUnitParameter
+(int)`** ×2 — esta última é a mesma função citada em
+`AI_DIFFICULTY_RESEARCH.md` como "não decompilada ainda" (ver
+limitações do documento de IA). Confirma que `SetUnitParameter` é
+chamada de dentro do sistema de animação de status, não só da IA de
+batalha — pista nova pra quando alguém for finalmente abrir essa
+função. `_changeAnimationStatus_(int,int,int)` (`0x1cd548`, 28 B,
+71% cob., 0 `bl`) é provavelmente um thunk/wrapper trivial (nome com
+underscores na frente/atrás sugere versão "interna"/não-exportada da
+mesma lógica). Ambas marcadas `read_structural` (cobertura abaixo do
+limiar em ambas; `changeAnimationStatus` já teve as 2 tabelas
+resolvidas com sucesso, mas os handlers em si não foram percorridos
+por completo).
+
+## 412. `cnvglobaltolocalid(int)`/`Wcnvglobaltolocalid(int)` — conversão de ID global→local de unidade, par normal/task (2026-10-23, Fase 3, quadragésimo quarto lote)
+
+`cnvglobaltolocalid(int)` (`0xdb8c4`, 700 B, 99% cob., 0 tabela, 35
+branches/17 de retrocesso) e `Wcnvglobaltolocalid(int)` (`0x103c94`,
+700 B, 99% cob., 0 tabela, topologia idêntica): par normal/"W". 7
+`bl` cada: `read_eventflag`/`Wread_eventflag` ×3, `get_bwp(int)` ×5
+(busca ponteiro de work de batalha), `search_character_f(int)`,
+`search_controlID(int,int*)` ×3, `checkAnimationExist(int)`,
+`getBattleWorkIDFromAnimation(unsigned int)`,
+`getAnimationIDFormBattleWork(int)`. Confirma ser a rotina de
+tradução de um ID "global" (provável índice no roster completo de
+personagens) para o ID "local" de batalha (slot/work-ID dentro do
+`BWORK` da batalha atual) — ponte entre o sistema de roster
+persistente e o sistema de trabalho de batalha efêmero. Marcadas
+`read_full` (99% ≥95%, 0 tabela de salto).
+
+## 413. `multiwindow_keyright(COMRECORD*,int)`/`Wmultiwindow_keyright(...)` — navegação de cursor da janela múltipla, inclui um hook de debug homônimo (2026-10-23, Fase 3, quadragésimo quarto lote)
+
+`multiwindow_keyright(COMRECORD*,int)` (`0xec644`, 708 B, 93% cob.,
+0 tabela, 21 branches/14 de retrocesso) e `Wmultiwindow_keyright`
+(`0x10558c`, 708 B, 93% cob., mesma topologia): par normal/"W". 10
+`bl` cada: `checkkeyok`/`Wcheckkeyok`, `read_eventflag`/
+`Wread_eventflag`, `task_create`/`Wtask_create`, `send_taskparamater`/
+`Wsend_taskparamater`, `asmGetActiveTask`/`wasmGetActiveTask`,
+**`iOS_DEBUG_multiwindow_keyright_hook()`** (hook de debug com o
+mesmo nome da função — infraestrutura de depuração exposta no
+próprio dynsym), `iOS_clearOkNg`, `pspBattleDisableFlg`,
+`pspNetGetBattleModeFlag` (gate de rede — confirma que a navegação
+da janela múltipla é sensível ao estado de batalha em rede), `iOS_
+setV2Icon`. Fecha o par com `multiwindow_packetinit` (seção 400) —
+é a lógica de mover o cursor/seleção pra direita dentro da janela de
+múltiplas opções. Marcadas `read_structural` (93% < 95%, 0 tabela de
+salto).
+
+## 414. `ctlret_init()`/`ctlretokng_init(int)`/`ctlretokng_main(CTLINFO*)` — quarto membro confirmado da família OK/NG (retorno ao título/sair), espelha `mouke_okng`/`ctlhakenokng_main`/`ctlbirthokng_*` (2026-10-23, Fase 3, quadragésimo quarto lote)
+
+`ctlret_init()` (`0x267368`, 600 B, 92% cob., 0 tabela, 8 branches/4
+de retrocesso): 3 `bl` — `Wsend_taskparamater`, `defscrwin_set`/
+`curhis_put`. `ctlretokng_init(int)` (`0x267840`, 656 B, 93% cob., 0
+tabela, 1 branch/0 de retrocesso): 6 `bl` — `Wsend_taskparamater`,
+`mouke_tbl_get(MOUINFO*,int)` (mesma tabela de roster já vista em
+`ctlworkinginf_init`, seção 384), `add_anmpac`/`add_winpac`,
+`moukeevtinf_window`, `wldwin_noropen` (janela modal sem transição
+de abertura). `ctlretokng_main(CTLINFO*)` (`0x267c74`, 708 B, 95%
+cob., 0 tabela, 17 branches/5 de retrocesso): 9 `bl` —
+`Wsend_taskparamater`, `iOS_setDispMenuTouch` ×2,
+`iOS_add_anmpac_max`, `ctlret_init()` (reentra no pai — confirma a
+tríade), `sound_request` ×3, `iOS_CMenuTouch::setDispAssist` ×2,
+`iOS_clearOkNg()` (mesmo teardown das demais famílias OK/NG),
+`iOS_getTouchTap`/`iOS_getV2Icon`. Confirma: "ret" = retorno/voltar
+(provável confirmação de "Retornar ao Título"/sair do jogo), quarto
+membro confirmado da família OK/NG já estabelecida (`mouke_okng`
+§366, `ctlhakenokng_main` §343, `ctlbirthokng_*` §372). Marcadas
+`read_structural` (92-95%, 0 tabela de salto em todas).
+
+**Referências cruzadas (seções 410-414):** seções 82/158/378
+(`requestParmanentEffect`/`createPermanentObject`/
+`DrawPermanentShape`, ciclo agora confirmado por `p15_deathFunc`/
+`p17_crystalFunc`), `docs/AI_DIFFICULTY_RESEARCH.md`
+(`SetUnitParameter`, ainda não decompilada — nova pista via
+`changeAnimationStatus`), seção 400 (`multiwindow_packetinit`, par
+agora com navegação de cursor), seção 384 (`ctlworkinginf_init`,
+mesmo `mouke_tbl_get` reusado por `ctlretokng_init`), seções
+343/366/372 (família OK/NG, `ctlretokng_main` é o quarto membro
+confirmado).
+
+## 415. `getweaponeffect(ACT*)` — despachante físico por categoria de arma (Blade/Pole/Bow/Gun), fecha mais um elo da cadeia de contra-ataque (2026-10-23, Fase 3, quadragésimo quinto lote)
+
+`getweaponeffect(ACT*)` (`0x1e2efc`, 700 B) — `jtable.py`: **97% de
+cobertura** (170/175), zero tabela de salto, 25 branches/11 de
+retrocesso. 9 `bl` distintos, todos resolvidos por símbolo:
+`pspItemIsEmpty` ×3, `pspItemGetWeaponData`, `get_coord_address
+(BWORK*)`, `check_coord(int,int,int)`, `copyACTst(ACT*,ACT*)`, e os
+quatro checadores de categoria: `CheckBladeResult(int,int,int,int,
+int)`, `CheckPoleResult` (seção 367), `CheckBowResult(int,SVECTOR*,
+int)`, `CheckGunResult(int,SVECTOR*,int)`. Confirma a arma equipada,
+resolve a coordenada de colisão e despacha pro checador específico
+da categoria — mesmo padrão de despacho-por-categoria já visto em
+`getskilleffect` (seção 95)/`calc_result` (seção 90), mas restrito a
+armas físicas. Fecha mais um elo da cadeia `check_reaction_deny` →
+`bcp_roll` → **`getweaponeffect`** → `getreaction_post` (seções 232/
+403): é o passo que calcula qual efeito/dano um contra-ataque físico
+produz, condicionado ao tipo de arma. Marcada `read_structural` (97%
+≥95%, 0 tabela de salto, nenhum `bl` sem símbolo).
+
+## 416. `UnitFlagInit()` — inicialização de flag ligada à janela de lista de unidades do world map (2026-10-23, Fase 3, quadragésimo quinto lote)
+
+`UnitFlagInit()` (`0x1bd464`, 712 B) — `jtable.py`: **77% de
+cobertura** (137/178), **abaixo do limiar de 95%**, zero tabela de
+salto, 1 branch de retrocesso. 3 `bl`: `iOSUnitListWinOnOff(int)`,
+`iOSWldUnitListWinSet(int)`, `MasaDataInit()`. Já citada (sem seção
+própria) junto a `SttsAMovingChk`/`AllSttsDelete`/`world_stopnoend`/
+`iOSLRChgTap`/`iOSLRChgSwype` — grupo inteiro em torno da tela de
+seleção/lista de unidades do world map. Hipótese: inicializa flags
+de unidade associadas à janela de lista (abrir/fechar, trocar com
+L/R) antes de exibi-la, disparando também `MasaDataInit()` (estrutura
+auxiliar "Masa" não identificada). Marcada `read_structural` (77% <
+95% — lacuna honesta de ~23%, provável bloco condicional/early-return
+não alcançado).
+
+## 417. `DynamicsAllObject(_Object*)` — integrador físico genérico para objetos dinâmicos do mapa, distinto do sistema de objeto permanente (2026-10-23, Fase 3, quadragésimo quinto lote)
+
+`DynamicsAllObject(_Object*)` (`0x21ba18`, 704 B) — `jtable.py`:
+**98% de cobertura** (173/176), zero tabela de salto, 9 branches/2
+de retrocesso (laço de iteração sobre lista de objetos). Apenas 2
+`bl`: `VectorNormal` e `__divsi3`. Catálogo pequeno e puramente
+aritmético (sem desenho/áudio/alocação) — consistente com um
+integrador físico por-objeto/por-frame (normaliza vetor de
+direção/impulso, aplica divisão por massa/densidade/passo de tempo).
+**Nota honesta**: apesar de estar no mesmo bloco de endereços da
+família de gravidade (`SetGravity`/`PushGravity`/`PopGravity`,
+sweep da seção 410), não há `bl` direto a nenhuma delas — a ligação
+é por adjacência, não por chamada confirmada; distinto também do
+sistema de objeto permanente (seções 158/378, que tem ciclo
+criar→desenhar→descartar com `bl` de desenho/alocação, ausentes
+aqui). Marcada `read_structural` (98% ≥95%, 0 tabela de salto).
+
+## 418. `callEffect(int, tag_animation*)` — resolução/preparação de efeito antes do dispatch real; NÃO é o dispatcher da família `p[NN]_*Func` (2026-10-23, Fase 3, quadragésimo quinto lote)
+
+`callEffect(int,tag_animation*)` (`0x201ca4`, 704 B) — `jtable.py`:
+**98% de cobertura** (172/176), zero tabela de salto, 23-24
+branches/9 de retrocesso, convergências if/else em 0x201d7c (3
+ramos) e 0x201e1c (5 ramos) — cadeia de if/else sobre o parâmetro
+`int`, não um switch tabelado. 7 `bl`: `searchAnimationByID`/
+`searchAnimationByBattleID` (resolução de ID de animação),
+`setShortVector`, `pspItemGetWeaponData`/`pspItemIsMagicalGun`
+(consulta à arma equipada — provável decisão de variante visual
+arco/arma de fogo), **`StartEffect(long,long,EffectOrder*)`**
+(delega a execução real), 1 local sem símbolo (`sub_715cc`).
+
+**Corrige a hipótese que motivou este fork**: apesar do nome e
+assinatura sugerirem o dispatcher da família `p[NN]_*Func` (seção
+410, 23 funções p00-p22), **não há nenhuma chamada direta a elas
+nem tabela de salto com ~23 casos** — `callEffect` é uma função de
+resolução/preparação que delega a execução de fato pra `StartEffect`
+(`0x21cc84`, ainda não lida). O dispatch real por ID das 23 funções
+`p[NN]_*Func` provavelmente ocorre dentro de `StartEffect` ou via
+tabela de ponteiros de função em outro lugar — não confirmado.
+Candidato natural de follow-up: abrir `StartEffect`. Marcada
+`read_structural` (98% ≥95%, 0 tabela de salto).
+
+## 419. `set_normability2(...)` — acessor/populador de dados de habilidade normal por job, confirma efeito colateral de agendamento de turno (2026-10-23, Fase 3, quadragésimo quinto lote)
+
+`set_normability2(int,unsigned char,short*,unsigned char*,unsigned
+char*,int,unsigned char*,unsigned char*)` (`0x1d4940`, 748 B) —
+`jtable.py`: **99% de cobertura** (185/187), zero tabela de salto,
+22 branches/12 de retrocesso. 6 `bl`: `GetLocalJobNumber(short)`,
+1 local sem símbolo (`sub_1d3a88`), `gc_bwp(int)`, **`set_event_table
+(TURN_TABLE*,int)`**, `get_command_ability(int,int)`,
+`get_ability_flag(BWORK*,int)`. Reforça a leitura já registrada em
+`getskillrange`/`make_abilitylistmain` (seções 94/128): é o acessor/
+populador de dados de habilidade normal (classe/job, em contraste
+com reaction/support/movement) usado tanto no cálculo de alcance
+quanto no agregador de lista do menu — e confirma, via `set_event_table`,
+que a função não é só leitura/preenchimento passivo: tem efeito
+colateral de agendamento na tabela de eventos de turno. Marcada
+`read_full` (99% ≥95%, 0 tabela de salto, catálogo pequeno e quase
+totalmente resolvido — hipótese já corroborada por 3 fontes
+independentes); pendência honesta: corpo de `sub_1d3a88` e layout
+campo-a-campo dos 4 buffers de saída não verificados.
+
+**Referências cruzadas (seções 415-419):** seções 232/367/403
+(cadeia de contra-ataque, `getweaponeffect` fecha outro elo),
+seção 410 (sweep `p[NN]_*Func`, `callEffect` corrige a hipótese de
+ser o dispatcher — aponta pra `StartEffect` como próximo alvo),
+seções 158/378 (sistema de objeto permanente, contraste com
+`DynamicsAllObject`), seções 94/128 (`getskillrange`/
+`make_abilitylistmain`, confirmadas por `set_normability2`).
+
+## 420. `StartEffect`/`StartPermanentEffect`/`ConvertEffectAttribute` — fecham a cadeia de follow-up da seção 418, mas o dispatch real por ID ainda não foi localizado (2026-10-23, Fase 3, quadragésimo sexto lote)
+
+`StartEffect(long,long,EffectOrder*)` (`0x21cc84`, 500 B) —
+`jtable.py`: **91% de cobertura** (114/125), zero tabela de salto,
+15 branches/7 de retrocesso. 3 `bl`: 1 local sem símbolo
+(`sub_714b8`), **`StartPermanentEffect(long,long,EffectOrder*)`**
+×2, `ConvertEffectAttribute(int)`. `StartPermanentEffect` (`0x220f94`,
+só 148 B, 95% cob., 0 tabela, 0 branches): 2 `bl` — `sub_714b8` ×2,
+**`NewPEffectTCB()`** (construtor do "_EffectTCB", mesma struct já
+vista em `doMetaschedulePtclCommandOnce`, seção 393). `ConvertEffect
+Attribute(int)` (`0x2210c4`, 56 B, **só 14% de cobertura** — lacuna
+grande, provável tabela de lookup/salto não detectada pela descida
+recursiva).
+
+**Fecha o follow-up da seção 418, mas com um achado honesto**: a
+cadeia é `callEffect` → `StartEffect` → `StartPermanentEffect` →
+`NewPEffectTCB` (cria o bloco de controle de tarefa de efeito) +
+`ConvertEffectAttribute` (converte atributo/flag). **Nenhuma dessas
+três funções despacha diretamente pra alguma `p[NN]_*Func`** — o
+dispatch real por ID de habilidade continua não localizado. Hipótese
+revisada: o `_EffectTCB` criado por `NewPEffectTCB` provavelmente
+carrega um ponteiro de função/ID que é lido e despachado depois, de
+dentro do laço de execução de tarefas de efeito (candidato:
+`doMetaschedulePtclCommandOnce`, seção 393, ou um scheduler ainda
+não identificado) — não uma chamada direta em cadeia. `StartEffect`/
+`StartPermanentEffect` marcadas `read_structural`/`read_full`
+respectivamente (91%/95% ≥... critério: `StartEffect` 91%<95% fica
+`read_structural`; `StartPermanentEffect` 95%≥95% fica `read_full`);
+`ConvertEffectAttribute` marcada `read_structural` com cobertura
+muito parcial (14%, pendência honesta explícita).
+
+## 421. Família `SwapDB`/`bSwapDB`/`cSwapDB`/`eSwapDB`/`jSwapDB` — troca de double-buffer PSX clássico, 5 variantes letter-prefix por contexto de tela (2026-10-23, Fase 3, quadragésimo sexto lote)
+
+Família completa de 5 membros, todos nunca lidos antes. Catálogo
+nuclear compartilhado: `VSync`, `ClearOTag`, `DrawSync`,
+`PutDrawEnv`/`PutDispEnv`, `DrawOTag`, `GetDrawEnv`, `myPollhost()`,
+`IS_TEX_2X()` — o clássico ciclo de troca de buffer PSX (limpa
+ordering table, sincroniza, desenha a OT do frame anterior, troca
+ambientes de desenho/display). `SwapDB(int,int)` (`0x1a6588`, 476
+B, 86% cob., 0 tabela, 10 `bl` — catálogo completo +
+`CFFT_STATE::SetParam`): versão base/genérica. `bSwapDB(int,int)`
+(`0x1757d0`, 712 B, 82% cob., 0 tabela, 8 `bl` — sem `myPollhost`
+nem `SetParam` mas com os demais): variante "b". `cSwapDB(int,int)`
+(`0x172560`, 256 B, 88% cob., 0 tabela, 6 `bl` — subconjunto mais
+magro, sem `PutDispEnv`): variante "c", a mais simples. `eSwapDB
+(int,int)` (`0x1876b0`, 624 B, 80% cob., 0 tabela, apenas 4 `bl` —
+`SetParam`/`ClearOTag`/`GetDrawEnv`/`IS_TEX_2X`, sem o ciclo
+VSync/DrawSync completo): variante "e", possivelmente usa um caminho
+de sincronismo diferente (cutscene/evento?). `jSwapDB(int,int)`
+(`0x192f08`, 508 B, 78% cob., 0 tabela, só 2 `bl` —
+`ClearOTag`/`GetDrawEnv`): variante "j", a mais minimalista de
+todas. Confirma que cada contexto de tela/menu letter-prefix já
+mapeado neste projeto (base/b/c/e/j, mesmo padrão de `MakeSmallWindowFunc`
+§358, `GetAbilityList` §390, `CurChrChg` §402) mantém sua própria
+rotina de troca de double-buffer, com variações no conjunto de
+chamadas de sincronismo — provavelmente otimizações/caminhos
+distintos conforme a complexidade da tela. Todas marcadas
+`read_structural` (78-88%, todas abaixo do limiar de 95%, mas 0
+tabela de salto em todas — lacunas honestas, catálogo de `bl`
+pequeno e consistente entre variantes).
+
+## 422. `rute_find(int,int)`/`rutegrow_draw(GsOT*)` — busca e desenho de linha de rota (provável indicador de alcance de movimento "crescendo"), chama o loop de CD-XA de abertura (2026-10-23, Fase 3, quadragésimo sexto lote)
+
+`rute_find(int,int)` (`0x26883c`, 688 B, 94% cob., 0 tabela, 19
+branches/9 de retrocesso): 8 `bl` — `Wread_eventflag`,
+**`fftCdLoop(CDREC*)`** (mesma API de CD-XA vista em `fft_opening`/
+`roll_xaplay`, seções 387/394 — achado curioso: por que uma função
+de "achar rota" toca o loop de CD? hipótese: efeito colateral de
+manter o áudio de fundo rodando durante um cálculo pesado, ou nome
+genérico reusado por coincidência de endereço/vizinhança — não
+confirmado), reentrada em si mesma (`rute_find`), `wldssd_control()`/
+`wldtown_bright()` (controle de som ambiente/brilho de cidade do
+world map), `VSync`, `GsGetActiveBuff`/`GsSetWorkBase`.
+`rutegrow_draw(GsOT*)` (`0x26854c`, 752 B, 99% cob., 0 tabela, 7
+branches/4 de retrocesso): 8 `bl` — `GetTPage`/`GetClut`+
+`SetPolyFT4`+`SetSemiTrans` (primitiva texturizada semi-transparente),
+`xpLibGetOffset`, `GsSortPoly`, `RotTransSV`, `__divsi3` ×4. "Rute"
+(ルート = "rota"/"route") + "grow" sugere o indicador visual de
+rota/caminho que "cresce" (animação de desenho progressivo) — muito
+provavelmente o efeito visual que traça a rota de movimento no mapa
+do world map (estrada entre cidades), não o grid de alcance de
+batalha (que já tem sua própria família `MapCost*`). Marcadas
+`read_structural` (`rutegrow_draw` 99% quase atinge `read_full`
+automático, mas fica `read_structural` por não ter leitura manual;
+`rute_find` 94% < 95%, lacuna honesta).
+
+## 423. `set_event_table(TURN_TABLE*, int)` — fecha o follow-up da seção 419, agenda/consulta entrada da tabela de eventos de turno (2026-10-23, Fase 3, quadragésimo sexto lote)
+
+`set_event_table(TURN_TABLE*,int)` (`0x1d4600`, 832 B) — `jtable.py`:
+**99% de cobertura** (205/208), zero tabela de salto, 25 branches/7
+de retrocesso. 4 `bl`: local sem símbolo (`sub_1d3b3c`, ×4),
+`get_active_unit()`, `check_turn_frozen(BWORK*)`, `set_cco_SD
+(BWORK*)`. Fecha o follow-up direto deixado pela seção 419
+(`set_normability2` chama esta função como efeito colateral de
+agendamento). Confirma que `TURN_TABLE*` é a estrutura real de
+agenda de turno do sistema de batalha, consultada/atualizada aqui
+contra o estado de "turno congelado" (`check_turn_frozen` — provável
+gate pra status que impedem agir, como paralisia/sono) e a unidade
+atualmente ativa (`get_active_unit`). `set_cco_SD` sugere efeito
+colateral de "cancelar comando atual"/"status de dados" na mesma
+passada. Marcada `read_full` (99% ≥95%, 0 tabela de salto); corpo de
+`sub_1d3b3c` (chamado 4×) não lido.
+
+**Referências cruzadas (seções 420-423):** seção 393
+(`doMetaschedulePtclCommandOnce`, `_EffectTCB` compartilhado com
+`NewPEffectTCB` — candidato a scheduler real do dispatch por ID),
+seção 418 (`callEffect`, cadeia agora estendida até
+`StartPermanentEffect` sem achar o dispatch), seções 358/390/402
+(famílias letter-prefix, `SwapDB` é mais um membro do mesmo padrão
+arquitetural), seções 387/394 (`fftCdLoop`, reaparece de forma
+inesperada em `rute_find`), seção 419 (`set_normability2`, fecha o
+follow-up direto pra `set_event_table`).
+
+## 424. `requestDamageAnimation(tag_animation*,tag_animation*)` — dispatcher de reação de golpe (troca de animação/knockback/reorientação), elo de baixo nível do pipeline golpe→animação (2026-10-23, Fase 3, quadragésimo sétimo lote)
+
+`requestDamageAnimation(tag_animation*,tag_animation*)` (`0x1f024c`,
+696 B) — `jtable.py`: **92% de cobertura** (160/174), **1 tabela de
+salto resolvida** (13 casos → 5 handlers, agrupamento denso), 20
+branches/13 de retrocesso. 7 `bl`: `changeAnimation`/
+`forceChangeAnimation`, `NewWeaponEquip` (reaparece — seção 89),
+`startKnockBack(tag_animation*,tag_animation*)`, `setActionDirection
+(tag_animation*,tag_animation*)` ×3, `getAnimationHeight` ×2, 1
+local sem símbolo (`sub_1e7d28`). Hipótese: switch sobre um campo
+tipo-enum de "reação ao golpe" despachando entre troca de animação
+normal/forçada, recuo físico (`startKnockBack`) e reorientação do
+alvo (`setActionDirection`). Encaixa no pipeline golpe→animação já
+mapeado (seções 82/89/393) como a peça de nível mais baixo que
+aplica a reação visual da unidade atingida. Marcada `read_structural`
+(92% < 95%, apesar da tabela resolvida; `sub_1e7d28` não lido).
+
+## 425. `getDisplayPosition()` — posicionamento de exibição ordenado por profundidade/prioridade de painel, distinta de `getAnimationPosition` (2026-10-23, Fase 3, quadragésimo sétimo lote)
+
+`getDisplayPosition()` (`0x1f2cd8`, 684 B) — `jtable.py`: **98% de
+cobertura** (168/171), zero tabela de salto, 18 branches/8 de
+retrocesso. 7 `bl`: `get_mapstp` ×2, `get_movetype(BWORK*)`,
+`setPanelPriorityMove`/`setPanelPrioritySppMove`/`setPanelPriority`/
+`setPanelPrioritySpp` (4 variantes Move×Spp), `setAnimationRealVector
+(SVECTOR*,tag_animation*)` (seção 139). Começa exatamente onde
+termina `displayShape` (seção 192, 0x1f25d4+0x704=0x1f2cd8) —
+adjacência de compilação no mesmo arquivo-fonte de pipeline de
+desenho. Consulta tipo de movimento pra escolher entre as 4
+variantes de prioridade de painel, grava o vetor resultante via
+`setAnimationRealVector` — é a rotina de posicionamento Z-ordenado
+pro desenho do sprite, distinta de `getAnimationPosition`
+(interpolação de quadro). Marcada `read_full` (98% ≥95%, 0 tabela
+de salto).
+
+## 426. `extend_systemframe(int,int,RECT16*,int)` — variante especializada de "estender moldura" para a janela de sistema, implementação por trás do wrapper `Wextend_systemframe` (2026-10-23, Fase 3, quadragésimo sétimo lote)
+
+`extend_systemframe(int,int,RECT16*,int)` (`0x11dd88`, 692 B) —
+`jtable.py`: **98% de cobertura** (170/173), zero tabela de salto,
+18 branches/9 de retrocesso. 5 `bl`: `allocatememorywait(int)` ×2,
+`disposememory(char*)`, 1 local sem símbolo (`sub_11d740`, helper
+compartilhado anterior a `extend_windowframemain` no binário),
+`task_wait(long)` ×2, `PSX_LoadImage` ×2. Está colada em memória
+logo após `extend_windowframemain` (seção 252, termina em
+0x11dd64) e usa o mesmo par alocação/espera — confirma ser a
+implementação de engine por trás do wrapper `Wextend_systemframe`
+já citado (junto com `Wextend_windowframemain`/`Wextend_windowframe`)
+como "três variantes de estender moldura de janela" chamadas por
+`Wdisp_floateventwindow`. Marcada `read_structural` (98% ≥95%, 0
+tabela de salto — seguindo a convenção de alta cobertura automática
+sem leitura manual = `read_structural`, não `read_full`).
+
+## 427. `ASHURA_LightSwitch(long)` — folha pura sem `bl`, provável toggle de fontes de luz GTE usado por `ASHURA_set_Mesh` (2026-10-23, Fase 3, quadragésimo sétimo lote)
+
+`ASHURA_LightSwitch(long)` (`0x162e94`, 692 B) — `jtable.py`: **94%
+de cobertura** (163/173), zero tabela de salto, 10 branches/8 de
+retrocesso (compatível com iterar um array pequeno de luzes, até 3 —
+limite clássico do GTE do PS1). **Zero `bl`** — função folha pura,
+toda a lógica inline (sem delegar a nenhuma outra rotina ASHURA/
+libc). Hipótese: percorre um array pequeno de fontes de luz
+(contexto apontado pelo parâmetro `long`), ligando/desligando cada
+uma inline — provavelmente usado por `ASHURA_set_Mesh` (seção 68,
+que já cita "trocar iluminação" como uma de suas 2 únicas `bl`) ao
+configurar um dos 9 tipos de malha 3D. Marcada `read_structural`
+(94% < 95% — lacuna pequena, provável pool literal, não confirmado
+byte a byte).
+
+## 428. `iOS_RectHitExecute()` — motor central do sistema de hit-test de retângulos de toque, fecha o ciclo registro→execução→consulta (2026-10-23, Fase 3, quadragésimo sétimo lote)
+
+**Correção de nome**: o símbolo real (`.dynsym` demangled) é
+`iOS_RectHitExecute()` (sem parâmetros), não "iOS_RectHitExec" como
+hipotetizado ao despachar este alvo. `0x27f238`, 700 B — `jtable.py`:
+**92% de cobertura** (161/175), zero tabela de salto, 24 branches/11
+de retrocesso. 9 `bl`: 1 local sem símbolo (`sub_27f0a4`, 144 B,
+chamado 6×, 97% cobertura própria — formato consistente com teste
+"ponto dentro do retângulo"), `iOS_getTouchTap`, `iOS_getTouchRelease`
+×2, `iOS_getTouchPress`, `iOS_getTouchBeginX`/`Y` ×2 cada,
+`iOS_getTouchNowX`/`Y` ×3 cada, `iOS_isInGameArea` (gate de área de
+jogo ativa).
+
+**Achado estrutural**: a função ocupa o intervalo imediatamente
+anterior a toda a família `iOS_GetRectHitNo{Tap,Release,Slide,Touch,
+TouchTrg,TouchOld,TouchDirect,Begin}` (0x27f4f4..0x27f5d8) — forte
+evidência de coesão de módulo. `iOS_RectHitExecute()` varre os
+retângulos registrados desde o último `iOS_ClearRectHitAll`/
+`iOS_SetRectHit`, cruza cada um com o estado bruto de toque via
+`sub_27f0a4` e grava o resultado num estado interno estático; os 8
+`iOS_GetRectHitNo*` (sem `bl` próprios) são meros acessores que leem
+esse estado já calculado. Fecha o ciclo documentado na seção 331
+(`ctlsthelp_main`: `ClearRectHitAll`+`SetRectHit`+`GetRectHitNo*` por
+frame) — faltava exatamente a etapa "Execute" entre registro e
+consulta; esta função é essa etapa. Marcada `read_structural` (92% <
+95%, lacuna provavelmente pool de literais, não confirmado byte a
+byte).
+
+**Referências cruzadas (seções 424-428):** seções 82/89/393
+(pipeline golpe→animação, `requestDamageAnimation` fecha outro elo),
+seções 139/192 (`setAnimationRealVector`/`displayShape`, vizinhança
+e reuso confirmados por `getDisplayPosition`), seção 252
+(`extend_windowframemain`, par agora identificado com
+`extend_systemframe`), seção 68 (`ASHURA_set_Mesh`, provável
+chamadora de `ASHURA_LightSwitch`), seção 331 (`ctlsthelp_main`,
+ciclo de hit-test agora completo com `iOS_RectHitExecute`).
+
+## 429. `LoadEffect()`/`LoadEffectTIM(short)` — carregamento assíncrono de dados de efeito, confirma o estado "PEffect" mas ainda não localiza o dispatch por ID (2026-10-23, Fase 3, quadragésimo oitavo lote)
+
+`LoadEffect()` (`0x21b5bc`, 676 B) — `jtable.py`: **82% de
+cobertura** (139/169), **1 tabela de salto resolvida** (4 casos → 4
+handlers distintos), 15 branches/9 de retrocesso. 6 `bl`:
+`fileReadRequest`/`fileReadCheck` (I/O assíncrono, mesma família de
+`ASHURA_GNS_Garage`/`ASHURA_GNS_Read`, seção 81/398),
+`effectFadeoutMusic(int,int)`, `SetEffectSetUpDataPtr(short)`,
+**`GetPEffectStatus(unsigned char)`**, **`PermanentEffectEndRequest
+(unsigned char)`**. `LoadEffectTIM(short)` (`0x21b108`, 280 B, 97%
+cob., 0 tabela, 3 branches/1 de retrocesso): 3 `bl` — `loadClutData`
+×2, `PSX_LoadImage`, `ClearImage` (carrega a textura TIM + paleta de
+um efeito específico). Confirma mais uma peça do estado "PEffect"
+(`GetPEffectStatus`/`PermanentEffectEndRequest`, companheiras de
+`NewPEffectTCB`, seção 420) — `LoadEffect` é o carregador assíncrono
+de dados (arquivo + textura) de um efeito, com switch de 4 vias
+sobre o estágio de carregamento (não sobre ID de habilidade). **O
+dispatch por ID das 23 `p[NN]_*Func` continua não localizado** nesta
+cadeia (`callEffect`→`StartEffect`→`StartPermanentEffect`→
+`LoadEffect`, todas folhas de infraestrutura/carregamento, nenhuma
+delas despacha por ID de habilidade). Marcadas `read_structural`
+(`LoadEffect` 82% < 95% apesar da tabela resolvida; `LoadEffectTIM`
+97% ≥95%).
+
+## 430. Família `valueput`/`Wvalueput`/`iOS_valueput_FT4`/`WiOS_valueput_FT4` — wrappers finos que delegam pra `statusfigprint`/`statusfigprint16`, fecham a biblioteca de impressão de valor numérico (2026-10-23, Fase 3, quadragésimo oitavo lote)
+
+Quatro funções pequenas, todas **100% de cobertura**, zero tabela
+de salto: `valueput(char*,VALUERECORD*,COPYFIELD*,int)` (`0xe226c`,
+156 B, 2 `bl` — `statusfigprint16`/`statusfigprint`, seções 46/391),
+`Wvalueput` (`0x110d28`, 156 B, 2 `bl` — `Wstatusfigprint16`/
+`Wstatusfigprint`), `iOS_valueput_FT4(...)` (`0xe2a40`, 196 B, 2 `bl`
+— `iOS_statusfigprint16_FT4`/`iOS_statusfigprint_FT4`, seção 360/391),
+`WiOS_valueput_FT4` (`0x1114b0`, 196 B, 2 `bl` — as variantes "W"
+correspondentes). Confirma que `valueput`/`iOS_valueput_FT4` são só
+despachantes de 2 vias (provavelmente por tamanho de fonte/figura
+— 16px vs. padrão) sobre a biblioteca `statusfigprint` já mapeada
+extensivamente — fecha a família inteira de impressão de valor
+numérico formatado usada por `disp_statuscpara` (seção 361) e outras
+telas. Todas marcadas `read_full` (100% cobertura, catálogo mínimo
+totalmente resolvido).
+
+## 431. `snpl_init(int)`/`snplflg_read(unsigned long*,int)`/`snplflg_write(unsigned long*,int,int)` — confirma "snpl" como sistema de "sound novel" (modo narrativo com áudio), não um acrônimo qualquer (2026-10-23, Fase 3, quadragésimo oitavo lote)
+
+`snpl_init(int)` (`0x26a874`, 764 B, 16 `bl` distintos, 13
+branches/5 de retrocesso): catálogo extenso — `snpl_load(int)`,
+`snpl_putpara()`, `snpl_backput()`, `snpl_picput()`, `snplinf_clr
+(SNPLINFO*)`, **`snSound_play(int)`**, **`envSound_play(int)`**,
+`ssd_request(int,int)` ×2, `wldmusic_change(int)`, `wldssd_wait()`,
+`wldload_wait()`, `pspWorldEnableFlg`/`pspWorldDataRectSet`,
+`Wwrite_eventflag` ×3, `Wsend_taskparamater`. **Confirma a hipótese
+"sound novel"**: a combinação de `snSound_play`/`envSound_play` (som
+narrativo + som ambiente) com `wldssd_wait`/`ssd_request` (mesma API
+SSD — provavelmente "Sound/Speech Data" — já vista em outros
+contextos narrativos) é o padrão clássico de uma cena de novel
+visual com narração sonora, música e background de cena
+(`snpl_backput`/`snpl_picput`). `snplflg_read`/`snplflg_write`
+(`0x26b2f0`/`0x26b2bc`, 44/52 B, 100% cob., 0 `bl`) são
+getter/setter triviais de flag — fecham a referência deixada pela
+seção 404 (`ctlsentuto_main`, chama ambas). Marcadas `read_structural`
+(`snpl_init`, catálogo grande mas cobertura não 100% verificada
+manualmente) e `read_full` (as 2 triviais).
+
+## 432. `ctlnobelstop_init()`/`ctlnobelstop_active`/`ctlnobelstop_deactive` + `ctlnobel_active` — fecham as duas famílias "Novel" (ctlnobel/ctlnobelstop) por completo (2026-10-23, Fase 3, quadragésimo oitavo lote)
+
+`ctlnobelstop_init()` (`0x263fcc`, 680 B, 93% cob., 0 tabela, 0
+branches): 9 `bl` — `iOS_setDispMenuTouch`, `add_anmpac`/
+`add_winpac`, `wldwin_noropen`, `LoadImage_menuData`, `iOS_CMenuTouch::
+setDispOffset`/`init`, `xpLibGetOffset`, `iOS_setV2Icon` ×2.
+`ctlnobelstop_active`/`ctlnobelstop_deactive` (`0x264274`/`0x2642f4`,
+128/132 B, 94% cob. ambas, 0 `bl`) — boilerplate puro de transição
+de estado. Fecha a tríade com `ctlnobelstop_main` (seção 269, já
+lida) — família "parar modo Novel" completa. `ctlnobel_active
+(CTLINFO*)` (`0x263ef4`, 168 B, 93% cob., 0 tabela, 3 branches/0 de
+retrocesso): 3 `bl` — `Wtask_start`, `wldload_wait`, `bk_load(int)`
+— fecha a família "ctlnobel" (init/main já lidas, seções 302/96) por
+completo. Todas marcadas `read_structural` (93-94% < 95% em quase
+todas, mas 0 tabela de salto — famílias de controller agora
+totalmente fechadas).
+
+## 433. `UnitSort()` — wrapper de alto nível que invoca `ChrSort` diretamente, confirma ligação com `iOSUnitListWinOnOff`/`iOSWldUnitListWinSet` (já vistos em `UnitFlagInit`, seção 416) (2026-10-23, Fase 3, quadragésimo oitavo lote)
+
+`UnitSort()` (`0x1c245c`, 680 B) — `jtable.py`: **90% de cobertura**
+(153/170), zero tabela de salto, 9 branches/6 de retrocesso. 11 `bl`
+distintos: `iOSUnitListWinOnOff(int)`, **`ChrSort(int)`** (reentrada
+direta — seção 353, confirma que `UnitSort` é o wrapper de tela que
+chama o algoritmo de ordenação real), `GetSortCondition(int,short*)`/
+`SetSortCondition(int,short*)` (persistência do critério de
+ordenação escolhido), `MessageMake`/`WindowDel`/`DrawMessage` (UI de
+feedback — provável mensagem de confirmação "ordenado por X"),
+`iOSWldUnitListWinSet(int)` (mesma função já vista em `UnitFlagInit`,
+seção 416 — confirma que as duas fazem parte do mesmo módulo de UI
+de lista de unidades do world map), `unitans_init()` (inicialização
+de resposta de unidade), `iOS_getV2Icon`/`iOS_setV2Icon`. Fecha o
+ciclo: `UnitFlagInit` prepara a janela, `UnitSort` processa a escolha
+de critério e invoca `ChrSort` pra reordenar de fato. Marcada
+`read_structural` (90% < 95%, 0 tabela de salto).
+
+**Referências cruzadas (seções 429-433):** seção 420 (`NewPEffectTCB`/
+estado "PEffect", `LoadEffect` confirma mais peças sem achar o
+dispatch por ID), seções 46/360/391 (família `statusfigprint`,
+`valueput` é o wrapper fino de 2 vias), seção 404 (`ctlsentuto_main`,
+fecha a referência a `snplflg_read`/`write`), seções 96/269/302
+(famílias `ctlnobel`/`ctlnobelstop`, ambas agora completas), seção
+353 (`ChrSort`, chamada direta confirmada por `UnitSort`), seção 416
+(`UnitFlagInit`, mesmo módulo de UI de lista de unidades que
+`UnitSort`).
+
+## 434. `ctlhentuto_main(CTLINFO*)` — controller de tutorial "hen" (mudança/transição de cena), distinto tematicamente de `ctlsentuto_main` (2026-10-23, Fase 3, quadragésimo nono lote)
+
+`ctlhentuto_main(CTLINFO*)` (`0x26df48`, 672 B) — `jtable.py`: **95%
+de cobertura** (160/168), zero tabela de salto, 16 branches/7 de
+retrocesso. 15 `bl` distintos: `Wtask_status`, `Wsend_taskparamater`
+×3, `changewindowamb`, `hook_tuto`, `iOS_setTutorialbreak`,
+`wldctl_active`, `wldfade_set`, `snplflg_write` (seção 431),
+`sound_request` ×2, `iOSTutoFlagSet`, `ctlhentuto_deactive` (a si
+mesmo), `curhis_get`/`curhis_clr`, `iOS_setV2Icon`,
+`iOS_setTutorialType` ×2. Compartilha a mesma biblioteca de
+infraestrutura de `ctlsentuto_main` (seção 404:
+`iOSTutoFlagSet`/`snplflg_write`/`sound_request`/`curhis_get`/
+`curhis_clr`), mas adiciona uma camada de transição visual
+(`changewindowamb`, `wldfade_set`, `iOS_setTutorialType` ×2) ausente
+ali — indício de que "hen" (変, mudança) é tematicamente distinto de
+"sen" (戦, batalha), não variação de nomenclatura da mesma mecânica;
+candidato mais provável é o tutorial de mudança de job/classe.
+Marcada `read_full` (95% ≥95%, exatamente no limiar — critério
+automático satisfeito, mas por margem mínima).
+
+## 435. `iOSGetChrList()` — wrapper do port iOS/Android que monta o buffer de personagens a partir do `BWORK`, hipótese de alimentar `ChrSort`/`UnitSort` (2026-10-23, Fase 3, quadragésimo nono lote)
+
+`iOSGetChrList()` (`0x15e144`, 672 B) — `jtable.py`: **96% de
+cobertura** (161/168), zero tabela de salto, 17 branches/12 de
+retrocesso. 4 `bl`: 1 local sem símbolo (`sub_714c4`),
+`iOSAnimeIDCntGet2(BWORK*,int)` ×2, `iOSBwork2ChrStts(BWORK*,
+CHR_STTS*,int)`, `get_bwp(int)` (seção 43). Hipótese: converte
+`BWORK` bruto pra `CHR_STTS` (struct voltada a exibição) por slot,
+coletando também contagem/índice de IDs de animação por unidade —
+candidata natural a ser a função que monta o buffer que `ChrSort`
+(seção 353) depois ordena e `UnitSort` (seção 433) processa.
+**Pendência honesta**: a ligação direta com `ChrSort`/`UnitSort` é
+inferência temática/por tipo (`BWORK`→`CHR_STTS`), não confirmada
+por xref de chamada — nenhum `bl` aqui aponta para elas nem vice-
+versa. Marcada `read_full` (96% ≥95%, 0 tabela de salto).
+
+## 436. `CG2D_COLOR::HSBToRGB(...)` — folha matemática pura do toolkit CG2D, primeira nota dedicada à classe `CG2D_COLOR` (2026-10-23, Fase 3, quadragésimo nono lote)
+
+`CG2D_COLOR::HSBToRGB(unsigned short,unsigned char,unsigned char,
+unsigned int*)` (`0xa1a5c`, 676 B) — `jtable.py`: **99% de
+cobertura** (168/169), zero tabela de salto, 8 branches/4 de
+retrocesso. 7 `bl`, todos helpers de ponto flutuante do runtime do
+compilador (libgcc soft-float): `__addsf3`/`__subsf3`/`__mulsf3`/
+`__divsf3`, `__floatsisf`/`__floatunsisf`, `__fixunssfsi`. Confirma
+ser a conversão HSB→RGB real do toolkit CG2D (mesma família de
+`CG2D_COLOR::GetTone4To8`/`5To8`/`6To8`, já vistas como callees de
+`CG2D_LOADER_BMP::Copy`/`CG2D_LOADER_TGA::Copy`, seções 205/217) —
+algoritmo clássico de setor de matiz + interpolação linear em float,
+sem chamar nenhuma outra classe/símbolo do jogo. Marcada `read_full`
+(99% ≥95%, 0 tabela de salto, catálogo 100% resolvido contra runtime
+conhecido).
+
+## 437. `MakeHeader(int,int,CARD_HEADER*)` — monta o cabeçalho de save real, primeira leitura estrutural da função já citada na seção 45 (2026-10-23, Fase 3, quadragésimo nono lote)
+
+`MakeHeader(int,int,CARD_HEADER*)` (`0x187264`, 688 B) — `jtable.py`:
+**95% de cobertura** (164/172), zero tabela de salto, 4 branches/3
+de retrocesso. 6 `bl`, reconciliados contra identidades já
+confirmadas em outra tabela do projeto (seção de `DrawTile4`, L2690-
+2692): `memcpy` (`0x714b8`) ×3, `memset` (`0x714c4`),
+`__stack_chk_fail` (`0x715cc`, canário de stack — confirma montagem
+do header em buffer local antes de copiar pro `CARD_HEADER*` de
+saída), `read_eventflag(int)`, `__divsi3`/`__aeabi_idivmod` ×2 cada.
+Padrão: zera o buffer → copia 3 campos distintos (título, timestamp/
+checksum, bloco de progresso) → injeta flag de evento/progresso via
+`read_eventflag` → formata tempo/percentual via divisão. Conecta
+`MakeHeader` ao sistema de save já mapeado (seções 42/45:
+`pspSaveDataMissionRateSave`, `pspSaveInit`/`Update`/`Exit`) — o
+cabeçalho carrega indicador de progresso, não só metadado cru.
+Marcada `read_structural` (95% ≥95% satisfaz o critério automático,
+mas layout exato de campos de `CARD_HEADER` não confirmado — mesma
+ressalva já registrada na seção 45 original).
+
+## 438. `jValueFunc(unsigned char*)` — widget de dígito numérico da família `ValueFunc`/`bValueFunc`/`cValueFunc`/`eValueFunc`, cobertura automática baixa por dispatch indireto real via vetor de function-pointers em BSS, não bug de ferramenta (2026-10-23, Fase 3, quadragésimo nono lote)
+
+`jValueFunc(unsigned char*)` (`0x1981b0`, 708 B) — `jtable.py`:
+**23% de cobertura** (40/177), zero tabela de salto resolvida, 1
+bloco termina em branch computado não resolvido (`blx r2` em
+`0x198204`). **Nota de correção de diagnóstico**: o fork que
+analisou esta função inicialmente hipotetizou um "bug de modo ARM/
+Thumb" na ferramenta como causa da cobertura baixa — **verificação
+no código-fonte de `jtable.py` mostra que a ferramenta já usa
+`CS_MODE_ARM` exclusivamente** (não há modo Thumb configurado em
+lugar nenhum), então essa hipótese específica está incorreta e não
+deve ser propagada. A causa real da baixa cobertura é outra: o
+`blx r2` em `0x198204` carrega `r2` de um vetor de function-pointers
+residente em BSS (`jValueFuncList`, símbolo de 64 B/16 entradas,
+zerado no `.so` e populado só em runtime) — um dispatch indireto
+genuinamente irresolvível estaticamente sem dump de memória, não um
+erro de decodificação. A descida recursiva do `jtable.py` parar
+nesse ponto é o comportamento correto esperado, não uma falha.
+
+Com disassembly manual (Capstone, `CS_MODE_ARM`, mesma config da
+ferramenta) o fork recuperou o fluxo completo e resolveu os `bl`
+reais via GOT: `jDrawFT4RGB` (`0x194048`) ×2 (dígitos normais e
+ramo de valor negativo), `sprintf@plt` (formata o texto do sinal
+negativo), `__stack_chk_fail@plt` (canário). **Confirma a família**:
+`jValueFunc` é a variante "j" de `ValueFunc`/`bValueFunc`/
+`cValueFunc`/`eValueFunc`/`ValueFuncShort` (já vistas nas seções
+222/227), cada uma com seu próprio vetor paralelo de callbacks
+(`jValueFuncList`/`bValueFuncList`/etc.) — **sem relação com
+`valueput`/`VALUERECORD`/`iOS_valueput_FT4`** (seção 430, família
+diferente de impressão de campo formatado). Desenha um valor
+numérico dígito a dígito lendo campos do widget (`[r4+4]`=contagem
+de dígitos, `[r4+8/9]`=valor+flags, `[r4+5/7]`=stride/posição),
+disparando um callback de setup via `jValueFuncList[[r4+3]]` antes
+de iterar. Marcada `read_structural` (dispatch indireto real via
+BSS é pendência estrutural inerente a toda a família, mesmo
+tratamento já dado a `bValueFunc`/`eValueFunc` nas seções 222/227 —
+não é lacuna de análise).
+
+**Referências cruzadas (seções 434-438):** seção 404 (`ctlsentuto_main`,
+biblioteca de tutorial compartilhada com `ctlhentuto_main`), seções
+353/433 (`ChrSort`/`UnitSort`, candidata ligação com `iOSGetChrList`),
+seções 205/217 (`CG2D_LOADER_BMP/TGA::Copy`, família `CG2D_COLOR`
+agora com conversão HSB→RGB documentada), seção 45 (sistema de save,
+`MakeHeader` lida por completo pela primeira vez), seções 222/227
+(família `ValueFunc`, `jValueFunc` confirma o padrão de dispatch via
+BSS — nota de correção sobre modo ARM/Thumb da ferramenta registrada
+para não se propagar em sessões futuras).
+
+## 439. `make_abilitycommandmain()`/`Wmake_abilitycommandmain()` — monta a janela de comando de habilidade, fecha a referência da seção de ação de batalha (2026-10-23, Fase 3, quinquagésimo lote)
+
+`make_abilitycommandmain()` (`0xdd9fc`, 668 B, 93% cob., 0 tabela, 8
+branches/6 de retrocesso) e `Wmake_abilitycommandmain()` (`0x106448`,
+792 B, 93% cob., 0 tabela, 12 branches/8 de retrocesso): par normal/
+"W". 5 `bl` cada: `serchmessagepointer`/`Wserchmessagepointer`,
+`read_eventflag`/`Wread_eventflag` ×2, `get_bwp(int)`,
+**`check_act_ok(BWORK*)`**, **`get_actwindow_data(int,unsigned
+char*,unsigned char*,unsigned char*)`**. Confirma ser a montagem
+real da janela de comando de habilidade durante o turno de batalha —
+valida se a ação é possível (`check_act_ok`) e busca os dados de
+exibição da janela de ação (`get_actwindow_data`). Marcadas
+`read_structural` (93% < 95%, 0 tabela de salto em ambas).
+
+## 440. `ctlbar_init()`/`ctlbar_deactive(CTLINFO*)` — fecham a tríade com `ctlbar_main` (seção 186), controller de barra com integração de "entrada no mapa" via rede (2026-10-23, Fase 3, quinquagésimo lote)
+
+`ctlbar_init()` (`0x24b420`, 668 B, cobertura não capturada no
+resumo truncado, 0 tabela, 4 branches/1 de retrocesso): 18 `bl`
+distintos — `barmenu_reset` (seção 368, confirma que "ctlbar" é a
+família por trás de `barmenu_reset`!), `wldframe_clr`/`wlddisp_mask`/
+`wldfade_set`/`wldload_wait`, `psp_bk_load(int,void*)`, `add_anmpac`/
+`add_winpac`, **`pspNetEntranceMapThumLoad()`**/**`pspNetEntrance
+MissionStateInit()`** (confirma integração com o sistema de rede de
+"entrada" no mapa — carrega thumbnail e inicializa estado de missão,
+provavelmente pra sincronizar com outro jogador numa sessão
+cooperativa/versus), `pspWorldEnableFlg`/`DisableFlg`/
+`DataBackBufGet`/`DataRectSet`, `xpLibgpuClearImage` ×3, `xpMallocIO`.
+`ctlbar_deactive(CTLINFO*)` (`0x24b790`, 148 B, 92% cob., 1 `bl`
+— `iOS_setDispMenuTouch`): teardown simples. Fecha a tríade
+init/main/deactive com `ctlbar_main` (seção 186, já lida) — "bar"
+é o menu de barra lateral do world map, agora confirmado como a
+família que chama `barmenu_reset` ao sair. Marcadas `read_structural`.
+
+## 441. `ctlhouk_init()`/`ctlhouk_main(CTLINFO*)` — controller de "relatório" (報告/houkoku), delega a um overlay OK/NG genérico via `ctlokng_init` (2026-10-23, Fase 3, quinquagésimo lote)
+
+`ctlhouk_init()` (`0x259bd8`, 664 B, 92% cob., 0 tabela, 10
+branches/4 de retrocesso): 7 `bl` — `Wtask_create`/`Wtask_status`/
+`Wsend_taskparamater`, `barmenu_reset` (mesma chamada de `ctlbar_init`
+— confirma que múltiplos controllers de menu compartilham o mesmo
+teardown de UI), `wldctl_active`, `defscrwin_set`/`curhis_put`.
+`ctlhouk_main(CTLINFO*)` (`0x259ebc`, 564 B, 91% cob., 0 tabela, 9
+branches/4 de retrocesso): 10 `bl` — `Wtask_status`/
+`Wsend_taskparamater`, `ctlhouk_deactive` ×2 (a si mesmo),
+**`houkokuinf_init(int)`** (confirma "houk" = 報告/houkoku,
+"relatório" — provável tela de relatório de missão/evento),
+**`ctlokng_init(_POINT)`** — achado importante: um construtor
+**genérico** de overlay OK/NG parametrizado por posição (`_POINT`),
+diferente dos wrappers dedicados já vistos (`mouke_okng`/
+`ctlhakenokng_main`/`ctlbirthokng_*`/`ctlretokng_*`, seções 343/366/
+372/414) — sugere que esses quatro são instâncias pré-configuradas
+de um framework mais genérico de confirmação, do qual `ctlokng_init`
+é a raiz. `sound_request` ×2, `curhis_get`/`curhis_clr`,
+`iOS_dispOkNg(int,int)`, `iOS_setV2Icon`. Marcadas `read_structural`
+(91-92% < 95%, 0 tabela de salto).
+
+## 442. `ctlchrmake_init()`/`ctlchrmake_main(CTLINFO*)` — hub de criação de personagem/novo jogo, orquestra birthday+música+mensagens "arzmes" (2026-10-23, Fase 3, quinquagésimo lote)
+
+`ctlchrmake_init()` (`0x24748c`, 348 B, 93% cob., 0 tabela, 4
+branches/2 de retrocesso): 12 `bl` — `callMusic(int)`,
+`vOpn_arzmes_init(int,int,unsigned long*)` (seção 365, família de
+mensagem), `vOpn_fadein`/`vOpn_loadwait`/`vOpn_bk_load`/
+`vOpn_dataload2()`, `Ssd_SetSpuVolume(short,short)` ×2,
+`pspOpenDataBackBufGet` ×2/`pspOpenEnableFlg`, `CFFT_STATE::
+SetRenderSize`, `xpMallocIO`, `iOS_setV2Icon` ×6. `ctlchrmake_main
+(CTLINFO*)` (`0x2475e8`, 668 B, 90% cob., 0 tabela, 17 branches/9 de
+retrocesso): 18 `bl` — `get_unitwork_add`, `fadeMusic`/`stopMusic`,
+`vOpn_arzmes_exit()`/`vOpn_arzmes_main()`, **`ctlbirthday_init()`**
+(seção 347 — confirma que a criação de personagem dispara o fluxo
+de aniversário!), **`ctlmusic_init()`** (seção 388), `vOpn_fadeout`,
+`wldbin_loadchk(int)`, `iOS_ClearRectHitAll` ×2, `iOS_setMask`,
+`pspOpenDataBackBufGet` ×2, `DrawSync` ×2, `PSX_LoadImage`,
+`StoreImage`, `xpFree`, `iOS_getV2Icon`/`iOS_setV2Icon` ×3. Confirma
+ser o hub da sequência de "criar personagem"/novo jogo: toca
+música, exibe mensagens de introdução via "arzmes", e dispara
+`ctlbirthday_init` (fluxo de aniversário) e `ctlmusic_init` como
+parte da sequência de abertura de uma nova partida. Marcadas
+`read_structural` (90-93% < 95%, 0 tabela de salto em ambas).
+
+## 443. `MasaDataInit()` — fecha o follow-up direto da seção 416 (`UnitFlagInit`), setup completo de tela de lista/roster com fade e carga de imagem (2026-10-23, Fase 3, quinquagésimo lote)
+
+`MasaDataInit()` (`0x1baec8`, 668 B) — `jtable.py`: **93% de
+cobertura** (156/167), zero tabela de salto, 1 branch/0 de
+retrocesso. 11 `bl` distintos: `worldmap_restart()`,
+`MessageDataSet(int)` ×4, `SetFrameRate(int)`, `FadeInInit()`,
+`WaitLoadImage(RECT16*,unsigned char*)` ×6, `WaitStoreImage
+(RECT16*,unsigned char*)` ×2, `MenuSelInit()`, `unitans_init()`
+(mesma função já vista em `UnitSort`, seção 433), `WindowInit
+(short*,int,unsigned char*)`, `SetDispMask`, `ClearImage`. Fecha o
+follow-up direto da seção 416 (`UnitFlagInit` dispara `MasaDataInit`
+ao preparar a janela de lista de unidades) — confirma ser o setup
+completo da tela (reinício do estado de world map, preparo de
+mensagens, fade-in, carregamento síncrono de imagem/buffer, menu de
+seleção). "Masa" permanece sem confirmação de significado literal
+(nome próprio de desenvolvedor? abreviação interna?) — hipótese não
+resolvida nesta passada. Marcada `read_structural` (93% < 95%, 0
+tabela de salto).
+
+**Referências cruzadas (seções 439-443):** seção 368 (`barmenu_reset`,
+agora identificada como pertencente à família "ctlbar", reusada
+também por `ctlhouk_init`), seção 186 (`ctlbar_main`, tríade agora
+completa), seções 343/366/372/414 (família OK/NG, `ctlokng_init`
+revela-se como a raiz genérica dos 4 wrappers), seção 347
+(`ctlbirthday_init`, disparada por `ctlchrmake_main` — hub de novo
+jogo confirmado), seção 388 (`ctlmusic_init`, mesma relação), seção
+365 (`vOpn_arzmes_init`/`_exit`/`_main`, consumida por
+`ctlchrmake_main`), seção 416 (`UnitFlagInit`, follow-up direto
+fechado por `MasaDataInit`), seção 433 (`UnitSort`, mesmo
+`unitans_init` reusado por `MasaDataInit`).
+
+## 444. `iOSYajiEffectSetLRTGA(int)` — setup de assets TGA esquerda/direita pra seta "Yaji", dois switches quase-gêmeos de 17 casos (2026-10-23, Fase 3, quinquagésimo primeiro lote)
+
+`iOSYajiEffectSetLRTGA(int)` (`0x160fb4`, 668 B) — `jtable.py`: **77%
+de cobertura** (128/167), **2 tabelas de salto resolvidas** (17
+casos → 10 handlers cada, alvos quase idênticos entre as duas), 19
+branches/16 de retrocesso. 2 `bl`: `iOS_getV2Icon`,
+`iOS_getCarrierType()` (decisão de variante de UI dependente de
+operadora — não geometria da seta). Dois switches quase-gêmeos sobre
+o mesmo intervalo de índices (0-16) sugerem "setar lado Esquerdo" na
+primeira passada e "lado Direito" na segunda — condizente com o nome
+`SetLRTGA`. É o passo de configuração/armamento de textura consumido
+pelas rotinas de desenho já mapeadas (`iOSSlideYajiMain`, seção 345;
+`iOSYajiEffect`, seção 407). Marcada `read_structural` (77% < 95%,
+apesar das 2 tabelas resolvidas — lacuna honesta nos handlers menos
+comuns).
+
+## 445. `FFTPSP_ASURA_polygon_combine(...)` — combinação/interpolação de polígono pra deformação de malha (morphing/skinning), folha pura com switch denso de 29 casos (2026-10-23, Fase 3, quinquagésimo primeiro lote)
+
+`FFTPSP_ASURA_polygon_combine(long,ADB*,SVECTOR*,SVECTOR*,SVECTOR*)`
+(`0x2862fc`, 772 B) — `jtable.py`: **76% de cobertura** (147/193),
+**3 tabelas de salto resolvidas** (29 casos → 6 handlers, "default"
+repetido ~20×; mais 2 tabelas de 4 casos → 4 handlers cada), 22
+branches/15 de retrocesso. **Zero `bl`** — função folha pura, 100%
+lógica inline. A assinatura (flag/tipo, bloco `ADB*`, 3 `SVECTOR*` =
+vértices de um triângulo) combinada com o switch denso de 29 casos
+aponta para combinação/interpolação de polígono pra deformação de
+malha por vértice (morphing/skinning), parte do pipeline ASURA de
+animação de malha (seções 38/48). Marcada `read_structural` (76% <
+95%, apesar das 3 tabelas resolvidas — lacuna honesta de ~24%,
+provavelmente dentro dos handlers menores do switch grande).
+
+## 446. `CINPUT_IF_TOUCH::GetGesturePinch(...)` — consulta de gesto de pinça (zoom), camada C++ moderna distinta de `iOS_getTouch*` (2026-10-23, Fase 3, quinquagésimo primeiro lote)
+
+`CINPUT_IF_TOUCH::GetGesturePinch(float,float*,unsigned int*,int*,
+unsigned char*,unsigned char*)` (`0xb4a98`, 664 B) — `jtable.py`:
+**100% de cobertura** (166/166), zero tabela de salto, 15 branches/8
+de retrocesso. 7 `bl`: 1 local sem símbolo (`sub_719f8`, ×2),
+`CINPUT_IF_TOUCH::GetData(int)`, `timeGetTime()`, `__floatsisf` ×2,
+`__divsf3`, `__aeabi_fcmpeq`/`fcmplt`. Função de consulta (polling),
+não handler de evento — varre slots de toque ativos, identifica os 2
+dedos candidatos, converte coordenadas pra float, calcula razão de
+distância (zoom), compara contra o `threshold` recebido e marca o
+instante via `timeGetTime`. Primeira leitura estrutural dedicada
+(já citada de passagem num catálogo maior). Complementa
+`GetGestureDoubleTap`/`GetGestureTap`/`GetGestureSwipe_Old` na
+camada de detecção de gesto de alto nível, acima de `GetData`/
+`OnTouches*`. Marcada `read_structural` (100% cobertura e 0 tabela
+de salto satisfazem o critério numérico, mas `sub_719f8` não
+identificado e papel exato dos parâmetros de saída não confirmado
+instrução a instrução).
+
+## 447. `vOpn_window(WINPAC*,unsigned long*)` — par de `vOpn_anim` para janelas, confirma arquitetura "vOpn" paralela a `wld_window`/`wld_anim` (2026-10-23, Fase 3, quinquagésimo primeiro lote)
+
+`vOpn_window(WINPAC*,unsigned long*)` (`0x24a688`, 668 B) —
+`jtable.py`: **98% de cobertura** (164/167), zero tabela de salto, 1
+branch de retrocesso. 7 `bl`: `vOpn_winopen_frmcalc(int,RECT16*,
+RECT16*)`, `AddPrim` ×2, `GetTPage`/`GetClut`, `SetSprt`,
+`SetDrawMode`/`SetSemiTrans`. É o par exato de `vOpn_anim(ANMPAC*,
+unsigned long*)` (seção 386), trocando `ANMPAC` por `WINPAC` e
+`vOpn_winopen_frmcalc` no lugar do cálculo de frame de animação —
+confirma que a família "vOpn" tem seu próprio par `_window`/`_anim`,
+paralelo ao par world-map "normal" `wld_window`/`wld_anim`, mas
+montando a primitiva manualmente via API PSYQ em vez de delegar a
+`GsSortFastSprite`. Marcada `read_full` (98% ≥95%, 0 tabela de
+salto); hipótese não cravada: os 2 `AddPrim` podem ser duas
+primitivas distintas por pacote de janela (moldura + preenchimento).
+
+## 448. `pspWorldBlackSpotDraw(GsOT*,int)` — confirma a hipótese de "fog-of-war" já levantada em `wldscr_snapshot`, overlay preto com gradiente em 4 iterações/8 primitivas (2026-10-23, Fase 3, quinquagésimo primeiro lote)
+
+`pspWorldBlackSpotDraw(GsOT*,int)` (`0x28b0c0`, 772 B) — `jtable.py`:
+**100% de cobertura** (193/193), zero tabela de salto, 7 branches/4
+de retrocesso. 2 `bl`: `GetTPage(1,2,0x1c0,0x100)` (prólogo),
+`GsSortPoly(ot,prim,depth)` ×2. Desassemblado manualmente pra
+confirmar a semântica ambígua do nome "BlackSpot": o 2º parâmetro
+(int) é truncado e usado como sort-key/profundidade de OT; o
+prólogo monta um template de primitiva GPU e o duplica; um laço de 4
+iterações grava 4 conjuntos diferentes de componentes de cor
+RGB/UV-posição num quad com gradiente (constante `~0x7f` = cor-base
+preta/escura em todas as variantes), inserindo 2 primitivas na OT
+por iteração (8 inserções totais). **Confirma exatamente a hipótese
+de "fog-of-war" já levantada de fora** pela seção 328
+(`wldscr_snapshot`, que já citava esta função como a etapa de
+fog-of-war da composição do world map) e pela seção 11
+(`wldnormal_lop`, que a chama no pipeline de frame real): não
+desenha sprite texturizado, é um preenchimento de área com gradiente
+preto pra mascarar/escurecer regiões não exploradas do mapa. Marcada
+`read_full` (100% cobertura, 0 tabela de salto, nenhum `bl` sem
+nome, desassemblado manual confirmatório feito).
+
+**Referências cruzadas (seções 444-448):** seções 345/407 (família
+"Yaji", `iOSYajiEffectSetLRTGA` fecha o setup de textura),
+seções 38/48 (pipeline ASURA de animação de malha, `FFTPSP_ASURA_
+polygon_combine` como peça de deformação), camada `CINPUT_IF_TOUCH`
+(input C++ moderno, distinto de `iOS_getTouch*`), seção 386
+(`vOpn_anim`, par confirmado com `vOpn_window`), seções 11/328
+(`wldnormal_lop`/`wldscr_snapshot`, hipótese de fog-of-war confirmada
+por `pspWorldBlackSpotDraw`).
+
+## 449. `ASHURA_init()` — inicializador de templates de primitiva do motor 3D, achado arquitetural de alto valor nunca citado antes (2026-10-23, Fase 3, quinquagésimo segundo lote)
+
+`ASHURA_init()` (`0x1650f4`, 660 B) — `jtable.py`: **96% de
+cobertura** (158/165), zero tabela de salto, 7 branches, **todos os
+7 de retrocesso** (laço único dominando toda a função). 6 `bl`
+distintos: `SetPolyF3` ×2, `SetPolyF4`, `SetPolyFT3` ×2, `SetPolyG4`,
+`SetPolyGT4`, `SetDrawMode` ×2. Nunca citada em nenhuma seção
+anterior apesar de ser o inicializador nominal de todo o motor
+"ASHURA"/"ASURA" (mencionado de passagem na introdução do projeto,
+linha 4469, mas nunca lido). Confirma ser o setup de **templates de
+primitiva GPU** — inicializa um template para cada tipo de polígono
+PS1 suportado pelo motor (flat triangle/quad, textured triangle,
+gradient quad, textured gradient quad), chamando `SetDrawMode` pra
+configurar o modo de desenho padrão. É executado uma vez no boot do
+motor 3D, antes de qualquer `ASHURA_addPrim`/`ASHURA_getOTptrZ`
+rodar. Marcada `read_full` (96% ≥95%, 0 tabela de salto).
+
+## 450. `ctlopt_init()`/`ctlopt_main(CTLINFO*)` — fecham a última pendência explícita do hub `ctlbrst_main` (seção 312), tela de opções com múltiplos snapshots de screenshot (2026-10-23, Fase 3, quinquagésimo segundo lote)
+
+`ctlopt_init()` (`0x255280`, 296 B, 88% cob., 0 tabela, 2 branches/0
+de retrocesso): 5 `bl` — `Wread_eventflag`, `request_worldcommand
+(int,int,int)`, `LoadImage_menuData`, `pspWorldEnableFlg`,
+`iOS_setV2Icon` ×2. `ctlopt_main(CTLINFO*)` (`0x255b88`, 652 B, 96%
+cob., 0 tabela, 25 branches/11 de retrocesso): 10 `bl` —
+`Wrecieve_statusinfo()`, `Wread_eventflag` ×3, `wldctl_active`,
+`wldkey_repinit()`, **`wldscr_snapshot(int)`** ×3 (chamada 3×! —
+provável thumbnail de 3 slots de save/preview diferentes na tela de
+opções), `iOSSnapshotSet(int)`, `frmbuf_get()`, `iOSTutoFlagSet`,
+`CFFT_STATE::SetParam`, `iOS_setV2Icon` ×5. Fecha a última das 8
+pendências explícitas deixadas pela seção 312 (`ctlbrst_init`, hub
+Zodíaco) — confirma "opt" como a tela de configurações/opções do
+jogo, com uso intenso de snapshot de tela (provavelmente pra exibir
+preview do mapa atual dentro do menu de opções). Marcadas
+`read_structural`/`read_full` respectivamente (`ctlopt_init` 88% <
+95%; `ctlopt_main` 96% ≥95%).
+
+## 451. Família `CursolFunc`/`bCursolFunc`/`cCursolFunc`/`eCursolFunc`/`jCursolFunc` + `CursolDownFunc` — confirma o padrão letter-prefix, cada variante desenha o cursor via seu próprio `DrawFT4RGB` (2026-10-23, Fase 3, quinquagésimo segundo lote)
+
+Mesmo padrão exato já confirmado em `MakeSmallWindowFunc` (seção
+358): cada variante chama **um único `bl`, 2×**, sua própria rotina
+`*DrawFT4RGB` por-letra. `CursolFunc(DVECTOR*,unsigned short*,int)`
+(`0x1c5770`, 520 B, 93% cob.) → `DrawFT4RGB` ×2. `bCursolFunc`
+(`0x182380`, 508 B, 94% cob.) → `bDrawFT4RGB` ×2. `cCursolFunc`
+(`0x1753f4`, 516 B, 93% cob.) → `cDrawFT4RGB` ×2. `eCursolFunc`
+(`0x191d84`, 520 B, 93% cob.) → `eDrawFT4RGB` ×2. `jCursolFunc`
+(`0x198614`, 520 B, 93% cob.) → `jDrawFT4RGB` ×2. Todas 0 tabela de
+salto, 9 branches/7 de retrocesso cada — topologia idêntica entre as
+5. Fecha a biblioteca `WindowInit2`/`DrawWindow2`/`CursolFunc`/
+`WindowPrioritySet` já citada em várias telas de equipar/loja
+(linhas 5015/7262/7905/9418) — `CursolFunc` é a navegação de cursor
+visual real, desenhada 2× por chamada (provável highlight +
+indicador de seleção). `CursolDownFunc(DVECTOR*,unsigned short*,int)`
+(`0x1c6ca4`, 648 B, 94% cob., 1 `bl` — **`DrawTexFree(short*,
+COLOR*,int,int)`**, mecanismo de desenho diferente, textura livre em
+vez de FT4RGB): variante "pressionado"/estado alternativo do cursor,
+usando um primitivo de forma livre em vez do quad fixo. Todas
+marcadas `read_structural` (93-94% < 95%, 0 tabela de salto em
+todas).
+
+## 452. Família `allocatetexture`/`Wallocatetexture`/`*init`/`*const` — alocador de atlas de textura compartilhado, 6 funções fecham o framework por completo (2026-10-23, Fase 3, quinquagésimo segundo lote)
+
+`allocatetexture(RECT16*,tagPOLY_FT4*,long*)` (`0xd7498`, 648 B, 99%
+cob., 0 tabela, 18 branches/8 de retrocesso) e `Wallocatetexture`
+(`0xff03c`, 656 B, 99% cob., mesma topologia): 2 `bl` cada —
+**`hook_allocate_texture()`** (hook de debug/instrumentação) e
+`GetTPage`. `allocatetextureinit()`/`Wallocatetextureinit()`
+(`0xd745c`/`0xfeffc`, 60/64 B, 93-94% cob., 0 `bl`): boilerplate de
+reset de estado do alocador. `allocatetextureconst(RECT16*,int,int,
+tagPOLY_FT4*,int)`/`Wallocatetextureconst` (`0xd893c`/`0x10060c`, 52
+B cada, 100% cob., 1 `bl` cada — reentram em `allocatetexture`/
+`Wallocatetexture` com parâmetros fixos/"const"). Fecha o framework
+de alocação de textura por completo: `*init` reseta o estado,
+`allocatetexture` é o alocador real (consulta `GetTPage` pra
+textura/paleta atual), `*const` é o wrapper de conveniência pra
+alocação com tamanho fixo conhecido em compile-time. Todas marcadas
+`read_structural`/`read_full` conforme cobertura (as 4 com `bl`
+mínimo e 100%/99% ficam `read_full`; as 2 `*init` com 93-94% ficam
+`read_structural`).
+
+## 453. `padRead()` — achado arquitetural: poll de input por frame que também detecta combo de reset e auto-command de rede, não um simples wrapper de leitura de pad (2026-10-23, Fase 3, quinquagésimo segundo lote)
+
+`padRead()` (`0x211460`, 656 B) — `jtable.py`: **cobertura alta**
+(resumo truncado, mas 0 tabela de salto), 19 branches/13 de
+retrocesso. 12 `bl` distintos: `read_eventflag`,
+`tutorial_padcontrol(int*)`, `searchCurrentAnimation()` ×2,
+`pspNetCheckAutoCommandPlayer()` ×2, **`resetFFT()`** ×2 (!),
+`callSystemSound`, `iOS_setReset(int)`/`iOS_getReset(int)`,
+`hook_Debug2(char const*)`, `pspNetGetBattleModeFlag()` ×2,
+`pspNetPadRead`, `iOS_setInterFlag(int)`.
+
+**Achado de alto valor**: `padRead()` não é um wrapper simples de
+leitura de controle — é a função que, a cada frame, lê o pad real
+(`pspNetPadRead`) e **também detecta o combo de reset do console**
+(chamando `resetFFT()` quando a condição de reset é satisfeita —
+mesmo papel do reset físico do PS1, preservado no port) e **verifica
+se é a vez do jogador automático em modo de rede**
+(`pspNetCheckAutoCommandPlayer`, condicionado por
+`pspNetGetBattleModeFlag`). Também dispara `tutorial_padcontrol`
+(gate de tutorial sobre input) e consulta `searchCurrentAnimation`
+(provável supressão de input durante animação em curso). Paralela
+ao achado da seção 376 (`mainLoop`, dispatcher de transição de
+modos) — `padRead` é outra função "guarda-chuva" cujo nome sugere
+algo simples mas que na verdade concentra lógica central do motor
+(reset, rede, tutorial). Marcada `read_structural` (pendência
+honesta: resumo de cobertura truncado nesta passada, revisão
+numérica exata recomendada antes de promover a `read_full`).
+
+**Referências cruzadas (seções 449-453):** seção 312 (`ctlbrst_init`,
+hub agora com as 8 pendências totalmente fechadas via `ctlopt_init`/
+`_main`), seção 358 (família letter-prefix, `CursolFunc` confirma o
+mesmo padrão), seção 376 (`mainLoop`, mesmo arquétipo de "função com
+nome simples mas papel arquitetural central" que `padRead`).
+
+## 454. `mksuccess_calc()`/`mkbonus_check()` — família "mk" de cálculo ligada ao cluster "mouke"/roster, distinta do prefixo "mouke" propriamente dito (2026-10-23, Fase 3, quinquagésimo terceiro lote)
+
+`mksuccess_calc()` (`0x25bc78`, 784 B) — `jtable.py`: **97% de
+cobertura** (191/196), zero tabela de salto, 16 branches/10 de
+retrocesso. 4 `bl`: `jobnumber_conv(int)` ×3, `mkadrtbl_calc(int)`
+×4, `get_unitwork_add_wld(int)` ×2, `ps_rand()` ×1 (sorteio único).
+`mkbonus_check()` (`0x25c124`, 648 B) — `jtable.py`: **98% de
+cobertura** (158/162), zero tabela de salto, 17 branches/8 de
+retrocesso. 3 `bl`: `Wread_eventflag` ×2, `mkadrtbl_calc(int)` ×4,
+`ps_rand()` ×4. Geograficamente vizinhas do cluster "mouke"/roster
+(`ctlmouke_init` em 0x25fff8, `mouke_okng` em 0x260ce8) mas prefixo
+"mk" (make) distinto de "mouke" (confirmado não ser a mesma família
+— não confundir). Hipótese: cálculo de taxa de sucesso (acumula
+modificadores por job/atributo em laço via `mkadrtbl_calc`, decide
+com rolagem única de RNG) e checagem de bônus (cruza flag de evento
+com tabela calculada, múltiplas rolagens de RNG). `jobnumber_conv`/
+`mkadrtbl_calc` ainda sem leitura dedicada — candidatos naturais de
+follow-up. Marcadas `read_full` (ambas ≥95%, 0 tabela de salto, `bl`
+totalmente resolvidos sem ambiguidade).
+
+## 455. `requestStatusChangeAnimation(tag_animation*)` — dispatcher de animação de mudança de status (cristal/morte/padrão), ponte entre `changeAnimationStatus` e os efeitos finais (2026-10-23, Fase 3, quinquagésimo terceiro lote)
+
+`requestStatusChangeAnimation(tag_animation*)` (`0x1efe60`, 660 B) —
+`jtable.py`: **98% de cobertura** (162/165), zero tabela de salto,
+32 branches/18 de retrocesso. 7 `bl`: `forceChangeAnimation` ×6,
+`callAnimationSound` ×3, `requestDefaultAnimation` ×2, 1 local sem
+símbolo (`sub_1e7d28`) ×2, **`requestCristalEffect(tag_animation*)`**,
+**`requestDeathEffect(tag_animation*)`**, `activateAnimation(int)`.
+Hipótese: despacha pela cadeia `cmp`/`beq` curta (sem tabela — poucos
+casos: cristal/morte/padrão) sobre o tipo de transição de status,
+chamando o efeito terminal correspondente e tocando o SFX da
+transição. Encaixa como a peça que `changeAnimationStatus` (seção
+411) efetivamente aciona pra materializar visualmente a mudança —
+papel análogo, em nível de status de unidade, ao de
+`requestDamageAnimation` (seção 424, reação a golpe). Marcada
+`read_structural` (98% ≥95%, 0 tabela de salto — seguindo a
+convenção explícita de alta cobertura automática sem leitura manual
+= `read_structural`, não `read_full`).
+
+## 456. `ctlflagset_main(CTLINFO*)` — provável tela de debug/dev pra listar e alternar flags de evento (2026-10-23, Fase 3, quinquagésimo terceiro lote)
+
+`ctlflagset_main(CTLINFO*)` (`0x255ee0`, 660 B) — `jtable.py`: **95%
+de cobertura** (157/165, exatamente no limiar), zero tabela de
+salto, 18 branches/10 de retrocesso. 4 `bl`: `Wread_eventflag(int)`,
+`ctlflag_winset(CTLINFO*)`, `wldkey_rep(unsigned long)` ×2,
+`iOS_add_anmpac_max(int)`. Hipótese: tela de debug/dev que lista
+flags de evento, permite navegar com repeat de tecla (`wldkey_rep`),
+lê o estado de cada flag (`Wread_eventflag`) e desenha cada linha
+com cursor animado (`ctlflag_winset` + `iOS_add_anmpac_max`).
+Marcada `read_structural` (95% exatos — no limiar sem margem,
+tratado com cautela adicional em vez de aceite automático
+irrestrito).
+
+**Referências cruzadas (seções 454-456):** seções 167/366/383
+(cluster "mouke"/roster, `mksuccess_calc`/`mkbonus_check`
+geograficamente vizinhos mas família de nome distinta), seção 411
+(`changeAnimationStatus`, `requestStatusChangeAnimation` é a ponte
+pra efeitos finais), seção 424 (`requestDamageAnimation`, papel
+análogo em outro contexto).
+
+## 457. `pspCtltutonet_init(...)` — inicializador linear do popup de nota/dica tutorial, par direto de `pspCtltutonet_main` (seção 333) (2026-10-23, Fase 3, quinquagésimo terceiro lote)
+
+`pspCtltutonet_init(...)` (`0x24fa34`, 664 B) — `jtable.py`: **95%
+de cobertura** (157/166), zero tabela de salto, **zero branches**
+(função inteiramente linear, sem loop nem condicional). 5 `bl`:
+`add_anmpac`/`add_winpac` (registram os pacotes gráficos do popup),
+`wldwin_set`/`wldwin_trans` (posicionam e disparam a transição de
+entrada), `wldmess_put` ×3 (escreve a mensagem inicial). Confirma
+ser o par `_init` (setup único, sem loop) de `pspCtltutonet_main`
+(seção 333, que já estabeleceu "net" = "note"/nota tutorial, não
+rede — nenhuma chamada de socket/network em nenhuma das duas). Junto
+com `ctltips_init`/`_main` e o hub `ctltuto_main` (seção 166),
+confirma o padrão geral da família: `_init` linear faz setup único,
+`_main` é a máquina de estado com polling. Marcada `read_structural`
+(95% no limiar, 0 tabela de salto, mas sem leitura manual completa).
+
+**Referência cruzada:** seção 333 (`pspCtltutonet_main`, par agora
+completo), seção 166 (`ctltuto_main`, hub da família de tutoriais).
+
+## 458. `CAUTOSAVE::Load()`/`CAUTOSAVE::IsExist()` — fecham o par com `CAUTOSAVE::Save` (seção 19.1), confirmam o mecanismo de dump/restauração de heap completo (2026-10-23, Fase 3, quinquagésimo quarto lote)
+
+`CAUTOSAVE::Load()` (`0x28ca3c`, 632 B) — `jtable.py`: **97% de
+cobertura** (153/158), zero tabela de salto, 9 branches/4 de
+retrocesso. **24 `bl` distintos**: `CCOMP_Z_DEC::Decode(unsigned
+char*,unsigned char*,int)` (descompressão — confirma que o dump
+salvo por `CAUTOSAVE::Save` é compactado), `CFILE::CFILE`/`Open`/
+`~CFILE`/`Read` ×2/`GetSize` (I/O de arquivo via classe C++
+moderna), `CWORK_MEM::GetTail(unsigned int)` ×3, **`iOS_ResumeGetData`**/
+**`iOS_WorldMapResumeGetData`** (mesma família de "resume" já mapeada
+nas seções 105/387/396/416), `CFFT_STATE::Resume(_FFT_STATE_RESUME*)`,
+`xpLib_GetTPage`, `xpGetHeap`/`xpGetHeapSize`/`xpMoveHeap` ×2 cada,
+`GuEmu_ClearTexCache()`, `CAPP_INFO::GetStoragePath()`, 2 locais sem
+símbolo. `CAUTOSAVE::IsExist()` (`0x28ccb4`, 396 B, **100% de
+cobertura**, zero tabela de salto, 10 branches/6 de retrocesso): 12
+`bl` — 4 locais sem símbolo, mais o mesmo subconjunto de `CFILE::*`/
+`CWORK_MEM::GetTail`/`CAPP_INFO::GetStoragePath` de `Load`.
+
+**Confirma por completo o achado da seção 19.1**: `CAUTOSAVE::Save`
+grava um dump compactado da heap inteira (não um save de progresso
+convencional); `CAUTOSAVE::Load` é a contraparte real — descomprime
+(`CCOMP_Z_DEC::Decode`), move/realoca a heap (`xpGetHeap`/
+`xpMoveHeap`), limpa cache de textura (`GuEmu_ClearTexCache`) e
+dispara o resume de estado de jogo (`CFFT_STATE::Resume` +
+`iOS_ResumeGetData`/`iOS_WorldMapResumeGetData`) — é o mecanismo que
+permite retomar o app exatamente de onde parou (snapshot binário de
+memória, não serialização por campo). `IsExist` apenas checa se o
+arquivo de dump existe via `CFILE`. Marcadas `read_structural`
+(`Load` 97% ≥95%, mas catálogo de 24 `bl` é grande demais pra aceite
+sem ressalva extra) e `read_full` (`IsExist`, 100% cobertura).
+
+## 459. `request_command(int)`/`Wrequest_command(int)` — dispatcher de comando de task, par normal/"W" (2026-10-23, Fase 3, quinquagésimo quarto lote)
+
+`request_command(int)` (`0xd9b10`, 628 B) — `jtable.py`: **88% de
+cobertura** (138/157), zero tabela de salto, 17 branches/7 de
+retrocesso. 5 `bl`: `getanimpos2d(int,SVECTOR*)`, `task_create(long,
+char*)`, `send_taskparamater(long,long,long,long)`,
+`getAnimationIDFormBattleWork(int)`, `hook_Debug(char const*)`.
+`Wrequest_command(int)` (`0x101a10`, só 48 B, 83% cob., 1 `bl` —
+`hook_Debug` apenas): esta é curiosamente muito menor que a
+contraparte normal — provável thunk/stub da variante "W" em vez de
+reimplementação completa (padrão diferente do habitual par normal/W
+de tamanho equivalente). Hipótese: `request_command` dispara uma
+task de comando de animação/batalha a partir de uma posição 2D
+resolvida. Marcadas `read_structural` (ambas < 95%, 0 tabela de
+salto — `Wrequest_command` com pendência honesta sobre por que é tão
+menor que o par).
+
+## 460. `set_playerwork_j(BWORK*,int,int)` — rotina central de ajuste de dados de trabalho do jogador, referenciada por múltiplas seções mas nunca lida em si (2026-10-23, Fase 3, quinquagésimo quarto lote)
+
+`set_playerwork_j(BWORK*,int,int)` (`0x1da6f8`, 640 B) — `jtable.py`:
+**99% de cobertura** (159/160), zero tabela de salto, 2 branches/0
+de retrocesso. 11 `bl` distintos: 4 locais sem símbolo (`sub_1d6af8`,
+`sub_1d6e28`, `sub_1d9bb4`, `sub_1da194`, `sub_1da468`), `get_unitwork_
+add(int)`, `set_jcflag(unsigned char*,int)`, `adjust_joblevel
+(unsigned short*,unsigned char*)`, **`copy_struct_data(void const*,
+void*,int)`** ×7 (a chamada mais repetida — cópia genérica de
+struct, usada pra popular múltiplos campos de uma vez),
+`clear_cmemory(void*,int)`, `pspJobGetJobChangeFlag(unsigned char*,
+unsigned char,unsigned char(*)[3],int)`. Já referenciada diretamente
+por `ctlworkingst_dataset` (seção 401) e `set_normability2` (seção
+419) sem nunca ter sido aberta — confirma ser a rotina que ajusta
+dados de trabalho/job do jogador (nível, flag de mudança de classe,
+cópia de struct de job em massa). Marcada `read_structural` (99%
+≥95%, 0 tabela de salto, mas 5 locais sem símbolo não lidos —
+catálogo grande demais pra aceite irrestrito).
+
+## 461. `ctltips_main(CTLINFO*)`/`ctltips_deactive(CTLINFO*)` — fecham a família "tips" (dica rápida), par direto de `pspCtltutonet_main`/`_init` (seção 333/457) (2026-10-23, Fase 3, quinquagésimo quarto lote)
+
+`ctltips_main(CTLINFO*)` (`0x24f688`, 568 B, 92% cob., 0 tabela, 14
+branches/3 de retrocesso): 9 `bl` — `Wtask_status`/
+`Wsend_taskparamater` ×2, `ctltips_deactive` (a si mesmo —
+confirma a tríade), `wldmes_load(int)`, `sound_request` ×2,
+`iOSTutoFlagSet`, `curhis_get`/`curhis_clr`, `iOS_setV2Icon`.
+`ctltips_deactive(CTLINFO*)` (`0x24f4d0`, 24 B, 83% cob., 0 `bl`):
+boilerplate trivial de transição de estado. Confirma a tríade
+completa de "tips" (dica rápida de UI), estruturalmente quase gêmea
+de `pspCtltutonet_main`/`_init` (seção 333/457) — mesmo catálogo de
+`bl` (`wldmes_load`/`curhis_get`/`curhis_clr`/`sound_request`/
+`iOS_add_anmpac_max`), confirmando que "tips" e "tutonet" são as duas
+variantes de popup de dica one-shot do jogo (provavelmente
+diferentes no gatilho/contexto de exibição, não na mecânica).
+Marcadas `read_structural` (92%/83% < 95%, 0 tabela de salto).
+
+## 462. `placeNameEnd()` — fecha o par com `placeNameStart` (seção 380), teardown do banner de nome de local (2026-10-23, Fase 3, quinquagésimo quarto lote)
+
+`placeNameEnd()` (`0x2106e0`, 640 B) — `jtable.py`: **99% de
+cobertura** (159/160), zero tabela de salto, **zero branches**
+(função inteiramente linear). 10 `bl`: 1 local sem símbolo
+(`sub_20fa88` — mesmo helper não resolvido já citado em
+`placeNameStart`!), `ClearOTag`, `AddPrim` ×3, `DrawSync` ×2,
+`GetTPage`/`GetClut`, `SetPolyF4`, `SetDrawMode`, `SetSemiTrans` ×2,
+`ClearImage`. Confirma a hipótese já registrada na seção 380: é a
+lógica simétrica de ocultar/limpar o banner de nome de local —
+monta um quad flat (não texturizado, `SetPolyF4` em vez do `SetPolyF4`+
+textura de `placeNameStart`) pra cobrir/apagar a área antes de
+limpar a imagem. Marcada `read_full` (99% ≥95%, 0 tabela de salto);
+`sub_20fa88` continua sem identidade — candidato de follow-up
+dedicado por aparecer em ambas as pontas do par Start/End.
+
+**Referências cruzadas (seções 458-462):** seção 19.1 (`CAUTOSAVE::
+Save`, par agora completo com `Load`/`IsExist`), seções 105/387/396/
+416 (família "resume", reusada por `CAUTOSAVE::Load`), seções 401/419
+(`ctlworkingst_dataset`/`set_normability2`, ambas referenciam
+`set_playerwork_j` diretamente), seção 333/457 (`pspCtltutonet_*`,
+par estrutural gêmeo de `ctltips_*`), seção 380 (`placeNameStart`,
+par agora completo, `sub_20fa88` compartilhado entre as duas
+pontas).
+
+## 463. `pspPrimBackDrawRGB(...)` — primitivo folha de desenho de fundo RGB plano, usado pelo overlay de ícone "pular" da abertura (2026-10-23, Fase 3, quinquagésimo quinto lote)
+
+`pspPrimBackDrawRGB(...)` (`0x289198`, 648 B) — `jtable.py`: **100%
+de cobertura** (162/162), zero tabela de salto, zero branches
+(corpo linear, sem desvio condicional/loop). Único `bl`:
+`pspGetpspPrimWorkBuf(int)` — reserva um bloco do ring buffer
+compartilhado da família `pspPrim*` pra escrever o primitivo antes
+de retornar, mesmo padrão de `addzodiacback` (seção 292). Já citada
+como `bl` de `fft_opening` (seção 394, camada `pspOpen*` do overlay
+de ícone de "pular"). Confirma ser o primitivo de baixo nível que
+desenha o retângulo/placa de fundo RGB plano por trás do ícone —
+mais simples que a variante tiled de 256px vista em
+`pspPrimBackDraw`/`RGB` (seção 331/332). Marcada `read_full` (100%
+cobertura, 0 tabela de salto, 1 `bl` totalmente resolvido).
+
+## 464. `ctltuto_init(int,int)` — inicializador par de `ctltuto_main` (seção 166), ponto de entrada compartilhado por múltiplos hubs de nível superior (2026-10-23, Fase 3, quinquagésimo quinto lote)
+
+`ctltuto_init(int,int)` (`0x26d9a8`, 644 B) — `jtable.py`: **93% de
+cobertura** (150/161), zero tabela de salto, 2 branches/0 de
+retrocesso (sem loop, consistente com setup one-shot). 6 `bl`:
+`add_anmpac` ×2/`add_winpac`, `iOS_setV2Icon` ×8 (mesma contagem de
+8 ícones já documentada pra `ctltuto_main`, seção 166 — confirma que
+`_init` pré-carrega/arma os ícones que o hub depois gerencia),
+`wld_tutomenu_reset(CTLINFO*)`, `pspWorldDisableFlg`, `CRECT::
+SetEnable(int,int)`. Confirma ser o inicializador clássico do
+subsistema de tutorial: carrega recursos gráficos, arma os ícones,
+zera o estado do menu e bloqueia o world map por trás. Achado
+adicional: `ctltuto_init` já havia sido citado como um dos 6
+inicializadores de tela-irmã chamados diretamente por `ctlzodiac_main`
+(junto com `ctlbrst_init`/`ctlkiromes_init`/`ctltremes_init`/
+`ctlhentuto_init`/`ctlsentuto_init`) — confirma que é ponto de
+entrada padrão do subsistema de tutorial, acionado por múltiplos
+hubs (`ctlbrst_main`/`ctlzodiac_main`), não só por `ctltuto_main`.
+Marcada `read_structural` (93% < 95%, 0 tabela de salto).
+
+## 465. `GetTargetBaseArea(int,int)` — função folha de cálculo de área-base de alvo, consumida por `GetDestinationsAndMakeMaskTG` (2026-10-23, Fase 3, quinquagésimo quinto lote)
+
+`GetTargetBaseArea(int,int)` (`0x276930`, 644 B) — `jtable.py`:
+**98% de cobertura** (158/161), zero tabela de salto, 29 branches/14
+de retrocesso (perfil denso de loop pro tamanho do corpo). **Zero
+`bl`** — função folha, toda a lógica aritmética/iterativa inline.
+Já citada na tabela comparativa ARM×x86 (crosscheck de porte de
+arquitetura) e como callee de `GetDestinationsAndMakeMaskTG` (seção
+159, "avalia/agrega uma área-base de alvo"), mas nunca lida em si.
+Hipótese: itera em laço aninhado sobre um raio/diamante de painéis
+pra calcular a área-base de alcance/alvo, devolvendo contagem ou
+máscara consumida antes de `GetPanelUnderUnit`/`CountMap` — parte do
+pipeline de pathfinding/alvejamento de IA perto de `ForAutoCommand`
+(seção 150). Marcada `read_structural` (98% ≥95%, 0 tabela de salto
+— mas sem `bl` pra ancorar a hipótese semântica por nome de callee,
+inferência só por contexto de uso).
+
+## 466. `IS_GAME_AREA(int,int)` — filtro de entrada que distingue toque em área de jogo de toque em UI sobreposta, usado pelo subsistema de rotação `iOSRot*` (2026-10-23, Fase 3, quinquagésimo quinto lote)
+
+`IS_GAME_AREA(int,int)` (`0x2b8378`, 640 B) — `jtable.py`: **92% de
+cobertura** (147/160), zero tabela de salto, 19 branches/10 de
+retrocesso. 3 `bl`: `CRECT::GetEnable(int)` ×6, `isInRectUi
+(_RECT_UI*,int,int)` ×8, `iOS_getV2Icon(V2ICON_DATA)` ×3. Já citada
+8× como `bl` por outra função já lida (câmera de batalha
+`sBattleTouchRotation`/roda de emprego `JobChange`), que a usa pra
+validar a posição de toque antes de alimentar o subsistema de
+deslizamento/rotação `iOSRot*`. Hipótese: itera sobre um conjunto de
+rects de UI habilitados, testando contenção de ponto — retorna falso
+se o toque cair em qualquer rect de UI (menu/HUD/ícone V2),
+verdadeiro se estiver na área de jogo útil. É o "filtro de entrada"
+comum que impede toques em botões de UI de serem interpretados como
+gestos de rotação/deslizamento do mundo. Marcada `read_structural`
+(92% < 95%, 0 tabela de salto — lacuna honesta de ~8%).
+
+## 467. `res1_class` — mais um interno de `libvorbis` reconhecido por nome, fast-track conforme regra 6 da metodologia (2026-10-23, Fase 3, quinquagésimo quinto lote)
+
+`res1_class` (`0x9673c`, 640 B) é o nome genuíno (C puro, sem
+mangling) de uma função interna do `libvorbis` upstream (`lib/res0.c`,
+classificação de residue tipo 1 no pipeline Ogg Vorbis). `jtable.py`:
+**100% de cobertura** (160/160), zero tabela de salto. 9 `bl`:
+`_vorbis_block_alloc` (símbolo real de `lib/block.c` da libvorbis)
+×2, 1 local sem símbolo, 7 helpers de runtime libgcc
+(`__divsi3`/`__floatsidf`/`__divdf3`/`__truncdfsf2`/`__floatsisf`/
+`__mulsf3`/`__fixsfsi`) — padrão aritmético típico de DSP de áudio.
+Mesma região de `mdct_init`/`drft_init`/`_ve_envelope_search`,
+reforçando que todo o bloco é código de terceiros (libvorbis), não
+lógica do jogo. Marcada `read_structural` por fast-track (biblioteca
+reconhecível, 100% cobertura, 0 tabela de salto — mesmo tratamento
+já dado a `floor1_encode`/`vorbis_analysis_headerout`/`_vp_tonemask`
+nas seções 102/138/145/174/189).
+
+**Referências cruzadas (seções 463-467):** seção 394 (`fft_opening`,
+`pspPrimBackDrawRGB` confirmado como seu `bl`), seção 166
+(`ctltuto_main`, par agora completo com `ctltuto_init`), seções
+150/159 (`ForAutoCommand`/`GetDestinationsAndMakeMaskTG`, pipeline de
+IA agora com `GetTargetBaseArea` lida), subsistema `iOSRot*`
+(câmera/roda de emprego, `IS_GAME_AREA` como filtro de entrada
+comum), seções 102/138/145/174/189 (libvorbis reconhecida por nome,
+`res1_class` mais um membro fast-tracked).
+
+## 468. `ctltips_init(int)` — fecha a tríade "tips" por completo junto com `ctltips_main`/`_deactive` (seção 461) (2026-10-23, Fase 3, quinquagésimo sexto lote)
+
+`ctltips_init(int)` (`0x24f238`, 632 B) — `jtable.py`: **92% de
+cobertura** (145/158), zero tabela de salto, 8 branches/4 de
+retrocesso. 5 `bl`: `iOSTutoFlagSet(int,int)`, `defscrwin_set`/
+`curhis_put`, `iOS_setTutorialType(int)`, `iOS_setV2Icon`. Fecha a
+tríade completa de "tips" (dica rápida de UI, já estabelecida como
+gêmea estrutural de `pspCtltutonet_main`/`_init`, seção 333/457).
+Marcada `read_structural` (92% < 95%, 0 tabela de salto).
+
+## 469. `set_playerwork_common(PENTRY*,int)`/`set_playerwork_common_child(PENTRY*,int)` — rotina central de criação de entrada de unidade no work, chama `NewEntry` diretamente (2026-10-23, Fase 3, quinquagésimo sexto lote)
+
+`set_playerwork_common(PENTRY*,int)` (`0x1d3308`, 628 B, 99% cob., 0
+tabela, 11 branches/5 de retrocesso): 6 `bl` — 1 local sem símbolo
+(`sub_1d2e9c`), `get_shape2_plus(BWORK*,unsigned char*)`,
+`set_playerwork_j(BWORK*,int,int)` (seção 460, confirma chamada
+direta!), `unitwork_init2all(BWORK*,int)`, `callSW(int)` ×2,
+**`NewEntry(int,int,int,short,short,short,short,BWORK*,int)`**
+(cria a entrada de unidade de batalha propriamente dita).
+`set_playerwork_common_child(PENTRY*,int)` (`0x1d2ff4`, 788 B, 99%
+cob., 0 tabela, 14 branches/8 de retrocesso): mesmo catálogo-base
+mais `pspNetGetBattleModeFlag()` ×2 e `get_netmodeadhoc()` (gate de
+rede ad-hoc). Confirma ser a rotina central de popular um `BWORK`
+a partir de um `PENTRY*` (dados de entrada do jogador) — resolve
+shape, ajusta job via `set_playerwork_j`, inicializa o work completo
+e finalmente cria a entrada de batalha via `NewEntry`; a variante
+"_child" adiciona a checagem de modo de rede ad-hoc (provável suporte
+a unidade secundária/convidada em partida cooperativa local).
+Marcadas `read_full` (ambas 99% ≥95%, 0 tabela de salto, catálogo
+quase totalmente resolvido).
+
+## 470. `bCursolDownFunc(DVECTOR*,unsigned short*,int)` — variante "b" de `CursolDownFunc` (seção 451), mesmo mecanismo de textura livre (2026-10-23, Fase 3, quinquagésimo sexto lote)
+
+`bCursolDownFunc(DVECTOR*,unsigned short*,int)` (`0x1831e0`, 628 B)
+— `jtable.py`: **94% de cobertura** (148/157), zero tabela de
+salto, 10 branches/8 de retrocesso. Único `bl`: **`bDrawTexFree
+(short*,COLOR*,int,int)`** — mesmo mecanismo de desenho via textura
+livre já confirmado em `CursolDownFunc` (seção 451), aqui na
+variante letter-prefix "b". Confirma que o padrão letter-prefix se
+aplica também à variante "pressionado" do cursor, não só à variante
+normal (`CursolFunc`/`b`/`c`/`e`/`j`, seção 451) — mas, pela busca no
+inventário, só existe a variante "b" de `CursolDownFunc` (não há
+`c`/`e`/`j` equivalentes), sugerindo que o estado "pressionado" só é
+necessário num contexto de tela específico. Marcada `read_structural`
+(94% < 95%, 0 tabela de salto).
+
+## 471. `CG2D_COLOR::RGBToHSB(...)` + 7 getters `GetTone*` triviais — fecham a classe `CG2D_COLOR` por completo, par inverso de `HSBToRGB` (seção 436) (2026-10-23, Fase 3, quinquagésimo sexto lote)
+
+`CG2D_COLOR::RGBToHSB(unsigned int,unsigned short*,unsigned short*,
+unsigned short*)` (`0xa17ec`, 624 B) — `jtable.py`: **100% de
+cobertura** (156/156), zero tabela de salto, 13 branches/5 de
+retrocesso. 9 `bl`, todos helpers de ponto flutuante do runtime
+(libgcc soft-float): `__subsf3`/`__addsf3`/`__mulsf3`/`__divsf3`,
+`__floatunsisf`, `__aeabi_fcmpeq`/`fcmplt`/`fcmple`, `__fixunssfsi`
+— mesmo padrão de `HSBToRGB` (seção 436), confirmando ser o
+algoritmo inverso (RGB→HSB) da mesma classe, sem chamar nenhum outro
+símbolo do jogo. Fecha a classe `CG2D_COLOR` por completo junto com
+7 getters triviais de conversão de tom (`GetTone2To8`/`4To8`/`5To8`/
+`6To8`/`64To255`/`64To255Inv`/`64To255_Sll24`, 16-20 B cada, 75-80%
+cob., 0 `bl`, lookups/shifts puros) — já citados como callees de
+`CG2D_LOADER_BMP::Copy`/`CG2D_LOADER_TGA::Copy` (seções 205/217) mas
+nunca abertos em si. Marcadas `read_full` (`RGBToHSB` 100% cobertura,
+0 tabela de salto; os 7 getters fast-tracked como boilerplate
+trivial de conversão de bit-depth, cobertura ~80% mas corpo de 1-2
+instruções reais).
+
+**Referências cruzadas (seções 468-471):** seção 333/457
+(`pspCtltutonet_*`, gêmeo estrutural de `ctltips_*` agora completo),
+seção 460 (`set_playerwork_j`, chamada direta confirmada por
+`set_playerwork_common`), seção 451 (`CursolDownFunc`, `bCursolDownFunc`
+confirma o mesmo mecanismo de textura livre), seções 205/217/436
+(`CG2D_LOADER_BMP/TGA::Copy`/`HSBToRGB`, classe `CG2D_COLOR` agora
+completa).
+
+## 472. `Logo_FrameRender()` — tela de logo de boot, a mais simples e isolada das telas "frame render" fora do loop PS1-emulado (2026-10-23, Fase 3, quinquagésimo sétimo lote)
+
+`Logo_FrameRender()` (`0x2b5bec`, 620 B) — `jtable.py`: **93% de
+cobertura** (144/155), zero tabela de salto, apenas 2 branches/1 de
+retrocesso — extremamente linear comparada a `Link_FrameRender`
+(seção 86, 21 branches) e `fft_opening` (seção 394, 19 branches). 19
+`bl`: `CGX_SCREEN_CORRECT::GetCorrect`/`GetAppScreenSize`/
+`GetAppScaledScreenSize`, `CEGL2_IF::SetScreenSize`/`ClearBackdrop`/
+`InitRenderState2D`/`AddSprite`/`Setup2D`/`DrawPacket`,
+`CEGL2_FBO::Begin`/`End`/`RenderToFBO`, `CEGL2_SPRITE::GetImageSize`/
+`SetAlpha`, `CSTEP_BATCH::GetData()`, e **delegação direta a
+`NowLoading_FrameMove()`/`NowLoading_FrameRender()`**. Hipótese: tela
+de boot (logo da desenvolvedora) desenhada via FBO off-screen com
+fade controlado por `CSTEP_BATCH` (mesmo sistema de animação por
+passos das seções 16/17), que ao final cede diretamente para
+`NowLoading` — mesma arquitetura de "dispatcher de tela" já
+confirmada na seção 34 (`Main_FrameRender`). Marcada `read_structural`
+(93% < 95%, 0 tabela de salto — mesmo precedente conservador de
+`fft_opening`).
+
+## 473. `musicPlayer_Play(int,int,int,int)` — backend nativo real por trás de `loadMusic`/`activateMusic` (seção 388) (2026-10-23, Fase 3, quinquagésimo sétimo lote)
+
+`musicPlayer_Play(int,int,int,int)` (`0x2b2fe8`, 624 B) —
+`jtable.py`: **~95% de cobertura** (148/156, no limiar sem margem),
+zero tabela de salto, 6 branches/2 de retrocesso. 10 `bl`:
+`musicPlayer_Stop()` (confirma o par Stop/Play), `CAPP_INFO::
+GetRootPath()`, `CFILE_DAT::GetOffset(int)`/`GetSize(int)` (resolve
+offset+tamanho da faixa dentro do `.DAT` empacotado),
+**`CSOUND_IF::Load(...)`**/**`CSOUND_IF::Play(...)`** ×3, 4 locais
+sem símbolo. Hipótese: implementação nativa final da tríade
+`loadMusic`/`disposeMusic`/`activateMusic` (seção 388) — para,
+resolve caminho e faixa no DAT, carrega no subsistema de som e
+dispara a reprodução (possivelmente uma vez por canal/parte). Marcada
+`read_structural` (no limiar exato de 95% sem margem real — mesmo
+critério já usado em `ctlflagset_main`, seção 456).
+
+## 474. `xpLibpad::Update(int)` — camada de abstração sob `padRead`, polling direto de `sceCtrlPeekBufferPositive` (2026-10-23, Fase 3, quinquagésimo sétimo lote)
+
+`xpLibpad::Update(int)` (`0x2a27c4`, 624 B) — `jtable.py`: **100% de
+cobertura** (156/156), zero tabela de salto, 16 branches/8 de
+retrocesso. 2 `bl`: `sceCtrlPeekBufferPositive` (API nativa PSP de
+leitura não-bloqueante do buffer de controle) e `__aeabi_idivmod`
+(provável normalização/clamp de eixo analógico). Hipótese: classe
+C++ que encapsula o SDK nativo de controle por baixo da camada
+usada em `padRead()` (seção 453) — o parâmetro `int` é provável
+índice de porta/jogador. **Pendência honesta**: não há xref
+confirmada de `padRead`/`pspNetPadRead` chamando esta função nesta
+passada — vínculo arquitetural hipotetizado, não comprovado por
+cadeia de `bl` direta. Marcada `read_full` (100% cobertura, 0 tabela
+de salto).
+
+## 475. `iOS_CMenuTouchNum::execPress(...)` — variante híbrida de hit-test, combina `isInRect` E `__divsi3`, ponto intermediário entre a classe-base e `SaveLoad` (2026-10-23, Fase 3, quinquagésimo sétimo lote)
+
+`iOS_CMenuTouchNum::execPress(int*,IOS_MENU_TOUCH_NUM_RESULT*)`
+(`0x27d98c`, 628 B) — `jtable.py`: **100% de cobertura** (157/157),
+zero tabela de salto, 13 branches/3 de retrocesso. 6 `bl`:
+`iOS_CMenuTouchNum::isInRect(RECT16*,int,int)` ×2, **`iOS_CMenuTouchNum::
+addNum(int*,int)`** ×4, `iOS_getTouchNowX`/`Y`, `iOS_isInGameArea`,
+`__divsi3`. **Posição arquitetural intermediária**: ao contrário da
+classe-base `iOS_CMenuTouch::execPress` (seções 225-226, só
+`isInRect`/sem divisão) e ao contrário de `iOS_CMenuTouchSaveLoad::
+execPress` (seção 364, só `__divsi3`/sem `isInRect`), a variante
+`Num` usa as duas técnicas juntas — `isInRect` valida a área geral
+do widget, `__divsi3` resolve qual dígito/coluna foi tocado dentro
+dela (colunas de largura fixa). `addNum` (×4) é a contraparte que
+soma/subtrai um delta no contador — confirma o papel de
+`iOS_CMenuTouchNum` como widget de entrada numérica por toque
+(mês/dia de aniversário, seção 347; quantidade em loja). Marcada
+`read_structural` (100% cobertura/0 tabela de salto, mas semântica
+fina das 4 chamadas de `addNum` não confirmada campo a campo).
+
+## 476. `search_mp(int,int,int,int)` — flood-fill de alcance de movimento no grid de batalha, desmontado manualmente pra confirmar que o gap de cobertura é só pool literal (2026-10-23, Fase 3, quinquagésimo sétimo lote)
+
+`search_mp(int,int,int,int)` (`0x1e180c`, 628 B) — `jtable.py`: 94%
+bruto (148/157), zero tabela de salto, 5 `bl` (todos locais sem
+símbolo: `sub_1dca58`/`sub_1dd864`/`sub_1ddba0`/`sub_1df158`/
+`sub_1e1288`). Dump linear manual (Capstone, modo ARM) confirmou que
+os ~9 slots não cobertos são constantes de pool literal (~10
+literais `ldr rX,[pc,#imm]`), não lacuna de controle de fluxo real —
+**cobertura efetiva de código é 100%**.
+
+**Achado via desmontagem manual**: apenas o 1º parâmetro é usado
+(os outros 3 nunca são lidos — provável resquício de assinatura
+herdada). `r0` indexa um array global de registros de 486 bytes;
+sentinela `0xff` no byte `+1` retorna `-1` (sem entrada válida).
+Corpo é um **loop duplo aninhado** sobre os limites X/Y de Move/Jump
+de uma unidade (campos `+0x18`/`+0x19` de um ponteiro de ator),
+testando um bitfield de "tile visitado" num array de flags de mapa,
+calculando dois ponteiros derivados por tile (stride 5 e 8 —
+prováveis "custo de movimento" e "nó de caminho" pra reconstrução de
+rota) e despachando pro handler de tile novo (`sub_1dd864`) ou já
+tratado (`sub_1ddba0`). Finaliza gravando o ID da unidade e uma flag
+global "busca concluída". É o clássico **flood-fill de alcance de
+movimento de SRPG** — nome `search_mp` é "search Move Points/Panels"
+(alcance de movimento no grid), **não** "Magic Point" (nenhum campo
+de MP mágico é tocado). Marcada `read_structural` (94% bruto, mas
+~100% efetivo confirmado manualmente — pendência honesta: os 5
+`sub_*` ainda não têm nome/contexto documentado em outras seções).
+
+**Referências cruzadas (seções 472-476):** seções 34/86/394
+(`Main_FrameRender`/`Link_FrameRender`/`fft_opening`, mesma
+arquitetura de dispatcher de tela confirmada por `Logo_FrameRender`),
+seção 388 (`ctlmusic_main`, `musicPlayer_Play` como backend nativo),
+seção 453 (`padRead`, `xpLibpad::Update` como camada de hardware
+hipotetizada por baixo), seções 225-226/347/364 (família
+`iOS_CMenuTouch*`, `execPress` de `Num` confirma arquitetura
+híbrida), seções 232/403/415 (vizinhança de endereço com a cadeia de
+reação/arma, sem dependência de chamada confirmada com `search_mp`).
+
+## 477. `Logo_FrameMove()` — fecha o par com `Logo_FrameRender` (seção 472), usa o mesmo dispatcher `onGotoNextMode` já visto em outras telas (2026-10-23, Fase 3, quinquagésimo oitavo lote)
+
+`Logo_FrameMove()` (`0x2b5988`, 612 B) — `jtable.py`: cobertura não
+capturada no resumo truncado, zero tabela de salto, 17 branches/8 de
+retrocesso. 13 `bl` distintos: `CEGL2_SPRITE::LoadEnd`,
+`CINPUT_IF_TOUCH::EndAll`/`SetDown`/`GetTouchPoint`/`BeginAll`,
+`CRECT::FrameMove(int,int)`, `CTHREAD::Sync()`, `timeGetTime()` ×2,
+`CFRAMERATE::GetRate()`, `CSTEP_BATCH::FrameMove(float)` ×2,
+**`onGotoNextMode(int)`**, 2 locais sem símbolo (`sub_2b56b8` ×3,
+`sub_2b57ac` ×2). Fecha o par de `Logo_FrameRender` (seção 472) —
+`FrameMove` é a lógica de update/transição (polling de toque,
+atualização do passo de animação via `CSTEP_BATCH`, sincronismo de
+thread), enquanto `FrameRender` é só o desenho. A chamada a
+`onGotoNextMode(int)` confirma que a tela de logo usa o mesmo
+dispatcher de transição de modo já visto em outras telas "frame
+render" (seções 34/86/394) — ao final do fade, dispara a troca pra
+próxima tela (provavelmente `NowLoading` ou a abertura). Marcada
+`read_structural` (0 tabela de salto, mas cobertura não verificada
+nesta passada — pendência honesta de revisão numérica).
+
+## 478. `Wextend_systemframe(int,int,RECT16*,int)` — fecha o par com `extend_systemframe` (seção 426) (2026-10-23, Fase 3, quinquagésimo oitavo lote)
+
+`Wextend_systemframe(int,int,RECT16*,int)` (`0x11e68c`, 612 B) —
+`jtable.py`: **99% de cobertura** (152/153), zero tabela de salto,
+13 branches/6 de retrocesso. 5 `bl`: `Wallocatememorywait(int)`,
+`Wdisposememory(char*)`, 1 local sem símbolo (`sub_11e03c`),
+`Wtask_wait(long)` ×2, `PSX_LoadImage` ×2. Mesmo catálogo-base da
+contraparte normal `extend_systemframe` (seção 426), confirmando o
+par normal/"W" (task cooperativa) já visto em várias famílias do
+projeto. Marcada `read_full` (99% ≥95%, 0 tabela de salto).
+
+## 479. `ctltremes_init(int)` — controller de tela "tremes" (provável histórico/registro de tesouro, "tresure" + "mes"), reusa o framework `PAGEWININFO` (2026-10-23, Fase 3, quinquagésimo oitavo lote)
+
+`ctltremes_init(int)` (`0x26c418`, 636 B) — `jtable.py`: **89% de
+cobertura** (142/159), zero tabela de salto, **zero branches**
+(função inteiramente linear). 7 `bl`: `Wsend_taskparamater`,
+`sun_to_ivarisday`/`wld_dayread(unsigned long*,int,FINDDAY*)`
+(mesma conversão de calendário já vista em `ctlunregmes_init`/
+`ctlbirthokng_main`, seções 371/372), `pic_load(int)`, `add_winpac`,
+`pagewin_init(PAGEWININFO*)` (seção 381 — confirma mais um consumidor
+do framework de janela paginada), `iOS_setV2Icon` ×3. Já citada como
+um dos 6 sub-controladores irmãos chamados por `ctlzodiac_main`
+(seção 362: `ctlbrst_init`/`ctlkiromes_init`/`ctltremes_init`/
+`ctltuto_init`/`ctlhentuto_init`/`ctlsentuto_init`). "Tremes" é
+provável contração de "tresure" (tesouro) + "mes" (mensagem) — tela
+de histórico/mensagem do sistema de caça ao tesouro já citado em
+outras seções. Marcada `read_structural` (89% < 95%, 0 tabela de
+salto).
+
+## 480. `pspPrimBackDraw(int,int,unsigned short*,unsigned long*)` — par texturizado de `pspPrimBackDrawRGB` (seção 463), mesmo mecanismo de ring buffer (2026-10-23, Fase 3, quinquagésimo oitavo lote)
+
+`pspPrimBackDraw(int,int,unsigned short*,unsigned long*)`
+(`0x288f30`, 616 B) — `jtable.py`: **100% de cobertura** (154/154),
+zero tabela de salto, **zero branches** (corpo linear). Único `bl`:
+`pspGetpspPrimWorkBuf(int)` — exatamente o mesmo mecanismo de
+alocação do ring buffer `pspPrim*` já confirmado em
+`pspPrimBackDrawRGB` (seção 463). Diferença de assinatura
+(`unsigned short*` no lugar dos 3 `unsigned char`+flag de cor) —
+esta variante recebe um ponteiro de dados de textura/CLUT em vez de
+uma cor RGB sólida, confirmando ser a versão texturizada do mesmo
+primitivo de fundo. Marcada `read_full` (100% cobertura, 0 tabela de
+salto, 1 `bl` totalmente resolvido).
+
+**Referências cruzadas (seções 477-480):** seção 472
+(`Logo_FrameRender`, par agora completo com `Logo_FrameMove`), seção
+426 (`extend_systemframe`, par agora completo com a variante "W"),
+seção 362 (`ctlzodiac_main`, mais um dos 6 sub-controladores irmãos
+fechado), seção 381 (`pagewin_init`, mais um consumidor do framework
+`PAGEWININFO`), seção 463 (`pspPrimBackDrawRGB`, par texturizado
+confirmado em `pspPrimBackDraw`).
+
+## 481. `iOSTatchPanelCtrl(int,int)` — dispatcher central do painel de toque, fala direto com a classe `CINPUT_IF_TOUCH` em vez de usar a fachada `iOS_getTouch*` (2026-10-23, Fase 3, quinquagésimo nono lote)
+
+`iOSTatchPanelCtrl(int,int)` (`0x2bb910`, 612 B) — `jtable.py`: **97%
+de cobertura** (149/153), zero tabela de salto, 18 branches/9 de
+retrocesso. 11 `bl`: `CINPUT_IF_TOUCH::GetPress`/`GetUp`/
+`GetTouchPoint` ×2/`GetGestureTap`, `iOSTutoCheck` ×2/`iOSTutoFlagCheck`
+×2, `SysSE_PlayUI(int)`, `SCREEN_TO_RENDER(int,int,int*,int*)` ×2,
+`iOS_getV2Icon` ×2, `iOSMenuOkCancelHelpGet(int,int)`,
+`iOSTutoSkipKeyCheck()`. "Tatch" = romanização de "touch" (タッチ).
+**Achado estrutural**: diferente de toda a família `iOS_getTouch*`
+(Tap/Press/BeginX/Y/NowX/Y) já mapeada extensivamente, esta função
+chama a classe `CINPUT_IF_TOUCH` diretamente — candidata a ser a
+fonte real de onde `iOS_getTouch*` deriva seus valores, não mais uma
+consumidora da fachada. Hipótese: dispatcher central que consulta
+estado bruto de toque, converte coordenada para espaço de render,
+checa gate de tutorial, dispara som de UI, e decide entre encaminhar
+pra checagem de botões ok/cancel/help ou pra lógica de ícone V2.
+Marcada `read_structural` (97% ≥95%, 0 tabela de salto, mas sem
+verificação de xrefs de quem chama esta função).
+
+## 482. `CRECT::MoveCursorFocus(int,int,int,int)` — navegação de foco entre elementos de UI por grupo, ligada à mesma classe CRECT já mapeada (2026-10-23, Fase 3, quinquagésimo nono lote)
+
+`CRECT::MoveCursorFocus(int,int,int,int)` (`0xb55e4`, 752 B) —
+`jtable.py`: **100% de cobertura** (188/188), zero tabela de salto,
+45 branches, **33 de retrocesso** (73% backward — múltiplos laços de
+busca). 3 `bl`, todos membros de `CRECT`, cada um chamado 5×:
+`GetEnable(int)`, `GetNoFocus(int)`, `GetGroup(int)`. Hipótese:
+navegação de foco (D-pad/analógico) entre widgets de UI — percorre a
+coleção de `CRECT`s candidatos filtrando por habilitado+focável+
+mesmo grupo de navegação, repetindo o teste em múltiplos loops até
+achar o próximo candidato válido na direção pedida. Reforça que
+`CRECT` não é só hit-rect passivo (`Register`/`SetRect`/`SetEnable`
+já vistos), mas também implementa lógica de navegação de foco por
+grupo. Marcada `read_full` (100% cobertura, 0 tabela de salto, 3
+`bl` totalmente resolvidos — ordem exata dos 4 parâmetros fica como
+hipótese razoável, não confirmada).
+
+## 483. `xpLibgpuInit()` — inicializador de baixo nível do "libgpu", abaixo de `ASHURA_init` na cadeia de boot gráfico (2026-10-23, Fase 3, quinquagésimo nono lote)
+
+`xpLibgpuInit()` (`0x291c48`, 632 B) — `jtable.py`: **94% de
+cobertura** (148/158), zero tabela de salto, 10 branches/8 de
+retrocesso (múltiplas fases de setup). 8 `bl`: 2 locais sem símbolo,
+**`xpLibgpuEnableFlg`** (vizinha imediata no binário — padrão já
+visto em `pspWorldEnableFlg`, seção 450, provável setter de flag
+"driver habilitado"), e 15 chamadas a helpers soft-float
+(`__addsf3`/`__floatunsisf`/`__mulsf3`/`__divsf3`/`__fixunssfsi` ×3
+cada) — assinatura clássica de cálculo de fator de escala (viewport/
+aspect-ratio) feito em float e reconvertido. Hipótese: inicializador
+da camada "libgpu" (emulação do GPU PSX — VRAM, draw/display
+environment) que roda **antes** de `ASHURA_init` (seção 449) na
+cadeia de boot gráfico — prepara o hardware/estado abstrato e
+levanta o flag de "pronto" antes que `ASHURA_init` monte os templates
+de primitiva. Marcada `read_structural` (94% < 95%, 0 tabela de
+salto — lacuna honesta, provável pool de literais float não
+confirmado).
+
+## 484. `iOS_RESUME_SET_BATTLE(...)` — membro "puro" (linear, 29 chamadas a um único primitivo) da família de serialização de resume leve (2026-10-23, Fase 3, quinquagésimo nono lote)
+
+`iOS_RESUME_SET_BATTLE(IOS_RESUME_DATA_BATTLE*,IOS_RESUME_DATACOPY_
+MODE)` (`0x205694`, 696 B) — `jtable.py`: cobertura exibida 95%
+(165/174 = 94,8% real, abaixo do limiar estrito), zero tabela de
+salto, 1 branch/0 de retrocesso (função quase inteiramente linear).
+Único `bl`: `iOS_Resume_DataCopy(IOS_RESUME_DATACOPY_MODE,unsigned
+char*,unsigned char*,int)`, chamado **29 vezes** — sem chamadas a
+`iOS_Resume_DataCopyAddr` nem helpers de endereço (diferente de
+`iOS_RESUME_SET_WORK_MU`, seção 105). Mesmo subtipo "serializador
+puro" de `iOS_RESUME_SET_EVENT`/`_W` (seções 76/99) — despejo
+campo-a-campo de struct plana. A escala de 29 chamadas (bem menor
+que as 149/105 de outros membros da família) confirma `IOS_RESUME_
+DATA_BATTLE` como struct pequena (provável só índice/estado de turno
+e flags de modo), não o estado de batalha completo — coexiste com o
+mecanismo pesado `CAUTOSAVE::Save`/`Load` (seção 458, dump binário
+da heap) como camada leve do mesmo problema de "process death" do
+Android. Marcada `read_structural` (94,8% real < 95% — seguindo o
+precedente da seção 96 de usar a fração exata, não o percentual
+arredondado exibido pela ferramenta).
+
+## 485. `CEGL2_FBO::RenderFromFBO(...)` — blit genérico de textura por handle explícito pro framebuffer atual, par de consumo de `RenderToFBO` (2026-10-23, Fase 3, quinquagésimo nono lote)
+
+`CEGL2_FBO::RenderFromFBO(unsigned int,float,float,float,float,
+float,float,unsigned short,unsigned short,int)` (`0xab164`, 732 B)
+— `jtable.py`: **100% de cobertura** (183/183), zero tabela de
+salto. 12 `bl`, todos resolvidos manualmente via `.rel.plt`/`.got`
+(mesma técnica da seção 9): 8 stubs PLT de OpenGL
+(`glDisable`/`glEnable`/`glEnableVertexAttribArray` ×3/
+`glTexParameteri` ×6/`glBindTexture` ×2/`glVertexAttribPointer`
+×3/`glDrawArrays`/`glGenerateMipmap`) + 4 helpers soft-float.
+Desmontagem manual completa confirmou o pseudocódigo: recebe um
+handle de textura **explícito** (1º parâmetro, diferente de
+`RenderToFBO`, que lê `this->field_0x8`), monta um quad
+`GL_TRIANGLE_STRIP` de 4 vértices com posição/cor/UV, pula overhead
+de blend quando a cor é totalmente opaca, e trata 3 vias de filtro
+não fundidas (NEAREST/LINEAR sem mipmap/LINEAR com mipmap) via 6
+call-sites de `glTexParameteri` (vs. 4 em `RenderToFBO`). Confirma
+ser a função de "blit de textura qualquer pro framebuffer atual" —
+candidata forte a ser a chamada usada por `Logo_FrameRender` (seção
+472) pra apresentar na tela o conteúdo renderizado off-screen.
+Marcada `read_full` (100% cobertura, 0 tabela de salto, 12 `bl`
+totalmente resolvidos com leitura manual completa de fluxo e
+literais GL).
+
+**Referências cruzadas (seções 481-485):** família `iOS_getTouch*`
+(contraste com `iOSTatchPanelCtrl`, camada mais baixa hipotetizada),
+toolkit CRECT (seções 86/283/405/449, `MoveCursorFocus` revela mais
+uma capacidade da classe), seção 449 (`ASHURA_init`, `xpLibgpuInit`
+posicionado abaixo na cadeia de boot), seções 76/99/105/387/396/416/
+458 (família de resume, `iOS_RESUME_SET_BATTLE` mais um membro
+"leve"), seção 472 (`Logo_FrameRender`, provável chamadora de
+`CEGL2_FBO::RenderFromFBO`), seção 13.9 (`RenderToFBO`, par de
+produção confirmado).
+
+## 486. `ctlworkend_init()`/`ctlworkend_main(CTLINFO*)`/`ctlworkendmes_init(int)`/`ctlworkendmes_main(CTLINFO*)` — fecham o terceiro estágio do indicador "trabalhando", pipeline completo com `ctlworking_init` (2026-10-23, Fase 3, sexagésimo lote)
+
+Fecha o pipeline de 3 estágios já citado de passagem na seção sobre
+`ctlworking_init` (linha 10432-10435: "`ctlworking_init()` →
+este controlador principal → `ctlworkend_init()`"). `ctlworkend_init()`
+(`0x2529ac`, 444 B, 91% cob., 0 tabela, 2 branches/1 de retrocesso):
+4 `bl` — `Wread_eventflag`, `Wsend_taskparamater`, `defscrwin_set`/
+`curhis_put`. `ctlworkend_main(CTLINFO*)` (`0x252c80`, 476 B, 92%
+cob., 0 tabela, 12 branches/4 de retrocesso): 5 `bl` — `Wtask_status`/
+`Wsend_taskparamater` ×2, `sound_request` ×2, `curhis_get`/`curhis_clr`.
+`ctlworkendmes_init(int)` (`0x252b70`, 272 B, 88% cob., 0 tabela, 0
+branches): 2 `bl` — `Wsend_taskparamater`, `wldmes_load(int)`.
+`ctlworkendmes_main(CTLINFO*)` (`0x252e5c`, 604 B, 94% cob., 0
+tabela, 9 branches/3 de retrocesso): 7 `bl` — `ret_adventurestatus()`,
+`ctlworkend_init()` (reentra no controller pai), `sun_to_ivarisday`/
+`wld_dayread` (calendário Ivalice), `sound_request`,
+`pagewin_init`/`pagewin_main(PAGEWININFO*)`. Confirma o pipeline
+completo de 3 estágios do indicador "trabalhando": `ctlworking_init`
+(início) → controller principal → `ctlworkend_init`/`_main` (fim,
+com sub-estado de mensagem `ctlworkendmes_*` reusando o framework
+`PAGEWININFO`, seção 381). `ret_adventurestatus()` sugere que o
+resultado do "trabalho" afeta o status de aventura/progresso.
+Marcadas `read_structural`.
+
+## 487. `ctlmoumes_init(int)`/`ctlmoumes_main(CTLINFO*)`/`ctlmoumes_active`/`ctlmoumes_deactive` — fecham o sub-estado de mensagem do controller "mouke", reentra em `ctlokng_init` e no ecossistema de hit-test (2026-10-23, Fase 3, sexagésimo lote)
+
+`ctlmoumes_init(int)` (`0x26037c`, 504 B, 90% cob., 0 tabela, 3
+branches/1 de retrocesso): 5 `bl` — `Wsend_taskparamater`,
+`mouke_tbl_get(MOUINFO*,int)` (mesma tabela de roster já vista em
+`ctlworkinginf_init`/`ctlretokng_init`, seções 384/414), `add_winpac`,
+`wldwin_noropen`, `ps_rand()`. `ctlmoumes_main(CTLINFO*)`
+(`0x260a8c`, 604 B, 93% cob., 0 tabela, 14 branches/6 de retrocesso):
+**8 `bl`** — `Wsend_taskparamater` ×2, `ctlmouke_init()` (reentra no
+controller pai, seção 383), `ctlmoumes_deactive` (a si mesmo),
+`ctlokng_init(_POINT)` (reentra na raiz genérica OK/NG, seção 441!),
+`sound_request` ×2, `iOS_ClearRectHitAll` ×2, `iOS_SetRectHit(int,
+int,int,int,int,int)` ×2, `iOS_GetRectHitNoTap()` — confirma mais um
+consumidor real do ciclo registro→execução→consulta do sistema de
+hit-test (`iOS_RectHitExecute`, seção 428). `ctlmoumes_active`/
+`ctlmoumes_deactive` (`0x260878`/`0x26089c`, 36 B cada, 89% cob., 0
+`bl`): boilerplate trivial. Fecha o sub-estado de mensagem do
+controller de roster "mouke" por completo. Marcadas `read_structural`.
+
+## 488. Família `ctluwa_*`/`ctluwames_*` — sete funções, novo controller com integração profunda ao sistema de tutorial (2026-10-23, Fase 3, sexagésimo lote)
+
+Família completa de 7 funções, citada de passagem como sub-
+controlador irmão de `ctlret_init` (linha 9352) mas nunca lida.
+`ctluwa_init()` (`0x26f830`, 604 B, 91% cob., 0 tabela, 6 branches/3
+de retrocesso): 4 `bl` — `Wread_eventflag`, `Wsend_taskparamater`,
+`defscrwin_set`/`curhis_put` (mesmo padrão de init simples de várias
+famílias já vistas). `ctluwa_main(CTLINFO*)` (`0x26fca8`, 416 B, 94%
+cob., 0 tabela, 13 branches/4 de retrocesso): 8 `bl` — `Wtask_status`/
+`Wsend_taskparamater` ×2, `ctluwa_deactive`/`ctluwa_exit` (a si
+mesmo, tríade completa), `sound_request` ×2, `curhis_get`/`curhis_clr`,
+`iOS_setV2Icon`. `ctluwa_active`/`ctluwa_deactive`/`ctluwa_exit`
+(`0x26fa8c`/`0x26fac0`/`0x26fad8`, 52/24/112 B, 82-92% cob.,
+boilerplate, 0 `bl`). `ctluwames_init(int)` (`0x26fb48`, 352 B, 91%
+cob., 0 tabela, 0 branches): 2 `bl` — `Wsend_taskparamater`,
+`pagewin_init(PAGEWININFO*)`. `ctluwames_main(CTLINFO*)` (`0x26fe48`,
+228 B, 91% cob., 0 tabela, 3 branches/2 de retrocesso): 2 `bl` —
+`pagewin_main(PAGEWININFO*)`, `iOS_setV2Icon`. Confirma mais um
+sub-estado de mensagem (`uwames`) reusando o framework `PAGEWININFO`
+(seção 381), análogo em estrutura às famílias `ctlworkendmes`/
+`ctlunregmes`/`ctlretokng`. Todas marcadas `read_structural`.
+
+**Referências cruzadas (seções 486-488):** seção 216
+(`ctlworking_init`, pipeline de 3 estágios agora completo), seções
+383/384/414 (`ctlmouke_init`/`ctlworkinginf_init`/`ctlretokng_init`,
+mesma tabela `mouke_tbl_get` reusada), seção 441 (`ctlokng_init`,
+reentrada confirmada por `ctlmoumes_main`), seção 428
+(`iOS_RectHitExecute`, mais um consumidor real do ciclo de hit-test),
+seção 381 (`PAGEWININFO`, framework reusado por `ctlworkendmes`/
+`ctluwames`).
+
+## 489. `AppEngine_FrameStep()` — achado arquitetural central: é o verdadeiro tick por frame, dispatch de 9 vias pros pares `<Modo>_FrameMove`/`FrameRender` já mapeados (2026-10-23, Fase 3, sexagésimo primeiro lote)
+
+`AppEngine_FrameStep()` (`0x2b1790`, 604 B) — `jtable.py`: **86% de
+cobertura** (130/151), **1 tabela de salto resolvida** (9 casos → 9
+handlers distintos), zero tabela pendente. 27 `bl` distintos: os 8
+pares de dispatch por modo — `Boot_FrameMove`/`FrameRender`,
+`Error_FrameMove`/`FrameRender`, `Link_FrameMove`/`FrameRender`
+(seções 86/283/405), `Logo_FrameMove`/`FrameRender` (seções 472/477),
+`Main_FrameMove`/`FrameRender`, `Movie_FrameMove`/`FrameRender`,
+`Settings_FrameMove`/`FrameRender`, `SettingsWnd_FrameMove`/
+`FrameRender` — mais infra de frame: `CFRAMERATE::FrameMove`/
+`GetRate`, `CSOUND_IF::FrameMove(int,float)`, `CINPUT_IF_TOUCH::
+FrameEnd()` ×2, `musicPlayer_FrameMove()`, `CFFT_STATE::GetParam`/
+`SetParam`, `CAPP_INFO::GetDeviceType`/`GetActive`, `Android_Dialog_
+Open(...)`, 1 local sem símbolo.
+
+**Achado de maior valor arquitetural da sessão**: `AppEngine_
+FrameStep()` é o verdadeiro tick de frame do motor — nem `mainLoop()`
+(seção 376, dispatcher de transição entre modos de jogo) nem
+`padRead()` (seção 453, poll de input com detecção de reset/combo)
+são o tick real. É `AppEngine_FrameStep` quem lê o modo atual
+(`CFFT_STATE::GetParam`), despacha via switch de 9 casos pro par
+`<Modo>_FrameMove`+`FrameRender` correspondente, e em volta disso
+atualiza framerate, finaliza input de toque e avança música/som —
+fecha a peça que faltava entre `mainLoop()` (decide/transiciona) e
+as funções `<Tela>_FrameMove/FrameRender` individuais já mapeadas
+(seções 34/86/394/472/477). Marcada `read_structural` (86% < 95%,
+mas tabela de salto 100% resolvida — lacuna honesta na cauda da
+função, provável handler do último caso ou epílogo compartilhado).
+
+## 490. `AutoEquip()` — orquestrador de topo do auto-equipamento, fecha o elo que faltava com `GetBestEquip`/`ChrPowerCompare` (2026-10-23, Fase 3, sexagésimo primeiro lote)
+
+`AutoEquip()` (`0x1aea08`, 604 B) — `jtable.py`: **91% de cobertura**
+(137/151), zero tabela de salto, 9 branches/5 de retrocesso. 12
+`bl`: `Wtask_start`/`Wtask_stop`, `ItemChg(short,int)` ×2,
+`SetRyoteFlag(short*,int)`, `SetChrList()`, `Ryoute(short)`,
+`ChrPowerCompare(C_STTS*,A_STTS*,short*,short*)` (já citada no
+achado 39.1), **`GetBestEquip(short,short*)`** (seção 173, a chamada
+central), `DrawMessage`, `SetSttsEqu2`/`SetSttsPara2` ×2 cada,
+`CurChrChg()`. Fecha o elo da cadeia "ver lista → trocar → comparar
+poder → auto-equipar" (achado 39.1): por slot, ajusta flags de
+empunhadura, chama `GetBestEquip`, compara poder, aplica a troca via
+`ItemChg`, recalcula status derivado e atualiza contexto de
+personagem — confirma que `AutoEquip` é o chamador de `GetBestEquip`,
+não um duplicado, e justifica o "Auto" (decide e comita por slot
+sem intervenção manual, diferente do fluxo `Equip()` guiado por UI).
+Marcada `read_structural` (91% < 95%, 0 tabela de salto).
+
+## 491. `GetJobList(unsigned char,short*,int)` — montagem da lista de jobs disponíveis, consumida por `LearnJobStts` (2026-10-23, Fase 3, sexagésimo primeiro lote)
+
+`GetJobList(unsigned char,short*,int)` (`0x1a829c`, 604 B) —
+`jtable.py`: **99% de cobertura** (149/151), zero tabela de salto,
+23 branches/14 de retrocesso. 6 `bl`, todos resolvidos por símbolo:
+`GetLocalJobNumber(short)`, `GetSpecialJob(short)`, `SetBitStream`/
+`SetBitStream2`/`GetBitStream` ×2/`GetBitStream2` ×2 (primitivo
+genérico de bit-packing da biblioteca de janela/menu, seção 39).
+Já chamada diretamente por `LearnJobStts()` (seção 248, tela real de
+navegação de lista de emprego) — confirma `GetJobList` como provedor
+de dados dessa tela, mesma família de consulta job/habilidade de
+`GetAbilityList` (seção 390)/`jobnumber_conv` (seção 454), aqui do
+lado "lista de jobs" em vez de "lista de habilidades por job".
+Marcada `read_full` (99% ≥95%, 0 tabela de salto); pendência
+honesta: layout exato do bitstream de filtro não confirmado.
+
+## 492. `yokoyari_mesput(CTLINFO*,int,int)` — variante de interjeição/interrupção do relatório, corrige a hipótese "tipo de ataque" da seção 117 (2026-10-23, Fase 3, sexagésimo primeiro lote)
+
+`yokoyari_mesput(CTLINFO*,int,int)` (`0x25b9f4`, 604 B) —
+`jtable.py`: **91% de cobertura** (138/151), **1 tabela de salto
+resolvida** (6 casos → 6 handlers distintos), 13 branches/10 de
+retrocesso. 9 `bl`: `Wtask_status` ×2, `Wsend_taskparamater` ×3,
+`Wwrite_eventflag`, `Wtask_create`, `ret_adventurestatus()`,
+**`unittoface(int)`**, **`houkokumes_select(int,int)`** (mesmo
+seletor de texto da mensagem "normal" já visto em `ctlhoukmes_main`,
+seção 117), `ps_rand()`, `iOS_getTouchTap()`. **Corrige a hipótese
+original**: a seção 117 descrevia esta função como "provavelmente
+relatório de um tipo específico de ataque" — o catálogo de `bl`
+(`unittoface` pra obter o retrato de quem interrompe,
+`houkokumes_select` reaproveitando o seletor normal) sustenta melhor
+a leitura idiomática de "yokoyari" (横槧り, interromper uma conversa):
+é a variante de interjeição quando outra unidade interrompe o
+relatório/diálogo em campo, orquestrada como task assíncrona numa
+máquina de 6 estados. Marcada `read_structural` (91% < 95%, apesar
+da tabela resolvida).
+
+## 493. `CSTEP::GetDataF()` — variante float de `CSTEP::GetData`, dispatch de 6 vias por modo de curva de interpolação (2026-10-23, Fase 3, sexagésimo primeiro lote)
+
+`CSTEP::GetDataF()` (`0xbddd8`, 608 B) — `jtable.py`: **89% de
+cobertura** (136/152), **1 tabela de salto resolvida** (6 casos → 6
+handlers distintos), 6 branches/5 de retrocesso. 7 `bl`: 1 local sem
+símbolo (`sub_717d0`, ×2, candidato a helper de clamp/curva
+compartilhado), `__subsf3`/`__addsf3`/`__mulsf3`/`__divsf3`,
+`__floatsisf`, `__aeabi_fcmpeq`. Hipótese: variante que retorna
+`float` do já documentado `CSTEP::GetData()` (retorna `int`,
+usado em `CSTEP::FrameMove` pra avançar a curva de fade até zero) —
+o dispatch de 6 vias seleciona o tipo de curva/modo de interpolação,
+cada handler calculando o valor float via os helpers soft-float.
+Reforça o papel de `CSTEP`/`CSTEP_BATCH` como sistema de animação
+por passos já citado em `Logo_FrameRender` (seção 472)/`Link_Init`
+(seção 405). Marcada `read_structural` (89% < 95%, apesar da tabela
+resolvida; `sub_717d0` não identificado).
+
+**Referências cruzadas (seções 489-493):** seções 34/86/283/394/405/
+453/472/477 (arquitetura de "frame render"/dispatcher de modo, agora
+com o tick real identificado em `AppEngine_FrameStep`), seções 39.1/
+173 (`GetBestEquip`/`ChrPowerCompare`, elo fechado por `AutoEquip`),
+seções 248/390/454 (família de consulta job/habilidade, `GetJobList`
+confirmada como provedora de `LearnJobStts`), seção 117
+(`ctlhoukmes_main`, hipótese de `yokoyari_mesput` corrigida), seção
+405/472 (`CSTEP_BATCH`, `CSTEP::GetDataF` como variante float de
+`GetData`).
+
+## 494. `CFFT_STATE::SetRenderSize(int,int)` — fecha dezenas de referências diretas (mainLoop, ctlmusic_main, ctlchrmake_init), dispatch de 6 vias por modo de tela (2026-10-23, Fase 3, sexagésimo primeiro lote)
+
+`CFFT_STATE::SetRenderSize(int,int)` (`0x28c32c`, 612 B) —
+`jtable.py`: **91% de cobertura** (139/153), **1 tabela de salto
+resolvida** (6 casos → 6 handlers distintos), 11 branches/7 de
+retrocesso. 8 `bl`: 1 local sem símbolo (`sub_71b54`),
+`CFFT_STATE::GetMenuBarVisible()`, `CFFT_STATE::GetParam(int)` ×2,
+e 23 chamadas a helpers soft-float (`__subsf3` ×2, **`__floatsisf`
+×13** — a mais repetida, de longe —, `__mulsf3` ×2, `__divsf3` ×4,
+`__aeabi_fcmpgt` ×2). Fecha dezenas de referências diretas acumuladas
+ao longo da sessão (`mainLoop`, seção 376; `ctlmusic_main`, seção
+388; `ctlchrmake_init`, seção 442) sem nunca ter sido aberta. O
+switch de 6 vias sobre um modo/orientação de tela, combinado com o
+altíssimo uso de conversão int→float, confirma ser o cálculo de
+viewport/escala de renderização — ajusta a área de desenho conforme
+o modo de tela atual (6 variantes: provavelmente orientação/aspect-
+ratio/presença da barra de menu, consultada via
+`GetMenuBarVisible`), convertendo dimensões inteiras pra float pra
+fazer a aritmética de escala e reconvertendo o resultado. Marcada
+`read_structural` (91% < 95%, apesar da tabela resolvida).
+
+**Referência cruzada:** seções 376/388/442 (`mainLoop`/
+`ctlmusic_main`/`ctlchrmake_init`, todas com referência direta agora
+fechada).
+
+## 495. `mouketeam_unitface(CTLINFO*,int,int)`/`mouketeam_scrollset(CTLINFO*)`/`mouketeam_unitwin(CTLINFO*)` — fecham a referência direta de `hakenunit_change` (seção 382) (2026-10-23, Fase 3, sexagésimo segundo lote)
+
+`mouketeam_unitface(CTLINFO*,int,int)` (`0x2624ac`, 604 B, 97%
+cob., 0 tabela, 6 branches/3 de retrocesso): 8 `bl` —
+`Wfaceuvclut(tagPOLY_FT4*,int,int*)`, `unittoface(int)`,
+`CFFT_STATE::SetParam` ×4, `CFFT_STATE::WorldFaceIDToFaceID(int)`,
+`IS_TEX_2X` ×2, `iOS_setV2Icon` ×2, `iOS_setFaceDataID` ×2,
+`iOS_setFaceDataCLUT` ×2. `mouketeam_scrollset(CTLINFO*)`
+(`0x261c68`, 324 B, 93% cob., 0 tabela, 12 branches/7 de retrocesso):
+2 `bl` — `get_unitwork_add_wld(int)`, `pspJobIsSpecialJob(int)`.
+`mouketeam_unitwin(CTLINFO*)` (`0x2623e4`, 200 B, 90% cob., 0
+tabela, 2 branches/1 de retrocesso): 2 `bl` —
+`world_extend_systemframe(int,int,char*)`, `wldmess_put`. Fecha a
+referência direta deixada por `hakenunit_change` (seção 382) — "mouketeam"
+é o widget de roster do time completo (retrato de rosto + CLUT por
+unidade, scroll da lista, filtro de job especial, janela de extensão
+de sistema). Marcadas `read_structural`.
+
+## 496. Família `walkrute_set`/`rutegrow_init`/`ctlrutegrow_init`/`ctlrutegrow_main` — fecham o sistema de indicador de rota do world map, companheiro de `rute_find`/`rutegrow_draw` (seção 422) (2026-10-23, Fase 3, sexagésimo segundo lote)
+
+`walkrute_set(int,int)` (`0x268c74`, 592 B, 91% cob., 0 tabela, 6
+branches/1 de retrocesso): 7 `bl` — `Wwrite_eventflag` ×2,
+`ctleeff_init(int)`, `wld_event(int,int)` ×2, `townpic_load(int)`,
+**`wldrute_tblget(WALKINFO*,int,int)`**, `rute_find(int,int)`
+(reentra diretamente na seção 422!), `wldcenter_set(_POINT*,
+SVECTOR*)`. `rutegrow_init(int,int)` (`0x268384`, 456 B, 97% cob., 0
+tabela, 9 branches/5 de retrocesso): único `bl` `PSX_csqrt` (raiz
+quadrada fixed-point PSX — cálculo de distância/comprimento de
+segmento de rota). `ctlrutegrow_init(int,int,int)` (`0x254ed8`, 196
+B, 88% cob., 1 `bl` — reentra em `rutegrow_init`). `ctlrutegrow_main
+(CTLINFO*)` (`0x253b60`, 548 B, 96% cob., 0 tabela, 13 branches/8 de
+retrocesso): 2 `bl` — `Wwrite_eventflag`, `sound_request` ×3. Fecha
+o sistema completo: `wldrute_tblget`/`rute_find` localizam o tile de
+destino, `rutegrow_init`/`PSX_csqrt` calculam a geometria da rota
+(comprimento via raiz quadrada), `walkrute_set` orquestra o evento
+de cidade/vila via `wld_event`/`townpic_load`, e o par `ctlrutegrow_
+init`/`_main` é o controller de tela que anima o "crescimento"
+visual da rota (seção 422, `rutegrow_draw`). Marcadas `read_structural`/
+`read_full` (`rutegrow_init` 97% ≥95%, 0 tabela → `read_full`;
+demais < 95% → `read_structural`).
+
+## 497. `DrawFT4RGB(RECT16*,int,int,COLOR*,int,unsigned short,unsigned short,int)` — implementação base real por trás de toda a família letter-prefix `*DrawFT4RGB`, chamada direta ou indiretamente dezenas de vezes na sessão (2026-10-23, Fase 3, sexagésimo segundo lote)
+
+`DrawFT4RGB(...)` (`0x1acafc`, 592 B) — `jtable.py`: **98% de
+cobertura** (145/148), zero tabela de salto, 6 branches/4 de
+retrocesso. 8 `bl`: `pspWindowCommonIsType(WINOBJ_TYPE,unsigned
+char,unsigned char,unsigned char,unsigned char)`, `addFT4num()`,
+`CFFT_STATE::GetParam`/`SetParam`, `SetSemiTrans`, `SetShadeTex` ×2,
+`TexHybrid_RegistCLUTAddr(int,unsigned int)`, `IS_TEX_2X()`. Fecha
+por completo a implementação de base da família letter-prefix
+(`b`/`c`/`e`/`j`/`DrawFT4RGB`) já extensivamente referenciada ao
+longo da sessão (seções 317/358/363 e dezenas de outras que chamam
+alguma variante) — confirma o pipeline real: valida o tipo de objeto
+de janela, acumula num contador de quads (`addFT4num`), consulta/
+ajusta o estado de render do app, aplica semi-transparência e
+textura de sombra (`SetShadeTex` ×2 — mesmo par confirmado em
+`disp_personalwindow`, seção 46), e registra o endereço de CLUT via
+`TexHybrid_RegistCLUTAddr`. Marcada `read_full` (98% ≥95%, 0 tabela
+de salto).
+
+## 498. `pspFftSizeCheck(int*,int*,int*)` — fecha a referência direta de `pspStartSaveCheck` (seção 387), dispatcher de 16 casos sobre API de save `xpLibapi*` (2026-10-23, Fase 3, sexagésimo segundo lote)
+
+`pspFftSizeCheck(int*,int*,int*)` (`0x289d5c`, 592 B) — `jtable.py`:
+**83% de cobertura** (123/148), **1 tabela de salto resolvida** (16
+casos → 3 handlers distintos), 15 branches/6 de retrocesso. 8 `bl`:
+2 locais sem símbolo, **`xpLibapiSaveStart`/`SaveEnd`/`SaveCheck`**,
+`xpLibapiGetFreeSize`/`GetMsSize`/`GetUtilSize` ×2 cada. Fecha a
+referência direta deixada por `pspStartSaveCheck` (seção 387) —
+confirma ser a função que verifica espaço disponível (free/ms/util
+size) via a API nativa `xpLibapi*` antes de permitir o save, com um
+switch de 16 estados colapsando em 3 caminhos reais (sucesso/espaço
+insuficiente/erro, provavelmente). Marcada `read_structural` (83% <
+95%, apesar da tabela resolvida — lacuna honesta nos handlers menos
+comuns).
+
+## 499. `iOS_limitOptrecSub()`/`WiOS_limitOptrecSub()` — par normal/"W", corpo totalmente linear sem nenhuma chamada externa (2026-10-23, Fase 3, sexagésimo segundo lote)
+
+`iOS_limitOptrecSub()` (`0x13cfe4`, 612 B) e `WiOS_limitOptrecSub()`
+(`0x142f60`, 612 B) — `jtable.py`: **92% de cobertura** (140/153)
+ambas, zero tabela de salto, **zero `bl`** (nenhuma chamada externa
+em nenhuma das duas — folhas puras, toda a lógica inline) e **zero
+branches** reportados pela ferramenta (corpo aparentemente sem
+desvio detectado pela descida — consistente com uma rotina de
+cálculo/limitação sequencial sobre um registro "Optrec", provável
+estrutura de otimização/registro de limite óptico/visual). Par
+normal/"W" idêntico em tamanho e topologia. Marcadas `read_structural`
+(92% < 95%, 0 tabela de salto — função sem nenhum `bl` pra ancorar
+hipótese de semântica por nome de callee).
+
+**Referências cruzadas (seções 495-499):** seção 382
+(`hakenunit_change`, referência direta fechada por `mouketeam_*`),
+seção 422 (`rute_find`/`rutegrow_draw`, sistema de rota do world map
+agora completo), seções 46/317/358/363 (família letter-prefix
+`*DrawFT4RGB`, `DrawFT4RGB` base finalmente lida), seção 387
+(`pspStartSaveCheck`, referência direta fechada por
+`pspFftSizeCheck`).
+
+## 500. `_make_words` — mais um interno de `libvorbis` reconhecido por nome, fast-track conforme regra 6 (2026-10-23, Fase 3, sexagésimo terceiro lote)
+
+`_make_words` (`0x97c44`, 600 B) é nome C puro, situado entre dois
+outros internos já catalogados da `libvorbis`: `res1_class` (seção
+467, `residue1.c`) e `_ve_envelope_search` (`psy.c`, encoder).
+`jtable.py`: **100% de cobertura** (150/150), zero tabela de salto,
+27 branches/12 de retrocesso (compatível com construção incremental
+de codewords Huffman a partir dos comprimentos de bit de cada
+símbolo do codebook). 3 `bl` pra locais sem símbolo, prováveis
+helpers estáticos do mesmo arquivo-fonte. Função é o internal
+genuíno de suporte à codificação de codebooks (`bookutil.c`/encoder
+da libvorbis), não código do jogo. Marcada `read_structural`
+fast-tracked (100% cobertura, 0 tabela de salto, terceiro
+reconhecível — mesmo tratamento das seções 102/138/145/174/189/467).
+
+## 501. `attackteam_end()` — finalização da montagem do time de ataque ao entrar em batalha, inclui polling de filme de introdução (2026-10-23, Fase 3, sexagésimo terceiro lote)
+
+`attackteam_end()` (`0xc4ef4`, 596 B) — `jtable.py`: **93% de
+cobertura** (139/149), zero tabela de salto, 19 branches/7 de
+retrocesso. 10 `bl`: 1 local sem símbolo, `read_eventflag`,
+`recover_chrname()`, 2 chamadas a um stub ASM genérico,
+`ASHURA_CVECTOR(long,CVECTOR*)`, **`getMoviePlayFlg()`** ×6 (alvo
+dominante), `iOS_SetLastBGMFromResumeData`, `getEventStatus()`,
+`iOS_getV2Icon`, `iOS_StartMovie()`. Já citada na seção 299
+(`initBattleMap`) como uma das chamadas do orquestrador de início de
+batalha. **Corrige a leitura ingênua do nome**: não é "fim do time
+de ataque" de uma habilidade em área — é a finalização da montagem
+do time de ataque ao entrar em batalha, incluindo a cinemática de
+introdução: `iOS_StartMovie()` dispara o filme, e o loop com
+`getMoviePlayFlg()` ×6 é polling clássico de "aguardar o filme
+terminar/progredir", seguido de restauração de BGM pós-filme e
+recuperação de nome/ícone do personagem corrente (popular a UI de
+apresentação do time). Marcada `read_structural` (93% < 95%, 0
+tabela de salto).
+
+## 502. `cnvattackclutno(int)` — conversor de id de ataque pra índice de CLUT, mesma família de `attack_assumechr`/`attack_assumeface` (seções 121/122) (2026-10-23, Fase 3, sexagésimo terceiro lote)
+
+`cnvattackclutno(int)` (`0x157ee4`, 600 B) — `jtable.py`: **74% de
+cobertura** (111/150), **1 tabela de salto resolvida** (36 casos →
+só 4 handlers distintos, 32 dos 36 casos colapsam no mesmo handler),
+24 branches/10 de retrocesso. 2 `bl`: `get_unitwork_add(int)`,
+`get_jobdata(int)`. **Achado estrutural**: o formato (switch de 36
+vias/4 handlers + mesma dupla `get_unitwork_add`+`get_jobdata`) é
+idêntico ao de `attack_assumechr`/`attack_assumeface` (seções 121/
+122) — mesma família de resolução de dados de unidade/emprego pro
+preview de ataque, mas aqui sem nenhuma chamada de I/O, consistente
+com o nome: só CALCULA o índice de CLUT (classificando o id de
+ataque em poucas categorias de origem de paleta), não carrega nada.
+Provável elo entre "qual paleta usar pro ataque" e o par produtor/
+consumidor `requestChangeClut`/`executeChangeClut` (seções 120/70),
+mas a ligação não está confirmada por xref direta. Marcada
+`read_structural` (74% < 95%, apesar da tabela resolvida — lacuna
+honesta de ~26%, ramos não alcançados além de 0x158124).
+
+## 503. `CEGL2_SPRITE::Save(char*,int,_G2D_SAVE*)` — ponte do toolkit moderno CEGL2 pro codificador legado `CG2D_LOADER`, usada pra gerar a miniatura de tela do save-game (2026-10-23, Fase 3, sexagésimo terceiro lote)
+
+`CEGL2_SPRITE::Save(char*,int,_G2D_SAVE*)` (`0xacb00`, 592 B) —
+`jtable.py`: **99% de cobertura** (147/148), zero tabela de salto,
+17 branches/8 de retrocesso. 10 `bl`: `CG2D_LOADER::CG2D_LOADER(int)`/
+`~CG2D_LOADER()` (constrói/destrói um loader temporário
+parametrizado por tipo de codec), **`CG2D_LOADER::Save(void*,int,
+int,_G2D_SAVE*)`** (assinatura quase idêntica a `CG2D_LOADER_BMP::
+Save`, seção 267, o codificador BMP real de thumbnail de save), 3
+locais sem símbolo, 4 stubs PLT consecutivos (padrão idêntico aos
+"4 helpers soft-float" da seção 485). Confirma ser a ponte entre o
+toolkit moderno de sprite GLES2 (`CEGL2_SPRITE`/`CEGL2_FBO`, seções
+472/477/485) e a pilha legada de codecs de imagem `CG2D_LOADER*`
+(seções 205/217/267) — instancia o loader (BMP/TGA via o parâmetro
+`int`), repassa o buffer de pixels, e delega a serialização real pro
+codificador concreto, reaproveitada pra gerar a miniatura de tela
+salva no save. Marcada `read_full` (99% ≥95%, 0 tabela de salto).
+
+**Referências cruzadas (seções 500-503):** seções 102/138/145/174/
+189/467 (libvorbis reconhecida por nome, `_make_words` mais um
+membro fast-tracked), seção 299 (`initBattleMap`, `attackteam_end`
+confirmado como chamada do orquestrador de início de batalha),
+seções 120/70/121/122 (sistema de CLUT e família `attack_assume*`,
+`cnvattackclutno` como elo hipotetizado), seções 205/217/267/472/
+477/485 (toolkits `CG2D_LOADER`/`CEGL2_*`, ponte confirmada por
+`CEGL2_SPRITE::Save`).
+
+## 504. `Android_Font_Render(char const*,int)` — ponte nativo→Java pra renderização de texto via `Canvas`/`Paint`/`Bitmap` do Android, expõe limitação real do `jtable.py` com `blx` indireto via vtable JNI (2026-10-23, Fase 3, sexagésimo terceiro lote)
+
+`Android_Font_Render(char const*,int)` (`0x73370`, 600 B) —
+`jtable.py`: só **7% de cobertura** (11/150), 0 jump tables
+resolvidas, para na primeira chamada indireta (`blx r3`, tratada
+como branch computado não resolvido). **Verificação manual completa
+via disassembly linear (capstone)** reconstruiu a função inteira
+sem ambiguidade, terminando corretamente num tail-call (`b`) com o
+restante sendo pool de literais.
+
+**Nota de limitação real da ferramenta (distinta da seção 438,
+`jValueFunc`)**: aqui a causa raiz É uma limitação genuína do
+`jtable.py` — a ferramenta trata `blx r3`/`blx ip` (chamada indireta
+via vtable, não um jump table de dados) como branch computado não
+resolvido e aborta a descida recursiva ali, mesmo sendo apenas uma
+chamada que retorna normalmente. Isso é esperado se repetir em
+qualquer ponte `Android_*`/JNI-heavy que use `(*env)->Method(...)`
+via vtable — vale registrar como alerta para não gerar falso alarme
+de "cobertura baixíssima = função complexa" em outras pontes
+semelhantes (`Android_Web_Open`, seção 283; `Android_Dialog_Open`,
+citada em `AppEngine_FrameStep`, seção 489).
+
+Catálogo de `bl` resolvidos manualmente: 1 local (`sub_723e8`,
+provável wrapper de `GetEnv()`), mais chamadas indiretas via offsets
+de vtable compatíveis com o layout canônico `JNINativeInterface` do
+NDK — `+0x18` (FindClass, alta confiança), `+0x1c4`
+(CallStaticObjectMethod ×3, alta confiança), `+0x29c`/`+0x32c`/`+0x5c`
+(compatíveis numericamente com GetStringUTFChars/método de cópia de
+pixel/DeleteLocalRef, mas uso observado nem sempre 100% consistente
+com a semântica JNI padrão — pode ser uma abstração própria do jogo
+imitando o layout, não o `JNIEnv*` cru; tratado como hipótese).
+`sub_2cdf7c`/`2cdf8c` (thunks alloc/free já catalogados em outras
+seções) no padrão clássico `free(ptr); ptr=alloc(largura*altura*4)`.
+
+Hipótese de semântica: ponte nativo→Java pra renderizar texto via
+`Canvas`/`Paint`/`Bitmap` do Android (provavelmente suporte a glyphs
+que a fonte bitmap própria do jogo não cobre — CJK/Unicode
+completo) — resolve a classe Java, chama o método estático,
+obtém largura/altura do texto renderizado, aloca buffer RGBA do
+tamanho certo, e copia os pixels de volta via `Bitmap.getPixels`-like.
+Irmã conceitual de `Android_Web_Open` (seção 283) e `Android_Dialog_
+Open` — ambas pontes nativo→Java via JNI. Marcada `read_structural`
+(critério numérico de cobertura automática não satisfeito — 7% — mas
+reconstrução manual completa do fluxo de controle feita; nomes de
+classe/método Java não lidos, strings pc-relative não resolvidas).
+
+**Referência cruzada:** seção 283 (`Android_Web_Open`, mesma família
+de pontes nativo→Java), seção 489 (`AppEngine_FrameStep`, cita
+`Android_Dialog_Open`).
+
+## 505. Família `DrawPluralFT4RGB`/`bDrawPluralFT4RGB`/`cDrawPluralFT4RGB`/`eDrawPluralFT4RGB`/`jDrawPluralFT4RGB` — variante "plural" (múltiplos quads) da família `*DrawFT4RGB`, mesmo catálogo mínimo em todas as 5 (2026-10-23, Fase 3, sexagésimo quarto lote)
+
+Família completa de 5 membros (base + 4 letter-prefix), todos **99%
+de cobertura**, zero tabela de salto, 4 branches/2 de retrocesso
+cada: `DrawPluralFT4RGB(unsigned char*,COLOR*,int,unsigned short,
+unsigned short,int,int)` (`0x1ac8c8`, 564 B, 3 `bl` —
+`addFT4num()`/`SetSemiTrans`/`SetShadeTex` ×2), `bDrawPluralFT4RGB`
+(`0x177664`, 580 B, 2 `bl` — `SetSemiTrans`/`SetShadeTex` ×2),
+`cDrawPluralFT4RGB` (`0x1729d4`, 568 B, mesmo catálogo),
+`eDrawPluralFT4RGB` (`0x189d6c`, 580 B, mesmo catálogo),
+`jDrawPluralFT4RGB` (`0x193e04`, 580 B, mesmo catálogo). Confirma
+ser a variante "plural" (desenha múltiplos quads num só primitivo,
+provavelmente barra de HP/texto formatado) da família `*DrawFT4RGB`
+(base agora completa, seção 497) — usa exatamente o mesmo par
+`SetSemiTrans`/`SetShadeTex` da base, sem a chamada extra a
+`pspWindowCommonIsType`/`CFFT_STATE`/`TexHybrid_RegistCLUTAddr` (só a
+versão base/não-prefixada chama `addFT4num`). Todas marcadas
+`read_full` (99% ≥95%, 0 tabela de salto).
+
+## 506. `cDB_init(DB*,...)` — fecha a família letter-prefix `DB_init` por completo (base/b/c/e/j), inicializa o double-buffer com tiles no lugar das 10+ categorias de primitiva (2026-10-23, Fase 3, sexagésimo quarto lote)
+
+`cDB_init(DB*,unsigned long*,tagPOLY_F3*,tagPOLY_FT3*,tagPOLY_F4*,
+tagPOLY_FT4*,...)` (`0x172660`, 588 B) — `jtable.py`: **96% de
+cobertura** (141/147), zero tabela de salto, 6 branches/2 de
+retrocesso. 6 `bl`: `cSwapDB(int,int)` (seção 421 — confirma
+chamada direta da família de troca de buffer!), `SetPolyFT4`,
+`SetTile`, `SetShadeTex`, `SetDefDispEnv` ×2, `SetDefDrawEnv`. Fecha
+a família `DB_init`/`*DB_init` por completo (`DB_init` seção 221,
+`bDB_init` seção 113, `eDB_init` seção 153, `jDB_init` seção 182,
+todas já `read_full`) — a variante "c" é mais magra (menos
+parâmetros de template, aceita só categorias até `DR_AREA`, sem
+`DR_MODE`) e chama `SetTile` em vez de registrar todos os templates
+de primitiva, sugerindo um contexto de tela mais simples/com menos
+tipos de primitiva ativos. Marcada `read_full` (96% ≥95%, 0 tabela
+de salto).
+
+## 507. `cValueFunc(unsigned char*)` — fecha a família `ValueFunc` por completo, variante "c" chama `cDrawFT4RGB`/`cDrawFT4RGB2` (2026-10-23, Fase 3, sexagésimo quarto lote)
+
+`cValueFunc(unsigned char*)` (`0x1751a8`, 588 B) — `jtable.py`:
+**100% de cobertura** (147/147), zero tabela de salto, 8 branches/4
+de retrocesso. 6 `bl`: `sub_715cc`/`sub_718cc` (locais sem símbolo,
+mesmos helpers já vistos em `jValueFunc`, seção 438 — `__stack_chk_fail`
+e `sprintf` prováveis, pelo padrão), `cDrawFT4RGB`, **`cDrawFT4RGB2
+(int,int,int,int,int,int,int,int,COLOR*,int,unsigned short,unsigned
+short,int)`** (variante com 8 parâmetros de posição — não vista nas
+outras letras ainda), `getClutNum()`, `IS_TEX_2X()`. Fecha a família
+`ValueFunc`/`b`/`e`/`j` (seções 222/227/438) por completo — a
+variante "c" é a única que chama `cDrawFT4RGB2` em vez de só
+`cDrawFT4RGB`, sugerindo um layout de dígito diferente nesse
+contexto de tela (talvez posicionamento explícito por 4 pontos em
+vez de retângulo simples). Marcada `read_full` (100% cobertura, 0
+tabela de salto).
+
+## 508. `resist_savedata(BWORK*,int)` — rotina de salvar estado antes de uma transformação reversível (petrificação/mudança temporária), referenciada desde a seção 43 (2026-10-23, Fase 3, sexagésimo quarto lote)
+
+`resist_savedata(BWORK*,int)` (`0x1d9968`, 588 B) — `jtable.py`:
+**99% de cobertura** (146/147), zero tabela de salto, 6 branches/3
+de retrocesso. 6 `bl`: `GetLocalJobNumber(short)`, `get_unitwork_
+add(int)`, **`search_empty_savework(int,unsigned char*)`** ×2,
+`erase_unit(int)`, **`copy_struct_data(void const*,void*,int)`** ×9
+(a chamada mais repetida), `pspJobGetTamanegiLevel(unsigned
+char(*)[3])`. Já referenciada desde a seção 43 (junto com
+`erase_unit`) e citada na seção 6149, mas nunca lida em si. Confirma
+a hipótese: busca um slot vazio de "save work" (`search_empty_
+savework`), copia 9 campos distintos do `BWORK` da unidade pra esse
+slot reservado (`copy_struct_data` ×9), e remove a unidade do campo
+ativo (`erase_unit`) — é o mecanismo de preservar o estado completo
+de uma unidade antes de uma transformação reversível (petrificação,
+possessão, ou efeito similar que precisa restaurar o original depois).
+Marcada `read_full` (99% ≥95%, 0 tabela de salto).
+
+## 509. `CEGL2_SPRITE::LoadEnd(int,int)` — fecha a referência direta de `Logo_FrameMove`/`Link_Init`, parte do ciclo de upload de textura do toolkit CEGL2 (2026-10-23, Fase 3, sexagésimo quarto lote)
+
+`CEGL2_SPRITE::LoadEnd(int,int)` (`0xadcd4`, 576 B) — `jtable.py`:
+cobertura não capturada no resumo truncado, 13 branches/4 de
+retrocesso. 13 `bl`: 6 locais sem símbolo, `CG2D_LOADER::~CG2D_LOADER()`
+(confirma o par com `CEGL2_SPRITE::Save`, seção 503 — o loader
+temporário é destruído ao final do upload), `CEGL2_SPRITE::
+Overwrite(unsigned char*,int,int,int,int)`, `CEGL2_SPRITE::Unload(int)`,
+`__floatsisf` ×2, 3 stubs PLT (`sub_2cdf7c`/`2cdf8c`/`2cdf9c`, mesmo
+padrão alloc/free de outras pontes do toolkit). Fecha a referência
+direta deixada por `Logo_FrameMove` (seção 477, chama `LoadEnd`
+como parte do ciclo de sprite) e `Link_Init` (seção 405, mesma
+classe `CEGL2_SPRITE`) — é a finalização do upload de textura
+(provavelmente libera buffers temporários de decodificação e
+registra o sprite como pronto, possivelmente com fallback via
+`Overwrite`/`Unload` em caso de erro). Marcada `read_structural`
+(cobertura não verificada numericamente nesta passada — pendência
+honesta).
+
+**Referências cruzadas (seções 505-509):** seção 497 (`DrawFT4RGB`,
+família "plural" como variante companheira), seção 421 (`cSwapDB`,
+chamada direta confirmada por `cDB_init`), seções 221/113/153/182
+(família `DB_init`, agora completa com `cDB_init`), seções 222/227/
+438 (família `ValueFunc`, agora completa com `cValueFunc`), seção 43
+(`erase_unit`, referência direta fechada por `resist_savedata`),
+seções 405/477/503 (toolkit `CEGL2_SPRITE`, `LoadEnd` fecha o ciclo
+de upload de textura).
+
+## 510. `PutDispEnv()` — implementação real (não stub) da primitiva libgpu PSX, ponte pro backend PSP/GLES, companheira de `xpLibgpuInit` (2026-10-23, Fase 3, sexagésimo quinto lote)
+
+`PutDispEnv()` (`0x294af8`, 588 B) — `jtable.py`: **93% de
+cobertura** (136/147), zero tabela de salto, 14 branches/5 de
+retrocesso. 10 `bl`: 2 locais sem símbolo, a tríade de flags
+`xpLibgpuEnableFlg`/`DisableFlg`/`CheckFlg` ×2 (mesma família de
+`xpLibgpuInit`, seção 483), `xpLibgpuVramChangeDispMode` ×2,
+`GsClearDispArea` ×2, `sceGuEnable` ×2, `sceGuScissor` ×3,
+`sceGuViewport` ×2. Diferente de todas as dezenas de outras
+ocorrências de `PutDispEnv` vistas só como `bl` (`placeNameStart`/
+`placeNameEnd`, seções 380/462), esta é a implementação real da
+primitiva clássica libgpu — traduz o "display environment" do PSX
+pra chamadas equivalentes no backend de emulação (recorte/viewport,
+troca de modo de display da VRAM virtual, limpeza de área de
+display, flags de estado). Confirma pertencer à camada de emulação
+de GPU PSX inicializada por `xpLibgpuInit`. Marcada `read_structural`
+(93% < 95%, 0 tabela de salto).
+
+## 511. `sceGuScissor`/`sceGuTexWrap` — mais dois elos da ponte real `sceGu*`→`CEGL_PACKET`, mesmo padrão de empacotamento já confirmado em `sceGuSendList`/`sceGuTexImage` (2026-10-23, Fase 3, sexagésimo quinto lote)
+
+`sceGuScissor` (`0x2ab9e8`, 672 B, 99% cob., 0 tabela, 3 branches/1
+de retrocesso): 12 `bl` — `CEGL2_IF::GetPacket`, `CEGL_PACKET::Add`/
+`SetTypeCurrent`/`SetBlendModeCurrent`/`SetTextureCurrent`/
+`SetExtraCurrent` ×3/`GetVBOBufferCurrent`, **`CFFT_STATE::
+GetVertexScaling(float*,float*)`**/`GetParam` ×2, `__floatsisf` ×4/
+`__mulsf3` ×4, 1 local sem símbolo. Converte o retângulo de recorte
+de coordenadas PSP pra coordenadas de tela via o fator de escala do
+viewport do motor antes de empacotar. `sceGuTexWrap` (`0x2ac838`,
+580 B, 97% cob., 0 tabela, 8 branches/4 de retrocesso): 7 `bl` —
+mesmo catálogo-base (`GetPacket`/`SetTypeCurrent`/
+`SetBlendModeCurrent`/`SetTextureCurrent`/`SetExtraCurrent` ×9/
+`GetVBOBufferCurrent`), repetido 3× (provável um por eixo/estágio de
+textura), colado imediatamente após `sceGuTexImage` (seção 204) no
+binário. Confirma pela terceira vez (seções 110/204) que `sceGu*`
+neste binário é a ponte real do motor contra `CEGL2_*`/`GuEmu_*`
+(seção 59), não boilerplate preservado de libPSP. Marcadas
+`read_full`/`read_structural` (`sceGuScissor` 99% ≥95% →
+`read_full`; `sceGuTexWrap` 97% ≥95% → `read_structural`, mapeamento
+fino argumento→`SetExtraCurrent` não conferido linha a linha).
+
+## 512. `iOS_DrawTexFlip(...)` — sexto gêmeo da família `DrawTexFlip`, variante de contexto "iOS" em vez de batalha (2026-10-23, Fase 3, sexagésimo quinto lote)
+
+`iOS_DrawTexFlip(short*,COLOR*,int,int,int,unsigned char*,unsigned
+short)` (`0x15f048`, 776 B) — `jtable.py`: **97% de cobertura**
+(189/194), **1 tabela de salto resolvida** (4 casos → 4 handlers
+distintos — mesmo esqueleto da família `DrawTexFlip`/`b`/`c`/`e`/`j`,
+seção 317), 5 branches/4 de retrocesso. 2 `bl`: `SetSemiTrans`,
+`SetShadeTex` ×2 — catálogo mínimo (sem `TexHybrid_Register`/
+`CFFT_STATE`/`IS_TEX_2X`), o que bate com o padrão base/c/e/j, não
+com o padrão especial de `bDrawTexFlip` (que tem 5 chamadas extras
+de textura híbrida). Endereço fora da faixa dos 5 já mapeados,
+prefixo `iOS_` consistente com a família de UI/plataforma portada do
+código-fonte iOS — provável 6º membro consumido pelo subsistema de
+menus herdado do port iOS, paralelo ao uso de `DrawTexFlip` simples
+por `Bottun` (seção 408). Marcada `read_structural` (mesmo veredito
+dos outros 5 irmãos — 97% ≥95%, 0 tabela de salto, mas sem leitura
+linha a linha dos 2 parâmetros extras da assinatura).
+
+## 513. `MulMatrix0(MATRIX*,MATRIX*,MATRIX*)` — variante de `MulMatrix` que descarta a translação, lida por completo via disassembly manual (2026-10-23, Fase 3, sexagésimo quinto lote)
+
+`MulMatrix0` (`0x2a0124`, 588 B) — `jtable.py`: **100% de
+cobertura** (147/147), zero tabela de salto, **zero `bl`** (função
+folha pura), zero branches reais (bloco reto com execução
+condicional `addlt`, sem desvio de fluxo). Desassemblada
+manualmente por completo (147/147 instruções): multiplica só a
+parte rotacional 3×3 da matriz (ponto fixo 4.12, `smulbb`/`smlabb` +
+arredondamento com sinal + `asr #0xc`) e **zera explicitamente a
+translação** do resultado (`m2->t[0..2] = 0`), em vez de propagá-la
+como `MulMatrix` legítima faz — mesma família GTE já catalogada em
+`move_light`/`Wmove_light` (seções 385/417), aqui usada onde o
+chamador só quer compor rotações (hierarquia de ossos/câmera) sem
+acumular translação herdada. Marcada `read_full` (100% cobertura, 0
+`bl`/branch a esconder, leitura manual completa).
+
+**Referências cruzadas (seções 510-513):** seção 483
+(`xpLibgpuInit`, `PutDispEnv` confirmado como parte da mesma camada
+de emulação), seções 59/110/204 (ponte `sceGu*`↔`CEGL_PACKET`,
+`sceGuScissor`/`sceGuTexWrap` mais dois elos confirmados), seção 317
+(família `DrawTexFlip`, `iOS_DrawTexFlip` como sexto membro), seções
+385/417 (biblioteca de matriz GTE, `MulMatrix0` como variante sem
+translação).
+
+## 514. Família `DrawFT4RGB` letter-prefix — fecha `b`/`c`/`e`/`j` por completo, mesmo catálogo mínimo (`SetSemiTrans`/`SetShadeTex`) da base (seção 497) (2026-10-23, Fase 3, sexagésimo sexto lote)
+
+`eDrawFT4RGB` (`0x189fb0`, 564 B, 98% cob., 0 tabela, 6 branches/4
+de retrocesso): 6 `bl` — `CFFT_STATE::GetParam`/`SetParam`,
+`SetSemiTrans`, `SetShadeTex` ×2, `TexHybrid_RegistCLUTAddr`,
+`IS_TEX_2X` — catálogo completo igual à base (seção 497).
+`bDrawFT4RGB` (`0x1778a8`, 556 B, 99% cob., 0 tabela, 2 branches/1
+de retrocesso): 3 `bl` — `pspWindowCommonIsType` ×2, `SetSemiTrans`,
+`SetShadeTex` ×2 (catálogo mais magro, sem `TexHybrid`/`CFFT_STATE`).
+`jDrawFT4RGB` (`0x194048`, 496 B, 98% cob., mesmo catálogo de
+`bDrawFT4RGB`). `cDrawFT4RGB` (`0x172c0c`, 448 B, 98% cob., 0
+tabela, 2 branches/1 de retrocesso): só 2 `bl` —
+`SetSemiTrans`/`SetShadeTex` ×2 (o mais magro de todos, sem
+`pspWindowCommonIsType`). Fecha a família letter-prefix `*DrawFT4RGB`
+por completo (base agora completa desde a seção 497) — confirma que
+cada variante ajusta o catálogo conforme a complexidade do contexto
+de tela (checagem de tipo de janela presente em `b`/`j`, ausente em
+`c`; `TexHybrid`/`CFFT_STATE` só na variante "e"). Todas marcadas
+`read_full` (98-99% ≥95%, 0 tabela de salto em todas).
+
+## 515. `ctlbirthday_init()`/`ctlbirthday_active`/`ctlbirthday_deactive` — fecham a tríade com `ctlbirthday_main` (seção 347) (2026-10-23, Fase 3, sexagésimo sexto lote)
+
+`ctlbirthday_init()` (`0x247a30`, 564 B, 94% cob., 0 tabela, 1
+branch/0 de retrocesso): 6 `bl` — `birthday_change(CTLINFO*)`,
+`vOpn_add_anmpac` ×2/`vOpn_add_winpac`, `vOpnwin_noropen(int,
+RECT16,int,int,unsigned long*)`, `LoadImage_menuData`,
+`iOS_setV2Icon`. `ctlbirthday_active`/`ctlbirthday_deactive`
+(`0x247c64`/`0x247d18`, 180/176 B, 95-96% cob., 0 `bl`):
+boilerplate trivial de transição de estado. Fecha a tríade completa
+com `ctlbirthday_main` (seção 347, já lida) — `birthday_change`
+(novo nome catalogado) sugere que o controller consulta/aplica a
+mudança de data antes de disparar a tela de aniversário. Marcadas
+`read_structural`/`read_full` conforme cobertura.
+
+## 516. `moukeevtinf_window(CTLINFO*,int,int)` — fecha a referência direta de `ctlworkinginf_init` (seção 384), janela de evento informativo do roster (2026-10-23, Fase 3, sexagésimo sexto lote)
+
+`moukeevtinf_window(CTLINFO*,int,int)` (`0x26760c`, 564 B) —
+`jtable.py`: **94% de cobertura** (133/141), zero tabela de salto,
+2 branches/1 de retrocesso. 6 `bl`: `Wserchmessagepointer(int)`,
+`Wcount_words2(short*,short*,char*)` (seção 352), `add_winpac`,
+`wldwin_set`/`wldwin_trans`, `wldmess_put` ×4. Fecha a referência
+direta deixada por `ctlworkinginf_init` (seção 384) — monta e exibe
+uma janela modal com transição mostrando texto de evento ligado ao
+roster "mouke" (formatação de mensagem via o mesmo par de contagem
+de palavras já visto na família `count_words`). Marcada
+`read_structural` (94% < 95%, 0 tabela de salto).
+
+## 517. `DattoNoGotokuNigeyoRoutine()` — handler de IA de "fuga", terceiro dos três handlers nomeados da sub-fase 2 de `BattleRoutine` (2026-10-23, Fase 3, sexagésimo sexto lote)
+
+`DattoNoGotokuNigeyoRoutine()` (`0x27286c`, 576 B) — `jtable.py`:
+cobertura não capturada no resumo truncado, 23 branches/9 de
+retrocesso. **13 `bl` distintos**: `SetBaseTargetGroup` ×2,
+**`EvaluateAllUnitAction()`** ×2 (recursão de volta no loop
+principal de IA!), `GetNearestUnit(int)`, **`SetMoveAreaSafePanelOnly()`**,
+**`StayAtSafePanel()`**, `SetDestUnit(int)`, `SetTmp_UA(UnitAction*)`,
+`SetThresholdDoNothing()`, `SetSafePanel(int,int)`,
+`ForChantedAction()`, `SetMove()` ×2, `MakeMapCostToDest(unsigned
+char*)`, `MakeMapChantedAction()`. Fecha o terceiro dos três
+handlers nomeados da sub-fase 2 de `BattleRoutine` (junto com
+`ForAbnormalStatus`, seção 396, e `ForAutoCommand`, seção 150) já
+catalogados em `docs/AI_DIFFICULTY_RESEARCH.md`. "Datto no gotoku
+nigeyo" (脱兎の如く逃げよ, "fuja como uma lebre em fuga" — expressão
+idiomática japonesa) confirma ser o handler de **fuga** da IA:
+restringe o movimento a painéis seguros (`SetMoveAreaSafePanelOnly`/
+`StayAtSafePanel`/`SetSafePanel`), define um limiar de "não fazer
+nada" (`SetThresholdDoNothing`), e devolve o controle ao avaliador
+principal (`EvaluateAllUnitAction`). Marcada `read_structural`
+(catálogo rico, mas cobertura numérica não verificada nesta
+passada).
+
+**Referências cruzadas (seções 514-517):** seção 497
+(`DrawFT4RGB`, família letter-prefix agora completa), seção 347
+(`ctlbirthday_main`, tríade agora completa), seção 384
+(`ctlworkinginf_init`, referência direta fechada por
+`moukeevtinf_window`), seções 150/396 (`ForAutoCommand`/
+`ForAbnormalStatus`, trio de handlers de sub-fase 2 de
+`BattleRoutine` agora completo com `DattoNoGotokuNigeyoRoutine`).
+
+## 518. `set_monomane_act(BWORK*)` — monta a ação copiada pelo Mime/Monomane a partir da última ação observada (2026-10-23, Fase 3, sexagésimo sétimo lote)
+
+`set_monomane_act(BWORK*)` (`0x1d1374`, 572 B) — `jtable.py`: **95%
+de cobertura** (136/143), zero tabela de salto, 12 branches/6 de
+retrocesso. 6 `bl`: `check_reaction_deny(BWORK*)`, `get_reflection_
+coord(BWORK*,int,int,int,int*,int*,int*)`, `copyACTst(ACT*,ACT*)`,
+`set_temp_status(BWORK*,int,unsigned char,int)`,
+`getskillrange(ACT*)`, `setskilldata_common(ACT*,ACT*,int)`. "Monomane"
+(物真似, mímica) + o catálogo batem com a habilidade Mimic do Mime
+(repetir a última ação de qualquer unidade no turno) — já citada de
+passagem em `time_flies` (seção #136), primeira leitura própria:
+clona a ACT original (`copyACTst`), recalcula dados/alcance da skill
+copiada (`setskilldata_common`/`getskillrange`), e trata casos de
+reação/reflexão em cadeia que a ação mimetizada possa disparar
+(`check_reaction_deny`/`get_reflection_coord`). Marcada
+`read_structural` (95% ≥95% satisfaz o critério numérico, mas sem
+leitura linha a linha dos campos exatos de `BWORK`/`ACT` tocados).
+
+## 519. `calender_add(int)` — função de mutação do relógio do mundo, nível abaixo de `sun_to_ivarisday`/`wld_dayread` (2026-10-23, Fase 3, sexagésimo sétimo lote)
+
+`calender_add(int)` (`0x24adec`, 576 B) — `jtable.py`: **95% de
+cobertura** (137/144), zero tabela de salto, 10 branches/5 de
+retrocesso. 4 `bl`: `Wwrite_eventflag` ×4, `Wread_eventflag` ×6,
+**`month_to_day(int,int)`** ×2, **`day_to_month(int,int*,int*)`**
+×1 (novos nomes de conversão de calendário, companheiros de
+`sun_to_ivarisday`/`wld_dayread`). Hipótese: avança a data corrente
+por um delta de dias, lendo o estado atual via flags (6×), convertendo
+entre representação linear e mês/dia para tratar carry-over de fim de
+mês, e gravando o resultado (4×). Opera num nível abaixo de
+`sun_to_ivarisday`/`wld_dayread` (seções 371/372/412/479/496) — estas
+são de leitura/apresentação (HUD), `calender_add` é a função de
+mutação real do relógio do mundo (viagem no mapa, avanço de tempo).
+Marcada `read_full` (95% ≥95%, 0 tabela de salto).
+
+## 520. `ASURA_PKT_Analyze(unsigned long*)` — copiador de registro bruto, vizinho direto de `ASHURA_GNS_Read` (2026-10-23, Fase 3, sexagésimo sétimo lote)
+
+`ASURA_PKT_Analyze(unsigned long*)` (`0x167a80`, 568 B) —
+`jtable.py`: **96% de cobertura** (137/142), zero tabela de salto, 8
+branches/5 de retrocesso (laço denso). Único `bl`: local já
+confirmado como `memcpy` em dezenas de outras seções, chamado 3×.
+Fica imediatamente antes de `ASHURA_GNS_Read` (seção 398, só 80 B de
+distância/padding) — hipótese: rotina de baixo nível que copia
+campos sequencialmente de um "pacote" (bloco bruto) antes de um
+parser mais complexo assumir, possivelmente a camada de
+transporte/protocolo subjacente ao formato GNS. Marcada `read_full`
+(96% ≥95%, 0 tabela de salto); pendência honesta: relação exata de
+chamada com `ASHURA_GNS_Read`/`ASHURA_GNS_Garage` não confirmada por
+xref direta, só por posição/nome.
+
+## 521. `ctleeff_init(int)` — controller de efeito visual/sonoro de chegada de rota, acopla o sistema de rota ao pedido de encontro aleatório (2026-10-23, Fase 3, sexagésimo sétimo lote)
+
+`ctleeff_init(int)` (`0x257c20`, 572 B) — `jtable.py`: **94% de
+cobertura** (135/143), zero tabela de salto, 2 branches/1 de
+retrocesso. 11 `bl`: `wldfade_set`, `wld_btlsect_seek()`,
+`ssd_request`, `ps_rand()` ×2, `pspWorldDataBackBufGet`,
+**`CFFT_STATE::SetEncountRequest(int)`**, quarteto GPU PSX
+(`DrawSync`/`MoveImage`/`GetTPage`/`ClearImage`), `xpMallocAlign`.
+Fecha a referência direta deixada por `walkrute_set` (seção 496).
+**Achado notável**: `CFFT_STATE::SetEncountRequest` liga diretamente
+o sistema de indicador de rota do world map ao sistema de random
+encounter — "ctl" segue o padrão prefixal de controller de tela
+("eff" = effect), disparado quando a rota chega a um tile: aloca
+buffer, pega o backbuffer, desenha com as primitivas GPU PSX, dispara
+fade/som, consulta o setor de batalha do tile e seta o pedido de
+encontro aleatório. Marcada `read_structural` (94% < 95%, 0 tabela
+de salto).
+
+## 522. `DrawEggWithShadow(DVECTOR*,int,COLOR*,int,int)` — resolve de vez a ambiguidade "Egg": é o sprite do monstro-em-ovo desenhado em campo, não um ícone oval de retrato (2026-10-23, Fase 3, sexagésimo sétimo lote)
+
+`DrawEggWithShadow(DVECTOR*,int,COLOR*,int,int)` (`0x1bd8e8`, 564 B)
+— `jtable.py`: **96% de cobertura** (135/141), zero tabela de salto,
+9 branches/7 de retrocesso. 5 `bl`, nenhum sem símbolo:
+`DrawTexFlip(short*,COLOR*,char,int,int,int)` ×2, `CFFT_STATE::
+GetParam` ×2, `GetTPage`, `GetClut`, `IS_TEX_2X()` ×2.
+
+**Resolve de vez a ambiguidade já antecipada pela seção 396
+(`EggChk`)**: o catálogo de `bl` é puramente de primitivas de
+desenho de sprite texturizado em campo — exatamente o conjunto
+usado pelo pipeline genérico de sprite de unidade na batalha, sem
+nenhuma chamada de UI/janela/fonte. A assinatura espelha a de
+`DrawUnitWithShadow`, e ambas são chamadas pelo mesmo helper local
+(`sub_1bf96c`) dentro do laço de `PreModeChg` que decide a ordem de
+aparição dos sprites de unidade em campo. **Hipótese vencedora**: a
+leitura "ícone oval de retrato de menu" está definitivamente
+descartada — "Egg" é o sistema de evolução/crescimento de monstro
+("monstro-ovo"), e `DrawEggWithShadow` é sua contraparte visual real,
+desenhando o monstro em estado de ovo no campo de batalha com sombra
+no chão, usando o mesmo pipeline de textura/CLUT de qualquer unidade.
+Marcada `read_full` (96% ≥95%, 0 tabela de salto, nenhum `bl` sem
+símbolo).
+
+**Referências cruzadas (seções 518-522):** seção 136 (`time_flies`,
+cita `set_monomane_act` de passagem), seções 371/372/412/479/496
+(sistema de calendário, `calender_add` como função de mutação),
+seção 398/81 (`ASHURA_GNS_Read`/`ASHURA_GNS_Garage`, vizinhança com
+`ASURA_PKT_Analyze`), seção 496 (`walkrute_set`, referência direta
+fechada por `ctleeff_init` — achado do acoplamento com random
+encounter), seção 396 (`EggChk`, ambiguidade "Egg" resolvida de vez
+por `DrawEggWithShadow`).
+
+## 523. `CheckGunResult(int,SVECTOR*,int)`/`CheckBladeResult(int,int,int,int,int)` — fecham o quarteto Blade/Pole/Bow/Gun de checagem de arma física, consumido por `getweaponeffect` (seção 415) (2026-10-23, Fase 3, sexagésimo oitavo lote)
+
+`CheckGunResult(int,SVECTOR*,int)` (`0x224e44`, 560 B, 96% cob., 0
+tabela, 4 branches/2 de retrocesso): 8 `bl` — `get_mapstp`,
+`getAnimationPositionFromBattleWork` ×3, `getAnimationHeightFromBattleID`
+×2, 2 locais sem símbolo, `ratan2`/`SquareRoot12`/`SquareRoot0`
+(trigonometria/distância GTE — consistente com trajetória de bala).
+`CheckBladeResult(int,int,int,int,int)` (`0x1e1ffc`, só 128 B, 100%
+cob., 0 tabela, 2 branches/1 de retrocesso): único `bl`
+`get_unit_height(int)` ×2 — função minúscula, checagem simples de
+diferença de altura (arma corpo-a-corpo não precisa de trajetória
+balística). Fecham o quarteto completo de checadores de categoria
+de arma física (`CheckPoleResult` seção 367, `CheckBowResult` seção
+242) já consumido por `getweaponeffect` (seção 415). Confirma que
+armas de longo alcance (Bow/Gun) usam trigonometria/distância GTE
+pra trajetória, enquanto armas corpo-a-corpo (Blade/Pole) só checam
+altura/coordenada. Marcadas `read_full` (96%/100% ≥95%, 0 tabela de
+salto em ambas).
+
+## 524. `make_statusscroll()`/`Wmake_statusscroll()` — par normal/"W" do menu de rolagem de status, chama o `hook_jobmenu` (2026-10-23, Fase 3, sexagésimo oitavo lote)
+
+`make_statusscroll()` (`0xef5e0`, 524 B, 92% cob., 0 tabela, 14
+branches/10 de retrocesso) e `Wmake_statusscroll()` (`0x118cdc`, 556
+B, 92% cob., mesma topologia): par normal/"W". 3 `bl` cada:
+`iOS_setsoundf(int*,int)`, `hook_jobmenu()`/`Whook_jobmenu()` (hook
+de debug nomeado explicitamente pro menu de job), `get_bwp(int)`.
+Confirma ser a rotina de montagem do menu de rolagem de status
+(provavelmente lista de atributos/parâmetros navegável por scroll)
+dentro do contexto do menu de job. Marcadas `read_structural` (92%
+< 95%, 0 tabela de salto).
+
+## 525. Família `direc1`/`direc2`/`Wdirec1`/`Wdirec2` — rotina de direção de animação por 16 vias, reusa `cnvglobaltolocalid`/`getanimpos3d` (2026-10-23, Fase 3, sexagésimo oitavo lote)
+
+`direc1(char*)` (`0xdc3d4`, 560 B, 95% cob., 0 tabela, 12 branches/5
+de retrocesso): 3 `bl` — 2 locais sem símbolo,
+`getAnimationDirection16(unsigned int)`. `direc2(char*,int)`
+(`0xdca14`, 536 B, 96% cob., 0 tabela, 7 branches/3 de retrocesso):
+5 `bl` — 2 locais sem símbolo, `getanimpos3d(int,short*)` ×2,
+**`cnvglobaltolocalid(int)`** (seção 412 — confirma reuso direto!),
+`ratan2`. `Wdirec1`/`Wdirec2` (`0x104798`/`0x1052e4`, 556 B cada,
+95-96% cob., mesmos catálogos com prefixo "W"). Confirma ser a
+família de cálculo de direção de animação discretizada em 16 vias
+(bússola de 16 pontos, padrão clássico de jogos PS1 pra sprites
+direcionais), usando o tradutor de ID global→local de batalha
+(seção 412) e a posição 3D da animação. Marcadas `read_structural`/
+`read_full` conforme cobertura (`direc2`/`Wdirec2` ≥95% sem
+ambiguidade → `read_full`; `direc1`/`Wdirec1` ligeiramente abaixo →
+`read_structural`).
+
+## 526. `DrawItemCategory(int,iOS_CMenuTouch*,int,IOS_MENU_TOUCH_RESULT)` — hub de desenho de categoria de item, reusa `GetItemList`/`GetShopItemList`/framework de janela completo (2026-10-23, Fase 3, sexagésimo oitavo lote)
+
+`DrawItemCategory(int,iOS_CMenuTouch*,int,IOS_MENU_TOUCH_RESULT)`
+(`0x1997f0`, 556 B) — `jtable.py`: cobertura não capturada no
+resumo truncado, 8 branches/4 de retrocesso. 10 `bl` distintos:
+`initMenuTouch(iOS_CMenuTouch*,int)`, `GetItemList`/`GetShopItemList`
+(seção 373 — confirma reuso pela mesma tela de categoria!),
+`DrawEquipCategory(int,int,int)`, `MenuSelSideWithSnd`/
+`MenuSelSideWithSndDirect`, `SetWindowPosition`/`GetWindowPosition`,
+`WindowInit2`, `SetWindowCount`. Já referenciada implicitamente por
+múltiplas telas de loja/equipamento já mapeadas (biblioteca de
+janela completa `WindowInit2`/`SetWindowPosition`/`CursolFunc`
+citada nas seções 7901+ etc.) — esta é a função real que desenha a
+categoria de itens, delegando a listagem pra `GetItemList`/
+`GetShopItemList` conforme o contexto (posse própria vs. loja).
+Marcada `read_structural` (cobertura numérica pendente de
+verificação nesta passada).
+
+## 527. `AppEngine_Init(int)` — achado arquitetural: o boot real do engine, par de `AppEngine_FrameStep` (seção 489) (2026-10-23, Fase 3, sexagésimo oitavo lote)
+
+`AppEngine_Init(int)` (`0x2b1be8`, 556 B) — `jtable.py`: cobertura
+não capturada no resumo truncado, 3 branches/3 de retrocesso. 14
+`bl` distintos: `CWORK_MEM::New(int)`, `CTHREAD::CTHREAD()`/`Create(int)`,
+`timeGetTime()`, `CSOUND_IF::CSOUND_IF(int)`/`Init(unsigned int,int,
+char*,int)`/`RegisterSavedata` ×2, `CFRAMERATE::CFRAMERATE(float,
+float)`, `CAPP_INFO::GetDeviceW`/`GetDeviceH`/`GetRootPath`,
+**`GX_Init(int)`**, **`AppEngineFFT_Init()`**, 4 stubs PLT. Fecha o
+par com `AppEngine_FrameStep` (seção 489, o tick real de frame) —
+confirma ser o **boot completo do engine**: aloca memória de
+trabalho, cria a thread principal, inicializa o subsistema de som
+(`CSOUND_IF`) com registro de savedata, configura o framerate,
+consulta dimensões do device e caminho raiz de assets, inicializa o
+contexto gráfico (`GX_Init`) e finalmente delega pro boot específico
+do jogo (`AppEngineFFT_Init`). É provavelmente a primeira função
+chamada pela JNI após o app abrir. Marcada `read_structural`
+(cobertura numérica pendente de verificação; achado arquitetural de
+alto valor mesmo sem o número exato).
+
+## 528. `wldfast_lop()` — achado arquitetural: o loop real de desenho por frame do world map, variante "rápida" do ciclo libgpu completo (2026-10-23, Fase 3, sexagésimo oitavo lote)
+
+`wldfast_lop()` (`0x25f990`, 564 B) — `jtable.py`: cobertura não
+capturada no resumo truncado, 10 branches/4 de retrocesso. 13 `bl`
+distintos: `wldinfo_put(GsOT*)`, `SetSpadStack(unsigned long)`/
+`ResetSpadStack()`, `pspPrimBackDraw`/`pspPrimDirectPartsDraw`
+(seções 463/480), `pspWorldCheckFlg` ×5, `pspWorldCallBackExec()`,
+`pspWorldDataBackBufGet` ×2/`pspWorldDataRectGet` ×2, `VSync`,
+`DrawSync` ×2, `GsClearOt`, `GsSwapDispBuff`, `GsSortClear`. Já
+citada de passagem (`mentioned_unverified`) em outra função. Confirma
+ser o loop real de desenho por frame do world map (análogo a
+`wldnormal_lop`, seção 11, mas a variante "rápida" — ciclo completo
+de double-buffer PSX: limpa OT, verifica flags de estado ×5,
+executa callbacks registrados, desenha primitivas de fundo e
+diretas, troca buffers de display e sincroniza). Marcada
+`read_structural` (cobertura numérica pendente de verificação nesta
+passada; achado arquitetural relevante).
+
+**Referências cruzadas (seções 523-528):** seção 415
+(`getweaponeffect`, quarteto Blade/Pole/Bow/Gun agora completo),
+seção 412 (`cnvglobaltolocalid`, reuso direto confirmado por
+`direc2`/`Wdirec2`), seção 373 (`GetShopItemList`/`GetItemList`,
+reuso confirmado por `DrawItemCategory`), seção 489
+(`AppEngine_FrameStep`, par de boot agora completo com
+`AppEngine_Init`), seção 11 (`wldnormal_lop`, variante "rápida" em
+`wldfast_lop`), seções 463/480 (`pspPrimBackDraw*`, consumidas pelo
+loop de desenho do world map).
+
+## 529. `iOS_RESUME_SET_BCALC(...)` — membro "misto" (DataCopy+DataCopyAddr) da família de resume, provável cache de cálculo de batalha (2026-10-23, Fase 3, sexagésimo nono lote)
+
+`iOS_RESUME_SET_BCALC(IOS_RESUME_DATA_BCALC*,IOS_RESUME_DATACOPY_
+MODE)` (`0x1d15d8`, 672 B) — `jtable.py`: **86% de cobertura real**
+(144/168), zero tabela de salto, 1 branch/0 de retrocesso (função
+linear, termina em tail-call `b` direto pra `iOS_Resume_DataCopy`).
+2 `bl`: `iOS_Resume_DataCopy`/`iOS_Resume_DataCopyAddr` — usa os
+**dois** primitivos (diferente de `iOS_RESUME_SET_BATTLE`, seção
+484, só `DataCopy`; mais parecido com `iOS_RESUME_SET_WORK_MU`,
+seção 105, que introduz helpers de endereço). "BCALC" = provável
+"Battle Calc" — um cache/estado de cálculo de batalha (resultado
+intermediário de dano/fórmula), não o estado completo (isso é
+`BATTLE`/`CAUTOSAVE`). A presença de `DataCopyAddr` sugere a struct
+guardar ao menos um ponteiro/endereço de trabalho, não só escalares
+planos. Marcada `read_structural` (86% real < 95%, seguindo o
+precedente da seção 484 de usar a fração exata, não o percentual
+arredondado).
+
+## 530. `unzReadCurrentFile` — leitura/descompressão de entrada ZIP, interno de `minizip`/zlib, fast-track de terceiros (2026-10-23, Fase 3, sexagésimo nono lote)
+
+`unzReadCurrentFile` (`0x8174c`, 804 B) — `jtable.py`: **93% de
+cobertura** (186/201), zero tabela de salto, 26 branches/11 de
+retrocesso. 3 `bl`: `crc32` ×2, `inflate`, `call_zseek64`. Vizinha
+de `unzOpenCurrentFile3` (já catalogada como terceiro `minizip`
+reconhecido) — mesma assinatura clássica de `unzip.c` (posiciona via
+`call_zseek64`, descomprime via `inflate`, valida integridade via
+`crc32` duplo/incremental) usada pra ler o pacote `fftpack.bin`/OBB
+empacotado. Marcada `read_structural` (93% < 95%, mas fast-tracked
+como terceiro reconhecível — regra 6 da metodologia, sem extração
+manual do remanescente).
+
+## 531. `xpLib_DebugExport`/`xpLib_DebugImport` — par simétrico de dump/restauração de debug, mais leve que `CAUTOSAVE::Save`/`Load` (2026-10-23, Fase 3, sexagésimo nono lote)
+
+`xpLib_DebugImport()` (`0x29b134`, 692 B, **100% de cobertura**,
+zero tabela de salto, 9 branches/0 de retrocesso): 11 `bl` —
+`CFILE::CFILE`/`Open`/`~CFILE`/`Read` ×4 cada, `CAPP_INFO::
+GetStoragePath()` ×4, mais locais já identificados em outras seções
+(`memcpy`, `strcpy`, `__stack_chk_fail`, `operator new`).
+`xpLib_DebugExport()` (`0x29ae90`, 676 B, **97% de cobertura**, zero
+tabela de salto, mesma topologia): catálogo quase idêntico, troca
+`Read` por `Write(void*,unsigned int,unsigned int)` — espelhamento
+perfeito do par import/export. **Achado notável**: nenhuma das duas
+chama `xpGetHeap`/`xpMoveHeap`, `CCOMP_Z_ENC`/`DEC`, `CFFT_STATE::
+Suspend`/`Resume`, ou `iOS_ResumeGetData` — todo o aparato que
+`CAUTOSAVE::Save`/`Load` (seções 19.1/458) usa pra dump/restauração
+da heap inteira comprimida. Confirma que este par é um mecanismo
+**mais leve** e distinto, provavelmente de uso interno do próprio
+`xpLib` (gerenciador de heap/alocador) pra serializar um único
+objeto/estrutura de controle de debug, não o heap completo. Marcadas
+`read_full` (ambas ≥95%, 0 tabela de salto); pendência honesta:
+identidade de `sub_2cdf9c` e `sub_71494`, tipo/tamanho exato da
+estrutura de debug não confirmado campo a campo.
+
+## 532. `sceGuClutLoad_for_iOS` — quarta confirmação da ponte real `sceGu*`↔`CEGL_PACKET`, sufixo "for_iOS" sugere variante de plataforma legada (2026-10-23, Fase 3, sexagésimo nono lote)
+
+`sceGuClutLoad_for_iOS` (`0x2abd34`, 716 B) — `jtable.py`: **84% de
+cobertura** (151/179), zero tabela de salto, 15 branches/10 de
+retrocesso. 3 `bl`: 1 local sem símbolo, `CFFT_STATE::GetParam(int)`,
+`IS_TEX_2X()` — subconjunto quase idêntico ao de `sceGuTexImage`
+(seção 204) e `sceGuScissor`/`sceGuTexWrap` (seção 511). Confirma
+pela quarta vez que `sceGu*` é a ponte real do motor contra
+`CEGL2_*`/`GuEmu_*` (seção 59), não boilerplate PSP preservado. O
+sufixo "for_iOS" sugere uma variante de plataforma legada do
+carregamento de CLUT (mesmo padrão de nomes cross-platform já visto
+em `iOS_DrawTexFlip`, seção 512), preservada tal-qual no port Android
+em vez de unificada com a rotina genérica. Um branch sai da faixa da
+função e cai no meio de outra rotina (perto de `CFFT_STATE::GetParam`,
+não resolvido como alvo próprio) — explica boa parte da lacuna de
+cobertura frente aos ~94-99% dos outros membros da família. Marcada
+`read_structural` (84% < 95%, ressalva explícita sobre o branch de
+saída não resolvido).
+
+## 533. `Zaddzod(ZODRECORD*,tagPOLY_FT4*)` — função-folha de montagem/push de primitivo de ícone de Zodíaco, completa o pipeline `ctlzodiac_*`→`addzodiacback`→`Zaddzod` (2026-10-23, Fase 3, sexagésimo nono lote)
+
+`Zaddzod(ZODRECORD*,tagPOLY_FT4*)` (`0x153940`, 804 B) —
+`jtable.py`: **99% de cobertura** (199/201), zero tabela de salto, 3
+branches/1 de retrocesso. 6 `bl`: `pspGetpspPrimWorkBuf`,
+`pspPrimBackDrawRGB`, `AddPrim`, `SetPolyFT4`, `SetSemiTrans`,
+`SetShadeTex` — catálogo idêntico ao de `addzodiacback` (seção 292),
+mas sem nenhuma chamada de orquestração de task (`wasmTaskEntry`/
+`Wtask_killmyself`). A assinatura (segundo parâmetro exatamente o
+tipo que `SetPolyFT4` consome) sugere ser a rotina de nível mais
+baixo que monta/preenche um único primitivo `tagPOLY_FT4` a partir
+de um registro `ZODRECORD` e o envia ao buffer PSP — completa o
+pipeline de desenho do ícone de Zodíaco: `ctlzodiac_init`/`_main`
+(seção 362) → `addzodiacback` (desenho do fundo/task) → `Zaddzod`
+(montagem/push do primitivo individual). Marcada `read_structural`
+(99% ≥95%, 0 tabela de salto — mesma convenção já usada em
+`addzodiacback`/seções 292-294, sem verificação semântica fina de
+campo nem confirmação de caller por xref).
+
+**Referências cruzadas (seções 529-533):** seções 105/484
+(família de resume, `iOS_RESUME_SET_BCALC` como membro "misto"),
+seção 19.1/458 (`CAUTOSAVE::Save`/`Load`, contraste com o par
+`xpLib_Debug*` mais leve), seções 59/110/204/511 (ponte `sceGu*`,
+quarto membro confirmado em `sceGuClutLoad_for_iOS`), seção 512
+(`iOS_DrawTexFlip`, mesmo padrão de nomes cross-platform legados),
+seção 292 (`addzodiacback`, pipeline de Zodíaco completo com
+`Zaddzod`).
