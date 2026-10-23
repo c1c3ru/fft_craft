@@ -650,22 +650,22 @@ address,size,mangled,demangled,status,section_ref
 00193e04,580,_Z17jDrawPluralFT4RGBPhP5COLORittii,"jDrawPluralFT4RGB(unsigned char*, COLOR*, int, unsigned short, unsigned short, int, int)",read_full,NOTES §505
 002ac838,580,sceGuTexWrap,sceGuTexWrap,read_structural,NOTES §511
 000adcd4,576,_ZN12CEGL2_SPRITE7LoadEndEii,"CEGL2_SPRITE::LoadEnd(int, int)",read_structural,NOTES §509
-0024adec,576,_Z12calender_addi,calender_add(int),unread,
+0024adec,576,_Z12calender_addi,calender_add(int),read_full,NOTES §519
 0026e1e8,576,_Z15ctlsentuto_initv,ctlsentuto_init(),read_structural,NOTES §404
-0027286c,576,_Z26DattoNoGotokuNigeyoRoutinev,DattoNoGotokuNigeyoRoutine(),mentioned_unverified,
-001d1374,572,_Z16set_monomane_actP5BWORK,set_monomane_act(BWORK*),unread,
-00257c20,572,_Z12ctleeff_initi,ctleeff_init(int),unread,
+0027286c,576,_Z26DattoNoGotokuNigeyoRoutinev,DattoNoGotokuNigeyoRoutine(),read_structural,NOTES §517
+001d1374,572,_Z16set_monomane_actP5BWORK,set_monomane_act(BWORK*),read_structural,NOTES §518
+00257c20,572,_Z12ctleeff_initi,ctleeff_init(int),read_structural,NOTES §521
 000962d0,568,res0_unpack,res0_unpack,unread,
 0009734c,568,res2_inverse,res2_inverse,unread,
-00167a80,568,_Z17ASURA_PKT_AnalyzePm,ASURA_PKT_Analyze(unsigned long*),unread,
+00167a80,568,_Z17ASURA_PKT_AnalyzePm,ASURA_PKT_Analyze(unsigned long*),read_full,NOTES §520
 001729d4,568,_Z17cDrawPluralFT4RGBPhP5COLORittii,"cDrawPluralFT4RGB(unsigned char*, COLOR*, int, unsigned short, unsigned short, int, int)",read_full,NOTES §505
 0024f688,568,_Z12ctltips_mainP7CTLINFO,ctltips_main(CTLINFO*),read_structural,NOTES §461
 00096508,564,res0_look,res0_look,unread,
-00189fb0,564,_Z11eDrawFT4RGBP6RECT16iiP5COLORitti,"eDrawFT4RGB(RECT16*, int, int, COLOR*, int, unsigned short, unsigned short, int)",unread,
+00189fb0,564,_Z11eDrawFT4RGBP6RECT16iiP5COLORitti,"eDrawFT4RGB(RECT16*, int, int, COLOR*, int, unsigned short, unsigned short, int)",read_full,NOTES §514
 001ac8c8,564,_Z16DrawPluralFT4RGBPhP5COLORittii,"DrawPluralFT4RGB(unsigned char*, COLOR*, int, unsigned short, unsigned short, int, int)",read_full,NOTES §505
-001bd8e8,564,_Z17DrawEggWithShadowsP7DVECTORiP5COLORii,"DrawEggWithShadow(short, DVECTOR*, int, COLOR*, int, int)",unread,
-00247a30,564,_Z16ctlbirthday_initv,ctlbirthday_init(),unread,
-0026760c,564,_Z18moukeevtinf_windowP7CTLINFOii,"moukeevtinf_window(CTLINFO*, int, int)",unread,
+001bd8e8,564,_Z17DrawEggWithShadowsP7DVECTORiP5COLORii,"DrawEggWithShadow(short, DVECTOR*, int, COLOR*, int, int)",read_full,NOTES §522
+00247a30,564,_Z16ctlbirthday_initv,ctlbirthday_init(),read_structural,NOTES §515
+0026760c,564,_Z18moukeevtinf_windowP7CTLINFOii,"moukeevtinf_window(CTLINFO*, int, int)",read_structural,NOTES §516
 00259ebc,564,_Z12ctlhouk_mainP7CTLINFO,ctlhouk_main(CTLINFO*),read_structural,NOTES §441
 0025f990,564,_Z11wldfast_lopv,wldfast_lop(),mentioned_unverified,
 0009c55c,560,drft_forward,drft_forward,unread,
@@ -677,7 +677,7 @@ address,size,mangled,demangled,status,section_ref
 00104798,556,_Z7Wdirec1Pc,Wdirec1(char*),unread,
 001052e4,556,_Z7Wdirec2Pci,"Wdirec2(char*, int)",unread,
 00118cdc,556,_Z18Wmake_statusscrollv,Wmake_statusscroll(),unread,
-001778a8,556,_Z11bDrawFT4RGBP6RECT16iiP5COLORitti,"bDrawFT4RGB(RECT16*, int, int, COLOR*, int, unsigned short, unsigned short, int)",unread,
+001778a8,556,_Z11bDrawFT4RGBP6RECT16iiP5COLORitti,"bDrawFT4RGB(RECT16*, int, int, COLOR*, int, unsigned short, unsigned short, int)",read_full,NOTES §514
 001997f0,556,_Z16DrawItemCategoryiP14iOS_CMenuTouchi21IOS_MENU_TOUCH_RESULT,"DrawItemCategory(int, iOS_CMenuTouch*, int, IOS_MENU_TOUCH_RESULT)",unread,
 000a8218,552,_ZN8CEGL2_IF13LoadShaderAllEPc,CEGL2_IF::LoadShaderAll(char*),unread,
 000b5fac,552,_ZN13CUI_SCROLLBAR7DragEndEii,"CUI_SCROLLBAR::DragEnd(int, int)",unread,
@@ -755,7 +755,7 @@ address,size,mangled,demangled,status,section_ref
 000969bc,496,res2_class,res2_class,unread,
 0015813c,496,_Z10unittofacei,unittoface(int),unread,
 001896e4,496,_Z12eGetItemListssaPsth,"eGetItemList(short, short, signed char, short*, unsigned short, unsigned char)",unread,
-00194048,496,_Z11jDrawFT4RGBP6RECT16iiP5COLORitti,"jDrawFT4RGB(RECT16*, int, int, COLOR*, int, unsigned short, unsigned short, int)",unread,
+00194048,496,_Z11jDrawFT4RGBP6RECT16iiP5COLORitti,"jDrawFT4RGB(RECT16*, int, int, COLOR*, int, unsigned short, unsigned short, int)",read_full,NOTES §514
 001bc87c,496,_Z13UnitTableInits,UnitTableInit(short),unread,
 001ccc3c,496,_Z19getTrapResultDamageP5BWORKi,"getTrapResultDamage(BWORK*, int)",unread,
 0025f44c,496,_Z10frmbuf_getv,frmbuf_get(),unread,
@@ -825,7 +825,7 @@ address,size,mangled,demangled,status,section_ref
 000a6618,448,_ZN15CG2D_LOADER_TIM21TIM_AnalyzeFileHeaderEPv,CG2D_LOADER_TIM::TIM_AnalyzeFileHeader(void*),read_structural,NOTES §316
 000bbe7c,448,_ZN12CSOUND_IF_SL7LoadPCMEiPcPhjji,"CSOUND_IF_SL::LoadPCM(int, char*, unsigned char*, unsigned int, unsigned int, int)",mentioned_unverified,
 0020ebc4,448,_Z18loadEventAnimationiPh,"loadEventAnimation(int, unsigned char*)",unread,
-00172c0c,448,_Z11cDrawFT4RGBP6RECT16iiP5COLORitti,"cDrawFT4RGB(RECT16*, int, int, COLOR*, int, unsigned short, unsigned short, int)",unread,
+00172c0c,448,_Z11cDrawFT4RGBP6RECT16iiP5COLORitti,"cDrawFT4RGB(RECT16*, int, int, COLOR*, int, unsigned short, unsigned short, int)",read_full,NOTES §514
 00172dcc,448,_Z12cDrawFT4RGB2iiiiiiiiP5COLORitti,"cDrawFT4RGB2(int, int, int, int, int, int, int, int, COLOR*, int, unsigned short, unsigned short, int)",unread,
 001abc4c,448,_Z12GetShapeDatasPs,"GetShapeData(short, short*)",unread,
 001e10c8,448,_Z15get_unit_heighti,get_unit_height(int),unread,
@@ -1743,7 +1743,7 @@ address,size,mangled,demangled,status,section_ref
 002101a8,180,_Z19loadPlayerPartyDatai,loadPlayerPartyData(int),unread,
 0021589c,180,_Z17loadBackGradationv,loadBackGradation(),unread,
 00248c18,180,_Z14ctlpremov_mainP7CTLINFO,ctlpremov_main(CTLINFO*),unread,
-00247c64,180,_Z18ctlbirthday_activeP7CTLINFO,ctlbirthday_active(CTLINFO*),unread,
+00247c64,180,_Z18ctlbirthday_activeP7CTLINFO,ctlbirthday_active(CTLINFO*),read_full,NOTES §515
 0024ab84,180,_Z14vOpnpicwin_seti6RECT166_POINTi,"vOpnpicwin_set(int, RECT16, _POINT, int)",unread,
 0027d488,180,_ZN17iOS_CMenuTouchNum11calcTapAreaEv,iOS_CMenuTouchNum::calcTapArea(),unread,
 0028dd74,180,TestEvent,TestEvent,unread,
@@ -1762,7 +1762,7 @@ address,size,mangled,demangled,status,section_ref
 00201008,176,_Z15iOSVectorNormalP6VECTOR,iOSVectorNormal(VECTOR*),unread,
 00211da0,176,_Z31requestDestinationClutAsDefaultijjiPt,"requestDestinationClutAsDefault(int, unsigned int, unsigned int, int, unsigned short*)",unread,
 00249cf4,176,_Z12vOpn_timloadPm,vOpn_timload(unsigned long*),unread,
-00247d18,176,_Z20ctlbirthday_deactiveP7CTLINFO,ctlbirthday_deactive(CTLINFO*),unread,
+00247d18,176,_Z20ctlbirthday_deactiveP7CTLINFO,ctlbirthday_deactive(CTLINFO*),read_full,NOTES §515
 00268aec,176,_Z13wldcenter_chkP6_POINT,wldcenter_chk(_POINT*),read_full,NOTES §12.9
 0025e5cc,176,_Z14wldday_countupv,wldday_countup(),mentioned_unverified,
 002741bc,176,_Z7SetMovev,SetMove(),unread,

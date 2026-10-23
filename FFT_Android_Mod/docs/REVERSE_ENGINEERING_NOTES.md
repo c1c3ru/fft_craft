@@ -16121,3 +16121,181 @@ de emulação), seções 59/110/204 (ponte `sceGu*`↔`CEGL_PACKET`,
 (família `DrawTexFlip`, `iOS_DrawTexFlip` como sexto membro), seções
 385/417 (biblioteca de matriz GTE, `MulMatrix0` como variante sem
 translação).
+
+## 514. Família `DrawFT4RGB` letter-prefix — fecha `b`/`c`/`e`/`j` por completo, mesmo catálogo mínimo (`SetSemiTrans`/`SetShadeTex`) da base (seção 497) (2026-10-23, Fase 3, sexagésimo sexto lote)
+
+`eDrawFT4RGB` (`0x189fb0`, 564 B, 98% cob., 0 tabela, 6 branches/4
+de retrocesso): 6 `bl` — `CFFT_STATE::GetParam`/`SetParam`,
+`SetSemiTrans`, `SetShadeTex` ×2, `TexHybrid_RegistCLUTAddr`,
+`IS_TEX_2X` — catálogo completo igual à base (seção 497).
+`bDrawFT4RGB` (`0x1778a8`, 556 B, 99% cob., 0 tabela, 2 branches/1
+de retrocesso): 3 `bl` — `pspWindowCommonIsType` ×2, `SetSemiTrans`,
+`SetShadeTex` ×2 (catálogo mais magro, sem `TexHybrid`/`CFFT_STATE`).
+`jDrawFT4RGB` (`0x194048`, 496 B, 98% cob., mesmo catálogo de
+`bDrawFT4RGB`). `cDrawFT4RGB` (`0x172c0c`, 448 B, 98% cob., 0
+tabela, 2 branches/1 de retrocesso): só 2 `bl` —
+`SetSemiTrans`/`SetShadeTex` ×2 (o mais magro de todos, sem
+`pspWindowCommonIsType`). Fecha a família letter-prefix `*DrawFT4RGB`
+por completo (base agora completa desde a seção 497) — confirma que
+cada variante ajusta o catálogo conforme a complexidade do contexto
+de tela (checagem de tipo de janela presente em `b`/`j`, ausente em
+`c`; `TexHybrid`/`CFFT_STATE` só na variante "e"). Todas marcadas
+`read_full` (98-99% ≥95%, 0 tabela de salto em todas).
+
+## 515. `ctlbirthday_init()`/`ctlbirthday_active`/`ctlbirthday_deactive` — fecham a tríade com `ctlbirthday_main` (seção 347) (2026-10-23, Fase 3, sexagésimo sexto lote)
+
+`ctlbirthday_init()` (`0x247a30`, 564 B, 94% cob., 0 tabela, 1
+branch/0 de retrocesso): 6 `bl` — `birthday_change(CTLINFO*)`,
+`vOpn_add_anmpac` ×2/`vOpn_add_winpac`, `vOpnwin_noropen(int,
+RECT16,int,int,unsigned long*)`, `LoadImage_menuData`,
+`iOS_setV2Icon`. `ctlbirthday_active`/`ctlbirthday_deactive`
+(`0x247c64`/`0x247d18`, 180/176 B, 95-96% cob., 0 `bl`):
+boilerplate trivial de transição de estado. Fecha a tríade completa
+com `ctlbirthday_main` (seção 347, já lida) — `birthday_change`
+(novo nome catalogado) sugere que o controller consulta/aplica a
+mudança de data antes de disparar a tela de aniversário. Marcadas
+`read_structural`/`read_full` conforme cobertura.
+
+## 516. `moukeevtinf_window(CTLINFO*,int,int)` — fecha a referência direta de `ctlworkinginf_init` (seção 384), janela de evento informativo do roster (2026-10-23, Fase 3, sexagésimo sexto lote)
+
+`moukeevtinf_window(CTLINFO*,int,int)` (`0x26760c`, 564 B) —
+`jtable.py`: **94% de cobertura** (133/141), zero tabela de salto,
+2 branches/1 de retrocesso. 6 `bl`: `Wserchmessagepointer(int)`,
+`Wcount_words2(short*,short*,char*)` (seção 352), `add_winpac`,
+`wldwin_set`/`wldwin_trans`, `wldmess_put` ×4. Fecha a referência
+direta deixada por `ctlworkinginf_init` (seção 384) — monta e exibe
+uma janela modal com transição mostrando texto de evento ligado ao
+roster "mouke" (formatação de mensagem via o mesmo par de contagem
+de palavras já visto na família `count_words`). Marcada
+`read_structural` (94% < 95%, 0 tabela de salto).
+
+## 517. `DattoNoGotokuNigeyoRoutine()` — handler de IA de "fuga", terceiro dos três handlers nomeados da sub-fase 2 de `BattleRoutine` (2026-10-23, Fase 3, sexagésimo sexto lote)
+
+`DattoNoGotokuNigeyoRoutine()` (`0x27286c`, 576 B) — `jtable.py`:
+cobertura não capturada no resumo truncado, 23 branches/9 de
+retrocesso. **13 `bl` distintos**: `SetBaseTargetGroup` ×2,
+**`EvaluateAllUnitAction()`** ×2 (recursão de volta no loop
+principal de IA!), `GetNearestUnit(int)`, **`SetMoveAreaSafePanelOnly()`**,
+**`StayAtSafePanel()`**, `SetDestUnit(int)`, `SetTmp_UA(UnitAction*)`,
+`SetThresholdDoNothing()`, `SetSafePanel(int,int)`,
+`ForChantedAction()`, `SetMove()` ×2, `MakeMapCostToDest(unsigned
+char*)`, `MakeMapChantedAction()`. Fecha o terceiro dos três
+handlers nomeados da sub-fase 2 de `BattleRoutine` (junto com
+`ForAbnormalStatus`, seção 396, e `ForAutoCommand`, seção 150) já
+catalogados em `docs/AI_DIFFICULTY_RESEARCH.md`. "Datto no gotoku
+nigeyo" (脱兎の如く逃げよ, "fuja como uma lebre em fuga" — expressão
+idiomática japonesa) confirma ser o handler de **fuga** da IA:
+restringe o movimento a painéis seguros (`SetMoveAreaSafePanelOnly`/
+`StayAtSafePanel`/`SetSafePanel`), define um limiar de "não fazer
+nada" (`SetThresholdDoNothing`), e devolve o controle ao avaliador
+principal (`EvaluateAllUnitAction`). Marcada `read_structural`
+(catálogo rico, mas cobertura numérica não verificada nesta
+passada).
+
+**Referências cruzadas (seções 514-517):** seção 497
+(`DrawFT4RGB`, família letter-prefix agora completa), seção 347
+(`ctlbirthday_main`, tríade agora completa), seção 384
+(`ctlworkinginf_init`, referência direta fechada por
+`moukeevtinf_window`), seções 150/396 (`ForAutoCommand`/
+`ForAbnormalStatus`, trio de handlers de sub-fase 2 de
+`BattleRoutine` agora completo com `DattoNoGotokuNigeyoRoutine`).
+
+## 518. `set_monomane_act(BWORK*)` — monta a ação copiada pelo Mime/Monomane a partir da última ação observada (2026-10-23, Fase 3, sexagésimo sétimo lote)
+
+`set_monomane_act(BWORK*)` (`0x1d1374`, 572 B) — `jtable.py`: **95%
+de cobertura** (136/143), zero tabela de salto, 12 branches/6 de
+retrocesso. 6 `bl`: `check_reaction_deny(BWORK*)`, `get_reflection_
+coord(BWORK*,int,int,int,int*,int*,int*)`, `copyACTst(ACT*,ACT*)`,
+`set_temp_status(BWORK*,int,unsigned char,int)`,
+`getskillrange(ACT*)`, `setskilldata_common(ACT*,ACT*,int)`. "Monomane"
+(物真似, mímica) + o catálogo batem com a habilidade Mimic do Mime
+(repetir a última ação de qualquer unidade no turno) — já citada de
+passagem em `time_flies` (seção #136), primeira leitura própria:
+clona a ACT original (`copyACTst`), recalcula dados/alcance da skill
+copiada (`setskilldata_common`/`getskillrange`), e trata casos de
+reação/reflexão em cadeia que a ação mimetizada possa disparar
+(`check_reaction_deny`/`get_reflection_coord`). Marcada
+`read_structural` (95% ≥95% satisfaz o critério numérico, mas sem
+leitura linha a linha dos campos exatos de `BWORK`/`ACT` tocados).
+
+## 519. `calender_add(int)` — função de mutação do relógio do mundo, nível abaixo de `sun_to_ivarisday`/`wld_dayread` (2026-10-23, Fase 3, sexagésimo sétimo lote)
+
+`calender_add(int)` (`0x24adec`, 576 B) — `jtable.py`: **95% de
+cobertura** (137/144), zero tabela de salto, 10 branches/5 de
+retrocesso. 4 `bl`: `Wwrite_eventflag` ×4, `Wread_eventflag` ×6,
+**`month_to_day(int,int)`** ×2, **`day_to_month(int,int*,int*)`**
+×1 (novos nomes de conversão de calendário, companheiros de
+`sun_to_ivarisday`/`wld_dayread`). Hipótese: avança a data corrente
+por um delta de dias, lendo o estado atual via flags (6×), convertendo
+entre representação linear e mês/dia para tratar carry-over de fim de
+mês, e gravando o resultado (4×). Opera num nível abaixo de
+`sun_to_ivarisday`/`wld_dayread` (seções 371/372/412/479/496) — estas
+são de leitura/apresentação (HUD), `calender_add` é a função de
+mutação real do relógio do mundo (viagem no mapa, avanço de tempo).
+Marcada `read_full` (95% ≥95%, 0 tabela de salto).
+
+## 520. `ASURA_PKT_Analyze(unsigned long*)` — copiador de registro bruto, vizinho direto de `ASHURA_GNS_Read` (2026-10-23, Fase 3, sexagésimo sétimo lote)
+
+`ASURA_PKT_Analyze(unsigned long*)` (`0x167a80`, 568 B) —
+`jtable.py`: **96% de cobertura** (137/142), zero tabela de salto, 8
+branches/5 de retrocesso (laço denso). Único `bl`: local já
+confirmado como `memcpy` em dezenas de outras seções, chamado 3×.
+Fica imediatamente antes de `ASHURA_GNS_Read` (seção 398, só 80 B de
+distância/padding) — hipótese: rotina de baixo nível que copia
+campos sequencialmente de um "pacote" (bloco bruto) antes de um
+parser mais complexo assumir, possivelmente a camada de
+transporte/protocolo subjacente ao formato GNS. Marcada `read_full`
+(96% ≥95%, 0 tabela de salto); pendência honesta: relação exata de
+chamada com `ASHURA_GNS_Read`/`ASHURA_GNS_Garage` não confirmada por
+xref direta, só por posição/nome.
+
+## 521. `ctleeff_init(int)` — controller de efeito visual/sonoro de chegada de rota, acopla o sistema de rota ao pedido de encontro aleatório (2026-10-23, Fase 3, sexagésimo sétimo lote)
+
+`ctleeff_init(int)` (`0x257c20`, 572 B) — `jtable.py`: **94% de
+cobertura** (135/143), zero tabela de salto, 2 branches/1 de
+retrocesso. 11 `bl`: `wldfade_set`, `wld_btlsect_seek()`,
+`ssd_request`, `ps_rand()` ×2, `pspWorldDataBackBufGet`,
+**`CFFT_STATE::SetEncountRequest(int)`**, quarteto GPU PSX
+(`DrawSync`/`MoveImage`/`GetTPage`/`ClearImage`), `xpMallocAlign`.
+Fecha a referência direta deixada por `walkrute_set` (seção 496).
+**Achado notável**: `CFFT_STATE::SetEncountRequest` liga diretamente
+o sistema de indicador de rota do world map ao sistema de random
+encounter — "ctl" segue o padrão prefixal de controller de tela
+("eff" = effect), disparado quando a rota chega a um tile: aloca
+buffer, pega o backbuffer, desenha com as primitivas GPU PSX, dispara
+fade/som, consulta o setor de batalha do tile e seta o pedido de
+encontro aleatório. Marcada `read_structural` (94% < 95%, 0 tabela
+de salto).
+
+## 522. `DrawEggWithShadow(DVECTOR*,int,COLOR*,int,int)` — resolve de vez a ambiguidade "Egg": é o sprite do monstro-em-ovo desenhado em campo, não um ícone oval de retrato (2026-10-23, Fase 3, sexagésimo sétimo lote)
+
+`DrawEggWithShadow(DVECTOR*,int,COLOR*,int,int)` (`0x1bd8e8`, 564 B)
+— `jtable.py`: **96% de cobertura** (135/141), zero tabela de salto,
+9 branches/7 de retrocesso. 5 `bl`, nenhum sem símbolo:
+`DrawTexFlip(short*,COLOR*,char,int,int,int)` ×2, `CFFT_STATE::
+GetParam` ×2, `GetTPage`, `GetClut`, `IS_TEX_2X()` ×2.
+
+**Resolve de vez a ambiguidade já antecipada pela seção 396
+(`EggChk`)**: o catálogo de `bl` é puramente de primitivas de
+desenho de sprite texturizado em campo — exatamente o conjunto
+usado pelo pipeline genérico de sprite de unidade na batalha, sem
+nenhuma chamada de UI/janela/fonte. A assinatura espelha a de
+`DrawUnitWithShadow`, e ambas são chamadas pelo mesmo helper local
+(`sub_1bf96c`) dentro do laço de `PreModeChg` que decide a ordem de
+aparição dos sprites de unidade em campo. **Hipótese vencedora**: a
+leitura "ícone oval de retrato de menu" está definitivamente
+descartada — "Egg" é o sistema de evolução/crescimento de monstro
+("monstro-ovo"), e `DrawEggWithShadow` é sua contraparte visual real,
+desenhando o monstro em estado de ovo no campo de batalha com sombra
+no chão, usando o mesmo pipeline de textura/CLUT de qualquer unidade.
+Marcada `read_full` (96% ≥95%, 0 tabela de salto, nenhum `bl` sem
+símbolo).
+
+**Referências cruzadas (seções 518-522):** seção 136 (`time_flies`,
+cita `set_monomane_act` de passagem), seções 371/372/412/479/496
+(sistema de calendário, `calender_add` como função de mutação),
+seção 398/81 (`ASHURA_GNS_Read`/`ASHURA_GNS_Garage`, vizinhança com
+`ASURA_PKT_Analyze`), seção 496 (`walkrute_set`, referência direta
+fechada por `ctleeff_init` — achado do acoplamento com random
+encounter), seção 396 (`EggChk`, ambiguidade "Egg" resolvida de vez
+por `DrawEggWithShadow`).
