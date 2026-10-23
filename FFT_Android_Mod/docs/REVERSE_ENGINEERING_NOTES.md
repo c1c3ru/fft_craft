@@ -13576,3 +13576,267 @@ camada `iOS_setV2Icon`), seções 59/110 (`GuEmu_libgu_to_gl`, par de
 frame de `GuEmu_EngineInit`), seção 84/375 (`GlobalName`/`Name`,
 contraste com `loadname`), seção 81 (`ASHURA_GNS_Garage`, loader que
 consome `ASHURA_GNS_Read`).
+
+## 399. `calcformula(int,int,int,int)`/`Wcalcformula(int,int,int,int)`/`hook_calcformula(int,int)` — motor de fórmula de dano/stat, par normal/task mais um hook vazio (2026-10-23, Fase 3, quadragésimo segundo lote)
+
+`calcformula(int,int,int,int)` (`0xdb4a4`, 728 B, 98% cob., 0 tabela,
+41 branches/18 de retrocesso — laço denso) e `Wcalcformula` (`0x103068`,
+728 B, 98% cob., 0 tabela, topologia idêntica): par normal/"W" (task
+cooperativa) já visto em outras famílias. 5 `bl` cada: um local sem
+símbolo (`sub_d6748`/`sub_fe290`, ×2), `read_eventflag`/
+`Wread_eventflag`, `task_killmyself`/`Wtask_killmyself` ×3,
+`__divsi3`, `__aeabi_idivmod`. O nome e os 4 parâmetros inteiros
+(nenhum ponteiro de struct) são consistentes com uma função
+avaliadora de fórmula genérica — provável motor de cálculo de dano/
+stat parametrizado (ex. fórmula de habilidade configurável por ID,
+usando os 4 inteiros como entrada bruta: atacante, defensor,
+potência, modificador). `hook_calcformula(int,int)` (`0x280674`, só
+**4 bytes**, 100% cob., 0 `bl`) é um stub/trampolim vazio — hook de
+depuração/instrumentação sem corpo real (consistente com outros
+hooks triviais já vistos no projeto). Marcadas `read_structural`
+(`calcformula`/`Wcalcformula`: 98% ≥95%, 0 tabela de salto — mas sem
+leitura manual completa do laço denso de 41 branches, então não
+promovidas a `read_full`; `hook_calcformula`: `read_full` trivial, 4
+bytes, 100% cobertura).
+
+## 400. `multiwindow_packetinit(RECT16*,COMRECORD*,PRIMPACKET*)`/`Wmultiwindow_packetinit(...)` — fecham a referência de helpers "multiwindow_*" deixada na seção 351 (2026-10-23, Fase 3, quadragésimo segundo lote)
+
+`multiwindow_packetinit` (`0xe12ac`, 584 B, 98% cob., 0 tabela, 2
+branches/2 de retrocesso): 7 `bl` — `initsprtfield(tagSPRT*,int,int)`
+×4, `settaskkind`, `initdrmode2(DR_MODE*,RECT16*)`,
+`bgput(tagPOLY_FT4*,RECT16*,RECT16*,BGRECORD*)` ×6, `GetTPage`/
+`SetDrawMode`/`SetSemiTrans` ×2. `Wmultiwindow_packetinit`
+(`0x10fd08`, 720 B, 98% cob., 0 tabela, mesma topologia): catálogo
+idêntico com prefixo "W" (`Winitsprtfield` ×5, `Wsettaskkind`,
+`Winitdrmode2`, `Wbgput` ×7). Fecha a referência deixada na seção
+351 (família `multiwindow_*` citada como helpers do `disp_select
+refleshwindow`): confirma que é a rotina real de inicialização do
+pacote de primitiva de janela múltipla — monta sprites de campo
+(`initsprtfield`), configura modo de desenho (`initdrmode2`), e
+preenche o fundo da janela (`bgput`) com textura/semi-transparência.
+Marcadas `read_structural`.
+
+## 401. `ctlworkingst_init(int,int)`/`ctlworkingst_dataset(int)` — fecham a tríade com `ctlworkingst_main` (seção 314), completando o indicador "trabalhando" rico (2026-10-23, Fase 3, quadragésimo segundo lote)
+
+`ctlworkingst_init(int,int)` (`0x251e34`, 660 B, 91% cob., 0 tabela,
+0 branches): 9 `bl` — `Wtask_create` ×3, `Wsend_taskparamater` ×3,
+local sem símbolo (`sub_250348`), `ctlworkingst_dataset(int)`
+(reentra no próprio companheiro), `add_anmpac` ×2, `pspWorldEnableFlg`,
+`DrawSync`, `MoveImage`, `iOS_setV2Icon` ×2. `ctlworkingst_dataset
+(int)` (`0x251b68`, 716 B, 97% cob., 0 tabela, 7 branches/4 de
+retrocesso): 4 `bl` — `get_ability(int,int)`, `set_playerwork_j
+(BWORK*,int,int)`, `pspItemIsEmpty` ×2, `pspItemIsExist`. Fecha a
+tríade completa `ctlworkingst_init`/`_dataset`/`_main` (seção 314) —
+`_dataset` monta os dados reais de progresso a partir de dados de
+trabalho da unidade e checagem de item (confirma por que
+`hakenunit_status`, seção 382, e `ctlworkinginf_init`, seção 384,
+chamam este mesmo `_dataset` pra popular o indicador rico de
+"trabalhando" compartilhado entre múltiplas famílias de tela).
+Marcadas `read_structural` (`init` 91% < 95%, `dataset` 97% ≥95% —
+ambas 0 tabela de salto).
+
+## 402. `CurChrChg()`/`CurChrChg2()`/`eCurChrChg()`/`LRCurChrChg(short)` — família "troca de personagem atual", referenciada dezenas de vezes mas nunca lida em si (2026-10-23, Fase 3, quadragésimo segundo lote)
+
+Família citada de passagem em pelo menos 6 seções anteriores
+(`CurChrChg2` sozinha aparece 5× em contextos de equipamento/status)
+mas nunca aberta. `CurChrChg()` (`0x1bb62c`, 232 B, 86% cob., 0
+tabela): 2 `bl` — local sem símbolo (`sub_714b8`, ×3 — mesmo helper
+já citado na seção 105/387 como vizinho de `sub_714c4`),
+`CopyChrStts(short,short)`. `CurChrChg2()` (`0x1bbbb8`, 728 B, 96%
+cob., 0 tabela, 15 branches/8 de retrocesso): **13 `bl` distintos**
+— `sub_714b8` ×4, `sub_715cc` ×1 (mesmo helper da seção 391/396),
+`SetRyoteFlag(short*,int)`, `Bwork2ChrStts(BWORK*,CHR_STTS*,
+UM_WORK*)`, `ChrPower(C_STTS*,short*)`, `CopyChrStts`,
+`AllSttsReflesh()`, `get_unitwork_add`, `set_playerwork_j`,
+**`adjudt_equip_change_sp(BWORK*)`** (confirma a chamada real por
+`CurChrChg2` já hipotetizada em seções anteriores), `pspItemGetCommonData`
+×2, `pspItemIsEmpty`, `pspItemIsBarehand`. **Confirma: `CurChrChg2` é
+a versão "completa" que recalcula todos os stats derivados**
+(poder/ryote/reflesh completo) após uma mudança de personagem
+(promoção, troca de classe, equipamento), enquanto `CurChrChg` (sem
+sufixo) é a versão simples que só copia os stats base
+(`CopyChrStts`). `eCurChrChg()` (`0x18e26c`, 200 B, 88% cob., 0
+tabela): 3 `bl` — `sub_714b8` ×3, `eChrPower`/`eCopyChrStts` — par
+exato de `CurChrChg` na variante "e" (evento/ending, já vista em
+outras famílias "e*"). `LRCurChrChg(short)` (`0x1c0564`, 280 B, 93%
+cob., 0 tabela, **zero `bl`** — aritmética/lookup pura, provável
+variante L/R de navegação por grupo). Todas marcadas `read_structural`
+(coberturas 86-96%, nenhuma atinge 95% uniformemente exceto
+`CurChrChg2`, mas por consistência de família todas ficam no mesmo
+nível sem leitura manual byte a byte).
+
+## 403. `getreaction_pre(int,unsigned short*)` — fecha o par com `getreaction_post` (seção 232), monta a fase de pré-reação (contra-ataque/evasão/roll de BC) (2026-10-23, Fase 3, quadragésimo segundo lote)
+
+`getreaction_pre(int,unsigned short*)` (`0x1e6a98`, 732 B) —
+`jtable.py`: **95% de cobertura** (173/183), zero tabela de salto,
+21 branches, **apenas 1 de retrocesso** (quase sem laços — função
+dominada por decisões sequenciais, não iteração). 10 `bl`
+distintos: `check_reaction_deny(BWORK*)`, `bcp_roll(BWORK*)` ("BC" =
+provável "battle counter"/contra-ataque; "roll" = sorteio de
+chance), `copyACTst(ACT*,ACT*)` ×2, 3 locais sem símbolo
+(`sub_1df620` ×2, `sub_1dfcdc`, `sub_1e0f2c`, `sub_1e69a0`),
+`getweaponeffect(ACT*)`, `get_rival()`. Fecha o par com
+`getreaction_post` (seção 232, 1.524 B, já lida) — a cadeia completa
+é agora `getreaction_pre` (decide SE uma reação ocorre: checa
+negação via `check_reaction_deny`, sorteia via `bcp_roll`, copia o
+estado de ação via `copyACTst`) → `getreaction_post` (processa o
+resultado, liga a `calc_result`/`setskillresult`). Marcada
+`read_structural` (95% ≥95%, 0 tabela de salto — critério automático
+satisfeito, mas 4 locais sem símbolo não lidos).
+
+## 404. `ctlsentuto_init()`/`ctlsentuto_main(CTLINFO*)` — controller de tutorial "sen" (provável tutorial de guerra/estratégia), usa a mesma biblioteca `iOSTutoFlag*` de outros controllers de tutorial (2026-10-23, Fase 3, quadragésimo segundo lote)
+
+`ctlsentuto_init()` (`0x26e1e8`, 576 B, 93% cob., 0 tabela, 1
+branch/1 de retrocesso): 6 `bl` — `snplflg_read`, `iOSTutoFlagSet`,
+`defscrwin_set`/`curhis_put`, `CFFT_STATE::SetParam` ×3,
+`iOS_setV2Icon` ×14 (!). `ctlsentuto_main(CTLINFO*)` (`0x26ec48`,
+728 B, 93% cob., 0 tabela, 14 branches/6 de retrocesso): 14 `bl` —
+`write_eventflag`/`Wwrite_eventflag`/`Wread_eventflag`,
+`Wtask_status`/`Wsend_taskparamater` ×3, `iOS_setTutorialbreak`,
+`wldctl_active`, `snplflg_write`, `sound_request` ×2,
+`iOSTutoFlagSet`, `ctlsentuto_deactive` (a si mesmo), `curhis_get`/
+`curhis_clr`, `iOS_setV2Icon` ×6. O prefixo "sen" (戦, "guerra"/
+"batalha" em japonês) combinado com `iOSTutoFlagSet`/`snplflg_*`
+(mesma biblioteca de flag de tutorial único-por-flag já vista em
+`iOSpagewin_main`, seção 381, e `snpl_init`, candidato de leitura
+futura) sugere ser o tutorial introdutório de mecânicas de batalha/
+guerra. Marcadas `read_structural` (93% < 95%, 0 tabela de salto —
+lacuna honesta em ambas).
+
+**Referências cruzadas (seções 399-404):** seção 351 (família
+`multiwindow_*`, referência fechada), seção 314 (`ctlworkingst_main`,
+tríade agora completa), seções 382/384 (`hakenunit_status`/
+`ctlworkinginf_init`, ambas reusam `ctlworkingst_dataset`), seção
+105/387/396 (helpers locais `sub_714b8`/`sub_715cc`, mesma vizinhança
+de endereço vista em múltiplas famílias), seção 232
+(`getreaction_post`, par agora completo), seção 381
+(`iOSpagewin_main`, mesma biblioteca `iOSTutoFlag*` de
+`ctlsentuto_main`).
+
+## 405. `Link_Init()` — inicialização da tela de links externos, companheira de `Link_FrameMove`/`Link_FrameRender` (2026-10-23, Fase 3, quadragésimo terceiro lote)
+
+`Link_Init()` (`0x2b3f34`, 716 B) — `jtable.py`: **94% de cobertura**
+(168/179), zero tabela de salto, 3 branches/1 de retrocesso. 24 `bl`
+distintos: `CGX_SCREEN_CORRECT::Init/GetCorrect/Scaled/CorrectY`
+(correção de tela/aspect), `CRECT::Register/SetScreenOffset/
+SetScreenScale/Init/MulRect/SetEnable/SetEnableAll` (registro de
+retângulos de UI), `CUI_SCROLLBAR::Create(_RECT_S32*,_RECT_S32*,int)`
+(barra de rolagem), `CTHREAD::Register` (carregamento assíncrono),
+`CSTEP_BATCH::Uninit` ×2, `CAPP_INFO::GetDeviceType`/`GetDeviceScale`,
+`NowLoading_Init()`, `RETINA_SCALE(int)` ×7, mais locais sem símbolo.
+Confirma ser a rotina de setup da tela de links externos já
+identificada nas seções 86 (`Link_FrameRender`) e 283
+(`Link_FrameMove`, chama `Android_Web_Open`) — registra retângulos
+de UI, cria a scrollbar, zera o sistema de animação por passos,
+aplica correção retina e registra uma thread (provável carregamento
+assíncrono da lista de links). Nenhuma chamada a `pspNet*`/rede —
+reforça que "Link" aqui é hyperlink/link promocional (sociais/site
+oficial), não rede/multiplayer nem cabo serial PS1. Marcada
+`read_structural` (94% < 95%, 0 tabela de salto, mesmo padrão
+honesto já aplicado a `Link_FrameMove`).
+
+## 406. `doCursor(VECTOR*,SVECTOR*,SVECTOR*)` — movimentação/posicionamento do cursor 3D no mapa de batalha (2026-10-23, Fase 3, quadragésimo terceiro lote)
+
+`doCursor(VECTOR*,SVECTOR*,SVECTOR*)` (`0x1f5018`, 776 B) —
+`jtable.py`: **94% de cobertura** (182/194), zero tabela de salto, 7
+branches/4 de retrocesso. 7 `bl` distintos: `get_mapstp(int,int,int)`,
+`setPanelPriority`/`setPanelPrioritySpp(SVECTOR*,SVECTOR*)`,
+`getPositionHight(SVECTOR*,unsigned char)` (seção 213, altura
+interpolada), `iOS_GetFrameRate()`, `setShortVector`, `loadClutData`
+×2. A assinatura `(VECTOR* out, SVECTOR* atual, SVECTOR* destino)`
+combinada com os `bl` aponta pra função que move/anima o cursor 3D
+de seleção: interpola entre posição atual e destino (fixed-point),
+ajusta Y via altura de tile (`get_mapstp`+`getPositionHight`,
+"snap ao relevo"), atualiza prioridade de desenho conforme muda de
+tile (`setPanelPriority*`), escala o passo por frame-rate
+(`iOS_GetFrameRate`), e atualiza paleta/destaque (`loadClutData` ×2).
+Marcada `read_structural` (94% < 95%, 0 tabela de salto — lacuna
+honesta de ~6%, provável branch condicional isolado).
+
+## 407. `iOSYajiEffect(unsigned char*, unsigned short*)` — primitiva de desenho do ícone de seta "yaji" no pipeline ASHURA, novo membro da família já mapeada (2026-10-23, Fase 3, quadragésimo terceiro lote)
+
+`iOSYajiEffect(unsigned char*,unsigned short*)` (`0x1609f8`, 740 B)
+— `jtable.py`: **98% de cobertura** (182/185), zero tabela de salto,
+13 branches/3 de retrocesso. 4 `bl` distintos: `iOSsTchBtlFlagGet()`
+×2, `ASHURA_getOTptrZ(int)`, `getClutMenuCursor()`, `AddPrim`. A
+família "Yaji" (矢印/seta) já está mapeada (seção 345,
+`iOSSlideYajiSet`→`iOSSlideYajiMain`→`iOSSlideNaviCurMove`) mas sem
+esta assinatura específica `(unsigned char*,unsigned short*)` —
+textura e paleta já resolvidas, respectivamente. Hipótese: rotina de
+baixo nível que monta e enfileira a primitiva de render do ícone de
+seta no OT Z-sorted (ASHURA/GTE), reaproveitando o CLUT do cursor de
+menu, com gate condicional via `iOSsTchBtlFlagGet` (provável dica
+visual de arraste/swipe ligada ao estado de toque em batalha).
+Complementa o pipeline `iOSmyGetShapePrim→ASHURA_getOTptrZ→AddPrim`
+já descrito na seção 345. Marcada `read_structural` (98% ≥95%, 0
+tabela de salto — mesmo padrão da família Yaji).
+
+## 408. `Bottun(short,short,short,short,short,short)` — desenho de botão de UI composto por múltiplos tiles via tabela de layout, delega o quad final a `DrawTexFlip` (2026-10-23, Fase 3, quadragésimo terceiro lote)
+
+`Bottun(short,short,short,short,short,short)` (`0x1bc5a0`, 732 B) —
+`jtable.py`: **93% de cobertura** (170/183), zero tabela de salto, 5
+branches de retrocesso fechando no mesmo rótulo de loop. Apenas 2
+`bl`: `DrawTexFlip` (seção 317, quad texturizado com flip de UV) ×1
+por iteração, `__divsi3` (só no ramo secundário, dividendo fixo 6).
+**Os 7% não cobertos foram verificados manualmente** (dump capstone
+ad hoc): são pool literal de constantes PC-relative (~11 `ldr
+rX,[pc,#...]`), não código não resolvido — fluxo de controle 100%
+mapeado.
+
+Hipótese de semântica (6 parâmetros short, sem struct): caminho
+principal calcula `count = tabela_offsets[tipo+1] - tabela_offsets
+[tipo]` (nº de "peças"/tiles do botão), lê um registro de 12 bytes
+por peça de uma tabela global indexada, combina com os valores
+x/y via multiplicação Q12 de ponto fixo, e chama `DrawTexFlip` por
+peça — um botão composto de vários quads posicionados por tabela de
+layout (atlas), não um sprite único. Caminho secundário (um dos
+params via stack ≠0) atualiza um contador de 1 byte por-id via
+`__divsi3` (6 = provável nº de frames de flash/highlight). "Bottun"
+é a contraparte de **desenho** de botão — distinta da camada de
+hit-test de toque (`iOS_getTouchTap`/`Press`/`BeginX`/`Y`, já
+catalogada em outro lugar). Marcada `read_structural` (93% < 95%,
+mas controle de fluxo 100% verificado manualmente — gap é só pool
+literal, não ambiguidade real; semântica fina da tabela global de 12
+bytes fica como hipótese).
+
+## 409. `adjust_equip_change_common(BWORK*,int,int)` — implementação real por trás de `adjust_equip_change`/`adjudt_equip_change_sp`, que são thunks de 12 bytes (2026-10-23, Fase 3, quadragésimo terceiro lote)
+
+`adjust_equip_change_common(BWORK*,int,int)` (`0x1dc474`, 748 B) —
+`jtable.py`: **99% de cobertura** (185/187), zero tabela de salto, 19
+branches/14 de retrocesso (provável iteração por slot de
+equipamento). 9 `bl` distintos: `changeAnimationStatus_(int,int,int)`
+×3, `set_equipbonus(BWORK*,int)`, `set_status_counter(BWORK*,int,
+int)`, `init_entry_status(BWORK*)`, `adjust_entry_status(BWORK*)` ×3
+(mesma função da seção 349, pipeline de recálculo HP/MP/stats pós-
+mudança), mais 4 locais sem símbolo.
+
+**Confirma e refina a relação já hipotetizada na seção 402**:
+checagem do `.dynsym` mostra que logo após o fim desta função
+(`0x1dc474+748=0x1dc760`) ficam **`adjudt_equip_change_sp(BWORK*)`**
+(`0x1dc760`, 12 B) e **`adjust_equip_change(BWORK*)`** (`0x1dc76c`,
+12 B) — ambas desmontadas (modo ARM) e confirmadas como thunks puros
+de tail-call (`b`, não `bl`) direto pra esta função:
+```
+adjudt_equip_change_sp(bw) == adjust_equip_change_common(bw, 1, 0)
+adjust_equip_change(bw)    == adjust_equip_change_common(bw, 0, 0)
+```
+Não são duas rotinas paralelas com nomes parecidos — é o MESMO
+código, com o 2º parâmetro como flag de modo (0=variante normal da
+tela de equipamento, 1=variante "sp" usada pelo caminho de troca de
+personagem). Fecha o `bl adjudt_equip_change_sp(BWORK*)` já
+catalogado em `CurChrChg2` (seção 402): confirma que `CurChrChg2`
+invoca o caminho flag=1 desta mesma rotina de recálculo de
+equipamento. `adjust_equip_change_common` marcada `read_structural`
+(99% ≥95%, 0 tabela de salto); os dois thunks (`adjudt_equip_change_sp`,
+`adjust_equip_change`) marcados `read_full` (100% compreendidos,
+2 instruções cada). Pendência honesta: significado exato do flag
+(0 vs 1) é hipótese ("contexto de origem da troca"), não confirmado
+byte a byte; 3º parâmetro sempre 0 nos call sites conhecidos.
+
+**Referências cruzadas (seções 405-409):** seções 86/283
+(`Link_FrameRender`/`Link_FrameMove`, família "Link" de links
+externos agora com init completo), seção 213 (`getPositionHight`,
+reusado por `doCursor`), seção 345 (família "Yaji", `iOSYajiEffect`
+novo membro), seção 317 (`DrawTexFlip`, reusada por `Bottun`), seções
+349/402 (`adjust_entry_status`/`CurChrChg2`, pipeline de recálculo de
+stats agora com o elo de equipamento confirmado).
