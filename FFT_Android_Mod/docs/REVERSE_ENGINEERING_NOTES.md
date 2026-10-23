@@ -14739,3 +14739,195 @@ polygon_combine` como peça de deformação), camada `CINPUT_IF_TOUCH`
 (`vOpn_anim`, par confirmado com `vOpn_window`), seções 11/328
 (`wldnormal_lop`/`wldscr_snapshot`, hipótese de fog-of-war confirmada
 por `pspWorldBlackSpotDraw`).
+
+## 449. `ASHURA_init()` — inicializador de templates de primitiva do motor 3D, achado arquitetural de alto valor nunca citado antes (2026-10-23, Fase 3, quinquagésimo segundo lote)
+
+`ASHURA_init()` (`0x1650f4`, 660 B) — `jtable.py`: **96% de
+cobertura** (158/165), zero tabela de salto, 7 branches, **todos os
+7 de retrocesso** (laço único dominando toda a função). 6 `bl`
+distintos: `SetPolyF3` ×2, `SetPolyF4`, `SetPolyFT3` ×2, `SetPolyG4`,
+`SetPolyGT4`, `SetDrawMode` ×2. Nunca citada em nenhuma seção
+anterior apesar de ser o inicializador nominal de todo o motor
+"ASHURA"/"ASURA" (mencionado de passagem na introdução do projeto,
+linha 4469, mas nunca lido). Confirma ser o setup de **templates de
+primitiva GPU** — inicializa um template para cada tipo de polígono
+PS1 suportado pelo motor (flat triangle/quad, textured triangle,
+gradient quad, textured gradient quad), chamando `SetDrawMode` pra
+configurar o modo de desenho padrão. É executado uma vez no boot do
+motor 3D, antes de qualquer `ASHURA_addPrim`/`ASHURA_getOTptrZ`
+rodar. Marcada `read_full` (96% ≥95%, 0 tabela de salto).
+
+## 450. `ctlopt_init()`/`ctlopt_main(CTLINFO*)` — fecham a última pendência explícita do hub `ctlbrst_main` (seção 312), tela de opções com múltiplos snapshots de screenshot (2026-10-23, Fase 3, quinquagésimo segundo lote)
+
+`ctlopt_init()` (`0x255280`, 296 B, 88% cob., 0 tabela, 2 branches/0
+de retrocesso): 5 `bl` — `Wread_eventflag`, `request_worldcommand
+(int,int,int)`, `LoadImage_menuData`, `pspWorldEnableFlg`,
+`iOS_setV2Icon` ×2. `ctlopt_main(CTLINFO*)` (`0x255b88`, 652 B, 96%
+cob., 0 tabela, 25 branches/11 de retrocesso): 10 `bl` —
+`Wrecieve_statusinfo()`, `Wread_eventflag` ×3, `wldctl_active`,
+`wldkey_repinit()`, **`wldscr_snapshot(int)`** ×3 (chamada 3×! —
+provável thumbnail de 3 slots de save/preview diferentes na tela de
+opções), `iOSSnapshotSet(int)`, `frmbuf_get()`, `iOSTutoFlagSet`,
+`CFFT_STATE::SetParam`, `iOS_setV2Icon` ×5. Fecha a última das 8
+pendências explícitas deixadas pela seção 312 (`ctlbrst_init`, hub
+Zodíaco) — confirma "opt" como a tela de configurações/opções do
+jogo, com uso intenso de snapshot de tela (provavelmente pra exibir
+preview do mapa atual dentro do menu de opções). Marcadas
+`read_structural`/`read_full` respectivamente (`ctlopt_init` 88% <
+95%; `ctlopt_main` 96% ≥95%).
+
+## 451. Família `CursolFunc`/`bCursolFunc`/`cCursolFunc`/`eCursolFunc`/`jCursolFunc` + `CursolDownFunc` — confirma o padrão letter-prefix, cada variante desenha o cursor via seu próprio `DrawFT4RGB` (2026-10-23, Fase 3, quinquagésimo segundo lote)
+
+Mesmo padrão exato já confirmado em `MakeSmallWindowFunc` (seção
+358): cada variante chama **um único `bl`, 2×**, sua própria rotina
+`*DrawFT4RGB` por-letra. `CursolFunc(DVECTOR*,unsigned short*,int)`
+(`0x1c5770`, 520 B, 93% cob.) → `DrawFT4RGB` ×2. `bCursolFunc`
+(`0x182380`, 508 B, 94% cob.) → `bDrawFT4RGB` ×2. `cCursolFunc`
+(`0x1753f4`, 516 B, 93% cob.) → `cDrawFT4RGB` ×2. `eCursolFunc`
+(`0x191d84`, 520 B, 93% cob.) → `eDrawFT4RGB` ×2. `jCursolFunc`
+(`0x198614`, 520 B, 93% cob.) → `jDrawFT4RGB` ×2. Todas 0 tabela de
+salto, 9 branches/7 de retrocesso cada — topologia idêntica entre as
+5. Fecha a biblioteca `WindowInit2`/`DrawWindow2`/`CursolFunc`/
+`WindowPrioritySet` já citada em várias telas de equipar/loja
+(linhas 5015/7262/7905/9418) — `CursolFunc` é a navegação de cursor
+visual real, desenhada 2× por chamada (provável highlight +
+indicador de seleção). `CursolDownFunc(DVECTOR*,unsigned short*,int)`
+(`0x1c6ca4`, 648 B, 94% cob., 1 `bl` — **`DrawTexFree(short*,
+COLOR*,int,int)`**, mecanismo de desenho diferente, textura livre em
+vez de FT4RGB): variante "pressionado"/estado alternativo do cursor,
+usando um primitivo de forma livre em vez do quad fixo. Todas
+marcadas `read_structural` (93-94% < 95%, 0 tabela de salto em
+todas).
+
+## 452. Família `allocatetexture`/`Wallocatetexture`/`*init`/`*const` — alocador de atlas de textura compartilhado, 6 funções fecham o framework por completo (2026-10-23, Fase 3, quinquagésimo segundo lote)
+
+`allocatetexture(RECT16*,tagPOLY_FT4*,long*)` (`0xd7498`, 648 B, 99%
+cob., 0 tabela, 18 branches/8 de retrocesso) e `Wallocatetexture`
+(`0xff03c`, 656 B, 99% cob., mesma topologia): 2 `bl` cada —
+**`hook_allocate_texture()`** (hook de debug/instrumentação) e
+`GetTPage`. `allocatetextureinit()`/`Wallocatetextureinit()`
+(`0xd745c`/`0xfeffc`, 60/64 B, 93-94% cob., 0 `bl`): boilerplate de
+reset de estado do alocador. `allocatetextureconst(RECT16*,int,int,
+tagPOLY_FT4*,int)`/`Wallocatetextureconst` (`0xd893c`/`0x10060c`, 52
+B cada, 100% cob., 1 `bl` cada — reentram em `allocatetexture`/
+`Wallocatetexture` com parâmetros fixos/"const"). Fecha o framework
+de alocação de textura por completo: `*init` reseta o estado,
+`allocatetexture` é o alocador real (consulta `GetTPage` pra
+textura/paleta atual), `*const` é o wrapper de conveniência pra
+alocação com tamanho fixo conhecido em compile-time. Todas marcadas
+`read_structural`/`read_full` conforme cobertura (as 4 com `bl`
+mínimo e 100%/99% ficam `read_full`; as 2 `*init` com 93-94% ficam
+`read_structural`).
+
+## 453. `padRead()` — achado arquitetural: poll de input por frame que também detecta combo de reset e auto-command de rede, não um simples wrapper de leitura de pad (2026-10-23, Fase 3, quinquagésimo segundo lote)
+
+`padRead()` (`0x211460`, 656 B) — `jtable.py`: **cobertura alta**
+(resumo truncado, mas 0 tabela de salto), 19 branches/13 de
+retrocesso. 12 `bl` distintos: `read_eventflag`,
+`tutorial_padcontrol(int*)`, `searchCurrentAnimation()` ×2,
+`pspNetCheckAutoCommandPlayer()` ×2, **`resetFFT()`** ×2 (!),
+`callSystemSound`, `iOS_setReset(int)`/`iOS_getReset(int)`,
+`hook_Debug2(char const*)`, `pspNetGetBattleModeFlag()` ×2,
+`pspNetPadRead`, `iOS_setInterFlag(int)`.
+
+**Achado de alto valor**: `padRead()` não é um wrapper simples de
+leitura de controle — é a função que, a cada frame, lê o pad real
+(`pspNetPadRead`) e **também detecta o combo de reset do console**
+(chamando `resetFFT()` quando a condição de reset é satisfeita —
+mesmo papel do reset físico do PS1, preservado no port) e **verifica
+se é a vez do jogador automático em modo de rede**
+(`pspNetCheckAutoCommandPlayer`, condicionado por
+`pspNetGetBattleModeFlag`). Também dispara `tutorial_padcontrol`
+(gate de tutorial sobre input) e consulta `searchCurrentAnimation`
+(provável supressão de input durante animação em curso). Paralela
+ao achado da seção 376 (`mainLoop`, dispatcher de transição de
+modos) — `padRead` é outra função "guarda-chuva" cujo nome sugere
+algo simples mas que na verdade concentra lógica central do motor
+(reset, rede, tutorial). Marcada `read_structural` (pendência
+honesta: resumo de cobertura truncado nesta passada, revisão
+numérica exata recomendada antes de promover a `read_full`).
+
+**Referências cruzadas (seções 449-453):** seção 312 (`ctlbrst_init`,
+hub agora com as 8 pendências totalmente fechadas via `ctlopt_init`/
+`_main`), seção 358 (família letter-prefix, `CursolFunc` confirma o
+mesmo padrão), seção 376 (`mainLoop`, mesmo arquétipo de "função com
+nome simples mas papel arquitetural central" que `padRead`).
+
+## 454. `mksuccess_calc()`/`mkbonus_check()` — família "mk" de cálculo ligada ao cluster "mouke"/roster, distinta do prefixo "mouke" propriamente dito (2026-10-23, Fase 3, quinquagésimo terceiro lote)
+
+`mksuccess_calc()` (`0x25bc78`, 784 B) — `jtable.py`: **97% de
+cobertura** (191/196), zero tabela de salto, 16 branches/10 de
+retrocesso. 4 `bl`: `jobnumber_conv(int)` ×3, `mkadrtbl_calc(int)`
+×4, `get_unitwork_add_wld(int)` ×2, `ps_rand()` ×1 (sorteio único).
+`mkbonus_check()` (`0x25c124`, 648 B) — `jtable.py`: **98% de
+cobertura** (158/162), zero tabela de salto, 17 branches/8 de
+retrocesso. 3 `bl`: `Wread_eventflag` ×2, `mkadrtbl_calc(int)` ×4,
+`ps_rand()` ×4. Geograficamente vizinhas do cluster "mouke"/roster
+(`ctlmouke_init` em 0x25fff8, `mouke_okng` em 0x260ce8) mas prefixo
+"mk" (make) distinto de "mouke" (confirmado não ser a mesma família
+— não confundir). Hipótese: cálculo de taxa de sucesso (acumula
+modificadores por job/atributo em laço via `mkadrtbl_calc`, decide
+com rolagem única de RNG) e checagem de bônus (cruza flag de evento
+com tabela calculada, múltiplas rolagens de RNG). `jobnumber_conv`/
+`mkadrtbl_calc` ainda sem leitura dedicada — candidatos naturais de
+follow-up. Marcadas `read_full` (ambas ≥95%, 0 tabela de salto, `bl`
+totalmente resolvidos sem ambiguidade).
+
+## 455. `requestStatusChangeAnimation(tag_animation*)` — dispatcher de animação de mudança de status (cristal/morte/padrão), ponte entre `changeAnimationStatus` e os efeitos finais (2026-10-23, Fase 3, quinquagésimo terceiro lote)
+
+`requestStatusChangeAnimation(tag_animation*)` (`0x1efe60`, 660 B) —
+`jtable.py`: **98% de cobertura** (162/165), zero tabela de salto,
+32 branches/18 de retrocesso. 7 `bl`: `forceChangeAnimation` ×6,
+`callAnimationSound` ×3, `requestDefaultAnimation` ×2, 1 local sem
+símbolo (`sub_1e7d28`) ×2, **`requestCristalEffect(tag_animation*)`**,
+**`requestDeathEffect(tag_animation*)`**, `activateAnimation(int)`.
+Hipótese: despacha pela cadeia `cmp`/`beq` curta (sem tabela — poucos
+casos: cristal/morte/padrão) sobre o tipo de transição de status,
+chamando o efeito terminal correspondente e tocando o SFX da
+transição. Encaixa como a peça que `changeAnimationStatus` (seção
+411) efetivamente aciona pra materializar visualmente a mudança —
+papel análogo, em nível de status de unidade, ao de
+`requestDamageAnimation` (seção 424, reação a golpe). Marcada
+`read_structural` (98% ≥95%, 0 tabela de salto — seguindo a
+convenção explícita de alta cobertura automática sem leitura manual
+= `read_structural`, não `read_full`).
+
+## 456. `ctlflagset_main(CTLINFO*)` — provável tela de debug/dev pra listar e alternar flags de evento (2026-10-23, Fase 3, quinquagésimo terceiro lote)
+
+`ctlflagset_main(CTLINFO*)` (`0x255ee0`, 660 B) — `jtable.py`: **95%
+de cobertura** (157/165, exatamente no limiar), zero tabela de
+salto, 18 branches/10 de retrocesso. 4 `bl`: `Wread_eventflag(int)`,
+`ctlflag_winset(CTLINFO*)`, `wldkey_rep(unsigned long)` ×2,
+`iOS_add_anmpac_max(int)`. Hipótese: tela de debug/dev que lista
+flags de evento, permite navegar com repeat de tecla (`wldkey_rep`),
+lê o estado de cada flag (`Wread_eventflag`) e desenha cada linha
+com cursor animado (`ctlflag_winset` + `iOS_add_anmpac_max`).
+Marcada `read_structural` (95% exatos — no limiar sem margem,
+tratado com cautela adicional em vez de aceite automático
+irrestrito).
+
+**Referências cruzadas (seções 454-456):** seções 167/366/383
+(cluster "mouke"/roster, `mksuccess_calc`/`mkbonus_check`
+geograficamente vizinhos mas família de nome distinta), seção 411
+(`changeAnimationStatus`, `requestStatusChangeAnimation` é a ponte
+pra efeitos finais), seção 424 (`requestDamageAnimation`, papel
+análogo em outro contexto).
+
+## 457. `pspCtltutonet_init(...)` — inicializador linear do popup de nota/dica tutorial, par direto de `pspCtltutonet_main` (seção 333) (2026-10-23, Fase 3, quinquagésimo terceiro lote)
+
+`pspCtltutonet_init(...)` (`0x24fa34`, 664 B) — `jtable.py`: **95%
+de cobertura** (157/166), zero tabela de salto, **zero branches**
+(função inteiramente linear, sem loop nem condicional). 5 `bl`:
+`add_anmpac`/`add_winpac` (registram os pacotes gráficos do popup),
+`wldwin_set`/`wldwin_trans` (posicionam e disparam a transição de
+entrada), `wldmess_put` ×3 (escreve a mensagem inicial). Confirma
+ser o par `_init` (setup único, sem loop) de `pspCtltutonet_main`
+(seção 333, que já estabeleceu "net" = "note"/nota tutorial, não
+rede — nenhuma chamada de socket/network em nenhuma das duas). Junto
+com `ctltips_init`/`_main` e o hub `ctltuto_main` (seção 166),
+confirma o padrão geral da família: `_init` linear faz setup único,
+`_main` é a máquina de estado com polling. Marcada `read_structural`
+(95% no limiar, 0 tabela de salto, mas sem leitura manual completa).
+
+**Referência cruzada:** seção 333 (`pspCtltutonet_main`, par agora
+completo), seção 166 (`ctltuto_main`, hub da família de tutoriais).
