@@ -606,8 +606,8 @@ address,size,mangled,demangled,status,section_ref
 000ba9c8,612,_ZN9CSOUND_IF4LoadEiPcPhjjiiiiii,"CSOUND_IF::Load(int, char*, unsigned char*, unsigned int, unsigned int, int, int, int, int, int, int)",mentioned_unverified,
 002bb910,612,_Z17iOSTatchPanelCtrlii,"iOSTatchPanelCtrl(int, int)",read_structural,NOTES §481
 0011e68c,612,_Z19Wextend_systemframeiiP6RECT16i,"Wextend_systemframe(int, int, RECT16*, int)",read_full,NOTES §478
-0013cfe4,612,_Z18iOS_limitOptrecSubv,iOS_limitOptrecSub(),unread,
-00142f60,612,_Z19WiOS_limitOptrecSubv,WiOS_limitOptrecSub(),unread,
+0013cfe4,612,_Z18iOS_limitOptrecSubv,iOS_limitOptrecSub(),read_structural,NOTES §499
+00142f60,612,_Z19WiOS_limitOptrecSubv,WiOS_limitOptrecSub(),read_structural,NOTES §499
 0028c32c,612,_ZN10CFFT_STATE13SetRenderSizeEii,"CFFT_STATE::SetRenderSize(int, int)",read_structural,NOTES §494
 002b5988,612,_Z14Logo_FrameMovev,Logo_FrameMove(),read_structural,NOTES §477
 000a4078,608,_ZN15CG2D_LOADER_BMP14BMP_DecodeRLE4EPhS0_ii,"CG2D_LOADER_BMP::BMP_DecodeRLE4(unsigned char*, unsigned char*, int, int)",read_structural,NOTES §316
@@ -621,18 +621,18 @@ address,size,mangled,demangled,status,section_ref
 00252e5c,604,_Z18ctlworkendmes_mainP7CTLINFO,ctlworkendmes_main(CTLINFO*),read_structural,NOTES §486
 00260a8c,604,_Z14ctlmoumes_mainP7CTLINFO,ctlmoumes_main(CTLINFO*),read_structural,NOTES §487
 0025b9f4,604,_Z15yokoyari_mesputP7CTLINFOii,"yokoyari_mesput(CTLINFO*, int, int)",read_structural,NOTES §492
-002624ac,604,_Z18mouketeam_unitfaceP7CTLINFOii,"mouketeam_unitface(CTLINFO*, int, int)",unread,
-00073370,600,_Z19Android_Font_RenderPKci,"Android_Font_Render(char const*, int)",unread,
-00097c44,600,_make_words,_make_words,unread,
-00157ee4,600,_Z15cnvattackclutnoi,cnvattackclutno(int),unread,
+002624ac,604,_Z18mouketeam_unitfaceP7CTLINFOii,"mouketeam_unitface(CTLINFO*, int, int)",read_structural,NOTES §495
+00073370,600,_Z19Android_Font_RenderPKci,"Android_Font_Render(char const*, int)",read_structural,NOTES §504
+00097c44,600,_make_words,_make_words,read_structural,NOTES §500
+00157ee4,600,_Z15cnvattackclutnoi,cnvattackclutno(int),read_structural,NOTES §502
 00238124,600,_Z7Mdl0011siii,"Mdl0011(short, int, int, int)",read_structural,NOTES §101
 00267368,600,_Z11ctlret_initv,ctlret_init(),read_structural,NOTES §414
 000ac850,596,_ZN12CEGL2_SHADER4LoadEiPvjS0_j,"CEGL2_SHADER::Load(int, void*, unsigned int, void*, unsigned int)",read_full,NOTES §13.6
-000c4ef4,596,_Z14attackteam_endv,attackteam_end(),unread,
-000acb00,592,_ZN12CEGL2_SPRITE4SaveEPciP9_G2D_SAVE,"CEGL2_SPRITE::Save(char*, int, _G2D_SAVE*)",mentioned_unverified,
-001acafc,592,_Z10DrawFT4RGBP6RECT16iiP5COLORitti,"DrawFT4RGB(RECT16*, int, int, COLOR*, int, unsigned short, unsigned short, int)",unread,
-00268c74,592,_Z12walkrute_setii,"walkrute_set(int, int)",unread,
-00289d5c,592,_Z15pspFftSizeCheckPiS_S_,"pspFftSizeCheck(int*, int*, int*)",unread,
+000c4ef4,596,_Z14attackteam_endv,attackteam_end(),read_structural,NOTES §501
+000acb00,592,_ZN12CEGL2_SPRITE4SaveEPciP9_G2D_SAVE,"CEGL2_SPRITE::Save(char*, int, _G2D_SAVE*)",read_full,NOTES §503
+001acafc,592,_Z10DrawFT4RGBP6RECT16iiP5COLORitti,"DrawFT4RGB(RECT16*, int, int, COLOR*, int, unsigned short, unsigned short, int)",read_full,NOTES §497
+00268c74,592,_Z12walkrute_setii,"walkrute_set(int, int)",read_structural,NOTES §496
+00289d5c,592,_Z15pspFftSizeCheckPiS_S_,"pspFftSizeCheck(int*, int*, int*)",read_structural,NOTES §498
 0028c7ec,592,_ZN9CAUTOSAVE4SaveEj,CAUTOSAVE::Save(unsigned int),read_full,NOTES §19.1
 0009541c,588,_vp_offset_and_mix,_vp_offset_and_mix,unread,
 001d9968,588,_Z15resist_savedataP5BWORKi,"resist_savedata(BWORK*, int)",unread,
@@ -684,7 +684,7 @@ address,size,mangled,demangled,status,section_ref
 000e00c4,552,_Z18request_makeattackv,request_makeattack(),unread,
 001d8d50,552,_Z14set_equipbonusP5BWORKi,"set_equipbonus(BWORK*, int)",unread,
 001d41d0,548,_Z18check_tobe_crystaliP5BWORK,"check_tobe_crystal(int, BWORK*)",unread,
-00253b60,548,_Z16ctlrutegrow_mainP7CTLINFO,ctlrutegrow_main(CTLINFO*),unread,
+00253b60,548,_Z16ctlrutegrow_mainP7CTLINFO,ctlrutegrow_main(CTLINFO*),read_structural,NOTES §496
 0027abb4,548,_Z17MakeMapCostToDestPh,MakeMapCostToDest(unsigned char*),unread,
 002847d8,548,_Z21Vector_ColorTransformP15VECTOR_DATABASE,Vector_ColorTransform(VECTOR_DATABASE*),unread,
 000753c0,544,deflateSetDictionary,deflateSetDictionary,unread,
@@ -813,7 +813,7 @@ address,size,mangled,demangled,status,section_ref
 000d8a34,456,_Z10faceuvclutP11tagPOLY_FT4iPi,"faceuvclut(tagPOLY_FT4*, int, int*)",unread,
 0018a1e4,456,_Z12eDrawFT4RGB2iiiiiiiiP5COLORitti,"eDrawFT4RGB2(int, int, int, int, int, int, int, int, COLOR*, int, unsigned short, unsigned short, int)",unread,
 0024cda0,456,_Z14ctlbrst_activeP7CTLINFO,ctlbrst_active(CTLINFO*),unread,
-00268384,456,_Z13rutegrow_initii,"rutegrow_init(int, int)",unread,
+00268384,456,_Z13rutegrow_initii,"rutegrow_init(int, int)",read_full,NOTES §496
 0025990c,456,_Z15ctlhistory_mainP7CTLINFO,ctlhistory_main(CTLINFO*),unread,
 0026b0f4,456,_Z8wld_snplv,wld_snpl(),mentioned_unverified,
 000a3c18,452,_ZN15CG2D_LOADER_BMP12BMP_LoadFileEPcj,"CG2D_LOADER_BMP::BMP_LoadFile(char*, unsigned int)",read_structural,NOTES §316
@@ -1112,7 +1112,7 @@ address,size,mangled,demangled,status,section_ref
 001ab17c,324,_Z11IsItemEquipsss,"IsItemEquip(short, short, short)",unread,
 002169d0,324,_Z9InitSoundv,InitSound(),unread,
 00253d84,324,_Z15ctltownset_mainP7CTLINFO,ctltownset_main(CTLINFO*),unread,
-00261c68,324,_Z19mouketeam_scrollsetP7CTLINFO,mouketeam_scrollset(CTLINFO*),unread,
+00261c68,324,_Z19mouketeam_scrollsetP7CTLINFO,mouketeam_scrollset(CTLINFO*),read_structural,NOTES §495
 002b20f4,324,_Z14onGotoNextModei,onGotoNextMode(int),unread,
 0007cdd8,320,inflateSync,inflateSync,mentioned_unverified,
 00096190,320,res0_pack,res0_pack,unread,
@@ -1631,7 +1631,7 @@ address,size,mangled,demangled,status,section_ref
 00257a2c,200,_Z13ctlparty_initv,ctlparty_init(),unread,
 0029c6b8,200,GsGetTimInfo,GsGetTimInfo,unread,
 0029b42c,200,GsInitGraph2,GsInitGraph2,mentioned_unverified,
-002623e4,200,_Z17mouketeam_unitwinP7CTLINFO,mouketeam_unitwin(CTLINFO*),unread,
+002623e4,200,_Z17mouketeam_unitwinP7CTLINFO,mouketeam_unitwin(CTLINFO*),read_structural,NOTES §495
 002666d4,200,_Z15winopen_frmcalciP6RECT16S0_,"winopen_frmcalc(int, RECT16*, RECT16*)",mentioned_unverified,
 002a16d0,200,ColorMatCol,ColorMatCol,unread,
 002b1e70,200,_Z20NowLoading_FrameMovev,NowLoading_FrameMove(),unread,
@@ -1656,7 +1656,7 @@ address,size,mangled,demangled,status,section_ref
 00242268,196,_Z16vOpn_arzpic_initi,vOpn_arzpic_init(int),unread,
 0026ffc8,196,_Z10wldwin_seti6RECT16iPm,"wldwin_set(int, RECT16, int, unsigned long*)",mentioned_unverified,
 002507d0,196,_Z14ctlwork_activeP7CTLINFO,ctlwork_active(CTLINFO*),unread,
-00254ed8,196,_Z16ctlrutegrow_initiii,"ctlrutegrow_init(int, int, int)",unread,
+00254ed8,196,_Z16ctlrutegrow_initiii,"ctlrutegrow_init(int, int, int)",read_structural,NOTES §496
 0025e508,196,_Z14person_year_upv,person_year_up(),unread,
 00279b70,196,_Z15CheckAbilityGetiii,"CheckAbilityGet(int, int, int)",mentioned_unverified,
 0028dae4,196,_Z10tlMoveHeapxi,"tlMoveHeap(long long, int)",unread,

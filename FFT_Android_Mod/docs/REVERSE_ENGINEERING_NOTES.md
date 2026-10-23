@@ -15712,3 +15712,231 @@ fazer a aritmética de escala e reconvertendo o resultado. Marcada
 **Referência cruzada:** seções 376/388/442 (`mainLoop`/
 `ctlmusic_main`/`ctlchrmake_init`, todas com referência direta agora
 fechada).
+
+## 495. `mouketeam_unitface(CTLINFO*,int,int)`/`mouketeam_scrollset(CTLINFO*)`/`mouketeam_unitwin(CTLINFO*)` — fecham a referência direta de `hakenunit_change` (seção 382) (2026-10-23, Fase 3, sexagésimo segundo lote)
+
+`mouketeam_unitface(CTLINFO*,int,int)` (`0x2624ac`, 604 B, 97%
+cob., 0 tabela, 6 branches/3 de retrocesso): 8 `bl` —
+`Wfaceuvclut(tagPOLY_FT4*,int,int*)`, `unittoface(int)`,
+`CFFT_STATE::SetParam` ×4, `CFFT_STATE::WorldFaceIDToFaceID(int)`,
+`IS_TEX_2X` ×2, `iOS_setV2Icon` ×2, `iOS_setFaceDataID` ×2,
+`iOS_setFaceDataCLUT` ×2. `mouketeam_scrollset(CTLINFO*)`
+(`0x261c68`, 324 B, 93% cob., 0 tabela, 12 branches/7 de retrocesso):
+2 `bl` — `get_unitwork_add_wld(int)`, `pspJobIsSpecialJob(int)`.
+`mouketeam_unitwin(CTLINFO*)` (`0x2623e4`, 200 B, 90% cob., 0
+tabela, 2 branches/1 de retrocesso): 2 `bl` —
+`world_extend_systemframe(int,int,char*)`, `wldmess_put`. Fecha a
+referência direta deixada por `hakenunit_change` (seção 382) — "mouketeam"
+é o widget de roster do time completo (retrato de rosto + CLUT por
+unidade, scroll da lista, filtro de job especial, janela de extensão
+de sistema). Marcadas `read_structural`.
+
+## 496. Família `walkrute_set`/`rutegrow_init`/`ctlrutegrow_init`/`ctlrutegrow_main` — fecham o sistema de indicador de rota do world map, companheiro de `rute_find`/`rutegrow_draw` (seção 422) (2026-10-23, Fase 3, sexagésimo segundo lote)
+
+`walkrute_set(int,int)` (`0x268c74`, 592 B, 91% cob., 0 tabela, 6
+branches/1 de retrocesso): 7 `bl` — `Wwrite_eventflag` ×2,
+`ctleeff_init(int)`, `wld_event(int,int)` ×2, `townpic_load(int)`,
+**`wldrute_tblget(WALKINFO*,int,int)`**, `rute_find(int,int)`
+(reentra diretamente na seção 422!), `wldcenter_set(_POINT*,
+SVECTOR*)`. `rutegrow_init(int,int)` (`0x268384`, 456 B, 97% cob., 0
+tabela, 9 branches/5 de retrocesso): único `bl` `PSX_csqrt` (raiz
+quadrada fixed-point PSX — cálculo de distância/comprimento de
+segmento de rota). `ctlrutegrow_init(int,int,int)` (`0x254ed8`, 196
+B, 88% cob., 1 `bl` — reentra em `rutegrow_init`). `ctlrutegrow_main
+(CTLINFO*)` (`0x253b60`, 548 B, 96% cob., 0 tabela, 13 branches/8 de
+retrocesso): 2 `bl` — `Wwrite_eventflag`, `sound_request` ×3. Fecha
+o sistema completo: `wldrute_tblget`/`rute_find` localizam o tile de
+destino, `rutegrow_init`/`PSX_csqrt` calculam a geometria da rota
+(comprimento via raiz quadrada), `walkrute_set` orquestra o evento
+de cidade/vila via `wld_event`/`townpic_load`, e o par `ctlrutegrow_
+init`/`_main` é o controller de tela que anima o "crescimento"
+visual da rota (seção 422, `rutegrow_draw`). Marcadas `read_structural`/
+`read_full` (`rutegrow_init` 97% ≥95%, 0 tabela → `read_full`;
+demais < 95% → `read_structural`).
+
+## 497. `DrawFT4RGB(RECT16*,int,int,COLOR*,int,unsigned short,unsigned short,int)` — implementação base real por trás de toda a família letter-prefix `*DrawFT4RGB`, chamada direta ou indiretamente dezenas de vezes na sessão (2026-10-23, Fase 3, sexagésimo segundo lote)
+
+`DrawFT4RGB(...)` (`0x1acafc`, 592 B) — `jtable.py`: **98% de
+cobertura** (145/148), zero tabela de salto, 6 branches/4 de
+retrocesso. 8 `bl`: `pspWindowCommonIsType(WINOBJ_TYPE,unsigned
+char,unsigned char,unsigned char,unsigned char)`, `addFT4num()`,
+`CFFT_STATE::GetParam`/`SetParam`, `SetSemiTrans`, `SetShadeTex` ×2,
+`TexHybrid_RegistCLUTAddr(int,unsigned int)`, `IS_TEX_2X()`. Fecha
+por completo a implementação de base da família letter-prefix
+(`b`/`c`/`e`/`j`/`DrawFT4RGB`) já extensivamente referenciada ao
+longo da sessão (seções 317/358/363 e dezenas de outras que chamam
+alguma variante) — confirma o pipeline real: valida o tipo de objeto
+de janela, acumula num contador de quads (`addFT4num`), consulta/
+ajusta o estado de render do app, aplica semi-transparência e
+textura de sombra (`SetShadeTex` ×2 — mesmo par confirmado em
+`disp_personalwindow`, seção 46), e registra o endereço de CLUT via
+`TexHybrid_RegistCLUTAddr`. Marcada `read_full` (98% ≥95%, 0 tabela
+de salto).
+
+## 498. `pspFftSizeCheck(int*,int*,int*)` — fecha a referência direta de `pspStartSaveCheck` (seção 387), dispatcher de 16 casos sobre API de save `xpLibapi*` (2026-10-23, Fase 3, sexagésimo segundo lote)
+
+`pspFftSizeCheck(int*,int*,int*)` (`0x289d5c`, 592 B) — `jtable.py`:
+**83% de cobertura** (123/148), **1 tabela de salto resolvida** (16
+casos → 3 handlers distintos), 15 branches/6 de retrocesso. 8 `bl`:
+2 locais sem símbolo, **`xpLibapiSaveStart`/`SaveEnd`/`SaveCheck`**,
+`xpLibapiGetFreeSize`/`GetMsSize`/`GetUtilSize` ×2 cada. Fecha a
+referência direta deixada por `pspStartSaveCheck` (seção 387) —
+confirma ser a função que verifica espaço disponível (free/ms/util
+size) via a API nativa `xpLibapi*` antes de permitir o save, com um
+switch de 16 estados colapsando em 3 caminhos reais (sucesso/espaço
+insuficiente/erro, provavelmente). Marcada `read_structural` (83% <
+95%, apesar da tabela resolvida — lacuna honesta nos handlers menos
+comuns).
+
+## 499. `iOS_limitOptrecSub()`/`WiOS_limitOptrecSub()` — par normal/"W", corpo totalmente linear sem nenhuma chamada externa (2026-10-23, Fase 3, sexagésimo segundo lote)
+
+`iOS_limitOptrecSub()` (`0x13cfe4`, 612 B) e `WiOS_limitOptrecSub()`
+(`0x142f60`, 612 B) — `jtable.py`: **92% de cobertura** (140/153)
+ambas, zero tabela de salto, **zero `bl`** (nenhuma chamada externa
+em nenhuma das duas — folhas puras, toda a lógica inline) e **zero
+branches** reportados pela ferramenta (corpo aparentemente sem
+desvio detectado pela descida — consistente com uma rotina de
+cálculo/limitação sequencial sobre um registro "Optrec", provável
+estrutura de otimização/registro de limite óptico/visual). Par
+normal/"W" idêntico em tamanho e topologia. Marcadas `read_structural`
+(92% < 95%, 0 tabela de salto — função sem nenhum `bl` pra ancorar
+hipótese de semântica por nome de callee).
+
+**Referências cruzadas (seções 495-499):** seção 382
+(`hakenunit_change`, referência direta fechada por `mouketeam_*`),
+seção 422 (`rute_find`/`rutegrow_draw`, sistema de rota do world map
+agora completo), seções 46/317/358/363 (família letter-prefix
+`*DrawFT4RGB`, `DrawFT4RGB` base finalmente lida), seção 387
+(`pspStartSaveCheck`, referência direta fechada por
+`pspFftSizeCheck`).
+
+## 500. `_make_words` — mais um interno de `libvorbis` reconhecido por nome, fast-track conforme regra 6 (2026-10-23, Fase 3, sexagésimo terceiro lote)
+
+`_make_words` (`0x97c44`, 600 B) é nome C puro, situado entre dois
+outros internos já catalogados da `libvorbis`: `res1_class` (seção
+467, `residue1.c`) e `_ve_envelope_search` (`psy.c`, encoder).
+`jtable.py`: **100% de cobertura** (150/150), zero tabela de salto,
+27 branches/12 de retrocesso (compatível com construção incremental
+de codewords Huffman a partir dos comprimentos de bit de cada
+símbolo do codebook). 3 `bl` pra locais sem símbolo, prováveis
+helpers estáticos do mesmo arquivo-fonte. Função é o internal
+genuíno de suporte à codificação de codebooks (`bookutil.c`/encoder
+da libvorbis), não código do jogo. Marcada `read_structural`
+fast-tracked (100% cobertura, 0 tabela de salto, terceiro
+reconhecível — mesmo tratamento das seções 102/138/145/174/189/467).
+
+## 501. `attackteam_end()` — finalização da montagem do time de ataque ao entrar em batalha, inclui polling de filme de introdução (2026-10-23, Fase 3, sexagésimo terceiro lote)
+
+`attackteam_end()` (`0xc4ef4`, 596 B) — `jtable.py`: **93% de
+cobertura** (139/149), zero tabela de salto, 19 branches/7 de
+retrocesso. 10 `bl`: 1 local sem símbolo, `read_eventflag`,
+`recover_chrname()`, 2 chamadas a um stub ASM genérico,
+`ASHURA_CVECTOR(long,CVECTOR*)`, **`getMoviePlayFlg()`** ×6 (alvo
+dominante), `iOS_SetLastBGMFromResumeData`, `getEventStatus()`,
+`iOS_getV2Icon`, `iOS_StartMovie()`. Já citada na seção 299
+(`initBattleMap`) como uma das chamadas do orquestrador de início de
+batalha. **Corrige a leitura ingênua do nome**: não é "fim do time
+de ataque" de uma habilidade em área — é a finalização da montagem
+do time de ataque ao entrar em batalha, incluindo a cinemática de
+introdução: `iOS_StartMovie()` dispara o filme, e o loop com
+`getMoviePlayFlg()` ×6 é polling clássico de "aguardar o filme
+terminar/progredir", seguido de restauração de BGM pós-filme e
+recuperação de nome/ícone do personagem corrente (popular a UI de
+apresentação do time). Marcada `read_structural` (93% < 95%, 0
+tabela de salto).
+
+## 502. `cnvattackclutno(int)` — conversor de id de ataque pra índice de CLUT, mesma família de `attack_assumechr`/`attack_assumeface` (seções 121/122) (2026-10-23, Fase 3, sexagésimo terceiro lote)
+
+`cnvattackclutno(int)` (`0x157ee4`, 600 B) — `jtable.py`: **74% de
+cobertura** (111/150), **1 tabela de salto resolvida** (36 casos →
+só 4 handlers distintos, 32 dos 36 casos colapsam no mesmo handler),
+24 branches/10 de retrocesso. 2 `bl`: `get_unitwork_add(int)`,
+`get_jobdata(int)`. **Achado estrutural**: o formato (switch de 36
+vias/4 handlers + mesma dupla `get_unitwork_add`+`get_jobdata`) é
+idêntico ao de `attack_assumechr`/`attack_assumeface` (seções 121/
+122) — mesma família de resolução de dados de unidade/emprego pro
+preview de ataque, mas aqui sem nenhuma chamada de I/O, consistente
+com o nome: só CALCULA o índice de CLUT (classificando o id de
+ataque em poucas categorias de origem de paleta), não carrega nada.
+Provável elo entre "qual paleta usar pro ataque" e o par produtor/
+consumidor `requestChangeClut`/`executeChangeClut` (seções 120/70),
+mas a ligação não está confirmada por xref direta. Marcada
+`read_structural` (74% < 95%, apesar da tabela resolvida — lacuna
+honesta de ~26%, ramos não alcançados além de 0x158124).
+
+## 503. `CEGL2_SPRITE::Save(char*,int,_G2D_SAVE*)` — ponte do toolkit moderno CEGL2 pro codificador legado `CG2D_LOADER`, usada pra gerar a miniatura de tela do save-game (2026-10-23, Fase 3, sexagésimo terceiro lote)
+
+`CEGL2_SPRITE::Save(char*,int,_G2D_SAVE*)` (`0xacb00`, 592 B) —
+`jtable.py`: **99% de cobertura** (147/148), zero tabela de salto,
+17 branches/8 de retrocesso. 10 `bl`: `CG2D_LOADER::CG2D_LOADER(int)`/
+`~CG2D_LOADER()` (constrói/destrói um loader temporário
+parametrizado por tipo de codec), **`CG2D_LOADER::Save(void*,int,
+int,_G2D_SAVE*)`** (assinatura quase idêntica a `CG2D_LOADER_BMP::
+Save`, seção 267, o codificador BMP real de thumbnail de save), 3
+locais sem símbolo, 4 stubs PLT consecutivos (padrão idêntico aos
+"4 helpers soft-float" da seção 485). Confirma ser a ponte entre o
+toolkit moderno de sprite GLES2 (`CEGL2_SPRITE`/`CEGL2_FBO`, seções
+472/477/485) e a pilha legada de codecs de imagem `CG2D_LOADER*`
+(seções 205/217/267) — instancia o loader (BMP/TGA via o parâmetro
+`int`), repassa o buffer de pixels, e delega a serialização real pro
+codificador concreto, reaproveitada pra gerar a miniatura de tela
+salva no save. Marcada `read_full` (99% ≥95%, 0 tabela de salto).
+
+**Referências cruzadas (seções 500-503):** seções 102/138/145/174/
+189/467 (libvorbis reconhecida por nome, `_make_words` mais um
+membro fast-tracked), seção 299 (`initBattleMap`, `attackteam_end`
+confirmado como chamada do orquestrador de início de batalha),
+seções 120/70/121/122 (sistema de CLUT e família `attack_assume*`,
+`cnvattackclutno` como elo hipotetizado), seções 205/217/267/472/
+477/485 (toolkits `CG2D_LOADER`/`CEGL2_*`, ponte confirmada por
+`CEGL2_SPRITE::Save`).
+
+## 504. `Android_Font_Render(char const*,int)` — ponte nativo→Java pra renderização de texto via `Canvas`/`Paint`/`Bitmap` do Android, expõe limitação real do `jtable.py` com `blx` indireto via vtable JNI (2026-10-23, Fase 3, sexagésimo terceiro lote)
+
+`Android_Font_Render(char const*,int)` (`0x73370`, 600 B) —
+`jtable.py`: só **7% de cobertura** (11/150), 0 jump tables
+resolvidas, para na primeira chamada indireta (`blx r3`, tratada
+como branch computado não resolvido). **Verificação manual completa
+via disassembly linear (capstone)** reconstruiu a função inteira
+sem ambiguidade, terminando corretamente num tail-call (`b`) com o
+restante sendo pool de literais.
+
+**Nota de limitação real da ferramenta (distinta da seção 438,
+`jValueFunc`)**: aqui a causa raiz É uma limitação genuína do
+`jtable.py` — a ferramenta trata `blx r3`/`blx ip` (chamada indireta
+via vtable, não um jump table de dados) como branch computado não
+resolvido e aborta a descida recursiva ali, mesmo sendo apenas uma
+chamada que retorna normalmente. Isso é esperado se repetir em
+qualquer ponte `Android_*`/JNI-heavy que use `(*env)->Method(...)`
+via vtable — vale registrar como alerta para não gerar falso alarme
+de "cobertura baixíssima = função complexa" em outras pontes
+semelhantes (`Android_Web_Open`, seção 283; `Android_Dialog_Open`,
+citada em `AppEngine_FrameStep`, seção 489).
+
+Catálogo de `bl` resolvidos manualmente: 1 local (`sub_723e8`,
+provável wrapper de `GetEnv()`), mais chamadas indiretas via offsets
+de vtable compatíveis com o layout canônico `JNINativeInterface` do
+NDK — `+0x18` (FindClass, alta confiança), `+0x1c4`
+(CallStaticObjectMethod ×3, alta confiança), `+0x29c`/`+0x32c`/`+0x5c`
+(compatíveis numericamente com GetStringUTFChars/método de cópia de
+pixel/DeleteLocalRef, mas uso observado nem sempre 100% consistente
+com a semântica JNI padrão — pode ser uma abstração própria do jogo
+imitando o layout, não o `JNIEnv*` cru; tratado como hipótese).
+`sub_2cdf7c`/`2cdf8c` (thunks alloc/free já catalogados em outras
+seções) no padrão clássico `free(ptr); ptr=alloc(largura*altura*4)`.
+
+Hipótese de semântica: ponte nativo→Java pra renderizar texto via
+`Canvas`/`Paint`/`Bitmap` do Android (provavelmente suporte a glyphs
+que a fonte bitmap própria do jogo não cobre — CJK/Unicode
+completo) — resolve a classe Java, chama o método estático,
+obtém largura/altura do texto renderizado, aloca buffer RGBA do
+tamanho certo, e copia os pixels de volta via `Bitmap.getPixels`-like.
+Irmã conceitual de `Android_Web_Open` (seção 283) e `Android_Dialog_
+Open` — ambas pontes nativo→Java via JNI. Marcada `read_structural`
+(critério numérico de cobertura automática não satisfeito — 7% — mas
+reconstrução manual completa do fluxo de controle feita; nomes de
+classe/método Java não lidos, strings pc-relative não resolvidas).
+
+**Referência cruzada:** seção 283 (`Android_Web_Open`, mesma família
+de pontes nativo→Java), seção 489 (`AppEngine_FrameStep`, cita
+`Android_Dialog_Open`).
