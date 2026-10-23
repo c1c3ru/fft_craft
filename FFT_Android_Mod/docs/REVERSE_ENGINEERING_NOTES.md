@@ -14532,3 +14532,210 @@ agora com conversão HSB→RGB documentada), seção 45 (sistema de save,
 (família `ValueFunc`, `jValueFunc` confirma o padrão de dispatch via
 BSS — nota de correção sobre modo ARM/Thumb da ferramenta registrada
 para não se propagar em sessões futuras).
+
+## 439. `make_abilitycommandmain()`/`Wmake_abilitycommandmain()` — monta a janela de comando de habilidade, fecha a referência da seção de ação de batalha (2026-10-23, Fase 3, quinquagésimo lote)
+
+`make_abilitycommandmain()` (`0xdd9fc`, 668 B, 93% cob., 0 tabela, 8
+branches/6 de retrocesso) e `Wmake_abilitycommandmain()` (`0x106448`,
+792 B, 93% cob., 0 tabela, 12 branches/8 de retrocesso): par normal/
+"W". 5 `bl` cada: `serchmessagepointer`/`Wserchmessagepointer`,
+`read_eventflag`/`Wread_eventflag` ×2, `get_bwp(int)`,
+**`check_act_ok(BWORK*)`**, **`get_actwindow_data(int,unsigned
+char*,unsigned char*,unsigned char*)`**. Confirma ser a montagem
+real da janela de comando de habilidade durante o turno de batalha —
+valida se a ação é possível (`check_act_ok`) e busca os dados de
+exibição da janela de ação (`get_actwindow_data`). Marcadas
+`read_structural` (93% < 95%, 0 tabela de salto em ambas).
+
+## 440. `ctlbar_init()`/`ctlbar_deactive(CTLINFO*)` — fecham a tríade com `ctlbar_main` (seção 186), controller de barra com integração de "entrada no mapa" via rede (2026-10-23, Fase 3, quinquagésimo lote)
+
+`ctlbar_init()` (`0x24b420`, 668 B, cobertura não capturada no
+resumo truncado, 0 tabela, 4 branches/1 de retrocesso): 18 `bl`
+distintos — `barmenu_reset` (seção 368, confirma que "ctlbar" é a
+família por trás de `barmenu_reset`!), `wldframe_clr`/`wlddisp_mask`/
+`wldfade_set`/`wldload_wait`, `psp_bk_load(int,void*)`, `add_anmpac`/
+`add_winpac`, **`pspNetEntranceMapThumLoad()`**/**`pspNetEntrance
+MissionStateInit()`** (confirma integração com o sistema de rede de
+"entrada" no mapa — carrega thumbnail e inicializa estado de missão,
+provavelmente pra sincronizar com outro jogador numa sessão
+cooperativa/versus), `pspWorldEnableFlg`/`DisableFlg`/
+`DataBackBufGet`/`DataRectSet`, `xpLibgpuClearImage` ×3, `xpMallocIO`.
+`ctlbar_deactive(CTLINFO*)` (`0x24b790`, 148 B, 92% cob., 1 `bl`
+— `iOS_setDispMenuTouch`): teardown simples. Fecha a tríade
+init/main/deactive com `ctlbar_main` (seção 186, já lida) — "bar"
+é o menu de barra lateral do world map, agora confirmado como a
+família que chama `barmenu_reset` ao sair. Marcadas `read_structural`.
+
+## 441. `ctlhouk_init()`/`ctlhouk_main(CTLINFO*)` — controller de "relatório" (報告/houkoku), delega a um overlay OK/NG genérico via `ctlokng_init` (2026-10-23, Fase 3, quinquagésimo lote)
+
+`ctlhouk_init()` (`0x259bd8`, 664 B, 92% cob., 0 tabela, 10
+branches/4 de retrocesso): 7 `bl` — `Wtask_create`/`Wtask_status`/
+`Wsend_taskparamater`, `barmenu_reset` (mesma chamada de `ctlbar_init`
+— confirma que múltiplos controllers de menu compartilham o mesmo
+teardown de UI), `wldctl_active`, `defscrwin_set`/`curhis_put`.
+`ctlhouk_main(CTLINFO*)` (`0x259ebc`, 564 B, 91% cob., 0 tabela, 9
+branches/4 de retrocesso): 10 `bl` — `Wtask_status`/
+`Wsend_taskparamater`, `ctlhouk_deactive` ×2 (a si mesmo),
+**`houkokuinf_init(int)`** (confirma "houk" = 報告/houkoku,
+"relatório" — provável tela de relatório de missão/evento),
+**`ctlokng_init(_POINT)`** — achado importante: um construtor
+**genérico** de overlay OK/NG parametrizado por posição (`_POINT`),
+diferente dos wrappers dedicados já vistos (`mouke_okng`/
+`ctlhakenokng_main`/`ctlbirthokng_*`/`ctlretokng_*`, seções 343/366/
+372/414) — sugere que esses quatro são instâncias pré-configuradas
+de um framework mais genérico de confirmação, do qual `ctlokng_init`
+é a raiz. `sound_request` ×2, `curhis_get`/`curhis_clr`,
+`iOS_dispOkNg(int,int)`, `iOS_setV2Icon`. Marcadas `read_structural`
+(91-92% < 95%, 0 tabela de salto).
+
+## 442. `ctlchrmake_init()`/`ctlchrmake_main(CTLINFO*)` — hub de criação de personagem/novo jogo, orquestra birthday+música+mensagens "arzmes" (2026-10-23, Fase 3, quinquagésimo lote)
+
+`ctlchrmake_init()` (`0x24748c`, 348 B, 93% cob., 0 tabela, 4
+branches/2 de retrocesso): 12 `bl` — `callMusic(int)`,
+`vOpn_arzmes_init(int,int,unsigned long*)` (seção 365, família de
+mensagem), `vOpn_fadein`/`vOpn_loadwait`/`vOpn_bk_load`/
+`vOpn_dataload2()`, `Ssd_SetSpuVolume(short,short)` ×2,
+`pspOpenDataBackBufGet` ×2/`pspOpenEnableFlg`, `CFFT_STATE::
+SetRenderSize`, `xpMallocIO`, `iOS_setV2Icon` ×6. `ctlchrmake_main
+(CTLINFO*)` (`0x2475e8`, 668 B, 90% cob., 0 tabela, 17 branches/9 de
+retrocesso): 18 `bl` — `get_unitwork_add`, `fadeMusic`/`stopMusic`,
+`vOpn_arzmes_exit()`/`vOpn_arzmes_main()`, **`ctlbirthday_init()`**
+(seção 347 — confirma que a criação de personagem dispara o fluxo
+de aniversário!), **`ctlmusic_init()`** (seção 388), `vOpn_fadeout`,
+`wldbin_loadchk(int)`, `iOS_ClearRectHitAll` ×2, `iOS_setMask`,
+`pspOpenDataBackBufGet` ×2, `DrawSync` ×2, `PSX_LoadImage`,
+`StoreImage`, `xpFree`, `iOS_getV2Icon`/`iOS_setV2Icon` ×3. Confirma
+ser o hub da sequência de "criar personagem"/novo jogo: toca
+música, exibe mensagens de introdução via "arzmes", e dispara
+`ctlbirthday_init` (fluxo de aniversário) e `ctlmusic_init` como
+parte da sequência de abertura de uma nova partida. Marcadas
+`read_structural` (90-93% < 95%, 0 tabela de salto em ambas).
+
+## 443. `MasaDataInit()` — fecha o follow-up direto da seção 416 (`UnitFlagInit`), setup completo de tela de lista/roster com fade e carga de imagem (2026-10-23, Fase 3, quinquagésimo lote)
+
+`MasaDataInit()` (`0x1baec8`, 668 B) — `jtable.py`: **93% de
+cobertura** (156/167), zero tabela de salto, 1 branch/0 de
+retrocesso. 11 `bl` distintos: `worldmap_restart()`,
+`MessageDataSet(int)` ×4, `SetFrameRate(int)`, `FadeInInit()`,
+`WaitLoadImage(RECT16*,unsigned char*)` ×6, `WaitStoreImage
+(RECT16*,unsigned char*)` ×2, `MenuSelInit()`, `unitans_init()`
+(mesma função já vista em `UnitSort`, seção 433), `WindowInit
+(short*,int,unsigned char*)`, `SetDispMask`, `ClearImage`. Fecha o
+follow-up direto da seção 416 (`UnitFlagInit` dispara `MasaDataInit`
+ao preparar a janela de lista de unidades) — confirma ser o setup
+completo da tela (reinício do estado de world map, preparo de
+mensagens, fade-in, carregamento síncrono de imagem/buffer, menu de
+seleção). "Masa" permanece sem confirmação de significado literal
+(nome próprio de desenvolvedor? abreviação interna?) — hipótese não
+resolvida nesta passada. Marcada `read_structural` (93% < 95%, 0
+tabela de salto).
+
+**Referências cruzadas (seções 439-443):** seção 368 (`barmenu_reset`,
+agora identificada como pertencente à família "ctlbar", reusada
+também por `ctlhouk_init`), seção 186 (`ctlbar_main`, tríade agora
+completa), seções 343/366/372/414 (família OK/NG, `ctlokng_init`
+revela-se como a raiz genérica dos 4 wrappers), seção 347
+(`ctlbirthday_init`, disparada por `ctlchrmake_main` — hub de novo
+jogo confirmado), seção 388 (`ctlmusic_init`, mesma relação), seção
+365 (`vOpn_arzmes_init`/`_exit`/`_main`, consumida por
+`ctlchrmake_main`), seção 416 (`UnitFlagInit`, follow-up direto
+fechado por `MasaDataInit`), seção 433 (`UnitSort`, mesmo
+`unitans_init` reusado por `MasaDataInit`).
+
+## 444. `iOSYajiEffectSetLRTGA(int)` — setup de assets TGA esquerda/direita pra seta "Yaji", dois switches quase-gêmeos de 17 casos (2026-10-23, Fase 3, quinquagésimo primeiro lote)
+
+`iOSYajiEffectSetLRTGA(int)` (`0x160fb4`, 668 B) — `jtable.py`: **77%
+de cobertura** (128/167), **2 tabelas de salto resolvidas** (17
+casos → 10 handlers cada, alvos quase idênticos entre as duas), 19
+branches/16 de retrocesso. 2 `bl`: `iOS_getV2Icon`,
+`iOS_getCarrierType()` (decisão de variante de UI dependente de
+operadora — não geometria da seta). Dois switches quase-gêmeos sobre
+o mesmo intervalo de índices (0-16) sugerem "setar lado Esquerdo" na
+primeira passada e "lado Direito" na segunda — condizente com o nome
+`SetLRTGA`. É o passo de configuração/armamento de textura consumido
+pelas rotinas de desenho já mapeadas (`iOSSlideYajiMain`, seção 345;
+`iOSYajiEffect`, seção 407). Marcada `read_structural` (77% < 95%,
+apesar das 2 tabelas resolvidas — lacuna honesta nos handlers menos
+comuns).
+
+## 445. `FFTPSP_ASURA_polygon_combine(...)` — combinação/interpolação de polígono pra deformação de malha (morphing/skinning), folha pura com switch denso de 29 casos (2026-10-23, Fase 3, quinquagésimo primeiro lote)
+
+`FFTPSP_ASURA_polygon_combine(long,ADB*,SVECTOR*,SVECTOR*,SVECTOR*)`
+(`0x2862fc`, 772 B) — `jtable.py`: **76% de cobertura** (147/193),
+**3 tabelas de salto resolvidas** (29 casos → 6 handlers, "default"
+repetido ~20×; mais 2 tabelas de 4 casos → 4 handlers cada), 22
+branches/15 de retrocesso. **Zero `bl`** — função folha pura, 100%
+lógica inline. A assinatura (flag/tipo, bloco `ADB*`, 3 `SVECTOR*` =
+vértices de um triângulo) combinada com o switch denso de 29 casos
+aponta para combinação/interpolação de polígono pra deformação de
+malha por vértice (morphing/skinning), parte do pipeline ASURA de
+animação de malha (seções 38/48). Marcada `read_structural` (76% <
+95%, apesar das 3 tabelas resolvidas — lacuna honesta de ~24%,
+provavelmente dentro dos handlers menores do switch grande).
+
+## 446. `CINPUT_IF_TOUCH::GetGesturePinch(...)` — consulta de gesto de pinça (zoom), camada C++ moderna distinta de `iOS_getTouch*` (2026-10-23, Fase 3, quinquagésimo primeiro lote)
+
+`CINPUT_IF_TOUCH::GetGesturePinch(float,float*,unsigned int*,int*,
+unsigned char*,unsigned char*)` (`0xb4a98`, 664 B) — `jtable.py`:
+**100% de cobertura** (166/166), zero tabela de salto, 15 branches/8
+de retrocesso. 7 `bl`: 1 local sem símbolo (`sub_719f8`, ×2),
+`CINPUT_IF_TOUCH::GetData(int)`, `timeGetTime()`, `__floatsisf` ×2,
+`__divsf3`, `__aeabi_fcmpeq`/`fcmplt`. Função de consulta (polling),
+não handler de evento — varre slots de toque ativos, identifica os 2
+dedos candidatos, converte coordenadas pra float, calcula razão de
+distância (zoom), compara contra o `threshold` recebido e marca o
+instante via `timeGetTime`. Primeira leitura estrutural dedicada
+(já citada de passagem num catálogo maior). Complementa
+`GetGestureDoubleTap`/`GetGestureTap`/`GetGestureSwipe_Old` na
+camada de detecção de gesto de alto nível, acima de `GetData`/
+`OnTouches*`. Marcada `read_structural` (100% cobertura e 0 tabela
+de salto satisfazem o critério numérico, mas `sub_719f8` não
+identificado e papel exato dos parâmetros de saída não confirmado
+instrução a instrução).
+
+## 447. `vOpn_window(WINPAC*,unsigned long*)` — par de `vOpn_anim` para janelas, confirma arquitetura "vOpn" paralela a `wld_window`/`wld_anim` (2026-10-23, Fase 3, quinquagésimo primeiro lote)
+
+`vOpn_window(WINPAC*,unsigned long*)` (`0x24a688`, 668 B) —
+`jtable.py`: **98% de cobertura** (164/167), zero tabela de salto, 1
+branch de retrocesso. 7 `bl`: `vOpn_winopen_frmcalc(int,RECT16*,
+RECT16*)`, `AddPrim` ×2, `GetTPage`/`GetClut`, `SetSprt`,
+`SetDrawMode`/`SetSemiTrans`. É o par exato de `vOpn_anim(ANMPAC*,
+unsigned long*)` (seção 386), trocando `ANMPAC` por `WINPAC` e
+`vOpn_winopen_frmcalc` no lugar do cálculo de frame de animação —
+confirma que a família "vOpn" tem seu próprio par `_window`/`_anim`,
+paralelo ao par world-map "normal" `wld_window`/`wld_anim`, mas
+montando a primitiva manualmente via API PSYQ em vez de delegar a
+`GsSortFastSprite`. Marcada `read_full` (98% ≥95%, 0 tabela de
+salto); hipótese não cravada: os 2 `AddPrim` podem ser duas
+primitivas distintas por pacote de janela (moldura + preenchimento).
+
+## 448. `pspWorldBlackSpotDraw(GsOT*,int)` — confirma a hipótese de "fog-of-war" já levantada em `wldscr_snapshot`, overlay preto com gradiente em 4 iterações/8 primitivas (2026-10-23, Fase 3, quinquagésimo primeiro lote)
+
+`pspWorldBlackSpotDraw(GsOT*,int)` (`0x28b0c0`, 772 B) — `jtable.py`:
+**100% de cobertura** (193/193), zero tabela de salto, 7 branches/4
+de retrocesso. 2 `bl`: `GetTPage(1,2,0x1c0,0x100)` (prólogo),
+`GsSortPoly(ot,prim,depth)` ×2. Desassemblado manualmente pra
+confirmar a semântica ambígua do nome "BlackSpot": o 2º parâmetro
+(int) é truncado e usado como sort-key/profundidade de OT; o
+prólogo monta um template de primitiva GPU e o duplica; um laço de 4
+iterações grava 4 conjuntos diferentes de componentes de cor
+RGB/UV-posição num quad com gradiente (constante `~0x7f` = cor-base
+preta/escura em todas as variantes), inserindo 2 primitivas na OT
+por iteração (8 inserções totais). **Confirma exatamente a hipótese
+de "fog-of-war" já levantada de fora** pela seção 328
+(`wldscr_snapshot`, que já citava esta função como a etapa de
+fog-of-war da composição do world map) e pela seção 11
+(`wldnormal_lop`, que a chama no pipeline de frame real): não
+desenha sprite texturizado, é um preenchimento de área com gradiente
+preto pra mascarar/escurecer regiões não exploradas do mapa. Marcada
+`read_full` (100% cobertura, 0 tabela de salto, nenhum `bl` sem
+nome, desassemblado manual confirmatório feito).
+
+**Referências cruzadas (seções 444-448):** seções 345/407 (família
+"Yaji", `iOSYajiEffectSetLRTGA` fecha o setup de textura),
+seções 38/48 (pipeline ASURA de animação de malha, `FFTPSP_ASURA_
+polygon_combine` como peça de deformação), camada `CINPUT_IF_TOUCH`
+(input C++ moderno, distinto de `iOS_getTouch*`), seção 386
+(`vOpn_anim`, par confirmado com `vOpn_window`), seções 11/328
+(`wldnormal_lop`/`wldscr_snapshot`, hipótese de fog-of-war confirmada
+por `pspWorldBlackSpotDraw`).
