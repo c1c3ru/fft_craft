@@ -15940,3 +15940,184 @@ classe/método Java não lidos, strings pc-relative não resolvidas).
 **Referência cruzada:** seção 283 (`Android_Web_Open`, mesma família
 de pontes nativo→Java), seção 489 (`AppEngine_FrameStep`, cita
 `Android_Dialog_Open`).
+
+## 505. Família `DrawPluralFT4RGB`/`bDrawPluralFT4RGB`/`cDrawPluralFT4RGB`/`eDrawPluralFT4RGB`/`jDrawPluralFT4RGB` — variante "plural" (múltiplos quads) da família `*DrawFT4RGB`, mesmo catálogo mínimo em todas as 5 (2026-10-23, Fase 3, sexagésimo quarto lote)
+
+Família completa de 5 membros (base + 4 letter-prefix), todos **99%
+de cobertura**, zero tabela de salto, 4 branches/2 de retrocesso
+cada: `DrawPluralFT4RGB(unsigned char*,COLOR*,int,unsigned short,
+unsigned short,int,int)` (`0x1ac8c8`, 564 B, 3 `bl` —
+`addFT4num()`/`SetSemiTrans`/`SetShadeTex` ×2), `bDrawPluralFT4RGB`
+(`0x177664`, 580 B, 2 `bl` — `SetSemiTrans`/`SetShadeTex` ×2),
+`cDrawPluralFT4RGB` (`0x1729d4`, 568 B, mesmo catálogo),
+`eDrawPluralFT4RGB` (`0x189d6c`, 580 B, mesmo catálogo),
+`jDrawPluralFT4RGB` (`0x193e04`, 580 B, mesmo catálogo). Confirma
+ser a variante "plural" (desenha múltiplos quads num só primitivo,
+provavelmente barra de HP/texto formatado) da família `*DrawFT4RGB`
+(base agora completa, seção 497) — usa exatamente o mesmo par
+`SetSemiTrans`/`SetShadeTex` da base, sem a chamada extra a
+`pspWindowCommonIsType`/`CFFT_STATE`/`TexHybrid_RegistCLUTAddr` (só a
+versão base/não-prefixada chama `addFT4num`). Todas marcadas
+`read_full` (99% ≥95%, 0 tabela de salto).
+
+## 506. `cDB_init(DB*,...)` — fecha a família letter-prefix `DB_init` por completo (base/b/c/e/j), inicializa o double-buffer com tiles no lugar das 10+ categorias de primitiva (2026-10-23, Fase 3, sexagésimo quarto lote)
+
+`cDB_init(DB*,unsigned long*,tagPOLY_F3*,tagPOLY_FT3*,tagPOLY_F4*,
+tagPOLY_FT4*,...)` (`0x172660`, 588 B) — `jtable.py`: **96% de
+cobertura** (141/147), zero tabela de salto, 6 branches/2 de
+retrocesso. 6 `bl`: `cSwapDB(int,int)` (seção 421 — confirma
+chamada direta da família de troca de buffer!), `SetPolyFT4`,
+`SetTile`, `SetShadeTex`, `SetDefDispEnv` ×2, `SetDefDrawEnv`. Fecha
+a família `DB_init`/`*DB_init` por completo (`DB_init` seção 221,
+`bDB_init` seção 113, `eDB_init` seção 153, `jDB_init` seção 182,
+todas já `read_full`) — a variante "c" é mais magra (menos
+parâmetros de template, aceita só categorias até `DR_AREA`, sem
+`DR_MODE`) e chama `SetTile` em vez de registrar todos os templates
+de primitiva, sugerindo um contexto de tela mais simples/com menos
+tipos de primitiva ativos. Marcada `read_full` (96% ≥95%, 0 tabela
+de salto).
+
+## 507. `cValueFunc(unsigned char*)` — fecha a família `ValueFunc` por completo, variante "c" chama `cDrawFT4RGB`/`cDrawFT4RGB2` (2026-10-23, Fase 3, sexagésimo quarto lote)
+
+`cValueFunc(unsigned char*)` (`0x1751a8`, 588 B) — `jtable.py`:
+**100% de cobertura** (147/147), zero tabela de salto, 8 branches/4
+de retrocesso. 6 `bl`: `sub_715cc`/`sub_718cc` (locais sem símbolo,
+mesmos helpers já vistos em `jValueFunc`, seção 438 — `__stack_chk_fail`
+e `sprintf` prováveis, pelo padrão), `cDrawFT4RGB`, **`cDrawFT4RGB2
+(int,int,int,int,int,int,int,int,COLOR*,int,unsigned short,unsigned
+short,int)`** (variante com 8 parâmetros de posição — não vista nas
+outras letras ainda), `getClutNum()`, `IS_TEX_2X()`. Fecha a família
+`ValueFunc`/`b`/`e`/`j` (seções 222/227/438) por completo — a
+variante "c" é a única que chama `cDrawFT4RGB2` em vez de só
+`cDrawFT4RGB`, sugerindo um layout de dígito diferente nesse
+contexto de tela (talvez posicionamento explícito por 4 pontos em
+vez de retângulo simples). Marcada `read_full` (100% cobertura, 0
+tabela de salto).
+
+## 508. `resist_savedata(BWORK*,int)` — rotina de salvar estado antes de uma transformação reversível (petrificação/mudança temporária), referenciada desde a seção 43 (2026-10-23, Fase 3, sexagésimo quarto lote)
+
+`resist_savedata(BWORK*,int)` (`0x1d9968`, 588 B) — `jtable.py`:
+**99% de cobertura** (146/147), zero tabela de salto, 6 branches/3
+de retrocesso. 6 `bl`: `GetLocalJobNumber(short)`, `get_unitwork_
+add(int)`, **`search_empty_savework(int,unsigned char*)`** ×2,
+`erase_unit(int)`, **`copy_struct_data(void const*,void*,int)`** ×9
+(a chamada mais repetida), `pspJobGetTamanegiLevel(unsigned
+char(*)[3])`. Já referenciada desde a seção 43 (junto com
+`erase_unit`) e citada na seção 6149, mas nunca lida em si. Confirma
+a hipótese: busca um slot vazio de "save work" (`search_empty_
+savework`), copia 9 campos distintos do `BWORK` da unidade pra esse
+slot reservado (`copy_struct_data` ×9), e remove a unidade do campo
+ativo (`erase_unit`) — é o mecanismo de preservar o estado completo
+de uma unidade antes de uma transformação reversível (petrificação,
+possessão, ou efeito similar que precisa restaurar o original depois).
+Marcada `read_full` (99% ≥95%, 0 tabela de salto).
+
+## 509. `CEGL2_SPRITE::LoadEnd(int,int)` — fecha a referência direta de `Logo_FrameMove`/`Link_Init`, parte do ciclo de upload de textura do toolkit CEGL2 (2026-10-23, Fase 3, sexagésimo quarto lote)
+
+`CEGL2_SPRITE::LoadEnd(int,int)` (`0xadcd4`, 576 B) — `jtable.py`:
+cobertura não capturada no resumo truncado, 13 branches/4 de
+retrocesso. 13 `bl`: 6 locais sem símbolo, `CG2D_LOADER::~CG2D_LOADER()`
+(confirma o par com `CEGL2_SPRITE::Save`, seção 503 — o loader
+temporário é destruído ao final do upload), `CEGL2_SPRITE::
+Overwrite(unsigned char*,int,int,int,int)`, `CEGL2_SPRITE::Unload(int)`,
+`__floatsisf` ×2, 3 stubs PLT (`sub_2cdf7c`/`2cdf8c`/`2cdf9c`, mesmo
+padrão alloc/free de outras pontes do toolkit). Fecha a referência
+direta deixada por `Logo_FrameMove` (seção 477, chama `LoadEnd`
+como parte do ciclo de sprite) e `Link_Init` (seção 405, mesma
+classe `CEGL2_SPRITE`) — é a finalização do upload de textura
+(provavelmente libera buffers temporários de decodificação e
+registra o sprite como pronto, possivelmente com fallback via
+`Overwrite`/`Unload` em caso de erro). Marcada `read_structural`
+(cobertura não verificada numericamente nesta passada — pendência
+honesta).
+
+**Referências cruzadas (seções 505-509):** seção 497 (`DrawFT4RGB`,
+família "plural" como variante companheira), seção 421 (`cSwapDB`,
+chamada direta confirmada por `cDB_init`), seções 221/113/153/182
+(família `DB_init`, agora completa com `cDB_init`), seções 222/227/
+438 (família `ValueFunc`, agora completa com `cValueFunc`), seção 43
+(`erase_unit`, referência direta fechada por `resist_savedata`),
+seções 405/477/503 (toolkit `CEGL2_SPRITE`, `LoadEnd` fecha o ciclo
+de upload de textura).
+
+## 510. `PutDispEnv()` — implementação real (não stub) da primitiva libgpu PSX, ponte pro backend PSP/GLES, companheira de `xpLibgpuInit` (2026-10-23, Fase 3, sexagésimo quinto lote)
+
+`PutDispEnv()` (`0x294af8`, 588 B) — `jtable.py`: **93% de
+cobertura** (136/147), zero tabela de salto, 14 branches/5 de
+retrocesso. 10 `bl`: 2 locais sem símbolo, a tríade de flags
+`xpLibgpuEnableFlg`/`DisableFlg`/`CheckFlg` ×2 (mesma família de
+`xpLibgpuInit`, seção 483), `xpLibgpuVramChangeDispMode` ×2,
+`GsClearDispArea` ×2, `sceGuEnable` ×2, `sceGuScissor` ×3,
+`sceGuViewport` ×2. Diferente de todas as dezenas de outras
+ocorrências de `PutDispEnv` vistas só como `bl` (`placeNameStart`/
+`placeNameEnd`, seções 380/462), esta é a implementação real da
+primitiva clássica libgpu — traduz o "display environment" do PSX
+pra chamadas equivalentes no backend de emulação (recorte/viewport,
+troca de modo de display da VRAM virtual, limpeza de área de
+display, flags de estado). Confirma pertencer à camada de emulação
+de GPU PSX inicializada por `xpLibgpuInit`. Marcada `read_structural`
+(93% < 95%, 0 tabela de salto).
+
+## 511. `sceGuScissor`/`sceGuTexWrap` — mais dois elos da ponte real `sceGu*`→`CEGL_PACKET`, mesmo padrão de empacotamento já confirmado em `sceGuSendList`/`sceGuTexImage` (2026-10-23, Fase 3, sexagésimo quinto lote)
+
+`sceGuScissor` (`0x2ab9e8`, 672 B, 99% cob., 0 tabela, 3 branches/1
+de retrocesso): 12 `bl` — `CEGL2_IF::GetPacket`, `CEGL_PACKET::Add`/
+`SetTypeCurrent`/`SetBlendModeCurrent`/`SetTextureCurrent`/
+`SetExtraCurrent` ×3/`GetVBOBufferCurrent`, **`CFFT_STATE::
+GetVertexScaling(float*,float*)`**/`GetParam` ×2, `__floatsisf` ×4/
+`__mulsf3` ×4, 1 local sem símbolo. Converte o retângulo de recorte
+de coordenadas PSP pra coordenadas de tela via o fator de escala do
+viewport do motor antes de empacotar. `sceGuTexWrap` (`0x2ac838`,
+580 B, 97% cob., 0 tabela, 8 branches/4 de retrocesso): 7 `bl` —
+mesmo catálogo-base (`GetPacket`/`SetTypeCurrent`/
+`SetBlendModeCurrent`/`SetTextureCurrent`/`SetExtraCurrent` ×9/
+`GetVBOBufferCurrent`), repetido 3× (provável um por eixo/estágio de
+textura), colado imediatamente após `sceGuTexImage` (seção 204) no
+binário. Confirma pela terceira vez (seções 110/204) que `sceGu*`
+neste binário é a ponte real do motor contra `CEGL2_*`/`GuEmu_*`
+(seção 59), não boilerplate preservado de libPSP. Marcadas
+`read_full`/`read_structural` (`sceGuScissor` 99% ≥95% →
+`read_full`; `sceGuTexWrap` 97% ≥95% → `read_structural`, mapeamento
+fino argumento→`SetExtraCurrent` não conferido linha a linha).
+
+## 512. `iOS_DrawTexFlip(...)` — sexto gêmeo da família `DrawTexFlip`, variante de contexto "iOS" em vez de batalha (2026-10-23, Fase 3, sexagésimo quinto lote)
+
+`iOS_DrawTexFlip(short*,COLOR*,int,int,int,unsigned char*,unsigned
+short)` (`0x15f048`, 776 B) — `jtable.py`: **97% de cobertura**
+(189/194), **1 tabela de salto resolvida** (4 casos → 4 handlers
+distintos — mesmo esqueleto da família `DrawTexFlip`/`b`/`c`/`e`/`j`,
+seção 317), 5 branches/4 de retrocesso. 2 `bl`: `SetSemiTrans`,
+`SetShadeTex` ×2 — catálogo mínimo (sem `TexHybrid_Register`/
+`CFFT_STATE`/`IS_TEX_2X`), o que bate com o padrão base/c/e/j, não
+com o padrão especial de `bDrawTexFlip` (que tem 5 chamadas extras
+de textura híbrida). Endereço fora da faixa dos 5 já mapeados,
+prefixo `iOS_` consistente com a família de UI/plataforma portada do
+código-fonte iOS — provável 6º membro consumido pelo subsistema de
+menus herdado do port iOS, paralelo ao uso de `DrawTexFlip` simples
+por `Bottun` (seção 408). Marcada `read_structural` (mesmo veredito
+dos outros 5 irmãos — 97% ≥95%, 0 tabela de salto, mas sem leitura
+linha a linha dos 2 parâmetros extras da assinatura).
+
+## 513. `MulMatrix0(MATRIX*,MATRIX*,MATRIX*)` — variante de `MulMatrix` que descarta a translação, lida por completo via disassembly manual (2026-10-23, Fase 3, sexagésimo quinto lote)
+
+`MulMatrix0` (`0x2a0124`, 588 B) — `jtable.py`: **100% de
+cobertura** (147/147), zero tabela de salto, **zero `bl`** (função
+folha pura), zero branches reais (bloco reto com execução
+condicional `addlt`, sem desvio de fluxo). Desassemblada
+manualmente por completo (147/147 instruções): multiplica só a
+parte rotacional 3×3 da matriz (ponto fixo 4.12, `smulbb`/`smlabb` +
+arredondamento com sinal + `asr #0xc`) e **zera explicitamente a
+translação** do resultado (`m2->t[0..2] = 0`), em vez de propagá-la
+como `MulMatrix` legítima faz — mesma família GTE já catalogada em
+`move_light`/`Wmove_light` (seções 385/417), aqui usada onde o
+chamador só quer compor rotações (hierarquia de ossos/câmera) sem
+acumular translação herdada. Marcada `read_full` (100% cobertura, 0
+`bl`/branch a esconder, leitura manual completa).
+
+**Referências cruzadas (seções 510-513):** seção 483
+(`xpLibgpuInit`, `PutDispEnv` confirmado como parte da mesma camada
+de emulação), seções 59/110/204 (ponte `sceGu*`↔`CEGL_PACKET`,
+`sceGuScissor`/`sceGuTexWrap` mais dois elos confirmados), seção 317
+(família `DrawTexFlip`, `iOS_DrawTexFlip` como sexto membro), seções
+385/417 (biblioteca de matriz GTE, `MulMatrix0` como variante sem
+translação).

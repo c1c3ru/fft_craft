@@ -462,7 +462,7 @@ address,size,mangled,demangled,status,section_ref
 0025bc78,784,_Z14mksuccess_calcv,mksuccess_calc(),read_full,NOTES §454
 0008e038,776,vorbis_lsp_to_curve,vorbis_lsp_to_curve,read_structural,NOTES §336
 000bc67c,776,_ZN12CSOUND_IF_SL7LoadOGGEiPcPhjji,"CSOUND_IF_SL::LoadOGG(int, char*, unsigned char*, unsigned int, unsigned int, int)",mentioned_unverified,
-0015f048,776,_Z15iOS_DrawTexFlipPsP5COLORciiPhPt,"iOS_DrawTexFlip(short*, COLOR*, char, int, int, unsigned char*, unsigned short*)",unread,
+0015f048,776,_Z15iOS_DrawTexFlipPsP5COLORciiPhPt,"iOS_DrawTexFlip(short*, COLOR*, char, int, int, unsigned char*, unsigned short*)",read_structural,NOTES §512
 001f5018,776,_Z8doCursorP6VECTORP7SVECTORS2_,"doCursor(VECTOR*, SVECTOR*, SVECTOR*)",read_structural,NOTES §406
 00248e6c,776,_Z12vOpn_scriniti,vOpn_scrinit(int),read_structural,NOTES §386
 002514c4,776,_Z18ctlworkinginf_initi,ctlworkinginf_init(int),read_structural,NOTES §384
@@ -550,7 +550,7 @@ address,size,mangled,demangled,status,section_ref
 0015e144,672,_Z13iOSGetChrListv,iOSGetChrList(),read_full,NOTES §435
 001d15d8,672,_Z20iOS_RESUME_SET_BCALCP21IOS_RESUME_DATA_BCALC24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_BCALC(IOS_RESUME_DATA_BCALC*, IOS_RESUME_DATACOPY_MODE)",unread,
 0026df48,672,_Z15ctlhentuto_mainP7CTLINFO,ctlhentuto_main(CTLINFO*),read_full,NOTES §434
-002ab9e8,672,sceGuScissor,sceGuScissor,unread,
+002ab9e8,672,sceGuScissor,sceGuScissor,read_full,NOTES §511
 000dd9fc,668,_Z23make_abilitycommandmainv,make_abilitycommandmain(),read_structural,NOTES §439
 00160fb4,668,_Z21iOSYajiEffectSetLRTGAi,iOSYajiEffectSetLRTGA(int),read_structural,NOTES §444
 001baec8,668,_Z12MasaDataInitv,MasaDataInit(),read_structural,NOTES §443
@@ -635,21 +635,21 @@ address,size,mangled,demangled,status,section_ref
 00289d5c,592,_Z15pspFftSizeCheckPiS_S_,"pspFftSizeCheck(int*, int*, int*)",read_structural,NOTES §498
 0028c7ec,592,_ZN9CAUTOSAVE4SaveEj,CAUTOSAVE::Save(unsigned int),read_full,NOTES §19.1
 0009541c,588,_vp_offset_and_mix,_vp_offset_and_mix,unread,
-001d9968,588,_Z15resist_savedataP5BWORKi,"resist_savedata(BWORK*, int)",unread,
-002a0124,588,MulMatrix0,MulMatrix0,unread,
-00172660,588,_Z8cDB_initP2DBPmP10tagPOLY_F3P11tagPOLY_FT3P10tagPOLY_F4P11tagPOLY_FT4P10tagPOLY_G3P11tagPOLY_GT3P10tagPOLY_G4P11tagPOLY_GT4P10tagLINE_F2P10tagLINE_F3P10tagLINE_F4P10tagLINE_G2P10tagLINE_G3P9tagLINEG4P7tagTILEP9tagTILE_1P9tagTILE_8P10tagTILE_16P7tagSPRTP9tagSPRT_8P10tagSPRT_16P7DR_MOVEP7DR_AREA,"cDB_init(DB*, unsigned long*, tagPOLY_F3*, tagPOLY_FT3*, tagPOLY_F4*, tagPOLY_FT4*, tagPOLY_G3*, tagPOLY_GT3*, tagPOLY_G4*, tagPOLY_GT4*, tagLINE_F2*, tagLINE_F3*, tagLINE_F4*, tagLINE_G2*, tagLINE_G3*, tagLINEG4*, tagTILE*, tagTILE_1*, tagTILE_8*, tagTILE_16*, tagSPRT*, tagSPRT_8*, tagSPRT_16*, DR_MOVE*, DR_AREA*)",unread,
-001751a8,588,_Z10cValueFuncPh,cValueFunc(unsigned char*),unread,
-00294af8,588,PutDispEnv,PutDispEnv,unread,
+001d9968,588,_Z15resist_savedataP5BWORKi,"resist_savedata(BWORK*, int)",read_full,NOTES §508
+002a0124,588,MulMatrix0,MulMatrix0,read_full,NOTES §513
+00172660,588,_Z8cDB_initP2DBPmP10tagPOLY_F3P11tagPOLY_FT3P10tagPOLY_F4P11tagPOLY_FT4P10tagPOLY_G3P11tagPOLY_GT3P10tagPOLY_G4P11tagPOLY_GT4P10tagLINE_F2P10tagLINE_F3P10tagLINE_F4P10tagLINE_G2P10tagLINE_G3P9tagLINEG4P7tagTILEP9tagTILE_1P9tagTILE_8P10tagTILE_16P7tagSPRTP9tagSPRT_8P10tagSPRT_16P7DR_MOVEP7DR_AREA,"cDB_init(DB*, unsigned long*, tagPOLY_F3*, tagPOLY_FT3*, tagPOLY_F4*, tagPOLY_FT4*, tagPOLY_G3*, tagPOLY_GT3*, tagPOLY_G4*, tagPOLY_GT4*, tagLINE_F2*, tagLINE_F3*, tagLINE_F4*, tagLINE_G2*, tagLINE_G3*, tagLINEG4*, tagTILE*, tagTILE_1*, tagTILE_8*, tagTILE_16*, tagSPRT*, tagSPRT_8*, tagSPRT_16*, DR_MOVE*, DR_AREA*)",read_full,NOTES §506
+001751a8,588,_Z10cValueFuncPh,cValueFunc(unsigned char*),read_full,NOTES §507
+00294af8,588,PutDispEnv,PutDispEnv,read_structural,NOTES §510
 0026f0bc,588,_Z16ctlunregmes_initi,ctlunregmes_init(int),read_structural,NOTES §371
 00087c84,584,vorbis_book_decodev_set,vorbis_book_decodev_set,read_structural,NOTES §336
 000e12ac,584,_Z22multiwindow_packetinitP6RECT16P9COMRECORDP10PRIMPACKET,"multiwindow_packetinit(RECT16*, COMRECORD*, PRIMPACKET*)",read_structural,NOTES §400
 0028bfb8,584,_ZN10CFFT_STATEC2Ev,CFFT_STATE::CFFT_STATE(),read_full,NOTES §22
 0028bfb8,584,_ZN10CFFT_STATEC1Ev,CFFT_STATE::CFFT_STATE(),read_full,NOTES §22
-00177664,580,_Z17bDrawPluralFT4RGBPhP5COLORittii,"bDrawPluralFT4RGB(unsigned char*, COLOR*, int, unsigned short, unsigned short, int, int)",unread,
-00189d6c,580,_Z17eDrawPluralFT4RGBPhP5COLORittii,"eDrawPluralFT4RGB(unsigned char*, COLOR*, int, unsigned short, unsigned short, int, int)",unread,
-00193e04,580,_Z17jDrawPluralFT4RGBPhP5COLORittii,"jDrawPluralFT4RGB(unsigned char*, COLOR*, int, unsigned short, unsigned short, int, int)",unread,
-002ac838,580,sceGuTexWrap,sceGuTexWrap,unread,
-000adcd4,576,_ZN12CEGL2_SPRITE7LoadEndEii,"CEGL2_SPRITE::LoadEnd(int, int)",unread,
+00177664,580,_Z17bDrawPluralFT4RGBPhP5COLORittii,"bDrawPluralFT4RGB(unsigned char*, COLOR*, int, unsigned short, unsigned short, int, int)",read_full,NOTES §505
+00189d6c,580,_Z17eDrawPluralFT4RGBPhP5COLORittii,"eDrawPluralFT4RGB(unsigned char*, COLOR*, int, unsigned short, unsigned short, int, int)",read_full,NOTES §505
+00193e04,580,_Z17jDrawPluralFT4RGBPhP5COLORittii,"jDrawPluralFT4RGB(unsigned char*, COLOR*, int, unsigned short, unsigned short, int, int)",read_full,NOTES §505
+002ac838,580,sceGuTexWrap,sceGuTexWrap,read_structural,NOTES §511
+000adcd4,576,_ZN12CEGL2_SPRITE7LoadEndEii,"CEGL2_SPRITE::LoadEnd(int, int)",read_structural,NOTES §509
 0024adec,576,_Z12calender_addi,calender_add(int),unread,
 0026e1e8,576,_Z15ctlsentuto_initv,ctlsentuto_init(),read_structural,NOTES §404
 0027286c,576,_Z26DattoNoGotokuNigeyoRoutinev,DattoNoGotokuNigeyoRoutine(),mentioned_unverified,
@@ -658,11 +658,11 @@ address,size,mangled,demangled,status,section_ref
 000962d0,568,res0_unpack,res0_unpack,unread,
 0009734c,568,res2_inverse,res2_inverse,unread,
 00167a80,568,_Z17ASURA_PKT_AnalyzePm,ASURA_PKT_Analyze(unsigned long*),unread,
-001729d4,568,_Z17cDrawPluralFT4RGBPhP5COLORittii,"cDrawPluralFT4RGB(unsigned char*, COLOR*, int, unsigned short, unsigned short, int, int)",unread,
+001729d4,568,_Z17cDrawPluralFT4RGBPhP5COLORittii,"cDrawPluralFT4RGB(unsigned char*, COLOR*, int, unsigned short, unsigned short, int, int)",read_full,NOTES §505
 0024f688,568,_Z12ctltips_mainP7CTLINFO,ctltips_main(CTLINFO*),read_structural,NOTES §461
 00096508,564,res0_look,res0_look,unread,
 00189fb0,564,_Z11eDrawFT4RGBP6RECT16iiP5COLORitti,"eDrawFT4RGB(RECT16*, int, int, COLOR*, int, unsigned short, unsigned short, int)",unread,
-001ac8c8,564,_Z16DrawPluralFT4RGBPhP5COLORittii,"DrawPluralFT4RGB(unsigned char*, COLOR*, int, unsigned short, unsigned short, int, int)",unread,
+001ac8c8,564,_Z16DrawPluralFT4RGBPhP5COLORittii,"DrawPluralFT4RGB(unsigned char*, COLOR*, int, unsigned short, unsigned short, int, int)",read_full,NOTES §505
 001bd8e8,564,_Z17DrawEggWithShadowsP7DVECTORiP5COLORii,"DrawEggWithShadow(short, DVECTOR*, int, COLOR*, int, int)",unread,
 00247a30,564,_Z16ctlbirthday_initv,ctlbirthday_init(),unread,
 0026760c,564,_Z18moukeevtinf_windowP7CTLINFOii,"moukeevtinf_window(CTLINFO*, int, int)",unread,
