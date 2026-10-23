@@ -16514,3 +16514,179 @@ quarto membro confirmado em `sceGuClutLoad_for_iOS`), seção 512
 (`iOS_DrawTexFlip`, mesmo padrão de nomes cross-platform legados),
 seção 292 (`addzodiacback`, pipeline de Zodíaco completo com
 `Zaddzod`).
+
+## 534. `set_equipbonus(BWORK*,int)` — fecha a referência direta de `adjust_equip_change_common` (seção 409), resolve bônus de equipamento via dados de armadura (2026-10-23, Fase 3, septuagésimo lote)
+
+`set_equipbonus(BWORK*,int)` (`0x1d8d50`, 552 B) — `jtable.py`:
+**100% de cobertura** (138/138), zero tabela de salto, 10 branches/6
+de retrocesso. 5 `bl`: 1 local sem símbolo, `pspItemGetCommonData`
+×2, **`pspItemGetEquipBonus`**, `pspItemIsEmpty`,
+**`pspItemGetArmorData`** ×2. Fecha a referência direta deixada por
+`adjust_equip_change_common` (seção 409) — confirma ser a rotina que
+recalcula o bônus de stat concedido pelo equipamento atual,
+consultando dados de armadura e o primitivo dedicado
+`pspItemGetEquipBonus` por slot. Marcada `read_full` (100%
+cobertura, 0 tabela de salto).
+
+## 535. `check_tobe_crystal(int,BWORK*)` — checagem de transformação em cristal, usa RNG sincronizado de rede `_pspNetRand` (2026-10-23, Fase 3, septuagésimo lote)
+
+`check_tobe_crystal(int,BWORK*)` (`0x1d41d0`, 548 B) — `jtable.py`:
+**97% de cobertura** (133/137), zero tabela de salto, 15 branches/3
+de retrocesso. 3 `bl`: `init_target_result(A_RESULT*)`,
+**`_pspNetRand(char const*,int)`** ×2, `pspNetGetErrorCode()`. Já
+citada de passagem junto a `check_hide_reset` (linha 8284). **Achado
+notável**: usa `_pspNetRand` em vez do `ps_rand()` genérico usado em
+quase toda a sorte do jogo — confirma que a decisão de transformação
+em cristal (vs. tesouro, vs. fuga) é sincronizada entre os
+participantes numa partida em rede (mesmo RNG determinístico em
+todos os clientes), não um sorteio local independente — detalhe
+crítico de fairness em partidas multiplayer. Marcada `read_full`
+(97% ≥95%, 0 tabela de salto).
+
+## 536. `MakeMapCostToDest(unsigned char*)` — fecha a referência direta de `ForAbnormalStatus`/`DattoNoGotokuNigeyoRoutine` (seções 387/517), reusa `search_reverse_mp` (2026-10-23, Fase 3, septuagésimo lote)
+
+`MakeMapCostToDest(unsigned char*)` (`0x27abb4`, 548 B) —
+`jtable.py`: **98% de cobertura** (134/137), zero tabela de salto,
+12 branches/6 de retrocesso. Único `bl`: **`search_reverse_mp(int,
+int,int,int,int,int*,int)`** — variante "reversa" de `search_mp`
+(seção 476, o flood-fill de alcance de movimento). Fecha a
+referência direta deixada por dois handlers de IA já lidos
+(`ForAbnormalStatus`, seção 387; `DattoNoGotokuNigeyoRoutine`, seção
+517) — confirma ser a rotina que constrói o mapa de custo de
+movimento até um destino específico, provavelmente fazendo o
+flood-fill "de trás para frente" (do destino até a unidade, em vez
+do alcance normal da unidade) pra reconstruir o caminho mais curto.
+Marcada `read_full` (98% ≥95%, 0 tabela de salto).
+
+## 537. `DrawUnitWithShadow(short,DVECTOR*,COLOR*,int,int)` — fecha o par com `DrawEggWithShadow` (seção 522), reusa o pipeline genérico de forma com sombra (2026-10-23, Fase 3, septuagésimo lote)
+
+`DrawUnitWithShadow(short,DVECTOR*,COLOR*,int,int)` (`0x1bdc0c`, 544
+B) — `jtable.py`: **95% de cobertura** (129/136), zero tabela de
+salto, 9 branches/4 de retrocesso. 9 `bl`: `GetShapeData(short,
+short*)`, `GetShapeNo(CHR_STTS*,int)`, `DrawTexFlip` (seção 317),
+1 local sem símbolo, **`DrawShapeWithShadow(short*,COLOR*,int,int)`**
+(delega o desenho de fato), `GetWindowColor()`, `CFFT_STATE::
+GetParam`, `IS_TEX_2X()`, `__divsi3` ×2. Fecha o par com
+`DrawEggWithShadow` (seção 522, já confirmada como desenho do
+monstro-em-ovo) — confirma que `DrawUnitWithShadow` resolve a forma
+(shape) da unidade a partir de `CHR_STTS*` e delega o desenho real
+pra `DrawShapeWithShadow`, o mesmo helper genérico de forma-com-sombra
+usado por qualquer sprite de campo (unidade normal ou ovo). Marcada
+`read_full` (95% ≥95%, 0 tabela de salto).
+
+**Referências cruzadas (seções 534-537):** seção 409
+(`adjust_equip_change_common`, referência direta fechada por
+`set_equipbonus`), seção 517 (`DattoNoGotokuNigeyoRoutine`/
+`ForAbnormalStatus`, referência direta fechada por
+`MakeMapCostToDest`), seção 476 (`search_mp`, variante reversa
+confirmada), seção 522 (`DrawEggWithShadow`, par agora completo com
+`DrawUnitWithShadow`), sistema de RNG de rede (`_pspNetRand`,
+achado de fairness multiplayer em `check_tobe_crystal`).
+
+## 538. `request_makeattack()` — camada de preparação de UI/recursos pra tela de comando de ataque, estágio anterior à cadeia `callEffect`/`StartEffect` (2026-10-23, Fase 3, septuagésimo primeiro lote)
+
+`request_makeattack()` (`0xe00c4`, 552 B) — `jtable.py`: **91% de
+cobertura** (125/138), zero tabela de salto, 11 branches/5 de
+retrocesso. 19 `bl`: `attack_assumechr()`/`attack_assumeface()`
+(retrato de confirmação de ataque), `loadname()`/
+`assumehelpmessage()`/`readmaptitle()`, `load_iconpackdata()`/
+`load_hight_font()`/`iOS_getV2Icon`, `load_loaddata()`,
+`read_eventflag`/`event_init()`, `task_create` ×2,
+`iOS_updateDispCameraIconSetting()`, `fileReadRequest`,
+`pspNetGetBattleModeFlag()`, `hook_Debug2`/`hook_chk_speedup`, 2
+locais sem símbolo. **Sem sobreposição nenhuma** com a cadeia já
+mapeada `callEffect`→`StartEffect`→`StartPermanentEffect`/
+`LoadEffect` (seções 418/420/429) nem com `requestDamageAnimation`
+(seção 424) — confirma que `request_makeattack` fica num estágio
+anterior e mais alto no pipeline (montagem de UI/recursos ao
+selecionar o comando de Ataque), não a execução de dano/efeito.
+Marcada `read_structural` (91% < 95%, 2 locais sem símbolo não
+investigados).
+
+## 539. `CUI_SCROLLBAR::DragEnd(int,int)` — fim de gesto de arrastar com cálculo de inércia, confirma o widget como drag-to-scroll com momentum (2026-10-23, Fase 3, septuagésimo primeiro lote)
+
+`CUI_SCROLLBAR::DragEnd(int,int)` (`0xb5fac`, 552 B) — `jtable.py`:
+**100% de cobertura** (138/138), zero tabela de salto, 9 branches/3
+de retrocesso. 9 `bl`: `GetDragOffset`, `GetCellRect` ×3,
+`SetCellPress`, `CorrectScrollBounds`, `CLIST::GetCount()` ×2,
+**`CSTEP::Init(...)`** ×3, tríade soft-float (`__floatsisf`→
+`__mulsf3`→`__fixsfsi`, escala de velocidade/desaceleração).
+Complementa o catálogo da seção 86 (`Link_FrameRender`) e a menção
+nominal em `Link_FrameMove` (seção 283, "`DragBegin`/`Update`/`End`/
+`FrameMove`") — confirma que `CUI_SCROLLBAR` é um widget completo de
+arrastar-com-inércia: arma uma animação de "snap" residual via
+`CSTEP::Init` até a posição final da lista, em vez de travar o
+scroll onde o dedo foi solto. Marcada `read_full` (100% cobertura, 0
+tabela de salto).
+
+## 540. `SettingsBundle_Init()` — carrega/cria o bundle persistido de configurações via `CFILE`, provável par de boot de `SettingsBundle_Get` (2026-10-23, Fase 3, septuagésimo primeiro lote)
+
+`SettingsBundle_Init()` (`0x2b1124`, 536 B) — `jtable.py`: **100% de
+cobertura** (134/134), zero tabela de salto, 6 branches/0 de
+retrocesso (sem laço — rotina "uma vez" de boot). 14 `bl`:
+`CAPP_INFO::GetStoragePath()` ×3, 3 locais sem símbolo (trio de
+montagem de caminho), `CFILE::CFILE`/`~CFILE()` ×2 cada,
+`CFILE::Open` ×2, `CFILE::Read`/`Write`/`GetSize`,
+**`CFILE_UTIL::FileFind(char*)`**, 2 locais extras. Padrão
+`FileFind`→branch→(`Open`+`Read`+`GetSize`) *ou* (`Open`+`Write`)→
+`~CFILE` é o esqueleto clássico de "carregar config persistida se
+existir, senão criar default e salvar" — fecha o par init/get com
+`SettingsBundle_Get` (já citado nas seções 133/135, consumido por
+`Settings_FrameMove`/`FrameRender`). Marcada `read_structural` (100%
+cobertura/0 tabela de salto satisfazem o critério numérico, mas o
+vínculo de chamada exato com `AppEngine_Init`/`SettingsBundle_Get`
+não foi confirmado por xref).
+
+## 541. `RayPick_GT4_input(tagPOLY_GT4*,int,int,int,int)` — camada de teste de hit em espaço de tela do ray-picking ASHURA, delega a `CEGL_COLLISION::IsVertexInTriangle2D` (2026-10-23, Fase 3, septuagésimo primeiro lote)
+
+`RayPick_GT4_input(tagPOLY_GT4*,int,int,int,int)` (`0x2b75d0`, 536
+B) — `jtable.py`: **100% de cobertura** (134/134), zero tabela de
+salto, 4 branches/3 de retrocesso. 2 `bl`: **`CEGL_COLLISION::
+IsVertexInTriangle2D(...)`** ×4, `__floatsisf` ×10. Testa se o ponto
+de pick cai dentro do quad `GT4` dividindo-o em triângulos (2
+testes por triângulo via o módulo `CEGL_COLLISION`). Detalha o
+mecanismo já apontado estruturalmente na seção 38.2 (`ASHURA_addPrim`
+chama `RayPick_GT4`/`RayPick_GT3`, "ray-picking real contra
+polígonos texturizados com Gouraud, provável seleção de alvo/unidade
+em 3D via toque") — esta função é a etapa de conversão de coordenada
+de tela (int→float) + teste geométrico que alimenta esse pipeline.
+Marcada `read_full` (100% cobertura, 0 tabela de salto); papel exato
+dos 4 inteiros de entrada inferido por convenção, não cravado
+byte a byte.
+
+## 542. `CEGL2_IF::LoadShaderAll(char*)` — boot que registra os 6 shaders fixos do motor via despacho virtual, desmontada manualmente além do limite da ferramenta (2026-10-23, Fase 3, septuagésimo primeiro lote)
+
+`CEGL2_IF::LoadShaderAll(char*)` (`0xa8218`, 552 B) — `jtable.py`
+reporta só **20% de cobertura** (28/138) e um `blx ip` marcado como
+branch computado não resolvido — **artificialmente baixo**, mesma
+limitação de vtable/JNI já documentada na seção 504
+(`Android_Font_Render`). Desassemblagem manual complementar confirma
+a função **inteiramente linear** (zero branches condicionais reais),
+cobertura de código real ~100% (129/129 instruções) — a ferramenta
+aborta a descida logo após o primeiro `blx` por tratá-lo como jump
+desconhecido, quando na verdade são chamadas virtuais legítimas que
+retornam normalmente. Catálogo real: `CEGL2_IF::GetShader()` ×1,
+`sub_71494` ×**12** (a ferramenta só viu 2 antes de abortar — provável
+helper de tamanho de string/recurso), `blx` em `vtbl[0x14]` ×6
+(chamadas virtuais, uma por par vertex/fragment shader),
+`blx` em `vtbl[0x1c]` ×1 (final, provável ativação de programa
+padrão). Assinatura de `vtbl[0x14]` casa exatamente com
+`CEGL2_SHADER::Load(this,key,vertSrc,vertLen,fragSrc,fragLen)` já
+catalogada (596 B, 100% lida: `glCreateShader`+`CompileShader`+
+`glLinkProgram`+cache por `key`) — confirma que `LoadShaderAll` é o
+boot que popula esse cache com os 6 shaders fixos consumidos depois
+por `DrawPacket`/`DrawTile4`. Marcada `read_structural` (critério
+numérico automático não satisfeito pela ferramenta, mas leitura
+manual complementar já reconstrói o fluxo completo; pendências:
+semântica exata de `sub_71494` e da chamada final em `vtbl[0x1c]`
+não confirmadas contra símbolo).
+
+**Referências cruzadas (seções 538-542):** seções 418/420/424/429
+(cadeia `callEffect`/`StartEffect`, `request_makeattack` fica em
+estágio anterior/UI), seções 86/283 (`CUI_SCROLLBAR`, `DragEnd`
+confirma widget de inércia completo), seções 133/135
+(`SettingsBundle_Get`, par de boot hipotetizado com
+`SettingsBundle_Init`), seção 38.2 (`ASHURA_addPrim`/ray-picking,
+`RayPick_GT4_input` detalha o mecanismo), seção 504
+(`Android_Font_Render`, mesma limitação de ferramenta com `blx`
+indireto confirmada em `CEGL2_IF::LoadShaderAll`).

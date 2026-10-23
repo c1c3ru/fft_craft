@@ -679,24 +679,24 @@ address,size,mangled,demangled,status,section_ref
 00118cdc,556,_Z18Wmake_statusscrollv,Wmake_statusscroll(),read_structural,NOTES §524
 001778a8,556,_Z11bDrawFT4RGBP6RECT16iiP5COLORitti,"bDrawFT4RGB(RECT16*, int, int, COLOR*, int, unsigned short, unsigned short, int)",read_full,NOTES §514
 001997f0,556,_Z16DrawItemCategoryiP14iOS_CMenuTouchi21IOS_MENU_TOUCH_RESULT,"DrawItemCategory(int, iOS_CMenuTouch*, int, IOS_MENU_TOUCH_RESULT)",read_structural,NOTES §526
-000a8218,552,_ZN8CEGL2_IF13LoadShaderAllEPc,CEGL2_IF::LoadShaderAll(char*),unread,
-000b5fac,552,_ZN13CUI_SCROLLBAR7DragEndEii,"CUI_SCROLLBAR::DragEnd(int, int)",unread,
-000e00c4,552,_Z18request_makeattackv,request_makeattack(),unread,
-001d8d50,552,_Z14set_equipbonusP5BWORKi,"set_equipbonus(BWORK*, int)",unread,
-001d41d0,548,_Z18check_tobe_crystaliP5BWORK,"check_tobe_crystal(int, BWORK*)",unread,
+000a8218,552,_ZN8CEGL2_IF13LoadShaderAllEPc,CEGL2_IF::LoadShaderAll(char*),read_structural,NOTES §542
+000b5fac,552,_ZN13CUI_SCROLLBAR7DragEndEii,"CUI_SCROLLBAR::DragEnd(int, int)",read_full,NOTES §539
+000e00c4,552,_Z18request_makeattackv,request_makeattack(),read_structural,NOTES §538
+001d8d50,552,_Z14set_equipbonusP5BWORKi,"set_equipbonus(BWORK*, int)",read_full,NOTES §534
+001d41d0,548,_Z18check_tobe_crystaliP5BWORK,"check_tobe_crystal(int, BWORK*)",read_full,NOTES §535
 00253b60,548,_Z16ctlrutegrow_mainP7CTLINFO,ctlrutegrow_main(CTLINFO*),read_structural,NOTES §496
-0027abb4,548,_Z17MakeMapCostToDestPh,MakeMapCostToDest(unsigned char*),unread,
+0027abb4,548,_Z17MakeMapCostToDestPh,MakeMapCostToDest(unsigned char*),read_full,NOTES §536
 002847d8,548,_Z21Vector_ColorTransformP15VECTOR_DATABASE,Vector_ColorTransform(VECTOR_DATABASE*),unread,
 000753c0,544,deflateSetDictionary,deflateSetDictionary,unread,
 00153cb8,544,_Z22iOS_RESUME_SET_WORK_IWP23IOS_RESUME_DATA_WORK_IW24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_WORK_IW(IOS_RESUME_DATA_WORK_IW*, IOS_RESUME_DATACOPY_MODE)",unread,
-001bdc0c,544,_Z18DrawUnitWithShadowsP7DVECTORP5COLORii,"DrawUnitWithShadow(short, DVECTOR*, COLOR*, int, int)",unread,
+001bdc0c,544,_Z18DrawUnitWithShadowsP7DVECTORP5COLORii,"DrawUnitWithShadow(short, DVECTOR*, COLOR*, int, int)",read_full,NOTES §537
 000bd740,540,_ZN17CSOUND_LOADER_OGG6DecodeEPaixxPi,"CSOUND_LOADER_OGG::Decode(signed char*, int, long long, long long, int*)",read_full,NOTES §17.7
 0028179c,540,_Z17iOS_v2menuSetType11V2MENU_TYPE,iOS_v2menuSetType(V2MENU_TYPE),unread,
 00193a10,540,_Z15jGetAbilityListssiPsi,"jGetAbilityList(short, short, int, short*, int)",read_structural,NOTES §390
 0029a618,540,ClearImage2,ClearImage2,unread,
 000dca14,536,_Z6direc2Pci,"direc2(char*, int)",read_full,NOTES §525
-002b75d0,536,_Z17RayPick_GT4_inputP11tagPOLY_GT4iiii,"RayPick_GT4_input(tagPOLY_GT4*, int, int, int, int)",unread,
-002b1124,536,_Z19SettingsBundle_Initv,SettingsBundle_Init(),unread,
+002b75d0,536,_Z17RayPick_GT4_inputP11tagPOLY_GT4iiii,"RayPick_GT4_input(tagPOLY_GT4*, int, int, int, int)",read_full,NOTES §541
+002b1124,536,_Z19SettingsBundle_Initv,SettingsBundle_Init(),read_structural,NOTES §540
 0009c78c,532,drft_backward,drft_backward,unread,
 00279cc0,532,_Z22GetDirectionOfAutoUnitv,GetDirectionOfAutoUnit(),mentioned_unverified,
 000aab58,528,_ZN9CEGL2_FBO4SaveEP9_RECT_S32PciP9_G2D_SAVE,"CEGL2_FBO::Save(_RECT_S32*, char*, int, _G2D_SAVE*)",mentioned_unverified,
