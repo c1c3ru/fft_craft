@@ -17754,3 +17754,83 @@ grupos por prefixo de subsistema (não mais família por nome) — maior
 lote em contagem de função do projeto até agora, e o único até hoje a
 resolver uma pendência de identidade (trio `sub_2cdf6c`/`8c`/`9c`)
 que se arrastava desde a seção 531.
+
+## 558. Recuperação de 6 funções órfãs — outra sessão (branch `worktree-fft-re-loop`, PR #4) fechou estas 6 em paralelo a este loop, mas a prosa se perdeu num merge do GitHub; conteúdo recriado e reverificado por `jtable.py` (2026-10-24, Fase 3)
+
+**Contexto da recuperação**: ao tentar `git push` do lote 75, o push foi
+rejeitado — `origin/main` tinha avançado por um PR (#4) que mesclou a
+branch `worktree-fft-re-loop` (uma segunda sessão/worktree trabalhando
+no mesmo repositório, independente desta). Essa sessão fez seu próprio
+"lote 70/71" (commit `86a9c82`) escolhendo os MESMOS números de seção
+534-542 que este loop também escolheu (coincidência inevitável — os
+dois começaram do mesmo ponto, `d3eb5b4`). O merge automático do
+GitHub resolveu o conflito linha-a-linha no CSV a favor desta sessão
+para as 3 funções que as duas sessões tocaram em comum
+(`CEGL2_IF::LoadShaderAll`/`CUI_SCROLLBAR::DragEnd`/`request_makeattack`
+— já fechadas aqui nas seções 539/547/557, nenhuma ação necessária),
+mas **descartou inteiramente as 176 linhas de prosa** da outra sessão
+pra `REVERSE_ENGINEERING_NOTES.md` (nenhum conflito de texto reportado
+— o merge simplesmente não as re-aplicou), deixando **6 linhas do CSV**
+com `status` correto mas `section_ref` apontando pra seções que, neste
+arquivo, são sobre outro assunto completamente (ex. `DrawUnitWithShadow`
+apontava pra `§537`, que aqui é `CGX_SCREEN_CORRECT`). Esta seção
+recria o conteúdo perdido a partir da mensagem do commit `86a9c82`
+(que já descrevia os achados com detalhe) e **reverifica cada uma via
+`jtable.py` nesta sessão antes de aceitar** — não é só confiança na
+mensagem de commit.
+
+- **`set_equipbonus(BWORK*,int)`** (552B, 100%, 5 `bl`:
+  `pspItemGetCommonData`×2+`pspItemGetEquipBonus`+`pspItemIsEmpty`+
+  `pspItemGetArmorData`×2 + 1 local sem símbolo): catálogo confirma o
+  tema do commit original — ajuste de bônus de equipamento,
+  consultando a base de item real (§556) e testando se o slot está
+  vazio antes de aplicar o bônus de armadura. `read_full`.
+- **`check_tobe_crystal(int,BWORK*)`** (548B, 97%, 3 `bl`:
+  `init_target_result`+`_pspNetRand`×2+`pspNetGetErrorCode`): confirma
+  RNG sincronizado por rede (`_pspNetRand`, não `rand()` local) —
+  checagem de "virar cristal" (morte permanente) precisa do mesmo
+  resultado em todos os clientes de uma partida em rede, daí o RNG
+  sincronizado em vez de local; detalhe de justiça/anti-trapaça de
+  multiplayer. `read_full`.
+- **`MakeMapCostToDest(unsigned char*)`** (548B, 98%, 1 `bl`:
+  `search_reverse_mp(int,int,int,int,int,int*,int)`): confirma reuso de
+  uma variante reversa de `search_mp` (busca de caminho/custo no mapa
+  de movimento) — a mensagem original associa a `ForAbnormalStatus`/
+  rotina de fuga por status anormal (seções 387/517), coerente com
+  "mapa de custo até o destino" sendo o inverso de "mapa de custo
+  desde a origem". `read_full`.
+- **`DrawUnitWithShadow(short,DVECTOR*,COLOR*,int,int)`** (544B, 95%, 9
+  `bl` incluindo `GetShapeData`/`GetShapeNo`/`DrawTexFlip`/
+  `DrawShapeWithShadow`/`GetWindowColor`/`CFFT_STATE::GetParam`/
+  `IS_TEX_2X`): confirma que delega pra `DrawShapeWithShadow` genérico
+  — completa o par com `DrawEggWithShadow` (§522), ambos sprites com
+  sombra desenhados pela mesma rotina de base. `read_full`.
+- **`RayPick_GT4_input(tagPOLY_GT4*,int,int,int,int)`** (536B, 100%, 2
+  `bl`: `CEGL_COLLISION::IsVertexInTriangle2D`×4+`__floatsisf`×10):
+  confirma teste de ponto-em-triângulo em espaço de tela pro pipeline
+  de ray-picking do `ASHURA` (hint original da seção 38.2) — mesmo
+  primitivo de teste já confirmado genérico na seção 325
+  (`IsVertexInTriangle3D`/`2D`). `read_full`.
+- **`SettingsBundle_Init()`** (536B, 100%, 14 `bl`: `CFILE::CFILE`/
+  `Open`/`Read`/`Write`/`GetSize`/`~CFILE`+`CFILE_UTIL::FileFind`+
+  `CAPP_INFO::GetStoragePath`×3+`sub_71494`/`714a0`/`714b8`/`715cc`
+  [helpers genéricos de string já vistos em §535/541/543]+
+  `sub_2cdf6c`/`sub_2cdf9c` [**agora identificados com certeza no
+  §554**: `operator new`/`operator delete`, não mais "sem
+  identidade"]): confirma carregamento-ou-criação de configurações via
+  `CFILE` a partir do caminho de armazenamento real (`CAPP_INFO`,
+  §542), alocando/desalocando memória pra o buffer via `operator
+  new`/`delete` — provável par de boot de `SettingsBundle_Get` (citado
+  na mensagem original, ainda não localizado/lido nesta sessão).
+  `read_structural` (lógica confirmada, mas o layout exato do buffer
+  carregado não foi extraído campo-a-campo).
+
+**Nota de processo pro resto do loop**: esta colisão confirma que
+rodar duas sessões/worktrees em paralelo sobre o mesmo repositório sem
+coordenação de numeração de seção é um risco real (já tinha sido
+sinalizado como risco residual ao usuário antes do lote 70) — toda vez
+que eu fizer push a partir de agora, vou `git fetch`+comparar antes de
+assumir que `origin/main` não andou, e tratar qualquer prosa
+"desaparecida" num merge futuro da mesma forma que aqui: reverificar
+por ferramenta antes de aceitar o status, nunca só copiar a mensagem
+de commit de outra sessão sem conferir.
