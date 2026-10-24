@@ -16982,3 +16982,189 @@ GetGesturePinch`/dispatcher central do painel de toque), seções 13.1/
 praticamente por completo 3 classes C++ inteiras (`CGX_SCREEN_CORRECT`,
 `CINPUT_IF_TOUCH`, `CEGL2_IF`) num único ciclo de 3 forks paralelos,
 116 funções no total.
+
+## 540. `CINPUT_DATA` — 22 membros `unread` restantes fechados, expõe o layout real do registro por device/slot que `CINPUT_IF_TOUCH` só repassava por tail-call (2026-10-23, Fase 3, septuagésimo segundo lote paralelo)
+
+Lote paralelo (fork 1/3), `jtable.py` + leitura manual nas 22 funções
+`unread` distintas. **Todas 100% de cobertura, zero tabela de salto.**
+Referência já `read_full`: `GetData(int)` (36B) — as 20 não-triviais
+chamam `GetData` exatamente 1 vez cada. Como `CINPUT_IF_TOUCH` (§538,
+lote 71) só fazia tail-call pra estes mesmos nomes, este é o primeiro
+lote que lê a lógica real por trás da API de input.
+
+**Achado estrutural central — layout do registro de device** (retornado
+por `GetData`): `+0x4` contador `N` de slots; `+0x8+4·i` tag de grupo
+por slot; `+0x88+4·i` keycode por slot; `+0x51c+4·i` valor extra por
+slot (4º parâmetro de `SetKeyCode`); cinco bitmasks **globais** (1 bit
+por índice de slot, não por tag): `+0x508` Press, `+0x50c` Down,
+`+0x510` Up, `+0x514` Repeat, `+0x518` DelayDown. `SetKeyWaitGroup(tag,
+waitTime,repeatInterval)` busca o slot pela tag e grava `waitTime`/
+`repeatInterval` em arrays por slot, zerando dois contadores — fecha o
+mecanismo de **autorepeat** completo: Down→espera `waitTime`→marca
+`DelayDown`→repete a cada `repeatInterval`→marca `Repeat`.
+
+**Distinção "Direct" vs "Group" confirmada**: `GetUpDirect`/
+`GetDelayDown(deviceID,índice)` testam o bit direto na bitmask (índice
+já conhecido); `Get*Group` buscam primeiro um slot cuja tag bata com o
+parâmetro, só então testam o bit — "Direct" = índice conhecido, "Group"
+= só a tag lógica é conhecida.
+
+**Nível 1 — 5 `Get*Mask(int)`**, leitura direta da bitmask global
+(20B, 0 branch): `GetPressMask`/`GetDownMask`/`GetUpMask`/
+`GetRepeatMask`/`GetDelayDownMask`. `read_full` em lote.
+
+**Nível 2 — índice direto** (7 funções, 24–64B): `SetKeyNum` (define
+`N`), `SetKeyGroup` (escreve tag), `GetUpDirect`/`GetDelayDown` (testam
+bit direto), `SetDown`/`SetDelayDown` (`orr`/`bic` do bit conforme
+valor). `read_full` em lote.
+
+**Nível 3 — busca por tag + teste de bit** (7 funções, 104–136B, laço
+real): `GetPressGroup`/`GetDownGroup`/`GetUpDirectGroup`/
+`GetRepeatGroup`/`GetDelayDownGroup` (busca linear + teste de bit);
+`GetUpGroup` (136B, a maior — **assimétrica**: mesma busca mas com uma
+verificação extra contra dois campos de `this`, não resolvida
+campo-a-campo); `SetKeyWaitGroup` (ver achado central). `read_full`.
+
+**Nível 4**: `End(deviceID,valor)` (100B, laço): pra cada slot,
+testa bit Down — se setado grava `valor` (provável timestamp/frame
+atual) num array por slot; senão testa bit Up e grava `-1` (sentinela)
+— finalização de contador por tecla no fim do frame. `SetRelaxUpMode`
+(8B, **não chama `GetData`** — grava direto em `this+8`, campo da
+própria instância, único membro fora do mecanismo de slots).
+`~CINPUT_DATA()` (4B, vazio). `read_full` nas 3.
+
+**Síntese**: `CINPUT_IF_TOUCH` é mesmo uma fachada fina — a lógica real
+mora aqui: array de até `N` slots (tag/keycode/flag extra), 5 bitmasks
+globais de estado indexadas por posição, autorepeat completo via
+`SetKeyWaitGroup`+`End`. Pendência real: a verificação extra de
+`GetUpGroup` contra campos de `this`.
+
+## 541. `CSTR_UTIL` — 29 métodos `unread` restantes fechados, biblioteca de string/path DBCS-aware estilo PC-SDK, trio de helpers sem identidade reaparece numa terceira classe sem relação (2026-10-23, Fase 3, septuagésimo segundo lote paralelo)
+
+Lote paralelo (fork 2/3), `jtable.py` nos 29 endereços distintos ainda
+`unread`. **Todas 100% de cobertura, zero tabela de salto.** Referência
+já `read_full`: `GetName(char*,char*,int)` (212B). `CSTR_UTIL::Find` já
+citada de fora (`CEGL2_IF::GetExtension`, §539), confirmando utilitário
+genérico análogo em espírito ao `CFILE_UTIL` (§342).
+
+**Achado central**: 23 das 29 chamam `IsLeadByte` (já
+`mentioned_unverified`) — não só as com sufixo `_DBCS`, confirma a
+biblioteca inteira DBCS-aware por padrão (Shift-JIS, mesmo tema de
+`statuskanjiprint`, §46). 21 das 29 chamam `sub_71494` (consistente com
+`strlen`, mesma hipótese de §539).
+
+**Achado cruzado notável**: `sub_714b8` (6 aparições: `GetPath`,
+`ToAbsolutePath`, `ToText`, `Divide` ×2, `GetPrevPath`, `GetExt`) é o
+MESMO endereço sem identidade já pendente em `CRECT::DropTest` (§535) —
+segunda classe não relacionada a usá-lo (provável `strcpy` genérico).
+Além disso `sub_2cdf6c` (`FindChar_DBCS`) e `sub_2cdf8c` (`Divide` ×2)
+são os mesmos dois helpers já vistos em `CEGL2_SPRITE::LoadBegin`
+(§534) — junto com `sub_2cdf9c` (§531/534/539), formam um **trio**
+(endereços consecutivos) que reaparece em 3+ classes sem relação
+(sprite loading, string util, debug dump) — forte evidência de alocador/
+heap genérico do runtime (`xpLib`), não específico de nenhum contexto.
+
+**Pares por simetria direta**: `GetHashValue`/`GetHashValueEx` (`Ex`
+pula o `strlen` porque já recebe o tamanho); `ToUpper`/`ToLower` (mesma
+forma, ambas DBCS-aware); `ExtCmp` (usa `GetExt`, deste lote) vs
+`ChangeExt` (usa `GetName`, já `read_full`) — estratégias distintas pro
+mesmo domínio.
+
+**Lógica própria**: `CmpN` (comparação byte-a-byte sem DBCS/`strlen`);
+`StrNLen` (tamanho com limite N + DBCS); `Insert` (sem `IsLeadByte` —
+não ajusta DBCS na posição, observação honesta); `Shorten`/
+`CmpLastChar` (DBCS-aware); `ToStr`/`ToText` (sem laço próprio visível,
+delega ao helper genérico). **Família de path** (`GetPath`/
+`CorrectToPath`/`CorrectToFile`/`GetPrevPath`/`ToAbsolutePath`,
+124–400B, todas DBCS-aware): `GetPrevPath` chama `CorrectToPath`
+(composição interna); `ToAbsolutePath` (400B, a maior do lote, 11
+branches/7 retrocesso) é a mais complexa — passe estrutural, sem
+confirmação campo-a-campo. **Família DBCS explícita** (`FindDBCS`/
+`FindChar_DBCS`/`Diff_DBCS`): `FindChar_DBCS` chama `CLIST::Add` (já
+`mentioned_unverified`, confirmado chamado de verdade); **observação
+honesta**: `Diff_DBCS` NÃO chama `IsLeadByte` apesar do nome —
+pendência semântica fina, não confirmada. `DecodeEscSequence` (388B,
+maior laço de parsing do lote, provável decoder de sequências de
+escape) — estrutura confirmada, semântica de cada código não extraída.
+Triviais 0 `bl` (3 funções): `IsRootPath`, `DBCSToWORD`, `~CSTR_UTIL()`.
+
+Todas `read_full` (regra 3), com as duas ressalvas semânticas
+(`ToAbsolutePath`, `Diff_DBCS`) registradas honestamente.
+
+**Síntese**: `CSTR_UTIL` é a contraparte de string/path do `CFILE_UTIL`
+(§342) — DBCS-aware por padrão, construída sobre dois helpers internos
+(`strlen`-like `sub_71494`, `strcpy`-like `sub_714b8`) e composição
+interna pra path. O trio `sub_2cdf6c`/`sub_2cdf8c`/`sub_2cdf9c`
+reaparecendo em 3 classes sem relação é a pista mais forte até agora de
+alocador/heap genérico do `xpLib` — candidato a leitura dedicada num
+lote futuro.
+
+## 542. `CAPP_INFO` — primeira leitura completa da classe, 30 métodos `unread` fechados, revela `GetResourceScale` dobrando escala por tipo de device e `CheckOSVersionRequirement` como stub hardcoded (2026-10-23, Fase 3, septuagésimo segundo lote paralelo)
+
+Lote paralelo (fork 3/3), `jtable.py` nos 30 endereços distintos ainda
+`unread`. **Todos 100% de cobertura, zero tabela de salto.** Classe sem
+nenhum membro `read_full`/`read_structural` antes desta passada — só 5
+`mentioned_unverified` (`Init(int)` 372B, `GetStoragePath()` já
+referenciado de verdade em `xpLib_DebugExport`/`Import`, §531, ctor,
+`Get()` estático). `CAPP_INFO` é a camada C++ de abstração de
+plataforma (device/resolução/bateria/armazenamento/idioma/orientação/
+iCloud/multitarefa), coerente com a raiz dupla PS1+PSP + porte mobile
+(§59).
+
+**Nível 1 — getters/setters triviais de campo embutido** (26 funções,
+4–8B): `GetDeviceType`/`GetDeviceW`/`GetDeviceH`/
+`IsDeviceiPhoneRetina4inch`/`GetDeviceScaleNative`/`GetDeviceScale`/
+`SetDeviceScale`/`GetDeviceOrientation`/`SetDeviceOrientation`/
+`GetDeviceBatteryLevel`/`SetDeviceBatteryLevel`/`GetDiskSpaceTotal`/
+`GetDiskSpaceFree`/`GetLang`/`SetLang`/`IsEnableMultiTask`/
+`GetEnableiCloud`/`SetEnableiCloud`/`GetActive`/`SetActive`/
+`GetRenderScale`/`SetRenderScale`/`~CAPP_INFO()` — load/store direto de
+campo escalar. `GetRootPath`/`GetDataPath`/`GetDataPath_Native`: mesmo
+padrão mas retornam ponteiro pra **buffer embutido** (`char[]` inline
+na struct, não `char*` alocado) — confirma convenção de armazenamento
+de path. `read_full` em lote.
+
+**`CheckOSVersionRequirement(char*)`** (8B): `mov r0,#0; bx lr` —
+ignora o parâmetro, sempre retorna falso. Stub hardcoded, sem checagem
+real de versão de SO nesta build (provável resquício de checagem iOS
+desativada no Android). `read_full`.
+
+**`IsEnableVibration()`** (4B): tail-call puro (`b`, não `bl`,
+invisível ao catálogo do `jtable.py`) pra `Android_Vibrator_IsExist()`
+— checagem JNI real de hardware, diferente do stub acima. `read_full`.
+
+**`GetTempPath()`** (12B, 0 `bl`): mesma família de buffer embutido,
+aritmética de offset maior (deslocamento exato não confirmado).
+`read_full`.
+
+**`GetResourceScale()`** (48B, 1 branch, 3 `bl`: `GetDeviceType`,
+`GetDeviceScaleNative`, `__addsf3`): `if (GetDeviceType()==1) return
+2×GetDeviceScaleNative(); else return GetDeviceScaleNative();` —
+dobra a escala pra uma classe de device específica (candidato forte:
+retina/alta densidade, via `IsDeviceiPhoneRetina4inch`), senão repassa
+o valor nativo. Padrão de seleção de asset @1x/@2x por densidade.
+`read_full` (regra 3), ressalva: valor exato de `DeviceType==1` não
+confirmado contra enum nomeado.
+
+**Síntese**: `CAPP_INFO` é a camada de abstração de plataforma clássica
+— campos escalares com getters/setters triviais, 3 buffers de path
+embutidos (complementando `GetStoragePath`, §531), e um punhado de
+consultas reais por baixo de nomes de "getter" simples
+(`IsEnableVibration` consulta hardware via JNI; `CheckOSVersionRequirement`
+é hoje sempre-falso). `GetResourceScale` é a única com lógica
+condicional própria. Restam `Init`/`GetStoragePath`/ctor/`Get()` como
+trabalho real pendente (`mentioned_unverified`).
+
+**Referências cruzadas (seções 540-542):** seção 538 (`CINPUT_IF_TOUCH`,
+fachada confirmada agora pela leitura real de `CINPUT_DATA`), seções
+531/534/539 (trio `sub_2cdf6c`/`8c`/`9c`, quarta+ aparição consolidada
+via `CSTR_UTIL`), seção 535 (`sub_714b8`, segunda aparição via 6
+funções de `CSTR_UTIL`, mesmo helper pendente de `CRECT::DropTest`),
+seção 342 (`CFILE_UTIL`, contraparte de arquivo do `CSTR_UTIL`), seção
+46 (`statuskanjiprint`, mesmo tema DBCS/Shift-JIS), seção 531
+(`GetStoragePath`, agora com os 3 buffers de path irmãos
+identificados), seção 59 (raiz dupla PS1+PSP, contexto de `CAPP_INFO`).
+Lote 72 fecha por completo 3 classes (`CINPUT_DATA`, `CSTR_UTIL`,
+`CAPP_INFO`), 81 funções, e acumula a terceira+quarta evidência
+independente do trio de helpers genéricos — candidato claro a uma
+leitura dedicada num lote futuro.
