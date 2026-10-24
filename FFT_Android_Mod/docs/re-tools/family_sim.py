@@ -61,7 +61,17 @@ def descend(md, data, start, end):
                     if m == 'b':
                         break
                 else:
-                    break
+                    # Same fix as jtable.py (NOTES §535/539): a conditional
+                    # bx<cc> falls through instead of ending the block, and
+                    # any blx (register-form call, with or without a
+                    # condition) is a call that returns, like bl.
+                    cond_suffixes = ('eq', 'ne', 'cs', 'hs', 'cc', 'lo', 'mi',
+                                      'pl', 'vs', 'vc', 'hi', 'ls', 'ge', 'lt',
+                                      'gt', 'le')
+                    is_cond = len(m) > 2 and m.endswith(cond_suffixes)
+                    is_blx_call = m.startswith('blx')
+                    if not (is_cond or is_blx_call):
+                        break
     return insns, unresolved_jt
 
 

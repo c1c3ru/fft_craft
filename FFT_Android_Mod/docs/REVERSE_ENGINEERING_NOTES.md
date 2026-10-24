@@ -7358,6 +7358,28 @@ que vinha sendo usado até a seção 69 — a partir da seção 70
 (primeiro lote paralelo) e, de forma mais explícita, a partir desta
 seção 100, é assim que o loop deve continuar operando.
 
+**Atualização (2026-10-23, lote 74, esgotamento de clusters de
+classe)**: a partir deste lote não há mais nenhum cluster de classe
+C++ com ≥20 membros `unread` na fila núcleo (`alvos_prioritarios_
+nucleo.csv`) — regras 1/2/5 passam a ser aplicadas sobre **funções C
+soltas** (sem `::`), agrupadas por nome-base removendo um prefixo
+`W`/`b`/`c`/`e`/`j` quando o restante começa com maiúscula/`_` (o
+mesmo padrão de contexto de task já confirmado dezenas de vezes em
+métodos de classe — seções 101/103/111/130/181/198/279 — também
+existe entre funções livres; primeira aplicação em escala no lote 74,
+seções 548-552). Duas ressalvas importantes aprendidas nesse lote:
+(a) `family_sim.py`/Jaccard por endereço bruto **subestima
+sistematicamente** essas famílias, porque cada variante prefixada
+chama os helpers igualmente prefixados (ex. `eFoo` chama `eBar`, não
+`Bar`) — comparar por NOME via `.dynsym`/`c++filt` (confirmar que o
+"extra"/"missing" de cada lado é exatamente o sibling da mesma letra)
+é necessário, não só o número de Jaccard cru; (b) nem toda família de
+nome igual é cópia por contexto — ~15-20% delas (medido no lote 74)
+tem divergência real de funcionalidade entre "variantes" (uma faz uma
+checagem extra, despacha pro sistema de task errado/diferente, ou é
+coincidência de nome entre duas funções sem relação) — sempre
+confirmar pelo catálogo de `bl` real, nunca assumir pelo nome sozinho.
+
 ## 101. Família `Mdl*` completa — confirmação em lote por catálogo de `bl`, 26 funções / 68.960 B numa única passada (2026-10-18, Fase 3, primeira aplicação da regra 2 da metodologia)
 
 Construída `family_sim.py` (ferramenta nova, ver seção 100, regra 2):
@@ -17350,3 +17372,191 @@ Dois achados apontam pro mesmo próximo alvo natural: `CSTEP`/
 `CSTEP_BATCH` (11+10 funções na fila núcleo, nunca lidas) — tanto
 `CSOUND_IF` (fade de volume por slot) quanto `CUI_SCROLLBAR` (snap de
 arrasto) embutem/chamam essa classe sem nunca tê-la lido por dentro.
+
+## 548. Lote 74, balde 1/5 — 26 famílias letter-prefix entre funções C soltas (71 funções), primeira aplicação do padrão `b`/`c`/`e`/`j`/`W` fora de métodos de classe (2026-10-23, Fase 3, septuagésimo quarto lote, 5 forks)
+
+Primeiro lote a abandonar agrupamento por classe C++ (esgotado — ver
+atualização da metodologia acima) em favor de famílias por prefixo de
+letra entre funções soltas. `jtable.py` completo no maior membro de
+cada família, depois comparação de catálogo de `bl` (por nome, não só
+endereço) contra os demais.
+
+**Confirmadas por Jaccard direto** (chamam primitivo compartilhado
+sem prefixo): `DrawGT4RGB`, `DrawG4`, `DrawLineF2`, `WaitStoreImage`
+(5 membros, todas chamam `DrawSync`+`StoreImage`). **Confirmadas por
+"letter-swap" manual** (Jaccard bruto 0,00 mas catálogo é o sibling
+exato de mesma letra, cruzado contra outras famílias do balde):
+`FontToImageAll` (5, cada chama `<letra>FontToImage`+
+`<letra>GetMesAdr`), `ChrPower` (2), `MessageMake` (2),
+`MenuSelSideWithSnd` (3, `read_structural` por cobertura <95%).
+
+**Divergência real encontrada**: `FadeIn` (`base` chama `GetTPage`;
+`b`/`c` chamam `GetFrameRate` — funções DIFERENTES, não letter-swap,
+possível lógica de fade distinta). `HelpMessage` (contagem de `bl`
+varia 4-8 entre variantes — `j` é a versão completa com ícones V2,
+outras mais simples). `DrawMessageKillFast` (c/`base` só batem
+parcialmente — `WindowDel` casa, dois outros alvos não identificados
+como siblings). `CardDelete`/`GetCardState` (coincidência de nome:
+`base` com lógica real vs `c` stub de 8B).
+
+**Pares não-letter-family confirmados por leitura direta**:
+`iOS_SetRectHit` (2 overloads reais, a de 52B chama a de 88B).
+`CSOUND_LOADER_PCM::~CSOUND_LOADER_PCM` (D1/D2 do ABI C++; D1 chama
+D2 + `sub_2cdf9c` — **sexta aparição** do trio de helpers genéricos já
+visto em §531/534/539/541/546/547, aqui como `operator delete`).
+
+Status final do balde: maioria `read_full`; `read_structural` nas
+famílias com cobertura <95% sem confirmação por similaridade forte
+(`DrawArea`, `MenuSelVertical`, `ClearPadData`,
+`WindowPositionInitSingle`, `GetFadeStatus`, `GetWindowCount`,
+`CardEventClose`, `GetMenuSelVertical`, `FadeIn`×3, `HelpMessage`×4).
+
+## 549. Lote 74, balde 2/5 — 26 famílias letter-prefix (77 funções), 7 com divergência real documentada pelo catálogo de `bl` (2026-10-23, Fase 3, septuagésimo quarto lote)
+
+19 famílias confirmadas por catálogo de `bl` idêntico trocando só o
+prefixo (`FontToImage`, `DrawWindow2`, `DrawMessageKill`, `SttsCSub`,
+`MenuSel2D`, `GetMesAdr`, `SetBitStream`, `WaitLoadImage`,
+`SetMenuSelSide`, `SetWindowCount`, `CopyChrStts`, `WindowInit`,
+`GetBitStream2`, `WindowPositionInit`, `FadeOutInit` e mais).
+
+**7 famílias com divergência real**: `GetItemList` (`base` tem
+`ItemChg` extra que `e` não chama — base permite troca de item,
+contexto `e` não); `IsAbleEquip` (`e` checa `pspItemIsBarehand` extra
+que `base` não testa); `GetJobList` (`b` checa `GetSpecialJob` extra
+que `j` não tem); `AllSttsDelete` (`base` chama `SetSttsEqu2` extra
+que falta em `e`); `DrawMessageFast` (mesma forma, mas `c` despacha
+pro contexto card/save enquanto `base` despacha pro menu de item via
+`Witemmenu_call` — sistemas de task diferentes, confirma de novo o
+padrão de §181); `WaitLoadImage::c` (4B, stub isolado vs 28B das
+outras 4); `FadeOutInit::b` (72B, único que checa
+`pspNetGetBattleModeFlag` — contexto battle-mode-aware).
+
+`CSOUND_LOADER::~CSOUND_LOADER` — **sexta+ aparição** do trio
+`sub_2cdf6c`/`8c`/`9c` (D1 chama `sub_2cdf9c`). Todas `read_full`
+(cobertura ≥86%, zero tabela de salto, divergências documentadas pelo
+catálogo real, não especulação).
+
+## 550. Lote 74, balde 3/5 — 26 famílias letter-prefix (75 funções), corrige o mesmo bug `bx<cond>`/`blx<reg>` em `family_sim.py` que já tinha sido corrigido em `jtable.py` nos lotes 70/71 (2026-10-23, Fase 3, septuagésimo quarto lote)
+
+**Bug de ferramenta corrigido**: `family_sim.py` nunca recebeu os
+dois fixes aplicados em `jtable.py` (§535/539: `bx<cond>` e
+`blx<reg>` tratados como terminadores incondicionais de bloco) —
+causava Jaccard artificialmente baixo e cobertura subestimada em toda
+família com `bl`/branch condicional real. **Corrigido nesta
+integração** (mesmo patch no bloco `else` de `descend()`); revalidado
+contra `CRECT::MulRect`/`MulAndAddRect` (§535) — Jaccard bate 1,00
+exatamente como o par já documentado.
+
+**Confirmadas por Jaccard ≥0,90 pós-fix**: `DrawModeChg`, `DrawTile`,
+`GetItemUserSort`, `SetFrameRate`, `WaitMoveImage`,
+`GetItemSmallCategory`. **Confirmadas por coincidência de cobertura
+(0 `bl` nos dois lados)**: `GetBitStream`, `WriteBitStream`,
+`DrawWindow`, `GetSortCondition`, `SearchUnit`,
+`MenuSelSideWithSndDirect`, `WindowColorSet`, `FadeInInit`,
+`WindowPrioritySet`, `WindowDel`, `SelectCard`, `CardFileList`,
+`CardInit`, `sceDisplayGetAccumulatedHcount` — gap de cobertura
+<100% em vários confirmado por amostragem manual como literal pool
+final (`SelectWindowClut`, `CardFileList`, `CardInit`,
+`sceDisplayGetAccumulatedHcount`, `SelectCard`), não código real
+faltando.
+
+**Divergência por contexto, não bug**: `ValueFunc2`/`SetSttsPara2`/
+`MenuSelVerticalWithSnd` — mesmo número de `bl`, mas cada variante
+chama o equivalente do seu próprio contexto (mesmo padrão de
+`direc2`/`Wdirec2`, §412). **`GetChrSingle`** NÃO é letter-prefix
+trivial: `j` (384B, 3 `bl`, checa `pspJobGetJobChangeFlag`) vs `e`
+(220B, 2 `bl`, sem essa checagem) — implementações distintas, não
+cópia por contexto.
+
+**`CEGL2_SHADER::~CEGL2_SHADER`** (D1/D2 reais, não letter-prefix): D1
+(88B) limpa o cache `std::map` de shaders (boilerplate já confirmado,
+§329); D2 (28B) chama D1 + `sub_2cdf9c` — **sexta aparição** do trio
+genérico, agora no destrutor da classe que `CEGL2_IF` embute (§539).
+Todas `read_full` (zero tabela de salto em todas as 75).
+
+## 551. Lote 74, balde 4/5 — 25 famílias letter-prefix (72 funções), deslocamento de prefixo propaga pros helpers chamados; 3 famílias com divergência real de lógica (2026-10-23, Fase 3, septuagésimo quarto lote)
+
+**Achado metodológico**: Jaccard por endereço absoluto falha quando
+os helpers chamados são eles mesmos cópias prefixadas (`e` chama
+`eWindowInit`, não `WindowInit`) — resolvido comparando por NOME via
+`.dynsym`/`c++filt` ("deslocamento de prefixo consistente"), não só
+Jaccard bruto. Confirmadas assim: `WindowInit2`, `ScrollWindowInit`,
+`ChrPowerCompare`, `DrawMove` (única onde o Jaccard bruto bateu
+direto, porque o helper chamado — `SetDrawMove` — não é duplicado por
+contexto). Triviais confirmados por forma idêntica: `MenuSelSide`,
+`SetWindowPosition`, `MenuSelInit`, `GetWindowColor`, `GetSpecialJob`,
+`ItemCategoryPos`, `CountMessage`, `GetCardNo`, `Nitoryu`, `Ryoute`,
+`sceDisplayGetVcount`, `Wait_GetCardState`.
+
+`TestEvent` (2 endereços) é coincidência de nome entre 2 funções sem
+relação (180B com laço real vs 8B trivial).
+
+**3 famílias com divergência real documentada pelo catálogo**:
+`DrawFT4RGB2` — `e`/`c` pulam a checagem `pspWindowCommonIsType` que
+`b`/`base` fazem antes de desenhar. `FadeOut` — `b`/`c` consultam
+`GetFrameRate` antes do fade, `base` não (ajuste de velocidade por
+framerate que só as variantes de task aplicam). `GetItemParameter` —
+`e` pula a confirmação final `pspItemIsExist` que `base` faz.
+`GetMaskedPad` (5 variantes, 76-504B): nenhuma bate 1:1 com outra,
+cada uma implementa um subconjunto DIFERENTE de funcionalidade
+(`iOS_getV2Icon` só em `j`; `GetWindowCount` em 3 das 5; `ClearPadData`
+em 3 das 5) — não é cópia completa por contexto, `read_structural` nas
+5.
+
+**Achado notável — padrão de task INVERTIDO**: `MesEventSingleAddy`/
+`SetSttsEqu`/`SetSttsPara` — a função SEM prefixo chama os helpers
+`Wtask_create`/`Wtask_status`/`Wsend_taskparamater` (namespace `W`),
+enquanto a variante PREFIXADA (`c`/`e`) chama as versões SEM prefixo
+— o inverso do padrão usual, confirmado por nome nos dois lados, não
+erro de leitura. `DrawMessage` (3 variantes) é o contraste: todas
+chamam exatamente os mesmos helpers sem prefixo — cópia estrutural
+real, sem inversão.
+
+## 552. Lote 74, balde 5/5 — 26 famílias letter-prefix (68 funções), maior taxa de divergência real do lote (~23%) — nomes repetidos entre funções livres são menos confiáveis que entre métodos de classe (2026-10-23, Fase 3, septuagésimo quarto lote)
+
+18 famílias (44 funções) confirmadas por catálogo de `bl` idêntico ou
+coincidência de forma: `MakeTextureMessage` (`base` mais simples,
+falta `sub_715cc` que as 4 variantes de letra chamam), `DrawTexFree`
+(`base` tem 1 `bl` extra, `addFT4num`), `GetWindowPosition` (2 pares
+reais por forma), `RefleshItemUserSort`, `GetItemCategory`,
+`PowerCompare`, `SetItemUserSort`, `ItemChg`, `SetSortCondition`,
+`GetJobNumber`, `SetBitStream2`, `ScrollWindowInit2`, `GetTotalItem`,
+`SetMenuSelVertical`, `GetCommandNumber`, `GetFrameRate`, `CardSave2`,
+`CardLoad2`. `CCAMERA::~CCAMERA` (D1/D2 real — **sexta aparição** do
+trio genérico via `sub_2cdf9c`).
+
+**6 famílias com divergência real** (~23% deste balde, taxa bem maior
+que a observada em famílias de MÉTODO DE CLASSE nos lotes anteriores
+— nomes repetidos entre funções livres são menos confiáveis como
+indicador de "mesma lógica, contexto diferente"): `IsItemEquip` (`e`
+checa `pspItemGetCommonData`+`pspItemIsBarehand`; `base` checa
+`IsUntauchable` — testes de equipamento genuinamente diferentes).
+`SetChrList` (`e` 440B/8`bl`, rotina completa de troca de equipamento;
+`base` 60B/1`bl`, wrapper trivial — **suspeita de colisão de nome**,
+não confirmado se são a mesma função, não resolvido nesta passada).
+`MesEventSingle`/`SetSttsA` — mesmo achado do balde 4 (`base` usa
+namespace `Wtask_*`, `e`/`c` usam sem `W`), primeira vez com o
+catálogo de `bl` mostrando a troca explicitamente. `GetTotalEquipItem`
+(formas incompatíveis: laço real sem `bl` vs linear com 1 `bl` —
+implementação distinta). `ItemEquip` (mesma forma, mas cobertura só
+96-97%, `read_structural` por honestidade). `GetChrList` (`base` 500B/
+6`bl` reais vs `b` 260B/3`bl` — `b` não é redução direta de `base`).
+
+**Referências cruzadas (seções 548-552):** atualização da metodologia
+registrada antes da seção 101 (regras 1/2/5 estendidas a funções C
+livres, com as duas ressalvas de comparação por nome e taxa de
+divergência real). Trio `sub_2cdf6c`/`8c`/`9c`: sexta aparição
+consolidada em pelo menos 4 contextos distintos neste único lote
+(`CSOUND_LOADER_PCM`, `CSOUND_LOADER`, `CEGL2_SHADER`, `CCAMERA`),
+todos no papel de `operator delete`/limpeza de destrutor — padrão
+agora tão consistente que a hipótese de alocador/heap genérico
+`xpLib` pode ser considerada praticamente confirmada, mesmo sem
+identidade exata do símbolo. Seção 181 (dois sistemas de task
+distintos) ganha confirmação direta via catálogo de `bl` em
+`MesEventSingleAddy`/`SetSttsEqu`/`SetSttsPara`/`SetSttsA` (balde 4 e
+5) — a inversão de namespace de task entre variante prefixada e
+sem-prefixo é um achado novo, não só a existência dos dois sistemas.
+Lote 74 fecha 363 funções em 129 famílias através de 5 forks
+paralelos — maior lote em contagem de função até agora, usando a
+mesma unidade de trabalho só reorientada (família por nome, não por
+classe) depois do esgotamento dos clusters C++ grandes.
