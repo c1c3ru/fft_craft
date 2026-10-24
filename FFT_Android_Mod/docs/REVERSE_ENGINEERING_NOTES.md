@@ -17834,3 +17834,145 @@ assumir que `origin/main` não andou, e tratar qualquer prosa
 "desaparecida" num merge futuro da mesma forma que aqui: reverificar
 por ferramenta antes de aceitar o status, nunca só copiar a mensagem
 de commit de outra sessão sem conferir.
+
+## 559. `iOS_get*`/`iOS_hook*`/`getAnimation*`/`getClut*` — 135 funções fechadas em lote, fecha a pendência `getClutActiveMenu*` citada desde o lote 71 (2026-10-24, Fase 3, septuagésimo sexto lote, 5 forks)
+
+Grupo 1/5 do lote 76. Zero tabela de salto nas 135; cobertura segue o
+padrão já estabelecido (déficit = literal pool final, confirmado por
+amostragem manual em 3 tiers de tamanho). **`getClutActiveMenu{L,R,C,
+Name,Cursor,CursorShadow}`+6 outras** (13 funções, 8B cada): fecha a
+pendência citada desde o lote 71 (`CEGL2_IF::LoadShaderAll`/
+`iOS_CMenuTouch::initPacket`, §538-539) — getters triviais de ID de
+CLUT pré-carregado por elemento de UI. `getAnimation*` (19 funções):
+fachada de consulta sobre `searchAnimationByID`/`ByBattleID`,
+extraindo um campo do resultado. `iOS_hook_*` (12 funções): majoritariamente
+stubs vazios (pontos de instrumentação declarados mas não
+implementados nesta build, mesma categoria de §542-543), exceto
+`iOS_hook_faceload` que tem lógica real. Dois casos de comportamento
+de borda documentados: `iOS_getTransFace`/`iOS_getMasaCdbOt` retornam
+o índice/ponteiro bruto em vez de um valor de tabela quando fora de
+alcance (fallback honesto, não crash). `iOS_getFingerAddPos` é a
+única do lote que também GRAVA (chama `iOS_setV2Icon`). Demais ~90
+são getters triviais de 1 campo/flag global. Todas `read_full`.
+
+## 560. `iOS_set*`/`setAnim*` — 69 funções fechadas, lado "escrita" simétrico do §559, dispatcher real de animação confirmado (2026-10-24, Fase 3, septuagésimo sexto lote)
+
+Grupo 2/5. Zero tabela de salto. `setAnimation*` (maioria):
+`searchAnimationByID` antes de aplicar o flag/efeito pedido — todo
+efeito visual (brilho, sombra, som, flip, cor) é resolvido contra a
+animação ATUALMENTE ativa. `setAnimationDirection`/`Direction16`
+forçam troca via `forceChangeAnimation`. `iOS_setStatus*_STATUS` (3
+variantes — dano por acerto/EXP/genérico) sobre o primitivo
+`iOS_setNumPrim`. `iOS_setDisableMapClip` configura clip FT3/FT4
+separadamente; `iOS_setCancelDisableAreaForStatusWindow` usa o
+namespace `xpLib` (§554). Resto: store direto de flag/campo global
+(toque, tutorial, cursor). Todas `read_full`, nenhuma divergência.
+
+## 561. Par `multiwindow_*`/`Wmultiwindow_*` (26 funções, 13 pares) — confirma o sistema `asm*`/`wasm*` em 12 pares, exceção real em `break` (2026-10-24, Fase 3, septuagésimo sexto lote)
+
+Grupo 3/5. Par de 2 variantes (não pego pelo agrupamento letter-prefix
+do lote 74, que exige os 5 prefixos padrão juntos). 11 pares + 2
+funções soltas confirmados por letter-swap exato via nome (`.dynsym`,
+não só Jaccard bruto — mesma ressalva do lote 74): mesma lógica nos
+sistemas `asm*`/`wasm*`, sem divergência. **Exceção real**:
+`multiwindow_break` (216B) vs `Wmultiwindow_break` (416B, quase o
+dobro) — a variante `W` cria uma task própria
+(`Wtask_create`+`Wsend_taskparamater`) e chama um PRIMEIRO hook de
+debug que a variante sem prefixo nunca chama — responsabilidade
+extra real, não só mesma lógica em sistema de task diferente (mesma
+lição honesta do lote 74). 18 `read_full`, 8 `read_structural` por
+cobertura <95% (déficit consistente nos dois lados do par, padrão de
+literal-pool-tail não verificado manualmente).
+
+## 562. `CSTEP`/`CSTEP_BATCH` finalmente lidos por dentro — resolve a pendência mais citada dos lotes 72/73; `ASHURA_*`/`RotMatrix*`/`iOSRot*`/`CEGL_PACKET`/`CEGL2_SHADER`/`CEGL2_FBO` fechados em lote; quarto veneer do ABI C++ (2026-10-24, Fase 3, septuagésimo sexto lote)
+
+Grupo 4/5. **Achado central**: `CSTEP::Init`/`InitF` (lida por
+desmontagem manual, incluindo `Init` que estava fora do recorte
+`unread` direto — prioridade #1 da diretiva) confirma `CSTEP` como
+interpolador genérico de 1 valor float ao longo de N frames (tween),
+com registro `_DATA_STEP` totalmente mapeado (valor atual, delta,
+duração em frames, flags, contador, progresso 0.0-1.0) e uma guarda
+honesta anti-divisão-por-zero: se a duração passada é 0, salta direto
+pro estado final em vez de dividir por zero em `FrameMove`/
+`GetProgress` (não lidas). Confirma exatamente o que `CSOUND_IF`
+(§544, array paralelo de `CSTEP` por slot pra fade de volume) e
+`CUI_SCROLLBAR::DragEnd` (§547, 3× `CSTEP::Init` pra snap de scroll)
+só citavam de fora. `InitFromCurrent`/`SetData`/`GetEnd` confirmam que
+"set instantâneo" é sintaticamente um `Init` e que "fim" é sempre
+derivado (`atual+delta`), nunca armazenado. `CSTEP_BATCH::SetStage`/
+`FinishStage` disparam um novo `CSTEP::Init` a cada transição de
+estágio — máquina de estágios sobre o tween.
+
+`ASHURA_*` (15): completa o pipeline de matriz/partícula do §38
+(`ASHURA_matrix` monta rotação+translação+escala; `ASHURA_CVECTOR`
+tem 1 tabela de salto real resolvida, marcada `read_full` pelo
+critério de §32/556). `RotMatrix*` (13): API real do PSYQ SDK
+(`rsin`/`rcos`/`MulMatrix0`), os 5 ordenamentos de Euler além de XYZ
+compõem os 3 eixos em sequência diferente; variantes `_gte` são thin
+wrappers compatíveis com a convenção do §553. `iOSRot*` (13): sistema
+de rotação de câmera/visão por arrasto de toque, análogo ao
+`iOSSlide*` do §556 mas pra rotação 3D; 3 marcadas `read_structural`
+por déficit real maior que o literal-pool padrão.
+
+`CEGL_PACKET`/`CEGL2_SHADER`/`CEGL2_FBO` (21): infraestrutura do
+toolkit gráfico moderno — API fluente de configuração de packet, API
+de uniform de shader, framebuffer object. **Achado bônus**:
+`CEGL_PACKET::Free()` chama `sub_2cdf7c`, um QUARTO veneer no mesmo
+cluster `0x2cdf6c`-`0x2cdf9c` já resolvido no §554 — resolvido pro
+símbolo real `_ZdaPv` = **`operator delete[](void*)`**. Completa o
+quarteto `new`/`new[]`/`delete`/`delete[]`, todos infraestrutura C++
+genérica. (Esta descoberta foi feita de forma independente e
+simultânea pelo grupo 5/5 deste mesmo lote — ver §563 — confirmando-se
+mutuamente.)
+
+## 563. Grab-bag de 18 prefixos pequenos (210 funções) — confirma (independentemente) o 4º veneer do ABI C++, 2 tabelas de salto novas, 9 subsistemas curtos identificados por nome (2026-10-24, Fase 3, septuagésimo sexto lote)
+
+Grupo 5/5. **Confirma de forma independente o achado do §562**:
+`CFILE_DAT::CacheUnload` chama o mesmo `sub_2cdf7c` → `operator
+delete[](void*)` — e aqui também o PRIMEIRO par real `new[]`/`delete[]`
+em uso de verdade é documentado: `CFILE_DAT::CacheLoad` aloca via
+`operator new[]` (§554), `CacheUnload` libera via `operator delete[]`
+(aqui identificado) — os casos anteriores eram só aparições isoladas
+em destrutores, nunca um par alocação/liberação real.
+
+**2 tabelas de salto novas, totalmente resolvidas** (`read_full` pela
+régua do §32/556 — tabela resolvida conta, não a % bruta):
+`change_md` (16 casos/14 handlers, dispatcher de mudança de modo
+visual/estado) e `pspBattleForceParticipationExit` (35 casos/3
+handlers, limpeza de evento de "participação forçada" em batalha).
+
+**9 subsistemas identificados por nome + catálogo de `bl`** (não
+assumidos): `Vector_*` (11, biblioteca de vetor PS1 sobre os
+registradores de controle do GTE — ponte direta com `_gte_*`, §553,
+por API de alto nível). `Wrequest_*` (13, par exato de `request_*`
+§557 no namespace de task `W` real). `search*`/`searchAnimationBy*`
+(14, busca em mapa + resolução de qual animação tocar por contexto).
+`change*` (10, troca de forma de monstro sincronizada em rede/paleta/
+clima/arma). `iOSBtl*` (10, widgets de UI de batalha, companheiro do
+`iOSUnit*` §555). `iOSJob*` restante (13, ângulo/rotação da roda de
+troca de emprego, completa `JobChange` §541). `iOSYaji*` (14, ciclo
+completo do ícone de seta "Yaji" já identificado no §556).
+`SetEffect*Ptr`/`Ssd_Set*` (17, ponteiros de dados de efeito sonoro
+nomeados por extensão PSYQ + parâmetros diretos de registrador SPU).
+`unzGet*` (14, API minizip de terceiros já reconhecida, regra 6).
+Mais: `CFFT_STATE::*` (12, flags globais do motor, já referenciada em
+`DrawUnitWithShadow` §558), `CSOUND_LOADER_PCM`/`CSOUND_LOADER` (14,
+completa o par com `CSOUND_LOADER_OGG` já lido), `SettingsBundle_*`
+(11, persistência de configurações via `CFILE` + os 4 helpers
+genéricos de string já vistos em §535/541/543), `iOSWld*`/
+`iOS_disableClip*`/`pspBattle*` (grupos pequenos de estado/flag
+triviais). 199/210 `read_full`, 11 `read_structural` por cobertura
+<90% com lógica/branch real não verificado linha-a-linha.
+
+**Referências cruzadas (seções 559-563):** seções 538-539 (pendência
+`getClutActiveMenu*` fechada no §559), seção 544/547 (`CSTEP`
+finalmente lido no §562, resolvendo a citação de ambas), seção 554
+(cluster de 4 veneers do linker agora completo, confirmado duas vezes
+de forma independente nos §562/563), seção 181 (sistema `asm*`/
+`wasm*`, mais uma exceção real documentada em `multiwindow_break`,
+§561, igual à de `AllSttsReflesh`/`SetSttsA` do lote 74), seções 541/
+556/557 (`JobChange`/widget Yaji/`request_*`, todos completados pelo
+grab-bag do §563), seção 553 (`_gte_*`, ponte direta via `Vector_*`).
+Lote 76 fecha 532 funções em 5 grupos — o trabalho de identificação
+de subsistema por nome continua rendendo (quarto veneer, 2 tabelas de
+salto novas, 1 pendência de 2 lotes atrás resolvida).
