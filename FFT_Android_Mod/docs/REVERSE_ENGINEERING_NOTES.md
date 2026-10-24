@@ -17560,3 +17560,197 @@ Lote 74 fecha 363 funções em 129 famílias através de 5 forks
 paralelos — maior lote em contagem de função até agora, usando a
 mesma unidade de trabalho só reorientada (família por nome, não por
 classe) depois do esgotamento dos clusters C++ grandes.
+
+**Atualização (2026-10-24, lote 75, segundo esgotamento)**: depois do
+lote 74, zero família letter-prefix (`b`/`c`/`e`/`j`/`W`) restava na
+fila núcleo — as 363 fechadas eram literalmente todas as que
+existiam. O lote 75 passa pra um TERCEIRO filão: agrupamento por
+**prefixo de subsistema/namespace** (`_gte_`, `xpLib`, `iOS_RESUME`,
+`pspNet`, etc., identificados pelos primeiros caracteres do nome,
+não por sufixo comum). Mesmas regras 1/2/5/6, unidade de trabalho
+reorientada de novo.
+
+## 553. Biblioteca `_gte_*` (PSYQ SDK, wrappers do GTE/COP2 do PS1) — 245 funções reconhecidas e fechadas em lote via amostragem representativa, regra 6 (2026-10-24, Fase 3, septuagésimo quinto lote, 5 forks por prefixo de subsistema)
+
+Grupo 1/5 do lote 75. `_gte_*` é API **PSYQ SDK** pública da Sony de
+wrappers do coprocessor GTE (hardware de transformação geométrica do
+PS1) — terceiros/plataforma, mesma categoria de `gl3stubInit`/zlib/
+libvorbis (regra 6, seções 69/102/138/145/174/182/189/203/210/228/
+247/255/260/272/336/337/342/344/467/500/530), mas a maior biblioteca
+já reconhecida em lote de uma vez (245 funções, 13.172 B).
+
+Amostra de 28 funções cobrindo todo o espectro de tamanho (4B-484B,
+incluindo as maiores: `_gte_ncs` 484B, `_gte_rtps` 452B, `_gte_rt`
+224B): zero tabela de salto em qualquer uma, cobertura automática
+80-100% (déficit sempre literal pool final), e **todo `bl` resolvido
+aponta pra outra `_gte_*` da própria biblioteca ou pra `__divsi3`**
+(libgcc), nunca pro código do jogo — confirma a composição em camadas
+esperada pela nomenclatura oficial (`_gte_rtps`=rotate-translate-
+perspective-**single** chama `_gte_rt`; variantes "triplas"/
+"compostas" como `nccs`/`ncds`/`ncct` chamam a variante "single" de
+base num pequeno laço). As demais amostradas sem `bl` são wrappers
+puros de hardware (`mtc2`/`cop2`/`mfc2`). Nenhum desvio do padrão em
+toda a amostra — regra 6 aplicada: **todas as 245 marcadas `read_full`**.
+Ressalva honesta: reconhecimento de padrão estrutural, não extração
+registrador-a-registrador de cada pseudo-instrução COP2.
+
+## 554. Namespace `xpLib*` — 77 funções fechadas, RESOLVE a identidade do trio de helpers mais citado do projeto inteiro (2026-10-24, Fase 3, septuagésimo quinto lote)
+
+Grupo 2/5 do lote 75. **Achado principal, resolve a pendência mais
+repetida de todo o projeto (10+ aparições em §531/534/535/539/541/
+546/547/548-552)**: `sub_2cdf6c`/`sub_2cdf8c`/`sub_2cdf9c` NÃO são
+funções de aplicação nem pertencem a `xpLib` — são **veneers de
+interworking ARM→Thumb gerados pelo linker** (`ldr ip,[pc,#4]; add
+ip,pc,ip; bx ip`, 12B, sem lógica própria), resolvendo via `.dynsym`
+pra:
+
+```
+sub_2cdf6c -> 0x2c99b4 (Thumb) -> _Znwj  = operator new(unsigned int)
+sub_2cdf8c -> 0x2c9a24 (Thumb) -> _Znaj  = operator new[](unsigned int)
+sub_2cdf9c -> 0x2c9114 (Thumb) -> _ZdlPv = operator delete(void*)
+```
+
+Isso explica TODAS as aparições anteriores de uma vez: toda
+`~Classe()` (deleting-destructor do ABI Itanium) chama o destrutor
+base e depois `operator delete(this)` — padrão genérico de QUALQUER
+classe C++ do binário, não um subsistema específico. **Hipótese
+anterior de "alocador `xpLib`" descartada.** `operator new`
+(`0x2c99b4`) em si é implementação padrão de libstdc++: aloca via
+`bl` (provável `malloc`), e se falhar consulta um "new-handler" via
+ponteiro de função antes de tentar de novo. Nenhuma das 77 funções
+deste lote chama os 3 veneers diretamente — pertencem à infra C++
+geral, não a `xpLib` (investigados porque eram a prioridade #1 da
+diretiva, não porque apareceram no recorte).
+
+**`xpLib*` de verdade se divide em 5 sub-bibliotecas independentes**:
+`xpLibapi*` (14 funções) — fachada fina sobre o singleton
+`pspSaveBase` (§543, mesmo padrão fachada-sobre-singleton de
+`CINPUT_IF_TOUCH`→`CINPUT_DATA`, §538/540); `SaveCheck`/`SaveStart`
+têm tabelas de salto reais (4 e 20 casos) despachando por estado de
+execução/erro pro `pspSaveBase` real (`read_structural`, <95%
+automático). `xpLibgpu*` (38 funções) — VRAM/framebuffer PS1
+auto-contido (carga/cópia de imagem, estado de render, double-buffer);
+`VramChangeDispMode`/`StoreImage` têm tabela de salto real
+(`read_structural`). `xpLibSN` (12 funções) — classe de I/O com
+assinatura POSIX (`PCopen`/`PCclose`/`PCread`/`PCwrite`/`PClseek`),
+prefixo "PC" sugere canal de debug serial/PC do SDK PSYQ original,
+não arquivo local. `xpLibpad` (10 funções) — wrapper fino de leitura
+de gamepad PSP, triviais. `xpLibgte`/`xpLibcd` (6 funções) — pontes
+finas pro `_gte_*` (§553) e stubs de checagem de CD-ROM.
+
+## 555. `iOS_RESUME_SET_*` (18) + `iOSUnit*`/`iOSUnitList*` (41) — família de resume quase 100% fechada via `family_sim.py`, UI de lista de unidades em batalha revelada (2026-10-24, Fase 3, septuagésimo quinto lote)
+
+Grupo 3/5 do lote 75. `iOS_RESUME_SET_*`: 13 confirmadas por
+Jaccard=1,00 contra `BATTLE` (§484, padrão puro `DataCopy`), 1 contra
+`BCALC` (§529, padrão misto `DataCopy`+`DataCopyAddr`), 2 por
+tail-call manual direto pra `DataCopy` (mesma limitação de catálogo
+de tail-calls já documentada em §538/540). **2 divergências reais**:
+`PSP_BATTLE` (96B) NÃO usa `DataCopy` — lê/grava 2 words direto num
+endereço global fixo fora do heap normal, e o modo `1` é **no-op**
+(mesma categoria de "recurso incompleto" de `CAPP_INFO`
+`CheckOSVersionRequirement` §542 e `pspSaveBase::errorMsgStrGet`
+§543). `WORK_IW` (544B, a maior do recorte, 87% automático): usa
+`DataCopy` normalmente mas no modo `mode==1` insere uma chamada EXTRA
+a `iOS_set_globalgamestartflag` — restaurar este resume também seta a
+flag global de "jogo iniciado" (`read_structural`, side-effect
+confirmado mas campo exato não isolado por nome).
+
+`iOSUnit*`/`iOSUnitList*` revela UI de lista/cursor de unidades em
+batalha: cursor 2D (`UDCur`/`LRCur`, orquestrando
+`iOSdisp_personalWinPosGet`+flags+checagem de movimento via toque),
+sistema de flags de movimento (`StsMoveCheck`/`StsMoveLRCheck`/
+`LRMoveCheck`, usando `iOS_getV2Icon` de feedback visual), e uma
+janela de popup pessoal no mapa-mundo (`iOSUnitListOutWin`, 488B,
+laço real, orquestra som + rastreio de arrasto de toque). Achados
+pontuais: `iOSUnitWorkClear` chama `sub_714c4` (helper tipo `memset`
+sem identidade, já visto em §541/543) 3× pra limpar buffers de
+unidade antes de animação; `iOSUnitCheck` (292B, 0 `bl`, laço sem
+chamada externa) é provável hit-test de toque contra o quad de cada
+unidade. 36/41 `read_full`, 5 `read_structural` por cobertura <95%
+com laço real não verificado linha-a-linha.
+
+## 556. 5 subsistemas pequenos identificados e fechados: tutorial, navegação de cursor do mapa-mundo, "Sound Novel", widget TGA genérico, e a base de dados de item real (2026-10-24, Fase 3, septuagésimo quinto lote)
+
+Grupo 4/5 do lote 75 (86 funções `iOSSl*`/`iOSTg*`/`iOSSd*`/`iOSTu*`/
+`pspItem*`). Prefixos de 2 letras identificados por nome completo +
+catálogo de `bl`, não assumidos: **`iOSTuto*`** (17, sistema de
+tutorial — checagem de toque/tecla pra avançar/pular, flags de
+progresso por bit, fade de dica contextual). **`iOSSlide*`/
+`iOSSlid*`** (16, grafia inconsistente no próprio binário — navegação
+do cursor do mapa-mundo; `iOSSlideNaviCurMove`, 260B, é o dispatcher
+central, atualiza a seta direcional "Yaji" [矢印, "seta" em japonês]
+e troca ícone de menu contextual). **`iOSSdNovel*`** (18, modo
+"Sound Novel" — tela de texto com escolhas/log/histórico, brilho,
+flags de progresso de história, mesmo padrão arquitetural de
+`iOSTuto*`). **`iOSTga*`** (17, widget genérico de ícone TGA — array
+de N slots **stride `0x30`, confirmado por leitura manual** de
+`iOSTgaIconClear`: campos X/Y/Count/Alpha/SizeW/SizeH/Flag por slot;
+todo `Get*`/`Set*` segue o mesmo padrão "load-base→indexar por
+stride→store de 1 campo", déficit automático sempre 1 palavra de
+literal pool, não código perdido).
+
+**`pspItem*`** (18, camada real de acesso à base de dados de item,
+antes só citada por nome em §541/551/552): família `GetItemData`/
+`GetArmorData`/`GetShieldData`/`GetAccessoryData` delega toda pro
+mesmo helper `sub_2855e8` (`read_structural`, não identificado).
+`GetWeaponVariationData` e `IsOnion` têm tabela de salto REAL
+totalmente resolvida (7 casos/3 handlers; 49 casos/2 handlers) com
+cobertura automática artificialmente baixa (67%/14%) porque a própria
+tabela domina o tamanho declarado — tratadas `read_full` pela
+resolução completa da tabela, não pela % bruta de slots (mesmo
+critério já usado pra `battle()`, §32). `IsExist` confirma que
+"existir" = "não vazio E não mão-vazia E não slot aleatório".
+
+## 557. `pspNet*`/`pspSave*`/`request_*` — 104 funções fechadas, revela dispatcher real por 9 modos em `pspSaveAuto::paramCreate` e confirma o template "spawn task" em `request_*` (2026-10-24, Fase 3, septuagésimo quinto lote)
+
+Grupo 5/5 do lote 75. `pspNet*` (~69 funções): dominado por flags/
+contadores triviais de estado de batalha em rede (double-indirect
+pc-relative, confirmado por amostragem manual); subgrupos
+`pspNetEntrance*` (ciclo de vida de missão em rede, via `Wtask_*`) e
+`pspNetTrap*` (tabela de armadilhas, compartilham `sub_2870a8` local,
+candidato a helper interno do namespace — não é o trio genérico já
+resolvido no §554). Notáveis: `pspNetDecisionOccurmagic`/`Iyasi`
+(decisão de IA de rede pra magia ofensiva/curativa).
+
+`pspSave*` (função livre, distinto da CLASSE `pspSaveBase`, §543):
+`pspSaveDelete()` (468B, 13 `bl`) é o ciclo de vida completo de abrir
+tela off-screen, inicializar/atualizar/finalizar o diálogo, apagar o
+save real via `pspFftDelete`, desenhando cada frame via as primitivas
+PSX de double-buffer já confirmadas (§523-528). **Achado**:
+`pspSaveAuto::paramCreate()` (236B, 83%) tem a única tabela de salto
+NOVA de todo o lote 75 — guarda em `this+0x14`, **9 casos válidos**
+confirmados por desmontagem manual: casos 0/3/4/5/6/7 caem no mesmo
+erro (`return -1`); caso 1 chama `pspSaveBase::SystemFileSet`; caso 2
+o mesmo + flag extra; caso 8 (o mais elaborado) monta 3 buffers via
+`sub_714c4` (memset-like, §541/543), grava 3 ponteiros numa tabela, e
+copia 2 strings fixas via `sub_714b8` (strcpy-like, §535/541/543) —
+confirma que `pspSaveAuto` constrói parâmetros de save DIFERENTES por
+modo, reusando `pspSaveBase` como builder (mesma arquitetura
+staging/commit do §543). `read_structural` (83% <95%, tabela
+validada, semântica fina do caso 8 pendente).
+
+`request_*` (15 funções) confirma amplamente o template "spawn task"
+já visto em dezenas de outras seções (`task_create`/`Wtask_create` +
+`send_taskparamater` opcional + guarda de instância única).
+`request_makeattack()` (552B, 19 `bl`, a maior do grupo) é o ponto de
+entrada real de "pedir um ataque" — carrega nome/dados de personagem,
+ícones, flags de evento, hooks de debug, e checa modo de rede ANTES
+de chamar `task_create`. 3 stubs vazios confirmados por leitura
+manual (`request_warnmes`/`effectmes`/`tooltest`, literalmente `bx
+lr`, ignoram os parâmetros — mesma categoria de "recurso incompleto"
+de §542/543).
+
+**Referências cruzadas (seções 553-557):** seção 531 (origem da
+pergunta sobre o trio de helpers, agora resolvida definitivamente no
+§554 como `operator new`/`new[]`/`delete` do ABI C++, não `xpLib`).
+Seções 538/540 (padrão fachada-sobre-singleton, confirmado de novo em
+`xpLibapi*`→`pspSaveBase`). Seções 484/529 (referências de
+`family_sim.py` pra `iOS_RESUME_SET_*`). Seção 32 (`battle()`,
+critério "tabela resolvida conta como pronto, não a % bruta" reusado
+em `pspItemIsOnion`/`GetWeaponVariationData`). Seções 541/543
+(helpers `sub_714b8`/`sub_714c4`, mais aparições em `pspSaveAuto`/
+`pspSaveList`/`iOSUnitWorkClear`). Lote 75 fecha 571 funções em 5
+grupos por prefixo de subsistema (não mais família por nome) — maior
+lote em contagem de função do projeto até agora, e o único até hoje a
+resolver uma pendência de identidade (trio `sub_2cdf6c`/`8c`/`9c`)
+que se arrastava desde a seção 531.
