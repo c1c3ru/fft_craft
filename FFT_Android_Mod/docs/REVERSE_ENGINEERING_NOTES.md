@@ -17168,3 +17168,185 @@ Lote 72 fecha por completo 3 classes (`CINPUT_DATA`, `CSTR_UTIL`,
 `CAPP_INFO`), 81 funções, e acumula a terceira+quarta evidência
 independente do trio de helpers genéricos — candidato claro a uma
 leitura dedicada num lote futuro.
+
+## 543. `pspSaveBase` — primeira leitura completa da classe, 31 métodos `unread` fechados, revela arquitetura staging/commit e um stub de mensagem de erro sempre-fixa (2026-10-23, Fase 3, septuagésimo terceiro lote, primeiro com 5 forks paralelos)
+
+Lote paralelo (fork 1/5), `jtable.py` + leitura manual nos 31 endereços
+`unread` da classe. **Todas 100% de cobertura real, zero tabela de
+salto** (3 vieram <95% automático só por literal pool no final da
+função sendo mal-decodificado como instrução, confirmado 100% real por
+leitura manual). Classe sem nenhum membro lido antes — camada de
+parâmetros do diálogo nativo de save/load do PSP real
+(`sceUtilitySavedataParam`-like).
+
+**Achado central — arquitetura staging→commit**: `UserIdSet(int)`
+(28B) NÃO grava direto — formata num buffer de rascunho (`this+0xbb8`);
+`setUserId()` minúsculo (20B) copia esse rascunho pro campo real
+(`this+0x6c`) via `sub_714b8` (o helper `strcpy`-like já visto em
+`CRECT::DropTest` §535 e 6× em `CSTR_UTIL` §541 — sexta+sétima
+aparição). Segundo par independente confirma o padrão:
+`ExecTypeSet(int)` grava rascunho (`+0x14`); `setExecType()` copia pro
+campo real (`+0x50`). `SaveStart()`/`SaveEnd()` manipulam o mesmo flag
+de execução (`+0xc`, retornam o valor anterior — idioma de detecção de
+reentrância); `SaveStart` também zera `+0x634`, o MESMO campo onde
+`ErrorMsgTypeGet` grava o tipo de erro (reset de erro ao iniciar).
+`IsExec()` só lê esse flag.
+
+**Achado notável**: `errorMsgStrGet(PspSaveErrorMsgType)` (a
+implementação real por trás de 2 overloads `ErrorMsgStrGet`) **ignora
+completamente o parâmetro enum recebido** e retorna sempre o mesmo
+endereço de string fixo — mesma categoria de achado que
+`CAPP_INFO::CheckOSVersionRequirement` (§542): um recurso que existe na
+API mas está incompleto/desativado nesta build. `ErrorMsgTypeGet(uint)`
+em si faz a tradução real (busca em tabela PC-relative de pares).
+
+Família `*DataSet` (`Icon0DataSet`/`BackGoundPic1DataSet`/
+`PmfIcon1DataSet`/`Snd0Set`/`GameDataSet`/`NewDataItemSet`): mesmo
+padrão de 3 campos em offsets diferentes por função — slots distintos
+da struct nativa, não duplicação. `SystemFileSet`/`TitleStrSet`/
+`TitleIdSet`/`SecureFileIdSet` usam o par `sub_71494` (`strlen`-like) +
+`sub_714b8` (`strcpy`-like) já visto em `CSTR_UTIL` (§541). 14 triviais
+de campo escalar (`IsMemoryStick`, `ExecStateGet`, `ErrorTypeGet`,
+`AbortedStatusGet`, `DataVersionSet`, `IsExec`, `FileNameSet`,
+`AnimFrameSet`, `ExecResultGet`, `FocusSet`, etc.). Todas `read_full`.
+
+## 544. `CSOUND_IF` — 26 membros `unread` restantes fechados, expõe layout real da fachada (backend trocável, volume mestre, 2 arrays paralelos por slot), confirma que "mute" é resolvido dentro de `SetVolume` (2026-10-23, Fase 3, septuagésimo terceiro lote)
+
+Lote paralelo (fork 2/5), `jtable.py` + leitura manual nos 26 endereços
+distintos `unread`. **Todos 100% de cobertura, zero tabela de salto.**
+`CSOUND_IF` (exata, sem `_SL`) não tinha nenhum membro próprio lido
+antes — a descrição de "ciclo de vida completo" das seções 13/16 veio
+de ler quem CHAMA a classe, não os métodos dela por dentro.
+
+**Layout do objeto**: `+0x0` tag de tipo de backend (`==4` = OpenSL ES
+ativo); `+0x4` ponteiro pro backend `CSOUND_IF_SL` embutido; `+0x8`
+flag global "som habilitado" (quase todos os 26 membros começam com
+`bl GetEnable; cmp; beq <bail>`); `+0x110/114/118` volume mestre de 3
+componentes; `+0x120` contador `N` de slots; `+0x124` array de
+`_SOUND_SAVEDATA*` por slot; `+0x128` **segundo array paralelo de
+objetos `CSTEP`** por slot, construído por `RegisterSavedata` — aponta
+direto pra que servem `CSTEP`/`CSTEP_BATCH` (próximos candidatos da
+fila núcleo, ainda não lidos): fade/transição de volume por slot.
+
+**Achado — fachada seletiva**: `GetPosition`/`GetLength`/`GetFormat`
+(16B cada) são IDÊNTICAS — chamam `GetEnable` só pelo efeito de guarda
+e **sempre retornam 0**, nunca chegam a checar o tipo de backend.
+Diferente de `GetTotalSample`/`SetTrans`/`GetPlaySec`, que REALMENTE
+checam `this+0==4` e delegam pro `CSOUND_IF_SL` embutido — a diferença
+entre um stub morto e uma fachada que funciona é exatamente esse
+`cmp`. **`SetMute`** não implementa um caminho de mudo separado: grava
+o flag e reaplica o volume existente via `SetVolume` — "mudo" é
+resolvido dentro de `SetVolume` (não lida neste lote), não aqui.
+
+`PauseAll(mask,flag)`/`UnloadAll(mask)` (laços reais): iteram os `N`
+slots, testam `savedata[i]+0x48 & mask`, e despacham
+`Pause(this,i,flag)`/`Unload(this,i)` (os 2 grandes
+`mentioned_unverified` da classe, confirmados como workers reais
+por-slot). `SetMasterVolume` grava os 3 campos mestre e reaplica o
+volume de cada slot via `SetVolume` — modelo multiplicativo (slot ×
+mestre) resolvido do lado de dentro de `SetVolume`. `RegisterRootPath`
+copia a string pra um buffer embutido (`this+0xc`), mesmo padrão de
+`CAPP_INFO` (§542). `~CSOUND_IF()` destrói o backend + o array `CSTEP`
+num laço, com mais uma aparição parcial do cluster `sub_2cdf7c`/`9c`.
+Todas `read_full`.
+
+## 545. `CSOUND_IF_SL` — 15 membros `unread` restantes fechados, confirma ciclo de vida real do player OpenSL ES e que Suspend/Resume são "pausar/retomar todo slot" sobre `Pause` (2026-10-23, Fase 3, septuagésimo terceiro lote)
+
+Lote paralelo (fork 3/5), `jtable.py` nos 15 endereços distintos
+`unread`. **14/15 com 100% automático**; `GetPlaySec` veio 86% (6/7) —
+desmontagem manual confirma 6 instruções reais (`GetPlaySample`→
+`__floatsisf`→`__divsf3`), o "7º slot" é só a constante literal de
+float do pool de dados sendo mal-decodificada como instrução, não uma
+lacuna real — função é `(float)GetPlaySample(id)/<taxa de amostragem
+fixa>`. `read_full` (100% real confirmado manualmente).
+
+6 triviais 0 `bl` (`GetPosition`, `GetTotalSample`, `GetSLState`,
+`GetBufferType`, `GetVolume`, `SetTrans` — este último é `bx lr` puro,
+stub vazio, confirma que trans/pan 3D não é implementado neste
+backend). **Ciclo de vida de player**: `Stream_Unload`
+(`Stop`+`sub_71a7c`) / `Stream_DeletePlayer` (só manipula
+ponteiros/vtable local, sem `bl` com símbolo — provável
+`SLObjectItf::Destroy` via vtable direta); lado "static" espelha
+trocando `sub_71a7c` por `Static_DeletePlayer`; `UnloadAll` itera
+todos os slots chamando `Unload`. **Achado**: `EngineSuspend()`/
+`EngineResume()` (catálogo idêntico: 1 `bl: Pause`, 1 laço) — suspender
+a engine inteira é "pausar todo slot ativo" sobre `Pause(int)`, NÃO
+uma API de engine separada (`EngineInit`/`EngineUninit` são de
+boot/shutdown, não de pause). `CB_for_Static` fecha o par de callbacks
+OpenSL junto com `CB_for_Stream` já citado. `~CSOUND_IF_SL()` chama
+`EngineUninit()` — destrutor real. Todas `read_full`.
+
+## 546. `CEGL2_TEX_HYBRID` — 18 membros `unread` fechados, confirma arquitetura de 4 pools paralelos (UV/CLUTAddr/RAW/GL) e CORRIGE a hipótese de `AutoRelease()` orquestrar os outros dois pools (2026-10-23, Fase 3, septuagésimo terceiro lote)
+
+Lote paralelo (fork 4/5), `jtable.py` nos 18 endereços `unread`
+distintos. **Todas 100% de cobertura, zero tabela de salto.**
+Referências já `read_full`: `GL_IsUpdate(...)` (684B),
+`DecodeTexture(...)` (468B).
+
+**Correção de hipótese**: a hipótese de partida (que `AutoRelease()`
+sem prefixo chama `UV_AutoRelease`+`CLUTAddr_AutoRelease`) estava
+ERRADA, confirmado por leitura manual. `AutoRelease()` (172B) itera 64
+slots de um **terceiro array** (lado GL, mesmo consumido por
+`GL_Unload`), com um timer de contagem regressiva por slot (`+0x600`)
+e flag de "uso recente" (`+0x5fc`): timer decrementa a cada chamada
+pra slots não-usados, e ao zerar chama `GL_Unload`; slot marcado "em
+uso" tem o timer resetado. É uma política de **eviction tipo
+LRU/timeout de textura GL**, não uma orquestração dos outros pools —
+`UV_AutoRelease`/`CLUTAddr_AutoRelease` são rotinas separadas sobre
+arrays diferentes, nunca chamadas por `AutoRelease()`.
+
+**4 pools paralelos confirmados**: `UV_*` (coordenadas de textura, 64
+slots, stride `0x14` — `UV_Regist` usa `sub_714b8`, **quinta
+aparição** do helper `strcpy`-like); `CLUTAddr_*` (endereço de paleta,
+16 slots, mesma estrutura); `GL_*` (lado GPU real — `GL_Unload` delega
+pro `CEGL2_SPRITE::Unload` embutido, mesma composição de §534;
+`GL_GetTextureSize` busca o tamanho do `CEGL2_SPRITE` membro);
+`RAW_*` (lado bruto — `RAW_IsUpdate` chama `sub_2cdf8c`, quarta/quinta
+aparição do trio genérico). `~CEGL2_TEX_HYBRID()` confirma por
+composição que a classe embute um `CEGL2_SPRITE` (destrói + os 3
+pools via `UnregistAll`/`UnloadAll` incondicional, não `AutoRelease`).
+Todas `read_full`.
+
+## 547. `CUI_SCROLLBAR` — classe completa fechada em lote, barra de rolagem genérica sobre `CLIST`+`CSTEP` por composição, ciclo de arrastar inteiro revelado (2026-10-23, Fase 3, septuagésimo terceiro lote)
+
+Lote paralelo (fork 5/5), `jtable.py` nos 16 endereços `unread`
+distintos. **Todas 100% de cobertura, zero tabela de salto.** Classe
+totalmente nova — zero membros lidos antes.
+
+**Achado central**: ctor chama `CLIST::CLIST()`+`CSTEP::CSTEP()`+
+`CSTEP::Register(_DATA_STEP*)`; dtor chama `Delete()`+`CLIST::~CLIST()`+
+`CSTEP::~CSTEP()` — confirma composição com um `CLIST` (células/marcas
+da barra) e um `CSTEP` (animação por passos, ainda não lido —
+candidata clara a próximo lote, reforçada pelo achado de `CSOUND_IF`
+§544 sobre a mesma classe). `GetCellRect`/`GetCellPress`/`SetCellPress`
+delegam pra `CLIST::GetData` — cada célula é um elemento indexado do
+`CLIST`.
+
+**Ciclo de arrastar completo**: `DragBegin(int,int)` (272B, laço real)
+busca linear pela célula tocada, marca `SetCellPress`;
+`DragUpdate(int,int)` aplica o delta via `GetDragOffset` e corrige via
+`CorrectScrollBounds` (clampa contra limites reais da lista);
+`DragEnd(int,int)` (552B, a maior do lote, laço real) finaliza —
+**achado**: chama `CSTEP::Init(int,int,int,int,uint)` TRÊS vezes com
+aritmética float envolvida, forte indício de animação de
+"snap"/inércia ao soltar o dedo (semântica exata dos 3 `Init` não
+confirmada, próximo passo natural é ler `CSTEP::Init` por dentro).
+`Add(int,int)` adiciona célula à lista e chama `sub_2cdf6c` — **quinta
+aparição independente** do trio de helpers genéricos, agora numa
+classe de UI sem relação com as anteriores (sprite loading, string
+util, debug dump, UI). Todas `read_full`.
+
+**Referências cruzadas (seções 543-547):** seção 535/541 (`sub_714b8`,
+agora com 7+ aparições), seções 531/534/539/541/546/547 (trio
+`sub_2cdf6c`/`8c`/`9c`, quinta+ aparição independente consolidada —
+candidato de altíssima prioridade pra leitura dedicada), seção 542
+(`CAPP_INFO::CheckOSVersionRequirement`, mesma categoria de "recurso
+incompleto" que `pspSaveBase::errorMsgStrGet`), seção 534 (composição
+`CEGL2_SPRITE` embutido, agora confirmada também em `CEGL2_TEX_HYBRID`
+e implicitamente em `CSOUND_IF`→`CSTEP`). Lote 73 foi o primeiro com 5
+forks paralelos em vez de 3 (a pedido do usuário) — 111 funções
+fechadas numa única passada, ritmo ~30% maior que os lotes de 3 forks.
+Dois achados apontam pro mesmo próximo alvo natural: `CSTEP`/
+`CSTEP_BATCH` (11+10 funções na fila núcleo, nunca lidas) — tanto
+`CSOUND_IF` (fade de volume por slot) quanto `CUI_SCROLLBAR` (snap de
+arrasto) embutem/chamam essa classe sem nunca tê-la lido por dentro.

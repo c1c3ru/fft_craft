@@ -680,7 +680,7 @@ address,size,mangled,demangled,status,section_ref
 001778a8,556,_Z11bDrawFT4RGBP6RECT16iiP5COLORitti,"bDrawFT4RGB(RECT16*, int, int, COLOR*, int, unsigned short, unsigned short, int)",read_full,NOTES §514
 001997f0,556,_Z16DrawItemCategoryiP14iOS_CMenuTouchi21IOS_MENU_TOUCH_RESULT,"DrawItemCategory(int, iOS_CMenuTouch*, int, IOS_MENU_TOUCH_RESULT)",read_structural,NOTES §526
 000a8218,552,_ZN8CEGL2_IF13LoadShaderAllEPc,CEGL2_IF::LoadShaderAll(char*),read_full,NOTES §539
-000b5fac,552,_ZN13CUI_SCROLLBAR7DragEndEii,"CUI_SCROLLBAR::DragEnd(int, int)",unread,
+000b5fac,552,_ZN13CUI_SCROLLBAR7DragEndEii,"CUI_SCROLLBAR::DragEnd(int, int)",read_full,NOTES §547
 000e00c4,552,_Z18request_makeattackv,request_makeattack(),unread,
 001d8d50,552,_Z14set_equipbonusP5BWORKi,"set_equipbonus(BWORK*, int)",unread,
 001d41d0,548,_Z18check_tobe_crystaliP5BWORK,"check_tobe_crystal(int, BWORK*)",unread,
@@ -1242,7 +1242,7 @@ address,size,mangled,demangled,status,section_ref
 0025d81c,276,_Z11wldpad_readv,wldpad_read(),read_full,NOTES §12.2
 00291178,276,MoveImage2,MoveImage2,unread,
 000a2978,272,_ZN11CG2D_LOADER17GetImageFormatExtEjPc,"CG2D_LOADER::GetImageFormatExt(unsigned int, char*)",read_structural,NOTES §316
-000b5c34,272,_ZN13CUI_SCROLLBAR9DragBeginEii,"CUI_SCROLLBAR::DragBegin(int, int)",unread,
+000b5c34,272,_ZN13CUI_SCROLLBAR9DragBeginEii,"CUI_SCROLLBAR::DragBegin(int, int)",read_full,NOTES §547
 001d2b00,272,_Z16search_controlIDiPi,"search_controlID(int, int*)",unread,
 000d9638,272,_Z15fade_eventlocalP8ITEMPRIMi,"fade_eventlocal(ITEMPRIM*, int)",unread,
 000f38c4,272,_Z17disp_plateorspellP3ACTii,"disp_plateorspell(ACT*, int, int)",unread,
@@ -1522,7 +1522,7 @@ address,size,mangled,demangled,status,section_ref
 0029e81c,216,_Z11_gte_rtirbkv,_gte_rtirbk(),unread,
 000b8d34,212,_ZN9CSTR_UTIL7GetNameEPcS0_i,"CSTR_UTIL::GetName(char*, char*, int)",read_full,NOTES §30
 00083160,212,ogg_page_granulepos,ogg_page_granulepos,read_structural,NOTES §336
-000aee64,212,_ZN16CEGL2_TEX_HYBRID9UV_RegistEP9_RECT_S32,CEGL2_TEX_HYBRID::UV_Regist(_RECT_S32*),unread,
+000aee64,212,_ZN16CEGL2_TEX_HYBRID9UV_RegistEP9_RECT_S32,CEGL2_TEX_HYBRID::UV_Regist(_RECT_S32*),read_full,NOTES §546
 000b4888,212,_ZN15CINPUT_IF_TOUCH15GetGestureSwipeEiiij,"CINPUT_IF_TOUCH::GetGestureSwipe(int, int, int, unsigned int)",read_full,NOTES §538
 00216530,212,_Z13activateMusiciii,"activateMusic(int, int, int)",mentioned_unverified,
 000d7388,212,_Z13disposewindowP13MESSAGEPACKET,disposewindow(MESSAGEPACKET*),unread,
@@ -1701,7 +1701,7 @@ address,size,mangled,demangled,status,section_ref
 002b0f70,188,_ZN11CDebugPrint7AddTextEiiiPci,"CDebugPrint::AddText(int, int, int, char*, int)",unread,
 0009e98c,184,ov_bitrate_instant,ov_bitrate_instant,read_structural,NOTES §336
 000bb05c,184,_ZN9CSOUND_IF10FadeVolumeEiiii,"CSOUND_IF::FadeVolume(int, int, int, int)",mentioned_unverified,
-000bc4ec,184,_ZN12CSOUND_IF_SL19Stream_DeletePlayerEi,CSOUND_IF_SL::Stream_DeletePlayer(int),unread,
+000bc4ec,184,_ZN12CSOUND_IF_SL19Stream_DeletePlayerEi,CSOUND_IF_SL::Stream_DeletePlayer(int),read_full,NOTES §545
 000bcd0c,184,_ZN17CSOUND_LOADER_PCM4ReadEPvmPm,"CSOUND_LOADER_PCM::Read(void*, unsigned long, unsigned long*)",mentioned_unverified,
 0020e314,184,_Z11moveToPaneliP7SVECTORiii,"moveToPanel(int, SVECTOR*, int, int, int)",unread,
 0015e51c,184,_Z16iOSBtlUnitSearchii,"iOSBtlUnitSearch(int, int)",unread,
@@ -1775,7 +1775,7 @@ address,size,mangled,demangled,status,section_ref
 0008cb48,172,vorbis_commentheader_out,vorbis_commentheader_out,read_structural,NOTES §336
 000af02c,172,_ZN16CEGL2_TEX_HYBRIDC2Ev,CEGL2_TEX_HYBRID::CEGL2_TEX_HYBRID(),mentioned_unverified,
 000af02c,172,_ZN16CEGL2_TEX_HYBRIDC1Ev,CEGL2_TEX_HYBRID::CEGL2_TEX_HYBRID(),mentioned_unverified,
-000af424,172,_ZN16CEGL2_TEX_HYBRID11AutoReleaseEv,CEGL2_TEX_HYBRID::AutoRelease(),unread,
+000af424,172,_ZN16CEGL2_TEX_HYBRID11AutoReleaseEv,CEGL2_TEX_HYBRID::AutoRelease(),read_full,NOTES §546
 000b4654,172,_ZN15CINPUT_IF_TOUCH12CreateDeviceEiji,"CINPUT_IF_TOUCH::CreateDevice(int, unsigned int, int)",read_full,NOTES §538
 000b475c,172,_ZN15CINPUT_IF_TOUCH13GetGestureTapEiiij,"CINPUT_IF_TOUCH::GetGestureTap(int, int, int, unsigned int)",read_full,NOTES §538
 000bbb6c,172,_ZN12CSOUND_IF_SL15SetSLDataFormatEiiP17SLDataFormat_PCM_,"CSOUND_IF_SL::SetSLDataFormat(int, int, SLDataFormat_PCM_*)",mentioned_unverified,
@@ -1835,7 +1835,7 @@ address,size,mangled,demangled,status,section_ref
 0008d264,164,vorbis_granule_time,vorbis_granule_time,read_structural,NOTES §336
 0009cfac,164,vorbis_packet_blocksize,vorbis_packet_blocksize,read_structural,NOTES §336
 0009f244,164,ov_open_callbacks,ov_open_callbacks,read_structural,NOTES §336
-000b5d94,164,_ZN13CUI_SCROLLBAR19CorrectScrollBoundsEi,CUI_SCROLLBAR::CorrectScrollBounds(int),unread,
+000b5d94,164,_ZN13CUI_SCROLLBAR19CorrectScrollBoundsEi,CUI_SCROLLBAR::CorrectScrollBounds(int),read_full,NOTES §547
 000b8f48,164,_ZN9CSTR_UTIL6GetExtEPcS0_i,"CSTR_UTIL::GetExt(char*, char*, int)",read_full,NOTES §541
 000b95a0,164,_ZN9CSTR_UTIL9Diff_DBCSEPcS0_,"CSTR_UTIL::Diff_DBCS(char*, char*)",read_full,NOTES §541
 000ba094,164,_Z12GetLocalTimeP11_SYSTEMTIME,GetLocalTime(_SYSTEMTIME*),mentioned_unverified,
@@ -1888,10 +1888,10 @@ address,size,mangled,demangled,status,section_ref
 002cb248,160,__truncdfsf2,__truncdfsf2,unread,
 00078900,156,gzclose_r,gzclose_r,unread,
 0007af1c,156,inflateResetKeep,inflateResetKeep,unread,
-000ba264,156,_ZN9CSOUND_IFD2Ev,CSOUND_IF::~CSOUND_IF(),unread,
-000ba264,156,_ZN9CSOUND_IFD1Ev,CSOUND_IF::~CSOUND_IF(),unread,
+000ba264,156,_ZN9CSOUND_IFD2Ev,CSOUND_IF::~CSOUND_IF(),read_full,NOTES §544
+000ba264,156,_ZN9CSOUND_IFD1Ev,CSOUND_IF::~CSOUND_IF(),read_full,NOTES §544
 000bba00,156,_ZN12CSOUND_IF_SL9SetVolumeEii,"CSOUND_IF_SL::SetVolume(int, int)",mentioned_unverified,
-000baf74,156,_ZN9CSOUND_IF7SetMuteEii,"CSOUND_IF::SetMute(int, int)",unread,
+000baf74,156,_ZN9CSOUND_IF7SetMuteEii,"CSOUND_IF::SetMute(int, int)",read_full,NOTES §544
 000e226c,156,_Z8valueputPcP11VALUERECORDP9COPYFIELDi,"valueput(char*, VALUERECORD*, COPYFIELD*, int)",read_full,NOTES §430
 00216458,156,_Z12disposeMusici,disposeMusic(int),mentioned_unverified,
 000d7a48,156,_Z13disposememoryPc,disposememory(char*),unread,
@@ -2032,7 +2032,7 @@ address,size,mangled,demangled,status,section_ref
 000b5988,140,_ZN5CRECT15GetNextEnableUIEii,"CRECT::GetNextEnableUI(int, int)",read_full,NOTES §535
 000b8c18,140,_ZN9CSTR_UTIL7GetPathEPcS0_,"CSTR_UTIL::GetPath(char*, char*)",read_full,NOTES §541
 000bc9fc,140,_ZN12CSOUND_IF_SL6UnloadEi,CSOUND_IF_SL::Unload(int),mentioned_unverified,
-000bb570,140,_ZN12CSOUND_IF_SL13CB_for_StaticEPKPK30SLAndroidSimpleBufferQueueItf_Pv,"CSOUND_IF_SL::CB_for_Static(SLAndroidSimpleBufferQueueItf_ const* const*, void*)",unread,
+000bb570,140,_ZN12CSOUND_IF_SL13CB_for_StaticEPKPK30SLAndroidSimpleBufferQueueItf_Pv,"CSOUND_IF_SL::CB_for_Static(SLAndroidSimpleBufferQueueItf_ const* const*, void*)",read_full,NOTES §545
 00216154,140,_Z15loadMusicBufferii,"loadMusicBuffer(int, int)",mentioned_unverified,
 000dfb50,140,_Z15recover_chrnamev,recover_chrname(),unread,
 0028e5e0,140,pspNetPadRead,pspNetPadRead,mentioned_unverified,
@@ -2181,7 +2181,7 @@ address,size,mangled,demangled,status,section_ref
 000a2754,124,_ZN11CG2D_LOADER13CalcAsTextureEiiPiS0_,"CG2D_LOADER::CalcAsTexture(int, int, int*, int*)",read_structural,NOTES §316
 000a96a0,124,_ZN8CEGL2_IF10DrawSpriteEP12CEGL2_SPRITEffffff,"CEGL2_IF::DrawSprite(CEGL2_SPRITE*, float, float, float, float, float, float)",read_full,NOTES §539
 000ab86c,124,_ZN12CEGL2_SHADER3EndEv,CEGL2_SHADER::End(),unread,
-000aef8c,124,_ZN16CEGL2_TEX_HYBRID15CLUTAddr_RegistEj,CEGL2_TEX_HYBRID::CLUTAddr_Regist(unsigned int),unread,
+000aef8c,124,_ZN16CEGL2_TEX_HYBRID15CLUTAddr_RegistEj,CEGL2_TEX_HYBRID::CLUTAddr_Regist(unsigned int),read_full,NOTES §546
 000b5318,124,_ZN5CRECT7MulRectEif,"CRECT::MulRect(int, float)",read_full,NOTES §535
 000b6bdc,124,_ZN9CFILE_DAT12CacheReplaceEiPhi,"CFILE_DAT::CacheReplace(int, unsigned char*, int)",unread,
 000b915c,124,_ZN9CSTR_UTIL13CorrectToFileEPc,CSTR_UTIL::CorrectToFile(char*),read_full,NOTES §541
@@ -2189,7 +2189,7 @@ address,size,mangled,demangled,status,section_ref
 000ba684,124,_ZN9CSOUND_IF4StopEi,CSOUND_IF::Stop(int),mentioned_unverified,
 000ba774,124,_ZN9CSOUND_IF9IsPlayingEii,"CSOUND_IF::IsPlaying(int, int)",mentioned_unverified,
 000bb8c8,124,_ZN12CSOUND_IF_SL5PauseEi,CSOUND_IF_SL::Pause(int),mentioned_unverified,
-000bb4a4,124,_ZN9CSOUND_IF8PauseAllEhh,"CSOUND_IF::PauseAll(unsigned char, unsigned char)",unread,
+000bb4a4,124,_ZN9CSOUND_IF8PauseAllEhh,"CSOUND_IF::PauseAll(unsigned char, unsigned char)",read_full,NOTES §544
 00159924,124,_Z12asmTaskEntryv,asmTaskEntry(),mentioned_unverified,
 000da204,124,_Z14request_atlistv,request_atlist(),unread,
 000daff0,124,_Z12move_ambientv,move_ambient(),unread,
@@ -2225,12 +2225,12 @@ address,size,mangled,demangled,status,section_ref
 002cb4bc,124,__aeabi_l2f,__aeabi_l2f,unread,
 000ab7f4,120,_ZN12CEGL2_SHADER5BeginEiPN4math7MATRIX4E,"CEGL2_SHADER::Begin(int, math::MATRIX4*)",read_full,NOTES §13.10
 000b422c,120,_ZN15CINPUT_IF_TOUCH19GetGestureDoubleTapEiiii,"CINPUT_IF_TOUCH::GetGestureDoubleTap(int, int, int, int)",read_full,NOTES §538
-000b5b4c,120,_ZN13CUI_SCROLLBAR3AddEii,"CUI_SCROLLBAR::Add(int, int)",unread,
+000b5b4c,120,_ZN13CUI_SCROLLBAR3AddEii,"CUI_SCROLLBAR::Add(int, int)",read_full,NOTES §547
 000bdbf4,120,_ZN5CSTEP4InitEiiiij,"CSTEP::Init(int, int, int, int, unsigned int)",mentioned_unverified,
 000b6834,120,_ZN9CFILE_DATC2Ev,CFILE_DAT::CFILE_DAT(),mentioned_unverified,
 000b6834,120,_ZN9CFILE_DATC1Ev,CFILE_DAT::CFILE_DAT(),mentioned_unverified,
 000b9800,120,_ZN9CSTR_UTIL11CmpLastCharEPcci,"CSTR_UTIL::CmpLastChar(char*, char, int)",read_full,NOTES §541
-000bc984,120,_ZN12CSOUND_IF_SL13Stream_UnloadEi,CSOUND_IF_SL::Stream_Unload(int),unread,
+000bc984,120,_ZN12CSOUND_IF_SL13Stream_UnloadEi,CSOUND_IF_SL::Stream_Unload(int),read_full,NOTES §545
 000d7e00,120,_Z17load_replaceitemsii,"load_replaceitems(int, int)",unread,
 000dcc2c,120,_Z10wait_direci,wait_direc(int),unread,
 000ff9ec,120,_Z18Wload_replaceitemsii,"Wload_replaceitems(int, int)",unread,
@@ -2276,7 +2276,7 @@ address,size,mangled,demangled,status,section_ref
 000a731c,116,_ZN18CGX_SCREEN_CORRECT13Area_ToRenderEiiiPiS0_,"CGX_SCREEN_CORRECT::Area_ToRender(int, int, int, int*, int*)",read_full,NOTES §537
 000aa8f8,116,_ZN9CEGL2_FBO6DeleteEv,CEGL2_FBO::Delete(),mentioned_unverified,
 000b8b3c,116,_ZN5CLIST6CreateEiPv,"CLIST::Create(int, void*)",mentioned_unverified,
-000ba610,116,_ZN9CSOUND_IF9UnloadAllEh,CSOUND_IF::UnloadAll(unsigned char),unread,
+000ba610,116,_ZN9CSOUND_IF9UnloadAllEh,CSOUND_IF::UnloadAll(unsigned char),read_full,NOTES §544
 000ba700,116,_ZN9CSOUND_IF7StopAllEh,CSOUND_IF::StopAll(unsigned char),mentioned_unverified,
 000c81c4,116,_Z15tool_squareinitv,tool_squareinit(),unread,
 000d8c00,116,_Z10checkkeyokv,checkkeyok(),unread,
@@ -2310,7 +2310,7 @@ address,size,mangled,demangled,status,section_ref
 0028a0a0,116,_Z22iOS_RESUME_SET_PSPSAVEP23IOS_RESUME_DATA_PSPSAVE24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_PSPSAVE(IOS_RESUME_DATA_PSPSAVE*, IOS_RESUME_DATACOPY_MODE)",unread,
 00284fd0,116,_Z23pspBattleEntryAreaCheckiiiis,"pspBattleEntryAreaCheck(int, int, int, int, short)",unread,
 0029f67c,116,_Z10_gte_sqr12v,_gte_sqr12(),unread,
-002a3418,116,_ZN11pspSaveBase13SystemFileSetEv,pspSaveBase::SystemFileSet(),unread,
+002a3418,116,_ZN11pspSaveBase13SystemFileSetEv,pspSaveBase::SystemFileSet(),read_full,NOTES §543
 002cabdc,116,__floatundidf,__floatundidf,unread,
 002cabdc,116,__aeabi_ul2d,__aeabi_ul2d,unread,
 002cb830,116,__gtsf2,__gtsf2,unread,
@@ -2371,8 +2371,8 @@ address,size,mangled,demangled,status,section_ref
 000b6a58,108,_ZN9CFILE_DAT5CloseEv,CFILE_DAT::Close(),mentioned_unverified,
 000b6f00,108,_ZN9CFILE_TXT6UnloadEv,CFILE_TXT::Unload(),read_structural,NOTES §344
 000b98c0,108,_ZN9CSTR_UTIL6InsertEPciS0_,"CSTR_UTIL::Insert(char*, int, char*)",read_full,NOTES §541
-000baf08,108,_ZN9CSOUND_IF15SetMasterVolumeEiii,"CSOUND_IF::SetMasterVolume(int, int, int)",unread,
-000bb230,108,_ZN9CSOUND_IF8SetTransEifff,"CSOUND_IF::SetTrans(int, float, float, float)",unread,
+000baf08,108,_ZN9CSOUND_IF15SetMasterVolumeEiii,"CSOUND_IF::SetMasterVolume(int, int, int)",read_full,NOTES §544
+000bb230,108,_ZN9CSOUND_IF8SetTransEifff,"CSOUND_IF::SetTrans(int, float, float, float)",read_full,NOTES §544
 0020c930,108,_Z11freeForFilePv,freeForFile(void*),unread,
 000d6eac,108,_Z16iOS_initsprt_numP7tagSPRTi,"iOS_initsprt_num(tagSPRT*, int)",unread,
 000d8778,108,_Z18import_localstatusPcS_S_S_,"import_localstatus(char*, char*, char*, char*)",unread,
@@ -2404,11 +2404,11 @@ address,size,mangled,demangled,status,section_ref
 0026a504,108,_Z15snpl_jparasmallv,snpl_jparasmall(),unread,
 00281730,108,_Z19iOS_v2menuGetEnable12V2_MENU_ITEM,iOS_v2menuGetEnable(V2_MENU_ITEM),unread,
 00282648,108,_Z18wgte_color_set_vecPK6MATRIXiPK7SVECTOR,"wgte_color_set_vec(MATRIX const*, int, SVECTOR const*)",unread,
-002a3550,108,_ZN11pspSaveBase11TitleStrSetEPKcS1_S1_,"pspSaveBase::TitleStrSet(char const*, char const*, char const*)",unread,
+002a3550,108,_ZN11pspSaveBase11TitleStrSetEPKcS1_S1_,"pspSaveBase::TitleStrSet(char const*, char const*, char const*)",read_full,NOTES §543
 002ab960,108,sceGuGetMemory_for_iOS,sceGuGetMemory_for_iOS,unread,
 0029fe04,108,xpLibgteSetData,xpLibgteSetData,unread,
 002a2460,108,_Z14RotColorMatDpqP7SVECTORS0_P7CVECTORPlS2_lS3_,"RotColorMatDpq(SVECTOR*, SVECTOR*, CVECTOR*, long*, CVECTOR*, long, long*)",unread,
-002a35dc,108,_ZN11pspSaveBase15ErrorMsgTypeGetEj,pspSaveBase::ErrorMsgTypeGet(unsigned int),unread,
+002a35dc,108,_ZN11pspSaveBase15ErrorMsgTypeGetEj,pspSaveBase::ErrorMsgTypeGet(unsigned int),read_full,NOTES §543
 002b2f7c,108,_Z16musicPlayer_Stopv,musicPlayer_Stop(),unread,
 002cb838,108,__ltsf2,__ltsf2,unread,
 002cb838,108,__lesf2,__lesf2,unread,
@@ -2419,8 +2419,8 @@ address,size,mangled,demangled,status,section_ref
 0009f390,104,ov_test_open,ov_test_open,read_structural,NOTES §336
 000b6708,104,_ZN5CFILE4ReadEPvjjPj,"CFILE::Read(void*, unsigned int, unsigned int, unsigned int*)",read_structural,NOTES §342
 000ab440,104,_ZN9CEGL2_FBO10ReadPixelsEPjiiii,"CEGL2_FBO::ReadPixels(unsigned int*, int, int, int, int)",unread,
-000af50c,104,_ZN16CEGL2_TEX_HYBRIDD2Ev,CEGL2_TEX_HYBRID::~CEGL2_TEX_HYBRID(),unread,
-000af50c,104,_ZN16CEGL2_TEX_HYBRIDD1Ev,CEGL2_TEX_HYBRID::~CEGL2_TEX_HYBRID(),unread,
+000af50c,104,_ZN16CEGL2_TEX_HYBRIDD2Ev,CEGL2_TEX_HYBRID::~CEGL2_TEX_HYBRID(),read_full,NOTES §546
+000af50c,104,_ZN16CEGL2_TEX_HYBRIDD1Ev,CEGL2_TEX_HYBRID::~CEGL2_TEX_HYBRID(),read_full,NOTES §546
 000b35e4,104,_ZN11CINPUT_DATA15SetKeyWaitGroupEijj,"CINPUT_DATA::SetKeyWaitGroup(int, unsigned int, unsigned int)",read_full,NOTES §540
 000b38e4,104,_ZN11CINPUT_DATA13GetPressGroupEi,CINPUT_DATA::GetPressGroup(int),read_full,NOTES §540
 000b394c,104,_ZN11CINPUT_DATA12GetDownGroupEi,CINPUT_DATA::GetDownGroup(int),read_full,NOTES §540
@@ -2518,14 +2518,14 @@ address,size,mangled,demangled,status,section_ref
 002cabf0,96,__aeabi_l2d,__aeabi_l2d,unread,
 000a971c,96,_ZN8CEGL2_IF12DrawScrollBGEP12CEGL2_SPRITEffP9_RECT_F32S3_,"CEGL2_IF::DrawScrollBG(CEGL2_SPRITE*, float, float, _RECT_F32*, _RECT_F32*)",mentioned_unverified,
 000abb28,96,_ZN12CEGL2_SHADER13CompileShaderERjPvj,"CEGL2_SHADER::CompileShader(unsigned int&, void*, unsigned int)",mentioned_unverified,
-000af5d4,96,_ZN16CEGL2_TEX_HYBRID17GL_GetTextureSizeEiPfS0_S0_S0_,"CEGL2_TEX_HYBRID::GL_GetTextureSize(int, float*, float*, float*, float*)",unread,
+000af5d4,96,_ZN16CEGL2_TEX_HYBRID17GL_GetTextureSizeEiPfS0_S0_S0_,"CEGL2_TEX_HYBRID::GL_GetTextureSize(int, float*, float*, float*, float*)",read_full,NOTES §546
 000b37c0,96,_ZN11CINPUT_DATA5GetUpEii,"CINPUT_DATA::GetUp(int, int)",mentioned_unverified,
 000b4050,96,_ZN15CINPUT_IF_TOUCH13GetPressCountEi,CINPUT_IF_TOUCH::GetPressCount(int),read_full,NOTES §538
 000b4e88,96,_ZN15CINPUT_IF_TOUCH5BeginEii,"CINPUT_IF_TOUCH::Begin(int, int)",mentioned_unverified,
-000b5f4c,96,_ZN13CUI_SCROLLBAR10DragUpdateEii,"CUI_SCROLLBAR::DragUpdate(int, int)",unread,
+000b5f4c,96,_ZN13CUI_SCROLLBAR10DragUpdateEii,"CUI_SCROLLBAR::DragUpdate(int, int)",read_full,NOTES §547
 000b6c70,96,_ZN9CFILE_DAT9GetBufferEi,CFILE_DAT::GetBuffer(int),mentioned_unverified,
 000bb160,96,_ZN9CSOUND_IF13GetPlaySampleEi,CSOUND_IF::GetPlaySample(int),mentioned_unverified,
-000bb1c0,96,_ZN9CSOUND_IF14GetTotalSampleEi,CSOUND_IF::GetTotalSample(int),unread,
+000bb1c0,96,_ZN9CSOUND_IF14GetTotalSampleEi,CSOUND_IF::GetTotalSample(int),read_full,NOTES §544
 000bd3b4,96,_ZN14COggMemMapFile4OpenEPKcjj,"COggMemMapFile::Open(char const*, unsigned int, unsigned int)",mentioned_unverified,
 000d7e78,96,_Z19serchmessagepointeri,serchmessagepointer(int),unread,
 001b8fe0,96,_Z22iOSTutorialMessageKillv,iOSTutorialMessageKill(),unread,
@@ -2625,7 +2625,7 @@ address,size,mangled,demangled,status,section_ref
 000abbc4,88,_ZN12CEGL2_SHADERD1Ev,CEGL2_SHADER::~CEGL2_SHADER(),unread,
 000a9648,88,_ZN8CEGL2_IF10DrawSpriteEP12CEGL2_SPRITEffP18_EGL_SPRITE_LAYOUT,"CEGL2_IF::DrawSprite(CEGL2_SPRITE*, float, float, _EGL_SPRITE_LAYOUT*)",read_full,NOTES §539
 000abbc4,88,_ZN12CEGL2_SHADERD2Ev,CEGL2_SHADER::~CEGL2_SHADER(),unread,
-000af3cc,88,_ZN16CEGL2_TEX_HYBRID9GL_UnloadEii,"CEGL2_TEX_HYBRID::GL_Unload(int, int)",unread,
+000af3cc,88,_ZN16CEGL2_TEX_HYBRID9GL_UnloadEii,"CEGL2_TEX_HYBRID::GL_Unload(int, int)",read_full,NOTES §546
 000b3f38,88,_ZN15CINPUT_IF_TOUCH6EndAllEi,CINPUT_IF_TOUCH::EndAll(int),read_full,NOTES §538
 000b942c,88,_ZN9CSTR_UTIL4ConvEccPc,"CSTR_UTIL::Conv(char, char, char*)",mentioned_unverified,
 000bb838,88,_ZN12CSOUND_IF_SL4StopEi,CSOUND_IF_SL::Stop(int),mentioned_unverified,
@@ -2693,10 +2693,10 @@ address,size,mangled,demangled,status,section_ref
 000b8ea0,84,_ZN9CSTR_UTIL7ToUpperEPc,CSTR_UTIL::ToUpper(char*),read_full,NOTES §541
 000b8ef4,84,_ZN9CSTR_UTIL7ToLowerEPc,CSTR_UTIL::ToLower(char*),read_full,NOTES §541
 000b9eb0,84,_ZN7CTHREAD8RegisterEPFjPvES0_,"CTHREAD::Register(unsigned int (*)(void*), void*)",read_full,NOTES §28
-000ba838,84,_ZN9CSOUND_IF7GetMuteEi,CSOUND_IF::GetMute(int),unread,
-000ba88c,84,_ZN9CSOUND_IF9GetVolumeEi,CSOUND_IF::GetVolume(int),unread,
-000bb2cc,84,_ZN9CSOUND_IF13SetAutoUnloadEii,"CSOUND_IF::SetAutoUnload(int, int)",unread,
-000bc268,84,_ZN12CSOUND_IF_SL13Static_UnloadEi,CSOUND_IF_SL::Static_Unload(int),unread,
+000ba838,84,_ZN9CSOUND_IF7GetMuteEi,CSOUND_IF::GetMute(int),read_full,NOTES §544
+000ba88c,84,_ZN9CSOUND_IF9GetVolumeEi,CSOUND_IF::GetVolume(int),read_full,NOTES §544
+000bb2cc,84,_ZN9CSOUND_IF13SetAutoUnloadEii,"CSOUND_IF::SetAutoUnload(int, int)",read_full,NOTES §544
+000bc268,84,_ZN12CSOUND_IF_SL13Static_UnloadEi,CSOUND_IF_SL::Static_Unload(int),read_full,NOTES §545
 000bce58,84,_ZN17CSOUND_LOADER_PCM4SeekEm,CSOUND_LOADER_PCM::Seek(unsigned long),unread,
 000e0568,84,_Z15export_localpadPl,export_localpad(long*),unread,
 000e0f14,84,_Z24iOS_assist_addlocalprim2P14iOS_CMenuTouchi,"iOS_assist_addlocalprim2(iOS_CMenuTouch*, int)",unread,
@@ -2779,7 +2779,7 @@ address,size,mangled,demangled,status,section_ref
 000a95f8,80,_ZN8CEGL2_IF10DrawSpriteEP12CEGL2_SPRITEff,"CEGL2_IF::DrawSprite(CEGL2_SPRITE*, float, float)",read_full,NOTES §539
 000ae4d0,80,_ZN12CEGL2_SPRITE4DrawEff,"CEGL2_SPRITE::Draw(float, float)",mentioned_unverified,
 000aad68,80,_ZN9CEGL2_FBO5BeginEii,"CEGL2_FBO::Begin(int, int)",mentioned_unverified,
-000b5d44,80,_ZN13CUI_SCROLLBAR11GetCellDrawEi,CUI_SCROLLBAR::GetCellDraw(int),unread,
+000b5d44,80,_ZN13CUI_SCROLLBAR11GetCellDrawEi,CUI_SCROLLBAR::GetCellDraw(int),read_full,NOTES §547
 000e2b78,80,_Z16statuskanjiprintiPcP9COPYFIELD,"statuskanjiprint(int, char*, COPYFIELD*)",unread,
 0020dd78,80,_Z23getAnimationDirection16j,getAnimationDirection16(unsigned int),unread,
 000d8830,80,_Z17makemessagepacketPc,makemessagepacket(char*),unread,
@@ -2851,10 +2851,10 @@ address,size,mangled,demangled,status,section_ref
 000a9224,76,_ZN8CEGL2_IF9SetupFontEv,CEGL2_IF::SetupFont(),read_full,NOTES §539
 000abc38,76,_ZNSt4priv10_Rb_globalIbE12_Rotate_leftEPNS_18_Rb_tree_node_baseERS3_,"std::priv::_Rb_global<bool>::_Rotate_left(std::priv::_Rb_tree_node_base*, std::priv::_Rb_tree_node_base*&)",read_structural,NOTES §329
 000abc84,76,_ZNSt4priv10_Rb_globalIbE13_Rotate_rightEPNS_18_Rb_tree_node_baseERS3_,"std::priv::_Rb_global<bool>::_Rotate_right(std::priv::_Rb_tree_node_base*, std::priv::_Rb_tree_node_base*&)",read_structural,NOTES §329
-000af574,76,_ZN16CEGL2_TEX_HYBRID12RAW_IsUpdateEi,CEGL2_TEX_HYBRID::RAW_IsUpdate(int),unread,
+000af574,76,_ZN16CEGL2_TEX_HYBRID12RAW_IsUpdateEi,CEGL2_TEX_HYBRID::RAW_IsUpdate(int),read_full,NOTES §546
 000b3bd8,76,_ZN15CINPUT_IF_TOUCHC2Ev,CINPUT_IF_TOUCH::CINPUT_IF_TOUCH(),mentioned_unverified,
 000b3bd8,76,_ZN15CINPUT_IF_TOUCHC1Ev,CINPUT_IF_TOUCH::CINPUT_IF_TOUCH(),mentioned_unverified,
-000b5bc4,76,_ZN13CUI_SCROLLBAR18IsEnableScrollDownEv,CUI_SCROLLBAR::IsEnableScrollDown(),unread,
+000b5bc4,76,_ZN13CUI_SCROLLBAR18IsEnableScrollDownEv,CUI_SCROLLBAR::IsEnableScrollDown(),read_full,NOTES §547
 000b70d4,76,_ZN9CFILE_TXT13IsDataCommentEiij,"CFILE_TXT::IsDataComment(int, int, unsigned int)",read_structural,NOTES §344
 000b8158,76,_ZN10CFILE_UTIL8FileFindEPc,CFILE_UTIL::FileFind(char*),read_structural,NOTES §342
 000b9554,76,_ZN9CSTR_UTIL4CmpNEPcS0_i,"CSTR_UTIL::CmpN(char*, char*, int)",read_full,NOTES §541
@@ -2942,8 +2942,8 @@ address,size,mangled,demangled,status,section_ref
 000acab8,72,_ZN12CEGL2_SPRITE6CreateEii,"CEGL2_SPRITE::Create(int, int)",mentioned_unverified,
 000b9878,72,_ZN9CSTR_UTIL7StrNLenEPci,"CSTR_UTIL::StrNLen(char*, int)",read_full,NOTES §541
 000ba354,72,_ZN9CSOUND_IF6ResumeEv,CSOUND_IF::Resume(),mentioned_unverified,
-000ba7f0,72,_ZN9CSOUND_IF15GetMasterVolumeEPiS0_S0_,"CSOUND_IF::GetMasterVolume(int*, int*, int*)",unread,
-000bb010,72,_ZN9CSOUND_IF7GetLoopEi,CSOUND_IF::GetLoop(int),unread,
+000ba7f0,72,_ZN9CSOUND_IF15GetMasterVolumeEPiS0_S0_,"CSOUND_IF::GetMasterVolume(int*, int*, int*)",read_full,NOTES §544
+000bb010,72,_ZN9CSOUND_IF7GetLoopEi,CSOUND_IF::GetLoop(int),read_full,NOTES §544
 000bd474,72,_ZN17CSOUND_LOADER_OGG5CloseEv,CSOUND_LOADER_OGG::Close(),mentioned_unverified,
 000bd4bc,72,_ZN17CSOUND_LOADER_OGGD2Ev,CSOUND_LOADER_OGG::~CSOUND_LOADER_OGG(),unread,
 000bd4bc,72,_ZN17CSOUND_LOADER_OGGD1Ev,CSOUND_LOADER_OGG::~CSOUND_LOADER_OGG(),unread,
@@ -3047,9 +3047,9 @@ address,size,mangled,demangled,status,section_ref
 002cb9ec,68,__aeabi_d2lz,__aeabi_d2lz,unread,
 000a8684,68,_ZN8CEGL2_IF9AddSpriteEiP12CEGL2_SPRITEffP18_EGL_SPRITE_LAYOUTh,"CEGL2_IF::AddSprite(int, CEGL2_SPRITE*, float, float, _EGL_SPRITE_LAYOUT*, unsigned char)",read_full,NOTES §539
 000ba310,68,_ZN9CSOUND_IF7SuspendEv,CSOUND_IF::Suspend(),mentioned_unverified,
-000ba4d8,68,_ZN9CSOUND_IF16RegisterSavedataEiP15_SOUND_SAVEDATAh,"CSOUND_IF::RegisterSavedata(int, _SOUND_SAVEDATA*, unsigned char)",unread,
+000ba4d8,68,_ZN9CSOUND_IF16RegisterSavedataEiP15_SOUND_SAVEDATAh,"CSOUND_IF::RegisterSavedata(int, _SOUND_SAVEDATA*, unsigned char)",read_full,NOTES §544
 000bb9b4,68,_ZN12CSOUND_IF_SL9IsPlayingEi,CSOUND_IF_SL::IsPlaying(int),mentioned_unverified,
-000bbb28,68,_ZN12CSOUND_IF_SL11GetPositionEiPj,"CSOUND_IF_SL::GetPosition(int, unsigned int*)",unread,
+000bbb28,68,_ZN12CSOUND_IF_SL11GetPositionEiPj,"CSOUND_IF_SL::GetPosition(int, unsigned int*)",read_full,NOTES §545
 000bd1dc,68,_ZN14COggMemMapFile12CallbackReadEPvjjS0_,"COggMemMapFile::CallbackRead(void*, unsigned int, unsigned int, void*)",unread,
 000bd334,68,_ZN17CSOUND_LOADER_OGG4SeekEm,CSOUND_LOADER_OGG::Seek(unsigned long),unread,
 000be0b8,68,_ZN5CSTEP16InitFromCurrentFEfiij,"CSTEP::InitFromCurrentF(float, int, int, unsigned int)",unread,
@@ -3123,7 +3123,7 @@ address,size,mangled,demangled,status,section_ref
 000b41ec,64,_ZN15CINPUT_IF_TOUCH13GetTouchCountEv,CINPUT_IF_TOUCH::GetTouchCount(),mentioned_unverified,
 000b93ec,64,_ZN9CSTR_UTIL5ToStrEPcS0_,"CSTR_UTIL::ToStr(char*, char*)",read_full,NOTES §541
 000b9f04,64,_ZN7CTHREAD17CreateAndRegisterEiPFjPvES0_,"CTHREAD::CreateAndRegister(int, unsigned int (*)(void*), void*)",read_full,NOTES §28
-000bb520,64,_ZN9CSOUND_IF12GetSoundTypeEi,CSOUND_IF::GetSoundType(int),unread,
+000bb520,64,_ZN9CSOUND_IF12GetSoundTypeEi,CSOUND_IF::GetSoundType(int),read_full,NOTES §544
 00153398,64,_Z15task_killmyselfv,task_killmyself(),unread,
 000d7ae4,64,_Z13addstatusbackP14STTSWINDOWBACK,addstatusback(STTSWINDOWBACK*),unread,
 002b8888,64,_Z13iOS_InitMoviei,iOS_InitMovie(int),unread,
@@ -3224,13 +3224,13 @@ address,size,mangled,demangled,status,section_ref
 000ab8e8,60,_ZN12CEGL2_SHADER10SetTextureEi,CEGL2_SHADER::SetTexture(int),read_full,NOTES §13.10
 000ab9cc,60,_ZN12CEGL2_SHADERC2Ev,CEGL2_SHADER::CEGL2_SHADER(),mentioned_unverified,
 000abb88,60,_ZNSt4priv8_Rb_treeIiSt4lessIiESt4pairIKiN12CEGL2_SHADER11DATA_SHADEREENS_10_Select1stIS7_EENS_11_MapTraitsTIS7_EESaIS7_EE8_M_eraseEPNS_18_Rb_tree_node_baseE,"std::priv::_Rb_tree<int, std::less<int>, std::pair<int const, CEGL2_SHADER::DATA_SHADER>, std::priv::_Select1st<std::pair<int const, CEGL2_SHADER::DATA_SHADER> >, std::priv::_MapTraitsT<std::pair<int const, CEGL2_SHADER::DATA_SHADER> >, std::allocator<std::pair<int const, CEGL2_SHADER::DATA_SHADER> > >::_M_erase(std::priv::_Rb_tree_node_base*)",read_structural,NOTES §329
-000af4d0,60,_ZN16CEGL2_TEX_HYBRID12GL_UnloadAllEv,CEGL2_TEX_HYBRID::GL_UnloadAll(),unread,
+000af4d0,60,_ZN16CEGL2_TEX_HYBRID12GL_UnloadAllEv,CEGL2_TEX_HYBRID::GL_UnloadAll(),read_full,NOTES §546
 000b52a0,60,_ZN5CRECT7SetRectEiP9_RECT_S32,"CRECT::SetRect(int, _RECT_S32*)",unread,
 000b52dc,60,_ZN5CRECT9SetRect16EiP9_RECT_S16,"CRECT::SetRect16(int, _RECT_S16*)",unread,
 000be0fc,60,_ZN5CSTEP7GetDataEv,CSTEP::GetData(),mentioned_unverified,
 000b8a98,60,_ZN5CLIST7GetNodeEi,CLIST::GetNode(int),unread,
-000bb124,60,_ZN9CSOUND_IF10GetPlaySecEi,CSOUND_IF::GetPlaySec(int),unread,
-000bb350,60,_ZN9CSOUND_IF13GetBufferTypeEi,CSOUND_IF::GetBufferType(int),unread,
+000bb124,60,_ZN9CSOUND_IF10GetPlaySecEi,CSOUND_IF::GetPlaySec(int),read_full,NOTES §544
+000bb350,60,_ZN9CSOUND_IF13GetBufferTypeEi,CSOUND_IF::GetBufferType(int),read_full,NOTES §544
 000bcdc4,60,_ZN17CSOUND_LOADER_PCM5CloseEv,CSOUND_LOADER_PCM::Close(),mentioned_unverified,
 000bce00,60,_ZN17CSOUND_LOADER_PCMD2Ev,CSOUND_LOADER_PCM::~CSOUND_LOADER_PCM(),unread,
 000bce00,60,_ZN17CSOUND_LOADER_PCMD1Ev,CSOUND_LOADER_PCM::~CSOUND_LOADER_PCM(),unread,
@@ -3304,7 +3304,7 @@ address,size,mangled,demangled,status,section_ref
 0028af88,60,__bpResetBinpackData,__bpResetBinpackData,unread,
 0028afdc,60,__bpGetAllBinarySize,__bpGetAllBinarySize,unread,
 0028bf7c,60,_Z8_ps_condv,_ps_cond(),unread,
-002a338c,60,_ZN11pspSaveBase10TitleIdSetEPKc,pspSaveBase::TitleIdSet(char const*),unread,
+002a338c,60,_ZN11pspSaveBase10TitleIdSetEPKc,pspSaveBase::TitleIdSet(char const*),read_full,NOTES §543
 0029b618,60,_Z17iOSGsSwapDispBuffv,iOSGsSwapDispBuff(),unread,
 0029dac8,60,_Z11_gte_subdvdP7DVECTORS0_S0_,"_gte_subdvd(DVECTOR*, DVECTOR*, DVECTOR*)",unread,
 0029db44,60,_Z11_gte_adddvdP7DVECTORS0_S0_,"_gte_adddvd(DVECTOR*, DVECTOR*, DVECTOR*)",unread,
@@ -3329,10 +3329,10 @@ address,size,mangled,demangled,status,section_ref
 000b461c,56,_ZN15CINPUT_IF_TOUCH12DeleteDeviceEi,CINPUT_IF_TOUCH::DeleteDevice(int),read_full,NOTES §538
 000b6e38,56,_ZN9CFILE_DAT7DecryptEij,"CFILE_DAT::Decrypt(int, unsigned int)",mentioned_unverified,
 000b9f44,56,_ZN7CTHREAD4SyncEv,CTHREAD::Sync(),mentioned_unverified,
-000bb944,56,_ZN12CSOUND_IF_SL13EngineSuspendEv,CSOUND_IF_SL::EngineSuspend(),unread,
-000bb97c,56,_ZN12CSOUND_IF_SL12EngineResumeEv,CSOUND_IF_SL::EngineResume(),unread,
+000bb944,56,_ZN12CSOUND_IF_SL13EngineSuspendEv,CSOUND_IF_SL::EngineSuspend(),read_full,NOTES §545
+000bb97c,56,_ZN12CSOUND_IF_SL12EngineResumeEv,CSOUND_IF_SL::EngineResume(),read_full,NOTES §545
 000bb890,56,_ZN12CSOUND_IF_SL7StopAllEv,CSOUND_IF_SL::StopAll(),mentioned_unverified,
-000bcba0,56,_ZN12CSOUND_IF_SL9UnloadAllEv,CSOUND_IF_SL::UnloadAll(),unread,
+000bcba0,56,_ZN12CSOUND_IF_SL9UnloadAllEv,CSOUND_IF_SL::UnloadAll(),read_full,NOTES §545
 000bdae0,56,_ZN10CFRAMERATE7GetRateEv,CFRAMERATE::GetRate(),mentioned_unverified,
 000be3ac,56,_ZN11CSTEP_BATCH8SetStageEi,CSTEP_BATCH::SetStage(int),unread,
 000be3e4,56,_ZN11CSTEP_BATCH11FinishStageEi,CSTEP_BATCH::FinishStage(int),unread,
@@ -3558,8 +3558,8 @@ address,size,mangled,demangled,status,section_ref
 000b8030,48,_ZN10CFILE_UTIL7DirMoveEPcS0_,"CFILE_UTIL::DirMove(char*, char*)",read_structural,NOTES §342
 000b9d5c,48,_ZN9CWORK_MEM6DeleteEi,CWORK_MEM::Delete(int),mentioned_unverified,
 000b9da4,48,_ZN9CWORK_MEM3NewEi,CWORK_MEM::New(int),unread,
-000bb29c,48,_ZN9CSOUND_IF11GetPlayModeEi,CSOUND_IF::GetPlayMode(int),unread,
-000bb320,48,_ZN9CSOUND_IF13GetFormatTypeEi,CSOUND_IF::GetFormatType(int),unread,
+000bb29c,48,_ZN9CSOUND_IF11GetPlayModeEi,CSOUND_IF::GetPlayMode(int),read_full,NOTES §544
+000bb320,48,_ZN9CSOUND_IF13GetFormatTypeEi,CSOUND_IF::GetFormatType(int),read_full,NOTES §544
 000bd968,48,_ZN10CFRAMERATE5ClearEv,CFRAMERATE::Clear(),mentioned_unverified,
 0029138c,48,GetClut,GetClut,mentioned_unverified,
 000e0538,48,_Z15import_localpadi,import_localpad(int),unread,
@@ -3662,7 +3662,7 @@ address,size,mangled,demangled,status,section_ref
 0029fdd4,48,xpLibgteGetData,xpLibgteGetData,unread,
 002a12c4,48,AverageZ3,AverageZ3,unread,
 002a12f4,48,AverageZ4,AverageZ4,unread,
-002a33e0,48,_ZN11pspSaveBase12ParamBaseSetEiiiiii,"pspSaveBase::ParamBaseSet(int, int, int, int, int, int)",unread,
+002a33e0,48,_ZN11pspSaveBase12ParamBaseSetEiiiiii,"pspSaveBase::ParamBaseSet(int, int, int, int, int, int)",read_full,NOTES §543
 002a38a8,48,_ZN11pspSaveListC2Ev,pspSaveList::pspSaveList(),mentioned_unverified,
 002a38a8,48,_ZN11pspSaveListC1Ev,pspSaveList::pspSaveList(),mentioned_unverified,
 002b045c,48,_ZN9CAPP_INFO16GetResourceScaleEv,CAPP_INFO::GetResourceScale(),read_full,NOTES §542
@@ -3683,7 +3683,7 @@ address,size,mangled,demangled,status,section_ref
 000a70e0,44,_ZN18CGX_SCREEN_CORRECT8X_AlignREi,CGX_SCREEN_CORRECT::X_AlignR(int),read_full,NOTES §537
 000a7134,44,_ZN18CGX_SCREEN_CORRECT8Y_AlignBEi,CGX_SCREEN_CORRECT::Y_AlignB(int),read_full,NOTES §537
 000aba20,44,_ZN12CEGL2_SHADER10SetMatrix4EiRKN4math7MATRIX4E,"CEGL2_SHADER::SetMatrix4(int, math::MATRIX4 const&)",mentioned_unverified,
-000af0d8,44,_ZN16CEGL2_TEX_HYBRID20CLUTAddr_AutoReleaseEv,CEGL2_TEX_HYBRID::CLUTAddr_AutoRelease(),unread,
+000af0d8,44,_ZN16CEGL2_TEX_HYBRID20CLUTAddr_AutoReleaseEv,CEGL2_TEX_HYBRID::CLUTAddr_AutoRelease(),read_full,NOTES §546
 000b3728,44,_ZN11CINPUT_DATA8GetPressEii,"CINPUT_DATA::GetPress(int, int)",mentioned_unverified,
 000b3754,44,_ZN11CINPUT_DATA7GetDownEii,"CINPUT_DATA::GetDown(int, int)",mentioned_unverified,
 000b3820,44,_ZN11CINPUT_DATA11GetUpDirectEii,"CINPUT_DATA::GetUpDirect(int, int)",read_full,NOTES §540
@@ -3693,11 +3693,11 @@ address,size,mangled,demangled,status,section_ref
 000b55b8,44,_ZN5CRECT15MoveCursorFirstEii,"CRECT::MoveCursorFirst(int, int)",read_full,NOTES §535
 000b595c,44,_ZN5CRECT14MoveCursorPrevEii,"CRECT::MoveCursorPrev(int, int)",read_full,NOTES §535
 000b5a14,44,_ZN5CRECT14MoveCursorNextEii,"CRECT::MoveCursorNext(int, int)",read_full,NOTES §535
-000b5a40,44,_ZN13CUI_SCROLLBARC2Ev,CUI_SCROLLBAR::CUI_SCROLLBAR(),unread,
-000b5a40,44,_ZN13CUI_SCROLLBARC1Ev,CUI_SCROLLBAR::CUI_SCROLLBAR(),unread,
-000ba4ac,44,_ZN9CSOUND_IF16RegisterRootPathEPc,CSOUND_IF::RegisterRootPath(char*),unread,
+000b5a40,44,_ZN13CUI_SCROLLBARC2Ev,CUI_SCROLLBAR::CUI_SCROLLBAR(),read_full,NOTES §547
+000b5a40,44,_ZN13CUI_SCROLLBARC1Ev,CUI_SCROLLBAR::CUI_SCROLLBAR(),read_full,NOTES §547
+000ba4ac,44,_ZN9CSOUND_IF16RegisterRootPathEPc,CSOUND_IF::RegisterRootPath(char*),read_full,NOTES §544
 000bba9c,44,_ZN12CSOUND_IF_SL13GetPlaySampleEi,CSOUND_IF_SL::GetPlaySample(int),mentioned_unverified,
-000bbae4,44,_ZN12CSOUND_IF_SL14GetTotalSampleEi,CSOUND_IF_SL::GetTotalSample(int),unread,
+000bbae4,44,_ZN12CSOUND_IF_SL14GetTotalSampleEi,CSOUND_IF_SL::GetTotalSample(int),read_full,NOTES §545
 000bcc20,44,_ZNK17CSOUND_LOADER_PCM12IsTerminatedEv,CSOUND_LOADER_PCM::IsTerminated() const,unread,
 001599fc,44,_Z12asmGetInput3v,asmGetInput3(),unread,
 0027b53c,44,_Z18LoadImage_menuDatav,LoadImage_menuData(),unread,
@@ -3798,7 +3798,7 @@ address,size,mangled,demangled,status,section_ref
 002a096c,44,ApplyMatrix,ApplyMatrix,unread,
 002a0a54,44,ApplyMatrixSV,ApplyMatrixSV,unread,
 002a1148,44,SquareSL0,SquareSL0,unread,
-002a3524,44,_ZN11pspSaveBase14NewDataItemSetEPvjj,"pspSaveBase::NewDataItemSet(void*, unsigned int, unsigned int)",unread,
+002a3524,44,_ZN11pspSaveBase14NewDataItemSetEPvjj,"pspSaveBase::NewDataItemSet(void*, unsigned int, unsigned int)",read_full,NOTES §543
 002b23d8,44,_Z12Music_Replayv,Music_Replay(),unread,
 00081a94,40,unztell64,unztell64,unread,
 00082450,40,oggpack_writecheck,oggpack_writecheck,unread,
@@ -3837,7 +3837,7 @@ address,size,mangled,demangled,status,section_ref
 000a85fc,40,_ZN8CEGL2_IF4TermEv,CEGL2_IF::Term(),mentioned_unverified,
 000abb00,40,_ZN12CEGL2_SHADER16SetFVector4ArrayEiiPN4math7VECTOR4IfEE,"CEGL2_SHADER::SetFVector4Array(int, int, math::VECTOR4<float>*)",unread,
 000ace68,40,_ZN12CEGL2_SPRITE12GetPixelByteEv,CEGL2_SPRITE::GetPixelByte(),read_full,NOTES §534
-000aef54,40,_ZN16CEGL2_TEX_HYBRID14UV_AutoReleaseEv,CEGL2_TEX_HYBRID::UV_AutoRelease(),unread,
+000aef54,40,_ZN16CEGL2_TEX_HYBRID14UV_AutoReleaseEv,CEGL2_TEX_HYBRID::UV_AutoRelease(),read_full,NOTES §546
 000af9c0,40,_ZN7CCAMERAD2Ev,CCAMERA::~CCAMERA(),unread,
 000af9c0,40,_ZN7CCAMERAD1Ev,CCAMERA::~CCAMERA(),unread,
 000b1880,40,_ZN11CEGL_PACKETC2Ev,CEGL_PACKET::CEGL_PACKET(),mentioned_unverified,
@@ -3848,7 +3848,7 @@ address,size,mangled,demangled,status,section_ref
 000b5254,40,_ZN5CRECT12GetChangeRIDEiii,"CRECT::GetChangeRID(int, int, int)",read_full,NOTES §535
 000b6b38,40,_ZN9CFILE_DAT14CacheUnloadAllEv,CFILE_DAT::CacheUnloadAll(),unread,
 000b70ac,40,_ZN9CFILE_TXT14GetDataAsFloatEiij,"CFILE_TXT::GetDataAsFloat(int, int, unsigned int)",read_structural,NOTES §344
-000ba584,40,_ZN9CSOUND_IF7SetAttrEih,"CSOUND_IF::SetAttr(int, unsigned char)",unread,
+000ba584,40,_ZN9CSOUND_IF7SetAttrEih,"CSOUND_IF::SetAttr(int, unsigned char)",read_full,NOTES §544
 000bceac,40,_ZN17CSOUND_LOADER_PCMC1Ev,CSOUND_LOADER_PCM::CSOUND_LOADER_PCM(),mentioned_unverified,
 000bcce4,40,_ZN13CSOUND_LOADERD0Ev,CSOUND_LOADER::~CSOUND_LOADER(),unread,
 000bceac,40,_ZN17CSOUND_LOADER_PCMC2Ev,CSOUND_LOADER_PCM::CSOUND_LOADER_PCM(),mentioned_unverified,
@@ -4031,16 +4031,16 @@ address,size,mangled,demangled,status,section_ref
 000abab8,36,_ZN12CEGL2_SHADER8SetFloatEif,"CEGL2_SHADER::SetFloat(int, float)",unread,
 000abadc,36,_ZN12CEGL2_SHADER7SetBoolEib,"CEGL2_SHADER::SetBool(int, bool)",unread,
 000ad900,36,_ZN12CEGL2_SPRITE8SetColorEihhh,"CEGL2_SPRITE::SetColor(int, unsigned char, unsigned char, unsigned char)",read_full,NOTES §534
-000af008,36,_ZN16CEGL2_TEX_HYBRID20CLUTAddr_UnregistAllEv,CEGL2_TEX_HYBRID::CLUTAddr_UnregistAll(),unread,
+000af008,36,_ZN16CEGL2_TEX_HYBRID20CLUTAddr_UnregistAllEv,CEGL2_TEX_HYBRID::CLUTAddr_UnregistAll(),read_full,NOTES §546
 000b3548,36,_ZN11CINPUT_DATA7GetDataEi,CINPUT_DATA::GetData(int),read_full,NOTES §27
 000b3d14,36,_ZN15CINPUT_IF_TOUCH10SetKeyCodeEiij,"CINPUT_IF_TOUCH::SetKeyCode(int, int, unsigned int)",read_full,NOTES §538
 000b3f14,36,_ZN15CINPUT_IF_TOUCH3EndEii,"CINPUT_IF_TOUCH::End(int, int)",read_full,NOTES §538
 000b459c,36,_ZN15CINPUT_IF_TOUCH17OnTouchesCanceledEiiii,"CINPUT_IF_TOUCH::OnTouchesCanceled(int, int, int, int)",read_full,NOTES §538
 000b45d0,36,_ZN15CINPUT_IF_TOUCH9GetDeviceEi,CINPUT_IF_TOUCH::GetDevice(int),read_full,NOTES §538
 000b527c,36,_ZN5CRECT7GetRectEiP9_RECT_S32,"CRECT::GetRect(int, _RECT_S32*)",read_full,NOTES §535
-000b5acc,36,_ZN13CUI_SCROLLBARD2Ev,CUI_SCROLLBAR::~CUI_SCROLLBAR(),unread,
-000b5acc,36,_ZN13CUI_SCROLLBARD1Ev,CUI_SCROLLBAR::~CUI_SCROLLBAR(),unread,
-000b5af0,36,_ZN13CUI_SCROLLBAR13GetDragOffsetEPiS0_,"CUI_SCROLLBAR::GetDragOffset(int*, int*)",unread,
+000b5acc,36,_ZN13CUI_SCROLLBARD2Ev,CUI_SCROLLBAR::~CUI_SCROLLBAR(),read_full,NOTES §547
+000b5acc,36,_ZN13CUI_SCROLLBARD1Ev,CUI_SCROLLBAR::~CUI_SCROLLBAR(),read_full,NOTES §547
+000b5af0,36,_ZN13CUI_SCROLLBAR13GetDragOffsetEPiS0_,"CUI_SCROLLBAR::GetDragOffset(int*, int*)",read_full,NOTES §547
 000b6f88,36,_ZN9CFILE_TXT12GetColumnNumEi,CFILE_TXT::GetColumnNum(int),read_structural,NOTES §344
 000b8be4,36,_ZN9CSTR_UTIL10IsLeadByteEh,CSTR_UTIL::IsLeadByte(unsigned char),mentioned_unverified,
 000b8a74,36,_ZN5CLIST7ResetIDEi,CLIST::ResetID(int),unread,
@@ -4174,7 +4174,7 @@ address,size,mangled,demangled,status,section_ref
 0028d228,36,_Z9tlPopHeapv,tlPopHeap(),unread,
 0028de28,36,EnableEvent,EnableEvent,unread,
 0028de4c,36,DisableEvent,DisableEvent,unread,
-002a334c,36,_ZN11pspSaveBase9SaveStartEv,pspSaveBase::SaveStart(),unread,
+002a334c,36,_ZN11pspSaveBase9SaveStartEv,pspSaveBase::SaveStart(),read_full,NOTES §543
 0028e514,36,_Z14xpLibcdIsExistv,xpLibcdIsExist(),unread,
 00294eb0,36,xpLibgpuDispEnvSet,xpLibgpuDispEnvSet,unread,
 0029fd34,36,_Z12_gte_mvmva_blllll,"_gte_mvmva_b(long, long, long, long, long)",unread,
@@ -4219,7 +4219,7 @@ address,size,mangled,demangled,status,section_ref
 000b4708,32,_ZN15CINPUT_IF_TOUCHD1Ev,CINPUT_IF_TOUCH::~CINPUT_IF_TOUCH(),read_full,NOTES §538
 000b66e8,32,_ZN5CFILED2Ev,CFILE::~CFILE(),read_structural,NOTES §342
 000b8bbc,32,_ZN5CLIST7SetDataEiPv,"CLIST::SetData(int, void*)",unread,
-000bbc2c,32,_ZN12CSOUND_IF_SL10GetSLStateEi,CSOUND_IF_SL::GetSLState(int),unread,
+000bbc2c,32,_ZN12CSOUND_IF_SL10GetSLStateEi,CSOUND_IF_SL::GetSLState(int),read_full,NOTES §545
 002808f8,32,_Z18iOS_getTransFaceATi,iOS_getTransFaceAT(int),unread,
 00153450,32,_Z11task_statusl,task_status(long),mentioned_unverified,
 002b9cac,32,_Z13iOS_setV2Icon11V2ICON_DATAi,"iOS_setV2Icon(V2ICON_DATA, int)",unread,
@@ -4378,7 +4378,7 @@ address,size,mangled,demangled,status,section_ref
 000a9414,28,_ZN8CEGL2_IFD2Ev,CEGL2_IF::~CEGL2_IF(),read_full,NOTES §539
 000a9414,28,_ZN8CEGL2_IFD1Ev,CEGL2_IF::~CEGL2_IF(),read_full,NOTES §539
 000abc1c,28,_ZN12CEGL2_SHADERD0Ev,CEGL2_SHADER::~CEGL2_SHADER(),unread,
-000aef38,28,_ZN16CEGL2_TEX_HYBRID14UV_UnregistAllEv,CEGL2_TEX_HYBRID::UV_UnregistAll(),unread,
+000aef38,28,_ZN16CEGL2_TEX_HYBRID14UV_UnregistAllEv,CEGL2_TEX_HYBRID::UV_UnregistAll(),read_full,NOTES §546
 000af9a0,28,_ZN7CCAMERA4InitEff,"CCAMERA::Init(float, float)",mentioned_unverified,
 000afa20,28,_ZN7CCAMERAD0Ev,CCAMERA::~CCAMERA(),unread,
 000b1964,28,_ZN11CEGL_PACKETD2Ev,CEGL_PACKET::~CEGL_PACKET(),unread,
@@ -4397,7 +4397,7 @@ address,size,mangled,demangled,status,section_ref
 000b9e78,28,_ZN7CTHREADC1Ev,CTHREAD::CTHREAD(),mentioned_unverified,
 000b9e94,28,_ZN7CTHREAD6CreateEi,CTHREAD::Create(int),mentioned_unverified,
 000bb6cc,28,_ZN12CSOUND_IF_SLC1Ev,CSOUND_IF_SL::CSOUND_IF_SL(),read_full,NOTES §17
-000bbac8,28,_ZN12CSOUND_IF_SL10GetPlaySecEi,CSOUND_IF_SL::GetPlaySec(int),unread,
+000bbac8,28,_ZN12CSOUND_IF_SL10GetPlaySecEi,CSOUND_IF_SL::GetPlaySec(int),read_full,NOTES §545
 000bb6cc,28,_ZN12CSOUND_IF_SLC2Ev,CSOUND_IF_SL::CSOUND_IF_SL(),read_full,NOTES §17
 000bcc04,28,_ZNK17CSOUND_LOADER_PCM4TellEv,CSOUND_LOADER_PCM::Tell() const,unread,
 000bcc70,28,_ZNK17CSOUND_LOADER_PCM16GetFormatDecodedEv,CSOUND_LOADER_PCM::GetFormatDecoded() const,unread,
@@ -4552,7 +4552,7 @@ address,size,mangled,demangled,status,section_ref
 0028712c,28,_Z18pspNetTrapSetTablecci,"pspNetTrapSetTable(char, char, int)",unread,
 00289be8,28,_Z27pspSaveDataDisableSystemFlg17FFTPSP_SYSTEM_FLG,pspSaveDataDisableSystemFlg(FFTPSP_SYSTEM_FLG),unread,
 0028da90,28,_Z17tlMallocErrorFuncPFv15TL_MALLOC_ERRORE,tlMallocErrorFunc(void (*)(TL_MALLOC_ERROR)),unread,
-002a348c,28,_ZN11pspSaveBase9UserIdSetEi,pspSaveBase::UserIdSet(int),unread,
+002a348c,28,_ZN11pspSaveBase9UserIdSetEi,pspSaveBase::UserIdSet(int),read_full,NOTES §543
 002a2a4c,28,xpPadKeyBufGet,xpPadKeyBufGet,unread,
 0028e6d4,28,_Z18xpSetWaitVSyncFuncPFivE,xpSetWaitVSyncFunc(int (*)()),unread,
 00291bdc,28,xpLibgpuIsRender,xpLibgpuIsRender,unread,
@@ -4570,7 +4570,7 @@ address,size,mangled,demangled,status,section_ref
 002a1974,28,NormalColorCol_nom,NormalColorCol_nom,unread,
 002a19a8,28,NormalColorCol3_nom,NormalColorCol3_nom,unread,
 002a2b10,28,xpPadDebugSet,xpPadDebugSet,unread,
-002a3780,28,_ZN11pspSaveBase14ErrorMsgStrGetEj,pspSaveBase::ErrorMsgStrGet(unsigned int),unread,
+002a3780,28,_ZN11pspSaveBase14ErrorMsgStrGetEj,pspSaveBase::ErrorMsgStrGet(unsigned int),read_full,NOTES §543
 002acb2c,28,_Z12GuEmu_GetRAWi,GuEmu_GetRAW(int),unread,
 002b0308,28,_Z26TexHybrid_GetTextureHandleii,"TexHybrid_GetTextureHandle(int, int)",unread,
 002b06f4,28,_ZN11CDebugPrintD2Ev,CDebugPrint::~CDebugPrint(),unread,
@@ -4865,7 +4865,7 @@ address,size,mangled,demangled,status,section_ref
 000acea0,20,_ZN12CEGL2_SPRITE12GetImageSizeEPiS0_,"CEGL2_SPRITE::GetImageSize(int*, int*)",read_full,NOTES §534
 000acec4,20,_ZN12CEGL2_SPRITE14GetTextureSizeEPfS0_,"CEGL2_SPRITE::GetTextureSize(float*, float*)",mentioned_unverified,
 000aced8,20,_ZN12CEGL2_SPRITE16GetTextureBufferEv,CEGL2_SPRITE::GetTextureBuffer(),read_full,NOTES §534
-000af5c0,20,_ZN16CEGL2_TEX_HYBRID19GL_GetTextureHandleEi,CEGL2_TEX_HYBRID::GL_GetTextureHandle(int),unread,
+000af5c0,20,_ZN16CEGL2_TEX_HYBRID19GL_GetTextureHandleEi,CEGL2_TEX_HYBRID::GL_GetTextureHandle(int),read_full,NOTES §546
 000b1b8c,20,_ZN11CEGL_PACKET15GetExtraCurrentEi,CEGL_PACKET::GetExtraCurrent(int),unread,
 000b1be8,20,_ZN11CEGL_PACKET10SetVBOInfoEiii,"CEGL_PACKET::SetVBOInfo(int, int, int)",unread,
 000b3b74,20,_ZN11CINPUT_DATA12GetPressMaskEi,CINPUT_DATA::GetPressMask(int),read_full,NOTES §540
@@ -4885,8 +4885,8 @@ address,size,mangled,demangled,status,section_ref
 000b5510,20,_ZN5CRECT8SetGroupEii,"CRECT::SetGroup(int, int)",read_full,NOTES §535
 000b8994,20,_ZN5CLISTC1Ev,CLIST::CLIST(),mentioned_unverified,
 000b8a04,20,_ZN5CLISTD1Ev,CLIST::~CLIST(),unread,
-000b5b1c,20,_ZN13CUI_SCROLLBAR15GetScrollOffsetEPiS0_,"CUI_SCROLLBAR::GetScrollOffset(int*, int*)",unread,
-000b5c20,20,_ZN13CUI_SCROLLBAR12SetCellPressEii,"CUI_SCROLLBAR::SetCellPress(int, int)",unread,
+000b5b1c,20,_ZN13CUI_SCROLLBAR15GetScrollOffsetEPiS0_,"CUI_SCROLLBAR::GetScrollOffset(int*, int*)",read_full,NOTES §547
+000b5c20,20,_ZN13CUI_SCROLLBAR12SetCellPressEii,"CUI_SCROLLBAR::SetCellPress(int, int)",read_full,NOTES §547
 000b6f6c,20,_ZN9CFILE_TXTD2Ev,CFILE_TXT::~CFILE_TXT(),read_structural,NOTES §344
 000b6f6c,20,_ZN9CFILE_TXTD1Ev,CFILE_TXT::~CFILE_TXT(),read_structural,NOTES §344
 000b707c,20,_ZN9CFILE_TXT13GetDataAsCharEiij,"CFILE_TXT::GetDataAsChar(int, int, unsigned int)",read_structural,NOTES §344
@@ -4897,10 +4897,10 @@ address,size,mangled,demangled,status,section_ref
 000b9d48,20,_ZN9CWORK_MEMC2Ev,CWORK_MEM::CWORK_MEM(),mentioned_unverified,
 000b9d48,20,_ZN9CWORK_MEMC1Ev,CWORK_MEM::CWORK_MEM(),mentioned_unverified,
 000b9ddc,20,_ZN9CWORK_MEM7GetTailEj,CWORK_MEM::GetTail(unsigned int),mentioned_unverified,
-000bcb8c,20,_ZN12CSOUND_IF_SLD1Ev,CSOUND_IF_SL::~CSOUND_IF_SL(),unread,
-000bbb14,20,_ZN12CSOUND_IF_SL13GetBufferTypeEi,CSOUND_IF_SL::GetBufferType(int),unread,
+000bcb8c,20,_ZN12CSOUND_IF_SLD1Ev,CSOUND_IF_SL::~CSOUND_IF_SL(),read_full,NOTES §545
+000bbb14,20,_ZN12CSOUND_IF_SL13GetBufferTypeEi,CSOUND_IF_SL::GetBufferType(int),read_full,NOTES §545
 000bbc18,20,_ZN12CSOUND_IF_SL11GetSLFormatEi,CSOUND_IF_SL::GetSLFormat(int),mentioned_unverified,
-000bcb8c,20,_ZN12CSOUND_IF_SLD2Ev,CSOUND_IF_SL::~CSOUND_IF_SL(),unread,
+000bcb8c,20,_ZN12CSOUND_IF_SLD2Ev,CSOUND_IF_SL::~CSOUND_IF_SL(),read_full,NOTES §545
 000bcc5c,20,_ZNK17CSOUND_LOADER_PCM9GetFormatEv,CSOUND_LOADER_PCM::GetFormat() const,unread,
 000bccd0,20,_ZNK17CSOUND_LOADER_PCM10GetLoopOutEv,CSOUND_LOADER_PCM::GetLoopOut() const,unread,
 000bd154,20,_ZNK17CSOUND_LOADER_OGG9GetFormatEv,CSOUND_LOADER_OGG::GetFormat() const,unread,
@@ -5228,8 +5228,8 @@ address,size,mangled,demangled,status,section_ref
 0028d1b0,20,_Z9tlGetHeapv,tlGetHeap(),unread,
 0028dcf0,20,StartRCnt,StartRCnt,unread,
 0028df7c,20,_card_info,_card_info,unread,
-002a34d0,20,_ZN11pspSaveBase11GameDataSetEPvjj,"pspSaveBase::GameDataSet(void*, unsigned int, unsigned int)",unread,
-002a3370,20,_ZN11pspSaveBase7SaveEndEv,pspSaveBase::SaveEnd(),unread,
+002a34d0,20,_ZN11pspSaveBase11GameDataSetEPvjj,"pspSaveBase::GameDataSet(void*, unsigned int, unsigned int)",read_full,NOTES §543
+002a3370,20,_ZN11pspSaveBase7SaveEndEv,pspSaveBase::SaveEnd(),read_full,NOTES §543
 0028e0b4,20,xpLibapiUserIdSet,xpLibapiUserIdSet,unread,
 0028e1fc,20,xpLibapiTitleIdSet,xpLibapiTitleIdSet,unread,
 0028e210,20,xpLibapiDataVersionSet,xpLibapiDataVersionSet,unread,
@@ -5256,8 +5256,8 @@ address,size,mangled,demangled,status,section_ref
 002a2b84,20,_ZN7xpLibSNC2Ev,xpLibSN::xpLibSN(),unread,
 002a2b84,20,_ZN7xpLibSNC1Ev,xpLibSN::xpLibSN(),unread,
 002a3138,20,xpSetResume,xpSetResume,unread,
-002a34a8,20,_ZN11pspSaveBase9setUserIdEv,pspSaveBase::setUserId(),unread,
-002a376c,20,_ZN11pspSaveBase14errorMsgStrGetENS_19PspSaveErrorMsgTypeE,pspSaveBase::errorMsgStrGet(pspSaveBase::PspSaveErrorMsgType),unread,
+002a34a8,20,_ZN11pspSaveBase9setUserIdEv,pspSaveBase::setUserId(),read_full,NOTES §543
+002a376c,20,_ZN11pspSaveBase14errorMsgStrGetENS_19PspSaveErrorMsgTypeE,pspSaveBase::errorMsgStrGet(pspSaveBase::PspSaveErrorMsgType),read_full,NOTES §543
 002ab6fc,20,_Z19GPUCmd_GetGPUCmd_IPv,GPUCmd_GetGPUCmd_IP(),unread,
 002b1430,20,_Z18SettingsBundle_Getv,SettingsBundle_Get(),unread,
 002b14d0,20,_Z23Project_Archive_GetFilei,Project_Archive_GetFile(int),unread,
@@ -5302,22 +5302,22 @@ address,size,mangled,demangled,status,section_ref
 000b1b5c,16,_ZN11CEGL_PACKET17SetTextureCurrentEj,CEGL_PACKET::SetTextureCurrent(unsigned int),mentioned_unverified,
 000b1b6c,16,_ZN11CEGL_PACKET8GetExtraEii,"CEGL_PACKET::GetExtra(int, int)",unread,
 000ace90,16,_ZN12CEGL2_SPRITE6IsLoadEv,CEGL2_SPRITE::IsLoad(),read_full,NOTES §534
-000aef7c,16,_ZN16CEGL2_TEX_HYBRID6UV_GetEi,CEGL2_TEX_HYBRID::UV_Get(int),unread,
-000af634,16,_ZN16CEGL2_TEX_HYBRID10GL_SetUsedEii,"CEGL2_TEX_HYBRID::GL_SetUsed(int, int)",unread,
+000aef7c,16,_ZN16CEGL2_TEX_HYBRID6UV_GetEi,CEGL2_TEX_HYBRID::UV_Get(int),read_full,NOTES §546
+000af634,16,_ZN16CEGL2_TEX_HYBRID10GL_SetUsedEii,"CEGL2_TEX_HYBRID::GL_SetUsed(int, int)",read_full,NOTES §546
 000b1ae4,16,_ZN11CEGL_PACKET10GetIndicesEv,CEGL_PACKET::GetIndices(),unread,
 000b1b7c,16,_ZN11CEGL_PACKET8SetExtraEiii,"CEGL_PACKET::SetExtra(int, int, int)",mentioned_unverified,
 000b3528,16,_ZN11CINPUT_DATA4InitEP11_INPUT_DATA,CINPUT_DATA::Init(_INPUT_DATA*),mentioned_unverified,
 000b4f78,16,_ZN5CRECT5ClearEv,CRECT::Clear(),mentioned_unverified,
 000bdb70,16,_ZN5CSTEP8RegisterEP10_DATA_STEP,CSTEP::Register(_DATA_STEP*),mentioned_unverified,
-000b5b3c,16,_ZN13CUI_SCROLLBAR11GetCellRectEi,CUI_SCROLLBAR::GetCellRect(int),unread,
-000b5c10,16,_ZN13CUI_SCROLLBAR12GetCellPressEi,CUI_SCROLLBAR::GetCellPress(int),unread,
+000b5b3c,16,_ZN13CUI_SCROLLBAR11GetCellRectEi,CUI_SCROLLBAR::GetCellRect(int),read_full,NOTES §547
+000b5c10,16,_ZN13CUI_SCROLLBAR12GetCellPressEi,CUI_SCROLLBAR::GetCellPress(int),read_full,NOTES §547
 000b6c58,16,_ZN9CFILE_DAT8GetTableEii,"CFILE_DAT::GetTable(int, int)",unread,
 000b6ef0,16,_ZN9CFILE_TXTC2Ec,CFILE_TXT::CFILE_TXT(char),read_structural,NOTES §344
 000b6ef0,16,_ZN9CFILE_TXTC1Ec,CFILE_TXT::CFILE_TXT(char),read_structural,NOTES §344
 000b8c08,16,_ZN9CSTR_UTIL10DBCSToWORDEPc,CSTR_UTIL::DBCSToWORD(char*),read_full,NOTES §541
-000bb114,16,_ZN9CSOUND_IF11GetPositionEi,CSOUND_IF::GetPosition(int),unread,
-000bb220,16,_ZN9CSOUND_IF9GetLengthEi,CSOUND_IF::GetLength(int),unread,
-000bb560,16,_ZN9CSOUND_IF9GetFormatEi,CSOUND_IF::GetFormat(int),unread,
+000bb114,16,_ZN9CSOUND_IF11GetPositionEi,CSOUND_IF::GetPosition(int),read_full,NOTES §544
+000bb220,16,_ZN9CSOUND_IF9GetLengthEi,CSOUND_IF::GetLength(int),read_full,NOTES §544
+000bb560,16,_ZN9CSOUND_IF9GetFormatEi,CSOUND_IF::GetFormat(int),read_full,NOTES §544
 000bd464,16,_ZNK14COggMemMapFile6IsOpenEv,COggMemMapFile::IsOpen() const,unread,
 000bdb38,16,_ZN10CFRAMERATE9FrameStepEi,CFRAMERATE::FrameStep(int),mentioned_unverified,
 000bdb50,16,_ZN10CFRAMERATE8SetPauseEi,CFRAMERATE::SetPause(int),unread,
@@ -5392,8 +5392,8 @@ address,size,mangled,demangled,status,section_ref
 0028debc,16,_ZN8xpApiEnv9startCARDEv,xpApiEnv::startCARD(),unread,
 0028dedc,16,_ZN8xpApiEnv8stopCARDEv,xpApiEnv::stopCARD(),unread,
 0028deec,16,StopCARD,StopCARD,unread,
-002a34e4,16,_ZN11pspSaveBase12Icon0DataSetEPvjj,"pspSaveBase::Icon0DataSet(void*, unsigned int, unsigned int)",unread,
-002a3504,16,_ZN11pspSaveBase20BackGoundPic1DataSetEPvjj,"pspSaveBase::BackGoundPic1DataSet(void*, unsigned int, unsigned int)",unread,
+002a34e4,16,_ZN11pspSaveBase12Icon0DataSetEPvjj,"pspSaveBase::Icon0DataSet(void*, unsigned int, unsigned int)",read_full,NOTES §543
+002a3504,16,_ZN11pspSaveBase20BackGoundPic1DataSetEPvjj,"pspSaveBase::BackGoundPic1DataSet(void*, unsigned int, unsigned int)",read_full,NOTES §543
 0028e694,16,_Z15xpSetVblankFuncPFviPvES_,"xpSetVblankFunc(void (*)(int, void*), void*)",unread,
 002a39b8,16,sceGeEdramGetAddr,sceGeEdramGetAddr,unread,
 002a1028,16,CompMatrix,CompMatrix,unread,
@@ -5406,9 +5406,9 @@ address,size,mangled,demangled,status,section_ref
 002a2be8,16,PCinit,PCinit,unread,
 002a2c60,16,_ZN7xpLibSN6PCreadEiPci,"xpLibSN::PCread(int, char*, int)",unread,
 002a2fe4,16,xpGetSPADAddress,xpGetSPADAddress,unread,
-002a33d0,16,_ZN11pspSaveBase15SecureFileIdSetEPKh,pspSaveBase::SecureFileIdSet(unsigned char const*),unread,
-002a34f4,16,_ZN11pspSaveBase15PmfIcon1DataSetEPvjj,"pspSaveBase::PmfIcon1DataSet(void*, unsigned int, unsigned int)",unread,
-002a3514,16,_ZN11pspSaveBase7Snd0SetEPvjj,"pspSaveBase::Snd0Set(void*, unsigned int, unsigned int)",unread,
+002a33d0,16,_ZN11pspSaveBase15SecureFileIdSetEPKh,pspSaveBase::SecureFileIdSet(unsigned char const*),read_full,NOTES §543
+002a34f4,16,_ZN11pspSaveBase15PmfIcon1DataSetEPvjj,"pspSaveBase::PmfIcon1DataSet(void*, unsigned int, unsigned int)",read_full,NOTES §543
+002a3514,16,_ZN11pspSaveBase7Snd0SetEPvjj,"pspSaveBase::Snd0Set(void*, unsigned int, unsigned int)",read_full,NOTES §543
 002a39a8,16,_ZN11pspSaveList6UpdateEv,pspSaveList::Update(),mentioned_unverified,
 002b1fe8,16,_Z13Offscreen_Getv,Offscreen_Get(),unread,
 002b375c,16,_Z18Error_GetErrorCodev,Error_GetErrorCode(),unread,
@@ -5441,7 +5441,7 @@ address,size,mangled,demangled,status,section_ref
 000acaa4,12,_ZN12CEGL2_SPRITE15SetVertexOffsetEff,"CEGL2_SPRITE::SetVertexOffset(float, float)",read_full,NOTES §534
 000ad8c4,12,_ZN12CEGL2_SPRITE8SetScaleEff,"CEGL2_SPRITE::SetScale(float, float)",read_full,NOTES §534
 000ae07c,12,_ZN12CEGL2_SPRITE8SetAlphaEih,"CEGL2_SPRITE::SetAlpha(int, unsigned char)",read_full,NOTES §534
-000af104,12,_ZN16CEGL2_TEX_HYBRID16CLUTAddr_GetAddrEi,CEGL2_TEX_HYBRID::CLUTAddr_GetAddr(int),unread,
+000af104,12,_ZN16CEGL2_TEX_HYBRID16CLUTAddr_GetAddrEi,CEGL2_TEX_HYBRID::CLUTAddr_GetAddr(int),read_full,NOTES §546
 000b1b00,12,_ZN11CEGL_PACKET7SetTypeEih,"CEGL_PACKET::SetType(int, unsigned char)",mentioned_unverified,
 000b1b28,12,_ZN11CEGL_PACKET12SetBlendModeEih,"CEGL_PACKET::SetBlendMode(int, unsigned char)",mentioned_unverified,
 000b1b50,12,_ZN11CEGL_PACKET10SetTextureEij,"CEGL_PACKET::SetTexture(int, unsigned int)",mentioned_unverified,
@@ -5476,7 +5476,7 @@ address,size,mangled,demangled,status,section_ref
 000b5094,12,_ZN5CRECT15SetScreenOffsetEii,"CRECT::SetScreenOffset(int, int)",read_full,NOTES §535
 000b50b4,12,_ZN5CRECT14SetScreenScaleEff,"CRECT::SetScreenScale(float, float)",read_full,NOTES §535
 000bdb60,12,_ZN5CSTEPC1Ev,CSTEP::CSTEP(),mentioned_unverified,
-000b5b30,12,_ZN13CUI_SCROLLBAR16IsEnableScrollUpEv,CUI_SCROLLBAR::IsEnableScrollUp(),unread,
+000b5b30,12,_ZN13CUI_SCROLLBAR16IsEnableScrollUpEv,CUI_SCROLLBAR::IsEnableScrollUp(),read_full,NOTES §547
 000b61d8,12,_ZN11CCOMP_Z_DEC12SetBlockSizeEii,"CCOMP_Z_DEC::SetBlockSize(int, int)",mentioned_unverified,
 000b63a4,12,_ZN11CCOMP_Z_ENC12SetBlockSizeEii,"CCOMP_Z_ENC::SetBlockSize(int, int)",mentioned_unverified,
 000ba084,12,_Z5Sleepj,Sleep(unsigned int),unread,
@@ -5531,8 +5531,8 @@ address,size,mangled,demangled,status,section_ref
 002a142c,12,SetFogNear,SetFogNear,unread,
 002a26c8,12,_ZN8xpLibpad11RepParamSetEss,"xpLibpad::RepParamSet(short, short)",unread,
 002a2714,12,_ZN8xpLibpad9PadTblSetEPj,xpLibpad::PadTblSet(unsigned int*),unread,
-002a3340,12,_ZN11pspSaveBase8FocusSetEv,pspSaveBase::FocusSet(),unread,
-002a34bc,12,_ZN11pspSaveBase11setExecTypeEv,pspSaveBase::setExecType(),unread,
+002a3340,12,_ZN11pspSaveBase8FocusSetEv,pspSaveBase::FocusSet(),read_full,NOTES §543
+002a34bc,12,_ZN11pspSaveBase11setExecTypeEv,pspSaveBase::setExecType(),read_full,NOTES §543
 002b0510,12,_ZN9CAPP_INFO11GetTempPathEv,CAPP_INFO::GetTempPath(),read_full,NOTES §542
 002cd57c,8,__aeabi_unwind_cpp_pr0,__aeabi_unwind_cpp_pr0,unread,
 002cd584,8,__aeabi_unwind_cpp_pr1,__aeabi_unwind_cpp_pr1,unread,
@@ -5568,8 +5568,8 @@ address,size,mangled,demangled,status,section_ref
 000ae088,8,_ZN12CEGL2_SPRITE21GetMultiTextureHandleEv,CEGL2_SPRITE::GetMultiTextureHandle(),mentioned_unverified,
 000aec10,8,_ZN12CEGL2_SPRITE21SetMultiTextureHandleEj,CEGL2_SPRITE::SetMultiTextureHandle(unsigned int),read_full,NOTES §534
 000aee5c,8,_ZN16CEGL2_TEX_HYBRID8RegisterEi,CEGL2_TEX_HYBRID::Register(int),mentioned_unverified,
-000af110,8,_ZN16CEGL2_TEX_HYBRID10RAW_GetFIDEv,CEGL2_TEX_HYBRID::RAW_GetFID(),unread,
-000af118,8,_ZN16CEGL2_TEX_HYBRID10RAW_GetBufEv,CEGL2_TEX_HYBRID::RAW_GetBuf(),unread,
+000af110,8,_ZN16CEGL2_TEX_HYBRID10RAW_GetFIDEv,CEGL2_TEX_HYBRID::RAW_GetFID(),read_full,NOTES §546
+000af118,8,_ZN16CEGL2_TEX_HYBRID10RAW_GetBufEv,CEGL2_TEX_HYBRID::RAW_GetBuf(),read_full,NOTES §546
 000af9e8,8,_ZN7CCAMERA7SetModeENS_8CAM_MODEE,CCAMERA::SetMode(CCAMERA::CAM_MODE),mentioned_unverified,
 000af9f0,8,_ZN7CCAMERA11SetNearClipEf,CCAMERA::SetNearClip(float),unread,
 000af9f8,8,_ZN7CCAMERA10SetFarClipEf,CCAMERA::SetFarClip(float),unread,
@@ -5585,7 +5585,7 @@ address,size,mangled,demangled,status,section_ref
 000b523c,8,_ZN5CRECT10GetLastRIDEv,CRECT::GetLastRID(),read_full,NOTES §535
 000b5244,8,_ZN5CRECT6GetRIDEv,CRECT::GetRID(),read_full,NOTES §535
 000b524c,8,_ZN5CRECT6SetRIDEi,CRECT::SetRID(int),read_full,NOTES §535
-000b5b14,8,_ZN13CUI_SCROLLBAR10GetScissorEv,CUI_SCROLLBAR::GetScissor(),unread,
+000b5b14,8,_ZN13CUI_SCROLLBAR10GetScissorEv,CUI_SCROLLBAR::GetScissor(),read_full,NOTES §547
 000b8a18,8,_ZN5CLIST8GetCountEv,CLIST::GetCount(),mentioned_unverified,
 000b67b0,8,_ZN5CFILE12GetLastErrorEv,CFILE::GetLastError(),read_structural,NOTES §342
 000b682c,8,_ZN5CFILE9GetHandleEv,CFILE::GetHandle(),read_structural,NOTES §342
@@ -5615,12 +5615,12 @@ address,size,mangled,demangled,status,section_ref
 000b9df0,8,_ZN9CWORK_MEM12GetAllocSizeEv,CWORK_MEM::GetAllocSize(),unread,
 000b9fc4,8,_ZN7CTHREAD11SetPriorityEi,CTHREAD::SetPriority(int),unread,
 000b9fcc,8,_ZN7CTHREAD4WaitEv,CTHREAD::Wait(),mentioned_unverified,
-000ba300,8,_ZN9CSOUND_IF5GetIFEv,CSOUND_IF::GetIF(),unread,
-000ba308,8,_ZN9CSOUND_IF9GetEnableEv,CSOUND_IF::GetEnable(),unread,
+000ba300,8,_ZN9CSOUND_IF5GetIFEv,CSOUND_IF::GetIF(),read_full,NOTES §544
+000ba308,8,_ZN9CSOUND_IF9GetEnableEv,CSOUND_IF::GetEnable(),read_full,NOTES §544
 000ba39c,8,_ZN9CSOUND_IF9SetEnableEi,CSOUND_IF::SetEnable(int),mentioned_unverified,
 000bd738,8,_ZN17CSOUND_LOADER_OGG13GetPlaySampleEv,CSOUND_LOADER_OGG::GetPlaySample(),mentioned_unverified,
 000bd95c,8,_ZN17CSOUND_LOADER_OGG15GetStreamBufferEv,CSOUND_LOADER_OGG::GetStreamBuffer(),mentioned_unverified,
-000bb9f8,8,_ZN12CSOUND_IF_SL9GetVolumeEi,CSOUND_IF_SL::GetVolume(int),unread,
+000bb9f8,8,_ZN12CSOUND_IF_SL9GetVolumeEi,CSOUND_IF_SL::GetVolume(int),read_full,NOTES §545
 000bcbf4,8,_ZN13CSOUND_LOADER14GetSoundFormatEv,CSOUND_LOADER::GetSoundFormat(),unread,
 000bcbfc,8,_ZNK17CSOUND_LOADER_PCM6IsOpenEv,CSOUND_LOADER_PCM::IsOpen() const,unread,
 000bcc4c,8,_ZN17CSOUND_LOADER_PCM14GetSoundFormatEv,CSOUND_LOADER_PCM::GetSoundFormat(),unread,
@@ -5899,12 +5899,12 @@ address,size,mangled,demangled,status,section_ref
 0028de84,8,_card_status,_card_status,unread,
 0028de8c,8,_Z9firstfilePKcP8DIRENTRY,"firstfile(char const*, DIRENTRY*)",unread,
 0028de94,8,_Z8nextfileP8DIRENTRY,nextfile(DIRENTRY*),unread,
-002a37a0,8,_ZN11pspSaveBase13IsMemoryStickEv,pspSaveBase::IsMemoryStick(),unread,
-002a34c8,8,_ZN11pspSaveBase11ExecTypeSetEi,pspSaveBase::ExecTypeSet(int),unread,
-002a35cc,8,_ZN11pspSaveBase12ExecStateGetEv,pspSaveBase::ExecStateGet(),unread,
-002a35d4,8,_ZN11pspSaveBase12ErrorTypeGetEv,pspSaveBase::ErrorTypeGet(),unread,
-002a35c4,8,_ZN11pspSaveBase16AbortedStatusGetEv,pspSaveBase::AbortedStatusGet(),unread,
-002a37a8,8,_ZN11pspSaveBase14DataVersionSetE25SceUtilitySavedataVersion,pspSaveBase::DataVersionSet(SceUtilitySavedataVersion),unread,
+002a37a0,8,_ZN11pspSaveBase13IsMemoryStickEv,pspSaveBase::IsMemoryStick(),read_full,NOTES §543
+002a34c8,8,_ZN11pspSaveBase11ExecTypeSetEi,pspSaveBase::ExecTypeSet(int),read_full,NOTES §543
+002a35cc,8,_ZN11pspSaveBase12ExecStateGetEv,pspSaveBase::ExecStateGet(),read_full,NOTES §543
+002a35d4,8,_ZN11pspSaveBase12ErrorTypeGetEv,pspSaveBase::ErrorTypeGet(),read_full,NOTES §543
+002a35c4,8,_ZN11pspSaveBase16AbortedStatusGetEv,pspSaveBase::AbortedStatusGet(),read_full,NOTES §543
+002a37a8,8,_ZN11pspSaveBase14DataVersionSetE25SceUtilitySavedataVersion,pspSaveBase::DataVersionSet(SceUtilitySavedataVersion),read_full,NOTES §543
 0028e254,8,xpLibapiIsMemoryStick,xpLibapiIsMemoryStick,unread,
 0028e568,8,sceDisplayWaitVblankStartCB,sceDisplayWaitVblankStartCB,unread,
 0028e594,8,sceDisplayGetVcount,sceDisplayGetVcount,unread,
@@ -5923,10 +5923,10 @@ address,size,mangled,demangled,status,section_ref
 002a2720,8,_ZNK8xpLibpad9PadTblGetEv,xpLibpad::PadTblGet() const,unread,
 002a3114,8,xpMallocErrorFuncSet,xpMallocErrorFuncSet,unread,
 002a314c,8,_ZN11pspSaveBase4ExitEv,pspSaveBase::Exit(),mentioned_unverified,
-002a3384,8,_ZN11pspSaveBase6IsExecEv,pspSaveBase::IsExec(),unread,
-002a33c8,8,_ZN11pspSaveBase11FileNameSetEPKc,pspSaveBase::FileNameSet(char const*),unread,
-002a3410,8,_ZN11pspSaveBase12AnimFrameSetEi,pspSaveBase::AnimFrameSet(int),unread,
-002a35bc,8,_ZN11pspSaveBase13ExecResultGetEv,pspSaveBase::ExecResultGet(),unread,
+002a3384,8,_ZN11pspSaveBase6IsExecEv,pspSaveBase::IsExec(),read_full,NOTES §543
+002a33c8,8,_ZN11pspSaveBase11FileNameSetEPKc,pspSaveBase::FileNameSet(char const*),read_full,NOTES §543
+002a3410,8,_ZN11pspSaveBase12AnimFrameSetEi,pspSaveBase::AnimFrameSet(int),read_full,NOTES §543
+002a35bc,8,_ZN11pspSaveBase13ExecResultGetEv,pspSaveBase::ExecResultGet(),read_full,NOTES §543
 002b0348,8,_Z23TexHybrid_GetTextureMaxi,TexHybrid_GetTextureMax(int),unread,
 002b0424,8,_ZN9CAPP_INFO13GetDeviceTypeEv,CAPP_INFO::GetDeviceType(),read_full,NOTES §542
 002b042c,8,_ZN9CAPP_INFO10GetDeviceWEv,CAPP_INFO::GetDeviceW(),read_full,NOTES §542
@@ -6023,8 +6023,8 @@ address,size,mangled,demangled,status,section_ref
 000b8be0,4,_ZN9CSTR_UTILD1Ev,CSTR_UTIL::~CSTR_UTIL(),read_full,NOTES §541
 000ba090,4,_Z6SleepMj,SleepM(unsigned int),unread,
 000bb834,4,_ZN12CSOUND_IF_SL9FrameMoveEif,"CSOUND_IF_SL::FrameMove(int, float)",mentioned_unverified,
-000bb058,4,_ZN9CSOUND_IF14ResetLoopPointEi,CSOUND_IF::ResetLoopPoint(int),unread,
-000bbb10,4,_ZN12CSOUND_IF_SL8SetTransEifff,"CSOUND_IF_SL::SetTrans(int, float, float, float)",unread,
+000bb058,4,_ZN9CSOUND_IF14ResetLoopPointEi,CSOUND_IF::ResetLoopPoint(int),read_full,NOTES §544
+000bbb10,4,_ZN12CSOUND_IF_SL8SetTransEifff,"CSOUND_IF_SL::SetTrans(int, float, float, float)",read_full,NOTES §545
 000bcbf0,4,_ZN13CSOUND_LOADER9FrameMoveEif,"CSOUND_LOADER::FrameMove(int, float)",mentioned_unverified,
 000bd964,4,_ZN10CFRAMERATED2Ev,CFRAMERATE::~CFRAMERATE(),unread,
 000bd964,4,_ZN10CFRAMERATED1Ev,CFRAMERATE::~CFRAMERATE(),unread,
@@ -6430,7 +6430,7 @@ address,size,mangled,demangled,status,section_ref
 002a1438,4,SetFarColor,SetFarColor,unread,
 002a2ff4,4,_Z8InitHeapPmm,"InitHeap(unsigned long*, unsigned long)",unread,
 002a3110,4,xpMallocSizeGet,xpMallocSizeGet,unread,
-002a379c,4,_ZN11pspSaveBase14ErrorMsgStrGetENS_19PspSaveErrorMsgTypeE,pspSaveBase::ErrorMsgStrGet(pspSaveBase::PspSaveErrorMsgType),unread,
+002a379c,4,_ZN11pspSaveBase14ErrorMsgStrGetENS_19PspSaveErrorMsgTypeE,pspSaveBase::ErrorMsgStrGet(pspSaveBase::PspSaveErrorMsgType),read_full,NOTES §543
 002ab900,4,sceGuColorFunc,sceGuColorFunc,unread,
 002b0420,4,_ZN9CAPP_INFOD2Ev,CAPP_INFO::~CAPP_INFO(),read_full,NOTES §542
 002b0420,4,_ZN9CAPP_INFOD1Ev,CAPP_INFO::~CAPP_INFO(),read_full,NOTES §542
