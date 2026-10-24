@@ -17976,3 +17976,229 @@ grab-bag do §563), seção 553 (`_gte_*`, ponte direta via `Vector_*`).
 Lote 76 fecha 532 funções em 5 grupos — o trabalho de identificação
 de subsistema por nome continua rendendo (quarto veneer, 2 tabelas de
 salto novas, 1 pendência de 2 lotes atrás resolvida).
+
+**Atualização de processo (2026-10-24, lote 77)**: por uma limitação
+do mecanismo de fork desta sessão (fork não pode disparar sub-fork),
+este lote foi processado pelo agente coordenador direto, reutilizando
+a lógica de `jtable.py` via um driver Python em lote (sem abrir 387
+processos de CLI) em vez de 5 forks paralelos. Mesmo critério de
+status de sempre, só aplicado manualmente: déficit de cobertura ≤2
+slots (ou tabela de salto resolvida) = literal pool = `read_full`;
+déficit maior = `read_structural` honesto.
+
+## 564. Família `requestXxx` (63 funções, camelCase — distinta de `request_*`/`Wrequest_*` já fechados nos lotes 75/76) — camada de pedido de efeito/animação de batalha, logo abaixo de `request_makeattack` (2026-10-24, Fase 3, septuagésimo sétimo lote)
+
+Três sub-famílias claras pelo catálogo de `bl`: **animação**
+(`requestDefaultAnimation`/`AttackAnimation`/`ThrowAnimation`/
+`StanderdWalkAnimation`/`NewAnimation`/`CastNAnimation` — todas
+convergem em `searchAnimationByID`/`ByBattleID` + `changeAnimation`/
+`forceChangeAnimation`, o mesmo par já confirmado em `setAnimation*`
+§560); **destino/câmera** (`requestDestinationGradation`/`Flat`/
+`Anbient` — todas chamam `ASHURA_CVECTOR` [§562, tabela de salto já
+resolvida] + `__divsi3`; as variantes `*AsDefault` tail-call a versão
+base com um parâmetro fixo via `sub_714b8`); **scroll de mapa**
+(`requestMapScroll`/`Scale`/`Angle`/`XYZ` + variantes `*Relative`,
+todas chamam só `iOS_GetFrameRate`+`__divsi3` — ajuste de velocidade
+de câmera por framerate, mesmo padrão já visto em `FadeOut`/`b`/`c`
+do lote 74, §551).
+
+**Achado de família oculta**: 7 funções `request{Landing,Waterin,
+Poison,Levelup,Telepo,Death,Cristal}Effect` (8B cada, catálogo vazio)
+são tail-calls puros (`mov r1,#N; b requestParmanentEffectMyself`) —
+confirmado por desmontagem manual — que só fixam um código de efeito
+numérico antes de delegar pro builder genérico de efeito permanente
+(`requestParmanentEffect(Myself)`, este lido com `bl` real:
+`RequestBowEffect`/`RequestHitMarkEffect`, ambos recebendo um
+`EffectOrder*` — fila de ordens de efeito visual já conhecida de
+outro contexto). `requestStatusResult`/`requestDamageResult*` seguem
+o mesmo padrão de alias por tail-call. 52 `read_full`, 11
+`read_structural` (as 6 `requestMapScroll*` com `bl` real porém
+cobertura <93%, mais `requestAttackSound`/`ParmanentEffect`/
+`HitMark`).
+
+## 565. Grupo iOS misto — confirma o lado "chamador" real do sistema de resume (`iOS_Resume*`), toque no mapa-mundo (visão "Fukan"/overhead) e os checadores de flag "Brave" (2026-10-24, Fase 3, septuagésimo sétimo lote)
+
+77 funções (`iOS_Get*`/`iOS_Set*`/`iOS_Res*` com maiúscula — mesmo
+grupo que `iOS_get*`/`iOS_set*` minúsculos do lote 76, confirmados
+símbolos DIFERENTES por endereço — mais `iOSstar*`/`iOSdisp*`/
+`iOS_chk*`/`iOSStat*`/`iOSMapC*`/`get_uni*`/`setPane*`).
+
+**Achado central**: `iOS_ResumeWorldMap`/`iOS_ResumeBeforeBattle`/
+`iOS_ResumeByAutoSave`/`iOS_ResumeMusic`/`iOS_ResumeAfterAttackTeam`
+são os CHAMADORES reais da família `iOS_RESUME_SET_*` já fechada no
+lote 75 (§555) — nunca tinham sido lidos por dentro. `iOS_ResumeWorldMap`
+(140B) chama 7 membros `SET_*` em sequência (EVENT_W/WORK_IW/RESERVE/
+UNIT_SD/GLBLWORK/WLDSAVE/PSPSAVE) — restaura o estado completo do
+mapa-mundo num só lugar. `iOS_Resume_DataCopy`/`DataCopyAddr` (os
+primitivos genéricos citados dezenas de vezes) finalmente lidos: são
+funções pequenas e auto-contidas (`DataCopy` 44B 0 `bl`; `DataCopyAddr`
+84B, 1 `bl: ResumeData_GetHeapOffset`) — confirma que o "copiar campo"
+é mesmo trivial, toda a complexidade do sistema está em QUAL campo
+cada `SET_*` escolhe copiar.
+
+**`iOS_chkBraveEventFlag`/`iOS_chkBraveTresureFlag`**: "Brave" é
+atributo real de unidade em Tactics (ponto de bravura/compatibilidade)
+— `chkBraveEventFlag` (396B) tem uma tabela de salto de **64
+casos/2 handlers** totalmente resolvida (classifica 64 IDs de evento
+específicos em "concede ponto Brave" sim/não), chamando
+`Wread_eventflag` (sistema de task `W` real). `read_full` pela tabela
+resolvida apesar do déficit bruto de cobertura ser o maior do lote
+(34%, maioria é a própria tabela).
+
+**`iOSMapCursorCheck`/`iOSMapCurModeSet*`/`iOSstartFukanChange`**:
+"Fukan" (俯瞰) = visão aérea/panorâmica em japonês — confirma um modo
+de câmera overhead no cursor do mapa-mundo, orquestrado com
+`iOSSlideNaviCurClear`/`iOSSlideIconReset`/`iOS_getV2Icon`/
+`iOS_setV2Icon` (ícones V2 já conhecidos). `setPanelPriority*` (família
+de 5, `SVECTOR*,SVECTOR*`): ordenação de profundidade de painéis/
+tiles do mapa. `iOSdisp_personalWin*` (Appear/Disp/Stay/Phase):
+máquina de estados da janela pessoal pop-up já vista no §555
+(`iOSUnitListOutWin`), agora com as fases internas lidas. Família
+`iOS_GetRectHitNo*` (9 variantes: Tap/Begin/Release/Slide/TouchOld/
+TouchTrg/Touch/sem sufixo): getters de índice de hit-test por estado
+de toque. 68 `read_full`, 9 `read_structural`.
+
+## 566. Fronteira JNI completa + ciclo de vida `AppEngine_*` — fecha de volta a seção 2 do dossiê (todos os 12 pontos de entrada Java↔nativo lidos por dentro) (2026-10-24, Fase 3, septuagésimo sétimo lote)
+
+51 funções (`Android*`+`Java_com*`+`dispose*`/`Dispose*`+`AppEngi*`+
+`xpApiEn*`). **Achado mais importante do lote**: TODOS os 12 pontos de
+entrada `Java_com_square_1enix_FFT_1Android_GL2JNILib_{init,step,
+onTouchEvent,onKeyEvent,setAccelerometerValue,setBatteryLevel,onPause,
+onResume,onDestroy,isExit,getCommand,dialogOnClose}` listados de
+passagem na seção 2 (a primeira seção de todo o dossiê, 2026-10-16)
+foram lidos por dentro nesta passada — fecha o ciclo de volta ao
+início da investigação. A maioria é trivial (store de parâmetro em
+global, 4-28B); os 3 com lógica real: `onTouchEvent` (260B, **tabela
+de salto de 7 casos/4 handlers totalmente resolvida** — despacha por
+tipo de evento de toque Android: down/move/up/cancel, alimentando o
+`CINPUT_IF_TOUCH`/`CSTR_UTIL` já confirmados); `init` (108B, chama
+`AppEngine_Bootup`+`AppEngine_Init`+`Boot_Init`+
+`CAPP_INFO::SetDeviceBatteryLevel` — é o boot real do engine, chamado
+direto da Activity Java); `onPause` (chama `AppEngine_Suspend`).
+
+**`AppEngine_*` — ciclo de vida real do motor, nunca lido por
+completo**: `AppEngine_Bootup()` (248B, 100%, 11 `bl`) monta a cadeia
+de boot: `Android_GetSystemPath`+`Sleep`+`CAPP_INFO::
+SetDeviceOrientation`+`GetRootPath`+`GetDataPath`+`Init`+
+`SettingsBundle_Init` (§563). `AppEngine_Uninit()` destrói
+`CINPUT_IF_TOUCH`+`CFILE_DAT`+`CFRAMERATE` em sequência (mais 3×
+`operator delete`, §554). `AppEngine_Suspend`/`Resume` chamam
+`CINPUT_IF_TOUCH::ClearAll`/`CSOUND_IF::Resume`+`CAPP_INFO::SetActive`+
+`Main_Suspend` — confirma que suspender o app pausa input e áudio e
+delega o resto pra `Main_*` (não lido). `AppEngineFFT_Init()` chama
+`SettingsBundle_Get` ×2 — par real com `AppEngine_Bootup`.
+
+**`Android_*` — primeira leitura de chamadas nativo→Java reais
+(`_JNIEnv::CallStatic{Void,Object,Int}Method`)**: `Android_Dialog_Open`/
+`Android_FileEnum`/`Android_GetSystemPath`/`Android_Movie_{Play,
+IsPlaying}`/`Android_Web_Open`/`Android_Vibrator_{IsExist,Vibrate}`/
+`Android_Font_SetStyle`/`Android_GetDeviceSize`/
+`Android_Accelerometer_Get` — confirma que o motor nativo chama de
+volta pro lado Java pra abrir diálogos, enumerar arquivos (via
+`CLIST`/`CSTR_UTIL::GetName`/`GetHashValue`, §541/547), tocar vídeo,
+abrir navegador, vibrar e consultar estilo de fonte — a ponte JNI
+bidirecional completa, não só o lado "Java chama nativo" já conhecido.
+
+**`Dispose*`/`dispose*`**: camada de liberação genérica —
+`DisposeObject`→`DisposeEffectAnimation`→`DisposeShape2`+`Free`;
+`DisposeTCB`/`DisposePEffectTCB` (destruição de task control block);
+dispose-minúsculo (texture/window/memory/Animation/EventAnimation/
+AbilityAnimation) como variantes por tipo de recurso. **`xpApiEnv`**
+(residual pequeno): `SetRCnt`/`StartRCnt` (tabela de salto de 4
+casos/1 handler — todos colapsam no mesmo destino, efetivamente
+sem ramificação real) + `_card_info` (chama `pspSaveBase::
+IsMemoryStick`, §543) + `init/start/stopCARD`/`alarmHandler`. 31
+`read_full`, 20 `read_structural` (a maioria dos `Android_*`/
+`AppEngine_*`/`Dispose*` com lógica real e cobertura 82-95%).
+
+## 567. Grab-bag de 103 funções — `RotAverage*`/`RotTransPers*` (média/projeção de rotação GTE), família `ctl*` residual, I/O de arquivo/CD real, `CDebugPrint` (2026-10-24, Fase 3, septuagésimo sétimo lote)
+
+`RotAverage{3,4,Nclip*}`/`RotTransPers{3,4,N}` (20 funções): camada de
+projeção/média de rotação sobre `_gte_ldv0`/`ldv3` — `RotTransPersN`
+chama `RotTransPers` N vezes (3/4 vértices), `RotAverageNclip*`
+compõe `NormalClip`+`RotAverageNclip3`+`RotColorDpq3`/`ColorCol3` —
+pipeline de projeção+clipping+cor por face, vizinho direto da família
+`NormalColor*` do grupo E (§568) e do `ASHURA_matrix` (§562). `ctl*`
+residual (`ctlwork_active/deactive`, `ctlworking_*`, `ctlopenhelp_*`,
+`ctlopenmov_*`, `ctlopentitle_*`): confirma mais handlers do padrão
+`ctlX_active`/`ctlX_deactive` já extensamente visto — `ctlopenmov_init`
+chama `iOS_InitMovie`/`iOS_StartMovie` (player de vídeo real),
+`ctlopenhelp_init` usa o sistema de task `W`. `fileRead*`/`fileOpe*`
+(13 funções): I/O de arquivo/CD-ROM REAL — `fileReadRequestOffset`
+(500B, 100%, usa `CFILE`+`CAPP_INFO::GetRootPath`+ os 4 helpers de
+string §535/541/543 + `operator new`/`new[]`/`delete`, §554) é o
+primitivo de base; `fileOpenPC`/`fileReadCDWithErrorCheck` orquestram
+leitura de CD com `pspNetGetBattleModeFlag` (leitura de CD sensível a
+modo de rede) e retry via `myPollhost`. `AddRnd{V,SV}ECTORTo*`/
+`Add{V,SV}ECTORTo*`/`Add{1,2,3,4,6,8}Shougen`/`Add...ToShort`:
+biblioteca de soma/perturbação aleatória de vetor ("Shougen" 昇天 ≈
+"ascensão", provável efeito de partícula subindo). `getSmooth*` (6
+variantes: Linear/Cos/Cos2Pai, SVECTOR/VECTOR): interpolação suave
+via `rcos`+`__divsi3` — companheira de `CSTEP` (§562) mas pra vetor
+em vez de escalar. `CDebugPrint::*` (10 membros): overlay de texto/
+linha/retângulo de debug sobre um `CEGL2_SPRITE` embutido (ctor chama
+`CEGL2_SPRITE::CEGL2_SPRITE()`). `SetPoly{F3,F4,G3,G4,GT3,GT4}`:
+família completa de setters de tipo de primitivo PS1 (triviais, 0
+`bl`). `CallGet{All,Eqp,AllDress,ItemPrice,SellItemPrice}`: fachada
+de consulta de item que delega pra `GetTotalItem`/`GetTotalEquipItem`/
+`GetItemPrice` (já conhecidos). 88 `read_full`, 15 `read_structural`.
+
+## 568. Grab-bag de 93 funções — `CLIST` lida por dentro pela primeira vez, `CCAMERA`/`CFRAMERATE` completas, `NormalColor*` liga GTE a cor-por-face, `TexHybrid_*` facade (2026-10-24, Fase 3, septuagésimo sétimo lote)
+
+**`CLIST`** (8 membros, a classe mais citada de fora sem nunca ter
+sido lida — usada por `CUI_SCROLLBAR` §547, `CSTR_UTIL` §541,
+`Android_FileEnum` §566): confirma ser um container de nós indexáveis
+genérico — `GetNode(int)`→`SetData`/`GetData`→`GetDataAsInt`/
+`GetDataAsStr` (acesso tipado sobre o nó bruto), `Add`/`Insert`/
+`ResetID`/`DeleteAll`/`~CLIST`. Todas triviais, 0-1 `bl`.
+
+**`CCAMERA`** (completa, destrutor D1/D2 já fechado no §563): câmera
+real com matriz de projeção/view (`SetProjOrtho`, 244B, 100%, aritmética
+float pura + `sub_714c4` [memset-like]), `SetFov`/`SetNearClip`/
+`SetFarClip`/`GetProj`/`GetView` — confirma que o motor tem uma câmera
+de verdade, não só a matriz `ASHURA`/`RotMatrix` (§562) de baixo
+nível. **`CFRAMERATE`** (completa): `SetPause`/`GetPause`/`SetSpeed`/
+`GetShowFPS`/`GetRootCnt`/dtor — controle de taxa de quadros/pausa já
+usado por `AppEngine_Uninit` (§566).
+
+**`NormalColor*`/`NormalClip`** (16 funções): ponte direta entre o GTE
+puro (`_gte_ldv0`/`ldv3`/`ldrgb`/`lddp`/`ldsxy3`/`stopz`/`nclip`) e
+cor/clip por face — `NormalColor{,3}` carrega vetor normal+cor+
+profundidade; `NormalClip` testa near-clip; variantes `Dpq`/`Col`
+trocam o tipo de iluminação (difusa vs. cor direta). Liga-se à família
+`RotAverage*` do §567 (mesmo pipeline projeção+cor). `TexHybrid_*` (7
+funções livres, facade sobre `CEGL2_TEX_HYBRID::` já quase todo
+fechado no §546): `FindNext/PrevTexture`/`GetTextureHandle`/`Register`/
+`RegistCLUTAddr`/`GetTextureSize`/`GetTextureMax` — API de função
+livre por cima da classe, mesmo padrão de fachada já visto em
+`xpLibapi*`→`pspSaveBase` (§554/566). `unzOpen*`/`unzOpen2*` (6,
+regra 6, minizip): todas delegam pra `unzOpenCurrentFile3`/
+`fill_zlib_filefunc64_32_def_from_filefunc32` já reconhecidos.
+`GX_GetScreen{W,H}_1X`/`GetScreenOffset{X,Y}[_1X]` (6): conversão de
+tela via `CAPP_INFO::GetDeviceScale`/`IS_TEX_2X` — mesmo tema de
+`CGX_SCREEN_CORRECT` (§537) e `GetResourceScale` (§542). `Wstatuskanjiprint*`/
+`Wstatusfigprint*`/`Wstatusnowprint` (6): impressão de texto kanji/
+dígito via `wasmKanjiCopy`/`wasmBoxCopy`/`wasm_function` — sistema de
+texto "W" real, mesmo tema de `statuskanjiprint` (§46). `eventMap{Jump,
+Jump2,Exit,FadeIn,Rewrite,RewriteWait}` (6): transições de evento no
+mapa-mundo. `wasmGet{Input1,Input2,Input3,ActiveF,ActiveTask,GP}` (6):
+getters de registrador do sistema de task `W` real, par exato de
+`asmGet*` já visto em `multiwindow_*` (§561). `initialize*` (9):
+funções de setup por subsistema (turno, item, imagem, textura
+estática, buffer de música, área de animação, fonte de debug).
+87 `read_full`, 6 `read_structural`.
+
+**Referências cruzadas (seções 564-568):** seção 2 (fronteira JNI do
+dossiê original, fechada por completo no §566 — primeiro "loop
+fechado" até a primeiríssima seção do projeto), seção 555 (`iOS_RESUME_SET_*`,
+chamadores reais encontrados no §565), seção 546/554 (`CEGL2_TEX_HYBRID`/
+fachadas-sobre-classe, padrão repetido em `TexHybrid_*`/`xpLibapi*`),
+seções 541/547 (`CLIST` finalmente lida, §568), seção 562 (`ASHURA`/
+`RotMatrix`/`CSTEP`, companheiros diretos de `RotAverage*`/`getSmooth*`
+no §567 e `NormalColor*` no §568), seção 557 (`request_makeattack`,
+camada logo abaixo confirmada em `requestXxx`, §564). Lote 77 fecha
+387 funções processadas diretamente pelo coordenador (sem forks, por
+limitação de sub-fork) — o trabalho de identificação por prefixo de
+subsistema continua rendendo achados de primeira leitura (`CLIST`,
+`CCAMERA`, ponte JNI completa, chamadores reais do sistema de
+resume).
