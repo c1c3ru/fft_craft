@@ -16515,178 +16515,470 @@ quarto membro confirmado em `sceGuClutLoad_for_iOS`), seção 512
 seção 292 (`addzodiacback`, pipeline de Zodíaco completo com
 `Zaddzod`).
 
-## 534. `set_equipbonus(BWORK*,int)` — fecha a referência direta de `adjust_equip_change_common` (seção 409), resolve bônus de equipamento via dados de armadura (2026-10-23, Fase 3, septuagésimo lote)
+## 534. Classe `CEGL2_SPRITE` — 24 membros restantes fechados, confirma fachada fina sobre `CG2D_LOADER` (2026-10-23, Fase 3, septuagésimo lote paralelo)
 
-`set_equipbonus(BWORK*,int)` (`0x1d8d50`, 552 B) — `jtable.py`:
-**100% de cobertura** (138/138), zero tabela de salto, 10 branches/6
-de retrocesso. 5 `bl`: 1 local sem símbolo, `pspItemGetCommonData`
-×2, **`pspItemGetEquipBonus`**, `pspItemIsEmpty`,
-**`pspItemGetArmorData`** ×2. Fecha a referência direta deixada por
-`adjust_equip_change_common` (seção 409) — confirma ser a rotina que
-recalcula o bônus de stat concedido pelo equipamento atual,
-consultando dados de armadura e o primitivo dedicado
-`pspItemGetEquipBonus` por slot. Marcada `read_full` (100%
-cobertura, 0 tabela de salto).
+Lote paralelo (fork 1/3), `jtable.py` em cada um dos 24 endereços ainda
+`unread` da classe. **Todos 100% de cobertura, zero tabela de salto**
+— aceitos direto pela regra 3 da metodologia, sem leitura instrução-a-
+instrução. Agrupados por nível, não por função individual:
 
-## 535. `check_tobe_crystal(int,BWORK*)` — checagem de transformação em cristal, usa RNG sincronizado de rede `_pspNetRand` (2026-10-23, Fase 3, septuagésimo lote)
+**Nível 1 — acessores puros, 0 `bl`, 0 lógica (15 funções, 8–40 B):**
+`GetPixelByte`, `SetColor(int,uchar,uchar,uchar)`, `SetColor(uchar,uchar,
+uchar)`, `SetAlpha(uchar)`, `GetImageSize`, `GetTextureBuffer`, `IsLoad`,
+`SetVertexOffset`, `SetScale`, `SetAlpha(int,uchar)`, `SetVertexScale`,
+`GetImageBPP`, `GetScaleAlignCenter`, `SetScaleAlignCenter`,
+`SetMultiTextureHandle` — load/store direto em campo da struct, sem
+chamada nenhuma, exatamente o padrão já visto em `iOS_CMenuTouchSaveLoad`
+(seção 359). `read_full` em lote.
 
-`check_tobe_crystal(int,BWORK*)` (`0x1d41d0`, 548 B) — `jtable.py`:
-**97% de cobertura** (133/137), zero tabela de salto, 15 branches/3
-de retrocesso. 3 `bl`: `init_target_result(A_RESULT*)`,
-**`_pspNetRand(char const*,int)`** ×2, `pspNetGetErrorCode()`. Já
-citada de passagem junto a `check_hide_reset` (linha 8284). **Achado
-notável**: usa `_pspNetRand` em vez do `ps_rand()` genérico usado em
-quase toda a sorte do jogo — confirma que a decisão de transformação
-em cristal (vs. tesouro, vs. fuga) é sincronizada entre os
-participantes numa partida em rede (mesmo RNG determinístico em
-todos os clientes), não um sorteio local independente — detalhe
-crítico de fairness em partidas multiplayer. Marcada `read_full`
-(97% ≥95%, 0 tabela de salto).
+**Nível 2 — wrappers de 1 `bl` só (3 funções):** `~CEGL2_SPRITE()` (24B)
+só chama `Unload(int)` — destrutor é trampolim puro, confirma que toda
+liberação real mora em `Unload` (ainda `mentioned_unverified`).
+`OnSuspend()` (56B, 1 branch retrocesso): 1 `bl` pra `sub_7177c` (local
+sem símbolo). `LoadBegin(uchar*,int,int,int,int,int,uchar,int)` (148B, 3
+branches retrocesso): 1 `bl` pra `Unload(int)` — variante de buffer bruto
+só limpa estado de textura anterior antes de armazenar o novo, sem passar
+pelo `CG2D_LOADER`. `read_full`.
 
-## 536. `MakeMapCostToDest(unsigned char*)` — fecha a referência direta de `ForAbnormalStatus`/`DattoNoGotokuNigeyoRoutine` (seções 387/517), reusa `search_reverse_mp` (2026-10-23, Fase 3, septuagésimo lote)
+**Nível 3 — adaptadores "Layout" que delegam pro par "Partial"/"Draw" já
+lido (2 funções):** `AddPacketLayout(float,float,_EGL_SPRITE_LAYOUT*,
+CEGL_PACKET*)` (108B) delega pra `AddPacketPartial` (já `read_full`) +
+`__floatsisf`; `DrawLayout(float,float,_EGL_SPRITE_LAYOUT*)` (100B) delega
+pra `DrawPartial` (já `read_structural`). Confirma que toda a família
+"*Layout" é açúcar sintático sobre o par "*Partial" — sem lógica de
+desenho própria. `read_full`.
 
-`MakeMapCostToDest(unsigned char*)` (`0x27abb4`, 548 B) —
-`jtable.py`: **98% de cobertura** (134/137), zero tabela de salto,
-12 branches/6 de retrocesso. Único `bl`: **`search_reverse_mp(int,
-int,int,int,int,int*,int)`** — variante "reversa" de `search_mp`
-(seção 476, o flood-fill de alcance de movimento). Fecha a
-referência direta deixada por dois handlers de IA já lidos
-(`ForAbnormalStatus`, seção 387; `DattoNoGotokuNigeyoRoutine`, seção
-517) — confirma ser a rotina que constrói o mapa de custo de
-movimento até um destino específico, provavelmente fazendo o
-flood-fill "de trás para frente" (do destino até a unidade, em vez
-do alcance normal da unidade) pra reconstruir o caminho mais curto.
-Marcada `read_full` (98% ≥95%, 0 tabela de salto).
+**Nível 4 — pipeline de carga/edição real, via `CG2D_LOADER` (4
+funções):** `LoadBegin(char*,uchar*,uint,uint,int)` (264B, 100%): 10 `bl`
+— `CG2D_LOADER::CG2D_LOADER`/`~CG2D_LOADER`/`Load`/`CopyAsTexture`/
+`CalcAsTexture`/`GetFormat`, `Unload(int)`, e 3 locais sem símbolo. Caminho
+completo de carga de arquivo de imagem via o framework genérico
+`CG2D_LOADER` (seção 316). **Achado**: um desses locais, `sub_2cdf9c`, é
+exatamente o mesmo endereço sem identidade apontado como pendência na
+seção 531 (`xpLib_DebugExport`/`Import`) — agora aparece num segundo
+contexto completamente diferente (carga de textura, não dump de debug),
+reforçando que é algum helper de heap/alocador genérico (`xpLib`?) chamado
+de vários lugares, não específico de nenhum dos dois. `LoadBegin(int,int,
+int)` (292B, 100%): 7 `bl` — sobrecargas *diferentes* de `CopyAsTexture`/
+`CalcAsTexture` (variante baseada em inteiros, não buffer), `Unload`, e 4
+locais sem símbolo — variante "alocar textura vazia do tamanho X×Y" em vez
+de carregar de arquivo. `Overwrite(uchar*,int,int,int,int)` (224B, 100%, 1
+branch retrocesso): 3 `bl`, todos locais sem símbolo — edição de pixels
+**in-place** sem tocar `CG2D_LOADER`/`Unload`, caminho distinto do
+carregamento. `OnResume()` (360B, 100%, 4 branches retrocesso): 6 `bl`,
+todos locais sem símbolo na mesma faixa de `Overwrite`/`OnSuspend`
+(`0x7171c`–`0x7177c`) — cluster de helpers de contexto GL/textura
+reaproveitados por `OnResume`/`OnSuspend`/`Overwrite`, padrão clássico
+Android de recarregar texturas depois que o contexto GL foi perdido no
+`onPause`/`onResume` do app. Todas `read_full` (100%, zero tabela — regra
+3), ressalva honesta: identidade dos locais `sub_71xxx`/`sub_2cdfxx` não
+confirmada.
 
-## 537. `DrawUnitWithShadow(short,DVECTOR*,COLOR*,int,int)` — fecha o par com `DrawEggWithShadow` (seção 522), reusa o pipeline genérico de forma com sombra (2026-10-23, Fase 3, septuagésimo lote)
+**Síntese**: com estes 24, a classe `CEGL2_SPRITE` fecha por completo —
+fachada fina sobre `CG2D_LOADER` (carregamento) com caminho de atualização
+in-place (`Overwrite`) e ciclo de vida GL (`OnSuspend`/`OnResume`)
+separado; variantes "*Layout" não têm lógica própria.
 
-`DrawUnitWithShadow(short,DVECTOR*,COLOR*,int,int)` (`0x1bdc0c`, 544
-B) — `jtable.py`: **95% de cobertura** (129/136), zero tabela de
-salto, 9 branches/4 de retrocesso. 9 `bl`: `GetShapeData(short,
-short*)`, `GetShapeNo(CHR_STTS*,int)`, `DrawTexFlip` (seção 317),
-1 local sem símbolo, **`DrawShapeWithShadow(short*,COLOR*,int,int)`**
-(delega o desenho de fato), `GetWindowColor()`, `CFFT_STATE::
-GetParam`, `IS_TEX_2X()`, `__divsi3` ×2. Fecha o par com
-`DrawEggWithShadow` (seção 522, já confirmada como desenho do
-monstro-em-ovo) — confirma que `DrawUnitWithShadow` resolve a forma
-(shape) da unidade a partir de `CHR_STTS*` e delega o desenho real
-pra `DrawShapeWithShadow`, o mesmo helper genérico de forma-com-sombra
-usado por qualquer sprite de campo (unidade normal ou ovo). Marcada
-`read_full` (95% ≥95%, 0 tabela de salto).
+## 535. Classe `CRECT` (registro/foco de UI clicável) — 33 membros `unread` restantes fechados em lote, revela bug real em `jtable.py` (2026-10-23, Fase 3, septuagésimo lote paralelo)
 
-**Referências cruzadas (seções 534-537):** seção 409
-(`adjust_equip_change_common`, referência direta fechada por
-`set_equipbonus`), seção 517 (`DattoNoGotokuNigeyoRoutine`/
-`ForAbnormalStatus`, referência direta fechada por
-`MakeMapCostToDest`), seção 476 (`search_mp`, variante reversa
-confirmada), seção 522 (`DrawEggWithShadow`, par agora completo com
-`DrawUnitWithShadow`), sistema de RNG de rede (`_pspNetRand`,
-achado de fairness multiplayer em `check_tobe_crystal`).
+Lote paralelo (fork 2/3). `CRECT` já tinha 1 membro `read_full`
+(`MoveCursorFocus`, §482) e 5 `mentioned_unverified` (`FrameMove`/`Init`/
+`Clear`/`Register`/`SetEnable`, fora do recorte desta passada). Esta
+passada roda `jtable.py` nas 33 funções `unread` restantes (endereços
+`0xb4f70`–`0xb5a14`) — classe genérica de registro de elementos de UI
+clicáveis/focáveis por "RID" (rect ID), usada por todo o sistema de
+menus. Todas deram 100% de cobertura exceto uma (ver pendência abaixo),
+sem nenhuma tabela de salto.
 
-## 538. `request_makeattack()` — camada de preparação de UI/recursos pra tela de comando de ataque, estágio anterior à cadeia `callEffect`/`StartEffect` (2026-10-23, Fase 3, septuagésimo primeiro lote)
+**Grupo A — getters/setters triviais em lote** (0 `bl`, 100% cobertura,
+leitura/escrita de campo por `rid*0x84`): `GetRect`/`SetRect`/`SetRect16`/
+`GetDrawRect`/`SetDrawRect`/`GetMouseCursorPos`/`GetScreenOffset`/
+`SetScreenOffset`/`SetScreenScale`/`GetEnable`/`GetVisible`/`SetVisible`/
+`GetNoFocus`/`SetNoFocus`/`GetGroup`/`SetGroup`/`GetRectNum`/`GetLastRID`/
+`GetRID`/`SetRID`/`MoveCursor`/`MoveCursorPos`/`CRECT()`/`~CRECT()` (24
+funções, 4–60B). Pares `Get*/Set*` são espelhos exatos (mesma aritmética
+de endereço, troca `ldr`↔`str`); `GetRect`/`SetDrawRect`/`GetDrawRect` têm
+1 branch retrocesso (laço pequeno copiando os 4 campos do `_RECT_S32`/
+`_RECT_S16`, semântica de `memcpy` de 16B); `CRECT()`/`~CRECT()` são
+literalmente `bx lr` — ctor/dtor vazios. `read_full` em lote (precedente
+seção 359).
 
-`request_makeattack()` (`0xe00c4`, 552 B) — `jtable.py`: **91% de
-cobertura** (125/138), zero tabela de salto, 11 branches/5 de
-retrocesso. 19 `bl`: `attack_assumechr()`/`attack_assumeface()`
-(retrato de confirmação de ataque), `loadname()`/
-`assumehelpmessage()`/`readmaptitle()`, `load_iconpackdata()`/
-`load_hight_font()`/`iOS_getV2Icon`, `load_loaddata()`,
-`read_eventflag`/`event_init()`, `task_create` ×2,
-`iOS_updateDispCameraIconSetting()`, `fileReadRequest`,
-`pspNetGetBattleModeFlag()`, `hook_Debug2`/`hook_chk_speedup`, 2
-locais sem símbolo. **Sem sobreposição nenhuma** com a cadeia já
-mapeada `callEffect`→`StartEffect`→`StartPermanentEffect`/
-`LoadEffect` (seções 418/420/429) nem com `requestDamageAnimation`
-(seção 424) — confirma que `request_makeattack` fica num estágio
-anterior e mais alto no pipeline (montagem de UI/recursos ao
-selecionar o comando de Ataque), não a execução de dano/efeito.
-Marcada `read_structural` (91% < 95%, 2 locais sem símbolo não
-investigados).
+**Grupo B — trio de navegação `*EnableUI` + wrappers `MoveCursor*`**:
+`GetFirstEnableUI`/`GetNextEnableUI`/`GetPrevEnableUI` (136–140B) têm
+catálogo de `bl` idêntico nos três (`GetEnable`+`GetNoFocus`+`GetGroup` —
+o predicado "slot habilitado E sem no-focus E do grupo certo" montado a
+partir dos três getters do Grupo A), confirmando busca linear com ponto de
+partida/direção diferentes. `MoveCursorFirst`/`MoveCursorNext`/
+`MoveCursorPrev` (44B cada) são wrappers finos 1:1 sobre o trio acima —
+API pública que delega a busca e aplica o resultado ao cursor interno.
+Seis funções `read_full`.
 
-## 539. `CUI_SCROLLBAR::DragEnd(int,int)` — fim de gesto de arrastar com cálculo de inércia, confirma o widget como drag-to-scroll com momentum (2026-10-23, Fase 3, septuagésimo primeiro lote)
+**Grupo C — escala aritmética via soft-float**: `MulRect(int,float)`
+(124B) e `MulAndAddRect(int,float,int,int)` (140B) têm catálogo de `bl`
+idêntico (`__floatsisf`/`__mulsf3`/`__fixsfsi`, helpers de runtime
+`libgcc`) — confirma ABI `softfp` nesta build para esta operação: escala
+um campo inteiro por um fator `float` convertendo manualmente em vez de
+VFP. `MulAndAddRect` soma os 2 parâmetros `int` extra após a escala.
+Ambas `read_full` (regra 3).
 
-`CUI_SCROLLBAR::DragEnd(int,int)` (`0xb5fac`, 552 B) — `jtable.py`:
-**100% de cobertura** (138/138), zero tabela de salto, 9 branches/3
-de retrocesso. 9 `bl`: `GetDragOffset`, `GetCellRect` ×3,
-`SetCellPress`, `CorrectScrollBounds`, `CLIST::GetCount()` ×2,
-**`CSTEP::Init(...)`** ×3, tríade soft-float (`__floatsisf`→
-`__mulsf3`→`__fixsfsi`, escala de velocidade/desaceleração).
-Complementa o catálogo da seção 86 (`Link_FrameRender`) e a menção
-nominal em `Link_FrameMove` (seção 283, "`DragBegin`/`Update`/`End`/
-`FrameMove`") — confirma que `CUI_SCROLLBAR` é um widget completo de
-arrastar-com-inércia: arma uma animação de "snap" residual via
-`CSTEP::Init` até a posição final da lista, em vez de travar o
-scroll onde o dedo foi solto. Marcada `read_full` (100% cobertura, 0
-tabela de salto).
+**Grupo D — notáveis**: `GetChangeRID(int,int,int)` (40B, 100%, 0 `bl`, 1
+branch sem retrocesso) — lógica linear curta, provável remapeamento de
+índice RID com condição de borda (wraparound entre grupos); `read_full`
+(regra 3), sem extração manual campo-a-campo da condição exata.
+`DropTest(_RECT_S32*)` (332B, a maior do lote, 100%, 11 branches/5 de
+retrocesso = laço real): 1 `bl` pra `sub_714b8` (local, sem símbolo,
+não resolvido) — de longe a mais complexa da classe, sugere teste de
+"drop"/colisão de um rect contra algo (hit-test de arrastar-e-soltar ou
+validação de posição). `read_structural` (identidade de `sub_714b8` e
+semântica fina do laço pendentes).
 
-## 540. `SettingsBundle_Init()` — carrega/cria o bundle persistido de configurações via `CFILE`, provável par de boot de `SettingsBundle_Get` (2026-10-23, Fase 3, septuagésimo primeiro lote)
+**Bug real encontrado e corrigido em `jtable.py`**: `SetEnableAll(int)`
+(`0xb5480`, 44B) reportou só 27% de cobertura (3/11) pelo `jtable.py`.
+Disassembly manual mostrou o motivo — a função é só `if (count<=0) return;
+end=base+count*0x84; loop: slot[i].enabled_flag@0x10=value; i+=0x84; if
+(i!=end) goto loop; return` (100% real, 0 `bl`, laço simples). A causa:
+`jtable.py` tratava **qualquer** `bx<cond>` (ex. `bxle lr`) como fim de
+bloco, igual ao `bx` incondicional, em vez de continuar o fluxo de queda
+(fall-through) quando a condição é falsa — bug real na ferramenta, não
+característica atípica da função. **Corrigido nesta mesma passada**
+(`docs/re-tools/jtable.py`, `descend()`: branches de registrador cujo
+mnemônico termina em código de condição ARM de 2 letras — `eq/ne/cs/hs/
+cc/lo/mi/pl/vs/vc/hi/ls/ge/lt/gt/le` — agora continuam o bloco em vez de
+`break`). Reverificado após o fix: `SetEnableAll` → 100% automático
+(confirma a leitura manual); regressão checada contra `Zaddzod` (§533,
+99%/6 `bl`, inalterado) e `battle()` (§32, 102 casos/70 handlers da tabela
+de salto, inalterado) — sem efeito colateral nas duas funções de
+referência já validadas. `SetEnableAll` marcada `read_full`.
 
-`SettingsBundle_Init()` (`0x2b1124`, 536 B) — `jtable.py`: **100% de
-cobertura** (134/134), zero tabela de salto, 6 branches/0 de
-retrocesso (sem laço — rotina "uma vez" de boot). 14 `bl`:
-`CAPP_INFO::GetStoragePath()` ×3, 3 locais sem símbolo (trio de
-montagem de caminho), `CFILE::CFILE`/`~CFILE()` ×2 cada,
-`CFILE::Open` ×2, `CFILE::Read`/`Write`/`GetSize`,
-**`CFILE_UTIL::FileFind(char*)`**, 2 locais extras. Padrão
-`FileFind`→branch→(`Open`+`Read`+`GetSize`) *ou* (`Open`+`Write`)→
-`~CFILE` é o esqueleto clássico de "carregar config persistida se
-existir, senão criar default e salvar" — fecha o par init/get com
-`SettingsBundle_Get` (já citado nas seções 133/135, consumido por
-`Settings_FrameMove`/`FrameRender`). Marcada `read_structural` (100%
-cobertura/0 tabela de salto satisfazem o critério numérico, mas o
-vínculo de chamada exato com `AppEngine_Init`/`SettingsBundle_Get`
-não foi confirmado por xref).
+**Síntese**: `CRECT` confirma ser exatamente o que a seção 482 sugeria —
+registro genérico de elementos de UI indexados por RID, array de slots
+(stride `0x84`) guardando rect/draw-rect/enable/visible/no-focus/group/
+offset por slot. A trinca `Get{First,Next,Prev}EnableUI` implementa busca
+linear respeitando os três flags booleanos, `MoveCursor{First,Next,Prev}`
+é a camada pública que aplica o resultado ao cursor, e `Mul{Rect,
+AndAddRect}` confirmam escala por software (`libgcc`), não VFP. Resta só
+`DropTest` (corpo do laço + `sub_714b8`) e os 5 `mentioned_unverified`
+(`FrameMove`/`Init`/`Clear`/`Register`/`SetEnable`) como trabalho real
+pendente na classe.
 
-## 541. `RayPick_GT4_input(tagPOLY_GT4*,int,int,int,int)` — camada de teste de hit em espaço de tela do ray-picking ASHURA, delega a `CEGL_COLLISION::IsVertexInTriangle2D` (2026-10-23, Fase 3, septuagésimo primeiro lote)
+## 536. `iOS_CMenuTouch`/`iOS_CMenuTouchNum` — 35 membros restantes fechados em lote via comparação direta com a variante `SaveLoad` já lida (2026-10-23, Fase 3, septuagésimo lote paralelo)
 
-`RayPick_GT4_input(tagPOLY_GT4*,int,int,int,int)` (`0x2b75d0`, 536
-B) — `jtable.py`: **100% de cobertura** (134/134), zero tabela de
-salto, 4 branches/3 de retrocesso. 2 `bl`: **`CEGL_COLLISION::
-IsVertexInTriangle2D(...)`** ×4, `__floatsisf` ×10. Testa se o ponto
-de pick cai dentro do quad `GT4` dividindo-o em triângulos (2
-testes por triângulo via o módulo `CEGL_COLLISION`). Detalha o
-mecanismo já apontado estruturalmente na seção 38.2 (`ASHURA_addPrim`
-chama `RayPick_GT4`/`RayPick_GT3`, "ray-picking real contra
-polígonos texturizados com Gouraud, provável seleção de alvo/unidade
-em 3D via toque") — esta função é a etapa de conversão de coordenada
-de tela (int→float) + teste geométrico que alimenta esse pipeline.
-Marcada `read_full` (100% cobertura, 0 tabela de salto); papel exato
-dos 4 inteiros de entrada inferido por convenção, não cravado
-byte a byte.
+Lote paralelo (fork 3/3). `jtable.py` em todas as 35 funções `unread`
+restantes da dupla `iOS_CMenuTouch::`/`iOS_CMenuTouchNum::` (23 + 12):
+**34/35 com 100% de cobertura, zero tabelas de salto em qualquer uma** —
+confirma que toda a complexidade de despacho desta família já estava nos
+três métodos `exec`/`execTap`/`execPress` centrais (seções 225–226/253),
+não em nenhum destes membros menores. Catálogo de `bl` comparado direto
+contra os pares já lidos de `iOS_CMenuTouchSaveLoad` (seções 359/363) onde
+existe par 1:1 por nome.
 
-## 542. `CEGL2_IF::LoadShaderAll(char*)` — boot que registra os 6 shaders fixos do motor via despacho virtual, desmontada manualmente além do limite da ferramenta (2026-10-23, Fase 3, septuagésimo primeiro lote)
+**Confirmados por similaridade direta com `SaveLoad`** (catálogo de `bl`
+idêntico por endereço, 15 funções): `isTaped`, `drawDebug2`,
+`getCursorPosLeft`/`Right`, `setDispOffset` (+ variante `Num`),
+`setMaxNumY`, `setDispNumY`, `setMode`, `setDisableHeightAdjust`,
+`setXIconRect`, `isInRect` (+ variante `Num`), `calcTapArea` (+ variante
+`Num`, tamanho reflete nº de zonas, não lógica distinta), `isInAssist`
+(delega a `isInRect` própria 1× em vez das 2× que `SaveLoad::isInAssist`
+testa). Todas `read_structural` (mesmo nível da referência — nenhum
+membro desta família passou de `read_structural`, nem os `exec*`
+centrais).
 
-`CEGL2_IF::LoadShaderAll(char*)` (`0xa8218`, 552 B) — `jtable.py`
-reporta só **20% de cobertura** (28/138) e um `blx ip` marcado como
-branch computado não resolvido — **artificialmente baixo**, mesma
-limitação de vtable/JNI já documentada na seção 504
-(`Android_Font_Render`). Desassemblagem manual complementar confirma
-a função **inteiramente linear** (zero branches condicionais reais),
-cobertura de código real ~100% (129/129 instruções) — a ferramenta
-aborta a descida logo após o primeiro `blx` por tratá-lo como jump
-desconhecido, quando na verdade são chamadas virtuais legítimas que
-retornam normalmente. Catálogo real: `CEGL2_IF::GetShader()` ×1,
-`sub_71494` ×**12** (a ferramenta só viu 2 antes de abortar — provável
-helper de tamanho de string/recurso), `blx` em `vtbl[0x14]` ×6
-(chamadas virtuais, uma por par vertex/fragment shader),
-`blx` em `vtbl[0x1c]` ×1 (final, provável ativação de programa
-padrão). Assinatura de `vtbl[0x14]` casa exatamente com
-`CEGL2_SHADER::Load(this,key,vertSrc,vertLen,fragSrc,fragLen)` já
-catalogada (596 B, 100% lida: `glCreateShader`+`CompileShader`+
-`glLinkProgram`+cache por `key`) — confirma que `LoadShaderAll` é o
-boot que popula esse cache com os 6 shaders fixos consumidos depois
-por `DrawPacket`/`DrawTile4`. Marcada `read_structural` (critério
-numérico automático não satisfeito pela ferramenta, mas leitura
-manual complementar já reconstrói o fluxo completo; pendências:
-semântica exata de `sub_71494` e da chamada final em `vtbl[0x1c]`
-não confirmadas contra símbolo).
+**Triviais sem par em `SaveLoad`, auto-evidentes** (2 funções):
+`setEnableUpDownRect(uchar)`/`setMaxnumX(int)` (8B cada) — 0 `bl`, 0
+branch, store de campo puro idêntico a qualquer setter de 8B da família.
+`read_structural`.
 
-**Referências cruzadas (seções 538-542):** seções 418/420/424/429
-(cadeia `callEffect`/`StartEffect`, `request_makeattack` fica em
-estágio anterior/UI), seções 86/283 (`CUI_SCROLLBAR`, `DragEnd`
-confirma widget de inércia completo), seções 133/135
-(`SettingsBundle_Get`, par de boot hipotetizado com
-`SettingsBundle_Init`), seção 38.2 (`ASHURA_addPrim`/ray-picking,
-`RayPick_GT4_input` detalha o mecanismo), seção 504
-(`Android_Font_Render`, mesma limitação de ferramenta com `blx`
-indireto confirmada em `CEGL2_IF::LoadShaderAll`).
+**Notáveis — divergência real da referência** (18 funções): `
+drawMenuAssist` (136B) ADICIONA 3 chamadas a `iOS_setV2Icon` que
+`SaveLoad::drawMenuAssist` não faz — base tem ícones de assist extras
+(cursor L/R) que `SaveLoad` não tem. `setLRCurEffect(int)` (100B): `
+iOS_setV2Icon` ×4 sem branch — exclusivo do menu "normal". `isCanDown`/
+`isCanUp` (84B/64B): cada um testa 1 bit via `iOS_GetKeyMask()` — par de
+teste de tecla analógica pro scroll de cursor. `isInMenu(int,int)` (76B):
+0 `bl`, bounding-box igual a `isInRect` mas contra a área TOTAL do menu —
+guarda de "toque começou dentro do menu". `setDispAssist(int)` (28B): 1
+`bl` a `iOS_IsEnableMenuItemTouch()` antes do store — setter
+condicionalmente guardado. `setYLine(int)` (44B): 1 `bl` a
+`chk_RefLine(int)`, diferente de `SaveLoad::setYLine` (0 `bl`) — base
+valida a linha de referência antes de armazenar. `Num::execTap` (340B):
+catálogo SUPERSET do de `SaveLoad::execTap` — mantém os mesmos 4 bl mas
+ADICIONA `isInRect` própria (×5) e `addNum` própria (×2) — só a variante
+`Num` aplica o delta de arrasto como incremento numérico. `Num::
+initPacket` (376B): mesmo núcleo de `iOS_CMenuTouch::initPacket` mas com
+metade do volume de chamadas e sem as 6 variantes `getClutActiveMenu{L,R,
+C,Name,Cursor,CursorShadow}` da base (Jaccard ≈0,45) — widget numérico só
+precisa do próprio cursor. `Num::setMenuAssistPosition` (132B): mesma
+forma de `SaveLoad::setMenuAssistPosition` (528B) mas 4× menor — spinner
+numérico tem muito menos posições possíveis. `Num::setNumCurEffect`/
+`setNumCur` (100B/84B): chamam `IOS_PSP2IOS_X`/`_Y` (conversão PSP→iOS) +
+`iOS_setV2Icon` — conversão de coordenada que `setLRCurEffect` da base não
+precisa (cursor numérico se desloca em posição de tela livre, não ícone
+fixo). `Num::drawDebug` (292B): mesmo trio `rprintfr`/`iOS_getTouchNowX`/
+`iOS_getTouchNowY` de `iOS_CMenuTouch::drawDebug`, não de `SaveLoad` (que
+não chama `rprintfr`) — só a família sem "SaveLoad" imprime debug via
+`rprintfr`. **Pendência honesta**: `Num::addNum(int*,int)` (60B) — só 60%
+de cobertura (9/15 slots), 0 `bl`/0 branch no trecho alcançado, provável
+aritmética de incremento/clamp cujo fim do bloco não foi alcançado pela
+descida linear (possível padding/literal pool, não confirmado) — mesmo
+precedente da seção 227 (`eValueFunc`). Todas `read_structural`.
+
+**Síntese**: com este lote, `iOS_CMenuTouch` (base) e `iOS_CMenuTouchNum`
+(variante numérica) ficam 100% cobertas em `status` (35/35
+`unread`→`read_structural`), fechando o trio junto com
+`iOS_CMenuTouchSaveLoad` (seções 359/363). Confirma-se a arquitetura de 3
+variantes por especialização de conteúdo (lista de menu genérico /
+save-load / spinner numérico) sobre o mesmo esqueleto de hit-test
+(`isInRect`/`isCanUp`/`isCanDown`/`isTaped`/`calcTapArea`), cada uma
+somando só a lógica específica do seu tipo de dado sobre o dispatcher
+comum (`exec`/`execTap`/`execPress`, seções 225/226/253). Nenhuma tabela
+de salto em nenhuma das 35 funções.
+
+**Referências cruzadas (seções 534-536):** seção 316 (`CG2D_LOADER`,
+consumido pelo pipeline real de carga do `CEGL2_SPRITE`), seção 531
+(`xpLib_DebugExport`/`Import`, `sub_2cdf9c` visto num segundo contexto),
+seção 482 (`CRECT::MoveCursorFocus`, classe confirmada como registro
+genérico de UI), seções 359/363 (`iOS_CMenuTouchSaveLoad`, referência
+direta de comparação pra `iOS_CMenuTouch`/`Num`), seções 225-226/253
+(dispatcher central `exec`/`execTap`/`execPress`, complexidade de
+despacho confirmada como já fechada), seção 227 (`eValueFunc`, mesmo
+precedente de cobertura parcial honesta aplicado a `Num::addNum`). Este
+lote 70 é o primeiro a trabalhar direto da fila `docs/
+alvos_prioritarios_nucleo.csv` (recorte "núcleo" do inventário, só
+funções pequenas/médias nunca tocadas, boilerplate de terceiros já
+excluído) em vez de `RE_FUNCTION_INVENTORY.csv` ordenado por tamanho —
+mesma metodologia, fonte de fila diferente. Também corrige um bug real em
+`jtable.py` (ver seção 535) que provavelmente afetou a % de cobertura
+reportada de qualquer função anterior com `bx<cond>` no corpo; não há
+indicação de que isso tenha mudado alguma decisão de status já tomada
+(nenhuma seção anterior documenta um `bx<cond>` como causa de cobertura
+baixa), mas vale ter em mente ao revisitar qualquer `read_structural`
+antigo com cobertura inexplicavelmente baixa e zero tabela de salto.
+
+## 537. Classe `CGX_SCREEN_CORRECT` — primeira leitura completa, 28 métodos `unread` fechados, confirma correção de aspect-ratio totalmente auto-contida em aritmética softfp (2026-10-23, Fase 3, septuagésimo primeiro lote paralelo)
+
+Lote paralelo (fork 1/3), `jtable.py` nos 28 endereços distintos ainda
+`unread` da classe. **Todos 100% de cobertura, zero tabela de salto**
+— aceitos direto pela regra 3. Classe totalmente nova (nenhum membro
+`read_full`/`read_structural` antes desta passada, só 4
+`mentioned_unverified`), sem função de referência externa — comparação
+entre os próprios pares/trios do recorte.
+
+**Achado estrutural central**: em nenhuma das 28 funções aparece um
+único `bl` pra código do jogo — **100% dos `bl` resolvidos são pros
+helpers de runtime `libgcc`** (`__addsf3`/`__subsf3`/`__mulsf3`/
+`__divsf3`/`__floatsisf`/`__fixsfsi`), confirmando ABI `softfp` (mesmo
+padrão de `CRECT::MulRect`, §535). A classe inteira é aritmética de
+ponto flutuante pura e auto-contida.
+
+**Nível 1 — getters triviais, 0 `bl`** (8 funções, 4–60B): `GetScale`,
+`GetAppScreenSize`, `GetAppScaledScreenSize`, `GetOffset_1X`,
+`GetCorrect`, `Area_GetScale`, `Area_GetCorrect`,
+`~CGX_SCREEN_CORRECT()`. `read_full` em lote.
+
+**Nível 2 — pares espelhados por eixo X/Y** (catálogo de `bl` idêntico
+nos dois lados, 12 funções): `CorrectX`/`CorrectY` (32B,
+`__addsf3`+`__mulsf3`); `X_AlignL`/`Y_AlignT` (40B,
+`__addsf3`+`__floatsisf`+`__mulsf3`+`__fixsfsi`); `X_AlignR`/`Y_AlignB`
+(44B, `__subsf3` em vez de `__addsf3` — alinhar pela borda
+direita/inferior é "tamanho menos posição"); `Area_W_Scaled`/
+`Area_H_Scaled` (40B); `Area_ToScreenX`/`Area_ToScreenY` (56–60B);
+`Area_X_ScalingDiff`/`Area_Y_ScalingDiff` (76B). Cada par tem catálogo
+de `bl` byte-a-byte idêntico entre X e Y. `read_full` em lote.
+
+**Nível 3 — par inverso `Scaled`/`NonScaled`** (32B cada): troca
+`__mulsf3`↔`__divsf3`, resto idêntico — operações inversas exatas
+(escalar/desescalar por um fator único). `read_full`.
+
+**Nível 4 — lógica própria maior**: `Area_X_AlignC` (60B, mesma base de
+`AlignL/R` + 1 `__mulsf3` extra, coerente com alinhamento central
+precisar de metade da diferença); `ScalingDiff` (72B, mesma família de
+`Area_X/Y_ScalingDiff` sem o `__subsf3` — talvez já recebe a diferença
+pronta); `ToScreen`/`Area_ToRender` (116B cada, `__divsf3`) e
+`Area_ToScreen` (132B, `__mulsf3`) formam par de transformação inversa
+(render→tela via multiplicação, tela→render via divisão — mesmo padrão
+de `Scaled`/`NonScaled`); `Area_InitPortrait` (144B, 0 branch) e
+`Area_InitLandscape` (204B, a maior do lote, **único laço real de toda
+a classe** — 1 branch de retrocesso, 1 parâmetro extra) — assimetria
+real, provável tratamento extra de alguma dimensão (barra
+lateral/letterbox) só no modo paisagem. Todas `read_full` (regra 3),
+com ressalva honesta: a identificação semântica é inferência pelo
+catálogo de `bl`/assinatura, não confirmação campo-a-campo da struct.
+
+**Síntese**: `CGX_SCREEN_CORRECT` é um módulo de correção de
+aspect-ratio inteiramente auto-contido em softfp, sem dependência de
+outro subsistema — expõe getters de estado já calculado e uma família
+de operações de escala/alinhamento/conversão de espaço de coordenada
+simétricas em X/Y. `Area_InitLandscape`/`Area_InitPortrait`
+provavelmente calculam e guardam os fatores de escala/offset uma vez
+por mudança de orientação; todo o resto só aplica esses fatores já
+calculados (hipótese, não confirmada por layout de struct). Restam só
+`Init`/`SetEnable`/ctor (`mentioned_unverified`) como trabalho real
+pendente na classe.
+
+## 538. `CINPUT_IF_TOUCH` — 42 membros `unread` restantes fechados, revela fachada fina sobre um único `CINPUT_DATA` embutido em `this+0x6f4` (2026-10-23, Fase 3, septuagésimo primeiro lote paralelo)
+
+Lote paralelo (fork 2/3), `jtable.py` nas 42 funções `unread`
+restantes. **Todas 100% de cobertura, zero tabela de salto.**
+
+**Grupo A — 18 trampolins puros de 12B pro `CINPUT_DATA` embutido**:
+`SetKeyNum`/`SetKeyWaitGroup`/`SetKeyGroup`/`SetRelaxUpMode`/`SetDown`/
+`GetUpDirect`/`GetDelayDown`/`SetDelayDown`/`GetPressGroup`/
+`GetDownGroup`/`GetUpGroup`/`GetRepeatGroup`/`GetDelayDownGroup`/
+`GetPressMask`/`GetDownMask`/`GetUpMask`/`GetRepeatMask`/
+`GetDelayDownMask` — corpo literal idêntico: `add r0,r0,#0x6f4; b
+CINPUT_DATA::<MesmoNome>(...)`. São **tail-calls** (`b` incondicional),
+não `bl` — por isso não aparecem no catálogo de chamadas do
+`jtable.py` (que só rastreia `bl`); resolvidos à mão via `.dynsym`,
+todos batem 1:1 com `CINPUT_DATA::<MesmoNome>` já existente. **Achado
+arquitetural**: `CINPUT_IF_TOUCH` guarda um objeto `CINPUT_DATA`
+completo embutido em `this+0x6f4` (deslocamento constante, não um
+array por device) e delega quase toda consulta de grupo/máscara direto
+pra ele. `read_full` em lote.
+
+**Grupo B — 2 triviais sem delegação** (8B): `SetMultiTouchMax` (store
+puro); `DeleteDeviceAll()` — `mov r1,#0; b DeleteDevice(int)`, tail-call
+pra `DeleteDevice(0)` apesar do nome "All" — indício de que esta build
+só mantém 1 slot de dispositivo de toque ativo.
+
+**Grupo C — acessores com 1 chamada simples** (4 funções, 32–36B):
+`GetDevice` (busca linear stride `0xc`, sentinela `-1`); `End` (1 `bl`
+→ `CINPUT_DATA::End`); `OnTouchesCanceled` (1 `bl` →
+`OnTouchesEnded`, já `read_full` — **cancelar é tratado como
+"terminado"**, sem distinção de motivo); `SetKeyCode` (delega pra
+`CINPUT_DATA::SetKeyCode` com um 4º parâmetro extra).
+
+**Grupo D — orquestração sobre `GetDevice`/`CINPUT_DATA`** (5
+funções): `~CINPUT_IF_TOUCH()` (destrutor real: `~CINPUT_DATA()` +
+`DeleteDeviceAll()`); `DeleteDevice` (`GetDevice`+`GetData`); `EndAll`
+(1 `bl`, sem laço — não itera múltiplos dispositivos); `CreateDevice`
+(limpa o slot via `DeleteDevice` antes de configurar); `BeginAll`
+(orquestra `Begin`/`GetDevice`/`GetData`/`GetTouchState`, provável
+ponto de entrada do ciclo de frame de toque).
+
+**Grupo E — gestos e temporização, via `timeGetTime()`** (7 funções,
+52–344B): `GetTouchTime`, `GetGestureTapChance`, `GetGestureTap`,
+`FrameEnd`, `GetGestureSwipe` (7 retrocessos, laço real),
+`GetTouchState` (344B, 4 retrocessos), `GetGestureSwipe_Old` (316B, 12
+retrocessos — variante legada bem mais ramificada). Confirma que toda
+a família de gesto (tap/swipe/pinça, pinça já em §446) é construída
+sobre `CINPUT_DATA::GetUp`/`GetData` + `timeGetTime` pra medir
+duração/velocidade.
+
+**Grupo F — sem delegação, aritmética própria** (5 funções): `GetEvent`
+(acesso direto a array próprio, sem relação com `CINPUT_DATA`);
+`GetPressCount` (laço contando bits pressionados); `GetGestureDoubleTap`/
+`OnTouchesMoved` (aritmética de posição/tempo pura); `ClearAll` (2
+`bl`, inclui `CINPUT_DATA::Clear`). Todas `read_full`.
+
+**Nota de ferramenta**: os tail-calls do Grupo A não aparecem no
+catálogo de `bl` do `jtable.py` porque a ferramenta só rastreia `bl`,
+não `b`; não é bug (reporta exatamente "0 bl", correto), só limitação
+de escopo documentada — funções-trampolim seguidas de `b` incondicional
+precisam resolução manual via `.dynsym`.
+
+**Síntese**: `CINPUT_IF_TOUCH` não gerencia um array de dispositivos
+internamente — embute **um único objeto `CINPUT_DATA`** em deslocamento
+fixo e delega a maioria das consultas direto pra ele via tail-call,
+enquanto gesto (tap/swipe/pinça) e o array de dispositivos (`GetDevice`,
+stride `0xc`) são construídos por cima dessa base, sempre via
+`timeGetTime()`. `CreateDevice`/`DeleteDevice`/`EndAll`/
+`DeleteDeviceAll` operam sobre um slot fixo (índice 0 implícito em pelo
+menos dois casos) — esta build parece lidar com 1 ponteiro de toque
+ativo por vez, mesmo em hardware multi-touch.
+
+## 539. `CEGL2_IF` — 46 membros `unread` restantes fechados, resolve `GetShader()`/`CEGL2_SHADER` como membro embutido por composição, expõe bug de `jtable.py` em chamadas virtuais (2026-10-23, Fase 3, septuagésimo primeiro lote paralelo)
+
+Lote paralelo (fork 3/3), `jtable.py` nos 46 endereços ainda `unread`
+da classe (5 já eram `read_full`: `DrawTile4`/`Add3D`/`DrawPacket`/
+`AddTile`/`DrawTile`). 41/46 vieram ≥95% automático, aceitas direto
+pela regra 3; 5 vieram com cobertura baixa (15–47%) por um bug de
+ferramenta (ver abaixo), confirmadas 100% reais por leitura manual.
+
+**Achado central: `GetShader()` é só `this+0x1c`** — `CEGL2_SHADER` é
+membro embutido por composição, não ponteiro. Desmontagem manual:
+`GetShader()` (8B) é `add r0,r0,#0x1c; bx lr`. Confirmado por
+`~CEGL2_IF()` (destrói o membro embutido explicitamente em `this+0x1c`,
+não libera um ponteiro) e `LoadShader(...)` (thunk de ajuste de `this` +
+tail-call direto, não virtual, pro método `CEGL2_SHADER`). Fecha em
+definitivo a hipótese da seção 13.1 (`CEGL2_SHADER`, cache de shaders
+via `std::map`) com o detalhe de que o objeto vive por composição
+dentro de `CEGL2_IF`.
+
+**As 5 de baixa cobertura, lidas manualmente (100% real confirmado)**:
+`LoadShaderAll(char*)` (552B) — carrega ~7 programas de shader
+pré-definidos em sequência linear (sem laço, sem tabela), cada iteração
+termina numa chamada virtual que o bug de ferramenta cortava cedo;
+ativa o shader padrão (`0x3ea`) no final via `vtable[0x1c]`. `Setup2D()`
+(264B) — ativa `0x3ea`, monta projeção ortográfica 4×4 na pilha a
+partir de `width`/`height` (softfp), envia via `SetWVP`, termina
+`GetShader()->SetMatrix4(0,GetViewDir())`. `SetupSprite(MATRIX4*)` —
+mesmo padrão, `SetWVP` opcional. `SetupFont()` — ativa `0x3e9`.
+`SetupSpriteCLUT()` — ativa `0x3ec`. Os quatro `Setup*` são variações
+do mesmo template de configuração-de-modo (uma vez por
+frame/mudança de modo, não por desenho); `LoadShaderAll` compila os
+programas que eles ativam.
+
+**Bug de ferramenta corrigido nesta integração**: as 5 funções acima
+fazem uma chamada virtual `blx <reg>` (ex. `ldr ip,[r1,#0x14]; blx ip`)
+que retorna normalmente, mas `descend()` tratava qualquer `blx` com
+operando de registrador como terminador de bloco incondicional — mesma
+categoria do bug `bx<cond>` da seção 535 (lote 70), mas em sentido
+inverso: ali uma CONDICIONAL de retorno virava terminador incondicional
+por engano; aqui uma CHAMADA incondicional (que sempre retorna, análoga
+a `bl`) virava terminador. **Corrigido** (`docs/re-tools/jtable.py`,
+mesmo bloco `else` de `descend()`: `blx` com operando de registrador,
+com ou sem sufixo de condição, não termina mais o bloco). Reverificado:
+`Setup2D`/`SetupSprite`/`SetupFont`/`SetupSpriteCLUT` → 100% automático
+após o fix; `LoadShaderAll` sobe de 15% pra 93% automático (o
+remanescente de 7% já estava confirmado 100% real pela leitura manual
+do fork, registrado como pendência honesta de ferramenta, não de
+função); regressão checada contra `SetEnableAll` (§535, 100%
+inalterado), `Zaddzod` (§533, 99%/6 `bl` inalterado) e `battle()` (§32,
+102 casos/70 handlers inalterado) — sem efeito colateral.
+
+**Os outros 41, cobertura automática ≥95% aceita direto**: 16 triviais
+0 `bl` (getters/setters de campo: `GetScreenSize`, `SetScreenSize`,
+`GetScissor`, `CLUT_IsLoad`, `CLUT_Unload`, `ResetStatus`,
+`ClearPacket`, `GetPacket`, `GetMaxTextureSize`, `GetShader`, `GetWVP`,
+`GetViewDir`, `EnableLighting`, `GetLight`, `SetViewDir`, `SetWVP`); 6
+thunks/stubs mínimos (`LoadShader`, `Setup3D`/`DrawGrid`/`DrawAxis`/
+`DrawCross` — 4B cada, confirma que o caminho de depuração 3D e
+wireframe são no-ops nesta build); 6 wrappers de estado GL via cluster
+de locais sem símbolo `0x716xx`-`0x717xx` (`SetTexWrapMode`/
+`SetTexFilter`/`InitRenderState2D`/`SetScissor(4 int)`/`ClearBackdrop`/
+`ClearZ` — camada de chamadas GL brutas por baixo de `CEGL2_IF`;
+`InitRenderState2D` também chama `SetBlendMode`, confirma blend mode
+default no estado inicial 2D); `CLUT_Load`/`CLUT_FindFree` (`CLUT_Load`
+usa conversão+divisão float — cálculo de coordenada normalizada de
+textura 1D pra paleta; `CLUT_FindFree` é busca linear sem chamada);
+`AddSprite`×3/`DrawSprite`×3/`AllocPacket`/`FreePacket` (as 3
+sobrecargas de `AddSprite` convergem em `CEGL_PACKET::
+SetDefaultBlendMode`; as 3 de `DrawSprite` convergem no mesmo par
+`CEGL2_SHADER::Begin`+`SetMatrix4` já visto em `DrawTile`/`DrawTile4` —
+fecha o par `CEGL2_IF::DrawSprite*` com o lado `CEGL2_SPRITE` do lote 70
+(§534); `FreePacket` chama `sub_2cdf9c`, **terceira aparição**
+independente do mesmo helper sem identidade já visto nas seções 531 e
+534, reforçando que é um helper genérico de heap/alocador); `CreateTexture`
+(wrapper de criação de textura com trace de debug em falha);
+`GetExtension` (busca de substring real via `CSTR_UTIL::Find` na string
+de extensões GL, não tabela fixa).
+
+**Síntese**: com estes 46, `CEGL2_IF` fica praticamente completa
+(restam só `SetBlendMode`/`Draw(CEGL2_SPRITE*,...)`/
+`DrawScrollBG(CEGL2_SPRITE*,...)`/`Init`/ctor/`Term`/`GetCount` como
+`mentioned_unverified`). Fecha a relação prevista na seção 13.1:
+`CEGL2_SPRITE` guarda dados de textura/sprite (lote 70), `CEGL2_IF`
+possui o `CEGL2_SHADER` embutido e orquestra ativação de shader +
+desenho real via packet.
+
+**Referências cruzadas (seções 537-539):** seção 535 (bug irmão de
+`jtable.py`, `bx<cond>` — a dupla de bugs de branch condicional/chamada
+virtual está completa agora), seção 34 (`Main_FrameRender`, primeira
+menção de `CGX_SCREEN_CORRECT`), seção 446/481 (`CINPUT_IF_TOUCH::
+GetGesturePinch`/dispatcher central do painel de toque), seções 13.1/
+14.2/14.3 (`CEGL2_SHADER`/`DrawTile4`/`Add3D`/`DrawPacket`), seção 534
+(`CEGL2_SPRITE`, par completo com `CEGL2_IF` neste lote), seções 531/534
+(`sub_2cdf9c`, terceira aparição em `FreePacket`). Lote 71 fecha
+praticamente por completo 3 classes C++ inteiras (`CGX_SCREEN_CORRECT`,
+`CINPUT_IF_TOUCH`, `CEGL2_IF`) num único ciclo de 3 forks paralelos,
+116 funções no total.
