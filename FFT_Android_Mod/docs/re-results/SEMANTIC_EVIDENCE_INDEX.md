@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **8/1258** pending functions.
+Evidence collected: **16/1258** pending functions.
 These reports do not constitute semantic verification.
 
 | Address | Function | Evidence |
@@ -17,3 +17,11 @@ These reports do not constitute semantic verification.
 | `0028bb88` | TE_asmTaskEntry(int) | [Evidence](semantic-evidence/0028bb88.md) |
 | `0024eadc` | ctlperson_main(CTLINFO*) | [Evidence](semantic-evidence/0024eadc.md) |
 | `002576e0` | ctlevtinfo_init(int) | [Evidence](semantic-evidence/002576e0.md) |
+| `0015813c` | unittoface(int) | [Evidence](semantic-evidence/0015813c.md) |
+| `001bc87c` | UnitTableInit(short) | [Evidence](semantic-evidence/001bc87c.md) |
+| `001ccc3c` | getTrapResultDamage(BWORK*, int) | [Evidence](semantic-evidence/001ccc3c.md) |
+| `0025f44c` | frmbuf_get() | [Evidence](semantic-evidence/0025f44c.md) |
+| `0015ad38` | iOSexecuteCurSlide() | [Evidence](semantic-evidence/0015ad38.md) |
+| `001569ac` | editdirect() | [Evidence](semantic-evidence/001569ac.md) |
+| `002472a8` | ctlsound_main(CTLINFO*) | [Evidence](semantic-evidence/002472a8.md) |
+| `00253f20` | ctlmap_init() | [Evidence](semantic-evidence/00253f20.md) |
