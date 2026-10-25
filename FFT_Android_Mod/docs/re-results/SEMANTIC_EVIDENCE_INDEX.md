@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **840/1258** pending functions.
+Evidence collected: **848/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -851,3 +851,11 @@ These reports do not constitute semantic verification.
 | `00159a54` | asmGetActiveTask(int) | [Evidence](semantic-evidence/00159a54.md) |
 | `0018378c` | fileclose(unsigned int) | [Evidence](semantic-evidence/0018378c.md) |
 | `00196ea0` | MenuSelSideDirect(unsigned char, unsigned char) | [Evidence](semantic-evidence/00196ea0.md) |
+| `001a8604` | Mituryo(short) | [Evidence](semantic-evidence/001a8604.md) |
+| `001b70f4` | DrawMessageWithPosition(int, COMRECORD*, int) | [Evidence](semantic-evidence/001b70f4.md) |
+| `001c7218` | TEST_TEST() | [Evidence](semantic-evidence/001c7218.md) |
+| `001ca938` | net_setknockback(unsigned char, unsigned char, unsigned char) | [Evidence](semantic-evidence/001ca938.md) |
+| `001d357c` | set_playerwork2(PENTRY*, unsigned char*) | [Evidence](semantic-evidence/001d357c.md) |
+| `001d751c` | erase_unit(int) | [Evidence](semantic-evidence/001d751c.md) |
+| `0021f2ec` | GetPEffectStatus(unsigned char) | [Evidence](semantic-evidence/0021f2ec.md) |
+| `0024d948` | iOS_BRST_CHECK() | [Evidence](semantic-evidence/0024d948.md) |
