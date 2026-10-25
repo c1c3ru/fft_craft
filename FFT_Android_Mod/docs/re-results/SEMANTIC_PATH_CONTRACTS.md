@@ -8,7 +8,9 @@ These are locally observed CMP/TST -> conditional branch edges; they are not dom
 
 Observed direct compare/branch pairs: **2**; local bitmask sequences: **0**.
 
-Modeled ARM CFG nodes: **128**; unmodeled outgoing edges/transfers: **0**.
+Modeled ARM CFG nodes: **128**; entry-reachable: **128**; unmodeled outgoing edges/transfers: **0**.
+
+Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
 
 A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
 
@@ -26,7 +28,9 @@ No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
 
 Observed direct compare/branch pairs: **3**; local bitmask sequences: **2**.
 
-Modeled ARM CFG nodes: **121**; unmodeled outgoing edges/transfers: **0**.
+Modeled ARM CFG nodes: **121**; entry-reachable: **121**; unmodeled outgoing edges/transfers: **0**.
+
+Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
 
 A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
 
@@ -41,17 +45,24 @@ A route in this graph is a candidate, not a proven executable path. An absent ro
 - Candidate clears `0x40` at `[r4]`; sequence: `0x244254`, `0x244258`, `0x24425c`.
   - No direct CMP/TST-branch incoming edge demonstrated; entry condition remains unknown.
   - Modeled direct predecessors: `0x244250` (fallthrough).
+  - Entry-relative modeled dominators: 19 decoded nodes (not global or dynamic dominance).
+  - No conditional CMP/TST branch proven to dominate this write even in the bounded model.
   - Branch `0x244310` after compare `0x24430c`: [r3 == 0x100] → no route found in modeled graph; [r3 != 0x100] → 0x244314 → 0x244318 → 0x24431c → 0x244320 → 0x244324 → 0x244328 → 0x24432c → .... Only one modeled successor reaches the write; NOT a dominance or impossibility proof.
 - Candidate clears `0x40` at `[r4]`; sequence: `0x2443b8`, `0x2443bc`, `0x2443c0`.
   - No direct CMP/TST-branch incoming edge demonstrated; entry condition remains unknown.
   - Modeled direct predecessors: `0x2443b4` (fallthrough).
+  - Entry-relative modeled dominators: 23 decoded nodes (not global or dynamic dominance).
+  - Conditional branches dominating this write in the entry-rooted modeled graph:
+    - `0x244310` after `0x24430c`: Only one successor has a modeled route; taken [r3 == 0x100], other [r3 != 0x100]. Not a proof of execution-path exclusivity.
   - Branch `0x244310` after compare `0x24430c`: [r3 == 0x100] → 0x24438c → 0x244390 → 0x244394 → 0x244398 → 0x24439c → 0x2443a0 → 0x2443a4 → ...; [r3 != 0x100] → no route found in modeled graph. Only one modeled successor reaches the write; NOT a dominance or impossibility proof.
 
 ## `000df864` — event_status_set(unsigned short, unsigned short)
 
 Observed direct compare/branch pairs: **11**; local bitmask sequences: **0**.
 
-Modeled ARM CFG nodes: **122**; unmodeled outgoing edges/transfers: **0**.
+Modeled ARM CFG nodes: **122**; entry-reachable: **122**; unmodeled outgoing edges/transfers: **0**.
+
+Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
 
 A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
 
@@ -78,7 +89,9 @@ No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
 
 Observed direct compare/branch pairs: **6**; local bitmask sequences: **1**.
 
-Modeled ARM CFG nodes: **119**; unmodeled outgoing edges/transfers: **2**.
+Modeled ARM CFG nodes: **119**; entry-reachable: **119**; unmodeled outgoing edges/transfers: **2**.
+
+Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
 
 A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
 
@@ -96,13 +109,18 @@ A route in this graph is a candidate, not a proven executable path. An absent ro
 - Candidate sets `0x40` at `[r3]`; sequence: `0x25a270`, `0x25a274`, `0x25a278`.
   - No direct CMP/TST-branch incoming edge demonstrated; entry condition remains unknown.
   - Modeled direct predecessors: `0x25a26c` (fallthrough).
+  - Entry-relative modeled dominators: 19 decoded nodes (not global or dynamic dominance).
+  - Conditional branches dominating this write in the entry-rooted modeled graph:
+    - `0x25a260` after `0x25a25c`: Only one successor has a modeled route; taken [r2 <= (signed) 0x0], other [r2 > (signed) 0x0]. Not a proof of execution-path exclusivity.
   - Branch `0x25a260` after compare `0x25a25c`: [r2 <= (signed) 0x0] → no route found in modeled graph; [r2 > (signed) 0x0] → 0x25a264 → 0x25a268 → 0x25a26c → 0x25a270. Only one modeled successor reaches the write; NOT a dominance or impossibility proof.
 
 ## `002b2448` — EnvSE_Play(int)
 
 Observed direct compare/branch pairs: **1**; local bitmask sequences: **0**.
 
-Modeled ARM CFG nodes: **98**; unmodeled outgoing edges/transfers: **1**.
+Modeled ARM CFG nodes: **98**; entry-reachable: **98**; unmodeled outgoing edges/transfers: **1**.
+
+Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
 
 A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
 
@@ -119,7 +137,9 @@ No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
 
 Observed direct compare/branch pairs: **10**; local bitmask sequences: **0**.
 
-Modeled ARM CFG nodes: **115**; unmodeled outgoing edges/transfers: **0**.
+Modeled ARM CFG nodes: **115**; entry-reachable: **115**; unmodeled outgoing edges/transfers: **0**.
+
+Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
 
 A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
 
@@ -145,7 +165,9 @@ No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
 
 Observed direct compare/branch pairs: **7**; local bitmask sequences: **1**.
 
-Modeled ARM CFG nodes: **115**; unmodeled outgoing edges/transfers: **4**.
+Modeled ARM CFG nodes: **115**; entry-reachable: **115**; unmodeled outgoing edges/transfers: **4**.
+
+Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
 
 A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
 
@@ -164,6 +186,13 @@ A route in this graph is a candidate, not a proven executable path. An absent ro
 - Candidate sets `0x4` at `[r5]`; sequence: `0x24ec08`, `0x24ec0c`, `0x24ec10`.
   - No direct CMP/TST-branch incoming edge demonstrated; entry condition remains unknown.
   - Modeled direct predecessors: `0x24ec04` (call_returns).
+  - Entry-relative modeled dominators: 30 decoded nodes (not global or dynamic dominance).
+  - Conditional branches dominating this write in the entry-rooted modeled graph:
+    - `0x24eafc` after `0x24eaf8`: Both successors have modeled routes; taken [(r3 & 0x4) != 0], other [(r3 & 0x4) == 0]. Not a proof of execution-path exclusivity.
+    - `0x24eb10` after `0x24eb0c`: Only one successor has a modeled route; taken [(r3 & 0x40) != 0], other [(r3 & 0x40) == 0]. Not a proof of execution-path exclusivity.
+    - `0x24eb18` after `0x24eb14`: Both successors have modeled routes; taken [(r3 & 0x100) != 0], other [(r3 & 0x100) == 0]. Not a proof of execution-path exclusivity.
+    - `0x24eb20` after `0x24eb1c`: Only one successor has a modeled route; taken [(r3 & 0x20) == 0], other [(r3 & 0x20) != 0]. Not a proof of execution-path exclusivity.
+    - `0x24eb2c` after `0x24eb28`: Only one successor has a modeled route; taken [r3 != 0x0], other [r3 == 0x0]. Not a proof of execution-path exclusivity.
   - Branch `0x24eb10` after compare `0x24eb0c`: [(r3 & 0x40) != 0] → no route found in modeled graph; [(r3 & 0x40) == 0] → 0x24eb14 → 0x24eb18 → 0x24eb1c → 0x24eb20 → 0x24eb24 → 0x24eb28 → 0x24eb2c → .... Only one modeled successor reaches the write; NOT a dominance or impossibility proof.
   - Branch `0x24eb20` after compare `0x24eb1c`: [(r3 & 0x20) == 0] → no route found in modeled graph; [(r3 & 0x20) != 0] → 0x24eb24 → 0x24eb28 → 0x24eb2c → 0x24ebe8 → 0x24ebec → 0x24ebf0 → 0x24ebf4 → .... Only one modeled successor reaches the write; NOT a dominance or impossibility proof.
   - Branch `0x24eb2c` after compare `0x24eb28`: [r3 != 0x0] → 0x24ebe8 → 0x24ebec → 0x24ebf0 → 0x24ebf4 → 0x24ebf8 → 0x24ebfc → 0x24ec00 → ...; [r3 == 0x0] → no route found in modeled graph. Only one modeled successor reaches the write; NOT a dominance or impossibility proof.
@@ -175,7 +204,9 @@ A route in this graph is a candidate, not a proven executable path. An absent ro
 
 Observed direct compare/branch pairs: **0**; local bitmask sequences: **0**.
 
-Modeled ARM CFG nodes: **115**; unmodeled outgoing edges/transfers: **0**.
+Modeled ARM CFG nodes: **115**; entry-reachable: **115**; unmodeled outgoing edges/transfers: **0**.
+
+Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
 
 A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
 
@@ -192,7 +223,9 @@ No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
 
 Observed direct compare/branch pairs: **7**; local bitmask sequences: **0**.
 
-Modeled ARM CFG nodes: **86**; unmodeled outgoing edges/transfers: **1**.
+Modeled ARM CFG nodes: **86**; entry-reachable: **86**; unmodeled outgoing edges/transfers: **1**.
+
+Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
 
 A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
 
@@ -215,7 +248,9 @@ No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
 
 Observed direct compare/branch pairs: **2**; local bitmask sequences: **0**.
 
-Modeled ARM CFG nodes: **107**; unmodeled outgoing edges/transfers: **0**.
+Modeled ARM CFG nodes: **107**; entry-reachable: **107**; unmodeled outgoing edges/transfers: **0**.
+
+Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
 
 A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
 
@@ -233,7 +268,9 @@ No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
 
 Observed direct compare/branch pairs: **1**; local bitmask sequences: **0**.
 
-Modeled ARM CFG nodes: **110**; unmodeled outgoing edges/transfers: **1**.
+Modeled ARM CFG nodes: **110**; entry-reachable: **110**; unmodeled outgoing edges/transfers: **1**.
+
+Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
 
 A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
 
@@ -250,7 +287,9 @@ No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
 
 Observed direct compare/branch pairs: **0**; local bitmask sequences: **0**.
 
-Modeled ARM CFG nodes: **113**; unmodeled outgoing edges/transfers: **0**.
+Modeled ARM CFG nodes: **113**; entry-reachable: **113**; unmodeled outgoing edges/transfers: **0**.
+
+Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
 
 A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
 
