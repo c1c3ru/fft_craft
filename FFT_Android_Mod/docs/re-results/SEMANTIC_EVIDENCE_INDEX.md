@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **984/1258** pending functions.
+Evidence collected: **992/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -995,3 +995,11 @@ These reports do not constitute semantic verification.
 | `00142f4c` | WiOS_getOptionAddOfsMode() | [Evidence](semantic-evidence/00142f4c.md) |
 | `001506a8` | getNetErrorCutFlg() | [Evidence](semantic-evidence/001506a8.md) |
 | `001531e4` | GetgMission_Successflg() | [Evidence](semantic-evidence/001531e4.md) |
+| `00155c78` | ret_adventurestatus() | [Evidence](semantic-evidence/00155c78.md) |
+| `00156550` | send_worldkeymask(unsigned long) | [Evidence](semantic-evidence/00156550.md) |
+| `001579ac` | worldcursormove(int) | [Evidence](semantic-evidence/001579ac.md) |
+| `001579c0` | regist_zodiacot(unsigned int*) | [Evidence](semantic-evidence/001579c0.md) |
+| `0015a16c` | iOSTapTimeAreaGet() | [Evidence](semantic-evidence/0015a16c.md) |
+| `0015a314` | iOSsTchBtlFlagGet() | [Evidence](semantic-evidence/0015a314.md) |
+| `0015a328` | iOSsTchBtlFlagSet(int) | [Evidence](semantic-evidence/0015a328.md) |
+| `0015a8a0` | iOSScrollgStatusModeGet() | [Evidence](semantic-evidence/0015a8a0.md) |
