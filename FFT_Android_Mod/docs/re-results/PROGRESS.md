@@ -6,21 +6,21 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 |---|---:|
 | Inventory total | 6,455 functions / 1,837,392 bytes |
 | Previously analyzed in CSV | 3,373 functions / 1,513,492 bytes |
-| JSON checkpoints (all statuses) | 2,325 |
-| Newly accepted structurally | 1,189 functions / 148,620 bytes |
+| JSON checkpoints (all statuses) | 2,423 |
+| Newly accepted structurally | 1,287 functions / 149,012 bytes |
 | Needs review | 1,136 functions |
 | Core targets in inventory | 4,642 functions |
-| Core targets checkpointed | 2,222 functions |
-| Core accepted structurally | 1,106 functions |
+| Core targets checkpointed | 2,320 functions |
+| Core accepted structurally | 1,204 functions |
 | Core needs review | 1,116 functions |
-| Core not yet checkpointed | 125 functions |
-| Not yet checkpointed | 729 functions / 39,776 bytes |
+| Core not yet checkpointed | 25 functions |
+| Not yet checkpointed | 629 functions / 39,376 bytes |
 
 ## Checkpoint status
 
 | Status | Functions |
 |---|---:|
-| auto_structural | 1,189 |
+| auto_structural | 1,287 |
 | needs_review | 1,136 |
 
 ## Review queue (largest first)

@@ -2,8 +2,8 @@
 
 Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Analyzed in current binary: 2325
-Automatically triaged: 148,620 bytes / 1,837,392 inventory bytes (8.09%); **this is newly triaged coverage, not total project coverage**.
+Analyzed in current binary: 2423
+Automatically triaged: 149,012 bytes / 1,837,392 inventory bytes (8.11%); **this is newly triaged coverage, not total project coverage**.
 
 | Address | Function | Size (B) | Coverage | Status |
 |---|---|---:|---:|---|
@@ -2282,19 +2282,60 @@ Automatically triaged: 148,620 bytes / 1,837,392 inventory bytes (8.09%); **this
 | `0020f424` | eventEffectStart() | 4 | 100.0% | auto_structural |
 | `0020f4f8` | getCharPrimList(short, Point*, unsigned long*) | 4 | 100.0% | auto_structural |
 | `00215d20` | fadeGradation(int, CVECTOR*) | 4 | 100.0% | auto_structural |
+| `00215d24` | fadeAnbient(int, CVECTOR*) | 4 | 100.0% | auto_structural |
+| `00215d28` | fadeFlatColor(int, CVECTOR*) | 4 | 100.0% | auto_structural |
+| `00215d5c` | PadStop | 4 | 100.0% | auto_structural |
+| `0021610c` | iOS_rand() | 4 | 100.0% | auto_structural |
 | `00216818` | stopZingle(int) | 4 | 100.0% | auto_structural |
 | `0021681c` | controlZingle() | 4 | 100.0% | auto_structural |
 | `002168e0` | callSystemSound(int) | 4 | 100.0% | auto_structural |
 | `002168fc` | recallEnvEffect() | 4 | 100.0% | auto_structural |
 | `002169cc` | pauseEnvEffect() | 4 | 100.0% | auto_structural |
+| `0021ebb0` | error(char, long) | 4 | 100.0% | auto_structural |
+| `00225310` | iOS_CheckPEffect(char const*, int) | 4 | 100.0% | auto_structural |
+| `00225a60` | objectLG2(_EffectTCB*, _Object*) | 4 | 100.0% | auto_structural |
+| `00225a64` | dmyFnc2(_EffectTCB*, _Object*) | 4 | 100.0% | auto_structural |
+| `0022a614` | DumpMemory(int, void*) | 4 | 100.0% | auto_structural |
 | `002419cc` | fftCdLoop(CDREC*) | 4 | 100.0% | auto_structural |
 | `002419d0` | fftCdCancel(CDREC*) | 4 | 100.0% | auto_structural |
+| `00248ccc` | ctlcard_init() | 4 | 100.0% | auto_structural |
+| `0026c058` | iOS_debugDispTownCircle(int, int) | 4 | 100.0% | auto_structural |
+| `0026ff2c` | effectdmy() | 4 | 100.0% | auto_structural |
+| `0027129c` | Ssd_Quit() | 4 | 100.0% | auto_structural |
+| `002712a0` | Ssd_Enable() | 4 | 100.0% | auto_structural |
+| `002712a4` | Ssd_Disable() | 4 | 100.0% | auto_structural |
+| `002712b0` | Ssd_DisposeNormalWave() | 4 | 100.0% | auto_structural |
+| `002712b4` | Ssd_DisposeWaveData(SsdWaveSetRec*) | 4 | 100.0% | auto_structural |
+| `002712c0` | Ssd_AddEffectData(void*) | 4 | 100.0% | auto_structural |
+| `002712c4` | Ssd_DisposeEffectData(void*) | 4 | 100.0% | auto_structural |
+| `002712c8` | Ssd_AllStop() | 4 | 100.0% | auto_structural |
+| `002712ec` | Ssd_CheckWideMode() | 4 | 100.0% | auto_structural |
+| `002712f4` | Ssd_ErrorProc(int) | 4 | 100.0% | auto_structural |
+| `002712f8` | Ssd_AddVagPackData(void*) | 4 | 100.0% | auto_structural |
+| `00271304` | Ssd_DisposeMusic(SsdSeqRec*) | 4 | 100.0% | auto_structural |
+| `00271308` | Ssd_LinkMusicData(SsdSeqRec*, void*) | 4 | 100.0% | auto_structural |
+| `0027130c` | Ssd_StartMusic(SsdSeqRec*, short, short) | 4 | 100.0% | auto_structural |
+| `00271310` | Ssd_StopMusic(SsdSeqRec*) | 4 | 100.0% | auto_structural |
+| `00271314` | Ssd_PlaySysEffect(long) | 4 | 100.0% | auto_structural |
+| `00271318` | Ssd_PlayEnvEffect(long) | 4 | 100.0% | auto_structural |
+| `00271340` | Ssd_PlayEffects03(long, long, long, long) | 4 | 100.0% | auto_structural |
+| `00271344` | Ssd_StopAllEffect() | 4 | 100.0% | auto_structural |
+| `00271348` | Ssd_StopEffectSet(void*) | 4 | 100.0% | auto_structural |
+| `00271410` | Ssd_InitEffectTrackRecWithStart(short, long, short, short) | 4 | 100.0% | auto_structural |
 | `0027b398` | numa_fileAllocateCD(unsigned long, unsigned long) | 4 | 100.0% | auto_structural |
 | `0027b39c` | numa_fileReadCD(unsigned long, unsigned long, void*) | 4 | 100.0% | auto_structural |
+| `0027b3a0` | numa_fileReadRequest(unsigned int, unsigned int, char*) | 4 | 100.0% | auto_structural |
+| `0027b510` | dispCmdKind() | 4 | 100.0% | auto_structural |
+| `0027b5c8` | rprintfr(RECT16*, int, int, int) | 4 | 100.0% | auto_structural |
 | `0027b670` | iOS_DEBUG_multiwindow_break_hook(unsigned long*) | 4 | 100.0% | auto_structural |
 | `0027b674` | iOS_DEBUG_multiwindow_break_hook2(unsigned long*, int) | 4 | 100.0% | auto_structural |
 | `0027b678` | iOS_DEBUG_multiwindow_keyright_hook() | 4 | 100.0% | auto_structural |
+| `0027fc28` | chk_ucResumeData2(int) | 4 | 100.0% | auto_structural |
+| `0027fc2c` | chk_ucResumeData(unsigned char*, int) | 4 | 100.0% | auto_structural |
+| `0027fc78` | initSaveFFT(char*, char*, bool) | 4 | 100.0% | auto_structural |
+| `0027fc7c` | cSaveFFT::~cSaveFFT() | 4 | 100.0% | auto_structural |
 | `00280610` | iOS_soundDirect(int) | 4 | 100.0% | auto_structural |
+| `00280670` | hook_write_eventflag(int, int) | 4 | 100.0% | auto_structural |
 | `00280678` | hook_Debug(char const*) | 4 | 100.0% | auto_structural |
 | `0028067c` | hook_Debug2(char const*) | 4 | 100.0% | auto_structural |
 | `00280680` | hook_NextEventSet() | 4 | 100.0% | auto_structural |
@@ -2303,15 +2344,29 @@ Automatically triaged: 148,620 bytes / 1,837,392 inventory bytes (8.09%); **this
 | `002806c0` | hook_allocate_texture() | 4 | 100.0% | auto_structural |
 | `002806c4` | hook_opt() | 4 | 100.0% | auto_structural |
 | `002806c8` | hook_chk_speedup(int) | 4 | 100.0% | auto_structural |
+| `00280708` | hook_pad() | 4 | 100.0% | auto_structural |
+| `0028070c` | hook_pad2() | 4 | 100.0% | auto_structural |
 | `00280710` | hook_drive_connect_chrmove() | 4 | 100.0% | auto_structural |
 | `00280714` | hook_drive_connect_chrmove2(int) | 4 | 100.0% | auto_structural |
+| `002807f4` | hook_cliptest() | 4 | 100.0% | auto_structural |
 | `002807f8` | chk_RefLine(int) | 4 | 100.0% | auto_structural |
+| `002807fc` | hook_drive_chr(int) | 4 | 100.0% | auto_structural |
 | `00280800` | hook_fix_bugno_931(int) | 4 | 100.0% | auto_structural |
 | `00280804` | hook_win_tail() | 4 | 100.0% | auto_structural |
+| `00280808` | hook_allSkipTest() | 4 | 100.0% | auto_structural |
+| `002815d8` | hook_num(int, int, int) | 4 | 100.0% | auto_structural |
+| `002815e4` | chk_test_addcolor(unsigned int*) | 4 | 100.0% | auto_structural |
+| `00281640` | hook_disp_plateorspell(int*) | 4 | 100.0% | auto_structural |
 | `00281644` | hook_code_soundeffect(int) | 4 | 100.0% | auto_structural |
+| `00281648` | hook_1284(char*, int) | 4 | 100.0% | auto_structural |
+| `00286744` | rsetmovie_title_flg__Fv() | 4 | 100.0% | auto_structural |
+| `00286748` | setmovie_title_flg__Fv() | 4 | 100.0% | auto_structural |
 | `002869f0` | _pspNetRand(char const*, int) | 4 | 100.0% | auto_structural |
+| `00286a94` | timer_print_screen() | 4 | 100.0% | auto_structural |
+| `00286a98` | val_letter(int, int, int) | 4 | 100.0% | auto_structural |
 | `00286a9c` | set_nettimer_flag(int, int) | 4 | 100.0% | auto_structural |
 | `00286ae8` | net_control_ex(void*, void*, int) | 4 | 100.0% | auto_structural |
+| `00286e90` | rivalCameraWorkProcs() | 4 | 100.0% | auto_structural |
 | `00286ec4` | check_rival_value(int) | 4 | 100.0% | auto_structural |
 | `00287584` | load_iconpackdata() | 4 | 100.0% | auto_structural |
 | `002875a0` | draw_maru(unsigned long*) | 4 | 100.0% | auto_structural |
@@ -2320,14 +2375,57 @@ Automatically triaged: 148,620 bytes / 1,837,392 inventory bytes (8.09%); **this
 | `00288498` | Draw_TuusinIcon(int, int, unsigned long*) | 4 | 100.0% | auto_structural |
 | `0028849c` | Draw_Trap_CancelCommandList(int*, int, int, unsigned long*) | 4 | 100.0% | auto_structural |
 | `002884c8` | NetBattleJudge() | 4 | 100.0% | auto_structural |
+| `002884fc` | setRewardLv(int) | 4 | 100.0% | auto_structural |
 | `00288508` | CalcRewardLv() | 4 | 100.0% | auto_structural |
 | `0028850c` | CalcMissionPayPoint(int) | 4 | 100.0% | auto_structural |
 | `00288510` | Final_CalcMissionPayPoint() | 4 | 100.0% | auto_structural |
 | `0028856c` | init_AnimList() | 4 | 100.0% | auto_structural |
+| `0028b460` | SpuInit | 4 | 100.0% | auto_structural |
+| `0028b464` | SpuInitHot | 4 | 100.0% | auto_structural |
+| `0028b468` | SpuQuit | 4 | 100.0% | auto_structural |
 | `0028b46c` | SetMem | 4 | 100.0% | auto_structural |
+| `0028b490` | StSetRing | 4 | 100.0% | auto_structural |
+| `0028b494` | StClearRing | 4 | 100.0% | auto_structural |
+| `0028b498` | StUnSetRing | 4 | 100.0% | auto_structural |
+| `0028b49c` | StSetStream | 4 | 100.0% | auto_structural |
+| `0028b4a0` | StSetEmulate | 4 | 100.0% | auto_structural |
+| `0028b4c4` | StRingStatus | 4 | 100.0% | auto_structural |
+| `0028b4c8` | StSetMask | 4 | 100.0% | auto_structural |
+| `0028b4cc` | StCdInterrupt | 4 | 100.0% | auto_structural |
+| `0028b4e0` | DecDCTReset | 4 | 100.0% | auto_structural |
+| `0028b4ec` | DecDCTout | 4 | 100.0% | auto_structural |
 | `0028b508` | pspMovieEnd__Fv() | 4 | 100.0% | auto_structural |
+| `0028b50c` | pspMovieInit__FiPCciiii(int, char*, int, int, int, int) | 4 | 100.0% | auto_structural |
+| `0028b510` | pspMoviePlay__Fv() | 4 | 100.0% | auto_structural |
+| `0028b514` | pspMovieStart__Fv() | 4 | 100.0% | auto_structural |
 | `0028b518` | setMoviePlayFlg__Fi(int) | 4 | 100.0% | auto_structural |
 | `0028b51c` | setMovieSkipFlg__Fi(int) | 4 | 100.0% | auto_structural |
+| `0028b530` | setToolBgmFlg__Fi(int) | 4 | 100.0% | auto_structural |
+| `0028b53c` | setBgmData__Fii(int, int) | 4 | 100.0% | auto_structural |
+| `0028b540` | CdFlush | 4 | 100.0% | auto_structural |
+| `0028b60c` | CdReadBreak | 4 | 100.0% | auto_structural |
+| `0028c7e8` | CAUTOSAVE::~CAUTOSAVE() | 4 | 100.0% | auto_structural |
+| `0028ce54` | asmmemcpy(void*, void const*, unsigned int) | 4 | 100.0% | auto_structural |
+| `0028cea8` | KanjiFntClose | 4 | 100.0% | auto_structural |
+| `0028cedc` | CatPrim | 4 | 100.0% | auto_structural |
+| `0028cee0` | DrawOTagIO | 4 | 100.0% | auto_structural |
+| `0028cee4` | DrawOTagEnv | 4 | 100.0% | auto_structural |
+| `0028cee8` | DumpClut | 4 | 100.0% | auto_structural |
+| `0028ceec` | DumpDispEnv | 4 | 100.0% | auto_structural |
+| `0028cef0` | DumpDrawEnv | 4 | 100.0% | auto_structural |
+| `0028cef4` | DumpOTag | 4 | 100.0% | auto_structural |
+| `0028cef8` | DumpTPage | 4 | 100.0% | auto_structural |
+| `0028cefc` | SetDumpFnt | 4 | 100.0% | auto_structural |
+| `0028cf00` | TermPrim | 4 | 100.0% | auto_structural |
+| `0028cf0c` | ContinueDraw | 4 | 100.0% | auto_structural |
+| `0028cf28` | GetDrawMode | 4 | 100.0% | auto_structural |
+| `0028cf2c` | GetTexWindow | 4 | 100.0% | auto_structural |
+| `0028cf30` | GetDrawArea | 4 | 100.0% | auto_structural |
+| `0028cf34` | GetDrawOffset | 4 | 100.0% | auto_structural |
+| `0028de70` | _bu_init | 4 | 100.0% | auto_structural |
+| `0028e464` | CdControlB | 4 | 100.0% | auto_structural |
+| `00290e90` | FntLoad | 4 | 100.0% | auto_structural |
+| `0029b428` | GsGetActiveBuff | 4 | 100.0% | auto_structural |
 | `0029ff94` | SquareRoot12 | 4 | 100.0% | auto_structural |
 | `002a0818` | SetRotMatrix | 4 | 100.0% | auto_structural |
 | `002a0d10` | SetTransMatrix | 4 | 100.0% | auto_structural |
