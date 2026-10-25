@@ -1,0 +1,17 @@
+{
+  "address": "002cb9dc",
+  "name": "__aeabi_ldiv0",
+  "size": 16,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "71c38"
+  ],
+  "log": "=== jtable.py: 0x2cb9dc..0x2cb9ec (16 bytes) ===\ncoverage: 4 of ~4 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x71c38 x1   sub_71c38 LOCAL(no-dynsym)\n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

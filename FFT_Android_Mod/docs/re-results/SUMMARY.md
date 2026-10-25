@@ -2,8 +2,8 @@
 
 Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Analyzed in current binary: 2880
-Automatically triaged: 175,008 bytes / 1,837,392 inventory bytes (9.52%); **this is newly triaged coverage, not total project coverage**.
+Analyzed in current binary: 2976
+Automatically triaged: 175,880 bytes / 1,837,392 inventory bytes (9.57%); **this is newly triaged coverage, not total project coverage**.
 
 | Address | Function | Size (B) | Coverage | Status |
 |---|---|---:|---:|---|
@@ -2435,6 +2435,7 @@ Automatically triaged: 175,008 bytes / 1,837,392 inventory bytes (9.52%); **this
 | `00285e40` | pspJobGetIndex2Job(int) | 16 | 100.0% | auto_structural |
 | `0028bf3c` | TE_dummy() | 16 | 100.0% | auto_structural |
 | `0028c5b0` | CFFT_STATE::GetStr(int) | 16 | 100.0% | auto_structural |
+| `0028c7d8` | CAUTOSAVE::CAUTOSAVE() | 16 | 100.0% | auto_structural |
 | `0028decc` | StartCARD | 16 | 75.0% | needs_review |
 | `0028deec` | StopCARD | 16 | 75.0% | needs_review |
 | `0028e694` | xpSetVblankFunc(void (*)(int, void*), void*) | 16 | 100.0% | auto_structural |
@@ -2442,21 +2443,45 @@ Automatically triaged: 175,008 bytes / 1,837,392 inventory bytes (9.52%); **this
 | `002a2be8` | PCinit | 16 | 75.0% | needs_review |
 | `002a2fe4` | xpGetSPADAddress | 16 | 75.0% | needs_review |
 | `002a3100` | xpMallocIO | 16 | 100.0% | auto_structural |
+| `002a39a8` | pspSaveList::Update() | 16 | 100.0% | auto_structural |
 | `002a39b8` | sceGeEdramGetAddr | 16 | 75.0% | needs_review |
 | `002b1fe8` | Offscreen_Get() | 16 | 75.0% | needs_review |
 | `002b375c` | Error_GetErrorCode() | 16 | 75.0% | needs_review |
 | `002bef64` | ResumeData_GetHeapOffset() | 16 | 75.0% | needs_review |
+| `002cb9dc` | __aeabi_ldiv0 | 16 | 100.0% | auto_structural |
+| `002cdedc` | _Unwind_GetRegionStart | 16 | 100.0% | auto_structural |
 | `00077ab8` | gzopen | 12 | 100.0% | auto_structural |
 | `00077ac4` | gzopen64 | 12 | 100.0% | auto_structural |
 | `000823c8` | unzSetOffset | 12 | 100.0% | auto_structural |
+| `000a863c` | CEGL2_IF::GetCount(int) | 12 | 100.0% | auto_structural |
+| `000b1b00` | CEGL_PACKET::SetType(int, unsigned char) | 12 | 100.0% | auto_structural |
+| `000b1b1c` | CEGL_PACKET::GetBlendMode(int) | 12 | 100.0% | auto_structural |
+| `000b1b28` | CEGL_PACKET::SetBlendMode(int, unsigned char) | 12 | 100.0% | auto_structural |
+| `000b1b44` | CEGL_PACKET::GetTexture(int) | 12 | 100.0% | auto_structural |
+| `000b1b50` | CEGL_PACKET::SetTexture(int, unsigned int) | 12 | 100.0% | auto_structural |
+| `000b1bbc` | CEGL_PACKET::GetVBOInfo(int) | 12 | 100.0% | auto_structural |
+| `000b3518` | CINPUT_DATA::CINPUT_DATA() | 12 | 100.0% | auto_structural |
+| `000b3d44` | CINPUT_IF_TOUCH::SetKeyWait(int, int, unsigned int, unsigned int) | 12 | 100.0% | auto_structural |
+| `000b3d5c` | CINPUT_IF_TOUCH::SetKeyDelay(int, int, unsigned int) | 12 | 100.0% | auto_structural |
+| `000b4044` | CINPUT_IF_TOUCH::GetPress(int, int) | 12 | 100.0% | auto_structural |
+| `000b40b0` | CINPUT_IF_TOUCH::GetDown(int, int) | 12 | 100.0% | auto_structural |
+| `000b40c8` | CINPUT_IF_TOUCH::GetUp(int, int) | 12 | 100.0% | auto_structural |
+| `000b40e0` | CINPUT_IF_TOUCH::GetRepeat(int, int) | 12 | 100.0% | auto_structural |
+| `000b4f88` | CRECT::Register(_RECT_UI*, int) | 12 | 100.0% | auto_structural |
+| `000b61d8` | CCOMP_Z_DEC::SetBlockSize(int, int) | 12 | 100.0% | auto_structural |
+| `000b63a4` | CCOMP_Z_ENC::SetBlockSize(int, int) | 12 | 100.0% | auto_structural |
 | `000b9f7c` | CTHREAD::RequestExit() | 12 | 100.0% | auto_structural |
 | `000b9fac` | CTHREAD::RequestSuspend() | 12 | 100.0% | auto_structural |
 | `000b9fb8` | CTHREAD::RequestResume() | 12 | 100.0% | auto_structural |
 | `000b9fd4` | TRACE_Empty(char const*, ...) | 12 | 100.0% | auto_structural |
 | `000ba084` | Sleep(unsigned int) | 12 | 100.0% | auto_structural |
+| `000bdb60` | CSTEP::CSTEP() | 12 | 100.0% | auto_structural |
+| `000bdb80` | CSTEP::SetUnit(int) | 12 | 100.0% | auto_structural |
+| `000be1dc` | CSTEP_BATCH::Uninit() | 12 | 100.0% | auto_structural |
 | `000d8734` | getanimpanel(int, SVECTOR*) | 12 | 100.0% | auto_structural |
 | `00100408` | Wgetanimpanel(int, SVECTOR*) | 12 | 100.0% | auto_structural |
 | `001d8d1c` | get_itemcommon(unsigned short) | 12 | 100.0% | auto_structural |
+| `001dc908` | set_startingstatus(BWORK*) | 12 | 100.0% | auto_structural |
 | `001e692c` | setskilldata_to_ACT(ACT*) | 12 | 100.0% | auto_structural |
 | `0020ebb8` | eventTerminateAnimation(int, int, short, short, short) | 12 | 100.0% | auto_structural |
 | `0021680c` | callZingle(int) | 12 | 100.0% | auto_structural |
@@ -2466,18 +2491,57 @@ Automatically triaged: 175,008 bytes / 1,837,392 inventory bytes (9.52%); **this
 | `00263f9c` | ctlnobel_deactive(CTLINFO*) | 12 | 100.0% | auto_structural |
 | `00282268` | iOS_clearOkNg() | 12 | 100.0% | auto_structural |
 | `00284410` | Clear_VectorDataBaseObject(VECTOR_DATABASE*) | 12 | 100.0% | auto_structural |
+| `0028a080` | pspGetFftPspSaveDataSize() | 12 | 100.0% | auto_structural |
 | `0028aec4` | __bpGetFileNum | 12 | 100.0% | auto_structural |
 | `0028afc4` | __bpGetBinarySize | 12 | 100.0% | auto_structural |
 | `0028afd0` | __bpGetBinaryData | 12 | 100.0% | auto_structural |
+| `0028c22c` | CFFT_STATE::SetVertexScaling(float, float) | 12 | 100.0% | auto_structural |
+| `0028c2e8` | CFFT_STATE::SetMusicBuffer(int, int) | 12 | 100.0% | auto_structural |
+| `0028c320` | CFFT_STATE::GetParam(int) | 12 | 100.0% | auto_structural |
+| `0028c590` | CFFT_STATE::SetParam(int, int) | 12 | 100.0% | auto_structural |
 | `0028ce48` | asmClearBuffer(void*, unsigned int) | 12 | 100.0% | auto_structural |
 | `002a142c` | SetFogNear | 12 | 100.0% | auto_structural |
 | `002b2cf8` | SysSE_PlayDef(int) | 12 | 100.0% | auto_structural |
 | `002b2d04` | SysSE_PlayUI(int) | 12 | 100.0% | auto_structural |
 | `002c9115` | operator delete(void*) | 12 | 100.0% | auto_structural |
+| `000823e4` | zlibCompileFlags | 8 | 100.0% | auto_structural |
 | `00082404` | zcalloc | 8 | 100.0% | auto_structural |
 | `0008240c` | zcfree | 8 | 100.0% | auto_structural |
+| `0008300c` | oggpack_get_buffer | 8 | 100.0% | auto_structural |
+| `000ab4a8` | CEGL2_FBO::GetTexture() | 8 | 100.0% | auto_structural |
+| `000acebc` | CEGL2_SPRITE::GetTextureHandle() | 8 | 100.0% | auto_structural |
+| `000ae088` | CEGL2_SPRITE::GetMultiTextureHandle() | 8 | 100.0% | auto_structural |
+| `000aee5c` | CEGL2_TEX_HYBRID::Register(int) | 8 | 100.0% | auto_structural |
+| `000af9e8` | CCAMERA::SetMode(CCAMERA::CAM_MODE) | 8 | 100.0% | auto_structural |
+| `000afa18` | CCAMERA::GetDir() const | 8 | 100.0% | auto_structural |
+| `000b1acc` | CEGL_PACKET::GetDefaultBlendMode() | 8 | 100.0% | auto_structural |
+| `000b1ad4` | CEGL_PACKET::SetDefaultBlendMode(unsigned char) | 8 | 100.0% | auto_structural |
+| `000b1adc` | CEGL_PACKET::GetCount() | 8 | 100.0% | auto_structural |
+| `000b1bb4` | CEGL_PACKET::GetVBOBuffer() | 8 | 100.0% | auto_structural |
+| `000b3540` | CINPUT_DATA::Begin(int) | 8 | 100.0% | auto_structural |
+| `000b6c68` | CFILE_DAT::GetOffset(int) | 8 | 100.0% | auto_structural |
+| `000b6cd0` | CFILE_DAT::GetSize(int) | 8 | 100.0% | auto_structural |
+| `000b8a18` | CLIST::GetCount() | 8 | 100.0% | auto_structural |
+| `000b9dd4` | CWORK_MEM::Get() | 8 | 100.0% | auto_structural |
 | `000b9df0` | CWORK_MEM::GetAllocSize() | 8 | 100.0% | auto_structural |
 | `000b9fc4` | CTHREAD::SetPriority(int) | 8 | 100.0% | auto_structural |
+| `000b9fcc` | CTHREAD::Wait() | 8 | 100.0% | auto_structural |
+| `000ba39c` | CSOUND_IF::SetEnable(int) | 8 | 100.0% | auto_structural |
+| `000bd134` | COggMemMapFile::CallbackClose(void*) | 8 | 100.0% | auto_structural |
+| `000bd13c` | COggMemMapFile::CallbackTell(void*) | 8 | 100.0% | auto_structural |
+| `000bd144` | CSOUND_LOADER_OGG::IsTerminated() const | 8 | 100.0% | auto_structural |
+| `000bd14c` | CSOUND_LOADER_OGG::GetSoundFormat() | 8 | 100.0% | auto_structural |
+| `000bd168` | CSOUND_LOADER_OGG::GetSoundEncode() const | 8 | 100.0% | auto_structural |
+| `000bd18c` | CSOUND_LOADER_OGG::GetTotal() const | 8 | 100.0% | auto_structural |
+| `000bd1b8` | CSOUND_LOADER_OGG::DecodeAll(unsigned char*) | 8 | 100.0% | auto_structural |
+| `000bd1c0` | CSOUND_LOADER_OGG::GetLoopIn() const | 8 | 100.0% | auto_structural |
+| `000bd520` | CSOUND_LOADER_OGG::IsOpen() const | 8 | 100.0% | auto_structural |
+| `000bd528` | COggMemMapFile::GetBuffer() | 8 | 100.0% | auto_structural |
+| `000bd530` | COggMemMapFile::GetSize() | 8 | 100.0% | auto_structural |
+| `000bd738` | CSOUND_LOADER_OGG::GetPlaySample() | 8 | 100.0% | auto_structural |
+| `000bd95c` | CSOUND_LOADER_OGG::GetStreamBuffer() | 8 | 100.0% | auto_structural |
+| `000bdb20` | CFRAMERATE::GetSpeed() | 8 | 100.0% | auto_structural |
+| `000bdb30` | CFRAMERATE::SetFixedMode(int) | 8 | 100.0% | auto_structural |
 | `000c8150` | return_jobdata() | 8 | 100.0% | auto_structural |
 | `000cbd6c` | CheckTrapCancelCommandWindow() | 8 | 100.0% | auto_structural |
 | `000d9f2c` | attackteam_prewait() | 8 | 100.0% | auto_structural |
@@ -2486,6 +2550,7 @@ Automatically triaged: 175,008 bytes / 1,837,392 inventory bytes (9.52%); **this
 | `000e8094` | iOS_EventNumberGet() | 8 | 100.0% | auto_structural |
 | `00101be8` | Wattackteam_prewait() | 8 | 100.0% | auto_structural |
 | `001024fc` | Wcopymat(MATRIX*, MATRIX*) | 8 | 100.0% | auto_structural |
+| `00102734` | MESSAGE_getMessageTaskKind() | 8 | 100.0% | auto_structural |
 | `001027b4` | Whook_wipe() | 8 | 100.0% | auto_structural |
 | `0010fb6c` | Wcheck_eventtoolmain(int, int) | 8 | 100.0% | auto_structural |
 | `0015324c` | return_jobdatafromsmall() | 8 | 100.0% | auto_structural |
@@ -2514,8 +2579,13 @@ Automatically triaged: 175,008 bytes / 1,837,392 inventory bytes (9.52%); **this
 | `00245814` | strNextVlc(DECENV*) | 8 | 100.0% | auto_structural |
 | `00245a58` | getMoviePlayFlg__Fv() | 8 | 100.0% | auto_structural |
 | `00245c04` | o_WaitCardInfo(int, int) | 8 | 100.0% | auto_structural |
+| `0026adb0` | snpl_je() | 8 | 100.0% | auto_structural |
+| `0026adb8` | snpl_jne() | 8 | 100.0% | auto_structural |
+| `0026ae1c` | snpl_jpageflg() | 8 | 100.0% | auto_structural |
 | `0026ae24` | snpl_jnpageflg() | 8 | 100.0% | auto_structural |
+| `0026ae7c` | snpl_jstatflg() | 8 | 100.0% | auto_structural |
 | `0026ae84` | snpl_jnstatflg() | 8 | 100.0% | auto_structural |
+| `0026aedc` | snpl_jlocalflg() | 8 | 100.0% | auto_structural |
 | `0026aee4` | snpl_jnlocalflg() | 8 | 100.0% | auto_structural |
 | `002712a8` | Ssd_AddWaveData(void*) | 8 | 100.0% | auto_structural |
 | `002712b8` | Ssd_GetBankWaveSetPtr(short) | 8 | 100.0% | auto_structural |
@@ -2526,6 +2596,7 @@ Automatically triaged: 175,008 bytes / 1,837,392 inventory bytes (9.52%); **this
 | `00279f84` | pspRoutineCheckArithmeticPermission() | 8 | 100.0% | auto_structural |
 | `0027b390` | saveVram(char const*) | 8 | 100.0% | auto_structural |
 | `00280530` | cSaveFFT::GetMode() | 8 | 100.0% | auto_structural |
+| `00280538` | cSaveFFT::SetMode(SAVEFFT) | 8 | 100.0% | auto_structural |
 | `002815dc` | test_test_addcolor() | 8 | 100.0% | auto_structural |
 | `00284694` | SearchVector(VECTOR_DATABASE*, SVECTOR const*) | 8 | 100.0% | auto_structural |
 | `00285f84` | pspFileManager::hockRead(void*, int) | 8 | 100.0% | auto_structural |
@@ -2591,6 +2662,14 @@ Automatically triaged: 175,008 bytes / 1,837,392 inventory bytes (9.52%); **this
 | `0028b604` | CdReadExec | 8 | 100.0% | auto_structural |
 | `0028b630` | exitXpHeap() | 8 | 100.0% | auto_structural |
 | `0028b6f4` | _FFT_Main() | 8 | 100.0% | auto_structural |
+| `0028c238` | CFFT_STATE::GetCaptureRequest() | 8 | 100.0% | auto_structural |
+| `0028c248` | CFFT_STATE::GetCaptureDraw() | 8 | 100.0% | auto_structural |
+| `0028c258` | CFFT_STATE::GetEncountRequest() | 8 | 100.0% | auto_structural |
+| `0028c270` | CFFT_STATE::SetMode(int) | 8 | 100.0% | auto_structural |
+| `0028c280` | CFFT_STATE::SetDebugMode(int) | 8 | 100.0% | auto_structural |
+| `0028c2e0` | CFFT_STATE::SetMoviePlaying(int) | 8 | 100.0% | auto_structural |
+| `0028c308` | CFFT_STATE::SetSettingsEnable(int) | 8 | 100.0% | auto_structural |
+| `0028c318` | CFFT_STATE::SetLinkEnable(int) | 8 | 100.0% | auto_structural |
 | `0028ce40` | CAUTOSAVE::GetHeapOffset() | 8 | 100.0% | auto_structural |
 | `0028ce78` | ReadTMD | 8 | 100.0% | auto_structural |
 | `0028ce80` | CheckPrim | 8 | 100.0% | auto_structural |
@@ -2621,22 +2700,39 @@ Automatically triaged: 175,008 bytes / 1,837,392 inventory bytes (9.52%); **this
 | `00290e94` | FntPrint | 8 | 100.0% | auto_structural |
 | `00290e9c` | FntFlush | 8 | 100.0% | auto_structural |
 | `0029ac18` | GetGraphType | 8 | 100.0% | auto_structural |
+| `0029b6fc` | GsDrawOt | 8 | 100.0% | auto_structural |
 | `002a0808` | MulMatrix | 8 | 100.0% | auto_structural |
 | `002a0810` | MulMatrix2 | 8 | 100.0% | auto_structural |
 | `002a26c0` | PadGetState | 8 | 100.0% | auto_structural |
 | `002a3114` | xpMallocErrorFuncSet | 8 | 100.0% | auto_structural |
+| `002a314c` | pspSaveBase::Exit() | 8 | 100.0% | auto_structural |
 | `002ab9e0` | sceGuSync | 8 | 100.0% | auto_structural |
+| `002b0508` | CAPP_INFO::GetStoragePath() | 8 | 100.0% | auto_structural |
 | `002b3444` | iCloud_Send() | 8 | 100.0% | auto_structural |
 | `002b344c` | iCloud_Receive() | 8 | 100.0% | auto_structural |
 | `002b3454` | iCloud_GetSlotCount() | 8 | 100.0% | auto_structural |
 | `002b36d4` | Error_FrameMove() | 8 | 100.0% | auto_structural |
 | `002b7a2c` | GetPanelCursorMode() | 8 | 100.0% | auto_structural |
 | `002c9121` | operator delete[](void*) | 8 | 0.0% | needs_review |
+| `002cce38` | _Unwind_GetCFA | 8 | 100.0% | auto_structural |
+| `002cd57c` | __aeabi_unwind_cpp_pr0 | 8 | 100.0% | auto_structural |
+| `002cd584` | __aeabi_unwind_cpp_pr1 | 8 | 100.0% | auto_structural |
+| `002cd58c` | __aeabi_unwind_cpp_pr2 | 8 | 100.0% | auto_structural |
+| `002cdf08` | _Unwind_GetDataRelBase | 8 | 100.0% | auto_structural |
+| `002cdf10` | _Unwind_GetTextRelBase | 8 | 100.0% | auto_structural |
 | `00077494` | gztell | 4 | 100.0% | auto_structural |
 | `000774fc` | gzoffset | 4 | 100.0% | auto_structural |
 | `00077dc8` | gzseek | 4 | 100.0% | auto_structural |
 | `000785e4` | gzgetc_ | 4 | 100.0% | auto_structural |
 | `0007f384` | _tr_flush_bits | 4 | 100.0% | auto_structural |
+| `0008244c` | oggpackB_writeinit | 4 | 100.0% | auto_structural |
+| `00082478` | oggpackB_writecheck | 4 | 100.0% | auto_structural |
+| `00082548` | oggpackB_reset | 4 | 100.0% | auto_structural |
+| `00082a14` | oggpackB_writeclear | 4 | 100.0% | auto_structural |
+| `00082a44` | oggpackB_readinit | 4 | 100.0% | auto_structural |
+| `00082ca8` | oggpackB_adv | 4 | 100.0% | auto_structural |
+| `00082cdc` | oggpackB_adv1 | 4 | 100.0% | auto_structural |
+| `00083004` | oggpackB_bytes | 4 | 100.0% | auto_structural |
 | `000b61d4` | CCOMP_Z_DEC::~CCOMP_Z_DEC() | 4 | 100.0% | auto_structural |
 | `000b63a0` | CCOMP_Z_ENC::~CCOMP_Z_ENC() | 4 | 100.0% | auto_structural |
 | `000b6584` | CCRYPT::~CCRYPT() | 4 | 100.0% | auto_structural |
