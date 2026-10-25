@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **832/1258** pending functions.
+Evidence collected: **840/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -843,3 +843,11 @@ These reports do not constitute semantic verification.
 | `000e628c` | Get_bravebreak() | [Evidence](semantic-evidence/000e628c.md) |
 | `000e62a8` | Set_bravebreak(unsigned short) | [Evidence](semantic-evidence/000e62a8.md) |
 | `00101434` | Wsetplatetime(int) | [Evidence](semantic-evidence/00101434.md) |
+| `0010155c` | WiOS_battle_scrollwindow_tap() | [Evidence](semantic-evidence/0010155c.md) |
+| `00101fa4` | Wchangeflame(int) | [Evidence](semantic-evidence/00101fa4.md) |
+| `00155854` | set_worldday(int, int) | [Evidence](semantic-evidence/00155854.md) |
+| `00155870` | set_worldmoney(int) | [Evidence](semantic-evidence/00155870.md) |
+| `00155c5c` | ret_optionstatus() | [Evidence](semantic-evidence/00155c5c.md) |
+| `00159a54` | asmGetActiveTask(int) | [Evidence](semantic-evidence/00159a54.md) |
+| `0018378c` | fileclose(unsigned int) | [Evidence](semantic-evidence/0018378c.md) |
+| `00196ea0` | MenuSelSideDirect(unsigned char, unsigned char) | [Evidence](semantic-evidence/00196ea0.md) |
