@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **808/1258** pending functions.
+Evidence collected: **816/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -819,3 +819,11 @@ These reports do not constitute semantic verification.
 | `0021cedc` | UnlockEffect() | [Evidence](semantic-evidence/0021cedc.md) |
 | `0021cefc` | LockEffectCompelBreak() | [Evidence](semantic-evidence/0021cefc.md) |
 | `0021f308` | PermanentEffectEndRequest(unsigned char) | [Evidence](semantic-evidence/0021f308.md) |
+| `0024f4b0` | ctltips_active(CTLINFO*) | [Evidence](semantic-evidence/0024f4b0.md) |
+| `0026df10` | ctlhentuto_active(CTLINFO*) | [Evidence](semantic-evidence/0026df10.md) |
+| `00270500` | curhis_clr(int) | [Evidence](semantic-evidence/00270500.md) |
+| `0028080c` | IOS_PSP2IOS_X(int) | [Evidence](semantic-evidence/0028080c.md) |
+| `0028082c` | IOS_PSP2IOS_Y(int) | [Evidence](semantic-evidence/0028082c.md) |
+| `00288a58` | pspPrimDirectParamSet(int, RECT16*) | [Evidence](semantic-evidence/00288a58.md) |
+| `0028b610` | initXpHeap() | [Evidence](semantic-evidence/0028b610.md) |
+| `0028ba84` | TE_task_start(long) | [Evidence](semantic-evidence/0028ba84.md) |
