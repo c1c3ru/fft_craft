@@ -138,13 +138,13 @@ def execute(caller_code, getter_code, followup, caller_literal,
         raise ValueError("Unexpected sampled getter state, flag, CPSR or neighbors")
     table = getter.indexed_address(getter_literal, flow.CALLER_ARGS)
     pages = {_page(a) for a in (START, getter.CALLEE, table-4, table,
-                               table+4, FLAG_PTR_SLOT, FLAG_WORD, OBJECT,
+                               table+4, FLAG_PTR_SLOT, FLAG_WORD-4, FLAG_WORD,
+                               FLAG_WORD+4, OBJECT, STACK_TOP-20,
                                STACK_TOP-16, RETURN_PC)}
-    if len(pages) != 7:
-        # 0x25a000, 0x2b7000, 0x19dc000, 0x347000, 0x610000,
-        # 0x500000, 0x700000, 0x710000 -> eight disjoint pages.
-        if len(pages) != 8:
-            raise ValueError("Unexpected overlapping synthetic memory mappings")
+    # The left canary of an aligned flag at a page boundary requires
+    # a separate 0x60f000 mapping; all the other sites are disjoint.
+    if len(pages) != 9:
+        raise ValueError("Unexpected overlapping synthetic memory mappings")
     emu = Uc(UC_ARCH_ARM, UC_MODE_ARM)
     for page in sorted(pages):
         emu.mem_map(page, PAGE_SIZE, UC_PROT_ALL)
