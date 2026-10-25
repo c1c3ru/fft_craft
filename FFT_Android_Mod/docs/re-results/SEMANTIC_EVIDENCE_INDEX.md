@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **720/1258** pending functions.
+Evidence collected: **728/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -731,3 +731,11 @@ These reports do not constitute semantic verification.
 | `0020c74c` | initSoundHeap() | [Evidence](semantic-evidence/0020c74c.md) |
 | `0020c99c` | initFileBuffer() | [Evidence](semantic-evidence/0020c99c.md) |
 | `0020d060` | setMapScrollXYZ(VECTOR*) | [Evidence](semantic-evidence/0020d060.md) |
+| `0020d2b8` | setMapScroll(VECTOR*) | [Evidence](semantic-evidence/0020d2b8.md) |
+| `0020d5d8` | setMapScale(VECTOR*) | [Evidence](semantic-evidence/0020d5d8.md) |
+| `0020d84c` | setMapAngle(SVECTOR*) | [Evidence](semantic-evidence/0020d84c.md) |
+| `0020f5a8` | getMapSize(SVECTOR*) | [Evidence](semantic-evidence/0020f5a8.md) |
+| `0021695c` | stopAllEffect() | [Evidence](semantic-evidence/0021695c.md) |
+| `00218dcc` | InitCamera() | [Evidence](semantic-evidence/00218dcc.md) |
+| `002231b0` | GetReachableHeight(int) | [Evidence](semantic-evidence/002231b0.md) |
+| `00246360` | ctlstartmov_main(CTLINFO*) | [Evidence](semantic-evidence/00246360.md) |
