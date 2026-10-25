@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **528/1258** pending functions.
+Evidence collected: **536/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -539,3 +539,11 @@ These reports do not constitute semantic verification.
 | `001eb794` | iOSmyGetShapePrim() | [Evidence](semantic-evidence/001eb794.md) |
 | `0020dad8` | setBackColor(unsigned char, unsigned char, unsigned char) | [Evidence](semantic-evidence/0020dad8.md) |
 | `0020e880` | getFontIDFormBattleWork(int) | [Evidence](semantic-evidence/0020e880.md) |
+| `0020ef78` | inactivateCompressedAnimation(int) | [Evidence](semantic-evidence/0020ef78.md) |
+| `0021665c` | effectFadeinMusic(int) | [Evidence](semantic-evidence/0021665c.md) |
+| `0021bd20` | s5_setSequenceID(_EffectTCB*) | [Evidence](semantic-evidence/0021bd20.md) |
+| `0021c08c` | s1f_ifNumTargetEQU(_EffectTCB*) | [Evidence](semantic-evidence/0021c08c.md) |
+| `0021c684` | s27_setEnvironmentWithTable(_EffectTCB*) | [Evidence](semantic-evidence/0021c684.md) |
+| `0021cbd0` | s1d_ifScheduleEnd(_EffectTCB*) | [Evidence](semantic-evidence/0021cbd0.md) |
+| `0024552c` | cdxa_stop() | [Evidence](semantic-evidence/0024552c.md) |
+| `00249278` | vOpn_init(int) | [Evidence](semantic-evidence/00249278.md) |
