@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **776/1258** pending functions.
+Evidence collected: **784/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -787,3 +787,11 @@ These reports do not constitute semantic verification.
 | `0028d228` | tlPopHeap() | [Evidence](semantic-evidence/0028d228.md) |
 | `0028de28` | EnableEvent | [Evidence](semantic-evidence/0028de28.md) |
 | `0028de4c` | DisableEvent | [Evidence](semantic-evidence/0028de4c.md) |
+| `00291074` | PSX_LoadImage | [Evidence](semantic-evidence/00291074.md) |
+| `00291154` | StoreImage | [Evidence](semantic-evidence/00291154.md) |
+| `0029128c` | MoveImage | [Evidence](semantic-evidence/0029128c.md) |
+| `00294e64` | GetDrawEnv | [Evidence](semantic-evidence/00294e64.md) |
+| `0029b654` | GsSetClip2D | [Evidence](semantic-evidence/0029b654.md) |
+| `002a1408` | SetFogFar | [Evidence](semantic-evidence/002a1408.md) |
+| `000c8158` | tool_writesquare(int, int, int) | [Evidence](semantic-evidence/000c8158.md) |
+| `000c8178` | tool_readsquare(int, int, int) | [Evidence](semantic-evidence/000c8178.md) |
