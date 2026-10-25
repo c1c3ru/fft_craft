@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1104/1258** pending functions.
+Evidence collected: **1112/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1115,3 +1115,11 @@ These reports do not constitute semantic verification.
 | `0020d83c` | getMapAngle() | [Evidence](semantic-evidence/0020d83c.md) |
 | `0020dac8` | getBackColor() | [Evidence](semantic-evidence/0020dac8.md) |
 | `0025690c` | IOSsTownModeGet() | [Evidence](semantic-evidence/0025690c.md) |
+| `0025f3ec` | iOSSnapshotGet() | [Evidence](semantic-evidence/0025f3ec.md) |
+| `00263aac` | iOSNovelBrightStop() | [Evidence](semantic-evidence/00263aac.md) |
+| `0027b494` | getDrawPrimNum() | [Evidence](semantic-evidence/0027b494.md) |
+| `0028decc` | StartCARD | [Evidence](semantic-evidence/0028decc.md) |
+| `0028deec` | StopCARD | [Evidence](semantic-evidence/0028deec.md) |
+| `002a2be8` | PCinit | [Evidence](semantic-evidence/002a2be8.md) |
+| `002a2fe4` | xpGetSPADAddress | [Evidence](semantic-evidence/002a2fe4.md) |
+| `002a39b8` | sceGeEdramGetAddr | [Evidence](semantic-evidence/002a39b8.md) |
