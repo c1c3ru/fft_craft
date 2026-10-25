@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **504/1258** pending functions.
+Evidence collected: **512/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -515,3 +515,11 @@ These reports do not constitute semantic verification.
 | `00258ff8` | evt_dead_low() | [Evidence](semantic-evidence/00258ff8.md) |
 | `00269c3c` | snpl_mesput3() | [Evidence](semantic-evidence/00269c3c.md) |
 | `002706c8` | pageanmpac_reset(int, int, int) | [Evidence](semantic-evidence/002706c8.md) |
+| `00273864` | GetDestinationRange() | [Evidence](semantic-evidence/00273864.md) |
+| `0029fef0` | ratan2 | [Evidence](semantic-evidence/0029fef0.md) |
+| `002a0878` | PushMatrix | [Evidence](semantic-evidence/002a0878.md) |
+| `002a08bc` | PopMatrix | [Evidence](semantic-evidence/002a08bc.md) |
+| `002b2b38` | SysSE_Stop(int) | [Evidence](semantic-evidence/002b2b38.md) |
+| `002b758c` | IS_ICON_AREA(int) | [Evidence](semantic-evidence/002b758c.md) |
+| `000d9a80` | send_sttslinecol(char*) | [Evidence](semantic-evidence/000d9a80.md) |
+| `000d9eec` | extend_endornot() | [Evidence](semantic-evidence/000d9eec.md) |
