@@ -29,8 +29,8 @@ class PipelineTests(unittest.TestCase):
     def test_core_priority_precedes_larger_general_function(self):
         with tempfile.TemporaryDirectory() as d:
             path = Path(d) / "core.csv"
-            path.write_text("address,size,mangled,demangled,status,section_ref\\n"
-                            "00000010,12,a,core(),unread,\\n")
+            path.write_text("address,size,mangled,demangled,status,section_ref\n"
+                            "00000010,12,a,core(),unread,\n")
             rows = [
                 {"address": "00000020", "size": 100, "status": "unread"},
                 {"address": "00000010", "size": 12, "status": "unread"},
@@ -48,7 +48,7 @@ class PipelineTests(unittest.TestCase):
     def test_duplicate_priority_addresses_do_not_duplicate_work(self):
         with tempfile.TemporaryDirectory() as d:
             path = Path(d) / "core.csv"
-            path.write_text("address\\n00000010\\n00000010\\n000000ff\\n")
+            path.write_text("address\n00000010\n00000010\n000000ff\n")
             rows = [{"address": "00000020"}, {"address": "00000010"}]
             self.assertEqual([x["address"] for x in loop.prioritize(rows, path)],
                              ["00000010", "00000020"])
