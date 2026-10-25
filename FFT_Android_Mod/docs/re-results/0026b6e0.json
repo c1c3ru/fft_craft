@@ -1,0 +1,19 @@
+{
+  "address": "0026b6e0",
+  "name": "iOSwldssd_wait()",
+  "size": 68,
+  "previous_status": "mentioned_unverified",
+  "status": "needs_review",
+  "coverage_pct": 88.24,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2419cc",
+    "26b378"
+  ],
+  "log": "=== jtable.py: 0x26b6e0..0x26b724 (68 bytes) ===\ncoverage: 15 of ~17 instruction slots (88%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x2419cc x1   fftCdLoop(CDREC*) \n  0x26b378 x1   wldssd_control() \n\n-- branches: 3 total, 2 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

@@ -1,0 +1,18 @@
+{
+  "address": "000ae4d0",
+  "name": "CEGL2_SPRITE::Draw(float, float)",
+  "size": 80,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2cb48c",
+    "ae090"
+  ],
+  "log": "=== jtable.py: 0xae4d0..0xae520 (80 bytes) ===\ncoverage: 20 of ~20 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0xae090 x1   CEGL2_SPRITE::DrawPartial(float, float, float, float, float, float) \n  0x2cb48c x2   __floatsisf \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
