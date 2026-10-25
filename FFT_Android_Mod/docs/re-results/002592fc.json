@@ -1,0 +1,18 @@
+{
+  "address": "002592fc",
+  "name": "evt_flagset()",
+  "size": 40,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "103340",
+    "2591d4"
+  ],
+  "log": "=== jtable.py: 0x2592fc..0x259324 (40 bytes) ===\ncoverage: 10 of ~10 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x103340 x1   Wwrite_eventflag(int, int) \n  0x2591d4 x1   evt_get_flgdt(int*, int*) \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
