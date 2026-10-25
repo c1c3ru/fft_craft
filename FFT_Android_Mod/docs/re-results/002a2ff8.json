@@ -1,0 +1,19 @@
+{
+  "address": "002a2ff8",
+  "name": "xpInitHeap",
+  "size": 48,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 91.67,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "28d0f8",
+    "71b84"
+  ],
+  "log": "=== jtable.py: 0x2a2ff8..0x2a3028 (48 bytes) ===\ncoverage: 11 of ~12 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x71b84 x1   sub_71b84 LOCAL(no-dynsym)\n  0x28d0f8 x1   tlInitHeap(void*, unsigned int) \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

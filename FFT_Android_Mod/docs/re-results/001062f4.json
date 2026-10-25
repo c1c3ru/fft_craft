@@ -1,0 +1,19 @@
+{
+  "address": "001062f4",
+  "name": "Wdisp_coverng()",
+  "size": 44,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "105d6c",
+    "161ef8",
+    "161fa4"
+  ],
+  "log": "=== jtable.py: 0x1062f4..0x106320 (44 bytes) ===\ncoverage: 11 of ~11 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x105d6c x1   sub_105d6c LOCAL(no-dynsym)\n  0x161ef8 x1   wasmTaskEntry() \n  0x161fa4 x1   wasmGetInput2() \n\n-- branches: 2 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
