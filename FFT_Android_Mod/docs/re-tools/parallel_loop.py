@@ -157,6 +157,8 @@ def main() -> int:
     parser.add_argument("--include-reviewed", action="store_true")
     parser.add_argument("--review-only", action="store_true",
                         help="Process only existing needs_review checkpoints; requires --retry-review")
+    parser.add_argument("--max-review-attempts", type=int, default=2,
+                        help="Maximum total review passes per unchanged binary (default 2)")
     parser.add_argument("--retry-review", action="store_true",
                         help="Reprocess results flagged for manual review")
     args = parser.parse_args()
@@ -165,6 +167,8 @@ def main() -> int:
         parser.error("invalid worker/limit/similarity/min-bl setting")
     if args.review_only and not args.retry_review:
         parser.error("--review-only requires --retry-review")
+    if args.max_review_attempts < 1:
+        parser.error("--max-review-attempts must be positive")
     if args.timeout < 1:
         parser.error("timeout must be positive")
     if not args.so.is_file():
@@ -179,6 +183,7 @@ def main() -> int:
     args.output.mkdir(parents=True, exist_ok=True)
     binary_hash = hashlib.sha256(args.so.read_bytes()).hexdigest()
     queue = []
+    review_attempts = {}
     for row in rows:
         if not args.include_reviewed and row["status"] in CONFIRMED:
             continue
@@ -196,6 +201,13 @@ def main() -> int:
         if destination.exists():
             try:
                 previous = json.loads(destination.read_text(encoding="utf-8"))
+                if (args.retry_review and previous.get("status") == "needs_review"
+                        and previous.get("binary_sha256") == binary_hash
+                        and previous.get("pipeline_version") == PIPELINE_VERSION):
+                    attempts = max(1, int(previous.get("review_attempts", 1)))
+                    if attempts >= args.max_review_attempts:
+                        continue
+                    review_attempts[row["address"]] = attempts
                 if (previous.get("binary_sha256") == binary_hash
                         and previous.get("size") == row["size"]
                         and previous.get("pipeline_version") == PIPELINE_VERSION
@@ -220,6 +232,10 @@ def main() -> int:
                 result = {"address": row["address"], "size": row["size"],
                           "name": row["demangled"], "status": "error",
                           "error": str(error)}
+            if row["address"] in review_attempts:
+                result["review_attempts"] = review_attempts[row["address"]] + 1
+            elif result.get("status") == "needs_review":
+                result["review_attempts"] = 1
             result["binary_sha256"] = binary_hash
             result["pipeline_version"] = PIPELINE_VERSION
             completed.append(result)
