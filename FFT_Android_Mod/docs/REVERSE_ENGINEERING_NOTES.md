@@ -19935,3 +19935,84 @@ da estratégia documentada.
 `*disp_staticwindow2` — fechadas via confirmação por similaridade
 `family_sim`, as demais por identificação de call-graph; nenhuma
 teve os blocos lidos instrução a instrução).
+
+## 609. Grab-bag de 20 checkpoints `auto_structural` (≥95% cobertura, 0 tabela pendente) aceitos direto, sem fork (2026-10-25, Fase 3, octogésimo nono lote)
+
+Mesma rota dos §605-608.
+
+- **`disp_staticwindow2()`** (`0x12cc1c`, 344 B, 98%, 14 `bl`) — a
+  variante **sem prefixo** (nem letra, nem `W`) da família fechada no
+  §608 (`C`/`D`/`E`): catálogo parecido mas **não idêntico** —
+  tem `multiwindow_packetadd` extra que as outras não têm, e falta
+  `iOS_getLastEventNo`/`chkMessagepacket` que elas têm — por isso
+  não entra na mesma confirmação por similaridade (Jaccard <0,90),
+  mas confirma que a família de "janela estática 2" tem pelo menos
+  4 variantes reais (base/`C`/`D`/`E`), com a variante `W` ainda
+  pendente.
+- **`direc4(char*)`**/**`Wdirec4(char*)`** (`0xdc6ec`/`0x104a70`, 356
+  B/360 B, 97% cada, 4 `bl` cada, mesmo padrão: `getanimpos3d`/
+  `Wgetanimpos3d`, `ratan2`, 2 locais) — par W/sem-W de cálculo de
+  direção (4 pontos cardeais) via arco-tangente sobre posição 3D de
+  animação.
+- **`seekcodeplus(int,int,int,int)`**/**`Wseekcodeplus(int,int,int,int)`**
+  (`0xe7da8`/`0x102f04`, 356 B cada, 98% cada, 2 `bl` cada,
+  `getCodeLength` idêntico + `task_killmyself`/`Wtask_killmyself`) —
+  par W/sem-W exato de busca de código/offset num buffer.
+- **`JobEquip(short, short, int)`** (`0x1ab67c`, 356 B, 99%, 5 `bl`:
+  `ItemChg` ×3, `SetChrList` ×4, **`GetBestEquip`** (já lida por
+  completo, §173), `SystemWarningTime`, +1 local) — liga direto à
+  lógica de "melhor equipamento automático" já confirmada em §173:
+  esta é a função que efetivamente **equipa** o item escolhido por
+  `GetBestEquip`, chamando `ItemChg` pra mover o item do inventário
+  pro slot do personagem.
+- **`set_unitcoord(int,uchar,uchar,uchar,uchar)`** (`0x1d1de8`, 352 B,
+  97%, 1 `bl`: **`check_coord2`**, já lida por completo em §148 —
+  "varredura de ocupação de chocobo numa coordenada") — confirma que
+  `set_unitcoord` é o setter real que usa essa checagem de ocupação
+  antes de mover a unidade pra nova coordenada; também citada como
+  `bl` de `setActionDirection` (§608).
+- **`set_sanjutsuability3(int,uchar,short*)`** (`0x1d5188`, 344 B,
+  **100%**, 4 `bl`: `gc_bwp`, **`set_normability2`** (já lida por
+  completo, §419) + 2 locais) — fecha mais um elo da família
+  `set_*ability*` (§419/128 já citava `set_sanjutsuability1/2`) —
+  este é o "3", delegando a lógica real de populamento pra
+  `set_normability2` já documentada.
+- **`musicPlayer_FrameMove()`** (`0x2b32e8`, 344 B, 97%, 9 `bl`:
+  `CSOUND_IF::IsPlaying`/`GetVolume`/`FadeVolume`, `iOS_GetFrameRate`,
+  `musicPlayer_Stop` ×2/`Play`/`Pause`/`Replay`) — o loop por-quadro
+  real do player de música (estados play/pause/stop/replay/fade),
+  ligando o framework `musicPlayer_*` (achado novo) ao mixer
+  `CSOUND_IF` já extensivamente documentado.
+- **`iOSWorldPlayer_Hp_Mp(unsigned int, unsigned int)`** (`0x25ecd8`,
+  344 B, **100%**, 4 `bl`: `get_unitwork_add`, `copy_struct_data`
+  ×2, `set_playerwork_j`) — grava HP/MP do jogador no registro de
+  trabalho do mapa mundi.
+- **`check_game_cont()`** (`0x1d4468`, 348 B, 99%, 2 `bl`:
+  `check_status_data2` (§584), `get_netmodeadhoc` ×2 (§607)) —
+  verifica se o jogo deve continuar (unidade viva? modo de rede
+  ad-hoc?).
+- **`initBdata()`** (`0x1da038`, 348 B, 97%, 1 `bl`: `clear_cmemory`
+  ×2) — inicializador simples que zera memória via o helper genérico
+  já citado em outras seções (linha 6158/9547).
+- **`roll_autochange()`** (`0x244f18`, 348 B, 98%, 1 `bl`:
+  `vOpn_timload(unsigned long*)`) — troca automática de "roll"
+  (créditos?) via carregamento de dado de tempo, família `vOpn_*`
+  já estabelecida (§571/580/603).
+- **`MakeMoveAreaNearByDestination(int)`** (`0x273b78`, 336 B, 99%, 1
+  `bl`: `MemCpyW`) — já citada (linha 10084) junto de
+  `ForChantedAction` (§607) no cluster de movimento da IA.
+- **`objectAnim(_EffectTCB*, _Object*)`** (`0x225644`, 332 B, 98%, 1
+  `bl`: `ratan2`) — callback de animação de objeto/partícula com
+  cálculo de ângulo real.
+- **`inflateCopy`**/**`gzgets`**/**`gzungetc`**/**`ReadTIM`**
+  (zlib real + leitor de formato de imagem PS1 `TIM`, 96-100% cada)
+  — mais funções padrão já em tema (zlib §569/605/606/607/608;
+  `ReadTIM` é achado novo — formato de textura nativo do PS1,
+  0 `bl`, função folha).
+- **`GsSortBoxFill`** (`0x29c780`, 360 B, 99%, 1 `bl`: `SetDrawMode`)
+  — primitiva de desenho PS1 (preenchimento de caixa via `GsOT`, já
+  tema de várias seções anteriores).
+
+**Status CSV**: `read_structural` para as 20 (identidade e call-graph
+confirmados via checkpoint + cruzamento textual; nenhuma teve os
+blocos lidos instrução a instrução).
