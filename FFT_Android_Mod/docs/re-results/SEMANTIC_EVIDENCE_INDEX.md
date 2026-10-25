@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **248/1258** pending functions.
+Evidence collected: **256/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -259,3 +259,11 @@ These reports do not constitute semantic verification.
 | `00125238` | Wrecover_windows(int, int) | [Evidence](semantic-evidence/00125238.md) |
 | `0013819c` | recover_windows(int, int) | [Evidence](semantic-evidence/0013819c.md) |
 | `001bd3cc` | UnitListInit() | [Evidence](semantic-evidence/001bd3cc.md) |
+| `0021f328` | GetPermanentObject() | [Evidence](semantic-evidence/0021f328.md) |
+| `00263254` | ctlmouketeam_deactive(CTLINFO*) | [Evidence](semantic-evidence/00263254.md) |
+| `002cb0c0` | __gedf2 | [Evidence](semantic-evidence/002cb0c0.md) |
+| `000d665c` | addlocalprim(tagPOLY_FT4*) | [Evidence](semantic-evidence/000d665c.md) |
+| `000d7d6c` | sttsback_blue(STTSWINDOWBACK*) | [Evidence](semantic-evidence/000d7d6c.md) |
+| `000da63c` | export_suc(int) | [Evidence](semantic-evidence/000da63c.md) |
+| `000e14f4` | statusfigprint10(int, int, char*, COPYFIELD*) | [Evidence](semantic-evidence/000e14f4.md) |
+| `000fe1a4` | Waddlocalprim(tagPOLY_FT4*) | [Evidence](semantic-evidence/000fe1a4.md) |
