@@ -1,0 +1,20 @@
+{
+  "address": "000be2b4",
+  "name": "CSTEP_BATCH::FrameMove(float)",
+  "size": 232,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "bdbf4",
+    "bdc6c",
+    "be1dc",
+    "be2a4"
+  ],
+  "log": "=== jtable.py: 0xbe2b4..0xbe39c (232 bytes) ===\ncoverage: 58 of ~58 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0xbdbf4 x1   CSTEP::Init(int, int, int, int, unsigned int) \n  0xbdc6c x1   CSTEP::FrameMove(float, unsigned int) \n  0xbe1dc x1   CSTEP_BATCH::Uninit() \n  0xbe2a4 x1   CSTEP_BATCH::GetEnable() \n\n-- branches: 9 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

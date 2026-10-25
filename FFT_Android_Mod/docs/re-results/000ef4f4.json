@@ -1,0 +1,24 @@
+{
+  "address": "000ef4f4",
+  "name": "hook_jobmenu()",
+  "size": 236,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 89.83,
+  "distinct_bl": 8,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "153254",
+    "153398",
+    "159924",
+    "159a54",
+    "20c930",
+    "d6d20",
+    "d9790",
+    "e809c"
+  ],
+  "log": "=== jtable.py: 0xef4f4..0xef5e0 (236 bytes) ===\ncoverage: 53 of ~59 instruction slots (90%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 8 distinct --\n  0xd6d20 x1   sub_d6d20 LOCAL(no-dynsym)\n  0xd9790 x1   wait_overlay(int) \n  0xe809c x1   iOS_setsoundf(int*, int) \n  0x153254 x2   task_wait(long) \n  0x153398 x2   task_killmyself() \n  0x159924 x1   asmTaskEntry() \n  0x159a54 x3   asmGetActiveTask(int) \n  0x20c930 x1   freeForFile(void*) \n\n-- branches: 6 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

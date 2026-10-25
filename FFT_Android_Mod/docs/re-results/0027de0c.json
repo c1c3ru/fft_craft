@@ -1,0 +1,29 @@
+{
+  "address": "0027de0c",
+  "name": "iOS_CMenuTouchNum::exec(int*)",
+  "size": 256,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 13,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "27d488",
+    "27d808",
+    "27d92c",
+    "27d98c",
+    "27dc00",
+    "27dda8",
+    "280610",
+    "2b7a8c",
+    "2b7af0",
+    "2b7b40",
+    "2b7b54",
+    "2b8750",
+    "2b9cac"
+  ],
+  "log": "=== jtable.py: 0x27de0c..0x27df0c (256 bytes) ===\ncoverage: 64 of ~64 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 13 distinct --\n  0x27d488 x1   iOS_CMenuTouchNum::calcTapArea() \n  0x27d808 x1   iOS_CMenuTouchNum::drawDebug() \n  0x27d92c x1   iOS_CMenuTouchNum::setSprite() \n  0x27d98c x1   iOS_CMenuTouchNum::execPress(int*, IOS_MENU_TOUCH_NUM_RESULT*) \n  0x27dc00 x1   iOS_CMenuTouchNum::execTap(int*, IOS_MENU_TOUCH_NUM_RESULT*) \n  0x27dda8 x1   iOS_CMenuTouchNum::setNumCurEffect(int) \n  0x280610 x1   iOS_soundDirect(int) \n  0x2b7a8c x1   iOS_getTouchTap() \n  0x2b7af0 x2   iOS_getTouchPress() \n  0x2b7b40 x2   iOS_getTouchNowX() \n  0x2b7b54 x2   iOS_getTouchNowY() \n  0x2b8750 x1   iOS_isMovedDist() \n  0x2b9cac x1   iOS_setV2Icon(V2ICON_DATA, int) \n\n-- branches: 6 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

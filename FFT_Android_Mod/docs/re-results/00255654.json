@@ -1,0 +1,21 @@
+{
+  "address": "00255654",
+  "name": "ctlhelp_init(int, int)",
+  "size": 260,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 87.69,
+  "distinct_bl": 5,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "100500",
+    "100550",
+    "153584",
+    "153734",
+    "26b374"
+  ],
+  "log": "=== jtable.py: 0x255654..0x255758 (260 bytes) ===\ncoverage: 57 of ~65 instruction slots (88%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 5 distinct --\n  0x100500 x1   Wmakemessagepacket(char*) \n  0x100550 x1   Wpushmessagepacket() \n  0x153584 x1   Wtask_create(long, char*) \n  0x153734 x1   Wsend_taskparamater(long, long, long, long) \n  0x26b374 x1   sound_request(int) \n\n-- branches: 2 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

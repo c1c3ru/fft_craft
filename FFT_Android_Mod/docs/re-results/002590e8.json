@@ -1,0 +1,15 @@
+{
+  "address": "002590e8",
+  "name": "wld_event(int, int)",
+  "size": 236,
+  "previous_status": "mentioned_unverified",
+  "status": "needs_review",
+  "coverage_pct": 94.92,
+  "distinct_bl": 0,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [],
+  "log": "=== jtable.py: 0x2590e8..0x2591d4 (236 bytes) ===\ncoverage: 56 of ~59 instruction slots (95%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 0 distinct --\n\n-- branches: 6 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

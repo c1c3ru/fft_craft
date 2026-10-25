@@ -2,8 +2,8 @@
 
 Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Analyzed in current binary: 344
-Automatically triaged: 77,164 bytes / 1,837,392 inventory bytes (4.20%); **this is newly triaged coverage, not total project coverage**.
+Analyzed in current binary: 444
+Automatically triaged: 90,928 bytes / 1,837,392 inventory bytes (4.95%); **this is newly triaged coverage, not total project coverage**.
 
 | Address | Function | Size (B) | Coverage | Status |
 |---|---|---:|---:|---|
@@ -351,3 +351,103 @@ Automatically triaged: 77,164 bytes / 1,837,392 inventory bytes (4.20%); **this 
 | `002b7050` | Main_Novel_GetBtnRect(int*, int*, int*, int*, int*, int*) | 268 | 98.51% | auto_structural |
 | `002ca215` | __cxa_call_unexpected | 268 | 0.0% | needs_review |
 | `0007f138` | _tr_init | 264 | 98.48% | auto_structural |
+| `0007fc50` | _tr_tally | 264 | 95.45% | auto_structural |
+| `00088bf4` | _ve_envelope_mark | 264 | 100.0% | auto_structural |
+| `000ba3a4` | CSOUND_IF::Init(unsigned int, int, char*, int) | 264 | 100.0% | auto_structural |
+| `0015a064` | iosAsmKanjiCopy(char*, char*, tCOPYFIELD*, int) | 264 | 96.97% | auto_structural |
+| `001c067c` | addlocalprim3(tagPOLY_FT4*, int) | 264 | 96.97% | auto_structural |
+| `0025b8ec` | houkoku_mesput(CTLINFO*, int) | 264 | 92.42% | needs_review |
+| `00082ce0` | oggpack_read | 260 | 98.46% | auto_structural |
+| `000bca88` | CSOUND_IF_SL::EngineUninit() | 260 | 100.0% | auto_structural |
+| `001537dc` | eventflaginit() | 260 | 81.54% | needs_review |
+| `0019d530` | FighterName() | 260 | 86.15% | needs_review |
+| `001bad9c` | SeExec() | 260 | 92.31% | needs_review |
+| `001d9250` | get_job_change_flag(unsigned char*, unsigned char) | 260 | 100.0% | auto_structural |
+| `00249174` | vOpn_parainit() | 260 | 78.46% | needs_review |
+| `00255654` | ctlhelp_init(int, int) | 260 | 87.69% | needs_review |
+| `00259ad4` | ctlhismes_main(CTLINFO*) | 260 | 90.77% | needs_review |
+| `0026a2cc` | snpl_scrdisp() | 260 | 93.85% | needs_review |
+| `00280004` | cSaveFFT::Load() | 260 | 96.92% | auto_structural |
+| `00282374` | DispClipedPolygonNo(int, int, int) | 260 | 96.92% | auto_structural |
+| `0007b080` | inflateInit2_ | 256 | 96.88% | auto_structural |
+| `000b1980` | CEGL_PACKET::Alloc(int) | 256 | 100.0% | auto_structural |
+| `00137424` | statusfigprint0(int, int, char*, COPYFIELD*) | 256 | 95.31% | auto_structural |
+| `001cc9fc` | status_countdown(int) | 256 | 92.19% | needs_review |
+| `001f5320` | displayCursor() | 256 | 96.88% | auto_structural |
+| `00210c9c` | setMapVector(SVECTOR*, SVECTOR*) | 256 | 89.06% | needs_review |
+| `00225210` | DoPermanentEffect() | 256 | 89.06% | needs_review |
+| `0024988c` | vOpn_sun2ivaday(int*, int*) | 256 | 95.31% | auto_structural |
+| `0024cf68` | ctlbrst_deactive(CTLINFO*) | 256 | 95.31% | auto_structural |
+| `00255180` | ctlmap_active(CTLINFO*) | 256 | 90.62% | needs_review |
+| `00266900` | infonumber_put(int, int, GsSPRITE*, GsOT*) | 256 | 96.88% | auto_structural |
+| `0027de0c` | iOS_CMenuTouchNum::exec(int*) | 256 | 100.0% | auto_structural |
+| `000e0fb8` | initdrmode(DR_MODE*, int) | 252 | 92.06% | needs_review |
+| `001bc334` | GetSttsApos(short) | 252 | 88.89% | needs_review |
+| `001f5df8` | MydisplayCursor(int) | 252 | 96.83% | auto_structural |
+| `0020c834` | mallocAddress(void*, unsigned int) | 252 | 96.83% | auto_structural |
+| `00225790` | InitObjectManager() | 252 | 87.3% | needs_review |
+| `0026a6d4` | fastpage_print(int, int) | 252 | 95.24% | auto_structural |
+| `002b1ff8` | Debug_DrawFPS() | 252 | 90.48% | needs_review |
+| `000ba138` | CompareLocalTime(_SYSTEMTIME*, _SYSTEMTIME*) | 248 | 100.0% | auto_structural |
+| `0010fa1c` | Winitdrmode(DR_MODE*, int) | 248 | 91.94% | needs_review |
+| `0018716c` | CardAccess3() | 248 | 95.16% | auto_structural |
+| `00188348` | allitem_count() | 248 | 91.94% | needs_review |
+| `001abe0c` | GetShapeNo(CHR_STTS*, int) | 248 | 96.77% | auto_structural |
+| `001caa10` | set_ct_weapon(ACT*) | 248 | 67.74% | needs_review |
+| `001f5d00` | DrawPanel(int, int, int, int) | 248 | 98.39% | auto_structural |
+| `0021b920` | Dynamics(Physics*) | 248 | 98.39% | auto_structural |
+| `00224d4c` | CheckGunReachable(unsigned char, unsigned char) | 248 | 98.39% | auto_structural |
+| `0022541c` | Free(void*) | 248 | 95.16% | auto_structural |
+| `00253a68` | ctlcenter_main(CTLINFO*) | 248 | 87.1% | needs_review |
+| `0027ce58` | iOS_CMenuTouch::init(int, int, int, int, int, int, int, int) | 248 | 100.0% | auto_structural |
+| `001a2a50` | initMenuTouch(iOS_CMenuTouch*, int) | 244 | 98.36% | auto_structural |
+| `001ab824` | AbilityEquip(short, short, short, int) | 244 | 98.36% | auto_structural |
+| `001b799c` | SystemWarningTime(int, int) | 244 | 90.16% | needs_review |
+| `001d2874` | set_succession_data(BWORK*, int) | 244 | 96.72% | auto_structural |
+| `00245720` | strCallback() | 244 | 96.72% | auto_structural |
+| `0025c744` | shogou_check() | 244 | 95.08% | auto_structural |
+| `00076e08` | deflateEnd | 240 | 100.0% | auto_structural |
+| `000b3c24` | CINPUT_IF_TOUCH::Init() | 240 | 100.0% | auto_structural |
+| `000dd360` | eventanmreq(char*) | 240 | 100.0% | auto_structural |
+| `00100844` | Wcheckkeyok() | 240 | 90.0% | needs_review |
+| `001069ac` | Weventanmreq(char*) | 240 | 100.0% | auto_structural |
+| `001bc430` | UnitScroll(short*, short*) | 240 | 95.0% | auto_structural |
+| `001bdb1c` | DrawShapeWithShadow(short*, COLOR*, int, int) | 240 | 95.0% | auto_structural |
+| `00211b98` | ExecuteChangePalette() | 240 | 90.0% | needs_review |
+| `0025c3ac` | mkdaypt_calc() | 240 | 93.33% | needs_review |
+| `0025c838` | ctlshogou_init() | 240 | 90.0% | needs_review |
+| `00266b94` | info_war_funds(GsOT*, GsSPRITE*, GsLINE*) | 240 | 96.67% | auto_structural |
+| `0026bf68` | town_touch(_POINT, int*, int*) | 240 | 98.33% | auto_structural |
+| `000b4f94` | CRECT::FrameMove(int, int) | 236 | 100.0% | auto_structural |
+| `000ef4f4` | hook_jobmenu() | 236 | 89.83% | needs_review |
+| `00101650` | Whook_jobmenu() | 236 | 89.83% | needs_review |
+| `0015ce74` | iOSMapIconModeSet(int) | 236 | 89.83% | needs_review |
+| `001f35dc` | EndAnimation(tag_animation*) | 236 | 94.92% | needs_review |
+| `002590e8` | wld_event(int, int) | 236 | 94.92% | needs_review |
+| `0025b78c` | houkoku_talkunit(int) | 236 | 86.44% | needs_review |
+| `0026be7c` | town_find3(_POINT, int) | 236 | 96.61% | auto_structural |
+| `00077598` | gz_error | 232 | 96.55% | auto_structural |
+| `000ba8e0` | CSOUND_IF::SetVolume(int, int) | 232 | 98.28% | auto_structural |
+| `000be2b4` | CSTEP_BATCH::FrameMove(float) | 232 | 100.0% | auto_structural |
+| `000dc604` | eventsetchrcol(char*) | 232 | 100.0% | auto_structural |
+| `001ceb14` | reset_status_forevent2(BWORK*) | 232 | 98.28% | auto_structural |
+| `00285e50` | pspMsgGet(unsigned int) | 232 | 63.79% | needs_review |
+| `00078f2c` | gzputc | 228 | 100.0% | auto_structural |
+| `00079224` | gzsetparams | 228 | 100.0% | auto_structural |
+| `001eb67c` | myInitShape() | 228 | 78.95% | needs_review |
+| `0020f1d0` | getCharacterInfo(int, unsigned short*) | 228 | 98.25% | auto_structural |
+| `00223310` | GetParabolaYPos(int, int) | 228 | 98.25% | auto_structural |
+| `0028d6ec` | tlCheckHeap() | 228 | 92.98% | needs_review |
+| `000813b4` | unzGoToNextFile | 224 | 100.0% | auto_structural |
+| `000cbb48` | delTrapWindowTaskall() | 224 | 98.21% | auto_structural |
+| `000d115c` | Ddisp_eventwaitwindow() | 224 | 92.86% | needs_review |
+| `00123994` | Edisp_eventwaitwindow() | 224 | 92.86% | needs_review |
+| `001252d0` | Wdisp_eventwindow() | 224 | 92.86% | needs_review |
+| `0012cb3c` | disp_eventwaitwindow() | 224 | 92.86% | needs_review |
+| `00134fa0` | Wdisp_eventwaitwindow() | 224 | 92.86% | needs_review |
+| `00138234` | disp_eventwindow() | 224 | 92.86% | needs_review |
+| `0014bd8c` | Cdisp_eventwaitwindow() | 224 | 92.86% | needs_review |
+| `0015588c` | title_menuinit() | 224 | 91.07% | needs_review |
+| `0015a33c` | iOSsTchBtlEnd() | 224 | 76.79% | needs_review |
+| `001cea0c` | set_walker_result(BWORK*, REWARD*) | 224 | 94.64% | needs_review |
+| `001dc29c` | set_eggmonster(int, int, int) | 224 | 96.43% | auto_structural |

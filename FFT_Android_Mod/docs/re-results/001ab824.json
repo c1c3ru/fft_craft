@@ -1,0 +1,22 @@
+{
+  "address": "001ab824",
+  "name": "AbilityEquip(short, short, short, int)",
+  "size": 244,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 98.36,
+  "distinct_bl": 6,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1a7338",
+    "1a7a48",
+    "1aa014",
+    "1ab40c",
+    "1ab7e0",
+    "1b799c"
+  ],
+  "log": "=== jtable.py: 0x1ab824..0x1ab918 (244 bytes) ===\ncoverage: 60 of ~61 instruction slots (98%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x1a7338 x2   ItemChg(short, int) \n  0x1a7a48 x2   SetChrList() \n  0x1aa014 x1   GetBestEquip(short, short*) \n  0x1ab40c x1   sub_1ab40c LOCAL(no-dynsym)\n  0x1ab7e0 x1   IsUntauchableAbility(int) \n  0x1b799c x1   SystemWarningTime(int, int) \n\n-- branches: 6 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

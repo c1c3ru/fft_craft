@@ -1,0 +1,19 @@
+{
+  "address": "00079224",
+  "name": "gzsetparams",
+  "size": 228,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "76cf0",
+    "78ae8",
+    "78ce8"
+  ],
+  "log": "=== jtable.py: 0x79224..0x79308 (228 bytes) ===\ncoverage: 57 of ~57 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x76cf0 x1   deflateParams \n  0x78ae8 x1   sub_78ae8 LOCAL(no-dynsym)\n  0x78ce8 x1   sub_78ce8 LOCAL(no-dynsym)\n\n-- branches: 12 total, 4 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

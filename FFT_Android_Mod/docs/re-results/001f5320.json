@@ -1,0 +1,23 @@
+{
+  "address": "001f5320",
+  "name": "displayCursor()",
+  "size": 256,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 96.88,
+  "distinct_bl": 7,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "160008",
+    "16f794",
+    "1d6718",
+    "1e796c",
+    "1e8d88",
+    "1eba8c",
+    "1f5018"
+  ],
+  "log": "=== jtable.py: 0x1f5320..0x1f5420 (256 bytes) ===\ncoverage: 62 of ~64 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 7 distinct --\n  0x160008 x1   iOSCurHojyo(SVECTOR*) \n  0x16f794 x2   ASHURA_getOTptrZ(int) \n  0x1d6718 x1   get_mapstp(int, int, int) \n  0x1e796c x1   sub_1e796c LOCAL(no-dynsym)\n  0x1e8d88 x1   sub_1e8d88 LOCAL(no-dynsym)\n  0x1eba8c x1   sub_1eba8c LOCAL(no-dynsym)\n  0x1f5018 x1   doCursor(VECTOR*, SVECTOR*, SVECTOR*) \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

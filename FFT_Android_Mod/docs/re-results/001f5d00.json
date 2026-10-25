@@ -1,0 +1,21 @@
+{
+  "address": "001f5d00",
+  "name": "DrawPanel(int, int, int, int)",
+  "size": 248,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 98.39,
+  "distinct_bl": 5,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "16f794",
+    "1d6718",
+    "1e796c",
+    "1e8d88",
+    "21036c"
+  ],
+  "log": "=== jtable.py: 0x1f5d00..0x1f5df8 (248 bytes) ===\ncoverage: 61 of ~62 instruction slots (98%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 5 distinct --\n  0x16f794 x1   ASHURA_getOTptrZ(int) \n  0x1d6718 x1   get_mapstp(int, int, int) \n  0x1e796c x1   sub_1e796c LOCAL(no-dynsym)\n  0x1e8d88 x1   sub_1e8d88 LOCAL(no-dynsym)\n  0x21036c x1   setShortVector(SVECTOR*, int, int, int) \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

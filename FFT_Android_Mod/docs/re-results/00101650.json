@@ -1,0 +1,24 @@
+{
+  "address": "00101650",
+  "name": "Whook_jobmenu()",
+  "size": 236,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 89.83,
+  "distinct_bl": 8,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1015a4",
+    "153518",
+    "15365c",
+    "161ef8",
+    "162028",
+    "20c930",
+    "e809c",
+    "fe868"
+  ],
+  "log": "=== jtable.py: 0x101650..0x10173c (236 bytes) ===\ncoverage: 53 of ~59 instruction slots (90%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 8 distinct --\n  0xe809c x1   iOS_setsoundf(int*, int) \n  0xfe868 x1   sub_fe868 LOCAL(no-dynsym)\n  0x1015a4 x1   Wwait_overlay(int) \n  0x153518 x2   Wtask_wait(long) \n  0x15365c x2   Wtask_killmyself() \n  0x161ef8 x1   wasmTaskEntry() \n  0x162028 x3   wasmGetActiveTask(int) \n  0x20c930 x1   freeForFile(void*) \n\n-- branches: 6 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
