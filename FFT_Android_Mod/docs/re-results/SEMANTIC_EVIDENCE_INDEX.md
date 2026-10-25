@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **904/1258** pending functions.
+Evidence collected: **912/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -915,3 +915,11 @@ These reports do not constitute semantic verification.
 | `0021b908` | PopAirDensity() | [Evidence](semantic-evidence/0021b908.md) |
 | `00248598` | iOS_TestDraw(unsigned long*) | [Evidence](semantic-evidence/00248598.md) |
 | `0024dcc0` | ctlkiroku_deactive(CTLINFO*) | [Evidence](semantic-evidence/0024dcc0.md) |
+| `0024e904` | ctlperson_deactive(CTLINFO*) | [Evidence](semantic-evidence/0024e904.md) |
+| `00259750` | ctlhistory_active(CTLINFO*) | [Evidence](semantic-evidence/00259750.md) |
+| `00259768` | ctlhistory_deactive(CTLINFO*) | [Evidence](semantic-evidence/00259768.md) |
+| `00259ea4` | ctlhouk_deactive(CTLINFO*) | [Evidence](semantic-evidence/00259ea4.md) |
+| `0025e294` | mkadrtbl_calc(int) | [Evidence](semantic-evidence/0025e294.md) |
+| `0025ffe0` | iOS_IsTutoStart() | [Evidence](semantic-evidence/0025ffe0.md) |
+| `002602f4` | ctlmouke_deactive(CTLINFO*) | [Evidence](semantic-evidence/002602f4.md) |
+| `002675f4` | ctlret_deactive(CTLINFO*) | [Evidence](semantic-evidence/002675f4.md) |
