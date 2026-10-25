@@ -1,0 +1,17 @@
+{
+  "address": "000b6834",
+  "name": "CFILE_DAT::CFILE_DAT()",
+  "size": 120,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "714c4"
+  ],
+  "log": "=== jtable.py: 0xb6834..0xb68ac (120 bytes) ===\ncoverage: 30 of ~30 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x714c4 x1   sub_714c4 LOCAL(no-dynsym)\n\n-- branches: 1 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

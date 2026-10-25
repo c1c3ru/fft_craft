@@ -1,0 +1,18 @@
+{
+  "address": "0025e204",
+  "name": "wldfade_mask()",
+  "size": 144,
+  "previous_status": "mentioned_unverified",
+  "status": "needs_review",
+  "coverage_pct": 91.67,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "29c780"
+  ],
+  "log": "=== jtable.py: 0x25e204..0x25e294 (144 bytes) ===\ncoverage: 33 of ~36 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x29c780 x1   GsSortBoxFill \n\n-- branches: 6 total, 3 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

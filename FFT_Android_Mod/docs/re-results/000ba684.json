@@ -1,0 +1,18 @@
+{
+  "address": "000ba684",
+  "name": "CSOUND_IF::Stop(int)",
+  "size": 124,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "ba308",
+    "bb838"
+  ],
+  "log": "=== jtable.py: 0xba684..0xba700 (124 bytes) ===\ncoverage: 31 of ~31 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0xba308 x1   CSOUND_IF::GetEnable() \n  0xbb838 x1   CSOUND_IF_SL::Stop(int) \n\n-- branches: 5 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

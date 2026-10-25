@@ -1,0 +1,19 @@
+{
+  "address": "000bd3b4",
+  "name": "COggMemMapFile::Open(char const*, unsigned int, unsigned int)",
+  "size": 96,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "71500",
+    "71aac",
+    "71ab8"
+  ],
+  "log": "=== jtable.py: 0xbd3b4..0xbd414 (96 bytes) ===\ncoverage: 24 of ~24 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x71500 x1   sub_71500 LOCAL(no-dynsym)\n  0x71aac x1   sub_71aac LOCAL(no-dynsym)\n  0x71ab8 x1   sub_71ab8 LOCAL(no-dynsym)\n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

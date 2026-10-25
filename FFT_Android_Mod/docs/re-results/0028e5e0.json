@@ -1,0 +1,19 @@
+{
+  "address": "0028e5e0",
+  "name": "pspNetPadRead",
+  "size": 140,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 97.14,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "26d798",
+    "2a2a4c",
+    "2b7c44"
+  ],
+  "log": "=== jtable.py: 0x28e5e0..0x28e66c (140 bytes) ===\ncoverage: 34 of ~35 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x26d798 x1   iOSTutoCheck() \n  0x2a2a4c x2   xpPadKeyBufGet \n  0x2b7c44 x2   iOS_getTutorialPad() \n\n-- branches: 2 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

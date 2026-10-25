@@ -1,0 +1,21 @@
+{
+  "address": "000b6e70",
+  "name": "CFILE_DAT::Decode(int, unsigned char*, int)",
+  "size": 112,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 5,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "b61d4",
+    "b61e4",
+    "b6204",
+    "b6c70",
+    "b6cd0"
+  ],
+  "log": "=== jtable.py: 0xb6e70..0xb6ee0 (112 bytes) ===\ncoverage: 28 of ~28 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 5 distinct --\n  0xb61d4 x1   CCOMP_Z_DEC::~CCOMP_Z_DEC() \n  0xb61e4 x1   CCOMP_Z_DEC::CCOMP_Z_DEC() \n  0xb6204 x1   CCOMP_Z_DEC::Decode(unsigned char*, unsigned char*, int) \n  0xb6c70 x1   CFILE_DAT::GetBuffer(int) \n  0xb6cd0 x1   CFILE_DAT::GetSize(int) \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

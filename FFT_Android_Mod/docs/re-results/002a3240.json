@@ -1,0 +1,19 @@
+{
+  "address": "002a3240",
+  "name": "pspSaveAuto::pspSaveAuto()",
+  "size": 112,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 96.43,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2a348c",
+    "2a37b0",
+    "714c4"
+  ],
+  "log": "=== jtable.py: 0x2a3240..0x2a32b0 (112 bytes) ===\ncoverage: 27 of ~28 instruction slots (96%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x714c4 x3   sub_714c4 LOCAL(no-dynsym)\n  0x2a348c x1   pspSaveBase::UserIdSet(int) \n  0x2a37b0 x1   pspSaveBase::pspSaveBase() \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

@@ -1,0 +1,19 @@
+{
+  "address": "002b0718",
+  "name": "CDebugPrint::EngineInit(char*, float)",
+  "size": 100,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2b0710",
+    "ada14",
+    "adcd4"
+  ],
+  "log": "=== jtable.py: 0x2b0718..0x2b077c (100 bytes) ===\ncoverage: 25 of ~25 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0xada14 x1   CEGL2_SPRITE::LoadBegin(char*, unsigned char*, unsigned int, unsigned int, int) \n  0xadcd4 x1   CEGL2_SPRITE::LoadEnd(int, int) \n  0x2b0710 x1   CDebugPrint::SetFontSize(float) \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

@@ -1,0 +1,18 @@
+{
+  "address": "000ba5ac",
+  "name": "CSOUND_IF::Unload(int)",
+  "size": 100,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "ba308",
+    "bc9fc"
+  ],
+  "log": "=== jtable.py: 0xba5ac..0xba610 (100 bytes) ===\ncoverage: 25 of ~25 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0xba308 x1   CSOUND_IF::GetEnable() \n  0xbc9fc x1   CSOUND_IF_SL::Unload(int) \n\n-- branches: 6 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

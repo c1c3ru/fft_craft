@@ -1,0 +1,17 @@
+{
+  "address": "00273e10",
+  "name": "CompareMove(MOVE*, MOVE*)",
+  "size": 144,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 97.22,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "273dbc"
+  ],
+  "log": "=== jtable.py: 0x273e10..0x273ea0 (144 bytes) ===\ncoverage: 35 of ~36 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x273dbc x1   CompareScore(SCORE*, SCORE*) \n\n-- branches: 2 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

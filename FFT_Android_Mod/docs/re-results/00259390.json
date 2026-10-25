@@ -1,0 +1,17 @@
+{
+  "address": "00259390",
+  "name": "evt_date_high()",
+  "size": 104,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 96.15,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "259324"
+  ],
+  "log": "=== jtable.py: 0x259390..0x2593f8 (104 bytes) ===\ncoverage: 25 of ~26 instruction slots (96%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x259324 x1   evt_get_date(int*, int*, int*, int*) \n\n-- branches: 2 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
