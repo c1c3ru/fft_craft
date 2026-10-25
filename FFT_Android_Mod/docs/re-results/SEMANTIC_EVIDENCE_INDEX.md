@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **600/1258** pending functions.
+Evidence collected: **608/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -611,3 +611,11 @@ These reports do not constitute semantic verification.
 | `00161e2c` | iOSIsCurMode() | [Evidence](semantic-evidence/00161e2c.md) |
 | `001a63dc` | bak_read(int, void*) | [Evidence](semantic-evidence/001a63dc.md) |
 | `001cb030` | clear_setstatus(A_RESULT*) | [Evidence](semantic-evidence/001cb030.md) |
+| `001d9370` | get_joblevel(unsigned short) | [Evidence](semantic-evidence/001d9370.md) |
+| `001eb760` | myStartShape() | [Evidence](semantic-evidence/001eb760.md) |
+| `001f36c8` | EndAllAnimation() | [Evidence](semantic-evidence/001f36c8.md) |
+| `001fd278` | startInterventionMode() | [Evidence](semantic-evidence/001fd278.md) |
+| `0020d7d4` | pushMapAngle() | [Evidence](semantic-evidence/0020d7d4.md) |
+| `0020d808` | popMapAngle() | [Evidence](semantic-evidence/0020d808.md) |
+| `0020da48` | pushBackColor() | [Evidence](semantic-evidence/0020da48.md) |
+| `0020eddc` | inactivateEventAnimation(int) | [Evidence](semantic-evidence/0020eddc.md) |
