@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **408/1258** pending functions.
+Evidence collected: **416/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -419,3 +419,11 @@ These reports do not constitute semantic verification.
 | `002ab908` | sceGuStart | [Evidence](semantic-evidence/002ab908.md) |
 | `002b2290` | GX_ApplyVertexScaling(int) | [Evidence](semantic-evidence/002b2290.md) |
 | `002b2e48` | Jingle_Stop(int) | [Evidence](semantic-evidence/002b2e48.md) |
+| `000e0568` | export_localpad(long*) | [Evidence](semantic-evidence/000e0568.md) |
+| `000e2fbc` | statuskanjiprintadv(int, char*, COPYFIELD*) | [Evidence](semantic-evidence/000e2fbc.md) |
+| `0010dea4` | Wexport_localpad(long*) | [Evidence](semantic-evidence/0010dea4.md) |
+| `001531f8` | edit_smallpacket() | [Evidence](semantic-evidence/001531f8.md) |
+| `0019d7e8` | DrawUnits() | [Evidence](semantic-evidence/0019d7e8.md) |
+| `0019e134` | SuccessEmploy() | [Evidence](semantic-evidence/0019e134.md) |
+| `001eed30` | getShapeAddress(unsigned short) | [Evidence](semantic-evidence/001eed30.md) |
+| `00245de4` | vOpn_ctlprog() | [Evidence](semantic-evidence/00245de4.md) |
