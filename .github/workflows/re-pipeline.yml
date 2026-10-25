@@ -72,6 +72,15 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_evidence.py --limit 8
           python3 FFT_Android_Mod/docs/re-tools/semantic_path_report.py --limit 12
           python3 FFT_Android_Mod/docs/re-tools/semantic_microexec.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_branch_microexec.py
+          python3 - <<'PY'
+          from pathlib import Path
+          report = Path("FFT_Android_Mod/docs/re-results/SEMANTIC_BRANCH_MICROEXEC.md").read_text()
+          assert "Total verified isolated branch executions:** 192" in report
+          assert all(token in report for token in
+                     ("0x2442cc", "0x244310", "0x244384", "not a full function trace"))
+          print("PASS: actual ELF conditional ARM branch machine test")
+          PY
           python3 - <<'PY'
           from pathlib import Path
           f = Path("FFT_Android_Mod/docs/re-results/SEMANTIC_MICROEXEC.md")
