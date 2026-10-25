@@ -131,9 +131,12 @@ def evidence(record, data, limit_lines=70, binary_sha256=None):
              "", DISCLAIMER, "",
              f'- Binary address: \x600x{start:x}\x60; size: {len(data)} bytes',
              f'- Checkpoint status: \x60{record["status"]}\x60 (unchanged)',
-             f'- Heuristically visited slots: {len(seen)}/{len(slots)}',
+             f'- Instruction set: {"Thumb (tagged symbol address)" if thumb else "ARM"}',
+             f'- Scan method: {"linear, stops at first recognized return; NOT a CFG" if thumb else "ARM recursive descent (heuristic)"}',
+             f'- Heuristically decoded instruction slots: {len(observed)}/{len(slots)}',
+             f'- Trailing bytes outside complete instructions: {len(data) % alignment}',
              f'- ELF SHA-256: `{binary_sha256 or "not supplied"}`',
-             f'- Unvisited 4-byte offsets: {len(gaps)} (not necessarily code)',
+             f'- Unvisited {alignment}-byte slots: {len(gaps)} (not necessarily code)',
              f'- Unvisited slots referenced by PC-relative LDR: {len(referenced_gaps)}',
              f'- Other unvisited slots: {len(other_gaps)}',
              f'- Candidate memory stores: {len(stores)}; calls: {len(calls)}',
@@ -160,7 +163,7 @@ def evidence(record, data, limit_lines=70, binary_sha256=None):
         lines.append(f'- `0x{addr:x}`: 0x{item["value"]:08x}; referenced by {sites}')
     if not literals:
         lines.append("None identified.")
-    lines.extend(["", "## Other unvisited offsets (first 40)", "",
+    lines.extend(["", "## Other unvisited instruction slots (first 40)", "",
                   ", ".join(f'`0x{a:x}`' for a in other_gaps[:40]) or "None",
                   "", f"## Visited instructions (first {limit_lines})", "",
                   "\x60\x60\x60asm"])
