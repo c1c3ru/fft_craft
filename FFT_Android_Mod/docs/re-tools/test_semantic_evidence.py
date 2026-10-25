@@ -73,7 +73,8 @@ class EvidenceTests(unittest.TestCase):
                 writer.writeheader()
                 writer.writerows(rows)
             # The first address has valid existing evidence.
-            (output / "00001000.md").write_text(f"ELF SHA-256: `{digest}`")
+            (output / "00001000.md").write_text(
+                f"ELF SHA-256: `{digest}`\nEvidence schema: v{module.EVIDENCE_VERSION}")
             data = bytes.fromhex("0100a0e3 1eff2fe1")
             with patch.object(module, "read_function", return_value=data) as reader:
                 module.run(binary, results, output, 2)
