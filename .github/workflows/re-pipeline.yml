@@ -70,6 +70,23 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/progress_report.py
           python3 FFT_Android_Mod/docs/re-tools/export_review_queue.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_evidence.py --limit 8
+          python3 - <<'PY'
+          import sys
+          from pathlib import Path
+          sys.path.insert(0, str(Path("FFT_Android_Mod/docs/re-tools").resolve()))
+          import semantic_evidence as evidence
+          import semantic_facts as facts
+          elf = evidence.ROOT / "src/lib/armeabi/libgl2jni.so"
+          seen, _, _ = evidence.collect(evidence.read_function(elf, 0x244200, 528), 0x244200)
+          effects = facts.bitmask_effects(seen)
+          assert any(f["kind"] == "clear_bits" and f["mask"] == 0x40
+                     and f["addresses"] == [0x244254, 0x244258, 0x24425c]
+                     for f in effects), "Expected vEnd_rollproc local flag clear not found"
+          true_calls = {address for address, _ in facts.calls(seen)}
+          assert 0x244204 in true_calls, "Expected BL missing"
+          assert 0x244358 not in true_calls, "BLE misclassified as function call"
+          print("PASS: real ELF local bitmask effect and BL/BLE distinction")
+          PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
