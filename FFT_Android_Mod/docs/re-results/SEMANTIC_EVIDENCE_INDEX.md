@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **115/115** pending functions.
+Evidence collected: **89/89** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -99,30 +99,4 @@ These reports do not constitute semantic verification.
 | `002c99b5` | operator new(unsigned int) | [Evidence](semantic-evidence/002c99b5.md) |
 | `002ca195` | __cxa_begin_cleanup | [Evidence](semantic-evidence/002ca195.md) |
 | `0028c288` | CFFT_STATE::GetBackdropColor(float*, float*, float*) | [Evidence](semantic-evidence/0028c288.md) |
-| `00269774` | snpl_jp() | [Evidence](semantic-evidence/00269774.md) |
-| `00269b08` | snpl_effmode() | [Evidence](semantic-evidence/00269b08.md) |
-| `0028c644` | CFFT_STATE::FaceIDToFID(int) | [Evidence](semantic-evidence/0028c644.md) |
-| `0029a834` | ClearImage | [Evidence](semantic-evidence/0029a834.md) |
-| `00153450` | task_status(long) | [Evidence](semantic-evidence/00153450.md) |
-| `00153714` | Wtask_status(long) | [Evidence](semantic-evidence/00153714.md) |
-| `0027f620` | iOS_ResumeGetData(unsigned char**, unsigned int*) | [Evidence](semantic-evidence/0027f620.md) |
-| `0029ae70` | xpLib_GetTPage(int*) | [Evidence](semantic-evidence/0029ae70.md) |
 | `002ccf98` | _Unwind_DeleteException | [Evidence](semantic-evidence/002ccf98.md) |
-| `000726e0` | JNI_OnLoad | [Evidence](semantic-evidence/000726e0.md) |
-| `0024b080` | wldbinEntry() | [Evidence](semantic-evidence/0024b080.md) |
-| `00258ac8` | evt_skip1() | [Evidence](semantic-evidence/00258ac8.md) |
-| `00258ae4` | evt_skip2() | [Evidence](semantic-evidence/00258ae4.md) |
-| `00258b38` | evt_item() | [Evidence](semantic-evidence/00258b38.md) |
-| `00258b54` | evt_eqp() | [Evidence](semantic-evidence/00258b54.md) |
-| `0026973c` | snpl_endpage() | [Evidence](semantic-evidence/0026973c.md) |
-| `00269758` | snpl_startpage() | [Evidence](semantic-evidence/00269758.md) |
-| `0028b018` | pspWorldEnableFlg(PSP_WORLD_FLG) | [Evidence](semantic-evidence/0028b018.md) |
-| `0028b034` | pspWorldDisableFlg(PSP_WORLD_FLG) | [Evidence](semantic-evidence/0028b034.md) |
-| `0029fea0` | rcos | [Evidence](semantic-evidence/0029fea0.md) |
-| `00279ed4` | ClearForBattleRoutine() | [Evidence](semantic-evidence/00279ed4.md) |
-| `0028b050` | pspWorldCheckFlg(PSP_WORLD_FLG) | [Evidence](semantic-evidence/0028b050.md) |
-| `0029fe88` | rsin | [Evidence](semantic-evidence/0029fe88.md) |
-| `002a1324` | SetGeomOffset | [Evidence](semantic-evidence/002a1324.md) |
-| `0028a08c` | Savedata_GetAddr() | [Evidence](semantic-evidence/0028a08c.md) |
-| `002a3120` | xpGetHeapSize | [Evidence](semantic-evidence/002a3120.md) |
-| `000823d4` | zlibVersion | [Evidence](semantic-evidence/000823d4.md) |

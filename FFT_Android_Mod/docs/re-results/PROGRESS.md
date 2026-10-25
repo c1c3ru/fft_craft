@@ -7,8 +7,8 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | Inventory total | 6,455 functions / 1,837,392 bytes |
 | Previously analyzed in CSV | 3,451 functions / 1,551,512 bytes |
 | JSON checkpoints (all statuses) | 3,002 |
-| Newly accepted structurally | 2,887 functions / 282,496 bytes |
-| Needs review | 115 functions |
+| Newly accepted structurally | 2,913 functions / 283,228 bytes |
+| Needs review | 89 functions |
 | Core targets in inventory | 4,642 functions |
 | Core targets checkpointed | 2,345 functions |
 | Core accepted structurally | 2,272 functions |
@@ -20,8 +20,8 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 
 | Status | Functions |
 |---|---:|
-| auto_structural | 2,887 |
-| needs_review | 115 |
+| auto_structural | 2,913 |
+| needs_review | 89 |
 
 ## Review queue (largest first)
 
@@ -114,33 +114,7 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | `002ca195` | __cxa_begin_cleanup (needs_review) | 60 | 66.67 | 0 | 0 |
 | `0028c288` | CFFT_STATE::GetBackdropColor(float*, float*, float*) (needs_review) | 56 | 57.14 | 1 | 0 |
 | `002cb484` | __floatunsisf (needs_review) | 40 | 80.0 | 0 | 0 |
-| `0029a834` | ClearImage (needs_review) | 36 | 77.78 | 0 | 0 |
-| `0028c644` | CFFT_STATE::FaceIDToFID(int) (needs_review) | 36 | 88.89 | 0 | 0 |
-| `00269b08` | snpl_effmode() (needs_review) | 36 | 88.89 | 0 | 0 |
-| `00269774` | snpl_jp() (needs_review) | 36 | 88.89 | 0 | 0 |
 | `002ccf98` | _Unwind_DeleteException (needs_review) | 32 | 62.5 | 0 | 0 |
-| `0029ae70` | xpLib_GetTPage(int*) (needs_review) | 32 | 87.5 | 0 | 0 |
-| `0027f620` | iOS_ResumeGetData(unsigned char**, unsigned int*) (needs_review) | 32 | 75.0 | 0 | 0 |
-| `00153714` | Wtask_status(long) (needs_review) | 32 | 87.5 | 0 | 0 |
-| `00153450` | task_status(long) (needs_review) | 32 | 87.5 | 0 | 0 |
-| `0029fea0` | rcos (needs_review) | 28 | 85.71 | 0 | 0 |
-| `0028b034` | pspWorldDisableFlg(PSP_WORLD_FLG) (needs_review) | 28 | 85.71 | 0 | 0 |
-| `0028b018` | pspWorldEnableFlg(PSP_WORLD_FLG) (needs_review) | 28 | 85.71 | 0 | 0 |
-| `00269758` | snpl_startpage() (needs_review) | 28 | 85.71 | 0 | 0 |
-| `0026973c` | snpl_endpage() (needs_review) | 28 | 85.71 | 0 | 0 |
-| `00258b54` | evt_eqp() (needs_review) | 28 | 85.71 | 0 | 0 |
-| `00258b38` | evt_item() (needs_review) | 28 | 85.71 | 0 | 0 |
-| `00258ae4` | evt_skip2() (needs_review) | 28 | 85.71 | 0 | 0 |
-| `00258ac8` | evt_skip1() (needs_review) | 28 | 85.71 | 0 | 0 |
-| `0024b080` | wldbinEntry() (needs_review) | 28 | 85.71 | 0 | 0 |
-| `000726e0` | JNI_OnLoad (needs_review) | 28 | 85.71 | 0 | 0 |
-| `002a1324` | SetGeomOffset (needs_review) | 24 | 83.33 | 0 | 0 |
-| `0029fe88` | rsin (needs_review) | 24 | 83.33 | 0 | 0 |
-| `0028b050` | pspWorldCheckFlg(PSP_WORLD_FLG) (needs_review) | 24 | 83.33 | 0 | 0 |
-| `00279ed4` | ClearForBattleRoutine() (needs_review) | 24 | 83.33 | 0 | 0 |
-| `002a3120` | xpGetHeapSize (needs_review) | 20 | 80.0 | 0 | 0 |
-| `0028a08c` | Savedata_GetAddr() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `000823d4` | zlibVersion (needs_review) | 16 | 75.0 | 0 | 0 |
 | `002c9121` | operator delete[](void*) (needs_review) | 8 | 0.0 | 0 | 0 |
 
 > Structural acceptance does not establish semantic equivalence.

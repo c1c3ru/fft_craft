@@ -87,30 +87,4 @@ address,name,size,core_priority,coverage_pct,review_reason,tables_resolved,table
 002c99b5,operator new(unsigned int),76,0,5.26,coverage_below_95,0,0,1,FFT_Android_Mod/docs/re-results/002c99b5.json
 002ca195,__cxa_begin_cleanup,60,0,66.67,coverage_below_95,0,0,1,FFT_Android_Mod/docs/re-results/002ca195.json
 0028c288,"CFFT_STATE::GetBackdropColor(float*, float*, float*)",56,0,57.14,resolved_jump_table_check,1,0,1,FFT_Android_Mod/docs/re-results/0028c288.json
-00269774,snpl_jp(),36,0,88.89,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00269774.json
-00269b08,snpl_effmode(),36,0,88.89,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00269b08.json
-0028c644,CFFT_STATE::FaceIDToFID(int),36,0,88.89,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0028c644.json
-0029a834,ClearImage,36,0,77.78,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0029a834.json
-00153450,task_status(long),32,0,87.5,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00153450.json
-00153714,Wtask_status(long),32,0,87.5,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00153714.json
-0027f620,"iOS_ResumeGetData(unsigned char**, unsigned int*)",32,0,75.0,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0027f620.json
-0029ae70,xpLib_GetTPage(int*),32,0,87.5,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0029ae70.json
-002ccf98,_Unwind_DeleteException,32,0,62.5,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002ccf98.json
-000726e0,JNI_OnLoad,28,0,85.71,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/000726e0.json
-0024b080,wldbinEntry(),28,0,85.71,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0024b080.json
-00258ac8,evt_skip1(),28,0,85.71,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00258ac8.json
-00258ae4,evt_skip2(),28,0,85.71,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00258ae4.json
-00258b38,evt_item(),28,0,85.71,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00258b38.json
-00258b54,evt_eqp(),28,0,85.71,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00258b54.json
-0026973c,snpl_endpage(),28,0,85.71,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0026973c.json
-00269758,snpl_startpage(),28,0,85.71,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00269758.json
-0028b018,pspWorldEnableFlg(PSP_WORLD_FLG),28,0,85.71,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0028b018.json
-0028b034,pspWorldDisableFlg(PSP_WORLD_FLG),28,0,85.71,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0028b034.json
-0029fea0,rcos,28,0,85.71,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0029fea0.json
-00279ed4,ClearForBattleRoutine(),24,0,83.33,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00279ed4.json
-0028b050,pspWorldCheckFlg(PSP_WORLD_FLG),24,0,83.33,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0028b050.json
-0029fe88,rsin,24,0,83.33,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0029fe88.json
-002a1324,SetGeomOffset,24,0,83.33,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002a1324.json
-0028a08c,Savedata_GetAddr(),20,0,80.0,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0028a08c.json
-002a3120,xpGetHeapSize,20,0,80.0,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002a3120.json
-000823d4,zlibVersion,16,0,75.0,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/000823d4.json
+002ccf98,_Unwind_DeleteException,32,0,62.5,coverage_below_95,0,0,1,FFT_Android_Mod/docs/re-results/002ccf98.json
