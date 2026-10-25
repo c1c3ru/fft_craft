@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **264/1258** pending functions.
+Evidence collected: **272/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -275,3 +275,11 @@ These reports do not constitute semantic verification.
 | `002b715c` | setPspDispNum(short, short, short) | [Evidence](semantic-evidence/002b715c.md) |
 | `002bb678` | iOSMenuOkCancelHelpGet(int, int) | [Evidence](semantic-evidence/002bb678.md) |
 | `00097b70` | _float32_pack | [Evidence](semantic-evidence/00097b70.md) |
+| `000d7b24` | sttsback_normal(STTSWINDOWBACK*) | [Evidence](semantic-evidence/000d7b24.md) |
+| `000ff95c` | Wsttsback_blue(STTSWINDOWBACK*) | [Evidence](semantic-evidence/000ff95c.md) |
+| `001253b0` | Wextend_valuefield(int) | [Evidence](semantic-evidence/001253b0.md) |
+| `00138314` | extend_valuefield(int) | [Evidence](semantic-evidence/00138314.md) |
+| `001532c0` | task_create(long, char*) | [Evidence](semantic-evidence/001532c0.md) |
+| `00153584` | Wtask_create(long, char*) | [Evidence](semantic-evidence/00153584.md) |
+| `001d6718` | get_mapstp(int, int, int) | [Evidence](semantic-evidence/001d6718.md) |
+| `00207d6c` | iOS_mapVectorLimit() | [Evidence](semantic-evidence/00207d6c.md) |
