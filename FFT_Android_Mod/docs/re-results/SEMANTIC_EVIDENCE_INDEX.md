@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **920/1258** pending functions.
+Evidence collected: **928/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -931,3 +931,11 @@ These reports do not constitute semantic verification.
 | `0027f5d8` | Resume_Get_WORK_MU_FontID() | [Evidence](semantic-evidence/0027f5d8.md) |
 | `0027f5f0` | Resume_Get_WORK_MU_BWorkFontID() | [Evidence](semantic-evidence/0027f5f0.md) |
 | `0027f608` | Resume_Get_WORK_MU_BWorkAnimationID() | [Evidence](semantic-evidence/0027f608.md) |
+| `00280540` | iOS_fftSave() | [Evidence](semantic-evidence/00280540.md) |
+| `002806f0` | iOS_clearDebugPrimNum() | [Evidence](semantic-evidence/002806f0.md) |
+| `0028164c` | iOS_v2menuSetScreenSize(int, int) | [Evidence](semantic-evidence/0028164c.md) |
+| `00283fb0` | mapclip_setpath(char*) | [Evidence](semantic-evidence/00283fb0.md) |
+| `002847c0` | new_ColorVectorDataBase(unsigned int) | [Evidence](semantic-evidence/002847c0.md) |
+| `00287588` | reset_g_NetIcon_DrawFlg() | [Evidence](semantic-evidence/00287588.md) |
+| `002885a0` | pspOpenCheckFlg(PSP_OPEN_FLG) | [Evidence](semantic-evidence/002885a0.md) |
+| `00288f18` | pspgFreamBufCountCountReset() | [Evidence](semantic-evidence/00288f18.md) |
