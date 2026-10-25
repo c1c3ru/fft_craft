@@ -894,7 +894,7 @@ address,size,mangled,demangled,status,section_ref
 0024e734,412,_Z14ctlperson_initv,ctlperson_init(),read_structural,NOTES §580
 0025bf88,412,_Z13mkbasept_calcv,mkbasept_calc(),read_structural,NOTES §607
 002cb2e8,412,__aeabi_frsub,__aeabi_frsub,read_structural,NOTES §607
-002cb538,408,__aeabi_fmul,__aeabi_fmul,unread,
+002cb538,408,__aeabi_fmul,__aeabi_fmul,read_structural,NOTES §618
 000a0514,408,ov_time_seek,ov_time_seek,read_structural,NOTES §336
 000a06ac,408,ov_time_seek_page,ov_time_seek_page,read_structural,NOTES §336
 00285f8c,408,_Z8hockReadPvij,"hockRead(void*, int, unsigned int)",read_structural,NOTES §615
@@ -907,8 +907,8 @@ address,size,mangled,demangled,status,section_ref
 001ab918,408,_Z15AbilityLearningsss,"AbilityLearning(short, short, short)",read_structural,NOTES §607
 0021ef4c,408,_Z19InitPermanentEffectv,InitPermanentEffect(),read_structural,NOTES §604
 00269034,408,_Z14wldencount_chkii,"wldencount_chk(int, int)",read_full,NOTES §12.2
-002cb538,408,__mulsf3,__mulsf3,mentioned_unverified,
-002cb2f0,404,__aeabi_fsub,__aeabi_fsub,unread,
+002cb538,408,__mulsf3,__mulsf3,read_structural,NOTES §618
+002cb2f0,404,__aeabi_fsub,__aeabi_fsub,read_structural,NOTES §618
 000e1118,404,_Z5bgputP11tagPOLY_FT4P6RECT16S2_P8BGRECORD,"bgput(tagPOLY_FT4*, RECT16*, RECT16*, BGRECORD*)",read_structural,NOTES §607
 00159aac,404,_Z12asm_functionmmmmmm,"asm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)",read_full,NOTES §585
 00162080,404,_Z13wasm_functionmmmmmm,"wasm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)",read_full,NOTES §586
@@ -918,7 +918,7 @@ address,size,mangled,demangled,status,section_ref
 0024dcd8,404,_Z15ctlkiromes_initi,ctlkiromes_init(int),read_structural,NOTES §365
 00266a00,404,_Z19infonumber_put_zeroiiP8GsSPRITEP4GsOTi,"infonumber_put_zero(int, int, GsSPRITE*, GsOT*, int)",mentioned_unverified,
 00280304,404,_Z24Savedata_LoadGameClearedPhPi,"Savedata_LoadGameCleared(unsigned char*, int*)",read_structural,NOTES §607
-002cb2f0,404,__subsf3,__subsf3,mentioned_unverified,
+002cb2f0,404,__subsf3,__subsf3,read_structural,NOTES §618
 00078d9c,400,gzwrite,gzwrite,read_structural,NOTES §607
 002cb2f4,400,__aeabi_fadd,__aeabi_fadd,mentioned_unverified,
 000a3a24,400,_ZN15CG2D_LOADER_BMP18BMP_AnalyzeBitMaskEPj,CG2D_LOADER_BMP::BMP_AnalyzeBitMask(unsigned int*),read_structural,NOTES §316
@@ -1033,7 +1033,7 @@ address,size,mangled,demangled,status,section_ref
 0024b824,356,_Z11ctlbar_exitP7CTLINFO,ctlbar_exit(CTLINFO*),read_structural,NOTES §615
 0026679c,356,_Z10wld_windowP6WINPACP4GsOT,"wld_window(WINPAC*, GsOT*)",read_full,NOTES §12.11
 00268220,356,_Z14wldrute_tblgetP8WALKINFOii,"wldrute_tblget(WALKINFO*, int, int)",mentioned_unverified,
-002cb6d0,352,__aeabi_fdiv,__aeabi_fdiv,unread,
+002cb6d0,352,__aeabi_fdiv,__aeabi_fdiv,read_structural,NOTES §618
 000b6cd8,352,_ZN9CFILE_DAT4LoadEiii,"CFILE_DAT::Load(int, int, int)",mentioned_unverified,
 000d7720,352,_Z14disposetextureP6RECT16,disposetexture(RECT16*),read_structural,NOTES §566
 0029ffac,352,RotMatrix,RotMatrix,mentioned_unverified,
@@ -1042,7 +1042,7 @@ address,size,mangled,demangled,status,section_ref
 001d1de8,352,_Z13set_unitcoordihhhh,"set_unitcoord(int, unsigned char, unsigned char, unsigned char, unsigned char)",read_structural,NOTES §609
 0020f004,352,_Z26getAnimationLoadAreaStatusPc,getAnimationLoadAreaStatus(char*),read_full,NOTES §559
 0026fb48,352,_Z14ctluwames_initi,ctluwames_init(int),read_structural,NOTES §488
-002cb6d0,352,__divsf3,__divsf3,mentioned_unverified,
+002cb6d0,352,__divsf3,__divsf3,read_structural,NOTES §618
 000a1dc0,348,_ZN11CG2D_LOADER4SaveEPviiP9_G2D_SAVE,"CG2D_LOADER::Save(void*, int, int, _G2D_SAVE*)",read_structural,NOTES §316
 001d4468,348,_Z15check_game_contv,check_game_cont(),read_structural,NOTES §609
 001e6368,348,_Z14forecast_skillP5BWORKS0_P3ACT,"forecast_skill(BWORK*, BWORK*, ACT*)",read_structural,NOTES §615
@@ -2764,8 +2764,8 @@ address,size,mangled,demangled,status,section_ref
 002b0350,84,_Z25TexHybrid_FindPrevTextureii,"TexHybrid_FindPrevTexture(int, int)",read_full,NOTES §568
 002b5e58,84,_Z11Logo_Uninitv,Logo_Uninit(),read_structural,NOTES §615
 002cb988,84,__fixunssfsi,__fixunssfsi,read_structural,NOTES §613
-002cdf18,84,__aeabi_d2uiz,__aeabi_d2uiz,unread,
-002cdf18,84,__fixunsdfsi,__fixunsdfsi,mentioned_unverified,
+002cdf18,84,__aeabi_d2uiz,__aeabi_d2uiz,read_structural,NOTES §618
+002cdf18,84,__fixunsdfsi,__fixunsdfsi,read_structural,NOTES §618
 00072960,80,Java_com_square_1enix_FFT_1Android_GL2JNILib_setAccelerometerValue,Java_com_square_1enix_FFT_1Android_GL2JNILib_setAccelerometerValue,read_full,NOTES §566
 00075794,80,deflatePending,deflatePending,read_structural,NOTES §613
 000788b0,80,gzdirect,gzdirect,read_structural,NOTES §611
@@ -3811,7 +3811,7 @@ address,size,mangled,demangled,status,section_ref
 00083ca0,40,ogg_sync_init,ogg_sync_init,read_structural,NOTES §336
 002cab74,40,__aeabi_i2d,__aeabi_i2d,read_structural,NOTES §613
 00094078,40,_vp_global_free,_vp_global_free,read_structural,NOTES §613
-002cb484,40,__aeabi_ui2f,__aeabi_ui2f,mentioned_unverified,
+002cb484,40,__aeabi_ui2f,__aeabi_ui2f,read_structural,NOTES §618
 0008c24c,40,vorbis_info_init,vorbis_info_init,read_structural,NOTES §336
 000940c8,40,_vi_psy_free,_vi_psy_free,read_structural,NOTES §612
 000940a0,40,_vi_gpsy_free,_vi_gpsy_free,read_structural,NOTES §612
@@ -4002,7 +4002,7 @@ address,size,mangled,demangled,status,section_ref
 002a25f8,40,_Z7read_mtPlS_S_,"read_mt(long*, long*, long*)",read_structural,NOTES §616
 002a2b5c,40,_ZN7xpLibSN4InitEv,xpLibSN::Init(),mentioned_unverified,
 002cab74,40,__floatsidf,__floatsidf,read_structural,NOTES §613
-002cb484,40,__floatunsisf,__floatunsisf,unread,
+002cb484,40,__floatunsisf,__floatunsisf,read_structural,NOTES §618
 000727d0,36,Java_com_square_1enix_FFT_1Android_GL2JNILib_isExit,Java_com_square_1enix_FFT_1Android_GL2JNILib_isExit,read_full,NOTES §566
 000735c8,36,_Z22Android_Font_GetBufferPiS_,"Android_Font_GetBuffer(int*, int*)",read_full,NOTES §566
 00077500,36,gzeof,gzeof,read_structural,NOTES §612
@@ -4194,7 +4194,7 @@ address,size,mangled,demangled,status,section_ref
 002cda4c,36,_Unwind_ForcedUnwind,_Unwind_ForcedUnwind,read_structural,NOTES §613
 002cda70,36,___Unwind_Backtrace,___Unwind_Backtrace,read_structural,NOTES §613
 002cda70,36,_Unwind_Backtrace,_Unwind_Backtrace,read_structural,NOTES §613
-002cb48c,32,__aeabi_i2f,__aeabi_i2f,unread,
+002cb48c,32,__aeabi_i2f,__aeabi_i2f,read_structural,NOTES §618
 000729c4,32,_Z21Android_GetDeviceSizePiS_,"Android_GetDeviceSize(int*, int*)",read_full,NOTES §566
 000808f8,32,unzGetGlobalInfo,unzGetGlobalInfo,read_full,NOTES §563
 000834d4,32,ogg_stream_destroy,ogg_stream_destroy,read_structural,NOTES §336
@@ -4360,7 +4360,7 @@ address,size,mangled,demangled,status,section_ref
 002b06b4,32,_ZN11CDebugPrintC1Ev,CDebugPrint::CDebugPrint(),read_full,NOTES §567
 002b06d4,32,_ZN11CDebugPrint12EngineUninitEv,CDebugPrint::EngineUninit(),mentioned_unverified,
 002ccf98,32,_Unwind_DeleteException,_Unwind_DeleteException,mentioned_unverified,NOTES §614
-002cb48c,32,__floatsisf,__floatsisf,mentioned_unverified,
+002cb48c,32,__floatsisf,__floatsisf,read_structural,NOTES §618
 002ccf74,32,__gnu_Unwind_Resume_or_Rethrow,__gnu_Unwind_Resume_or_Rethrow,read_structural,NOTES §613
 000726e0,28,JNI_OnLoad,JNI_OnLoad,mentioned_unverified,
 0007276c,28,Java_com_square_1enix_FFT_1Android_GL2JNILib_onResume,Java_com_square_1enix_FFT_1Android_GL2JNILib_onResume,read_full,NOTES §566

@@ -2463,7 +2463,7 @@ address,size,mangled,demangled,status,section_ref
 002a1aac,40,_Z15read_sxsy_fifo3PlS_S_,"read_sxsy_fifo3(long*, long*, long*)",read_structural,NOTES §616
 002a1b1c,40,_Z13read_rgb_fifoPlS_S_,"read_rgb_fifo(long*, long*, long*)",read_structural,NOTES §616
 002a25f8,40,_Z7read_mtPlS_S_,"read_mt(long*, long*, long*)",read_structural,NOTES §616
-002cb484,40,__floatunsisf,__floatunsisf,unread,
+002cb484,40,__floatunsisf,__floatunsisf,read_structural,NOTES §618
 0020c99c,40,_Z14initFileBufferv,initFileBuffer(),read_structural,NOTES §616
 0029d92c,40,_Z9_gte_sttrP6VECTOR,_gte_sttr(VECTOR*),read_full,
 0029d87c,40,_Z15_gte_strgb3_gt4P11tagPOLY_GT4,_gte_strgb3_gt4(tagPOLY_GT4*),read_full,

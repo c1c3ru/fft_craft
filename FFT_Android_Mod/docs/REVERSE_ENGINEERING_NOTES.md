@@ -22961,3 +22961,29 @@ via checkpoint; nenhuma teve blocos lidos instrução a instrução).
 **Esgota por completo** qualquer checkpoint do CI com tabela de salto
 resolvida (ou sem tabela) ainda não reconciliado no
 `RE_FUNCTION_INVENTORY.csv`.
+
+## 618. Últimas 6 entradas `unread` do inventário — inconsistência de linha duplicada corrigida, soft-float single-precision com cobertura completa (2026-10-25, Fase 3, nonagésimo oitavo lote)
+
+Investigação do porquê de sobrarem 6 `unread` depois do §617 esgotar
+todo checkpoint pendente: as 6 são o lado "`__aeabi_*`" de 6 pares de
+linha duplicada no CSV (mesmo endereço, dois nomes mangled
+diferentes — `__aeabi_fmul`/`__mulsf3`, `__aeabi_fsub`/`__subsf3`,
+`__aeabi_fdiv`/`__divsf3`, `__aeabi_d2uiz`/`__fixunsdfsi`,
+`__aeabi_ui2f`/`__floatunsisf`, `__aeabi_i2f`/`__floatsisf`) — o lado
+`mentioned_unverified` já vinha herdado da passada automática de
+cruzamento por nome original (pré-Fase 3), mas o lado `__aeabi_*`
+nunca foi atualizado em paralelo. Checkpoint do CI confirma, pra
+todos os 6 endereços: **100% de cobertura (80% só em `__aeabi_ui2f`),
+0 `bl`, função folha** — diferente dos correspondentes de precisão
+dupla (`__aeabi_dadd`/`dsub`/`dmul`/`ddiv`, §569, mantidas
+`mentioned_unverified` por cobertura baixa real) — as versões
+`float` (precisão simples) são bem mais simples (sem a mesma cascata
+de casos especiais IEEE-754) e ficam inteiramente cobertas.
+
+**Status CSV**: `read_structural` pras 6 linhas `__aeabi_*` (e os
+pares `__mulsf3`/`__subsf3`/`__divsf3`/`__fixunsdfsi`/`__floatunsisf`/
+`__floatsisf` sobem de `mentioned_unverified` pra `read_structural`
+junto, mesma identidade/cobertura). **Zero funções `unread`
+restam no `RE_FUNCTION_INVENTORY.csv`** — todo o inventário de 6.455
+funções tem agora status `read_full`, `read_structural` ou
+`mentioned_unverified`.
