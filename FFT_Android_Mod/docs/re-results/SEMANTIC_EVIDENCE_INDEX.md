@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **128/1258** pending functions.
+Evidence collected: **136/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -139,3 +139,11 @@ These reports do not constitute semantic verification.
 | `001dc944` | set_casting_status(BWORK*, unsigned char) | [Evidence](semantic-evidence/001dc944.md) |
 | `0022588c` | NewObject(short, short) | [Evidence](semantic-evidence/0022588c.md) |
 | `002b7268` | SCREEN_TO_RENDER(int, int, int*, int*) | [Evidence](semantic-evidence/002b7268.md) |
+| `00200cdc` | startZoomChange(int) | [Evidence](semantic-evidence/00200cdc.md) |
+| `00249ac0` | vOpn_padread() | [Evidence](semantic-evidence/00249ac0.md) |
+| `002557ac` | ctlhelp_main(CTLINFO*) | [Evidence](semantic-evidence/002557ac.md) |
+| `0028b738` | initTaskEmu() | [Evidence](semantic-evidence/0028b738.md) |
+| `0025b8ec` | houkoku_mesput(CTLINFO*, int) | [Evidence](semantic-evidence/0025b8ec.md) |
+| `001537dc` | eventflaginit() | [Evidence](semantic-evidence/001537dc.md) |
+| `0019d530` | FighterName() | [Evidence](semantic-evidence/0019d530.md) |
+| `001bad9c` | SeExec() | [Evidence](semantic-evidence/001bad9c.md) |
