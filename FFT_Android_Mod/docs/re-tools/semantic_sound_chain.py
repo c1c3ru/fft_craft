@@ -124,15 +124,15 @@ def run(binary):
             emulate(chain,boundary,arg,cpsr)
             cases+=1
     lines=["# sound_request — conservative ARM tail-branch chain", "",
-           f"ELF SHA-256: \`{digest}\`", "",
+           f"ELF SHA-256: `{digest}`", "",
            "Original executable ELF opcodes are followed only while each "
            "instruction is an unconditional ARM B with a direct target.", "",
            "| PC | Opcode word | Direct destination |",
            "|---|---|---|"]
     for pc,(word,target) in chain.items():
-        lines.append(f"| \`0x{pc:x}\` | \`0x{int.from_bytes(word,'little'):08x}\` | "
-                     f"\`0x{target:x}\` |")
-    lines.extend(["",f"Stop **before** \`0x{boundary:x}\`: {reason}.", "",
+        lines.append(f"| `0x{pc:x}` | `0x{int.from_bytes(word,'little'):08x}` | "
+                     f"`0x{target:x}` |")
+    lines.extend(["",f"Stop **before** `0x{boundary:x}`: {reason}.", "",
                   f"**Sound tail-branch microexecutions: {cases}/{cases} PASS.**", "",
                   "## Verified scope and unknowns", "",
                   "- Only the direct-B trampoline opcodes are machine-executed; "
