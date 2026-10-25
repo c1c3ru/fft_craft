@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **48/1258** pending functions.
+Evidence collected: **56/1258** pending functions.
 These reports do not constitute semantic verification.
 
 | Address | Function | Evidence |
@@ -57,3 +57,11 @@ These reports do not constitute semantic verification.
 | `00259780` | ctlhismes_init(int) | [Evidence](semantic-evidence/00259780.md) |
 | `002875a8` | Draw_Win(int) | [Evidence](semantic-evidence/002875a8.md) |
 | `001cd308` | check_learning(int, unsigned short*) | [Evidence](semantic-evidence/001cd308.md) |
+| `002031a4` | iOSsetCursorByTouch(int, int, int, int, int) | [Evidence](semantic-evidence/002031a4.md) |
+| `00256174` | ctlfsetnum_main(CTLINFO*) | [Evidence](semantic-evidence/00256174.md) |
+| `00176b80` | bChrSort(int) | [Evidence](semantic-evidence/00176b80.md) |
+| `002c9b11` | __gxx_personality_v0 | [Evidence](semantic-evidence/002c9b11.md) |
+| `001f4440` | InitAnimationInit() | [Evidence](semantic-evidence/001f4440.md) |
+| `00242498` | ctlendroll_init() | [Evidence](semantic-evidence/00242498.md) |
+| `002453a4` | fft_ending() | [Evidence](semantic-evidence/002453a4.md) |
+| `0027fe84` | Savedata_Load(unsigned char*, int*) | [Evidence](semantic-evidence/0027fe84.md) |
