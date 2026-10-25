@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **136/1258** pending functions.
+Evidence collected: **144/1258** pending functions.
 These reports do not constitute semantic verification.
 
 | Address | Function | Evidence |
@@ -145,3 +145,11 @@ These reports do not constitute semantic verification.
 | `001537dc` | eventflaginit() | [Evidence](semantic-evidence/001537dc.md) |
 | `0019d530` | FighterName() | [Evidence](semantic-evidence/0019d530.md) |
 | `001bad9c` | SeExec() | [Evidence](semantic-evidence/001bad9c.md) |
+| `00249174` | vOpn_parainit() | [Evidence](semantic-evidence/00249174.md) |
+| `00255654` | ctlhelp_init(int, int) | [Evidence](semantic-evidence/00255654.md) |
+| `00259ad4` | ctlhismes_main(CTLINFO*) | [Evidence](semantic-evidence/00259ad4.md) |
+| `001cc9fc` | status_countdown(int) | [Evidence](semantic-evidence/001cc9fc.md) |
+| `00210c9c` | setMapVector(SVECTOR*, SVECTOR*) | [Evidence](semantic-evidence/00210c9c.md) |
+| `00225210` | DoPermanentEffect() | [Evidence](semantic-evidence/00225210.md) |
+| `00255180` | ctlmap_active(CTLINFO*) | [Evidence](semantic-evidence/00255180.md) |
+| `000e0fb8` | initdrmode(DR_MODE*, int) | [Evidence](semantic-evidence/000e0fb8.md) |
