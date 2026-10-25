@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **168/1258** pending functions.
+Evidence collected: **176/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -179,3 +179,11 @@ These reports do not constitute semantic verification.
 | `00123994` | Edisp_eventwaitwindow() | [Evidence](semantic-evidence/00123994.md) |
 | `001252d0` | Wdisp_eventwindow() | [Evidence](semantic-evidence/001252d0.md) |
 | `0012cb3c` | disp_eventwaitwindow() | [Evidence](semantic-evidence/0012cb3c.md) |
+| `00134fa0` | Wdisp_eventwaitwindow() | [Evidence](semantic-evidence/00134fa0.md) |
+| `00138234` | disp_eventwindow() | [Evidence](semantic-evidence/00138234.md) |
+| `0014bd8c` | Cdisp_eventwaitwindow() | [Evidence](semantic-evidence/0014bd8c.md) |
+| `0015588c` | title_menuinit() | [Evidence](semantic-evidence/0015588c.md) |
+| `0015a33c` | iOSsTchBtlEnd() | [Evidence](semantic-evidence/0015a33c.md) |
+| `001cea0c` | set_walker_result(BWORK*, REWARD*) | [Evidence](semantic-evidence/001cea0c.md) |
+| `002541c4` | ctlcenter_init(int) | [Evidence](semantic-evidence/002541c4.md) |
+| `00264378` | ctlnblwldinfo_init() | [Evidence](semantic-evidence/00264378.md) |
