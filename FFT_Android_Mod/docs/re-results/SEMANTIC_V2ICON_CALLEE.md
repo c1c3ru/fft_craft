@@ -1,11 +1,11 @@
-# ARM callee boundary: iOS_getV2Icon
+# ARM callee: iOS_getV2Icon — verified instruction/data split
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
 Caller: `0x25a298`: `bl #0x2b7ccc`.
-Callee: `0x2b7ccc`, 24 bytes, `iOS_getV2Icon(V2ICON_DATA)` (inventory identifier only).
+Callee: `0x2b7ccc`, 24 bytes, `iOS_getV2Icon(V2ICON_DATA)`.
 
-## All six original ARM instructions
+## Five executable ARM instructions
 
 | Address | Instruction |
 |---|---|
@@ -14,9 +14,14 @@ Callee: `0x2b7ccc`, 24 bytes, `iOS_getV2Icon(V2ICON_DATA)` (inventory identifier
 | `0x2b7cd4` | `add r0, r3, r0, lsl #2` |
 | `0x2b7cd8` | `ldr r0, [r0, #0xd04]` |
 | `0x2b7cdc` | `bx lr` |
-| `0x2b7ce0` | `cmneq r2, r8, lsr #31` |
 
-## Instruction-level register access (Capstone heuristic)
+## One PC-relative literal (data, not an executable opcode)
+
+- Literal at `0x2b7ce0`: `0x01723fa8`.
+- Indexed data address for argument `r0 = 0`: `0x19dc984`.
+- The final 4-byte word must not be counted as a sixth ARM instruction simply because it decodes as one.
+
+## Register accesses for five ARM instructions
 
 | Address | Read registers | Written registers |
 |---|---|---|
@@ -25,10 +30,9 @@ Callee: `0x2b7ccc`, 24 bytes, `iOS_getV2Icon(V2ICON_DATA)` (inventory identifier
 | `0x2b7cd4` | r3, r0 | r0 |
 | `0x2b7cd8` | r0 | r0 |
 | `0x2b7cdc` | — | pc |
-| `0x2b7ce0` | r2, r8 | cpsr |
 
-Observed branch/call/return-like instructions: **1**.
+The code calculates a PC-relative base, adds `r0 * 4`, loads a word at an additional `0xd04` displacement, and returns via `BX LR`. No store instruction is present.
 
-## What remains unproven
+## Evidence boundary
 
-The argument passed to the callee, result in r0, global/heap memory access, external call side effects and conditional status after the BL are not inferred solely from a symbol name or six disassembled instructions. No full-function equivalence is claimed.
+The actual table contents, valid index bounds, aliasing, caller argument provenance and complete function behavior are not established by disassembly. No semantic equivalence claimed.
