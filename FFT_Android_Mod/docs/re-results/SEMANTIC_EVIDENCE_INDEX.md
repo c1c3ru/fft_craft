@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **760/1258** pending functions.
+Evidence collected: **768/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -771,3 +771,11 @@ These reports do not constitute semantic verification.
 | `0020d008` | pushMapScrollXYZ() | [Evidence](semantic-evidence/0020d008.md) |
 | `0020d02c` | popMapScrollXYZ() | [Evidence](semantic-evidence/0020d02c.md) |
 | `0020d260` | pushMapScroll() | [Evidence](semantic-evidence/0020d260.md) |
+| `0020d284` | popMapScroll() | [Evidence](semantic-evidence/0020d284.md) |
+| `0020d580` | pushMapScale() | [Evidence](semantic-evidence/0020d580.md) |
+| `0020d5a4` | popMapScale() | [Evidence](semantic-evidence/0020d5a4.md) |
+| `0020f514` | stopAnimation() | [Evidence](semantic-evidence/0020f514.md) |
+| `00216860` | stopMusic() | [Evidence](semantic-evidence/00216860.md) |
+| `0021b220` | SetEditANMPtr() | [Evidence](semantic-evidence/0021b220.md) |
+| `0021b244` | SetEditTSQPtr() | [Evidence](semantic-evidence/0021b244.md) |
+| `00263fa8` | iOSSDNovelSysCurCheck() | [Evidence](semantic-evidence/00263fa8.md) |
