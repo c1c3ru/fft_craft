@@ -3,7 +3,7 @@
   "name": "iOSShiftUnitSet(int)",
   "size": 60,
   "previous_status": "unread",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 86.67,
   "distinct_bl": 2,
   "tables_resolved": 0,
@@ -13,7 +13,30 @@
     "15e144"
   ],
   "log": "=== jtable.py: 0x15e768..0x15e7a4 (60 bytes) ===\ncoverage: 13 of ~15 instruction slots (87%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x15a41c x1   iOSBtlFreeCurCheck() \n  0x15e144 x1   iOSGetChrList() \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x15e768",
+    "total_slots": 15,
+    "code_slots": 13,
+    "instruction_slots": 13,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x15e79c",
+      "0x15e7a0"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/0015e768.json"
 }
