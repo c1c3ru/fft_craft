@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **24/1258** pending functions.
+Evidence collected: **32/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -35,3 +35,11 @@ These reports do not constitute semantic verification.
 | `002608c0` | ctlokng_init(_POINT) | [Evidence](semantic-evidence/002608c0.md) |
 | `0025990c` | ctlhistory_main(CTLINFO*) | [Evidence](semantic-evidence/0025990c.md) |
 | `001b8c38` | sort_init() | [Evidence](semantic-evidence/001b8c38.md) |
+| `001d8b58` | get_ability_address(int, ABILITY_COMMON_DATA**, void**) | [Evidence](semantic-evidence/001d8b58.md) |
+| `0024e91c` | ctlpersmes_init(int) | [Evidence](semantic-evidence/0024e91c.md) |
+| `0019d304` | DressSellStock() | [Evidence](semantic-evidence/0019d304.md) |
+| `001eb124` | loadAbilityAnimation(tag_animation*, void*) | [Evidence](semantic-evidence/001eb124.md) |
+| `0020c264` | db_init(int, int, int, unsigned char, unsigned char, unsigned char) | [Evidence](semantic-evidence/0020c264.md) |
+| `0019df84` | AccountEmploy() | [Evidence](semantic-evidence/0019df84.md) |
+| `0026abac` | timeevt_chk() | [Evidence](semantic-evidence/0026abac.md) |
+| `00247884` | birthday_change(CTLINFO*) | [Evidence](semantic-evidence/00247884.md) |
