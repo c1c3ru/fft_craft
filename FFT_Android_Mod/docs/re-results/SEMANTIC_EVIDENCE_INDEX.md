@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **464/1258** pending functions.
+Evidence collected: **472/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -475,3 +475,11 @@ These reports do not constitute semantic verification.
 | `001cb7fc` | check_reaction_deny2(BWORK*) | [Evidence](semantic-evidence/001cb7fc.md) |
 | `001d189c` | Resume_MK_BSTR_Init() | [Evidence](semantic-evidence/001d189c.md) |
 | `001eed84` | getSequenceAddress(unsigned short) | [Evidence](semantic-evidence/001eed84.md) |
+| `00216984` | stopEffect(int) | [Evidence](semantic-evidence/00216984.md) |
+| `0021c22c` | s6_setPersonalProc(_EffectTCB*) | [Evidence](semantic-evidence/0021c22c.md) |
+| `00242450` | vEnd_ctlinit() | [Evidence](semantic-evidence/00242450.md) |
+| `00249a38` | vOpn_month2day(int, int) | [Evidence](semantic-evidence/00249a38.md) |
+| `002594e8` | evt_brave_low() | [Evidence](semantic-evidence/002594e8.md) |
+| `00259578` | evt_faith_low() | [Evidence](semantic-evidence/00259578.md) |
+| `0025e840` | month_to_day(int, int) | [Evidence](semantic-evidence/0025e840.md) |
+| `0026a234` | snpl_fadeout() | [Evidence](semantic-evidence/0026a234.md) |
