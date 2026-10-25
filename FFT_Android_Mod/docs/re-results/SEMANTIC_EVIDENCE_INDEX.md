@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **72/1258** pending functions.
+Evidence collected: **80/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -83,3 +83,11 @@ These reports do not constitute semantic verification.
 | `000ff4b0` | Wallocatememorywait(int) | [Evidence](semantic-evidence/000ff4b0.md) |
 | `0024b824` | ctlbar_exit(CTLINFO*) | [Evidence](semantic-evidence/0024b824.md) |
 | `0015af24` | iOSexecuteScroll() | [Evidence](semantic-evidence/0015af24.md) |
+| `002878b4` | Draw_Draw(int) | [Evidence](semantic-evidence/002878b4.md) |
+| `001597c0` | disp_worlddhelpmenu() | [Evidence](semantic-evidence/001597c0.md) |
+| `001e6368` | forecast_skill(BWORK*, BWORK*, ACT*) | [Evidence](semantic-evidence/001e6368.md) |
+| `0024ac38` | vOpn_defscrwin_set(int, int, _POINT*, _POINT*) | [Evidence](semantic-evidence/0024ac38.md) |
+| `002b582c` | Logo_Init() | [Evidence](semantic-evidence/002b582c.md) |
+| `000d78f0` | allocatememorywait(int) | [Evidence](semantic-evidence/000d78f0.md) |
+| `0020fe94` | InitializeHot() | [Evidence](semantic-evidence/0020fe94.md) |
+| `002578d4` | ctlevtinfo_main(CTLINFO*) | [Evidence](semantic-evidence/002578d4.md) |
