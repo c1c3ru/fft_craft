@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **688/1258** pending functions.
+Evidence collected: **696/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -699,3 +699,11 @@ These reports do not constitute semantic verification.
 | `0027f180` | iOS_ClearRectHit(int) | [Evidence](semantic-evidence/0027f180.md) |
 | `00280590` | GetAbilityName(int) | [Evidence](semantic-evidence/00280590.md) |
 | `00287044` | get_timing_true() | [Evidence](semantic-evidence/00287044.md) |
+| `0028846c` | free_hight_font() | [Evidence](semantic-evidence/0028846c.md) |
+| `0028a054` | pspClearCurrentSystemFile() | [Evidence](semantic-evidence/0028a054.md) |
+| `0028baa4` | TE_task_stop(long) | [Evidence](semantic-evidence/0028baa4.md) |
+| `002a0900` | MulRotMatrix0 | [Evidence](semantic-evidence/002a0900.md) |
+| `002b23d8` | Music_Replay() | [Evidence](semantic-evidence/002b23d8.md) |
+| `000daac0` | settaskkind(int) | [Evidence](semantic-evidence/000daac0.md) |
+| `000e0eec` | jobstts_call(unsigned long*, unsigned long) | [Evidence](semantic-evidence/000e0eec.md) |
+| `001024bc` | Wreaded_mapchange() | [Evidence](semantic-evidence/001024bc.md) |
