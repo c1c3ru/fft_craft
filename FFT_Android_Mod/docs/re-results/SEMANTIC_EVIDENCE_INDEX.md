@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1072/1258** pending functions.
+Evidence collected: **1080/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1083,3 +1083,11 @@ These reports do not constitute semantic verification.
 | `0028d1b0` | tlGetHeap() | [Evidence](semantic-evidence/0028d1b0.md) |
 | `0028dcf0` | StartRCnt | [Evidence](semantic-evidence/0028dcf0.md) |
 | `0028dea8` | InitCARD | [Evidence](semantic-evidence/0028dea8.md) |
+| `0028df7c` | _card_info | [Evidence](semantic-evidence/0028df7c.md) |
+| `0029b6e8` | GsGetWorkBase | [Evidence](semantic-evidence/0029b6e8.md) |
+| `0029fd7c` | GteGetCtrlReg(int) | [Evidence](semantic-evidence/0029fd7c.md) |
+| `0029fda8` | GteSetCtrlReg(long, long) | [Evidence](semantic-evidence/0029fda8.md) |
+| `002a133c` | SetGeomScreen | [Evidence](semantic-evidence/002a133c.md) |
+| `002a1370` | ReadGeomScreen | [Evidence](semantic-evidence/002a1370.md) |
+| `002a13b4` | InitClip | [Evidence](semantic-evidence/002a13b4.md) |
+| `002a2da4` | PCclose | [Evidence](semantic-evidence/002a2da4.md) |
