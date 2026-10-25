@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **432/1258** pending functions.
+Evidence collected: **440/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -443,3 +443,11 @@ These reports do not constitute semantic verification.
 | `00249ec4` | vEnd_dataload() | [Evidence](semantic-evidence/00249ec4.md) |
 | `0025396c` | ctlmap_deactive(CTLINFO*) | [Evidence](semantic-evidence/0025396c.md) |
 | `00269820` | snpl_picclr() | [Evidence](semantic-evidence/00269820.md) |
+| `00269f34` | snpl_mesput2() | [Evidence](semantic-evidence/00269f34.md) |
+| `0026ae2c` | snpl_jstatflg_sub(int) | [Evidence](semantic-evidence/0026ae2c.md) |
+| `0026ae8c` | snpl_jlocalflg_sub(int) | [Evidence](semantic-evidence/0026ae8c.md) |
+| `000d87e4` | export_localstatus(char*, char*, char*) | [Evidence](semantic-evidence/000d87e4.md) |
+| `000e3010` | statuskanjiprintwithptr(char*, COPYFIELD*, char*) | [Evidence](semantic-evidence/000e3010.md) |
+| `001004b4` | Wexport_localstatus(char*, char*, char*) | [Evidence](semantic-evidence/001004b4.md) |
+| `00155d88` | active_worldwindow() | [Evidence](semantic-evidence/00155d88.md) |
+| `0015a27c` | iOSPressArea() | [Evidence](semantic-evidence/0015a27c.md) |
