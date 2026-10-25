@@ -108,8 +108,12 @@ def emulate(chain, boundary, argument, cpsr):
         raise AssertionError(f"Unexpected sound branch chain: {list(map(hex,trace))}")
     if reads or writes:
         raise AssertionError("Direct B trampoline unexpectedly accessed data memory")
-    if uc.reg_read(UC_ARM_REG_R0)!=argument or uc.reg_read(UC_ARM_REG_LR)!=LR_SEED:
-        raise AssertionError("Unconditional tail branch unexpectedly altered arguments")
+    actual_r0=uc.reg_read(UC_ARM_REG_R0)
+    actual_lr=uc.reg_read(UC_ARM_REG_LR)
+    if actual_r0!=argument or actual_lr!=LR_SEED:
+        raise AssertionError(f"Tail branch argument / link mismatch: "
+                             f"r0=0x{actual_r0:x} expected 0x{argument:x}, "
+                             f"lr=0x{actual_lr:x} expected 0x{LR_SEED:x}")
     if (uc.reg_read(UC_ARM_REG_CPSR) & 0xF0000000)!=(cpsr & 0xF0000000):
         raise AssertionError("Unconditional tail branch unexpectedly altered flags")
     return trace
