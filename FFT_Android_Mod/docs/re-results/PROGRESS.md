@@ -6,22 +6,22 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 |---|---:|
 | Inventory total | 6,455 functions / 1,837,392 bytes |
 | Previously analyzed in CSV | 3,373 functions / 1,513,492 bytes |
-| JSON checkpoints (all statuses) | 2,028 |
-| Newly accepted structurally | 893 functions / 146,752 bytes |
-| Needs review | 1,135 functions |
+| JSON checkpoints (all statuses) | 2,128 |
+| Newly accepted structurally | 992 functions / 147,572 bytes |
+| Needs review | 1,136 functions |
 | Core targets in inventory | 4,642 functions |
-| Core targets checkpointed | 1,925 functions |
-| Core accepted structurally | 810 functions |
-| Core needs review | 1,115 functions |
-| Core not yet checkpointed | 425 functions |
-| Not yet checkpointed | 1,029 functions / 41,664 bytes |
+| Core targets checkpointed | 2,025 functions |
+| Core accepted structurally | 909 functions |
+| Core needs review | 1,116 functions |
+| Core not yet checkpointed | 325 functions |
+| Not yet checkpointed | 929 functions / 40,836 bytes |
 
 ## Checkpoint status
 
 | Status | Functions |
 |---|---:|
-| auto_structural | 893 |
-| needs_review | 1,135 |
+| auto_structural | 992 |
+| needs_review | 1,136 |
 
 ## Review queue (largest first)
 
@@ -1162,6 +1162,7 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | `00101fc0` | WgetStatusPad() (needs_review) | 16 | 75.0 | 0 | 0 |
 | `000d6d98` | getStatusPad() (needs_review) | 16 | 75.0 | 0 | 0 |
 | `00073c64` | get_crc_table (needs_review) | 16 | 75.0 | 0 | 0 |
+| `002c9121` | operator delete[](void*) (needs_review) | 8 | 0.0 | 0 | 0 |
 
 > Structural acceptance does not establish semantic equivalence.
 > Counts distinguish historical CSV statuses, new accepted checkpoints, and review cases.
