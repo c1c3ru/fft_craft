@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **456/1258** pending functions.
+Evidence collected: **464/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -467,3 +467,11 @@ These reports do not constitute semantic verification.
 | `00270414` | defscrwin_set(int, int, _POINT*, _POINT*) | [Evidence](semantic-evidence/00270414.md) |
 | `0028d6a0` | tlSetMallocUserPointer(void**) | [Evidence](semantic-evidence/0028d6a0.md) |
 | `002a257c` | RotNclip3_nom | [Evidence](semantic-evidence/002a257c.md) |
+| `001533d8` | task_init() | [Evidence](semantic-evidence/001533d8.md) |
+| `0015369c` | Wtask_init() | [Evidence](semantic-evidence/0015369c.md) |
+| `0015de44` | iOSGT4_MapXYZClear(unsigned long) | [Evidence](semantic-evidence/0015de44.md) |
+| `0019f750` | DrawFunds() | [Evidence](semantic-evidence/0019f750.md) |
+| `001a93dc` | ChgShopStockItem(short, int) | [Evidence](semantic-evidence/001a93dc.md) |
+| `001cb7fc` | check_reaction_deny2(BWORK*) | [Evidence](semantic-evidence/001cb7fc.md) |
+| `001d189c` | Resume_MK_BSTR_Init() | [Evidence](semantic-evidence/001d189c.md) |
+| `001eed84` | getSequenceAddress(unsigned short) | [Evidence](semantic-evidence/001eed84.md) |
