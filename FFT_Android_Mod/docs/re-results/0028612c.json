@@ -1,0 +1,17 @@
+{
+  "address": "0028612c",
+  "name": "ps_rand()",
+  "size": 20,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "21610c"
+  ],
+  "log": "=== jtable.py: 0x28612c..0x286140 (20 bytes) ===\ncoverage: 5 of ~5 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x21610c x1   iOS_rand() \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
