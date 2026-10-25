@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **664/1258** pending functions.
+Evidence collected: **672/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -675,3 +675,11 @@ These reports do not constitute semantic verification.
 | `002b23a8` | Music_Pause() | [Evidence](semantic-evidence/002b23a8.md) |
 | `000d6f54` | allocatewindowinit() | [Evidence](semantic-evidence/000d6f54.md) |
 | `000d9810` | hook_disp_option() | [Evidence](semantic-evidence/000d9810.md) |
+| `000da610` | set_autobattletarget(int, int) | [Evidence](semantic-evidence/000da610.md) |
+| `000fea78` | Wallocatewindowinit() | [Evidence](semantic-evidence/000fea78.md) |
+| `00101624` | Whook_disp_option() | [Evidence](semantic-evidence/00101624.md) |
+| `001021dc` | Wset_autobattletarget(int, int) | [Evidence](semantic-evidence/001021dc.md) |
+| `001599d0` | asmGetInput2() | [Evidence](semantic-evidence/001599d0.md) |
+| `001599fc` | asmGetInput3() | [Evidence](semantic-evidence/001599fc.md) |
+| `00159a28` | asmGetActiveF() | [Evidence](semantic-evidence/00159a28.md) |
+| `0015df10` | iOSGT4_MapT9Get(unsigned long) | [Evidence](semantic-evidence/0015df10.md) |
