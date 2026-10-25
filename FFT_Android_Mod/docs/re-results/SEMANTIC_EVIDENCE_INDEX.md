@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **960/1258** pending functions.
+Evidence collected: **968/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -971,3 +971,11 @@ These reports do not constitute semantic verification.
 | `002a2ae0` | xpPadPspPadDataGet | [Evidence](semantic-evidence/002a2ae0.md) |
 | `002a2af8` | xpPadRepeatGet | [Evidence](semantic-evidence/002a2af8.md) |
 | `002a2b2c` | xpPadKeyTblSet | [Evidence](semantic-evidence/002a2b2c.md) |
+| `002a2b44` | xpPadKeyTblGet | [Evidence](semantic-evidence/002a2b44.md) |
+| `002a2fb8` | PCcreat | [Evidence](semantic-evidence/002a2fb8.md) |
+| `002ab608` | GuEmu_SetLineInterval(int) | [Evidence](semantic-evidence/002ab608.md) |
+| `002b36bc` | Error_Init() | [Evidence](semantic-evidence/002b36bc.md) |
+| `002b376c` | Error_SetError(int, char*) | [Evidence](semantic-evidence/002b376c.md) |
+| `002b701c` | iOSHelpButtonCheck() | [Evidence](semantic-evidence/002b701c.md) |
+| `002b7a5c` | SetDisableMapTouch() | [Evidence](semantic-evidence/002b7a5c.md) |
+| `002b7a74` | ClearDisableMapTouch() | [Evidence](semantic-evidence/002b7a74.md) |
