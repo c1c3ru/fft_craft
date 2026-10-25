@@ -1,0 +1,18 @@
+{
+  "address": "0024a414",
+  "name": "vOpn_pacdraw(unsigned long*, unsigned long*, int)",
+  "size": 132,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 96.97,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "24a0ac",
+    "24a688"
+  ],
+  "log": "=== jtable.py: 0x24a414..0x24a498 (132 bytes) ===\ncoverage: 32 of ~33 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x24a0ac x1   vOpn_anim(ANMPAC*, unsigned long*) \n  0x24a688 x1   vOpn_window(WINPAC*, unsigned long*) \n\n-- branches: 8 total, 4 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

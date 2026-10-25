@@ -1,0 +1,22 @@
+{
+  "address": "00102aa4",
+  "name": "Wmove_ambient()",
+  "size": 124,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 96.77,
+  "distinct_bl": 6,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "10278c",
+    "153518",
+    "161f7c",
+    "20f94c",
+    "215c80",
+    "2ca79c"
+  ],
+  "log": "=== jtable.py: 0x102aa4..0x102b20 (124 bytes) ===\ncoverage: 30 of ~31 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x10278c x1   Wsettaskkind(int) \n  0x153518 x1   Wtask_wait(long) \n  0x161f7c x1   wasmGetInput1() \n  0x20f94c x1   iOS_GetFrameRate() \n  0x215c80 x1   changeAnbient(int, int, short, short, short) \n  0x2ca79c x1   __divsi3 \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

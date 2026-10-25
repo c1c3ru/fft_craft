@@ -33,6 +33,7 @@
     "71adc"
   ],
   "log": "=== jtable.py: 0x20fd1c..0x20fe94 (376 bytes) ===\ncoverage: 83 of ~94 instruction slots (88%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 22 distinct --\n  0x71adc x1   sub_71adc LOCAL(no-dynsym)\n  0x1609d0 x1   iOSYajiEffectClear() \n  0x20c99c x1   initFileBuffer() \n  0x20fa50 x1   sub_20fa50 LOCAL(no-dynsym)\n  0x20fb18 x1   db_init_all(int, int, int, unsigned char, unsigned char, unsigned char) \n  0x20fcc4 x1   initializeStaticTexture() \n  0x2169d0 x1   InitSound() \n  0x2821ec x1   iOS_setMask(int) \n  0x28b460 x1   SpuInit \n  0x28b470 x1   ResetCallback \n  0x28b5b4 x1   CdReadCallback \n  0x28b5bc x1   CdReadyCallback \n  0x28c32c x1   CFFT_STATE::SetRenderSize(int, int) \n  0x28cec4 x1   SetGraphDebug \n  0x28de70 x1   _bu_init \n  0x28dea8 x1   InitCARD \n  0x28decc x1   StartCARD \n  0x28e5c4 x1   VSyncCallback \n  0x28e66c x1   PadInit \n  0x290cf0 x1   ResetGraph \n  0x290e6c x1   DrawSyncCallback \n  0x2b9cac x4   iOS_setV2Icon(V2ICON_DATA, int) \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

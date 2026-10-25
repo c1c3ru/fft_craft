@@ -13,6 +13,7 @@
     "2869f0"
   ],
   "log": "=== jtable.py: 0x1ccc3c..0x1cce2c (496 bytes) ===\ncoverage: 110 of ~124 instruction slots (89%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0x1ccc64, dispatch @0x1ccc68: 7 cases, 7 distinct handlers\n    targets: ['0x1cccc0', '0x1cccd8', '0x1ccd00', '0x1ccd08', '0x1ccd2c', '0x1ccdec', '0x1ccc8c']\n\n-- bl targets: 2 distinct --\n  0x1ca5a4 x4   change_status_adjust(int) \n  0x2869f0 x1   _pspNetRand(char const*, int) \n\n-- branches: 6 total, 5 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

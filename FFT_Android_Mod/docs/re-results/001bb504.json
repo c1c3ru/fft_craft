@@ -1,0 +1,20 @@
+{
+  "address": "001bb504",
+  "name": "SetSttsBoth(int)",
+  "size": 140,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 91.43,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "153584",
+    "153714",
+    "153734"
+  ],
+  "log": "=== jtable.py: 0x1bb504..0x1bb590 (140 bytes) ===\ncoverage: 32 of ~35 instruction slots (91%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x153584 x1   Wtask_create(long, char*) \n  0x153714 x2   Wtask_status(long) \n  0x153734 x1   Wsend_taskparamater(long, long, long, long) \n\n-- branches: 6 total, 3 backward (loop candidates) --\n",
+  "review_attempts": 1,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

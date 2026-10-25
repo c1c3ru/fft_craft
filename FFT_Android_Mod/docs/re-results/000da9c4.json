@@ -1,0 +1,19 @@
+{
+  "address": "000da9c4",
+  "name": "checkpara1(int)",
+  "size": 140,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "153398",
+    "159a54",
+    "2b7ccc"
+  ],
+  "log": "=== jtable.py: 0xda9c4..0xdaa50 (140 bytes) ===\ncoverage: 35 of ~35 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x153398 x1   task_killmyself() \n  0x159a54 x2   asmGetActiveTask(int) \n  0x2b7ccc x1   iOS_getV2Icon(V2ICON_DATA) \n\n-- branches: 8 total, 4 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

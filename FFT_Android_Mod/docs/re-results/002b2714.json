@@ -1,0 +1,19 @@
+{
+  "address": "002b2714",
+  "name": "EnvSE_SetVol(int, int)",
+  "size": 132,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 90.91,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "28c320",
+    "ba774"
+  ],
+  "log": "=== jtable.py: 0x2b2714..0x2b2798 (132 bytes) ===\ncoverage: 30 of ~33 instruction slots (91%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0xba774 x1   CSOUND_IF::IsPlaying(int, int) \n  0x28c320 x1   CFFT_STATE::GetParam(int) \n\n-- branches: 5 total, 2 backward (loop candidates) --\n",
+  "review_attempts": 1,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

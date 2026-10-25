@@ -1,0 +1,18 @@
+{
+  "address": "0016a14c",
+  "name": "ASURA_soundStop()",
+  "size": 124,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 90.32,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "216984"
+  ],
+  "log": "=== jtable.py: 0x16a14c..0x16a1c8 (124 bytes) ===\ncoverage: 28 of ~31 instruction slots (90%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x216984 x3   stopEffect(int) \n\n-- branches: 5 total, 2 backward (loop candidates) --\n",
+  "review_attempts": 1,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

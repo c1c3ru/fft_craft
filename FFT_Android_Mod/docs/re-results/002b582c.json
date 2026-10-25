@@ -20,6 +20,7 @@
     "be1dc"
   ],
   "log": "=== jtable.py: 0x2b582c..0x2b5988 (348 bytes) ===\ncoverage: 74 of ~87 instruction slots (85%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 9 distinct --\n  0xa6db4 x1   CGX_SCREEN_CORRECT::Init(int, int, int, int) \n  0xb3e28 x1   CINPUT_IF_TOUCH::ClearAll() \n  0xb4f88 x1   CRECT::Register(_RECT_UI*, int) \n  0xb5480 x1   CRECT::SetEnableAll(int) \n  0xb9eb0 x1   CTHREAD::Register(unsigned int (*)(void*), void*) \n  0xbe1dc x1   CSTEP_BATCH::Uninit() \n  0x2b044c x1   CAPP_INFO::GetDeviceScale() \n  0x2b1e14 x1   NowLoading_Init() \n  0x2cb904 x1   __aeabi_fcmpge \n\n-- branches: 2 total, 1 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

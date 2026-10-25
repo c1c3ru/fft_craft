@@ -14,6 +14,7 @@
     "290b40"
   ],
   "log": "=== jtable.py: 0x248cd0..0x248e24 (340 bytes) ===\ncoverage: 76 of ~85 instruction slots (89%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x2168e0 x2   callSystemSound(int) \n  0x2494a0 x2   vOpn_fadeout(int) \n  0x290b40 x1   SetDispMask \n\n-- branches: 10 total, 5 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

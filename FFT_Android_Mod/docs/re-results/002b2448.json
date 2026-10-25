@@ -18,6 +18,7 @@
     "bad78"
   ],
   "log": "=== jtable.py: 0x2b2448..0x2b2644 (508 bytes) ===\ncoverage: 98 of ~127 instruction slots (77%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0x2b2474, dispatch @0x2b2478: 24 cases, 10 distinct handlers\n    targets: ['0x2b2624', '0x2b24e0', '0x2b25a8', '0x2b25a0', '0x2b25bc', '0x2b25cc', '0x2b25dc', '0x2b25a0', '0x2b25a0', '0x2b25a0', '0x2b25f0', '0x2b25a0', '0x2b25a0', '0x2b25a0', '0x2b2604', '0x2b25a0', '0x2b25a0', '0x2b25a0', '0x2b25a0', '0x2b25a0', '0x2b25a0', '0x2b25a0', '0x2b25a0', '0x2b2614']\n\n-- bl targets: 7 distinct --\n  0xb6a28 x1   CFILE_DAT::Unload() \n  0xb6c70 x1   CFILE_DAT::GetBuffer(int) \n  0xb6cd0 x1   CFILE_DAT::GetSize(int) \n  0xb6cd8 x1   CFILE_DAT::Load(int, int, int) \n  0xba9c8 x1   CSOUND_IF::Load(int, char*, unsigned char*, unsigned int, unsigned int, int, int, int, int, int, int) \n  0xbad78 x1   CSOUND_IF::Play(int, int, int, int, unsigned char) \n  0x28c320 x1   CFFT_STATE::GetParam(int) \n\n-- branches: 9 total, 8 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

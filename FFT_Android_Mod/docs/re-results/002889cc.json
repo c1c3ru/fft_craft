@@ -1,0 +1,19 @@
+{
+  "address": "002889cc",
+  "name": "pspOffScreenInit(RECT16*, RECT16*)",
+  "size": 140,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 97.14,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "291c2c",
+    "294924",
+    "714b8"
+  ],
+  "log": "=== jtable.py: 0x2889cc..0x288a58 (140 bytes) ===\ncoverage: 34 of ~35 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x714b8 x4   sub_714b8 LOCAL(no-dynsym)\n  0x291c2c x1   xpLibgpuEnableFlg \n  0x294924 x1   xpLibgpuOffScreenRectSet \n\n-- branches: 2 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

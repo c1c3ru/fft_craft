@@ -1,0 +1,19 @@
+{
+  "address": "002b85f8",
+  "name": "RayPick_GT4(tagPOLY_GT4*, int, int)",
+  "size": 136,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 94.12,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2b75d0",
+    "2b7ccc"
+  ],
+  "log": "=== jtable.py: 0x2b85f8..0x2b8680 (136 bytes) ===\ncoverage: 32 of ~34 instruction slots (94%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x2b75d0 x1   RayPick_GT4_input(tagPOLY_GT4*, int, int, int, int) \n  0x2b7ccc x3   iOS_getV2Icon(V2ICON_DATA) \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 1,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

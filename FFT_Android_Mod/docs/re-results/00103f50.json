@@ -1,0 +1,19 @@
+{
+  "address": "00103f50",
+  "name": "Wmovetopanelsub(char*)",
+  "size": 128,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "103c94",
+    "20e314",
+    "2806b8"
+  ],
+  "log": "=== jtable.py: 0x103f50..0x103fd0 (128 bytes) ===\ncoverage: 32 of ~32 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x103c94 x1   Wcnvglobaltolocalid(int) \n  0x20e314 x1   moveToPanel(int, SVECTOR*, int, int, int) \n  0x2806b8 x1   iOS_hook_movetopanel() \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

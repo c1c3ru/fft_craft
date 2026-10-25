@@ -1,0 +1,19 @@
+{
+  "address": "0020f7f4",
+  "name": "prepareForEventGun(int, int)",
+  "size": 128,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1eb03c",
+    "21036c",
+    "224e44"
+  ],
+  "log": "=== jtable.py: 0x20f7f4..0x20f874 (128 bytes) ===\ncoverage: 32 of ~32 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x1eb03c x2   searchAnimationByBattleID(unsigned short) \n  0x21036c x1   setShortVector(SVECTOR*, int, int, int) \n  0x224e44 x1   CheckGunResult(int, SVECTOR*, int) \n\n-- branches: 2 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

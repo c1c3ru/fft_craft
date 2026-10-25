@@ -17,6 +17,7 @@
     "270500"
   ],
   "log": "=== jtable.py: 0x25990c..0x259ad4 (456 bytes) ===\ncoverage: 105 of ~114 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x153714 x1   Wtask_status(long) \n  0x153734 x2   Wsend_taskparamater(long, long, long, long) \n  0x259768 x1   ctlhistory_deactive(CTLINFO*) \n  0x26b374 x2   sound_request(int) \n  0x270460 x1   curhis_get(int) \n  0x270500 x1   curhis_clr(int) \n\n-- branches: 13 total, 5 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }
