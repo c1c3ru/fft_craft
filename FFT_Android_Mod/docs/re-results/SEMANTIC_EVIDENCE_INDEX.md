@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **936/1258** pending functions.
+Evidence collected: **944/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -947,3 +947,11 @@ These reports do not constitute semantic verification.
 | `0028d688` | tlFreeAll() | [Evidence](semantic-evidence/0028d688.md) |
 | `0029b6d0` | GsSetWorkBase | [Evidence](semantic-evidence/0029b6d0.md) |
 | `0029fd90` | GteGetDataReg(int) | [Evidence](semantic-evidence/0029fd90.md) |
+| `0029fdbc` | GteSetDataReg(long, long) | [Evidence](semantic-evidence/0029fdbc.md) |
+| `0029fe70` | InitGeom | [Evidence](semantic-evidence/0029fe70.md) |
+| `0029febc` | PSX_csin | [Evidence](semantic-evidence/0029febc.md) |
+| `002a13f0` | SetFogNearFar | [Evidence](semantic-evidence/002a13f0.md) |
+| `002a1ad4` | read_sxsy0(long*) | [Evidence](semantic-evidence/002a1ad4.md) |
+| `002a1aec` | read_sxsy1(long*) | [Evidence](semantic-evidence/002a1aec.md) |
+| `002a1b04` | read_sxsy2(long*) | [Evidence](semantic-evidence/002a1b04.md) |
+| `002a1b44` | read_rgb0(long*) | [Evidence](semantic-evidence/002a1b44.md) |
