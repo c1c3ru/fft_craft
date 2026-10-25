@@ -95,6 +95,9 @@ jobs:
       - name: Generate progress and review queue
         run: |
           python3 FFT_Android_Mod/docs/re-tools/progress_report.py
+      - name: Export prioritized manual review queue
+        run: |
+          python3 FFT_Android_Mod/docs/re-tools/export_review_queue.py
       - name: Count newly checkpointed functions
         id: progress
         env:
