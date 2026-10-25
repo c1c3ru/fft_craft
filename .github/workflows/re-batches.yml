@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/re-batches.yml'
       - 'FFT_Android_Mod/docs/re-tools/progress_report.py'
+      - 'FFT_Android_Mod/docs/re-tools/status_geral.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_evidence.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_path_report.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_cfg.py'
@@ -169,6 +170,20 @@ jobs:
       - name: Publish v3 coverage diagnostics and migration counts
         run: |
           python3 FFT_Android_Mod/docs/re-tools/structural_v3_report.py
+      - name: Update central FFT Craft dashboard
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if gh api "repos/${GITHUB_REPOSITORY}/pulls?state=closed&per_page=30" > /tmp/recent-merged-prs.json; then
+            python3 FFT_Android_Mod/docs/re-tools/status_geral.py \
+              --pulls-json /tmp/recent-merged-prs.json
+          else
+            echo "GitHub PR metadata unavailable; preserving the dashboard without recent PR metadata"
+            python3 FFT_Android_Mod/docs/re-tools/status_geral.py
+          fi
+          grep -q 'Aprovação estrutural entre checkpoints' \
+            FFT_Android_Mod/docs/re-results/STATUS_GERAL.md
       - name: Count newly checkpointed functions
         id: progress
         env:
