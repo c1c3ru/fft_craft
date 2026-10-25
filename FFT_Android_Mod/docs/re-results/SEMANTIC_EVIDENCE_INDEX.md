@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1000/1258** pending functions.
+Evidence collected: **1008/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1011,3 +1011,11 @@ These reports do not constitute semantic verification.
 | `001a4858` | iOSLearnTypeSet(int) | [Evidence](semantic-evidence/001a4858.md) |
 | `001ac8b4` | dispFT4num() | [Evidence](semantic-evidence/001ac8b4.md) |
 | `001adc68` | FadeMask(int) | [Evidence](semantic-evidence/001adc68.md) |
+| `001aec64` | iOSItemTypeSet(int) | [Evidence](semantic-evidence/001aec64.md) |
+| `001aec78` | iOSItemTypeGet() | [Evidence](semantic-evidence/001aec78.md) |
+| `001b4c20` | IsDark(int) | [Evidence](semantic-evidence/001b4c20.md) |
+| `001b8e50` | get_tutrial_pad() | [Evidence](semantic-evidence/001b8e50.md) |
+| `001bab64` | GetSttsAMovingTime() | [Evidence](semantic-evidence/001bab64.md) |
+| `001d15b0` | get_originalability() | [Evidence](semantic-evidence/001d15b0.md) |
+| `001eee34` | getEffSequenceAddress() | [Evidence](semantic-evidence/001eee34.md) |
+| `001fcdf0` | iOSgetCursorVisible() | [Evidence](semantic-evidence/001fcdf0.md) |
