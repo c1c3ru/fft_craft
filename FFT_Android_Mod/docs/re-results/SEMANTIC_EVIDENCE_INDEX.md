@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **208/1258** pending functions.
+Evidence collected: **216/1258** pending functions.
 These reports do not constitute semantic verification.
 
 | Address | Function | Evidence |
@@ -217,3 +217,11 @@ These reports do not constitute semantic verification.
 | `00211e50` | setPresentClutDataAsDefault(unsigned int, unsigned int, int) | [Evidence](semantic-evidence/00211e50.md) |
 | `00242268` | vOpn_arzpic_init(int) | [Evidence](semantic-evidence/00242268.md) |
 | `0025e508` | person_year_up() | [Evidence](semantic-evidence/0025e508.md) |
+| `00269870` | snpl_syscur() | [Evidence](semantic-evidence/00269870.md) |
+| `000dfa94` | makemessagestructure() | [Evidence](semantic-evidence/000dfa94.md) |
+| `0020c19c` | fftVSyncCallback() | [Evidence](semantic-evidence/0020c19c.md) |
+| `0020f43c` | debugEffectWait() | [Evidence](semantic-evidence/0020f43c.md) |
+| `00261b0c` | mouke_eventday_chg() | [Evidence](semantic-evidence/00261b0c.md) |
+| `00291098` | StoreImage2 | [Evidence](semantic-evidence/00291098.md) |
+| `00254f9c` | ctltownset_init(int, int) | [Evidence](semantic-evidence/00254f9c.md) |
+| `001cc89c` | check_hide_reset(BWORK*) | [Evidence](semantic-evidence/001cc89c.md) |
