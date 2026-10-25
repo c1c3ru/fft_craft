@@ -53,8 +53,8 @@ def _match(seq):
             or op.operands[2].type != ARM_OP_IMM):
         return None
     reg = load.operands[0].reg
-    if not (reg == store.operands[0].reg == op.operands[0].reg
-            == op.operands[1].reg or op.cc != store.cc):
+    if (not (reg == store.operands[0].reg == op.operands[0].reg
+             == op.operands[1].reg) or op.cc != store.cc):
         return None
     if test is not None:
         if (test.id != ARM_INS_TST or not _unconditional(test)
