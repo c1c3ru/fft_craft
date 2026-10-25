@@ -19845,3 +19845,93 @@ Mesma rota dos §605/606.
 **Status CSV**: `read_structural` para as 18 (identidade e call-graph
 confirmados via checkpoint + cruzamento textual; nenhuma teve os
 blocos lidos instrução a instrução).
+
+## 608. Grab-bag de 18 checkpoints `auto_structural` (≥95% cobertura, 0 tabela pendente) aceitos direto, sem fork — inclui 1ª confirmação formal por `family_sim` nesta sessão (2026-10-25, Fase 3, octogésimo oitavo lote)
+
+Mesma rota dos §605-607. **Novidade de processo**: antes de escrever,
+comparei os `bl_targets` brutos dos 3 candidatos `*disp_staticwindow2`
+abaixo entre si — **Jaccard = 1,0 exato** (15 de 15 endereços
+idênticos) — e os tratei como uma família confirmada por similaridade
+numa única entrada, em vez de 3 seções separadas, conforme o item 2
+da estratégia documentada.
+
+- **`Cdisp_staticwindow2()`/`Ddisp_staticwindow2()`/`Edisp_staticwindow2()`**
+  (`0x1443b0`/`0xd123c`/`0x123a74`, 372 B cada, 98%, **15 `bl`
+  idênticos nas três**: `disposememory`/`multiwindow_break`/
+  `multiwindow_packetcolor`/`multiwindow_packetinit`/`statuskanjiprint`/
+  `loadcdst`/`extend_systemframe`/`task_killmyself`/`asmTaskEntry`/
+  `asmGetInput1`/`PSX_LoadImage`, mais `iOS_getLastEventNo()` e
+  `chkMessagepacket()`, novos) — terceiro membro da família de
+  variantes por prefixo de letra (`C`/`D`/`E`) já prevista desde a
+  §46 (`disp_personalwindow`, que citava variantes `A/C/D/E/W` nunca
+  lidas) — confirma que são, de fato, cópias idênticas (mesmo
+  "charset"/contexto de exibição), reusando a mesma família
+  `multiwindow_*`/`statuskanjiprint`/`asmTaskEntry` do `disp_noframe`
+  (§607), só com os dois extras `iOS_getLastEventNo`/`chkMessagepacket`.
+- **`setActionDirection(tag_animation*, tag_animation*)`** (`0x201798`,
+  388 B, **100%**, 5 `bl`: `set_unitcoord` ×2,
+  `searchAnimationByID`/`searchAnimationByBattleID`,
+  `reserveActionDirection`, `ratan2`) — cálculo real de direção de
+  ação via arco-tangente (`ratan2`), ligando duas animações
+  (provável animação de origem → direção calculada pra animação de
+  destino/reação).
+- **`MakeTextureMessage2(unsigned char*, short*, RECT16*, int)`**
+  (`0x1b6c00`, 388 B, **100%**, 2 `bl`: `MakeTextureMessage` (já
+  citada em várias seções, linha 7225/8505/9389, nunca lida por
+  dentro) — confirma que existe uma wrapper "2" sobre a função base,
+  mesmo padrão de duplicação `X`/`X2` já visto em `ClearImage`/
+  `ClearImage2` (§570).
+- **`ctlshogou_main(CTLINFO*)`** (`0x25c928`, 388 B, 96%, 4 `bl`:
+  `ret_adventurestatus()`, `ctlhouk_init()`, `ssd_request(int,int)`
+  ×4, `iOS_getTouchTap()`) — mais um controlador `ctl*_main`;
+  `ret_adventurestatus`/`stop_adventuremessage` já confirmados como
+  o par real do sistema "adventure"/novel (ligado a §96/§269/§592);
+  `ctlhouk_init` já citado (linha 9375/10357) como sub-controlador
+  irmão.
+- **`iOSQSort(short*,short*,short*,short*,int,int,int)`** (`0x15daf4`,
+  388 B, **100%**, 2 `bl`: `iOSSwap` + **recursão em si mesma**) —
+  quicksort real sobre 4 arrays paralelos de `short`, confirmado por
+  nome e pela auto-chamada recursiva.
+- **`RayPick_FT4(tagPOLY_FT4*, int, int)`** (`0x2b78ac`, 384 B, 98%, 2
+  `bl`: `CEGL_COLLISION::IsVertexInTriangle2D` (já lida por completo
+  na §325), `__floatsisf` ×10) — ray-picking real sobre um polígono
+  `FT4`, usando o teste ponto-em-triângulo já confirmado.
+- **`get_ma_result(BWORK*)`** (`0x1cced8`, 384 B, 96%, 5 `bl`:
+  `init_target_result`, `check_move_ability`, `check_status_data2`
+  (§584), `get_step_no` ×2, `pspNetGetBattleModeFlag`) — resolve o
+  resultado de "movimento/ação" (MA) de uma unidade, usando os
+  mesmos verificadores de status/movimento já estabelecidos.
+- **`SysSE_Play(int, int)`** (`0x2b2b7c`, 380 B, 96%, 8 `bl`,
+  catálogo quase idêntico ao de `EnvSE_Play` (§579): `CFILE_DAT::*`
+  + `CSOUND_IF::Load/Play` + `CFFT_STATE::GetParam` + **`chkSeDouble()`**
+  novo) — a contraparte "efeito sonoro de sistema" (menu/UI) de
+  `EnvSE_Play` (ambiente); `chkSeDouble` sugere um guard contra tocar
+  o mesmo SE duas vezes em sequência.
+- **`get_actwindow_data(int, unsigned char*, unsigned char*, unsigned char*)`**
+  (`0x1d5640`, 392 B, 97%, 2 `bl`: `gc_bwp` (par get/set já visto em
+  `get_comwindow_data` §607) + 1 local) — irmã direta de
+  `get_comwindow_data`, mesma família de dados de janela de comando.
+- **`Wcalceffectangle(int, int)`** (`0x102504`, 384 B, 97%, 2 `bl`:
+  `Wgetanimpanel`, `get_mapid`) — par W exato de `calceffectangle`
+  (§607), confirmando mais uma vez o padrão.
+- **`get_reflection_coord(BWORK*,int,int,int,int*,int*,int*)`**
+  (`0x1d1204`, 368 B, 97%, 1 `bl`: `get_coord_address`) e
+  **`get_item_number(unsigned short, int)`** (`0x1d9d70`, 368 B, 97%,
+  1 `bl`: `get_unitwork_add`) — dois utilitários de consulta simples
+  sobre coordenada/inventário de unidade.
+- **`mapclip_save(int)`** (`0x283fc8`, 380 B, **100%**, 11 `bl`,
+  catálogo quase idêntico ao de `mapclip_load` (§607), trocando
+  `CFILE::Read` por `CFILE::Write`) — par save/load exato do sistema
+  de clip de mapa.
+- **`oggpack_write`**/**`oggpackB_write`** (`0x82578`/`0x82704`, zlib/
+  Tremor real, 99% cada, 1 `bl` local cada) — mais duas funções
+  padrão da biblioteca Ogg (bit-packer de escrita), tema do §569/§605.
+- **`_vp_noisemask`** (`0x94cd4`, 384 B, **100%**, 7 `bl`: locais +
+  `__adddf3`/`__extendsfdf2`/`__fixdfsi`/`__subsf3`/`__addsf3`) —
+  mais uma função do Tremor (máscara de ruído psicoacústico), tema
+  do §569.
+
+**Status CSV**: `read_structural` para as 18 (3 delas — a família
+`*disp_staticwindow2` — fechadas via confirmação por similaridade
+`family_sim`, as demais por identificação de call-graph; nenhuma
+teve os blocos lidos instrução a instrução).
