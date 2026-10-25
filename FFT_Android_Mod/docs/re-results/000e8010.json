@@ -1,0 +1,18 @@
+{
+  "address": "000e8010",
+  "name": "iOS_clearFLAGeventdirect()",
+  "size": 56,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "db77c",
+    "db83c"
+  ],
+  "log": "=== jtable.py: 0xe8010..0xe8048 (56 bytes) ===\ncoverage: 14 of ~14 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0xdb77c x2   write_eventflag(int, int) \n  0xdb83c x1   read_eventflag(int) \n\n-- branches: 1 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

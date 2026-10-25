@@ -1,0 +1,18 @@
+{
+  "address": "001f36c8",
+  "name": "EndAllAnimation()",
+  "size": 52,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 92.31,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1f35dc"
+  ],
+  "log": "=== jtable.py: 0x1f36c8..0x1f36fc (52 bytes) ===\ncoverage: 12 of ~13 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x1f35dc x1   EndAnimation(tag_animation*) \n\n-- branches: 2 total, 1 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

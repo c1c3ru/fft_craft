@@ -1,0 +1,19 @@
+{
+  "address": "002c5400",
+  "name": "Movie_FrameMove()",
+  "size": 52,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 92.31,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2b20f4",
+    "730a4"
+  ],
+  "log": "=== jtable.py: 0x2c5400..0x2c5434 (52 bytes) ===\ncoverage: 12 of ~13 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x730a4 x1   Android_Movie_IsPlaying() \n  0x2b20f4 x1   onGotoNextMode(int) \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
