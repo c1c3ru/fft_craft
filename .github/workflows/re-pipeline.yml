@@ -24,6 +24,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Install test dependencies
+        run: python3 -m pip install capstone pyelftools
       - run: python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_*.py' -v
 
   structural-smoke:
@@ -63,6 +65,11 @@ jobs:
             --workers 5 --limit 150 --timeout 120
           cp FFT_Android_Mod/docs/re-results/SUMMARY.md \
             FFT_Android_Mod/docs/re-results/batch-summaries/batch-250.md
+      - name: Validate semantic evidence generation on real ARM ELF
+        run: |
+          python3 FFT_Android_Mod/docs/re-tools/progress_report.py
+          python3 FFT_Android_Mod/docs/re-tools/export_review_queue.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_evidence.py --limit 8
       - uses: actions/upload-artifact@v4
         if: always()
         with:
