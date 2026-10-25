@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 
 from capstone import Cs, CS_ARCH_ARM, CS_MODE_ARM
+from capstone.arm import ARM_INS_LDR, ARM_OP_MEM, ARM_REG_PC
 from elftools.elf.elffile import ELFFile
 
 import jtable
@@ -64,11 +65,37 @@ def collect(data, start):
     return found, tables, sorted(unresolved)
 
 
-def evidence(record, data, limit_lines=70):
+def pc_relative_literals(instructions, start, data):
+    """Identify in-range, PC-relative ARM LDR words as *candidate* literal pool data.
+
+    This is not a semantic proof: referenced words may overlap code.
+    """
+    refs = {}
+    end = start + len(data)
+    for address, insn in sorted(instructions.items()):
+        if insn.id != ARM_INS_LDR or len(insn.operands) < 2:
+            continue
+        operand = insn.operands[1]
+        if (operand.type != ARM_OP_MEM or operand.mem.base != ARM_REG_PC
+                or operand.mem.index):
+            continue
+        target = ((address + 8) & ~3) + int(operand.mem.disp)
+        if not (start <= target <= end - 4 and target % 4 == 0):
+            continue
+        offset = target - start
+        refs.setdefault(target, {"value": int.from_bytes(data[offset:offset + 4], "little"),
+                                 "load_sites": []})["load_sites"].append(address)
+    return refs
+
+
+def evidence(record, data, limit_lines=70, binary_sha256=None):
     start = int(record["address"], 16)
     seen, tables, unresolved = collect(data, start)
     slots = list(range(start, start + len(data), 4))
     gaps = [addr for addr in slots if addr not in seen]
+    literals = pc_relative_literals(seen, start, data)
+    referenced_gaps = [addr for addr in gaps if addr in literals]
+    other_gaps = [addr for addr in gaps if addr not in literals]
     stores = [(addr, ins) for addr, ins in sorted(seen.items())
               if ins.mnemonic.startswith(("str", "stm", "vstr", "vstm", "strex", "swp"))
               or ins.mnemonic in ("push", "vpush")]
@@ -81,7 +108,10 @@ def evidence(record, data, limit_lines=70):
              f'- Binary address: \x600x{start:x}\x60; size: {len(data)} bytes',
              f'- Checkpoint status: \x60{record["status"]}\x60 (unchanged)',
              f'- Heuristically visited slots: {len(seen)}/{len(slots)}',
+             f'- ELF SHA-256: `{binary_sha256 or "not supplied"}`',
              f'- Unvisited 4-byte offsets: {len(gaps)} (not necessarily code)',
+             f'- Unvisited slots referenced by PC-relative LDR: {len(referenced_gaps)}',
+             f'- Other unvisited slots: {len(other_gaps)}',
              f'- Candidate memory stores: {len(stores)}; calls: {len(calls)}',
              f'- Resolved jump dispatches: {len(tables)}; unresolved: {len(unresolved)}',
              "", "## Candidate dispatch destinations", ""]
@@ -96,8 +126,16 @@ def evidence(record, data, limit_lines=70):
     lines += [f'- \x60{line(a, i)}\x60' for a, i in stores[:30]] or ["None identified."]
     lines.extend(["", "## Calls (first 30)", ""])
     lines += [f'- \x60{line(a, i)}\x60' for a, i in calls[:30]] or ["None identified."]
-    lines.extend(["", "## Unvisited offsets (first 40)", "",
-                  ", ".join(f'\x600x{a:x}\x60' for a in gaps[:40]) or "None",
+    lines.extend(["", "## Candidate PC-relative literal words", "",
+                  "A reference suggests data, not a proven classification; it may overlap code.", ""])
+    for addr in sorted(literals)[:40]:
+        item = literals[addr]
+        sites = ", ".join(f"0x{x:x}" for x in item["load_sites"])
+        lines.append(f'- `0x{addr:x}`: 0x{item["value"]:08x}; referenced by {sites}')
+    if not literals:
+        lines.append("None identified.")
+    lines.extend(["", "## Other unvisited offsets (first 40)", "",
+                  ", ".join(f'`0x{a:x}`' for a in other_gaps[:40]) or "None",
                   "", f"## Visited instructions (first {limit_lines})", "",
                   "\x60\x60\x60asm"])
     lines += [line(a, i) for a, i in sorted(seen.items())[:limit_lines]]
@@ -114,13 +152,24 @@ def run(binary, results, output, limit):
     digest = hashlib.sha256(binary.read_bytes()).hexdigest()
     queue = results / "REVIEW_QUEUE.csv"
     with queue.open(newline="", encoding="utf-8") as stream:
-        selected = list(csv.DictReader(stream))[:limit]
+        rows = list(csv.DictReader(stream))
     output.mkdir(parents=True, exist_ok=True)
-    index = ["# ARM review evidence index", "", DISCLAIMER, "",
-             f"ELF SHA-256: \x60{digest}\x60", "",
-             "| Address | Function | Evidence |",
-             "|---|---|---|"]
-    count = 0
+    marker = f"ELF SHA-256: `{digest}`"
+
+    def is_current(path):
+        try:
+            return path.is_file() and marker in path.read_text(encoding="utf-8")
+        except OSError:
+            return False
+
+    selected = []
+    for row in rows:
+        address = row["address"].lower()
+        if not is_current(output / f"{address}.md"):
+            selected.append(row)
+            if len(selected) >= limit:
+                break
+
     for row in selected:
         addr = row["address"].lower()
         if len(addr) != 8 or any(c not in "0123456789abcdef" for c in addr):
@@ -133,13 +182,27 @@ def run(binary, results, output, limit):
                 or record.get("pipeline_version") != 2):
             raise ValueError(f"Stale/invalid checkpoint {addr}")
         data = read_function(binary, int(addr, 16), int(record["size"]))
-        (output / f"{addr}.md").write_text(evidence(record, data), encoding="utf-8")
-        name = str(row["name"]).replace("|", "/")
-        index.append(f'| \x60{addr}\x60 | {name} | [Evidence](semantic-evidence/{addr}.md) |')
-        count += 1
+        (output / f"{addr}.md").write_text(
+            evidence(record, data, binary_sha256=digest), encoding="utf-8")
+
+    index = ["# ARM review evidence index", "", DISCLAIMER, "",
+             f"ELF SHA-256: `{digest}`", "",
+             "These reports do not constitute semantic verification.", "",
+             "| Address | Function | Evidence |",
+             "|---|---|---|"]
+    complete = 0
+    for row in rows:
+        addr = row["address"].lower()
+        if is_current(output / f"{addr}.md"):
+            name = str(row["name"]).replace("|", "/")
+            index.append(f'| `{addr}` | {name} | [Evidence](semantic-evidence/{addr}.md) |')
+            complete += 1
+    index.insert(6, f"Evidence collected: **{complete}/{len(rows)}** pending functions.")
     (results / "SEMANTIC_EVIDENCE_INDEX.md").write_text(
         "\n".join(index) + "\n", encoding="utf-8")
-    print(f"Exported {count} evidence files (manual validation required)")
+    print(f"Evidence available for {complete}/{len(rows)} review functions")
+    print(f"EVIDENCE_GENERATED={len(selected)}")
+
 
 
 def main():
