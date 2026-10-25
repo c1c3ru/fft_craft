@@ -1,0 +1,20 @@
+{
+  "address": "0010638c",
+  "name": "Wdisp_backtotitle_yesno()",
+  "size": 100,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 92.0,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "105d6c",
+    "161ef8",
+    "161fa4"
+  ],
+  "log": "=== jtable.py: 0x10638c..0x1063f0 (100 bytes) ===\ncoverage: 23 of ~25 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x105d6c x1   sub_105d6c LOCAL(no-dynsym)\n  0x161ef8 x1   wasmTaskEntry() \n  0x161fa4 x1   wasmGetInput2() \n\n-- branches: 3 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

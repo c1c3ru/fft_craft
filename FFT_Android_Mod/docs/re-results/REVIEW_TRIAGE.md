@@ -1,12 +1,12 @@
 # ARM semantic review triage
 
-Unverified checkpoints: **985**; core targets: **843**.
+Unverified checkpoints: **889**; core targets: **747**.
 
 These are structural observations, not semantic equivalence proofs.
 
 | Review reason | Total | Core |
 |---|---:|---:|
-| coverage_below_95 | 951 | 818 |
+| coverage_below_95 | 855 | 722 |
 | resolved_jump_table_check | 34 | 25 |
 
 ## Highest priority evidence collection

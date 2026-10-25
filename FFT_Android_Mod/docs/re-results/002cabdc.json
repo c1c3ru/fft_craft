@@ -10,7 +10,35 @@
   "tables_unresolved": 0,
   "bl_targets": [],
   "log": "=== jtable.py: 0x2cabdc..0x2cac50 (116 bytes) ===\ncoverage: 22 of ~29 instruction slots (76%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 0 distinct --\n\n-- branches: 3 total, 2 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "needs_review",
+    "reason": "unexplained_code_slots",
+    "function_start": "0x2cabdc",
+    "total_slots": 29,
+    "code_slots": 22,
+    "instruction_slots": 22,
+    "table_entry_slots": 0,
+    "literal_slots": [],
+    "unexplained_slots": [
+      "0x2cabf0",
+      "0x2cabf4",
+      "0x2cabf8",
+      "0x2cabfc",
+      "0x2cac00",
+      "0x2cac04",
+      "0x2cac08"
+    ],
+    "unexplained_count": 7,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 75.86,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
+  "review_attempts": 1,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }
