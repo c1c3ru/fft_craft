@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **376/1258** pending functions.
+Evidence collected: **384/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -387,3 +387,11 @@ These reports do not constitute semantic verification.
 | `001d1a18` | set_playerwork_sp(PENTRY*, unsigned char*, int) | [Evidence](semantic-evidence/001d1a18.md) |
 | `001e20c0` | dec_party_item(BWORK*, unsigned short, int) | [Evidence](semantic-evidence/001e20c0.md) |
 | `0028d1c4` | tlPushHeap(void*) | [Evidence](semantic-evidence/0028d1c4.md) |
+| `0010c79c` | Wmakemessagestructure() | [Evidence](semantic-evidence/0010c79c.md) |
+| `00150630` | NetEndSyncProc() | [Evidence](semantic-evidence/00150630.md) |
+| `001ade40` | GetItemCategoryPos(int) | [Evidence](semantic-evidence/001ade40.md) |
+| `001baa18` | unit_isdark() | [Evidence](semantic-evidence/001baa18.md) |
+| `001bb1c4` | SetSttsA2(int) | [Evidence](semantic-evidence/001bb1c4.md) |
+| `001cd0cc` | set_calcmode_think() | [Evidence](semantic-evidence/001cd0cc.md) |
+| `001d1ffc` | check_item_left(int, int, int) | [Evidence](semantic-evidence/001d1ffc.md) |
+| `00228de4` | NewShape2(unsigned char) | [Evidence](semantic-evidence/00228de4.md) |
