@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **768/1258** pending functions.
+Evidence collected: **776/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -779,3 +779,11 @@ These reports do not constitute semantic verification.
 | `0021b220` | SetEditANMPtr() | [Evidence](semantic-evidence/0021b220.md) |
 | `0021b244` | SetEditTSQPtr() | [Evidence](semantic-evidence/0021b244.md) |
 | `00263fa8` | iOSSDNovelSysCurCheck() | [Evidence](semantic-evidence/00263fa8.md) |
+| `0026c238` | iOSNovelModeBackup() | [Evidence](semantic-evidence/0026c238.md) |
+| `0027fbf0` | iOS_WorldMapResumeGetData2(unsigned char**, unsigned int*) | [Evidence](semantic-evidence/0027fbf0.md) |
+| `002806cc` | iOS_HookAddPrim() | [Evidence](semantic-evidence/002806cc.md) |
+| `00284494` | Clear_VectorDataBase() | [Evidence](semantic-evidence/00284494.md) |
+| `0028bad0` | TE_is_task_end(long) | [Evidence](semantic-evidence/0028bad0.md) |
+| `0028d228` | tlPopHeap() | [Evidence](semantic-evidence/0028d228.md) |
+| `0028de28` | EnableEvent | [Evidence](semantic-evidence/0028de28.md) |
+| `0028de4c` | DisableEvent | [Evidence](semantic-evidence/0028de4c.md) |
