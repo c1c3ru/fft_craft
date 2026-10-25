@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **896/1258** pending functions.
+Evidence collected: **904/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -907,3 +907,11 @@ These reports do not constitute semantic verification.
 | `001fd2ac` | resetTurnOrder() | [Evidence](semantic-evidence/001fd2ac.md) |
 | `0020f4fc` | clearOverSpecCtr() | [Evidence](semantic-evidence/0020f4fc.md) |
 | `0020f538` | restartAnimation() | [Evidence](semantic-evidence/0020f538.md) |
+| `0020f8a0` | finishAttackTeamSelect() | [Evidence](semantic-evidence/0020f8a0.md) |
+| `0020f8ec` | resetFrameRate() | [Evidence](semantic-evidence/0020f8ec.md) |
+| `00216128` | iOS_resetTexCacheLine() | [Evidence](semantic-evidence/00216128.md) |
+| `00216848` | getMusicPointer(int) | [Evidence](semantic-evidence/00216848.md) |
+| `0021b8f0` | PushAirDensity() | [Evidence](semantic-evidence/0021b8f0.md) |
+| `0021b908` | PopAirDensity() | [Evidence](semantic-evidence/0021b908.md) |
+| `00248598` | iOS_TestDraw(unsigned long*) | [Evidence](semantic-evidence/00248598.md) |
+| `0024dcc0` | ctlkiroku_deactive(CTLINFO*) | [Evidence](semantic-evidence/0024dcc0.md) |
