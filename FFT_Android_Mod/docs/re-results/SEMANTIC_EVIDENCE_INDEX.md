@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **968/1258** pending functions.
+Evidence collected: **976/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -979,3 +979,11 @@ These reports do not constitute semantic verification.
 | `002b701c` | iOSHelpButtonCheck() | [Evidence](semantic-evidence/002b701c.md) |
 | `002b7a5c` | SetDisableMapTouch() | [Evidence](semantic-evidence/002b7a5c.md) |
 | `002b7a74` | ClearDisableMapTouch() | [Evidence](semantic-evidence/002b7a74.md) |
+| `002bef4c` | iOS_isExistResumeData() | [Evidence](semantic-evidence/002bef4c.md) |
+| `002befbc` | iOS_ClearMenuTouchKeyInput() | [Evidence](semantic-evidence/002befbc.md) |
+| `002c53e8` | Movie_Init() | [Evidence](semantic-evidence/002c53e8.md) |
+| `000c81b0` | tool_setarrowmode(int) | [Evidence](semantic-evidence/000c81b0.md) |
+| `000cbb1c` | getYLine() | [Evidence](semantic-evidence/000cbb1c.md) |
+| `000d9608` | get_padframe() | [Evidence](semantic-evidence/000d9608.md) |
+| `00101420` | Wget_padframe() | [Evidence](semantic-evidence/00101420.md) |
+| `00101590` | WiOS_getStatusAllgrayf() | [Evidence](semantic-evidence/00101590.md) |
