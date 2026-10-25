@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **544/1258** pending functions.
+Evidence collected: **552/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -555,3 +555,11 @@ These reports do not constitute semantic verification.
 | `002a3028` | xpFree | [Evidence](semantic-evidence/002a3028.md) |
 | `002b8888` | iOS_InitMovie(int) | [Evidence](semantic-evidence/002b8888.md) |
 | `00101980` | Wsend_sttslinecol(char*) | [Evidence](semantic-evidence/00101980.md) |
+| `001534a4` | send_taskparamater4(long, long, long, long, long) | [Evidence](semantic-evidence/001534a4.md) |
+| `00153768` | Wsend_taskparamater4(long, long, long, long, long) | [Evidence](semantic-evidence/00153768.md) |
+| `0015e768` | iOSShiftUnitSet(int) | [Evidence](semantic-evidence/0015e768.md) |
+| `0016f738` | iOS_cacheFilesNameClear() | [Evidence](semantic-evidence/0016f738.md) |
+| `001a7368` | IsDismiss(short) | [Evidence](semantic-evidence/001a7368.md) |
+| `001b7bf0` | MenuSelVerticalWithSndDirect(unsigned short, unsigned char, int, int) | [Evidence](semantic-evidence/001b7bf0.md) |
+| `001c7178` | SelectWindowClutEx(int, int) | [Evidence](semantic-evidence/001c7178.md) |
+| `001ca97c` | overlayMonomaneStack() | [Evidence](semantic-evidence/001ca97c.md) |
