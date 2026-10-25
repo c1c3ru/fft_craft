@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **304/1258** pending functions.
+Evidence collected: **312/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -315,3 +315,11 @@ These reports do not constitute semantic verification.
 | `001bc520` | scroll_chk() | [Evidence](semantic-evidence/001bc520.md) |
 | `00245610` | strSetDefDecEnv(DECENV*, int, int, int, int) | [Evidence](semantic-evidence/00245610.md) |
 | `00249f14` | vOpn_dataload2() | [Evidence](semantic-evidence/00249f14.md) |
+| `0024fd74` | pspCtltutonet_deactive(CTLINFO*) | [Evidence](semantic-evidence/0024fd74.md) |
+| `0025f0b8` | pic_load(int) | [Evidence](semantic-evidence/0025f0b8.md) |
+| `0025f168` | bk_load(int) | [Evidence](semantic-evidence/0025f168.md) |
+| `0025f358` | psp_bk_load(int, void*) | [Evidence](semantic-evidence/0025f358.md) |
+| `00266654` | add_winpac(unsigned long*, int*) | [Evidence](semantic-evidence/00266654.md) |
+| `002b3590` | Boot_FrameMove() | [Evidence](semantic-evidence/002b3590.md) |
+| `00105510` | Wwait_direc(int) | [Evidence](semantic-evidence/00105510.md) |
+| `00161ef8` | wasmTaskEntry() | [Evidence](semantic-evidence/00161ef8.md) |
