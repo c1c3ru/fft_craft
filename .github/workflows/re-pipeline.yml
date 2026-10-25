@@ -1,0 +1,50 @@
+name: Reverse engineering pipeline
+
+on:
+  pull_request:
+    paths:
+      - 'FFT_Android_Mod/docs/re-tools/**'
+      - '.github/workflows/re-pipeline.yml'
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: 'Functions to analyze'
+        required: false
+        default: '25'
+
+permissions:
+  contents: read
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_*.py' -v
+
+  structural-smoke:
+    if: github.event_name == 'workflow_dispatch'
+    needs: unit-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install analysis dependencies
+        run: python3 -m pip install capstone pyelftools
+      - name: Structural batch
+        run: |
+          python3 FFT_Android_Mod/docs/re-tools/parallel_loop.py \
+            --workers 5 --limit "${{ inputs.limit }}" --timeout 180
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reverse-engineering-report
+          path: FFT_Android_Mod/docs/re-results/
+          if-no-files-found: warn
+          retention-days: 14
