@@ -1,0 +1,18 @@
+{
+  "address": "0029b42c",
+  "name": "GsInitGraph2",
+  "size": 200,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 96.0,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "294e64",
+    "2a1350"
+  ],
+  "log": "=== jtable.py: 0x29b42c..0x29b4f4 (200 bytes) ===\ncoverage: 48 of ~50 instruction slots (96%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x294e64 x1   GetDrawEnv \n  0x2a1350 x1   ReadGeomOffset \n\n-- branches: 2 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

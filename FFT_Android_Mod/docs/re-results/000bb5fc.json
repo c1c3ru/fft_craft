@@ -1,0 +1,19 @@
+{
+  "address": "000bb5fc",
+  "name": "CSOUND_IF_SL::CB_for_Stream(SLAndroidSimpleBufferQueueItf_ const* const*, void*)",
+  "size": 208,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "bd738",
+    "bd740",
+    "bd95c"
+  ],
+  "log": "=== jtable.py: 0xbb5fc..0xbb6cc (208 bytes) ===\ncoverage: 52 of ~52 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0xbd738 x1   CSOUND_LOADER_OGG::GetPlaySample() \n  0xbd740 x1   CSOUND_LOADER_OGG::Decode(signed char*, int, long long, long long, int*) \n  0xbd95c x2   CSOUND_LOADER_OGG::GetStreamBuffer() \n\n-- branches: 4 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

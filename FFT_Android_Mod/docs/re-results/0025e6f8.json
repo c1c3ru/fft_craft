@@ -1,0 +1,17 @@
+{
+  "address": "0025e6f8",
+  "name": "wld_dayread(unsigned long*, int, FINDDAY*)",
+  "size": 188,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "26b2f0"
+  ],
+  "log": "=== jtable.py: 0x25e6f8..0x25e7b4 (188 bytes) ===\ncoverage: 47 of ~47 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x26b2f0 x2   snplflg_read(unsigned long*, int) \n\n-- branches: 2 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

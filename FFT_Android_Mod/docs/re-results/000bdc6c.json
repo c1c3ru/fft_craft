@@ -1,0 +1,21 @@
+{
+  "address": "000bdc6c",
+  "name": "CSTEP::FrameMove(float, unsigned int)",
+  "size": 204,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 98.04,
+  "distinct_bl": 5,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2cb2f4",
+    "2cb484",
+    "2cb48c",
+    "2cb92c",
+    "b9fd4"
+  ],
+  "log": "=== jtable.py: 0xbdc6c..0xbdd38 (204 bytes) ===\ncoverage: 50 of ~51 instruction slots (98%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 5 distinct --\n  0xb9fd4 x1   TRACE_Empty(char const*, ...) \n  0x2cb2f4 x1   __addsf3 \n  0x2cb484 x1   __floatunsisf \n  0x2cb48c x2   __floatsisf \n  0x2cb92c x1   __fixsfsi \n\n-- branches: 6 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

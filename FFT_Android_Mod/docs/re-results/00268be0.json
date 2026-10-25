@@ -1,0 +1,20 @@
+{
+  "address": "00268be0",
+  "name": "wldcenter_set(_POINT*, SVECTOR*)",
+  "size": 148,
+  "previous_status": "mentioned_unverified",
+  "status": "needs_review",
+  "coverage_pct": 94.59,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "268aec",
+    "268b9c",
+    "29ff5c"
+  ],
+  "log": "=== jtable.py: 0x268be0..0x268c74 (148 bytes) ===\ncoverage: 35 of ~37 instruction slots (95%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x268aec x1   wldcenter_chk(_POINT*) \n  0x268b9c x1   wldcenter_calc(SVECTOR*, VECTOR*) \n  0x29ff5c x1   PSX_csqrt \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

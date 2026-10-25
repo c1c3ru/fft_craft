@@ -1,0 +1,18 @@
+{
+  "address": "00273ea0",
+  "name": "SetBestMoveAnywhereOK()",
+  "size": 172,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 97.67,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "276788",
+    "277f1c"
+  ],
+  "log": "=== jtable.py: 0x273ea0..0x273f4c (172 bytes) ===\ncoverage: 42 of ~43 instruction slots (98%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x276788 x2   CheckUnitActionOK(unsigned char*) \n  0x277f1c x2   SetBestMove() \n\n-- branches: 8 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

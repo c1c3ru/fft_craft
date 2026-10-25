@@ -1,0 +1,17 @@
+{
+  "address": "00094bfc",
+  "name": "_vp_psy_clear",
+  "size": 216,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "714dc"
+  ],
+  "log": "=== jtable.py: 0x94bfc..0x94cd4 (216 bytes) ===\ncoverage: 54 of ~54 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x714dc x10  sub_714dc LOCAL(no-dynsym)\n\n-- branches: 9 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

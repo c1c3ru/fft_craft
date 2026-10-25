@@ -1,0 +1,20 @@
+{
+  "address": "0021669c",
+  "name": "fadeMusic(int, int)",
+  "size": 164,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 95.12,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "20f94c",
+    "271414",
+    "2b2404",
+    "2ca79c"
+  ],
+  "log": "=== jtable.py: 0x21669c..0x216740 (164 bytes) ===\ncoverage: 39 of ~41 instruction slots (95%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x20f94c x1   iOS_GetFrameRate() \n  0x271414 x1   Ssd_SetSeqMasterVolume(SsdSeqRec*, short, short) \n  0x2b2404 x2   Music_SetVol(int, int) \n  0x2ca79c x1   __divsi3 \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

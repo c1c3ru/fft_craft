@@ -1,0 +1,20 @@
+{
+  "address": "0027efec",
+  "name": "iOS_CMenuTouchSaveLoad::init(int, int, int, int, int, int, int, int)",
+  "size": 184,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "27df0c",
+    "27dffc",
+    "27e470",
+    "27efe4"
+  ],
+  "log": "=== jtable.py: 0x27efec..0x27f0a4 (184 bytes) ===\ncoverage: 46 of ~46 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x27df0c x1   iOS_CMenuTouchSaveLoad::calcTapArea() \n  0x27dffc x1   iOS_CMenuTouchSaveLoad::initPacket() \n  0x27e470 x1   iOS_CMenuTouchSaveLoad::setMenuAssistPosition(int) \n  0x27efe4 x1   iOS_CMenuTouchSaveLoad::setMode(IOS_MENU_TOUCH_SAVELOAD_MODE) \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

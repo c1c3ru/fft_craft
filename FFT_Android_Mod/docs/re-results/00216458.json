@@ -1,0 +1,23 @@
+{
+  "address": "00216458",
+  "name": "disposeMusic(int)",
+  "size": 156,
+  "previous_status": "mentioned_unverified",
+  "status": "needs_review",
+  "coverage_pct": 94.87,
+  "distinct_bl": 6,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "20c6e4",
+    "271304",
+    "28c2e8",
+    "28c320",
+    "28c590",
+    "2b2378"
+  ],
+  "log": "=== jtable.py: 0x216458..0x2164f4 (156 bytes) ===\ncoverage: 37 of ~39 instruction slots (95%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x20c6e4 x1   freeForSound(void*) \n  0x271304 x1   Ssd_DisposeMusic(SsdSeqRec*) \n  0x28c2e8 x1   CFFT_STATE::SetMusicBuffer(int, int) \n  0x28c320 x1   CFFT_STATE::GetParam(int) \n  0x28c590 x1   CFFT_STATE::SetParam(int, int) \n  0x2b2378 x1   Music_Stop() \n\n-- branches: 3 total, 1 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

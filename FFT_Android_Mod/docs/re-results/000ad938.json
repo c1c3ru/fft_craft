@@ -1,0 +1,22 @@
+{
+  "address": "000ad938",
+  "name": "CEGL2_SPRITE::Unload(int)",
+  "size": 196,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 6,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2cdf7c",
+    "2cdf9c",
+    "7177c",
+    "a1d3c",
+    "ad8c4",
+    "ad8e0"
+  ],
+  "log": "=== jtable.py: 0xad938..0xad9fc (196 bytes) ===\ncoverage: 49 of ~49 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x7177c x1   sub_7177c LOCAL(no-dynsym)\n  0xa1d3c x1   CG2D_LOADER::~CG2D_LOADER() \n  0xad8c4 x1   CEGL2_SPRITE::SetScale(float, float) \n  0xad8e0 x1   CEGL2_SPRITE::SetColor(unsigned char, unsigned char, unsigned char) \n  0x2cdf7c x1   sub_2cdf7c LOCAL(no-dynsym)\n  0x2cdf9c x1   sub_2cdf9c LOCAL(no-dynsym)\n\n-- branches: 6 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

@@ -1,0 +1,17 @@
+{
+  "address": "00279b70",
+  "name": "CheckAbilityGet(int, int, int)",
+  "size": 196,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 97.96,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "187618"
+  ],
+  "log": "=== jtable.py: 0x279b70..0x279c34 (196 bytes) ===\ncoverage: 48 of ~49 instruction slots (98%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x187618 x1   GetLocalJobNumber(short) \n\n-- branches: 5 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

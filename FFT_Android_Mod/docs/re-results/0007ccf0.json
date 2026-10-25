@@ -1,0 +1,18 @@
+{
+  "address": "0007ccf0",
+  "name": "inflateSetDictionary",
+  "size": 172,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "736ac",
+    "7ade4"
+  ],
+  "log": "=== jtable.py: 0x7ccf0..0x7cd9c (172 bytes) ===\ncoverage: 43 of ~43 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x736ac x2   adler32 \n  0x7ade4 x1   sub_7ade4 LOCAL(no-dynsym)\n\n-- branches: 7 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
