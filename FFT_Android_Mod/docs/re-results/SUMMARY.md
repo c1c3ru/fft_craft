@@ -2,8 +2,8 @@
 
 Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Analyzed in current binary: 739
-Automatically triaged: 116,616 bytes / 1,837,392 inventory bytes (6.35%); **this is newly triaged coverage, not total project coverage**.
+Analyzed in current binary: 836
+Automatically triaged: 122,284 bytes / 1,837,392 inventory bytes (6.66%); **this is newly triaged coverage, not total project coverage**.
 
 | Address | Function | Size (B) | Coverage | Status |
 |---|---|---:|---:|---|
@@ -744,5 +744,102 @@ Automatically triaged: 116,616 bytes / 1,837,392 inventory bytes (6.35%); **this
 | `0020c550` | db_swap_generate(unsigned long*, unsigned long*) | 124 | 90.32% | needs_review |
 | `00210d9c` | NewEntry(int, int, int, short, short, short, short, BWORK*, int) | 124 | 96.77% | auto_structural |
 | `0024a544` | vOpn_add_winpac(unsigned long*, int*) | 124 | 93.55% | needs_review |
+| `0024a9e4` | vOpnwin_trans(int, unsigned long*) | 124 | 96.77% | auto_structural |
+| `002665d8` | add_anmpac(unsigned long*, int*) | 124 | 93.55% | needs_review |
 | `00279eec` | SetTrapPanel(int, int, int) | 124 | 96.77% | auto_structural |
+| `0028bec0` | TE_VSync(int) | 124 | 90.32% | needs_review |
 | `0029a89c` | SetDefDrawEnv | 124 | 100.0% | auto_structural |
+| `002b2798` | SE_CorrectFID(int) | 124 | 93.55% | needs_review |
+| `002b2a18` | SE_StopVFX(int) | 124 | 90.32% | needs_review |
+| `002b36dc` | Error_FrameRender() | 124 | 90.32% | needs_review |
+| `002cb4bc` | __aeabi_l2f | 124 | 100.0% | auto_structural |
+| `000d7e00` | load_replaceitems(int, int) | 120 | 56.67% | needs_review |
+| `000dcc2c` | wait_direc(int) | 120 | 93.33% | needs_review |
+| `000ff9ec` | Wload_replaceitems(int, int) | 120 | 56.67% | needs_review |
+| `0015d2ac` | iOS_GameAreaCheck() | 120 | 83.33% | needs_review |
+| `001789e0` | iOS_addPrim_graphic(tagPOLY_FT4*, short) | 120 | 96.67% | auto_structural |
+| `001a47e0` | pspAbilityCompareSupport(short, short) | 120 | 90.0% | needs_review |
+| `001a92f8` | ItemCheck() | 120 | 96.67% | auto_structural |
+| `001ab104` | IsUntauchable(int) | 120 | 96.67% | auto_structural |
+| `001adcec` | iOS_addPrim_window_graphics_unitlist(tagPOLY_FT4*, short) | 120 | 96.67% | auto_structural |
+| `001d9ee0` | copy_entry_coord(BWORK*, EDATA*) | 120 | 100.0% | auto_structural |
+| `001e4e94` | get_step_no(BWORK*) | 120 | 93.33% | needs_review |
+| `001fd200` | setTurnOrder() | 120 | 96.67% | auto_structural |
+| `0021e760` | doSequence(short) | 120 | 90.0% | needs_review |
+| `00245aa8` | o_GetCardEvent() | 120 | 96.67% | auto_structural |
+| `00245b78` | o_GetCardEvent_X() | 120 | 96.67% | auto_structural |
+| `0024a4cc` | vOpn_add_anmpac(unsigned long*, int*) | 120 | 93.33% | needs_review |
+| `0028441c` | Clear_VectorDataBaseContainer(VECTOR_DATABASE_CONTAINER*) | 120 | 100.0% | auto_structural |
+| `002918ec` | SetTexWindow | 120 | 100.0% | auto_structural |
+| `002b1458` | Project_Core_Bootup() | 120 | 96.67% | auto_structural |
+| `002c5434` | Movie_FrameRender() | 120 | 90.0% | needs_review |
+| `00077524` | gzerror | 116 | 93.1% | needs_review |
+| `00081660` | unzGoToFilePos64 | 116 | 100.0% | auto_structural |
+| `000c81c4` | tool_squareinit() | 116 | 89.66% | needs_review |
+| `000d8c00` | checkkeyok() | 116 | 89.66% | needs_review |
+| `000e2b04` | statusnowprint(char*, COPYFIELD*) | 116 | 93.1% | needs_review |
+| `000ff43c` | Wallocatememoryinit() | 116 | 93.1% | needs_review |
+| `001b7ef4` | TruePadRead(int) | 116 | 93.1% | needs_review |
+| `001cd058` | adjust_input_flag(BWORK*) | 116 | 100.0% | auto_structural |
+| `001d43f4` | check_unit_active(BWORK*) | 116 | 100.0% | auto_structural |
+| `001fd168` | setActivePanelFromAction(tag_animation*) | 116 | 89.66% | needs_review |
+| `00201708` | setActionStartDirection(tag_animation*) | 116 | 93.1% | needs_review |
+| `002042c8` | startTurnRelative(int) | 116 | 89.66% | needs_review |
+| `0021cc10` | s1e_ifMetascheduleEnd(_EffectTCB*) | 116 | 93.1% | needs_review |
+| `002492b8` | vEnd_init() | 116 | 96.55% | auto_structural |
+| `0024fd00` | pspCtltutonet_active(CTLINFO*) | 116 | 93.1% | needs_review |
+| `0025b878` | houkokumes_select(int, int) | 116 | 100.0% | auto_structural |
+| `0025d590` | directedit_chk() | 116 | 96.55% | auto_structural |
+| `002816bc` | iOS_v2menuSetEnable(V2_MENU_ITEM, int) | 116 | 93.1% | needs_review |
+| `002cabdc` | __aeabi_ul2d | 116 | 75.86% | needs_review |
+| `002cb830` | __gtsf2 | 116 | 89.66% | needs_review |
+| `00080a4c` | unzGoToFirstFile | 112 | 100.0% | auto_structural |
+| `00097a48` | res1_forward | 112 | 100.0% | auto_structural |
+| `000d7880` | allocatememoryinit() | 112 | 92.86% | needs_review |
+| `000daa50` | checktaskkind(int) | 112 | 92.86% | needs_review |
+| `000db77c` | write_eventflag(int, int) | 112 | 92.86% | needs_review |
+| `000e05bc` | addlocalprim2(tagPOLY_FT4*) | 112 | 96.43% | auto_structural |
+| `000feeb4` | Wdisposewindowbytask(int) | 112 | 92.86% | needs_review |
+| `001026c4` | Wchecktaskkind(int) | 112 | 92.86% | needs_review |
+| `00103340` | Wwrite_eventflag(int, int) | 112 | 92.86% | needs_review |
+| `0010e0e4` | Waddlocalprim2(tagPOLY_FT4*) | 112 | 96.43% | auto_structural |
+| `0015bfac` | iOSTchInputCheckCur() | 112 | 96.43% | auto_structural |
+| `001d1f8c` | check_charge(BWORK*, int) | 112 | 96.43% | auto_structural |
+| `001d2324` | get_mapitem(BWORK*) | 112 | 96.43% | auto_structural |
+| `001eb0b4` | raiseAnimationPriority(int) | 112 | 96.43% | auto_structural |
+| `001ed68c` | getTargetAnimationHight(tag_animation*, SVECTOR*) | 112 | 100.0% | auto_structural |
+| `00241938` | fftCdRead2(CDREC*, int, int, int, unsigned long*) | 112 | 96.43% | auto_structural |
+| `002419d4` | vOpn_arzmes_init(int, int, unsigned long*) | 112 | 96.43% | auto_structural |
+| `00254100` | wldctl_init() | 112 | 82.14% | needs_review |
+| `0026030c` | ctlmouke_exit(CTLINFO*) | 112 | 82.14% | needs_review |
+| `00270490` | curhis_put(int, int, int) | 112 | 92.86% | needs_review |
+| `002727fc` | StayAtSafePanel() | 112 | 96.43% | auto_structural |
+| `0028d088` | tlSetHeap(void*) | 112 | 85.71% | needs_review |
+| `0028e25c` | OpenEvent(unsigned long, long, long, long (*)()) | 112 | 92.86% | needs_review |
+| `002a1798` | gteMIMefunc | 112 | 100.0% | auto_structural |
+| `002a23bc` | RotColorDpq3_nom | 112 | 96.43% | auto_structural |
+| `00096f20` | res1_inverse | 108 | 96.3% | auto_structural |
+| `000d6eac` | iOS_initsprt_num(tagSPRT*, int) | 108 | 100.0% | auto_structural |
+| `000d8778` | import_localstatus(char*, char*, char*, char*) | 108 | 92.59% | needs_review |
+| `000d9a14` | seekfacefile(int) | 108 | 96.3% | auto_structural |
+| `000fe9d0` | WiOS_initsprt_num(tagSPRT*, int) | 108 | 100.0% | auto_structural |
+| `00101914` | Wseekfacefile(int) | 108 | 96.3% | auto_structural |
+| `0015d858` | iOSCurSameOKMove() | 108 | 92.59% | needs_review |
+| `001a9370` | GetTotalItemBackup(short) | 108 | 92.59% | needs_review |
+| `001b6e60` | GetCharAdr(unsigned char*, int) | 108 | 100.0% | auto_structural |
+| `001d1d20` | appare_unit_f(int) | 108 | 96.3% | auto_structural |
+| `0020c930` | freeForFile(void*) | 108 | 92.59% | needs_review |
+| `0020f164` | setEventClut(int, int, int) | 108 | 96.3% | auto_structural |
+| `0020f2e4` | eventEffectCall(int, int, SVECTOR*) | 108 | 100.0% | auto_structural |
+| `002151e8` | resetClutData(unsigned int, unsigned int, int) | 108 | 92.59% | needs_review |
+| `00215950` | loadAnbient() | 108 | 96.3% | auto_structural |
+| `002159bc` | loadFlatColor() | 108 | 96.3% | auto_structural |
+| `0021bf70` | s19_ifChildTaskEQU(_EffectTCB*) | 108 | 100.0% | auto_structural |
+| `00245c0c` | o_GetCardState() | 108 | 88.89% | needs_review |
+| `00249c58` | vOpn_bk_load(int, unsigned long*) | 108 | 88.89% | needs_review |
+| `00259324` | evt_get_date(int*, int*, int*, int*) | 108 | 96.3% | auto_structural |
+| `0025c6d8` | shogou_mesput(CTLINFO*) | 108 | 100.0% | auto_structural |
+| `0026a504` | snpl_jparasmall() | 108 | 96.3% | auto_structural |
+| `00281730` | iOS_v2menuGetEnable(V2_MENU_ITEM) | 108 | 92.59% | needs_review |
+| `00282648` | wgte_color_set_vec(MATRIX const*, int, SVECTOR const*) | 108 | 100.0% | auto_structural |
+| `002ab960` | sceGuGetMemory_for_iOS | 108 | 96.3% | auto_structural |

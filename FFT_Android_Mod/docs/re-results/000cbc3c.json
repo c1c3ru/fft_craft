@@ -15,6 +15,7 @@
     "cbc28"
   ],
   "log": "=== jtable.py: 0xcbc3c..0xcbd50 (276 bytes) ===\ncoverage: 65 of ~69 instruction slots (94%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0xcbc28 x2   TrapWindow_Taskchk(int) \n  0x1532c0 x1   task_create(long, char*) \n  0x153470 x2   send_taskparamater(long, long, long, long) \n  0x159924 x2   asmTaskEntry() \n\n-- branches: 6 total, 2 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

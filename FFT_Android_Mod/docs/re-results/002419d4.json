@@ -1,0 +1,17 @@
+{
+  "address": "002419d4",
+  "name": "vOpn_arzmes_init(int, int, unsigned long*)",
+  "size": 112,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 96.43,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2b9cac"
+  ],
+  "log": "=== jtable.py: 0x2419d4..0x241a44 (112 bytes) ===\ncoverage: 27 of ~28 instruction slots (96%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x2b9cac x4   iOS_setV2Icon(V2ICON_DATA, int) \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

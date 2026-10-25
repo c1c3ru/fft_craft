@@ -14,6 +14,7 @@
     "1dc914"
   ],
   "log": "=== jtable.py: 0x1dc944..0x1dca54 (272 bytes) ===\ncoverage: 58 of ~68 instruction slots (85%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0x1dc95c, dispatch @0x1dc960: 9 cases, 6 distinct handlers\n    targets: ['0x1dc994', '0x1dc99c', '0x1dc99c', '0x1dc99c', '0x1dc99c', '0x1dca0c', '0x1dca18', '0x1dca24', '0x1dca38']\n\n-- bl targets: 3 distinct --\n  0x1cd548 x1   _changeAnimationStatus_(int, int, int) \n  0x1dc408 x2   set_temp_status(BWORK*, int, unsigned char, int) \n  0x1dc914 x1   set_cco_SD(BWORK*) \n\n-- branches: 8 total, 5 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

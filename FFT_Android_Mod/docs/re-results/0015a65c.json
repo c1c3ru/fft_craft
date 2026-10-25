@@ -12,6 +12,7 @@
     "15a60c"
   ],
   "log": "=== jtable.py: 0x15a65c..0x15a72c (208 bytes) ===\ncoverage: 41 of ~52 instruction slots (79%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0x15a670, dispatch @0x15a674: 10 cases, 9 distinct handlers\n    targets: ['0x15a6b4', '0x15a6c4', '0x15a724', '0x15a6d4', '0x15a6e4', '0x15a6f4', '0x15a724', '0x15a704', '0x15a714', '0x15a6a4']\n\n-- bl targets: 1 distinct --\n  0x15a60c x1   siOS_TCurPosGet(unsigned int, int) \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

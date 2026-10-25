@@ -19,6 +19,7 @@
     "2b7a8c"
   ],
   "log": "=== jtable.py: 0x25b8ec..0x25b9f4 (264 bytes) ===\ncoverage: 61 of ~66 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 8 distinct --\n  0x103340 x1   Wwrite_eventflag(int, int) \n  0x153584 x1   Wtask_create(long, char*) \n  0x153714 x1   Wtask_status(long) \n  0x153734 x1   Wsend_taskparamater(long, long, long, long) \n  0x155c78 x1   ret_adventurestatus() \n  0x15813c x1   unittoface(int) \n  0x25b878 x1   houkokumes_select(int, int) \n  0x2b7a8c x1   iOS_getTouchTap() \n\n-- branches: 6 total, 3 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

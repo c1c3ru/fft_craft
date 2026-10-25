@@ -12,6 +12,7 @@
     "2ca878"
   ],
   "log": "=== jtable.py: 0x100df8..0x100ec0 (200 bytes) ===\ncoverage: 46 of ~50 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x2ca878 x1   __aeabi_idivmod \n\n-- branches: 7 total, 3 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

@@ -14,6 +14,7 @@
     "1bab64"
   ],
   "log": "=== jtable.py: 0x1bab78..0x1bac48 (208 bytes) ===\ncoverage: 46 of ~52 instruction slots (88%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x153714 x1   Wtask_status(long) \n  0x1b7ef4 x1   TruePadRead(int) \n  0x1bab64 x1   GetSttsAMovingTime() \n\n-- branches: 9 total, 5 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

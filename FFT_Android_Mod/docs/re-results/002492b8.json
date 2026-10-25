@@ -1,0 +1,24 @@
+{
+  "address": "002492b8",
+  "name": "vEnd_init()",
+  "size": 116,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 96.55,
+  "distinct_bl": 8,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "216820",
+    "242450",
+    "248e6c",
+    "249174",
+    "249ec4",
+    "249f94",
+    "290dc0",
+    "29128c"
+  ],
+  "log": "=== jtable.py: 0x2492b8..0x24932c (116 bytes) ===\ncoverage: 28 of ~29 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 8 distinct --\n  0x216820 x1   initializeMusicBuffer() \n  0x242450 x1   vEnd_ctlinit() \n  0x248e6c x1   vOpn_scrinit(int) \n  0x249174 x1   vOpn_parainit() \n  0x249ec4 x1   vEnd_dataload() \n  0x249f94 x1   vOpn_pacinit() \n  0x290dc0 x1   DrawSync \n  0x29128c x1   MoveImage \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

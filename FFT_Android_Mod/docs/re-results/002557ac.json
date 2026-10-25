@@ -15,6 +15,7 @@
     "2b9cac"
   ],
   "log": "=== jtable.py: 0x2557ac..0x2558b8 (268 bytes) ===\ncoverage: 57 of ~67 instruction slots (85%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x153714 x1   Wtask_status(long) \n  0x253a10 x1   wldctl_active() \n  0x255758 x1   iOSHelpCheck() \n  0x2b9cac x1   iOS_setV2Icon(V2ICON_DATA, int) \n\n-- branches: 6 total, 3 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

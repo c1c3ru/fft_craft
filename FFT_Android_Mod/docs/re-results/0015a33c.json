@@ -12,6 +12,7 @@
     "15a328"
   ],
   "log": "=== jtable.py: 0x15a33c..0x15a41c (224 bytes) ===\ncoverage: 43 of ~56 instruction slots (77%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x15a328 x1   iOSsTchBtlFlagSet(int) \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }
