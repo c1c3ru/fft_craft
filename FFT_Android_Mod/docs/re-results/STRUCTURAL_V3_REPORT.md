@@ -4,13 +4,13 @@ Automatic structural acceptance checks all ARM instruction slots, candidate PC-r
 
 | Metric | Count |
 |---|---:|
-| v3 checkpoints | 298 |
-| Legacy checkpoint records unchanged | 2704 |
-| v3 structurally accepted | 273 |
-| v3 still under review | 25 |
-| Archived v2 originals | 296 |
-| Referenced candidate literal words | 1481 |
-| Unexplained instruction slots | 372 |
+| v3 checkpoints | 396 |
+| Legacy checkpoint records unchanged | 2606 |
+| v3 structurally accepted | 369 |
+| v3 still under review | 27 |
+| Archived v2 originals | 392 |
+| Referenced candidate literal words | 1708 |
+| Unexplained instruction slots | 382 |
 | Independently checked jump tables | 0 |
 | Unsafe / unresolved checked tables | 21 |
 
@@ -41,8 +41,10 @@ Automatic structural acceptance checks all ARM instruction slots, candidate PC-r
 | `002b20f4` | 20 | unverified_jump_table |
 | `002b3464` | 0 | instruction_conflict |
 | `002c9b11` | 0 | non_arm_aligned_or_empty |
+| `002cabdc` | 7 | unexplained_code_slots |
 | `002cb0c0` | 3 | unexplained_code_slots |
 | `002cb4ac` | 6 | unexplained_code_slots |
+| `002cb830` | 3 | unexplained_code_slots |
 
 ## Migration contract
 

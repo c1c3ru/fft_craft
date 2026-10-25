@@ -1,0 +1,18 @@
+{
+  "address": "000e2b78",
+  "name": "statuskanjiprint(int, char*, COPYFIELD*)",
+  "size": 80,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 90.0,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "159aac"
+  ],
+  "log": "=== jtable.py: 0xe2b78..0xe2bc8 (80 bytes) ===\ncoverage: 18 of ~20 instruction slots (90%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x159aac x1   asm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long) \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
