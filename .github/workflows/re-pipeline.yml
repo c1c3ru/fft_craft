@@ -107,6 +107,17 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_branch_microexec.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_guarded_block.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_two_guards.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_entry_prefix.py
+          python3 - <<'PY'
+          from pathlib import Path
+          report = Path("FFT_Android_Mod/docs/re-results/SEMANTIC_ENTRY_PREFIX.md").read_text()
+          assert "Function-entry bounded micro-executions: 1024/1024 PASS" in report
+          assert all(marker in report for marker in (
+              "0x347d58", "0x3479b0", "0x3479cc",
+              "Early BNE", "BLE exit", "State transition",
+              "not a whole-function test"))
+          print("PASS: 1024 real ELF prologue-to-state-transition machine tests")
+          PY
           python3 - <<'PY'
           from pathlib import Path
           report = Path("FFT_Android_Mod/docs/re-results/SEMANTIC_TWO_GUARDS.md").read_text()
