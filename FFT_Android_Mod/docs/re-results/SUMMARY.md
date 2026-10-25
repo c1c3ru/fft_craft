@@ -2,8 +2,8 @@
 
 Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Analyzed in current binary: 2976
-Automatically triaged: 175,880 bytes / 1,837,392 inventory bytes (9.57%); **this is newly triaged coverage, not total project coverage**.
+Analyzed in current binary: 3002
+Automatically triaged: 175,984 bytes / 1,837,392 inventory bytes (9.58%); **this is newly triaged coverage, not total project coverage**.
 
 | Address | Function | Size (B) | Coverage | Status |
 |---|---|---:|---:|---|
@@ -2733,10 +2733,22 @@ Automatically triaged: 175,880 bytes / 1,837,392 inventory bytes (9.57%); **this
 | `00082ca8` | oggpackB_adv | 4 | 100.0% | auto_structural |
 | `00082cdc` | oggpackB_adv1 | 4 | 100.0% | auto_structural |
 | `00083004` | oggpackB_bytes | 4 | 100.0% | auto_structural |
+| `00083008` | oggpackB_bits | 4 | 100.0% | auto_structural |
+| `00083014` | oggpackB_get_buffer | 4 | 100.0% | auto_structural |
+| `000af9bc` | CCAMERA::Uninit() | 4 | 100.0% | auto_structural |
+| `000b5ac8` | CUI_SCROLLBAR::Delete() | 4 | 100.0% | auto_structural |
 | `000b61d4` | CCOMP_Z_DEC::~CCOMP_Z_DEC() | 4 | 100.0% | auto_structural |
+| `000b6200` | CCOMP_Z_DEC::Error(char const*) | 4 | 100.0% | auto_structural |
 | `000b63a0` | CCOMP_Z_ENC::~CCOMP_Z_ENC() | 4 | 100.0% | auto_structural |
+| `000b63cc` | CCOMP_Z_ENC::Error(char const*) | 4 | 100.0% | auto_structural |
+| `000b6580` | CCRYPT::CCRYPT() | 4 | 100.0% | auto_structural |
 | `000b6584` | CCRYPT::~CCRYPT() | 4 | 100.0% | auto_structural |
+| `000b661c` | CCRYPT::Decrypt(unsigned char*, int, unsigned int) | 4 | 100.0% | auto_structural |
+| `000b8bdc` | CSTR_UTIL::CSTR_UTIL() | 4 | 100.0% | auto_structural |
 | `000ba090` | SleepM(unsigned int) | 4 | 100.0% | auto_structural |
+| `000bb834` | CSOUND_IF_SL::FrameMove(int, float) | 4 | 100.0% | auto_structural |
+| `000bcbf0` | CSOUND_LOADER::FrameMove(int, float) | 4 | 100.0% | auto_structural |
+| `000be41c` | CSTEP_BATCH::GetData() | 4 | 100.0% | auto_structural |
 | `000c4418` | Adisp_floateventwindow() | 4 | 100.0% | auto_structural |
 | `000c4498` | attackdebugfunc() | 4 | 100.0% | auto_structural |
 | `000cbd50` | SetTrapNameWindowParam(int, short, int) | 4 | 100.0% | auto_structural |
@@ -2813,10 +2825,12 @@ Automatically triaged: 175,880 bytes / 1,837,392 inventory bytes (9.57%); **this
 | `00215d24` | fadeAnbient(int, CVECTOR*) | 4 | 100.0% | auto_structural |
 | `00215d28` | fadeFlatColor(int, CVECTOR*) | 4 | 100.0% | auto_structural |
 | `00215d5c` | PadStop | 4 | 100.0% | auto_structural |
+| `00215db4` | resetFFT() | 4 | 100.0% | auto_structural |
 | `0021610c` | iOS_rand() | 4 | 100.0% | auto_structural |
 | `00216818` | stopZingle(int) | 4 | 100.0% | auto_structural |
 | `0021681c` | controlZingle() | 4 | 100.0% | auto_structural |
 | `002168e0` | callSystemSound(int) | 4 | 100.0% | auto_structural |
+| `002168e4` | callSoundEffect(int) | 4 | 100.0% | auto_structural |
 | `002168fc` | recallEnvEffect() | 4 | 100.0% | auto_structural |
 | `002169cc` | pauseEnvEffect() | 4 | 100.0% | auto_structural |
 | `0021ebb0` | error(char, long) | 4 | 100.0% | auto_structural |
@@ -2827,6 +2841,10 @@ Automatically triaged: 175,880 bytes / 1,837,392 inventory bytes (9.57%); **this
 | `002419cc` | fftCdLoop(CDREC*) | 4 | 100.0% | auto_structural |
 | `002419d0` | fftCdCancel(CDREC*) | 4 | 100.0% | auto_structural |
 | `00248ccc` | ctlcard_init() | 4 | 100.0% | auto_structural |
+| `00258ac4` | evt_skip0() | 4 | 100.0% | auto_structural |
+| `0025f354` | wld_btlsect_seek() | 4 | 100.0% | auto_structural |
+| `00267f38` | wldrute_init() | 4 | 100.0% | auto_structural |
+| `0026b374` | sound_request(int) | 4 | 100.0% | auto_structural |
 | `0026c058` | iOS_debugDispTownCircle(int, int) | 4 | 100.0% | auto_structural |
 | `0026ff2c` | effectdmy() | 4 | 100.0% | auto_structural |
 | `0027129c` | Ssd_Quit() | 4 | 100.0% | auto_structural |
@@ -2887,6 +2905,8 @@ Automatically triaged: 175,880 bytes / 1,837,392 inventory bytes (9.57%); **this
 | `00281640` | hook_disp_plateorspell(int*) | 4 | 100.0% | auto_structural |
 | `00281644` | hook_code_soundeffect(int) | 4 | 100.0% | auto_structural |
 | `00281648` | hook_1284(char*, int) | 4 | 100.0% | auto_structural |
+| `00286124` | SetSpadStack(unsigned long) | 4 | 100.0% | auto_structural |
+| `00286128` | ResetSpadStack() | 4 | 100.0% | auto_structural |
 | `00286744` | rsetmovie_title_flg__Fv() | 4 | 100.0% | auto_structural |
 | `00286748` | setmovie_title_flg__Fv() | 4 | 100.0% | auto_structural |
 | `002869f0` | _pspNetRand(char const*, int) | 4 | 100.0% | auto_structural |
@@ -2953,7 +2973,9 @@ Automatically triaged: 175,880 bytes / 1,837,392 inventory bytes (9.57%); **this
 | `0028cf38` | GetDrawEnv2 | 4 | 100.0% | auto_structural |
 | `0028de70` | _bu_init | 4 | 100.0% | auto_structural |
 | `0028e464` | CdControlB | 4 | 100.0% | auto_structural |
+| `0028e5c0` | VSync | 4 | 100.0% | auto_structural |
 | `00290e90` | FntLoad | 4 | 100.0% | auto_structural |
+| `0029b3ec` | GsInit3D | 4 | 100.0% | auto_structural |
 | `0029b428` | GsGetActiveBuff | 4 | 100.0% | auto_structural |
 | `0029ff94` | SquareRoot12 | 4 | 100.0% | auto_structural |
 | `002a0818` | SetRotMatrix | 4 | 100.0% | auto_structural |
@@ -2965,6 +2987,8 @@ Automatically triaged: 175,880 bytes / 1,837,392 inventory bytes (9.57%); **this
 | `002a143c` | SetBackColor | 4 | 100.0% | auto_structural |
 | `002a2ff4` | InitHeap(unsigned long*, unsigned long) | 4 | 100.0% | auto_structural |
 | `002a3110` | xpMallocSizeGet | 4 | 100.0% | auto_structural |
+| `002a311c` | xpGetHeap | 4 | 100.0% | auto_structural |
+| `002a3134` | xpMoveHeap | 4 | 100.0% | auto_structural |
 | `002ab710` | sceGuClearColor | 4 | 100.0% | auto_structural |
 | `002ab714` | sceGuClear | 4 | 100.0% | auto_structural |
 | `002ab888` | sceGuAlphaFunc | 4 | 100.0% | auto_structural |
@@ -2973,6 +2997,7 @@ Automatically triaged: 175,880 bytes / 1,837,392 inventory bytes (9.57%); **this
 | `002abc88` | sceGuShadeModel | 4 | 100.0% | auto_structural |
 | `002abd1c` | sceGuTexFunc | 4 | 100.0% | auto_structural |
 | `002acb28` | sceGuViewport | 4 | 100.0% | auto_structural |
+| `002b06b0` | CAPP_INFO::Get() | 4 | 100.0% | auto_structural |
 | `002b1f38` | NowLoading_FrameRender() | 4 | 100.0% | auto_structural |
 | `002b3440` | Achievement_Unlock(int) | 4 | 100.0% | auto_structural |
 | `002b36b8` | Boot_Uninit() | 4 | 100.0% | auto_structural |
@@ -2983,3 +3008,4 @@ Automatically triaged: 175,880 bytes / 1,837,392 inventory bytes (9.57%); **this
 | `002b5eb0` | Logo_Resume() | 4 | 100.0% | auto_structural |
 | `002b6bcc` | Main_Resume() | 4 | 100.0% | auto_structural |
 | `002c54ac` | Movie_Uninit() | 4 | 100.0% | auto_structural |
+| `002ccf94` | _Unwind_Complete | 4 | 100.0% | auto_structural |
