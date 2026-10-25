@@ -1,0 +1,103 @@
+name: Automated ARM reverse engineering batches
+
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: 'New functions (100 to 250)'
+        required: false
+        default: '100'
+  schedule:
+    - cron: '17 3 * * *'
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: read
+
+concurrency:
+  group: re-automated-batches
+  cancel-in-progress: false
+
+jobs:
+  analyze-and-merge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install requirements and unit test
+        run: |
+          python3 -m pip install capstone pyelftools
+          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_*.py' -v
+      - name: Restore initial batch checkpoints
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p FFT_Android_Mod/docs/re-results
+          if ! compgen -G 'FFT_Android_Mod/docs/re-results/*.json' > /dev/null; then
+            gh run download 40148837136 --repo "${GITHUB_REPOSITORY}" \
+              --name reverse-engineering-report \
+              --dir FFT_Android_Mod/docs/re-results
+          fi
+      - name: Validate initial real ELF baseline
+        run: |
+          python3 FFT_Android_Mod/docs/re-tools/check_smoke.py \
+            FFT_Android_Mod/docs/re-results
+      - name: Analyze next bounded batch
+        env:
+          REQUESTED_LIMIT: ${{ inputs.limit }}
+        run: |
+          LIMIT="${REQUESTED_LIMIT:-100}"
+          case "$LIMIT" in
+            ''|*[!0-9]*) echo 'Limit must be numeric'; exit 2;;
+          esac
+          if [ "$LIMIT" -lt 100 ] || [ "$LIMIT" -gt 250 ]; then
+            echo 'Limit must be from 100 to 250'; exit 2
+          fi
+          python3 FFT_Android_Mod/docs/re-tools/parallel_loop.py \
+            --workers 5 --limit "$LIMIT" --timeout 120
+          python3 FFT_Android_Mod/docs/re-tools/check_smoke.py \
+            FFT_Android_Mod/docs/re-results
+      - name: Summarize accepted vs review
+        run: |
+          python3 - <<'PY'
+          import collections, json
+          from pathlib import Path
+          files = list(Path('FFT_Android_Mod/docs/re-results').glob('*.json'))
+          results = [json.loads(p.read_text()) for p in files]
+          statuses = collections.Counter(x['status'] for x in results)
+          print('Total checkpoints:', len(results))
+          print('Status counts:', dict(statuses))
+          if any(x.get('status') == 'error' for x in results):
+              raise SystemExit('Errors in checkpoints: refusing automated merge')
+          PY
+      - name: Create checkpoint PR and merge automatically
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          BRANCH="automation/re-results-${GITHUB_RUN_ID}"
+          git switch -c "$BRANCH"
+          git add FFT_Android_Mod/docs/re-results/
+          if git diff --cached --quiet; then
+            echo 'No checkpoint changes'; exit 0
+          fi
+          git commit -m 'chore(re): persist ARM batch checkpoints [skip ci]'
+          git push origin "$BRANCH"
+          gh pr create --base main --head "$BRANCH" \
+            --title "chore(re): automated structural batch ${GITHUB_RUN_ID}" \
+            --body "Automated, checkpointed ARM binary analysis. Unit tests, real-ELF baseline and error gate passed. JSON status needs_review is retained for human verification; these entries are not treated as approved semantics."
+          gh pr merge "$BRANCH" --squash --auto --delete-branch
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: automated-re-batch
+          path: FFT_Android_Mod/docs/re-results/
+          retention-days: 30
