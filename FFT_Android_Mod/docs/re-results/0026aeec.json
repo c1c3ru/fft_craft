@@ -1,0 +1,21 @@
+{
+  "address": "0026aeec",
+  "name": "snpl_mreqcore(int)",
+  "size": 172,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 95.35,
+  "distinct_bl": 5,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "216154",
+    "216274",
+    "216458",
+    "2164f4",
+    "28e5c0"
+  ],
+  "log": "=== jtable.py: 0x26aeec..0x26af98 (172 bytes) ===\ncoverage: 41 of ~43 instruction slots (95%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 5 distinct --\n  0x216154 x1   loadMusicBuffer(int, int) \n  0x216274 x1   checkLoadMusic() \n  0x216458 x1   disposeMusic(int) \n  0x2164f4 x1   inactivateMusic() \n  0x28e5c0 x2   VSync \n\n-- branches: 6 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

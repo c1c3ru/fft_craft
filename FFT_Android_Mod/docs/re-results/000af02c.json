@@ -1,0 +1,19 @@
+{
+  "address": "000af02c",
+  "name": "CEGL2_TEX_HYBRID::CEGL2_TEX_HYBRID()",
+  "size": 172,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "aec18",
+    "aef38",
+    "af008"
+  ],
+  "log": "=== jtable.py: 0xaf02c..0xaf0d8 (172 bytes) ===\ncoverage: 43 of ~43 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0xaec18 x1   CEGL2_SPRITE::CEGL2_SPRITE() \n  0xaef38 x1   CEGL2_TEX_HYBRID::UV_UnregistAll() \n  0xaf008 x1   CEGL2_TEX_HYBRID::CLUTAddr_UnregistAll() \n\n-- branches: 4 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

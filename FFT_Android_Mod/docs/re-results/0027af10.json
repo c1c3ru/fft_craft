@@ -1,0 +1,18 @@
+{
+  "address": "0027af10",
+  "name": "GetCountToNextTurn(BWORK*)",
+  "size": 204,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 98.04,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2ca79c",
+    "2ca878"
+  ],
+  "log": "=== jtable.py: 0x27af10..0x27afdc (204 bytes) ===\ncoverage: 50 of ~51 instruction slots (98%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x2ca79c x1   __divsi3 \n  0x2ca878 x1   __aeabi_idivmod \n\n-- branches: 6 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

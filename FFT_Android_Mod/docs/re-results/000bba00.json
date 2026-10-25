@@ -1,0 +1,22 @@
+{
+  "address": "000bba00",
+  "name": "CSOUND_IF_SL::SetVolume(int, int)",
+  "size": 156,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 6,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2cb2f0",
+    "2cb48c",
+    "2cb538",
+    "2cb6d0",
+    "2cb8f0",
+    "2cb92c"
+  ],
+  "log": "=== jtable.py: 0xbba00..0xbba9c (156 bytes) ===\ncoverage: 39 of ~39 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x2cb2f0 x1   __subsf3 \n  0x2cb48c x1   __floatsisf \n  0x2cb538 x2   __mulsf3 \n  0x2cb6d0 x1   __divsf3 \n  0x2cb8f0 x1   __aeabi_fcmple \n  0x2cb92c x1   __fixsfsi \n\n-- branches: 4 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

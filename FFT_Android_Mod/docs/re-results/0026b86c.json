@@ -1,0 +1,17 @@
+{
+  "address": "0026b86c",
+  "name": "wldsymbol_draw()",
+  "size": 152,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 97.37,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2a2620"
+  ],
+  "log": "=== jtable.py: 0x26b86c..0x26b904 (152 bytes) ===\ncoverage: 37 of ~38 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x2a2620 x1   RotTrans \n\n-- branches: 2 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
