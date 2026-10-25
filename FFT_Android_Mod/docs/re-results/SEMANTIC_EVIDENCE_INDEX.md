@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **608/1258** pending functions.
+Evidence collected: **616/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -619,3 +619,11 @@ These reports do not constitute semantic verification.
 | `0020d808` | popMapAngle() | [Evidence](semantic-evidence/0020d808.md) |
 | `0020da48` | pushBackColor() | [Evidence](semantic-evidence/0020da48.md) |
 | `0020eddc` | inactivateEventAnimation(int) | [Evidence](semantic-evidence/0020eddc.md) |
+| `0020f574` | getMapXYZ(SVECTOR*) | [Evidence](semantic-evidence/0020f574.md) |
+| `002119c0` | PushChangePalette() | [Evidence](semantic-evidence/002119c0.md) |
+| `002119f4` | PopChangePalette() | [Evidence](semantic-evidence/002119f4.md) |
+| `0021b474` | GetMSQFrameRate(_EffectTCB*) | [Evidence](semantic-evidence/0021b474.md) |
+| `00228e64` | startShape() | [Evidence](semantic-evidence/00228e64.md) |
+| `00243014` | fRoll_exit(short*) | [Evidence](semantic-evidence/00243014.md) |
+| `00245a74` | o_ClearCardEvent() | [Evidence](semantic-evidence/00245a74.md) |
+| `00245b34` | o_ClearCardEvent_X() | [Evidence](semantic-evidence/00245b34.md) |
