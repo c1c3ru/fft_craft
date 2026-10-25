@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1160/1258** pending functions.
+Evidence collected: **1168/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1171,3 +1171,11 @@ These reports do not constitute semantic verification.
 | `0026a120` | snpl_rndjp() | [Evidence](semantic-evidence/0026a120.md) |
 | `00159924` | asmTaskEntry() | [Evidence](semantic-evidence/00159924.md) |
 | `0025da0c` | wldkey_repinit() | [Evidence](semantic-evidence/0025da0c.md) |
+| `00269bc0` | snpl_timeset() | [Evidence](semantic-evidence/00269bc0.md) |
+| `00276c28` | CheckCrystalAndTresureBox() | [Evidence](semantic-evidence/00276c28.md) |
+| `00269ec8` | snpl_mesput() | [Evidence](semantic-evidence/00269ec8.md) |
+| `001e6938` | setskilldata(ACT*) | [Evidence](semantic-evidence/001e6938.md) |
+| `00269aa0` | snpl_chgpara() | [Evidence](semantic-evidence/00269aa0.md) |
+| `0026b5e4` | ssd_request(int, int) | [Evidence](semantic-evidence/0026b5e4.md) |
+| `002cba30` | __fixunsdfdi | [Evidence](semantic-evidence/002cba30.md) |
+| `002775dc` | JudgeMovable(int) | [Evidence](semantic-evidence/002775dc.md) |
