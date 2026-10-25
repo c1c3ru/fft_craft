@@ -99,6 +99,15 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_microexec.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_branch_microexec.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_guarded_block.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_two_guards.py
+          python3 - <<'PY'
+          from pathlib import Path
+          report = Path("FFT_Android_Mod/docs/re-results/SEMANTIC_TWO_GUARDS.md").read_text()
+          assert "Two-guard machine executions: 256/256 PASS" in report
+          assert "Early BNE" in report and "BLE" in report and "Fallthrough" in report
+          assert "semantic equivalence" in report and "mid-function" in report
+          print("PASS: two ARM guards and global state writes from original ELF")
+          PY
           python3 - <<'PY'
           from pathlib import Path
           report = Path("FFT_Android_Mod/docs/re-results/SEMANTIC_GUARDED_BLOCK.md").read_text()
