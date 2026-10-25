@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **728/1258** pending functions.
+Evidence collected: **736/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -739,3 +739,11 @@ These reports do not constitute semantic verification.
 | `00218dcc` | InitCamera() | [Evidence](semantic-evidence/00218dcc.md) |
 | `002231b0` | GetReachableHeight(int) | [Evidence](semantic-evidence/002231b0.md) |
 | `00246360` | ctlstartmov_main(CTLINFO*) | [Evidence](semantic-evidence/00246360.md) |
+| `002494a0` | vOpn_fadeout(int) | [Evidence](semantic-evidence/002494a0.md) |
+| `0024adc4` | endEntry() | [Evidence](semantic-evidence/0024adc4.md) |
+| `00267340` | iOS_add_anmpac_max(int) | [Evidence](semantic-evidence/00267340.md) |
+| `0026a64c` | snplinf_init(int) | [Evidence](semantic-evidence/0026a64c.md) |
+| `002808b8` | iOS_initTransFace() | [Evidence](semantic-evidence/002808b8.md) |
+| `0028b3f0` | pspWorldDataRectSet(RECT16*) | [Evidence](semantic-evidence/0028b3f0.md) |
+| `0028dc30` | SetRCnt | [Evidence](semantic-evidence/0028dc30.md) |
+| `002a1aac` | read_sxsy_fifo3(long*, long*, long*) | [Evidence](semantic-evidence/002a1aac.md) |
