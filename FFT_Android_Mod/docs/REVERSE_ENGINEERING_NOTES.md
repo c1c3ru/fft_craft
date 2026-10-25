@@ -21841,3 +21841,523 @@ as 4 restantes (`__gxx_personality_v0`/`__cxa_call_unexpected`/
 completo o pool `needs_review`** — todos os checkpoints do CI
 (auto_structural + needs_review) estão agora reconciliados no
 `RE_FUNCTION_INVENTORY.csv`.
+## 615. Segundo pool: 500 funções `auto_structural` com cobertura 80-95% (abaixo do corte anterior, mas com 0 tabela pendente) — primeira leva (2026-10-25, Fase 3, nonagésimo quinto lote)
+
+Depois de esgotar os pools `auto_structural≥95%` (§605-613) e
+`needs_review` (§614), restava um terceiro grupo que o filtro
+original deixava de fora por engano: checkpoints com `status:
+auto_structural` mas cobertura abaixo de 95% — 1.049 funções, todas
+com **0 tabela não resolvida** (ou seja, estruturalmente sãs, só com
+cobertura bruta mais baixa por chamada indireta/literal pool, mesma
+causa já vista em casos individuais como `asm_function` antes da
+leitura manual). Primeira leva de 500, mesma rota de agrupamento +
+triagem de novidade dos lotes 91-93.
+
+Composição: **9 famílias confirmadas** (21 funções), achados novos
+destacados abaixo, **164 funções-folha**, resto em tabela.
+
+### 615.1 Famílias confirmadas
+
+- **`Draw_Draw(int)` / `Draw_Lose(int)` / `Draw_Win(int)`** (`0x002875a8`, `0x00287734`, `0x002878b4`) — catálogo de bl idêntico.
+- **`Winitdrmode(DR_MODE*, int)` / `initdrmode(DR_MODE*, int)`** (`0x000e0fb8`, `0x0010fa1c`) — catálogo de bl idêntico.
+- **`Cdisp_eventwaitwindow()` / `Ddisp_eventwaitwindow()` / `Edisp_eventwaitwindow()` / `disp_eventwaitwindow()`** (`0x0012cb3c`, `0x0014bd8c`, `0x000d115c`, `0x00123994`) — catálogo de bl idêntico.
+- **`check_hide_reset(BWORK*)` / `status_handle_main(BWORK*)`** (`0x001cc89c`, `0x001cc950`) — ambas chamam `init_target_result` (A_RESULT*) — par de resets de resultado de alvo, uma pra "esconder"/ocultação, outra pro handler geral de status.
+- **`RequestBowEffect(long, EffectOrder*)` / `RequestLandingEffect(EffectOrder*, VECTOR*)`** (`0x00221028`, `0x00221e84`) — duas requisições de efeito visual que passam por `NewPEffectTCB()` (§614→cluster PermanentEffect) — arco e aterrissagem como dois gatilhos de efeito permanente distintos.
+- **`disp_status2()` / `disp_status2right()`** (`0x000e5708`, `0x000e5680`) — catálogo de bl idêntico.
+- **`Wdisp_status2()` / `Wdisp_status2right()`** (`0x0011c02c`, `0x0011bfa8`) — catálogo de bl idêntico.
+- **`Error_FrameRender()` / `Movie_FrameRender()`** (`0x002b36dc`, `0x002c5434`) — dois dos oito módulos de tela de topo revelados em `onGotoNextMode` (§614) finalmente com seu método `FrameRender` lido: ambos chamam a MESMA sequência `CEGL2_IF::SetScreenSize`/`InitRenderState2D`/`Setup2D` já confirmada como o setup de desenho 2D de `Main_FrameRender` (§34.1) — confirma que todo módulo de tela de topo (Boot/Error/Link/Logo/Main/Movie/Settings/SettingsWnd) reusa o mesmo pipeline `CEGL2_IF` de baixo nível, não implementações de desenho separadas.
+- **`evt_brave_low()` / `evt_faith_low()`** (`0x00259578`, `0x002594e8`) — catálogo de bl idêntico.
+
+### 615.2 Achados genuinamente novos (33 funções)
+
+- **`Wevent_init_memory()`** (`0x00101fe4`, 276 B, 76.81%): chama `iOS_GetFontBuffer()`.
+- **`ctlcenter_main(CTLINFO*)`** (`0x00253a68`, 248 B, 87.1%): chama `wldcenter_move()`.
+- **`iOSsTchBtlEnd()`** (`0x0015a33c`, 224 B, 76.79%): chama `iOSsTchBtlFlagSet(int)`.
+- **`GuEmu_FrameMove()`** (`0x002aca7c`, 172 B, 93.02%): chama `sceGuTexFilter`.
+- **`ctlpremov_init(int, int, int, int, int, char*)`** (`0x00248b70`, 168 B, 88.1%): chama `movie_init(int, int, int, int, int, char*)`.
+- **`NewEffectAnimation(short)`** (`0x00217ebc`, 160 B, 92.5%): chama `NewShape2(unsigned char)`.
+- **`checkScrolling()`** (`0x0020f728`, 160 B, 87.5%): chama `iOSIsCurMode()`.
+- **`task_create(long, char*)`** (`0x001532c0`, 144 B, 94.44%): chama `asmGetGP()`.
+- **`Wtask_create(long, char*)`** (`0x00153584`, 144 B, 94.44%): chama `wasmGetGP()`.
+- **`wasmTaskEntry()`** (`0x00161ef8`, 124 B, 93.55%): chama `tutorial_hookfunc()`.
+- **`ASURA_soundStop()`** (`0x0016a14c`, 124 B, 90.32%): chama `stopEffect(int)`.
+- **`startTurnRelative(int)`** (`0x002042c8`, 116 B, 89.66%): chama `iOSRotAutoSet()`, `startLeftTurn(int)`, `startRightTurn(int)`.
+- **`wldctl_init()`** (`0x00254100`, 112 B, 82.14%): chama `ctlmap_init()`.
+- **`Wmakemessagestructure()`** (`0x0010c79c`, 96 B, 87.5%): chama `iOS_hook_common(char const*, int)`.
+- **`GetItemCategoryPos(int)`** (`0x001ade40`, 96 B, 83.33%): chama `GetItemSmallCategory(short)`, `ItemCategoryPos(int, short*)`.
+- **`uninitTaskEmu()`** (`0x0028b844`, 88 B, 90.91%): chama `sub_71a64`, `sub_71b24`.
+- **`Wmakemessagepacket(char*)`** (`0x00100500`, 80 B, 90.0%): chama `iOS_hook_common(char const*, int)`.
+- **`makemessagepacket(char*)`** (`0x000d8830`, 80 B, 90.0%): chama `iOS_hook_common(char const*, int)`.
+- **`RotNclip3_nom`** (`0x002a257c`, 76 B, 94.74%): chama `RotNclip3`.
+- **`s6_setPersonalProc(_EffectTCB*)`** (`0x0021c22c`, 72 B, 94.44%): chama `GetPlugInFuncAdr(short)`.
+- **`stopEffect(int)`** (`0x00216984`, 72 B, 94.44%): chama `EnvSE_Stop(int)`.
+- **`get_movie_filename(int)`** (`0x0028674c`, 72 B, 77.78%): chama `sub_718cc`.
+- **`TE_task_get_no()`** (`0x0028baf4`, 72 B, 94.44%): chama `sub_71b30`.
+- **`pitchMusic(int, int)`** (`0x00216784`, 68 B, 94.12%): chama `Ssd_SetSeqMasterPitch(SsdSeqRec*, short, short)`.
+- **`panpotMusic(int, int)`** (`0x002167c8`, 68 B, 94.12%): chama `Ssd_SetSeqMasterPanpot(SsdSeqRec*, short, short)`.
+- **`vOpn_pacloop()`** (`0x0024a068`, 68 B, 82.35%): chama `ClearOTagR`.
+- **`effectFadeoutMusic(int, int)`** (`0x00216618`, 68 B, 94.12%): chama `Ssd_SetSeqMasterVolume(SsdSeqRec*, short, short)`.
+- **`tempoMusic(int, int)`** (`0x00216740`, 68 B, 94.12%): chama `Ssd_SetSeqMasterTempo(SsdSeqRec*, short, short)`.
+- **`effectFadeinMusic(int)`** (`0x0021665c`, 64 B, 93.75%): chama `Ssd_SetSeqMasterVolume(SsdSeqRec*, short, short)`.
+- **`GetItemPos(int)`** (`0x001adea0`, 64 B, 87.5%): chama `Witemmenu_uvclut(short*, int)`.
+- **`extend_endornot()`** (`0x000d9eec`, 64 B, 93.75%): chama `sub_d6b20`, `edit_smallpacket()`.
+- **`Wextend_endornot()`** (`0x00101ba8`, 64 B, 93.75%): chama `sub_fe620`, `edit_smallpacket()`.
+- **`STEP_DISP(char const*)`** (`0x0028b6fc`, 60 B, 93.33%): chama `sub_714a0`.
+
+### 615.3 Funções-folha sem chamada externa (164)
+
+| Endereço | Função | Bytes | Cobertura |
+|---|---|---:|---:|
+| `0x001b8c38` | `sort_init()` | 452 | 87.61% |
+| `0x00176b80` | `bChrSort(int)` | 388 | 92.78% |
+| `0x001d2c10` | `get_battlebonus(B_BONUS*)` | 312 | 93.59% |
+| `0x002530b8` | `ctlbrst_zodiac()` | 300 | 93.33% |
+| `0x002702f0` | `scrwin_para_set(int, int, _POINT*, _POINT*)` | 292 | 90.41% |
+| `0x00200bb8` | `eventZoomChange(int)` | 292 | 93.15% |
+| `0x000da35c` | `event_init_memory()` | 288 | 76.39% |
+| `0x00163bb4` | `iOS_initTouchDisable(int)` | 280 | 91.43% |
+| `0x00200e2c` | `eventFukanChange(int)` | 280 | 92.86% |
+| `0x0024971c` | `vOpn_key_rep(unsigned long)` | 280 | 94.29% |
+| `0x00249174` | `vOpn_parainit()` | 260 | 78.46% |
+| `0x001537dc` | `eventflaginit()` | 260 | 81.54% |
+| `0x001bc334` | `GetSttsApos(short)` | 252 | 88.89% |
+| `0x00211b98` | `ExecuteChangePalette()` | 240 | 90.0% |
+| `0x001f35dc` | `EndAnimation(tag_animation*)` | 236 | 94.92% |
+| `0x001eb67c` | `myInitShape()` | 228 | 78.95% |
+| `0x00264378` | `ctlnblwldinfo_init()` | 224 | 78.57% |
+| `0x00187514` | `TimeConvert(int)` | 220 | 89.09% |
+| `0x000fef24` | `Wdisposewindow(MESSAGEPACKET*)` | 216 | 94.44% |
+| `0x002531e4` | `ctltuto_zodiac()` | 212 | 90.57% |
+| `0x00249f94` | `vOpn_pacinit()` | 212 | 86.79% |
+| `0x001a9158` | `IsItem(int)` | 208 | 94.23% |
+| `0x00200f44` | `startFukanChange()` | 196 | 91.84% |
+| `0x00211e50` | `setPresentClutDataAsDefault(unsigned int, unsigned int, int)` | 196 | 93.88% |
+| `0x0021025c` | `InitializePartyItem()` | 196 | 93.88% |
+| `0x00269870` | `snpl_syscur()` | 192 | 89.58% |
+| `0x00261b0c` | `mouke_eventday_chg()` | 188 | 93.62% |
+| `0x000dfa94` | `makemessagestructure()` | 188 | 91.49% |
+| `0x00254f9c` | `ctltownset_init(int, int)` | 184 | 86.96% |
+| `0x0021cf30` | `InitEffect()` | 180 | 86.67% |
+| `0x002699bc` | `snpl_putpara()` | 172 | 83.72% |
+| `0x00261bc8` | `endevent_count(int)` | 160 | 92.5% |
+| `0x0021f328` | `GetPermanentObject()` | 152 | 89.47% |
+| `0x00263254` | `ctlmouketeam_deactive(CTLINFO*)` | 152 | 94.74% |
+| `0x000d7d6c` | `sttsback_blue(STTSWINDOWBACK*)` | 148 | 94.59% |
+| `0x000fe1a4` | `Waddlocalprim(tagPOLY_FT4*)` | 148 | 94.59% |
+| `0x0015d6b4` | `iOSTchCurUnitCheck()` | 148 | 86.49% |
+| `0x000d665c` | `addlocalprim(tagPOLY_FT4*)` | 148 | 94.59% |
+| `0x002b715c` | `setPspDispNum(short, short, short)` | 148 | 89.19% |
+| `0x000d7b24` | `sttsback_normal(STTSWINDOWBACK*)` | 144 | 94.44% |
+| `0x001d6718` | `get_mapstp(int, int, int)` | 144 | 91.67% |
+| `0x00207d6c` | `iOS_mapVectorLimit()` | 144 | 91.67% |
+| `0x00292678` | `__xpLibgpuDrawCallBack(int)` | 144 | 83.33% |
+| `0x000ff95c` | `Wsttsback_blue(STTSWINDOWBACK*)` | 144 | 94.44% |
+| `0x000ff718` | `Wsttsback_normal(STTSWINDOWBACK*)` | 140 | 94.29% |
+| `0x002562fc` | `sthelp_curpos_set(CTLINFO*)` | 140 | 94.29% |
+| `0x00228d40` | `InitPermanentShape()` | 136 | 82.35% |
+| `0x0026dcbc` | `ctltuto_deactive(CTLINFO*)` | 132 | 93.94% |
+| `0x0007d9ac` | `fill_fopen_filefunc` | 132 | 78.79% |
+| `0x0007da30` | `fill_fopen64_filefunc` | 132 | 78.79% |
+| `0x00266654` | `add_winpac(unsigned long*, int*)` | 128 | 93.75% |
+| `0x001bc520` | `scroll_chk()` | 128 | 87.5% |
+| `0x00245610` | `strSetDefDecEnv(DECENV*, int, int, int, int)` | 128 | 90.62% |
+| `0x0024fd74` | `pspCtltutonet_deactive(CTLINFO*)` | 128 | 93.75% |
+| `0x0024a544` | `vOpn_add_winpac(unsigned long*, int*)` | 124 | 93.55% |
+| `0x002665d8` | `add_anmpac(unsigned long*, int*)` | 124 | 93.55% |
+| `0x002b2798` | `SE_CorrectFID(int)` | 124 | 93.55% |
+| `0x0021e760` | `doSequence(short)` | 120 | 90.0% |
+| `0x0024a4cc` | `vOpn_add_anmpac(unsigned long*, int*)` | 120 | 93.33% |
+| `0x00077524` | `gzerror` | 116 | 93.1% |
+| `0x000ff43c` | `Wallocatememoryinit()` | 116 | 93.1% |
+| `0x0024fd00` | `pspCtltutonet_active(CTLINFO*)` | 116 | 93.1% |
+| `0x002816bc` | `iOS_v2menuSetEnable(V2_MENU_ITEM, int)` | 116 | 93.1% |
+| `0x0021cc10` | `s1e_ifMetascheduleEnd(_EffectTCB*)` | 116 | 93.1% |
+| `0x000d7880` | `allocatememoryinit()` | 112 | 92.86% |
+| `0x0028d088` | `tlSetHeap(void*)` | 112 | 85.71% |
+| `0x000feeb4` | `Wdisposewindowbytask(int)` | 112 | 92.86% |
+| `0x00270490` | `curhis_put(int, int, int)` | 112 | 92.86% |
+| `0x0026030c` | `ctlmouke_exit(CTLINFO*)` | 112 | 82.14% |
+| `0x00281730` | `iOS_v2menuGetEnable(V2_MENU_ITEM)` | 108 | 92.59% |
+| `0x002151e8` | `resetClutData(unsigned int, unsigned int, int)` | 108 | 92.59% |
+| `0x0020c930` | `freeForFile(void*)` | 108 | 92.59% |
+| `0x0021cfe4` | `GetEffectTCB()` | 104 | 88.46% |
+| `0x001d18e4` | `Resume_MK_BSTR_IsLoaded(int)` | 104 | 92.31% |
+| `0x0020c6e4` | `freeForSound(void*)` | 104 | 92.31% |
+| `0x0028d1c4` | `tlPushHeap(void*)` | 100 | 84.0% |
+| `0x001e20c0` | `dec_party_item(BWORK*, unsigned short, int)` | 100 | 92.0% |
+| `0x00246300` | `vOpn_ctlinit(int)` | 96 | 91.67% |
+| `0x0026a674` | `op_search(int, int)` | 96 | 91.67% |
+| `0x002ab88c` | `sceGuBlendFunc` | 96 | 87.5% |
+| `0x001d1ffc` | `check_item_left(int, int, int)` | 96 | 91.67% |
+| `0x00288ebc` | `pspGetpspPrimWorkBuf(int)` | 92 | 91.3% |
+| `0x00270b04` | `pagenext_cursor(PAGEWININFO*)` | 88 | 90.91% |
+| `0x00253a10` | `wldctl_active()` | 88 | 81.82% |
+| `0x00253ec8` | `wldctl_deactive()` | 88 | 81.82% |
+| `0x001ca9b8` | `reset_toumei_afterskill(BWORK*)` | 88 | 90.91% |
+| `0x001531f8` | `edit_smallpacket()` | 84 | 90.48% |
+| `0x00265f84` | `iOSSDNovelBackLogCheck()` | 84 | 90.48% |
+| `0x00245de4` | `vOpn_ctlprog()` | 84 | 80.95% |
+| `0x00289fac` | `pspLoadSystemFile()` | 84 | 90.48% |
+| `0x00255758` | `iOSHelpCheck()` | 84 | 90.48% |
+| `0x001eed30` | `getShapeAddress(unsigned short)` | 84 | 85.71% |
+| `0x0010dea4` | `Wexport_localpad(long*)` | 84 | 90.48% |
+| `0x000e0568` | `export_localpad(long*)` | 84 | 90.48% |
+| `0x0025396c` | `ctlmap_deactive(CTLINFO*)` | 80 | 85.0% |
+| `0x00269820` | `snpl_picclr()` | 80 | 90.0% |
+| `0x001fce04` | `setActivePanelFromAnimation(tag_animation*)` | 80 | 85.0% |
+| `0x00228e98` | `GetShapePrim(int)` | 80 | 85.0% |
+| `0x0015a60c` | `siOS_TCurPosGet(unsigned int, int)` | 80 | 90.0% |
+| `0x002496d0` | `vOpn_key_repinit()` | 76 | 84.21% |
+| `0x0025e888` | `day_to_month(int, int*, int*)` | 76 | 94.74% |
+| `0x0020da7c` | `popBackColor()` | 76 | 89.47% |
+| `0x00200ae8` | `startLeftTurnSub(int)` | 76 | 78.95% |
+| `0x0021b570` | `SeekEffect()` | 76 | 89.47% |
+| `0x0015ddf8` | `iOSGT4_MapXYZ(unsigned long, long, long, long)` | 76 | 84.21% |
+| `0x00200b34` | `startRightTurnSub(int)` | 76 | 78.95% |
+| `0x0028dd2c` | `CloseEvent` | 72 | 94.44% |
+| `0x002b32a0` | `musicPlayer_Replay()` | 72 | 88.89% |
+| `0x00249a38` | `vOpn_month2day(int, int)` | 72 | 94.44% |
+| `0x002a2678` | `set_trans_matrix(long, long, long)` | 72 | 88.89% |
+| `0x00242450` | `vEnd_ctlinit()` | 72 | 88.89% |
+| `0x0025e840` | `month_to_day(int, int)` | 72 | 94.44% |
+| `0x0027d420` | `setCancelDisableArea(int, int, int, int, int)` | 72 | 88.89% |
+| `0x001a93dc` | `ChgShopStockItem(short, int)` | 72 | 94.44% |
+| `0x002b3258` | `musicPlayer_Pause()` | 72 | 88.89% |
+| `0x0015369c` | `Wtask_init()` | 72 | 88.89% |
+| `0x001eed84` | `getSequenceAddress(unsigned short)` | 72 | 83.33% |
+| `0x001d189c` | `Resume_MK_BSTR_Init()` | 72 | 88.89% |
+| `0x001cb7fc` | `check_reaction_deny2(BWORK*)` | 72 | 94.44% |
+| `0x001533d8` | `task_init()` | 72 | 88.89% |
+| `0x002b8750` | `iOS_isMovedDist()` | 72 | 94.44% |
+| `0x0015de44` | `iOSGT4_MapXYZClear(unsigned long)` | 72 | 83.33% |
+| `0x001cab08` | `clear_addeffect()` | 68 | 88.24% |
+| `0x002706c8` | `pageanmpac_reset(int, int, int)` | 68 | 94.12% |
+| `0x0010f9c0` | `Wloadcsrc(int, int, int, int)` | 68 | 94.12% |
+| `0x002a0878` | `PushMatrix` | 68 | 88.24% |
+| `0x001cec5c` | `setCasterDirection(int, unsigned char)` | 68 | 82.35% |
+| `0x002a08bc` | `PopMatrix` | 68 | 88.24% |
+| `0x00273864` | `GetDestinationRange()` | 68 | 94.12% |
+| `0x002b758c` | `IS_ICON_AREA(int)` | 68 | 88.24% |
+| `0x00269c3c` | `snpl_mesput3()` | 68 | 94.12% |
+| `0x001e207c` | `getskilldata(int)` | 68 | 94.12% |
+| `0x000fb554` | `chkMessagepacket()` | 64 | 93.75% |
+| `0x0020ef78` | `inactivateCompressedAnimation(int)` | 64 | 93.75% |
+| `0x0026a570` | `snpl_fadewait()` | 64 | 81.25% |
+| `0x00155cac` | `world_stopnoend(int)` | 64 | 93.75% |
+| `0x0028b080` | `pspWorldCallBackExec()` | 64 | 87.5% |
+| `0x0021c08c` | `s1f_ifNumTargetEQU(_EffectTCB*)` | 64 | 93.75% |
+| `0x0021cbd0` | `s1d_ifScheduleEnd(_EffectTCB*)` | 64 | 93.75% |
+| `0x0015365c` | `Wtask_killmyself()` | 64 | 87.5% |
+| `0x0021bd20` | `s5_setSequenceID(_EffectTCB*)` | 64 | 93.75% |
+| `0x00273b38` | `SetSafePanelAhead(int)` | 64 | 93.75% |
+| `0x00153398` | `task_killmyself()` | 64 | 87.5% |
+| `0x001e7420` | `iOS_AddClearItem()` | 64 | 87.5% |
+| `0x001eb794` | `iOSmyGetShapePrim()` | 64 | 93.75% |
+| `0x001eb074` | `countCrystalAnimation()` | 64 | 93.75% |
+| `0x002b8888` | `iOS_InitMovie(int)` | 64 | 87.5% |
+| `0x0020dad8` | `setBackColor(unsigned char, unsigned char, unsigned char)` | 64 | 93.75% |
+| `0x0020e880` | `getFontIDFormBattleWork(int)` | 64 | 93.75% |
+| `0x0016f738` | `iOS_cacheFilesNameClear()` | 60 | 93.33% |
+| `0x002ab5cc` | `GuEmu_Clear()` | 60 | 86.67% |
+| `0x001b7bf0` | `MenuSelVerticalWithSndDirect(unsigned short, unsigned char, int, int)` | 60 | 86.67% |
+| `0x001a7368` | `IsDismiss(short)` | 60 | 93.33% |
+| `0x001d3d5c` | `get_active_unit()` | 60 | 93.33% |
+| `0x00213e0c` | `stopColorRotation(unsigned int)` | 60 | 93.33% |
+| `0x001ca97c` | `overlayMonomaneStack()` | 60 | 93.33% |
+| `0x00153768` | `Wsend_taskparamater4(long, long, long, long, long)` | 60 | 93.33% |
+| `0x002819cc` | `iOS_v2menuInit()` | 60 | 93.33% |
+| `0x002b6fe0` | `iOSReleaseButtonAreaCheck()` | 60 | 93.33% |
+| `0x001534a4` | `send_taskparamater4(long, long, long, long, long)` | 60 | 93.33% |
+| `0x00284784` | `ColorVectorDataBase(unsigned int)` | 60 | 93.33% |
+| `0x0028daac` | `tlGetHeapSize()` | 56 | 92.86% |
+| `0x0021ce78` | `IsPermanentEffect(long)` | 56 | 92.86% |
+| `0x001cec24` | `copy_target_table2(unsigned char*)` | 56 | 92.86% |
+
+### 615.4 Restante com chamadas já documentadas (282)
+
+| Endereço | Função | Bytes | Cobertura | Chama |
+|---|---|---:|---:|---|
+| `0x0025f44c` | `frmbuf_get()` | 496 | 91.13% | `wldbg_draw(GsOT*)`, `ctleeff_draw(GsOT*)`, `wldiwasaki_put(GsOT*)`, `wldfrm_rect(int, RECT16*)`... |
+| `0x0015ad38` | `iOSexecuteCurSlide()` | 492 | 93.5% | `iOSCurIsInGame(int, int)`, `iOS_mapVectorLimit()`, `rsin`, `rcos`... |
+| `0x001569ac` | `editdirect()` | 484 | 91.74% | `Wwrite_eventflag(int, int)`, `Wread_eventflag(int)`, `worldmap_startinit()`, `changewindowamb(int, int, int)`... |
+| `0x001022ec` | `Wtutorial_hookfunc()` | 464 | 88.79% | `get_tutrial_pad()`, `__divsi3` |
+| `0x00267ad0` | `ctlret_main(CTLINFO*)` | 420 | 92.38% | `Wtask_status(long)`, `ctlret_deactive(CTLINFO*)`, `sound_request(int)`, `curhis_get(int)`... |
+| `0x0015a988` | `sBattleTouchRotationMain()` | 416 | 94.23% | `iOS_getTouchTap()`, `iOS_getTouchBeginX()`, `iOS_getTouchNowX()`, `iOS_getTouchSwype()`... |
+| `0x00285f8c` | `hockRead(void*, int, unsigned int)` | 408 | 83.33% | `sub_714c4` |
+| `0x0015e5d4` | `iOSShiftUnitGet()` | 404 | 92.08% | `iOSBtlFreeCurCheck()`, `iOSSoundSESet(int)`, `iOSUnitNumberGet(int, int)`, `iOSsetCursorByTouch(int, int, int, int, int)`... |
+| `0x002b1600` | `GX_Init(int)` | 400 | 91.0% | `CG2D_LOADER::CalcAsTexture(int, int, int*, int*)`, `CEGL2_IF::CEGL2_IF()`, `CEGL2_IF::LoadShaderAll(char*)`, `CEGL2_IF::AllocPacket(int, int)`... |
+| `0x001f4440` | `InitAnimationInit()` | 384 | 88.54% | `iOS_getV2Icon(V2ICON_DATA)` |
+| `0x002453a4` | `fft_ending()` | 384 | 91.67% | `myPollhost()`, `fftCdLoop(CDREC*)`, `getMoviePlayFlg__Fv()`, `vOpn_ctlprog()`... |
+| `0x001d205c` | `check_trap(unsigned char, unsigned char, unsigned char)` | 380 | 93.68% | `read_eventflag(int)`, `check_item_left(int, int, int)`, `check_coord2(int, int, int, unsigned char)` |
+| `0x001b8e64` | `TutrialInit(int)` | 380 | 92.63% | `sub_714b8`, `load_worldname()`, `MakeSaveData(int)`, `SetLoadData(int)`... |
+| `0x0019f798` | `MainShop()` | 380 | 89.47% | `Wsend_taskparamater(long, long, long, long)`, `DrawMessage(int, COMRECORD*)`, `SetMenuSelSide(unsigned char, short)`, `CurChrChg()`... |
+| `0x0020fd1c` | `InitializeAll()` | 376 | 88.3% | `sub_71adc`, `iOSYajiEffectClear()`, `initFileBuffer()`, `sub_20fa50`... |
+| `0x0024f8c0` | `ctltipsmes_main(CTLINFO*)` | 372 | 93.55% | `ctltips_init(int)`, `sound_request(int)`, `iOSTutoReset()`, `iOSTutoFlagCheck(int)`... |
+| `0x0019d634` | `MonsterNameInput()` | 368 | 88.04% | `Wtask_create(long, char*)`, `Wsend_taskparamater(long, long, long, long)`, `iOSUnitListWinReset()`, `iOSUnitListWinOnOff(int)`... |
+| `0x00211a28` | `SetChangePaletteData(unsigned short, unsigned short, unsigned short, unsigned short, unsigned short)` | 368 | 91.3% | `iOS_GetFrameRate()`, `SetDrawMode`, `__divsi3` |
+| `0x000ff2cc` | `Wdisposetexture(RECT16*)` | 368 | 93.48% | `Wtask_killmyself()` |
+| `0x000ff4b0` | `Wallocatememorywait(int)` | 364 | 92.31% | `wasmTaskEntry()`, `FntPrint` |
+| `0x0024b824` | `ctlbar_exit(CTLINFO*)` | 356 | 92.13% | `iOS_setDispMenuTouch(char)`, `wldctl_deactive()`, `ctltownmenu_init(int)`, `wldframe_clr(int)`... |
+| `0x0015af24` | `iOSexecuteScroll()` | 352 | 92.05% | `rsin`, `rcos`, `iOS_getTouchTap()`, `__subsf3`... |
+| `0x002b582c` | `Logo_Init()` | 348 | 85.06% | `CGX_SCREEN_CORRECT::Init(int, int, int, int)`, `CINPUT_IF_TOUCH::ClearAll()`, `CRECT::Register(_RECT_UI*, int)`, `CRECT::SetEnableAll(int)`... |
+| `0x0024ac38` | `vOpn_defscrwin_set(int, int, _POINT*, _POINT*)` | 348 | 90.8% | `Wtask_create(long, char*)` |
+| `0x001e6368` | `forecast_skill(BWORK*, BWORK*, ACT*)` | 348 | 91.95% | `init_target_result(A_RESULT*)`, `calc_result(ACT*, unsigned char)`, `get_coord_address(BWORK*)`, `copyACTst(ACT*, ACT*)`... |
+| `0x001597c0` | `disp_worlddhelpmenu()` | 348 | 91.95% | `Wexport_localpad(long*)`, `Wmesputmain()`, `Wsend_taskparamater(long, long, long, long)`, `wasmGetInput1()`... |
+| `0x002578d4` | `ctlevtinfo_main(CTLINFO*)` | 344 | 90.7% | `iOS_add_anmpac_max(int)`, `sound_request(int)`, `pagewin_main(PAGEWININFO*)`, `iOS_setV2Icon(V2ICON_DATA, int)` |
+| `0x000d78f0` | `allocatememorywait(int)` | 344 | 91.86% | `asmTaskEntry()`, `FntPrint` |
+| `0x0020fe94` | `InitializeHot()` | 344 | 88.37% | `eventflaginit()`, `sort_init()`, `initBdata()`, `initFileBuffer()`... |
+| `0x00248cd0` | `ctlcard_main(CTLINFO*)` | 340 | 89.41% | `callSystemSound(int)`, `vOpn_fadeout(int)`, `SetDispMask` |
+| `0x001d21d8` | `get_stop_event(BWORK*)` | 332 | 93.98% | `change_status_adjust(int)`, `init_target_result(A_RESULT*)`, `set_status_all(int, int)`, `check_move_ability(BWORK*)`... |
+| `0x0026b724` | `worldmap_new()` | 328 | 87.8% | `sub_714b8` |
+| `0x002169d0` | `InitSound()` | 324 | 91.36% | `initSoundHeap()`, `fileOpenForSndCD(unsigned long, unsigned long)`, `fileOpenCD(unsigned long, unsigned long, void*)`, `Ssd_Init(unsigned short)`... |
+| `0x00253d84` | `ctltownset_main(CTLINFO*)` | 324 | 92.59% | `Wwrite_eventflag(int, int)`, `sound_request(int)` |
+| `0x001612d0` | `iOSsTchBtlInit()` | 324 | 80.25% | `iOSsTchBtlFlagSet(int)`, `iOSSlideYajiSet(int)`, `LoadImage_menuData()` |
+| `0x002b2d10` | `Jingle_Play(int)` | 312 | 93.59% | `CFILE_DAT::GetOffset(int)`, `CFILE_DAT::GetSize(int)`, `CSOUND_IF::GetVolume(int)`, `CSOUND_IF::Load(int, char*, unsigned char*, unsigned int, unsigned int, int, int, int, int, int, int)`... |
+| `0x0020c418` | `db_swap(unsigned long*, unsigned long*)` | 312 | 89.74% | `pspgFreamBufCountCountReset()`, `VSync`, `DrawSync`, `FntFlush`... |
+| `0x00162d5c` | `iOS_IsInYellowMesh(int, int)` | 312 | 92.31% | `xpLibGetOffset(int*, int*)`, `RayPick_GT4_input(tagPOLY_GT4*, int, int, int, int)`, `RayPick_GT3_input(tagPOLY_GT3*, int, int, int, int)` |
+| `0x00225514` | `MemoryMapper()` | 304 | 88.16% | `FntPrint` |
+| `0x00255054` | `ctlmap_eventchk()` | 300 | 93.33% | `ctlmap_deactive(CTLINFO*)`, `wld_event(int, int)` |
+| `0x00257af4` | `ctlparty_main(CTLINFO*)` | 300 | 90.67% | `Wtask_status(long)`, `load_worldname()`, `loadPlayerPartyData(int)`, `sound_request(int)` |
+| `0x00256ec8` | `ctltownmenu_exit(CTLINFO*, int)` | 300 | 92.0% | `wldctl_active()`, `iOS_add_anmpac_max(int)` |
+| `0x001b2ac8` | `SetJobName()` | 296 | 90.54% | `GetMesAdr(unsigned char*, short, int)`, `MakeTextureMessage(unsigned char*, short*, RECT16*, int)`, `CountWidthMessage(unsigned char*)` |
+| `0x000c18cc` | `disp_maptitle()` | 288 | 94.44% | `sub_c1468`, `asmTaskEntry()`, `asmGetInput3()`, `iOS_getV2Icon(V2ICON_DATA)`... |
+| `0x00221d64` | `RequestHitMarkEffect(long, EffectOrder*, long)` | 288 | 93.06% | `sub_714b8`, `NewPEffectTCB()`, `ConvertEffectAttribute(int)` |
+| `0x0019f914` | `ExitShop()` | 284 | 91.55% | `Wsend_taskparamater(long, long, long, long)`, `DrawPrice()`, `DrawFunds()`, `FadeOutInit()`... |
+| `0x001ccafc` | `get_floor_damage(BWORK*)` | 284 | 90.14% | `sub_1c88f8`, `change_status_adjust(int)`, `init_target_result(A_RESULT*)`, `get_coord_address(BWORK*)` |
+| `0x0029a2d8` | `DrawOTag` | 276 | 89.86% | `xpLibgpuStartRender`, `sub_291f08`, `sub_2956a0`, `sceGuEnable`... |
+| `0x00291178` | `MoveImage2` | 276 | 94.2% | `sub_714b8`, `sub_28e6f0`, `sub_28e798`, `sub_28e998` |
+| `0x000cbc3c` | `TrapWindowTaskManager(int, int, short, int)` | 276 | 94.2% | `TrapWindow_Taskchk(int)`, `task_create(long, char*)`, `send_taskparamater(long, long, long, long)`, `asmTaskEntry()` |
+| `0x001aec8c` | `DrawEquipCategory(int, int, int)` | 276 | 94.2% | `DrawTexFlip(short*, COLOR*, char, int, int, int)`, `DrawWindow2(unsigned char*, unsigned long, int)`, `GetWindowColor()` |
+| `0x002b7378` | `RENDER_TO_SCREEN(int, int, int*, int*)` | 276 | 91.3% | `CGX_SCREEN_CORRECT::Area_ToScreen(int, int, int, int*, int*)`, `IS_TEX_2X()`, `__floatsisf`, `__mulsf3`... |
+| `0x0022588c` | `NewObject(short, short)` | 272 | 92.65% | `system_error(int, int)`, `NewEffectAnimation(short)` |
+| `0x002b7268` | `SCREEN_TO_RENDER(int, int, int*, int*)` | 272 | 91.18% | `CGX_SCREEN_CORRECT::Area_ToRender(int, int, int, int*, int*)`, `IS_TEX_2X()`, `__floatsisf`, `__divsf3`... |
+| `0x0015d748` | `iOSCurSameOK()` | 272 | 89.71% | `iOSTchCurUnitCheck()`, `iOS_getTouchTap()`, `iOS_getV2Icon(V2ICON_DATA)`, `iOS_setV2Icon(V2ICON_DATA, int)` |
+| `0x00155b4c` | `worldmap_menuinit()` | 272 | 89.71% | `Wevent_init_memory()`, `Wevent_init_system()`, `Wwrite_eventflag(int, int)`, `sub_154b88`... |
+| `0x0028b738` | `initTaskEmu()` | 268 | 92.54% | `sub_714c4`, `sub_71a4c`, `sub_71af4`, `sub_71b00`... |
+| `0x00200cdc` | `startZoomChange(int)` | 268 | 94.03% | `callSystemSound(int)` |
+| `0x002557ac` | `ctlhelp_main(CTLINFO*)` | 268 | 85.07% | `Wtask_status(long)`, `wldctl_active()`, `iOSHelpCheck()`, `iOS_setV2Icon(V2ICON_DATA, int)` |
+| `0x00249ac0` | `vOpn_padread()` | 268 | 91.04% | `resetFFT()`, `vOpn_SetCDVolume(int, int)`, `Ssd_SetAttenuator(short)`, `Ssd_SetSpuVolume(short, short)`... |
+| `0x0025b8ec` | `houkoku_mesput(CTLINFO*, int)` | 264 | 92.42% | `Wwrite_eventflag(int, int)`, `Wtask_create(long, char*)`, `Wtask_status(long)`, `Wsend_taskparamater(long, long, long, long)`... |
+| `0x001bad9c` | `SeExec()` | 260 | 92.31% | `callSoundEffect(int)` |
+| `0x00255654` | `ctlhelp_init(int, int)` | 260 | 87.69% | `Wmakemessagepacket(char*)`, `Wpushmessagepacket()`, `Wtask_create(long, char*)`, `Wsend_taskparamater(long, long, long, long)`... |
+| `0x0019d530` | `FighterName()` | 260 | 86.15% | `Wtask_create(long, char*)`, `Wsend_taskparamater(long, long, long, long)`, `iOSUnitListWinOnOff(int)`, `Name(unsigned char*, short*)`... |
+| `0x00259ad4` | `ctlhismes_main(CTLINFO*)` | 260 | 90.77% | `pagewin_main(PAGEWININFO*)` |
+| `0x00210c9c` | `setMapVector(SVECTOR*, SVECTOR*)` | 256 | 89.06% | `get_mapstp(int, int, int)`, `setShortVector(SVECTOR*, int, int, int)`, `setLongVector(VECTOR*, int, int, int)` |
+| `0x00225210` | `DoPermanentEffect()` | 256 | 89.06% | `ASHURA_getOTptrZ(int)`, `DisposePEffectTCB(unsigned char)` |
+| `0x001cc9fc` | `status_countdown(int)` | 256 | 92.19% | `change_status_adjust(int)`, `init_target_result(A_RESULT*)` |
+| `0x00255180` | `ctlmap_active(CTLINFO*)` | 256 | 90.62% | `Wread_eventflag(int)`, `wldscr_snapshot(int)`, `CFFT_STATE::GetParam(int)`, `CFFT_STATE::SetParam(int, int)` |
+| `0x002b1ff8` | `Debug_DrawFPS()` | 252 | 90.48% | `timeGetTime()`, `CFRAMERATE::GetRate()`, `__divsf3`, `__fixsfsi`... |
+| `0x00225790` | `InitObjectManager()` | 252 | 87.3% | `Malloc(unsigned long, long)` |
+| `0x00188348` | `allitem_count()` | 248 | 91.94% | `sub_714b8`, `get_unitwork_add(int)`, `get_item_number(unsigned short, int)`, `pspItemIsExist`... |
+| `0x001b799c` | `SystemWarningTime(int, int)` | 244 | 90.16% | `Wtask_create(long, char*)`, `Wtask_status(long)`, `Wsend_taskparamater(long, long, long, long)`, `WindowDel(int)` |
+| `0x00100844` | `Wcheckkeyok()` | 240 | 90.0% | `wasmGetInput3()`, `wasmGetActiveF()`, `wasmGetActiveTask(int)` |
+| `0x0025c838` | `ctlshogou_init()` | 240 | 90.0% | `Wtask_create(long, char*)`, `Wtask_status(long)`, `shogou_mesput(CTLINFO*)`, `shogou_check()` |
+| `0x0025c3ac` | `mkdaypt_calc()` | 240 | 93.33% | `mkadrtbl_calc(int)` |
+| `0x00101650` | `Whook_jobmenu()` | 236 | 89.83% | `iOS_setsoundf(int*, int)`, `sub_fe868`, `Wwait_overlay(int)`, `Wtask_wait(long)`... |
+| `0x0015ce74` | `iOSMapIconModeSet(int)` | 236 | 89.83% | `iOSRotSlidCls()`, `iOS_getV2Icon(V2ICON_DATA)`, `iOS_setV2Icon(V2ICON_DATA, int)` |
+| `0x000ef4f4` | `hook_jobmenu()` | 236 | 89.83% | `sub_d6d20`, `wait_overlay(int)`, `iOS_setsoundf(int*, int)`, `task_wait(long)`... |
+| `0x0028d6ec` | `tlCheckHeap()` | 228 | 92.98% | `sub_28cfb4`, `sub_28d01c` |
+| `0x001cea0c` | `set_walker_result(BWORK*, REWARD*)` | 224 | 94.64% | `setskillresult(int)`, `get_unit_jl(BWORK*, int, int*)` |
+| `0x00138234` | `disp_eventwindow()` | 224 | 92.86% | `multiwindow_break(unsigned long*)`, `import_localpad(int)`, `multiwindow_keyright(COMRECORD*, int)`, `task_wait(long)`... |
+| `0x002541c4` | `ctlcenter_init(int)` | 224 | 85.71% | `wldcenter_set(_POINT*, SVECTOR*)` |
+| `0x00134fa0` | `Wdisp_eventwaitwindow()` | 224 | 92.86% | `Wmultiwindow_keyright(COMRECORD*, int)`, `Wimport_localpad(int)`, `Wtask_create(long, char*)`, `Wwait_taskend(long)`... |
+| `0x0015588c` | `title_menuinit()` | 224 | 91.07% | `Wevent_init_memory()`, `Wevent_init_system()`, `Wwrite_eventflag(int, int)`, `numa_fileReadCD(unsigned long, unsigned long, void*)`... |
+| `0x001252d0` | `Wdisp_eventwindow()` | 224 | 92.86% | `Wmultiwindow_break(unsigned long*)`, `Wmultiwindow_keyright(COMRECORD*, int)`, `Wimport_localpad(int)`, `Wtask_wait(long)`... |
+| `0x002b54b4` | `Link_Uninit()` | 220 | 92.73% | `CEGL2_SPRITE::Unload(int)`, `CUI_SCROLLBAR::Delete()`, `CFILE_TXT::~CFILE_TXT()`, `sub_2cdf9c` |
+| `0x002b2ea0` | `Jingle_FrameMove()` | 220 | 92.73% | `CSOUND_IF::Unload(int)`, `CSOUND_IF::IsPlaying(int, int)`, `CSOUND_IF::GetVolume(int)`, `CSOUND_IF::FadeVolume(int, int, int, int)`... |
+| `0x002ab620` | `GuEmu_ClearTexCache()` | 220 | 94.55% | `CEGL2_SPRITE::Unload(int)` |
+| `0x0025f280` | `snpl_load(int)` | 212 | 86.79% | `wldload_wait()`, `wldCdRead(CDREC*, int, int, int, unsigned long*)` |
+| `0x001c02d4` | `JobToAbiChg()` | 212 | 92.45% | `DrawUnitWithShadow(short, DVECTOR*, COLOR*, int, int)` |
+| `0x0024b6bc` | `ctlbar_active(CTLINFO*)` | 212 | 94.34% | `Wsend_taskparamater(long, long, long, long)`, `iOS_setDispMenuTouch(char)`, `pspWorldDisableFlg(PSP_WORLD_FLG)`, `pspWorldCheckFlg(PSP_WORLD_FLG)` |
+| `0x00290cf0` | `ResetGraph` | 208 | 90.38% | `sub_714b8`, `sub_28e6f0`, `sub_28e868` |
+| `0x002b2644` | `EnvSE_Stop(int)` | 208 | 94.23% | `CFFT_STATE::GetParam(int)` |
+| `0x001bab78` | `GetIwaPadData()` | 208 | 88.46% | `Wtask_status(long)`, `TruePadRead(int)`, `GetSttsAMovingTime()` |
+| `0x00255584` | `ctlhelp2_main(CTLINFO*)` | 208 | 86.54% | `Wpopmessagepacket()`, `iOS_add_anmpac_max(int)`, `pagewin_main(PAGEWININFO*)` |
+| `0x00228c74` | `InitShape()` | 204 | 82.35% | `Malloc(unsigned long, long)` |
+| `0x00255e14` | `ctlfsetnum_init(int, int)` | 204 | 86.27% | `valnumwin_set(int, unsigned long, int, _POINT*)` |
+| `0x00257a2c` | `ctlparty_init()` | 200 | 86.0% | `valnumwin_set(int, unsigned long, int, _POINT*)` |
+| `0x000d8fe0` | `get_cursoroffset(int)` | 200 | 92.0% | `__aeabi_idivmod` |
+| `0x00100df8` | `Wget_cursoroffset(int)` | 200 | 92.0% | `__aeabi_idivmod` |
+| `0x002b1e70` | `NowLoading_FrameMove()` | 200 | 90.0% | `timeGetTime()`, `CFRAMERATE::GetRate()`, `CSTEP::Init(int, int, int, int, unsigned int)`, `CSTEP::FrameMove(float, unsigned int)` |
+| `0x0015a7d8` | `iOSScrollButtonMove()` | 200 | 90.0% | `iOSScrollButtonAreaCheck()`, `searchCurrentAnimation()`, `iOSgetCursorVisible()`, `iOSsetCursorByTouch(int, int, int, int, int)` |
+| `0x000da720` | `tutorial_hookfunc()` | 196 | 85.71% | `iOS_getV2Icon(V2ICON_DATA)` |
+| `0x001383a4` | `maptest()` | 196 | 85.71% | `import_localpad(int)`, `task_create(long, char*)` |
+| `0x00242268` | `vOpn_arzpic_init(int)` | 196 | 89.8% | `vOpn_bk_load(int, unsigned long*)`, `pspOpenDataBackBufGet(int)`, `xpMallocIO` |
+| `0x0025e508` | `person_year_up()` | 196 | 93.88% | `Wread_eventflag(int)` |
+| `0x00291098` | `StoreImage2` | 188 | 93.62% | `sub_714b8` |
+| `0x0020c19c` | `fftVSyncCallback()` | 188 | 87.23% | `ps_rand()` |
+| `0x0020f43c` | `debugEffectWait()` | 188 | 80.85% | `iOS_SetFrameRate(int)`, `LoadEffect()`, `UnlockEffect()` |
+| `0x00216308` | `readMusic(int)` | 180 | 93.33% | `errorHandler(int)`, `mallocForSound(unsigned int)`, `fileReadRequest(unsigned long, unsigned long, void*)`, `CFFT_STATE::SetMusicBuffer(int, int)` |
+| `0x002101a8` | `loadPlayerPartyData(int)` | 180 | 93.33% | `clear_unitwork()`, `employ_from_entry(unsigned char*, int, int, int)`, `requestReadEntryData()`, `requestEntryData()`... |
+| `0x00248c18` | `ctlpremov_main(CTLINFO*)` | 180 | 88.89% | `SetDispMask` |
+| `0x001568fc` | `worldmap_restart()` | 176 | 81.82% | `Wmakemessagepacket(char*)`, `Wevent_init_memory()`, `Wevent_init_system()`, `load_worldname()`... |
+| `0x001cce2c` | `get_trap_result(BWORK*)` | 172 | 88.37% | `init_target_result(A_RESULT*)`, `getTrapResultDamage(BWORK*, int)`, `check_trap(unsigned char, unsigned char, unsigned char)` |
+| `0x001bd320` | `UnitTableInitFirst(short)` | 172 | 83.72% | `iOSUnitListWinOnOff(int)`, `iOSWldUnitListWinSet(int)`, `UnitTableInit(short)` |
+| `0x0024998c` | `vOpn_iwaprog()` | 172 | 83.72% | `send_worldkeymask(unsigned long)`, `worldmap_call(unsigned long*, unsigned long)` |
+| `0x002b1f3c` | `Offscreen_ReadPixels(int, int, int, int)` | 172 | 93.02% | `CEGL2_FBO::ReadPixels(unsigned int*, int, int, int, int)`, `sub_2cdf8c` |
+| `0x000da4ac` | `event_init_light()` | 172 | 88.37% | `sub_714b8`, `ASHURA_SetMatrix(long, MATRIX*, MATRIX*, unsigned short)` |
+| `0x002b3610` | `Boot_FrameRender()` | 168 | 88.1% | `CEGL2_IF::SetScreenSize(float, float)`, `CEGL2_IF::ClearBackdrop(float, float, float)`, `CEGL2_IF::InitRenderState2D()`, `CEGL2_IF::Setup2D()`... |
+| `0x00217e14` | `InitEffectAnimation()` | 168 | 92.86% | `GetClut` |
+| `0x002116f0` | `padReadGenerate()` | 168 | 88.1% | `resetFFT()`, `iOS_setReset(int)`, `iOS_getReset()`, `pspNetPadRead` |
+| `0x001f4a88` | `initEntryPlayerAnimations()` | 164 | 87.8% | `return_pentry()`, `read_eventflag(int)`, `set_playerwork2(PENTRY*, unsigned char*)`, `set_playerwork(PENTRY*, unsigned char*)` |
+| `0x00289ac0` | `pspFftLoad(int, FFT_SAVE_DATA*, int*, int)` | 164 | 92.68% | `iOS_fftLoad(int)`, `pspClearSaveData()`, `xpLibapiSaveStart`, `xpLibapiSaveEnd`... |
+| `0x001bb460` | `SetSttsAbi(int)` | 164 | 92.68% | `Wtask_create(long, char*)`, `Wtask_status(long)`, `Wsend_taskparamater(long, long, long, long)`, `iOSUnitListWinOnOff(int)`... |
+| `0x0029a3ec` | `DrawPrim` | 164 | 90.24% | `ClearOTag`, `AddPrim`, `xpLibgpuStartRender`, `sub_291f08`... |
+| `0x00211c88` | `DisplayChangePalette()` | 160 | 87.5% | `ASHURA_getOTptrZ(int)`, `AddPrim` |
+| `0x001bb224` | `SetSttsEqu2(int)` | 156 | 87.18% | `Wtask_create(long, char*)`, `Wtask_status(long)`, `Wsend_taskparamater(long, long, long, long)`, `WindowDel(int)` |
+| `0x000da280` | `recieve_statusinfo()` | 156 | 92.31% | `asmGetActiveTask(int)` |
+| `0x001cd9b0` | `inc_party_item(BWORK*, unsigned short, BWORK*)` | 156 | 94.87% | `get_item_number(unsigned short, int)`, `pspItemIsEmpty`, `pspItemIsBarehand` |
+| `0x001bd3cc` | `UnitListInit()` | 152 | 89.47% | `GetChrList(short, CHR_STTS**, int)`, `RefleshItemUserSort(int)`, `UnitTableInitFirst(short)` |
+| `0x0013819c` | `recover_windows(int, int)` | 152 | 92.11% | `task_create(long, char*)`, `send_taskparamater(long, long, long, long)` |
+| `0x00125238` | `Wrecover_windows(int, int)` | 152 | 92.11% | `Wtask_create(long, char*)`, `Wsend_taskparamater(long, long, long, long)` |
+| `0x0015a744` | `iOSScrollButtonAreaCheck()` | 148 | 94.59% | `searchCurrentAnimation()` |
+| `0x00102208` | `Wexport_suc(int)` | 148 | 91.89% | `wasm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)`, `get_bwp(int)`, `system_error(int, int)` |
+| `0x000e14f4` | `statusfigprint10(int, int, char*, COPYFIELD*)` | 148 | 91.89% | `asmKanjiCopy(char*, char*, COPYFIELD*, int)` |
+| `0x000da63c` | `export_suc(int)` | 148 | 91.89% | `asm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)`, `get_bwp(int)`, `system_error(int, int)` |
+| `0x002b6b38` | `Main_Uninit()` | 148 | 94.59% | `CEGL2_SPRITE::Unload(int)`, `uninitTaskEmu()`, `CFFT_STATE::GetDebugMode()`, `CFFT_STATE::GetMoviePlaying()`... |
+| `0x002bb678` | `iOSMenuOkCancelHelpGet(int, int)` | 148 | 94.59% | `isInRectUi(_RECT_UI*, int, int)`, `iOS_getCarrierType()` |
+| `0x00268ec4` | `wldcenter_move()` | 148 | 94.59% | `__divsi3` |
+| `0x00138314` | `extend_valuefield(int)` | 144 | 91.67% | `getvaluelength(int)` |
+| `0x001253b0` | `Wextend_valuefield(int)` | 144 | 91.67% | `Wgetvaluelength(int)` |
+| `0x00097b70` | `_float32_pack` | 144 | 88.89% | `sub_715fc`, `sub_7162c`, `sub_71680`, `sub_71698`... |
+| `0x002abc8c` | `sceGuTexFilter` | 144 | 94.44% | `CEGL2_IF::GetPacket(int)`, `CFFT_STATE::GetParam(int)` |
+| `0x0020e228` | `get2DPosition(SVECTOR*, SVECTOR*)` | 144 | 86.11% | `ASHURA_matrix(MATRIX*, SVECTOR*, VECTOR*, VECTOR*)`, `SetRotMatrix`, `SetTransMatrix`, `RotTrans` |
+| `0x0026dc2c` | `ctltuto_active(CTLINFO*)` | 144 | 94.44% | `Wsend_taskparamater(long, long, long, long)` |
+| `0x001bb504` | `SetSttsBoth(int)` | 140 | 91.43% | `Wtask_create(long, char*)`, `Wtask_status(long)`, `Wsend_taskparamater(long, long, long, long)` |
+| `0x0021627c` | `readMusicBuffer(int, int)` | 140 | 94.29% | `errorHandler(int)`, `mallocForSound(unsigned int)`, `fileReadRequest(unsigned long, unsigned long, void*)` |
+| `0x00245e38` | `ctlstartmov_init(int, int, int, int)` | 140 | 85.71% | `iOS_InitMovie(int)`, `iOS_StartMovie()` |
+| `0x002b8680` | `RayPick_GT3(tagPOLY_GT3*, int, int)` | 136 | 94.12% | `RayPick_GT3_input(tagPOLY_GT3*, int, int, int, int)`, `iOS_getV2Icon(V2ICON_DATA)` |
+| `0x002b85f8` | `RayPick_GT4(tagPOLY_GT4*, int, int)` | 136 | 94.12% | `RayPick_GT4_input(tagPOLY_GT4*, int, int, int, int)`, `iOS_getV2Icon(V2ICON_DATA)` |
+| `0x0015dfbc` | `iOSActiveUnitGet()` | 132 | 93.94% | `iOSBtlFreeCurCheck()`, `searchCurrentAnimation()`, `iOSsetCursorByTouch(int, int, int, int, int)` |
+| `0x002b2714` | `EnvSE_SetVol(int, int)` | 132 | 90.91% | `CSOUND_IF::IsPlaying(int, int)`, `CFFT_STATE::GetParam(int)` |
+| `0x001abb18` | `MakeChr(short)` | 132 | 93.94% | `GetChrList(short, CHR_STTS**, int)`, `get_unitwork_add(int)`, `set_unitdata(int)` |
+| `0x0025f0b8` | `pic_load(int)` | 128 | 87.5% | `wldload_wait()`, `wldCdRead(CDREC*, int, int, int, unsigned long*)` |
+| `0x0025f358` | `psp_bk_load(int, void*)` | 128 | 90.62% | `wldload_wait()`, `wldCdRead(CDREC*, int, int, int, unsigned long*)` |
+| `0x0025f168` | `bk_load(int)` | 128 | 87.5% | `wldload_wait()`, `wldCdRead(CDREC*, int, int, int, unsigned long*)` |
+| `0x000d9790` | `wait_overlay(int)` | 128 | 90.62% | `asmTaskEntry()` |
+| `0x000d9988` | `wait_loaddata(int)` | 128 | 90.62% | `asmTaskEntry()` |
+| `0x001015a4` | `Wwait_overlay(int)` | 128 | 90.62% | `wasmTaskEntry()` |
+| `0x00101888` | `Wwait_loaddata(int)` | 128 | 90.62% | `wasmTaskEntry()` |
+| `0x0015df3c` | `iOSTapCalcu()` | 128 | 87.5% | `iOS_getTouchPress()` |
+| `0x00249f14` | `vOpn_dataload2()` | 128 | 93.75% | `vOpn_loadwait()`, `numa_vOpn_CdRead(CDREC*, unsigned long, unsigned long, unsigned long, unsigned long*)`, `vOpn_timload(unsigned long*)` |
+| `0x002b3590` | `Boot_FrameMove()` | 128 | 90.62% | `CEGL2_IF::ClearBackdrop(float, float, float)`, `CTHREAD::Sync()`, `onGotoNextMode(int)` |
+| `0x0020c550` | `db_swap_generate(unsigned long*, unsigned long*)` | 124 | 90.32% | `pspgFreamBufCountCountReset()`, `VSync`, `DrawSync`, `FntFlush`... |
+| `0x00105510` | `Wwait_direc(int)` | 124 | 93.55% | `Wcnvglobaltolocalid(int)`, `wasmTaskEntry()` |
+| `0x001baae8` | `SttsAMovingChk()` | 124 | 90.32% | `Wtask_status(long)` |
+| `0x0028bec0` | `TE_VSync(int)` | 124 | 90.32% | `TE_asmTaskEntry(int)` |
+| `0x002b2a18` | `SE_StopVFX(int)` | 124 | 90.32% | `CSOUND_IF::Unload(int)`, `CFFT_STATE::GetParam(int)` |
+| `0x000dcc2c` | `wait_direc(int)` | 120 | 93.33% | `cnvglobaltolocalid(int)`, `asmTaskEntry()` |
+| `0x0015d2ac` | `iOS_GameAreaCheck()` | 120 | 83.33% | `IS_GAME_AREA(int, int)` |
+| `0x001e4e94` | `get_step_no(BWORK*)` | 120 | 93.33% | `_pspNetRand(char const*, int)` |
+| `0x001a47e0` | `pspAbilityCompareSupport(short, short)` | 120 | 90.0% | `SetChrListOne(int)`, `CurChrChg()`, `CurChrChg2()` |
+| `0x000d8c00` | `checkkeyok()` | 116 | 89.66% | `asmGetInput3()`, `asmGetActiveF()` |
+| `0x000e2b04` | `statusnowprint(char*, COPYFIELD*)` | 116 | 93.1% | `asmBoxCopy(char*, char*, COPYFIELD*, COPYFIELD*)` |
+| `0x00201708` | `setActionStartDirection(tag_animation*)` | 116 | 93.1% | `ratan2` |
+| `0x001fd168` | `setActivePanelFromAction(tag_animation*)` | 116 | 89.66% | `searchAnimationByBattleID(unsigned short)` |
+| `0x000c81c4` | `tool_squareinit()` | 116 | 89.66% | `sub_be538`, `task_create(long, char*)` |
+| `0x001b7ef4` | `TruePadRead(int)` | 116 | 93.1% | `CardEventClose()`, `CallresetFFT()`, `pspNetPadRead` |
+| `0x000daa50` | `checktaskkind(int)` | 112 | 92.86% | `asmGetActiveTask(int)` |
+| `0x00103340` | `Wwrite_eventflag(int, int)` | 112 | 92.86% | `Wcalcformula(int, int, int, int)` |
+| `0x000db77c` | `write_eventflag(int, int)` | 112 | 92.86% | `calcformula(int, int, int, int)` |
+| `0x0028e25c` | `OpenEvent(unsigned long, long, long, long (*)())` | 112 | 92.86% | `pspSaveBase::Update()` |
+| `0x001026c4` | `Wchecktaskkind(int)` | 112 | 92.86% | `wasmGetActiveTask(int)` |
+| `0x000d8778` | `import_localstatus(char*, char*, char*, char*)` | 108 | 92.59% | `sub_714b8` |
+| `0x001a9370` | `GetTotalItemBackup(short)` | 108 | 92.59% | `GetTotalItem(short)` |
+| `0x00249c58` | `vOpn_bk_load(int, unsigned long*)` | 108 | 88.89% | `numa_vOpn_CdRead(CDREC*, unsigned long, unsigned long, unsigned long, unsigned long*)` |
+| `0x002b2f7c` | `musicPlayer_Stop()` | 108 | 92.59% | `CSOUND_IF::Unload(int)`, `CSOUND_IF::Stop(int)` |
+| `0x0015d858` | `iOSCurSameOKMove()` | 108 | 92.59% | `iOS_getTouchTap()`, `iOS_getV2Icon(V2ICON_DATA)`, `iOS_setV2Icon(V2ICON_DATA, int)` |
+| `0x00245c0c` | `o_GetCardState()` | 108 | 88.89% | `o_GetCardEvent()`, `o_WaitCardInfo(int, int)` |
+| `0x0010044c` | `Wimport_localstatus(char*, char*, char*, char*)` | 104 | 92.31% | `sub_714b8` |
+| `0x0026a1cc` | `snpl_musicstop()` | 104 | 92.31% | `disposeMusic(int)`, `inactivateMusic()` |
+| `0x00269e04` | `snpl_mfadein()` | 104 | 92.31% | `activateMusic(int, int, int)`, `fadeMusic(int, int)` |
+| `0x0010638c` | `Wdisp_backtotitle_yesno()` | 100 | 92.0% | `sub_105d6c`, `wasmTaskEntry()`, `wasmGetInput2()` |
+| `0x000f15a0` | `disp_backtotitle_yesno()` | 100 | 92.0% | `sub_f0f84`, `asmTaskEntry()`, `asmGetInput2()` |
+| `0x001d1a18` | `set_playerwork_sp(PENTRY*, unsigned char*, int)` | 100 | 92.0% | `set_playerwork_j(BWORK*, int, int)`, `unitwork_init2all(BWORK*, int)` |
+| `0x000cbab8` | `createEndModeWindow()` | 100 | 92.0% | `task_create(long, char*)`, `task_status(long)`, `send_taskparamater(long, long, long, long)` |
+| `0x00228de4` | `NewShape2(unsigned char)` | 96 | 91.67% | `Malloc(unsigned long, long)` |
+| `0x001baa18` | `unit_isdark()` | 96 | 91.67% | `Wtask_status(long)` |
+| `0x001bb1c4` | `SetSttsA2(int)` | 96 | 91.67% | `Wtask_create(long, char*)`, `Wtask_status(long)` |
+| `0x001cd0cc` | `set_calcmode_think()` | 96 | 79.17% | `copy_struct_data(void const*, void*, int)` |
+| `0x0025c49c` | `houkokuinf_init(int)` | 96 | 87.5% | `houkoku_talkunit(int)`, `mksuccess_calc()`, `mkbasept_calc()`, `mkbonus_check()`... |
+| `0x0025d20c` | `world_exit()` | 96 | 91.67% | `initializeMusicBuffer()`, `wldssd_wait()`, `pspWorldDisableFlg(PSP_WORLD_FLG)`, `VSync`... |
+| `0x00150630` | `NetEndSyncProc()` | 96 | 91.67% | `asmTaskEntry()`, `asm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)` |
+| `0x00155d14` | `reactive_worldwindow()` | 92 | 91.3% | `Wtask_create(long, char*)` |
+| `0x0018e358` | `esys_warning(int, int)` | 92 | 86.96% | `eMesEventSingle(int, unsigned int, int, int)`, `callSystemSound(int)` |
+| `0x00156b90` | `hook_tuto(int)` | 92 | 86.96% | `worldmap_restart()`, `UnitList(int, int)` |
+| `0x002b74d4` | `IS_GAME_ROT_AREA(int, int)` | 92 | 91.3% | `isInRectUi(_RECT_UI*, int, int)` |
+| `0x002b7530` | `IS_GAME_MOV_AREA(int, int)` | 92 | 91.3% | `isInRectUi(_RECT_UI*, int, int)` |
+| `0x0026adc0` | `snpl_jpageflg_sub(int)` | 92 | 91.3% | `snplflg_read(unsigned long*, int)` |
+| `0x002b1e14` | `NowLoading_Init()` | 92 | 86.96% | `timeGetTime()`, `CSTEP::Init(int, int, int, int, unsigned int)` |
+| `0x002423f4` | `ctlendmov_init(int, int, int)` | 92 | 86.96% | `set_gEventMovieNo(int)`, `iOS_InitMovie(int)` |
+| `0x002b2e48` | `Jingle_Stop(int)` | 88 | 86.36% | `CFFT_STATE::GetParam(int)` |
+| `0x0026b31c` | `snplread_parcalc()` | 88 | 90.91% | `snplflg_read(unsigned long*, int)` |
+| `0x0021b518` | `LoadOverlayBin(long)` | 88 | 86.36% | `numa_fileReadCD(unsigned long, unsigned long, void*)` |
+| `0x002ab908` | `sceGuStart` | 88 | 90.91% | `sub_714c4`, `sub_2cdf7c`, `sub_2cdf8c` |
+| `0x002b2290` | `GX_ApplyVertexScaling(int)` | 88 | 90.91% | `CGX_SCREEN_CORRECT::GetCorrect(float*, float*, float*)`, `CEGL2_SPRITE::SetVertexOffset(float, float)`, `CEGL2_SPRITE::SetVertexScale(float)` |
+| `0x002b5e58` | `Logo_Uninit()` | 84 | 90.48% | `CEGL2_SPRITE::Unload(int)` |
+| `0x000e2fbc` | `statuskanjiprintadv(int, char*, COPYFIELD*)` | 84 | 90.48% | `asm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)` |
+| `0x0019d7e8` | `DrawUnits()` | 84 | 85.71% | `DrawWindow2(unsigned char*, unsigned long, int)` |
+| `0x00269db0` | `snpl_mfadeout()` | 84 | 90.48% | `fadeMusic(int, int)` |
+| `0x00269f34` | `snpl_mesput2()` | 80 | 90.0% | `Wtask_create(long, char*)`, `Wsend_taskparamater(long, long, long, long)` |
+| `0x0026ae2c` | `snpl_jstatflg_sub(int)` | 80 | 90.0% | `snplflg_read(unsigned long*, int)` |
+| `0x0026ae8c` | `snpl_jlocalflg_sub(int)` | 80 | 90.0% | `snplflg_read(unsigned long*, int)` |
+| `0x000e2b78` | `statuskanjiprint(int, char*, COPYFIELD*)` | 80 | 90.0% | `asm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)` |
+| `0x00221f14` | `RequestReboundEffect()` | 80 | 90.0% | `NewPEffectTCB()` |
+| `0x00243464` | `fRoll_bkput(short*)` | 80 | 90.0% | `vOpn_timload(unsigned long*)` |
+| `0x00249ec4` | `vEnd_dataload()` | 80 | 90.0% | `vOpn_loadwait()`, `numa_vOpn_CdRead(CDREC*, unsigned long, unsigned long, unsigned long, unsigned long*)` |
+| `0x001004b4` | `Wexport_localstatus(char*, char*, char*)` | 76 | 94.74% | `sub_714b8` |
+| `0x000d87e4` | `export_localstatus(char*, char*, char*)` | 76 | 94.74% | `sub_714b8` |
+| `0x00258f68` | `evt_gil_low()` | 76 | 94.74% | `Wread_eventflag(int)` |
+| `0x000e3010` | `statuskanjiprintwithptr(char*, COPYFIELD*, char*)` | 76 | 89.47% | `asm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)` |
+| `0x00270414` | `defscrwin_set(int, int, _POINT*, _POINT*)` | 76 | 89.47% | `Wtask_create(long, char*)`, `scrwin_para_set(int, int, _POINT*, _POINT*)` |
+| `0x0024aa60` | `vOpnmess_put(int, int, _POINT, unsigned long*)` | 76 | 94.74% | `Wstatuskanjiprint(int, char*, COPYFIELD*)` |
+| `0x0028d6a0` | `tlSetMallocUserPointer(void**)` | 76 | 94.74% | `sub_28d01c` |
+| `0x0015a27c` | `iOSPressArea()` | 76 | 89.47% | `iOS_getTouchPress()`, `IS_GAME_AREA(int, int)` |
+| `0x00263abc` | `iOSNovelBrightOn()` | 76 | 94.74% | `iOS_setV2Icon(V2ICON_DATA, int)` |
+| `0x00243a14` | `deleteMessage()` | 76 | 89.47% | `xpFree` |
+| `0x00155d88` | `active_worldwindow()` | 76 | 94.74% | `Wtask_stop(long)` |
+| `0x001baa78` | `sys_warning(int, int)` | 76 | 89.47% | `MesEventSingle(int, unsigned int, int, int)`, `callSoundEffect(int)` |
+| `0x0015a2c8` | `iOSTapArea()` | 76 | 89.47% | `iOS_getTouchTap()`, `IS_GAME_AREA(int, int)` |
+| `0x0019f750` | `DrawFunds()` | 72 | 83.33% | `DrawWindow2(unsigned char*, unsigned long, int)` |
+| `0x0026a234` | `snpl_fadeout()` | 72 | 88.89% | `wldfade_set(int, int)` |
+| `0x002a3068` | `xpMalloc` | 72 | 94.44% | `sub_71b90`, `sub_71b9c`, `tlMalloc(unsigned int)` |
+| `0x000d8880` | `pushmessagepacket()` | 68 | 88.24% | `sub_714b8` |
+| `0x00100550` | `Wpushmessagepacket()` | 68 | 88.24% | `sub_714b8` |
+| `0x002b2b38` | `SysSE_Stop(int)` | 68 | 88.24% | `CFFT_STATE::GetParam(int)` |
+| `0x00258ff8` | `evt_dead_low()` | 68 | 94.12% | `Wread_eventflag(int)` |
+| `0x00242618` | `ctlendmov_main(CTLINFO*)` | 68 | 88.24% | `SetDispMask` |
+| `0x0019d7a4` | `DrawPrice()` | 68 | 82.35% | `DrawWindow2(unsigned char*, unsigned long, int)` |
+| `0x000da558` | `event_start()` | 68 | 88.24% | `sub_d49ac`, `sub_d5ca4`, `event_init_light()`, `asmGetActiveTask(int)` |
+| `0x0029fef0` | `ratan2` | 68 | 94.12% | `sub_71b60`, `__floatsisf`, `__mulsf3`, `__divsf3`... |
+| `0x001cd16c` | `get_weatherdata()` | 68 | 94.12% | `read_eventflag(int)` |
+| `0x00210960` | `MenuTest()` | 68 | 88.24% | `asmTaskEntry()`, `VSync`, `iOS_getTouchPress()` |
+| `0x00204210` | `iOS_isCursorOnUnit()` | 68 | 82.35% | `searchAnimationByPositionBattle(int, int, int)` |
+| `0x001ab7e0` | `IsUntauchableAbility(int)` | 68 | 94.12% | `IsUntauchable(int)` |
+| `0x00216414` | `readMusicBlock(int)` | 68 | 94.12% | `myPollhost()`, `readMusic(int)`, `checkReadMusic()`, `fftCdLoop(CDREC*)`... |
+| `0x001f37e4` | `ExecuteAnimations()` | 68 | 94.12% | `executeAnimationStatus(tag_animation*)`, `executeShape(tag_animation*)`, `executeTerminateAnimation(tag_animation*)` |
+| `0x000d9a80` | `send_sttslinecol(char*)` | 64 | 93.75% | `sub_714b8` |
+| `0x0015d9e0` | `iOSTchCurLimit(int)` | 64 | 93.75% | `searchCurrentAnimation()` |
+| `0x0028be80` | `_ps_test()` | 64 | 87.5% | `TE_asmTaskEntry(int)` |
+| `0x0010634c` | `Wdisp_resume_yesno()` | 64 | 93.75% | `sub_105d6c`, `wasmTaskEntry()`, `wasmGetInput2()` |
+| `0x000f1560` | `disp_resume_yesno()` | 64 | 93.75% | `sub_f0f84`, `asmTaskEntry()`, `asmGetInput2()` |
+| `0x001cd12c` | `reset_calcmode_think()` | 64 | 81.25% | `copy_struct_data(void const*, void*, int)` |
+| `0x0026ebf0` | `ctlsentuto_active(CTLINFO*)` | 64 | 93.75% | `iOS_setV2Icon(V2ICON_DATA, int)` |
+| `0x0024552c` | `cdxa_stop()` | 64 | 93.75% | `vOpn_SetCDVolume(int, int)`, `VSync` |
+| `0x00249278` | `vOpn_init(int)` | 64 | 93.75% | `initializeMusicBuffer()`, `vOpn_ctlinit(int)`, `vOpn_scrinit(int)`, `vOpn_parainit()`... |
+| `0x0010212c` | `Wevent_start()` | 64 | 87.5% | `sub_fc26c`, `Wevent_init_light()`, `wasmGetActiveTask(int)` |
+| `0x002a3028` | `xpFree` | 64 | 93.75% | `sub_71b90`, `sub_71b9c`, `tlFree(void*)` |
+| `0x0021c684` | `s27_setEnvironmentWithTable(_EffectTCB*)` | 64 | 93.75% | `SetGravity(Vector*)`, `SetAirDensity(long)` |
+| `0x00289844` | `pspClearSaveData()` | 60 | 93.33% | `sub_714c4` |
+| `0x00101980` | `Wsend_sttslinecol(char*)` | 60 | 93.33% | `sub_714b8` |
+| `0x0028bf7c` | `_ps_cond()` | 60 | 93.33% | `TE_task_create(int, void (*)(), int)`, `TE_asmTaskEntry(int)` |
+| `0x00249bcc` | `vOpn_loadwait()` | 60 | 93.33% | `fftCdLoop(CDREC*)`, `VSync` |
+| `0x002431b4` | `fRoll_fadein(short*)` | 60 | 86.67% | `vOpn_fadein(int)` |
+| `0x001c7178` | `SelectWindowClutEx(int, int)` | 60 | 86.67% | `SelectWindowClut(int)` |
+| `0x0029b618` | `iOSGsSwapDispBuff()` | 60 | 93.33% | `PutDispEnv`, `GsGetActiveBuff` |
+| `0x002431f0` | `fRoll_fadeout(short*)` | 60 | 86.67% | `vOpn_fadeout(int)` |
+| `0x0015e768` | `iOSShiftUnitSet(int)` | 60 | 86.67% | `iOSBtlFreeCurCheck()`, `iOSGetChrList()` |
+| `0x00269d78` | `snpl_clrlocal()` | 56 | 85.71% | `snplflg_write(unsigned long*, int, int)` |
+| `0x00269d08` | `snpl_clrstat()` | 56 | 85.71% | `snplflg_write(unsigned long*, int, int)` |
+| `0x002bf32c` | `Debug_SetDebugDirectBtn(int)` | 56 | 92.86% | `CRECT::SetEnable(int, int)` |
+
+**Status CSV**: `read_structural` para as 500 (identidade e call-graph confirmados via checkpoint; cobertura automática 80-95% nesta leva por chamada indireta/literal pool, não por falha de extração; nenhuma teve blocos lidos instrução a instrução).
