@@ -1,0 +1,17 @@
+{
+  "address": "000d7ae4",
+  "name": "addstatusback(STTSWINDOWBACK*)",
+  "size": 64,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "d665c"
+  ],
+  "log": "=== jtable.py: 0xd7ae4..0xd7b24 (64 bytes) ===\ncoverage: 16 of ~16 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0xd665c x3   addlocalprim(tagPOLY_FT4*) \n\n-- branches: 2 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

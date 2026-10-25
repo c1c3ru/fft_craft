@@ -16,6 +16,7 @@
     "26b2bc"
   ],
   "log": "=== jtable.py: 0x26b0f4..0x26b2bc (456 bytes) ===\ncoverage: 107 of ~114 instruction slots (94%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 5 distinct --\n  0x103400 x3   Wread_eventflag(int) \n  0x26abac x1   timeevt_chk() \n  0x26af98 x1   snpl_effcheck(int, int, int) \n  0x26b0e0 x1   iOS_getNblFuncName(int) \n  0x26b2bc x1   snplflg_write(unsigned long*, int, int) \n\n-- branches: 7 total, 4 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

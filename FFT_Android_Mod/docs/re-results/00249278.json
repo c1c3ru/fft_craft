@@ -1,0 +1,24 @@
+{
+  "address": "00249278",
+  "name": "vOpn_init(int)",
+  "size": 64,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 93.75,
+  "distinct_bl": 7,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "216820",
+    "246300",
+    "248e6c",
+    "249174",
+    "2496d0",
+    "249da4",
+    "249f94"
+  ],
+  "log": "=== jtable.py: 0x249278..0x2492b8 (64 bytes) ===\ncoverage: 15 of ~16 instruction slots (94%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 7 distinct --\n  0x216820 x1   initializeMusicBuffer() \n  0x246300 x1   vOpn_ctlinit(int) \n  0x248e6c x1   vOpn_scrinit(int) \n  0x249174 x1   vOpn_parainit() \n  0x2496d0 x1   vOpn_key_repinit() \n  0x249da4 x1   vOpn_dataload() \n  0x249f94 x1   vOpn_pacinit() \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

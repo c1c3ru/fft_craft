@@ -1,0 +1,19 @@
+{
+  "address": "00101ba8",
+  "name": "Wextend_endornot()",
+  "size": 64,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 93.75,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1531f8",
+    "fe620"
+  ],
+  "log": "=== jtable.py: 0x101ba8..0x101be8 (64 bytes) ===\ncoverage: 15 of ~16 instruction slots (94%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0xfe620 x1   sub_fe620 LOCAL(no-dynsym)\n  0x1531f8 x1   edit_smallpacket() \n\n-- branches: 2 total, 1 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

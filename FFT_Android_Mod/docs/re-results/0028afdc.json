@@ -1,0 +1,19 @@
+{
+  "address": "0028afdc",
+  "name": "__bpGetAllBinarySize",
+  "size": 60,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "28aec4",
+    "28afc4",
+    "28afd0"
+  ],
+  "log": "=== jtable.py: 0x28afdc..0x28b018 (60 bytes) ===\ncoverage: 15 of ~15 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x28aec4 x1   __bpGetFileNum \n  0x28afc4 x1   __bpGetBinarySize \n  0x28afd0 x1   __bpGetBinaryData \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
