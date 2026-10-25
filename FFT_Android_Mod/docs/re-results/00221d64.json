@@ -14,6 +14,7 @@
     "714b8"
   ],
   "log": "=== jtable.py: 0x221d64..0x221e84 (288 bytes) ===\ncoverage: 67 of ~72 instruction slots (93%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x714b8 x2   sub_714b8 LOCAL(no-dynsym)\n  0x21f0e4 x1   NewPEffectTCB() \n  0x2210c4 x1   ConvertEffectAttribute(int) \n\n-- branches: 7 total, 2 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

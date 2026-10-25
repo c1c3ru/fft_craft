@@ -10,6 +10,7 @@
   "tables_unresolved": 0,
   "bl_targets": [],
   "log": "=== jtable.py: 0x21d544..0x21d620 (220 bytes) ===\ncoverage: 44 of ~55 instruction slots (80%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0x21d574, dispatch @0x21d578: 5 cases, 5 distinct handlers\n    targets: ['0x21d594', '0x21d5c4', '0x21d5dc', '0x21d5f0', '0x21d5a0']\n\n-- bl targets: 0 distinct --\n\n-- branches: 4 total, 4 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

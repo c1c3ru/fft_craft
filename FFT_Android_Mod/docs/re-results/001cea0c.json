@@ -13,6 +13,7 @@
     "1e31b8"
   ],
   "log": "=== jtable.py: 0x1cea0c..0x1ceaec (224 bytes) ===\ncoverage: 53 of ~56 instruction slots (95%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x1cda4c x1   setskillresult(int) \n  0x1e31b8 x1   get_unit_jl(BWORK*, int, int*) \n\n-- branches: 3 total, 1 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

@@ -13,6 +13,7 @@
     "28d01c"
   ],
   "log": "=== jtable.py: 0x28d6ec..0x28d7d0 (228 bytes) ===\ncoverage: 53 of ~57 instruction slots (93%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x28cfb4 x1   sub_28cfb4 LOCAL(no-dynsym)\n  0x28d01c x1   sub_28d01c LOCAL(no-dynsym)\n\n-- branches: 9 total, 3 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

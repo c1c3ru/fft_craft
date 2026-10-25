@@ -1,0 +1,21 @@
+{
+  "address": "002c5434",
+  "name": "Movie_FrameRender()",
+  "size": 120,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 90.0,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2cb48c",
+    "a7e6c",
+    "a8098",
+    "a9270"
+  ],
+  "log": "=== jtable.py: 0x2c5434..0x2c54ac (120 bytes) ===\ncoverage: 27 of ~30 instruction slots (90%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0xa7e6c x1   CEGL2_IF::SetScreenSize(float, float) \n  0xa8098 x1   CEGL2_IF::InitRenderState2D() \n  0xa9270 x1   CEGL2_IF::Setup2D() \n  0x2cb48c x2   __floatsisf \n\n-- branches: 1 total, 1 backward (loop candidates) --\n",
+  "review_attempts": 1,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

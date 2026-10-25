@@ -1,0 +1,17 @@
+{
+  "address": "002b1458",
+  "name": "Project_Core_Bootup()",
+  "size": 120,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 96.67,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "b6cd8"
+  ],
+  "log": "=== jtable.py: 0x2b1458..0x2b14d0 (120 bytes) ===\ncoverage: 29 of ~30 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0xb6cd8 x4   CFILE_DAT::Load(int, int, int) \n\n-- branches: 1 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

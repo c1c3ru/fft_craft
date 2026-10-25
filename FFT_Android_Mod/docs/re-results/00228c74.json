@@ -12,6 +12,7 @@
     "225370"
   ],
   "log": "=== jtable.py: 0x228c74..0x228d40 (204 bytes) ===\ncoverage: 42 of ~51 instruction slots (82%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x225370 x1   Malloc(unsigned long, long) \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

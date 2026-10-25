@@ -1,0 +1,21 @@
+{
+  "address": "0025d590",
+  "name": "directedit_chk()",
+  "size": 116,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 96.55,
+  "distinct_bl": 5,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "103400",
+    "1569ac",
+    "26d7bc",
+    "2b7ccc",
+    "2b9cac"
+  ],
+  "log": "=== jtable.py: 0x25d590..0x25d604 (116 bytes) ===\ncoverage: 28 of ~29 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 5 distinct --\n  0x103400 x1   Wread_eventflag(int) \n  0x1569ac x1   editdirect() \n  0x26d7bc x1   iOSTutoFlagSet(int, int) \n  0x2b7ccc x1   iOS_getV2Icon(V2ICON_DATA) \n  0x2b9cac x2   iOS_setV2Icon(V2ICON_DATA, int) \n\n-- branches: 2 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

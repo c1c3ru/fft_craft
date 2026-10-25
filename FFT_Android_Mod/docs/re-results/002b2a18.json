@@ -1,0 +1,19 @@
+{
+  "address": "002b2a18",
+  "name": "SE_StopVFX(int)",
+  "size": 124,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 90.32,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "28c320",
+    "ba5ac"
+  ],
+  "log": "=== jtable.py: 0x2b2a18..0x2b2a94 (124 bytes) ===\ncoverage: 28 of ~31 instruction slots (90%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0xba5ac x1   CSOUND_IF::Unload(int) \n  0x28c320 x1   CFFT_STATE::GetParam(int) \n\n-- branches: 3 total, 1 backward (loop candidates) --\n",
+  "review_attempts": 1,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

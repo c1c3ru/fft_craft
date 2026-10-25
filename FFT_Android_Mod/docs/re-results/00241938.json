@@ -1,0 +1,18 @@
+{
+  "address": "00241938",
+  "name": "fftCdRead2(CDREC*, int, int, int, unsigned long*)",
+  "size": 112,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 96.43,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "20c9c4",
+    "28e470"
+  ],
+  "log": "=== jtable.py: 0x241938..0x2419a8 (112 bytes) ===\ncoverage: 27 of ~28 instruction slots (96%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x20c9c4 x1   fileReadRequestOffset(unsigned int, unsigned int, unsigned int, void*) \n  0x28e470 x1   CdIntToPos \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

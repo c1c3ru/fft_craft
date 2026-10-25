@@ -1,0 +1,18 @@
+{
+  "address": "00215950",
+  "name": "loadAnbient()",
+  "size": 108,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 96.3,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1639ac",
+    "714b8"
+  ],
+  "log": "=== jtable.py: 0x215950..0x2159bc (108 bytes) ===\ncoverage: 26 of ~27 instruction slots (96%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x714b8 x1   sub_714b8 LOCAL(no-dynsym)\n  0x1639ac x1   ASHURA_CVECTOR(long, CVECTOR*) \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

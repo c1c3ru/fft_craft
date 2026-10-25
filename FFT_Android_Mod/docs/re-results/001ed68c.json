@@ -1,0 +1,18 @@
+{
+  "address": "001ed68c",
+  "name": "getTargetAnimationHight(tag_animation*, SVECTOR*)",
+  "size": 112,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1eb00c",
+    "1ece44"
+  ],
+  "log": "=== jtable.py: 0x1ed68c..0x1ed6fc (112 bytes) ===\ncoverage: 28 of ~28 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x1eb00c x1   searchAnimationByID(unsigned short) \n  0x1ece44 x1   sub_1ece44 LOCAL(no-dynsym)\n\n-- branches: 3 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

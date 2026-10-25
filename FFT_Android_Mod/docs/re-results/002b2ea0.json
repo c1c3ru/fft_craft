@@ -19,6 +19,7 @@
     "bdae0"
   ],
   "log": "=== jtable.py: 0x2b2ea0..0x2b2f7c (220 bytes) ===\ncoverage: 51 of ~55 instruction slots (93%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 8 distinct --\n  0xba5ac x1   CSOUND_IF::Unload(int) \n  0xba774 x1   CSOUND_IF::IsPlaying(int, int) \n  0xba88c x1   CSOUND_IF::GetVolume(int) \n  0xbb05c x1   CSOUND_IF::FadeVolume(int, int, int, int) \n  0xbdae0 x1   CFRAMERATE::GetRate() \n  0x20f94c x1   iOS_GetFrameRate() \n  0x28c320 x1   CFFT_STATE::GetParam(int) \n  0x2ca79c x1   __divsi3 \n\n-- branches: 3 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

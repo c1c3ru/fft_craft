@@ -13,6 +13,7 @@
     "2919c0"
   ],
   "log": "=== jtable.py: 0x10fa1c..0x10fb14 (248 bytes) ===\ncoverage: 57 of ~62 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x291348 x5   GetTPage \n  0x2919c0 x1   SetDrawMode \n\n-- branches: 8 total, 4 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

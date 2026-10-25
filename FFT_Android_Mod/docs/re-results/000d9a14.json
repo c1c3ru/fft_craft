@@ -1,0 +1,20 @@
+{
+  "address": "000d9a14",
+  "name": "seekfacefile(int)",
+  "size": 108,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 96.3,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "20ccb8",
+    "291074",
+    "2b7ccc",
+    "d78f0"
+  ],
+  "log": "=== jtable.py: 0xd9a14..0xd9a80 (108 bytes) ===\ncoverage: 26 of ~27 instruction slots (96%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0xd78f0 x1   allocatememorywait(int) \n  0x20ccb8 x1   fileReadCDOffset(unsigned long, unsigned long, unsigned long, void*) \n  0x291074 x2   PSX_LoadImage \n  0x2b7ccc x1   iOS_getV2Icon(V2ICON_DATA) \n\n-- branches: 2 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

@@ -6,22 +6,22 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 |---|---:|
 | Inventory total | 6,455 functions / 1,837,392 bytes |
 | Previously analyzed in CSV | 3,373 functions / 1,513,492 bytes |
-| JSON checkpoints (all statuses) | 739 |
-| Newly accepted structurally | 403 functions / 116,616 bytes |
-| Needs review | 336 functions |
+| JSON checkpoints (all statuses) | 836 |
+| Newly accepted structurally | 453 functions / 122,284 bytes |
+| Needs review | 383 functions |
 | Core targets in inventory | 4,642 functions |
-| Core targets checkpointed | 636 functions |
-| Core accepted structurally | 320 functions |
-| Core needs review | 316 functions |
-| Core not yet checkpointed | 1,725 functions |
-| Not yet checkpointed | 2,329 functions / 110,968 bytes |
+| Core targets checkpointed | 733 functions |
+| Core accepted structurally | 370 functions |
+| Core needs review | 363 functions |
+| Core not yet checkpointed | 1,625 functions |
+| Not yet checkpointed | 2,229 functions / 99,524 bytes |
 
 ## Checkpoint status
 
 | Status | Functions |
 |---|---:|
-| auto_structural | 403 |
-| needs_review | 336 |
+| auto_structural | 453 |
+| needs_review | 383 |
 
 ## Review queue (largest first)
 
@@ -357,12 +357,59 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | `001015a4` | Wwait_overlay(int) (needs_review) | 128 | 90.62 | 0 | 0 |
 | `000d9988` | wait_loaddata(int) (needs_review) | 128 | 90.62 | 0 | 0 |
 | `000d9790` | wait_overlay(int) (needs_review) | 128 | 90.62 | 0 | 0 |
+| `002b36dc` | Error_FrameRender() (needs_review) | 124 | 90.32 | 0 | 0 |
+| `002b2a18` | SE_StopVFX(int) (needs_review) | 124 | 90.32 | 0 | 0 |
+| `002b2798` | SE_CorrectFID(int) (needs_review) | 124 | 93.55 | 0 | 0 |
+| `0028bec0` | TE_VSync(int) (needs_review) | 124 | 90.32 | 0 | 0 |
+| `002665d8` | add_anmpac(unsigned long*, int*) (needs_review) | 124 | 93.55 | 0 | 0 |
 | `0024a544` | vOpn_add_winpac(unsigned long*, int*) (needs_review) | 124 | 93.55 | 0 | 0 |
 | `0020c550` | db_swap_generate(unsigned long*, unsigned long*) (needs_review) | 124 | 90.32 | 0 | 0 |
 | `001baae8` | SttsAMovingChk() (needs_review) | 124 | 90.32 | 0 | 0 |
 | `0016a14c` | ASURA_soundStop() (needs_review) | 124 | 90.32 | 0 | 0 |
 | `00161ef8` | wasmTaskEntry() (needs_review) | 124 | 93.55 | 0 | 0 |
 | `00105510` | Wwait_direc(int) (needs_review) | 124 | 93.55 | 0 | 0 |
+| `002c5434` | Movie_FrameRender() (needs_review) | 120 | 90.0 | 0 | 0 |
+| `0024a4cc` | vOpn_add_anmpac(unsigned long*, int*) (needs_review) | 120 | 93.33 | 0 | 0 |
+| `0021e760` | doSequence(short) (needs_review) | 120 | 90.0 | 0 | 0 |
+| `001e4e94` | get_step_no(BWORK*) (needs_review) | 120 | 93.33 | 0 | 0 |
+| `001a47e0` | pspAbilityCompareSupport(short, short) (needs_review) | 120 | 90.0 | 0 | 0 |
+| `0015d2ac` | iOS_GameAreaCheck() (needs_review) | 120 | 83.33 | 0 | 0 |
+| `000ff9ec` | Wload_replaceitems(int, int) (needs_review) | 120 | 56.67 | 1 | 0 |
+| `000dcc2c` | wait_direc(int) (needs_review) | 120 | 93.33 | 0 | 0 |
+| `000d7e00` | load_replaceitems(int, int) (needs_review) | 120 | 56.67 | 1 | 0 |
+| `002cb830` | __gesf2 (needs_review) | 116 | 89.66 | 0 | 0 |
+| `002cabdc` | __aeabi_ul2d (needs_review) | 116 | 75.86 | 0 | 0 |
+| `002816bc` | iOS_v2menuSetEnable(V2_MENU_ITEM, int) (needs_review) | 116 | 93.1 | 0 | 0 |
+| `0024fd00` | pspCtltutonet_active(CTLINFO*) (needs_review) | 116 | 93.1 | 0 | 0 |
+| `0021cc10` | s1e_ifMetascheduleEnd(_EffectTCB*) (needs_review) | 116 | 93.1 | 0 | 0 |
+| `002042c8` | startTurnRelative(int) (needs_review) | 116 | 89.66 | 0 | 0 |
+| `00201708` | setActionStartDirection(tag_animation*) (needs_review) | 116 | 93.1 | 0 | 0 |
+| `001fd168` | setActivePanelFromAction(tag_animation*) (needs_review) | 116 | 89.66 | 0 | 0 |
+| `001b7ef4` | TruePadRead(int) (needs_review) | 116 | 93.1 | 0 | 0 |
+| `000ff43c` | Wallocatememoryinit() (needs_review) | 116 | 93.1 | 0 | 0 |
+| `000e2b04` | statusnowprint(char*, COPYFIELD*) (needs_review) | 116 | 93.1 | 0 | 0 |
+| `000d8c00` | checkkeyok() (needs_review) | 116 | 89.66 | 0 | 0 |
+| `000c81c4` | tool_squareinit() (needs_review) | 116 | 89.66 | 0 | 0 |
+| `00077524` | gzerror (needs_review) | 116 | 93.1 | 0 | 0 |
+| `0028e25c` | OpenEvent(unsigned long, long, long, long (*)()) (needs_review) | 112 | 92.86 | 0 | 0 |
+| `0028d088` | tlSetHeap(void*) (needs_review) | 112 | 85.71 | 0 | 0 |
+| `00270490` | curhis_put(int, int, int) (needs_review) | 112 | 92.86 | 0 | 0 |
+| `0026030c` | ctlmouke_exit(CTLINFO*) (needs_review) | 112 | 82.14 | 0 | 0 |
+| `00254100` | wldctl_init() (needs_review) | 112 | 82.14 | 0 | 0 |
+| `00103340` | Wwrite_eventflag(int, int) (needs_review) | 112 | 92.86 | 0 | 0 |
+| `001026c4` | Wchecktaskkind(int) (needs_review) | 112 | 92.86 | 0 | 0 |
+| `000feeb4` | Wdisposewindowbytask(int) (needs_review) | 112 | 92.86 | 0 | 0 |
+| `000db77c` | write_eventflag(int, int) (needs_review) | 112 | 92.86 | 0 | 0 |
+| `000daa50` | checktaskkind(int) (needs_review) | 112 | 92.86 | 0 | 0 |
+| `000d7880` | allocatememoryinit() (needs_review) | 112 | 92.86 | 0 | 0 |
+| `00281730` | iOS_v2menuGetEnable(V2_MENU_ITEM) (needs_review) | 108 | 92.59 | 0 | 0 |
+| `00249c58` | vOpn_bk_load(int, unsigned long*) (needs_review) | 108 | 88.89 | 0 | 0 |
+| `00245c0c` | o_GetCardState() (needs_review) | 108 | 88.89 | 0 | 0 |
+| `002151e8` | resetClutData(unsigned int, unsigned int, int) (needs_review) | 108 | 92.59 | 0 | 0 |
+| `0020c930` | freeForFile(void*) (needs_review) | 108 | 92.59 | 0 | 0 |
+| `001a9370` | GetTotalItemBackup(short) (needs_review) | 108 | 92.59 | 0 | 0 |
+| `0015d858` | iOSCurSameOKMove() (needs_review) | 108 | 92.59 | 0 | 0 |
+| `000d8778` | import_localstatus(char*, char*, char*, char*) (needs_review) | 108 | 92.59 | 0 | 0 |
 
 > Structural acceptance does not establish semantic equivalence.
 > Counts distinguish historical CSV statuses, new accepted checkpoints, and review cases.
