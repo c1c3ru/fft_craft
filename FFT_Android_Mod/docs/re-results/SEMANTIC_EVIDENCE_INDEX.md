@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **800/1258** pending functions.
+Evidence collected: **808/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -811,3 +811,11 @@ These reports do not constitute semantic verification.
 | `001b9d84` | iOS_clearTutorialbreak() | [Evidence](semantic-evidence/001b9d84.md) |
 | `001d66f8` | set_td(unsigned char*) | [Evidence](semantic-evidence/001d66f8.md) |
 | `00202efc` | iOS_BattleEventCheck() | [Evidence](semantic-evidence/00202efc.md) |
+| `002064a8` | iOS_IsEnableMenuItemTouch() | [Evidence](semantic-evidence/002064a8.md) |
+| `0020696c` | iOS_IsEnableFlicker() | [Evidence](semantic-evidence/0020696c.md) |
+| `0020f8cc` | setFrameRate(int) | [Evidence](semantic-evidence/0020f8cc.md) |
+| `002119a0` | ResetChangePalette() | [Evidence](semantic-evidence/002119a0.md) |
+| `0021b8a4` | PushGravity() | [Evidence](semantic-evidence/0021b8a4.md) |
+| `0021cedc` | UnlockEffect() | [Evidence](semantic-evidence/0021cedc.md) |
+| `0021cefc` | LockEffectCompelBreak() | [Evidence](semantic-evidence/0021cefc.md) |
+| `0021f308` | PermanentEffectEndRequest(unsigned char) | [Evidence](semantic-evidence/0021f308.md) |
