@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **952/1258** pending functions.
+Evidence collected: **960/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -963,3 +963,11 @@ These reports do not constitute semantic verification.
 | `002a25e0` | read_opz(long*) | [Evidence](semantic-evidence/002a25e0.md) |
 | `002a2728` | xpPadAnalogAssign | [Evidence](semantic-evidence/002a2728.md) |
 | `002a2a34` | xpPadUpdateData | [Evidence](semantic-evidence/002a2a34.md) |
+| `002a2a68` | xpPadWorkBufGet | [Evidence](semantic-evidence/002a2a68.md) |
+| `002a2a80` | xpPadTriggerGet | [Evidence](semantic-evidence/002a2a80.md) |
+| `002a2a98` | xpPadGet | [Evidence](semantic-evidence/002a2a98.md) |
+| `002a2ab0` | xpPadAnalogXGet | [Evidence](semantic-evidence/002a2ab0.md) |
+| `002a2ac8` | xpPadAnalogYGet | [Evidence](semantic-evidence/002a2ac8.md) |
+| `002a2ae0` | xpPadPspPadDataGet | [Evidence](semantic-evidence/002a2ae0.md) |
+| `002a2af8` | xpPadRepeatGet | [Evidence](semantic-evidence/002a2af8.md) |
+| `002a2b2c` | xpPadKeyTblSet | [Evidence](semantic-evidence/002a2b2c.md) |
