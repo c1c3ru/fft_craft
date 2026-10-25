@@ -44,6 +44,11 @@ jobs:
           LIMIT="${REQUESTED_LIMIT:-3}"
           python3 FFT_Android_Mod/docs/re-tools/parallel_loop.py \
             --workers 3 --limit "$LIMIT" --timeout 120
+      - name: Verify real ARM golden baseline
+        if: success()
+        run: |
+          python3 FFT_Android_Mod/docs/re-tools/check_smoke.py \
+            FFT_Android_Mod/docs/re-results
       - uses: actions/upload-artifact@v4
         if: always()
         with:
