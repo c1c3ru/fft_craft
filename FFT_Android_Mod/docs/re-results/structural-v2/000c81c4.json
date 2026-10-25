@@ -1,0 +1,19 @@
+{
+  "address": "000c81c4",
+  "name": "tool_squareinit()",
+  "size": 116,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 89.66,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1532c0",
+    "be538"
+  ],
+  "log": "=== jtable.py: 0xc81c4..0xc8238 (116 bytes) ===\ncoverage: 26 of ~29 instruction slots (90%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0xbe538 x1   sub_be538 LOCAL(no-dynsym)\n  0x1532c0 x1   task_create(long, char*) \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

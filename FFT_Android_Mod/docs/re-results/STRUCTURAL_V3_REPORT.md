@@ -4,20 +4,22 @@ Automatic structural acceptance checks all ARM instruction slots, candidate PC-r
 
 | Metric | Count |
 |---|---:|
-| v3 checkpoints | 200 |
-| Legacy checkpoint records unchanged | 2802 |
-| v3 structurally accepted | 179 |
-| v3 still under review | 21 |
-| Archived v2 originals | 200 |
-| Referenced candidate literal words | 1204 |
-| Unexplained instruction slots | 337 |
+| v3 checkpoints | 298 |
+| Legacy checkpoint records unchanged | 2704 |
+| v3 structurally accepted | 273 |
+| v3 still under review | 25 |
+| Archived v2 originals | 296 |
+| Referenced candidate literal words | 1481 |
+| Unexplained instruction slots | 372 |
 | Independently checked jump tables | 0 |
-| Unsafe / unresolved checked tables | 19 |
+| Unsafe / unresolved checked tables | 21 |
 
 ## Remaining v3 review examples
 
 | Address | Unexplained slots | Reason |
 |---|---:|---|
+| `000d7e00` | 13 | unverified_jump_table |
+| `000ff9ec` | 13 | unverified_jump_table |
 | `0015a65c` | 11 | unverified_jump_table |
 | `001a6410` | 10 | unverified_jump_table |
 | `001caa10` | 17 | unverified_jump_table |
@@ -39,6 +41,8 @@ Automatic structural acceptance checks all ARM instruction slots, candidate PC-r
 | `002b20f4` | 20 | unverified_jump_table |
 | `002b3464` | 0 | instruction_conflict |
 | `002c9b11` | 0 | non_arm_aligned_or_empty |
+| `002cb0c0` | 3 | unexplained_code_slots |
+| `002cb4ac` | 6 | unexplained_code_slots |
 
 ## Migration contract
 

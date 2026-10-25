@@ -3,7 +3,7 @@
   "name": "Main_Uninit()",
   "size": 148,
   "previous_status": "unread",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 94.59,
   "distinct_bl": 7,
   "tables_resolved": 0,
@@ -18,7 +18,30 @@
     "ad938"
   ],
   "log": "=== jtable.py: 0x2b6b38..0x2b6bcc (148 bytes) ===\ncoverage: 35 of ~37 instruction slots (95%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 7 distinct --\n  0xad938 x1   CEGL2_SPRITE::Unload(int) \n  0x28b844 x1   uninitTaskEmu() \n  0x28c278 x1   CFFT_STATE::GetDebugMode() \n  0x28c2d8 x1   CFFT_STATE::GetMoviePlaying() \n  0x28c300 x1   CFFT_STATE::GetSettingsEnable() \n  0x28c310 x1   CFFT_STATE::GetLinkEnable() \n  0x2b375c x1   Error_GetErrorCode() \n\n-- branches: 7 total, 6 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x2b6b38",
+    "total_slots": 37,
+    "code_slots": 35,
+    "instruction_slots": 35,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x2b6bc4",
+      "0x2b6bc8"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/002b6b38.json"
 }

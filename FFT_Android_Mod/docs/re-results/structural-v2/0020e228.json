@@ -1,0 +1,21 @@
+{
+  "address": "0020e228",
+  "name": "get2DPosition(SVECTOR*, SVECTOR*)",
+  "size": 144,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 86.11,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "165388",
+    "2a0818",
+    "2a0d10",
+    "2a2620"
+  ],
+  "log": "=== jtable.py: 0x20e228..0x20e2b8 (144 bytes) ===\ncoverage: 31 of ~36 instruction slots (86%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x165388 x1   ASHURA_matrix(MATRIX*, SVECTOR*, VECTOR*, VECTOR*) \n  0x2a0818 x1   SetRotMatrix \n  0x2a0d10 x1   SetTransMatrix \n  0x2a2620 x1   RotTrans \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

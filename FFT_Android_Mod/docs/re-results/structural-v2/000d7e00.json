@@ -1,0 +1,16 @@
+{
+  "address": "000d7e00",
+  "name": "load_replaceitems(int, int)",
+  "size": 120,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 56.67,
+  "distinct_bl": 0,
+  "tables_resolved": 1,
+  "tables_unresolved": 0,
+  "bl_targets": [],
+  "log": "=== jtable.py: 0xd7e00..0xd7e78 (120 bytes) ===\ncoverage: 17 of ~30 instruction slots (57%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0xd7e04, dispatch @0xd7e08: 12 cases, 7 distinct handlers\n    targets: ['0xd7e48', '0xd7e50', '0xd7e70', '0xd7e70', '0xd7e70', '0xd7e58', '0xd7e70', '0xd7e70', '0xd7e70', '0xd7e60', '0xd7e68', '0xd7e40']\n\n-- bl targets: 0 distinct --\n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

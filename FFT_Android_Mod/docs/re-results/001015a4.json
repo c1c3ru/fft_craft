@@ -3,7 +3,7 @@
   "name": "Wwait_overlay(int)",
   "size": 128,
   "previous_status": "unread",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 90.62,
   "distinct_bl": 1,
   "tables_resolved": 0,
@@ -12,7 +12,31 @@
     "161ef8"
   ],
   "log": "=== jtable.py: 0x1015a4..0x101624 (128 bytes) ===\ncoverage: 29 of ~32 instruction slots (91%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x161ef8 x2   wasmTaskEntry() \n\n-- branches: 7 total, 3 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x1015a4",
+    "total_slots": 32,
+    "code_slots": 29,
+    "instruction_slots": 29,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x101618",
+      "0x10161c",
+      "0x101620"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/001015a4.json"
 }

@@ -1,0 +1,20 @@
+{
+  "address": "00102208",
+  "name": "Wexport_suc(int)",
+  "size": 148,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 91.89,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "162080",
+    "1d2968",
+    "20c5d0"
+  ],
+  "log": "=== jtable.py: 0x102208..0x10229c (148 bytes) ===\ncoverage: 34 of ~37 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x162080 x1   wasm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long) \n  0x1d2968 x1   get_bwp(int) \n  0x20c5d0 x1   system_error(int, int) \n\n-- branches: 1 total, 1 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
