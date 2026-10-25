@@ -21,6 +21,8 @@ TOOLS = Path(__file__).resolve().parent
 DEFAULT_SO = ROOT / "src/lib/armeabi/libgl2jni.so"
 DEFAULT_CSV = ROOT / "docs/RE_FUNCTION_INVENTORY.csv"
 CONFIRMED = {"read_structural", "read_full", "confirmed_by_similarity"}
+RETRYABLE = {"error", "needs_review"}
+PIPELINE_VERSION = 2
 FAMILY_PATTERNS = (
     ("Mdl", re.compile(r"^Mdl\d+")),
     ("personalwindow", re.compile(r"^(?:[WACDE])?disp_personalwindow")),
@@ -107,7 +109,8 @@ def analyze_one(row: dict, so: Path, timeout: int, references: dict,
     cov = COVERAGE.search(output)
     tables = TABLES.search(output)
     unresolved = len(UNRESOLVED.findall(output))
-    targets = set(BL.findall(output))
+    targets_section = output.split("-- bl targets:", 1)[-1].split("-- branches:", 1)[0]
+    targets = set(BL.findall(targets_section))
     if not cov or not tables:
         raise ValueError("Could not parse jtable.py output; leave for manual review")
     coverage_pct = 100 * int(cov.group(1)) / max(1, int(cov.group(2)))
@@ -132,10 +135,14 @@ def main() -> int:
     parser.add_argument("--similarity", type=float, default=0.90)
     parser.add_argument("--min-bl", type=int, default=5)
     parser.add_argument("--include-reviewed", action="store_true")
+    parser.add_argument("--retry-review", action="store_true",
+                        help="Reprocess results flagged for manual review")
     args = parser.parse_args()
     if not (1 <= args.workers <= 16 and args.limit >= 1 and
             0 < args.similarity <= 1 and args.min_bl >= 1):
         parser.error("invalid worker/limit/similarity/min-bl setting")
+    if args.timeout < 1:
+        parser.error("timeout must be positive")
     if not args.so.is_file():
         parser.error(f"library missing: {args.so}")
     rows = load_inventory(args.inventory)
@@ -154,8 +161,11 @@ def main() -> int:
         if destination.exists():
             try:
                 previous = json.loads(destination.read_text(encoding="utf-8"))
-                if previous.get("binary_sha256") == binary_hash and (
-                    previous.get("size") == row["size"]):
+                if (previous.get("binary_sha256") == binary_hash
+                        and previous.get("size") == row["size"]
+                        and previous.get("pipeline_version") == PIPELINE_VERSION
+                        and previous.get("status") != "error"
+                        and not (args.retry_review and previous.get("status") == "needs_review")):
                     continue
             except (ValueError, OSError):
                 pass
@@ -176,6 +186,7 @@ def main() -> int:
                           "name": row["demangled"], "status": "error",
                           "error": str(error)}
             result["binary_sha256"] = binary_hash
+            result["pipeline_version"] = PIPELINE_VERSION
             completed.append(result)
             target = args.output / (row["address"] + ".json")
             temp = target.with_suffix(".json.tmp")
@@ -187,11 +198,12 @@ def main() -> int:
     for path in args.output.glob("*.json"):
         try:
             record = json.loads(path.read_text(encoding="utf-8"))
-            if record.get("binary_sha256") == binary_hash:
+            if (record.get("binary_sha256") == binary_hash
+                    and record.get("pipeline_version") == PIPELINE_VERSION):
                 recorded.append(record)
         except (ValueError, OSError):
             continue
-    recorded.sort(key=lambda r: -r["size"])
+    recorded.sort(key=lambda r: (-r["size"], r["address"]))
     total_bytes = sum(row["size"] for row in rows)
     accepted = {"auto_structural", "confirmed_by_similarity"}
     validated_bytes = sum(r["size"] for r in recorded if r["status"] in accepted)
@@ -208,8 +220,10 @@ def main() -> int:
         name = item["name"].replace("|", "\|")
         lines.append(f"| `{item['address']}` | {name} | {item['size']} | "
                      f"{item.get('coverage_pct', '—')}% | {item['status']} |")
-    (args.output / "SUMMARY.md").write_text("\n".join(lines) + "\n",
-                                             encoding="utf-8")
+    summary = args.output / "SUMMARY.md"
+    summary_tmp = summary.with_suffix(".md.tmp")
+    summary_tmp.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    summary_tmp.replace(summary)
     return 1 if any(item["status"] == "error" for item in completed) else 0
 
 
