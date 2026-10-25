@@ -19673,3 +19673,79 @@ call-graph confirmados via checkpoint + cruzamento textual; nenhuma
 teve os blocos lidos instrução a instrução — aceite direto por já
 vir com cobertura ≥95% e zero tabela pendente, conforme o item 3 da
 estratégia documentada).
+
+## 606. Grab-bag de 16 checkpoints `auto_structural` (≥95% cobertura, 0 tabela pendente) aceitos direto, sem fork (2026-10-25, Fase 3, octogésimo sexto lote)
+
+Mesma rota do §605 — identificação curta a partir do `bl` já resolvido
+no checkpoint + um grep de cruzamento, sem fork.
+
+- **`iOS_Suspend(IOS_RESUME_MODE)`** (`0x27f680`, 432 B, **99%**, **21
+  `bl`**) — achado de alto valor: chama **todos os 19**
+  `iOS_RESUME_SET_*` já documentados dispersos em dezenas de seções
+  (`_ATTACK`/`_EVENT` §76/`_WORK_IW`/`_ASURA`/`_FFTDATA`/
+  `_FFTDATA_UNITLIST`/`_RESERVE`/`_BCALC`/`_BSTR`/`_BW_INIT`/
+  `_COMWIND`/`_MAPADJ`/`_UNIT_SD`/`_BATTLE`/`_GLBLWORK`/`_WORK_MU`/
+  `_WLDSAVE`/`_INITIAL`/`_PSP_BATTLE`), mais `read_eventflag(int)`
+  (×7) e `xpGetHeap`. É a função coordenadora que dispara a
+  serialização completa do estado de "suspend" (snapshot do app pra
+  iOS salvar ao sair) — o ponto de entrada real de todo o sistema
+  `IOS_RESUME_*` que até agora só era conhecido função a função.
+- **`ctlbrst_active(CTLINFO*)`** (`0x24cda0`, 456 B, 96%, 2 `bl`:
+  `Wsend_taskparamater`, `iOS_setDispMenuTouch(char)`) — parte do hub
+  `ctlbrst_*` (zodiac popup, §125/§312): fase "active" simples, sem
+  switch, só habilita/desabilita toque de menu e notifica a task.
+- **`faceuvclut(tagPOLY_FT4*, int, int*)`** (`0xd8a34`, 456 B, 97%, 5
+  `bl`: `get_bwp`, `getAnimationIDFormBattleWork`,
+  `getFontIDFormBattleWork`, `GetTPage` ×4, `GetClut` ×2) — a
+  variante sem prefixo `W` de `Wfaceuvclut` (já citada na §125/linha
+  10550 sem nunca ter sido lida); confirma o par W/sem-W pro cálculo
+  de UV/CLUT do rosto renderizado em primitivas `POLY_FT4`.
+- **`s25_playObject(_EffectTCB*)`** (`0x21c474`, 464 B, 98%, 5 `bl`:
+  `DynamicsAllObject`, `DisposeObject`, `CreateObjectWithTable` (§44)
+  ×2, `SetRotMatrix`, `SetTransMatrix`) — mais um consumidor do
+  gerador de partículas/efeitos (§44), com gerenciamento de matriz
+  de transformação próprio.
+- **`SetChrListOne(int)`** (`0x1a7884`, 452 B, **100%**, 6 `bl`:
+  `Bwork2ChrStts`, `get_unitwork_add`, `set_playerwork_j`,
+  `pspItemGetCommonData` ×2, +2 locais) — monta uma entrada de lista
+  de personagem (status + item) pra exibição, reusando os
+  conversores já confirmados em outras seções de UI de unidade.
+- **`GetShapeData(short, short*)`** (`0x1abc4c`, 448 B, 96%, 3 `bl`:
+  `cnvattackclutno(int)`, `GetClut`, +1 local) — resolve o CLUT de
+  ataque pra uma forma/sprite específica.
+- **`loadEventAnimation(int, unsigned char*)`** (`0x20ebc4`, 448 B,
+  **99%**, 0 `bl`) — função folha, já citada por nome na linha 5978
+  junto de `loadNewAnimation`/`activateEventAnimation` (cluster de
+  carregamento de animação de evento).
+- **`picsand_draw(GsIMAGE*, int)`** (`0x26c860`, 436 B, 96%, 1 `bl`:
+  `LoadTPage`) — já citada várias vezes (linhas 10939/11169/11984)
+  como o efeito "revelar por areia" da ilustração do popup zodiac —
+  confirma que o efeito usa só uma chamada de setup de textura, o
+  resto é aritmética de máscara local.
+- **`setjoinus_net()`** (`0x15047c`, 436 B, **99%**, 6 `bl`:
+  `GetLocalJobNumber`, `get_bwp`, `get_unitwork_add` ×2,
+  `search_empty_savework`, `copy_struct_data` ×6,
+  `pspJobGetTamanegiLevel`) — sincronização de rede de uma unidade
+  "join us" (recruta via evento de história) pro slot de trabalho
+  salvo local.
+- **`UnitBakOne(int)`**/**`UnitBakTwo(int, int)`** (`0x17c0c0`/`0x1bd72c`,
+  444 B cada, 97%, 2 `bl` cada) — par genuíno de variantes "1
+  unidade"/"2 unidades" de um backup de desenho pra undo/preview de
+  ataque: `UnitBakOne` chama `bDrawGT4RGB` (variante de batalha, `b`-
+  prefixada), `UnitBakTwo` chama `DrawGT4RGB` (variante sem prefixo)
+  — mais um caso do padrão `b*`/sem-`b*` já estabelecido, não dois
+  sistemas diferentes.
+- **`Winitstatusback(RECT16*, STTSWINDOWBACK*)`**/**`initstatusback(RECT16*, STTSWINDOWBACK*)`**
+  (`0xff7a4`/`0xd7bb4`, 440 B cada, 98%, 5 `bl` cada, catálogo
+  idêntico: `Winitsprt`/`initsprt`, `Wsttsback_normal`/`sttsback_normal`,
+  `GetTPage`/`SetLineF2`/`SetDrawMode`) — par W/sem-W exato do fundo
+  de janela de status, mesmo padrão de duplicação já visto em
+  dezenas de outras famílias do projeto.
+- **`deflateCopy`**/**`gzread`**/**`gzseek64`** (`0x77200`/`0x78390`/
+  `0x77c18`, zlib real, 100%/99%/100%, delegam pra `deflateEnd`/
+  `gz_error`/`gzrewind` já conhecidos ou helpers locais) — mais três
+  funções padrão da zlib real, mesmo tema do §605/§569.
+
+**Status CSV**: `read_structural` para as 16 (identidade e call-graph
+confirmados via checkpoint + cruzamento textual; nenhuma teve os
+blocos lidos instrução a instrução).
