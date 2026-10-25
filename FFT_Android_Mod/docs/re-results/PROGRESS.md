@@ -5,7 +5,7 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | Metric | Quantity |
 |---|---:|
 | Inventory total | 6,455 functions / 1,837,392 bytes |
-| Previously analyzed in CSV | 3,419 functions / 1,537,112 bytes |
+| Previously analyzed in CSV | 3,425 functions / 1,539,852 bytes |
 | JSON checkpoints (all statuses) | 3,002 |
 | Newly accepted structurally | 1,744 functions / 175,984 bytes |
 | Needs review | 1,258 functions |
