@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **352/1258** pending functions.
+Evidence collected: **360/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -363,3 +363,11 @@ These reports do not constitute semantic verification.
 | `00103340` | Wwrite_eventflag(int, int) | [Evidence](semantic-evidence/00103340.md) |
 | `00254100` | wldctl_init() | [Evidence](semantic-evidence/00254100.md) |
 | `0026030c` | ctlmouke_exit(CTLINFO*) | [Evidence](semantic-evidence/0026030c.md) |
+| `00270490` | curhis_put(int, int, int) | [Evidence](semantic-evidence/00270490.md) |
+| `0028d088` | tlSetHeap(void*) | [Evidence](semantic-evidence/0028d088.md) |
+| `0028e25c` | OpenEvent(unsigned long, long, long, long (*)()) | [Evidence](semantic-evidence/0028e25c.md) |
+| `000d8778` | import_localstatus(char*, char*, char*, char*) | [Evidence](semantic-evidence/000d8778.md) |
+| `0015d858` | iOSCurSameOKMove() | [Evidence](semantic-evidence/0015d858.md) |
+| `001a9370` | GetTotalItemBackup(short) | [Evidence](semantic-evidence/001a9370.md) |
+| `0020c930` | freeForFile(void*) | [Evidence](semantic-evidence/0020c930.md) |
+| `002151e8` | resetClutData(unsigned int, unsigned int, int) | [Evidence](semantic-evidence/002151e8.md) |
