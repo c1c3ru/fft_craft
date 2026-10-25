@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **384/1258** pending functions.
+Evidence collected: **392/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -395,3 +395,11 @@ These reports do not constitute semantic verification.
 | `001cd0cc` | set_calcmode_think() | [Evidence](semantic-evidence/001cd0cc.md) |
 | `001d1ffc` | check_item_left(int, int, int) | [Evidence](semantic-evidence/001d1ffc.md) |
 | `00228de4` | NewShape2(unsigned char) | [Evidence](semantic-evidence/00228de4.md) |
+| `00246300` | vOpn_ctlinit(int) | [Evidence](semantic-evidence/00246300.md) |
+| `0025c49c` | houkokuinf_init(int) | [Evidence](semantic-evidence/0025c49c.md) |
+| `0025d20c` | world_exit() | [Evidence](semantic-evidence/0025d20c.md) |
+| `0026a674` | op_search(int, int) | [Evidence](semantic-evidence/0026a674.md) |
+| `002ab88c` | sceGuBlendFunc | [Evidence](semantic-evidence/002ab88c.md) |
+| `00155d14` | reactive_worldwindow() | [Evidence](semantic-evidence/00155d14.md) |
+| `00156b90` | hook_tuto(int) | [Evidence](semantic-evidence/00156b90.md) |
+| `0018e358` | esys_warning(int, int) | [Evidence](semantic-evidence/0018e358.md) |
