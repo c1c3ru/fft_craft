@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1120/1258** pending functions.
+Evidence collected: **1128/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1131,3 +1131,11 @@ These reports do not constitute semantic verification.
 | `002ca8a0` | __subdf3 | [Evidence](semantic-evidence/002ca8a0.md) |
 | `002ca8a4` | __adddf3 | [Evidence](semantic-evidence/002ca8a4.md) |
 | `002cac50` | __muldf3 | [Evidence](semantic-evidence/002cac50.md) |
+| `00271ba4` | SetBaseTargetGroup(int, int) | [Evidence](semantic-evidence/00271ba4.md) |
+| `0015596c` | worldmap_startinit() | [Evidence](semantic-evidence/0015596c.md) |
+| `0027207c` | GetNearestUnit(int) | [Evidence](semantic-evidence/0027207c.md) |
+| `0027a974` | BattleRoutineInit() | [Evidence](semantic-evidence/0027a974.md) |
+| `0026b0f4` | wld_snpl() | [Evidence](semantic-evidence/0026b0f4.md) |
+| `00276788` | CheckUnitActionOK(unsigned char*) | [Evidence](semantic-evidence/00276788.md) |
+| `000ab4b0` | CEGL2_FBO::ErrorGL(char const*, char const*, unsigned int) | [Evidence](semantic-evidence/000ab4b0.md) |
+| `000aecb8` | CEGL2_SPRITE::ErrorGL(char const*, char const*, unsigned int) | [Evidence](semantic-evidence/000aecb8.md) |
