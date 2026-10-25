@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **624/1258** pending functions.
+Evidence collected: **632/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -635,3 +635,11 @@ These reports do not constitute semantic verification.
 | `0026c3cc` | ctltresure_active(CTLINFO*) | [Evidence](semantic-evidence/0026c3cc.md) |
 | `0027b4dc` | setCmdKind(unsigned int) | [Evidence](semantic-evidence/0027b4dc.md) |
 | `0027f14c` | iOS_ClearRectHitAll() | [Evidence](semantic-evidence/0027f14c.md) |
+| `002a0844` | ReadRotMatrix | [Evidence](semantic-evidence/002a0844.md) |
+| `002a242c` | RotColorDpq_nom | [Evidence](semantic-evidence/002a242c.md) |
+| `002c5400` | Movie_FrameMove() | [Evidence](semantic-evidence/002c5400.md) |
+| `000da6d0` | geteventcategory() | [Evidence](semantic-evidence/000da6d0.md) |
+| `000e0538` | import_localpad(int) | [Evidence](semantic-evidence/000e0538.md) |
+| `001020f8` | Wevent_init_system() | [Evidence](semantic-evidence/001020f8.md) |
+| `0010229c` | Wgeteventcategory() | [Evidence](semantic-evidence/0010229c.md) |
+| `00153420` | wait_taskend(long) | [Evidence](semantic-evidence/00153420.md) |
