@@ -20,7 +20,7 @@ class ArmCfgTests(unittest.TestCase):
         graph, unknown = semantic_cfg.build_cfg(instructions)
         self.assertIn((0x1008, "not_taken"), graph[0x1004])
         self.assertIn((0x1004, "fallthrough"), graph[0x1000])
-        self.assertIn((0x1004, "fallthrough"), semantic_cfg.predecessors(graph)[0x1004])
+        self.assertIn((0x1000, "fallthrough"), semantic_cfg.predecessors(graph)[0x1004])
         self.assertIn((0x1004, "taken", 0x1018), unknown)
         effects = semantic_facts.bitmask_effects(instructions)
         guards = semantic_paths.branch_guards(instructions)
