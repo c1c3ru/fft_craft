@@ -1,0 +1,18 @@
+{
+  "address": "0015b664",
+  "name": "iOSTchInputCheck()",
+  "size": 36,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "15b604",
+    "2b7ccc"
+  ],
+  "log": "=== jtable.py: 0x15b664..0x15b688 (36 bytes) ===\ncoverage: 9 of ~9 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x15b604 x1   iOSTchStatusModeGet() \n  0x2b7ccc x1   iOS_getV2Icon(V2ICON_DATA) \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
