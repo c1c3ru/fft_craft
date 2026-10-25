@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **752/1258** pending functions.
+Evidence collected: **760/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -763,3 +763,11 @@ These reports do not constitute semantic verification.
 | `00161d50` | iOSPosW(int) | [Evidence](semantic-evidence/00161d50.md) |
 | `00161d74` | iOSPosH(int) | [Evidence](semantic-evidence/00161d74.md) |
 | `0018e334` | equans_init() | [Evidence](semantic-evidence/0018e334.md) |
+| `001baac4` | event_warning(short, int) | [Evidence](semantic-evidence/001baac4.md) |
+| `001ca580` | get_net_rival_weapon_range() | [Evidence](semantic-evidence/001ca580.md) |
+| `001eb2d8` | vramDeleteUsed() | [Evidence](semantic-evidence/001eb2d8.md) |
+| `001f4a64` | initEntryEnemyAnimations(int) | [Evidence](semantic-evidence/001f4a64.md) |
+| `001fd1dc` | nextTurnOrder() | [Evidence](semantic-evidence/001fd1dc.md) |
+| `0020d008` | pushMapScrollXYZ() | [Evidence](semantic-evidence/0020d008.md) |
+| `0020d02c` | popMapScrollXYZ() | [Evidence](semantic-evidence/0020d02c.md) |
+| `0020d260` | pushMapScroll() | [Evidence](semantic-evidence/0020d260.md) |
