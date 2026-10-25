@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **296/1258** pending functions.
+Evidence collected: **304/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -307,3 +307,11 @@ These reports do not constitute semantic verification.
 | `001abb18` | MakeChr(short) | [Evidence](semantic-evidence/001abb18.md) |
 | `0026dcbc` | ctltuto_deactive(CTLINFO*) | [Evidence](semantic-evidence/0026dcbc.md) |
 | `002b2714` | EnvSE_SetVol(int, int) | [Evidence](semantic-evidence/002b2714.md) |
+| `000d9790` | wait_overlay(int) | [Evidence](semantic-evidence/000d9790.md) |
+| `000d9988` | wait_loaddata(int) | [Evidence](semantic-evidence/000d9988.md) |
+| `001015a4` | Wwait_overlay(int) | [Evidence](semantic-evidence/001015a4.md) |
+| `00101888` | Wwait_loaddata(int) | [Evidence](semantic-evidence/00101888.md) |
+| `0015df3c` | iOSTapCalcu() | [Evidence](semantic-evidence/0015df3c.md) |
+| `001bc520` | scroll_chk() | [Evidence](semantic-evidence/001bc520.md) |
+| `00245610` | strSetDefDecEnv(DECENV*, int, int, int, int) | [Evidence](semantic-evidence/00245610.md) |
+| `00249f14` | vOpn_dataload2() | [Evidence](semantic-evidence/00249f14.md) |
