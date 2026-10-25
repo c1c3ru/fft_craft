@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1016/1258** pending functions.
+Evidence collected: **1024/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1027,3 +1027,11 @@ These reports do not constitute semantic verification.
 | `0020f8b8` | getFrameTicks() | [Evidence](semantic-evidence/0020f8b8.md) |
 | `00216604` | checkActiveMusic() | [Evidence](semantic-evidence/00216604.md) |
 | `002168e8` | callEnvEffect(int) | [Evidence](semantic-evidence/002168e8.md) |
+| `0021b4e0` | GetPlugInFuncAdr(short) | [Evidence](semantic-evidence/0021b4e0.md) |
+| `0021b890` | SetAirDensity(long) | [Evidence](semantic-evidence/0021b890.md) |
+| `0021cf1c` | GetEffectStatus() | [Evidence](semantic-evidence/0021cf1c.md) |
+| `00228dd0` | GetShapePrimPtNow() | [Evidence](semantic-evidence/00228dd0.md) |
+| `0024509c` | TEST_setClearOt(int) | [Evidence](semantic-evidence/0024509c.md) |
+| `002450b0` | TEST_getClearOt() | [Evidence](semantic-evidence/002450b0.md) |
+| `00245a60` | o_SelectCard(int) | [Evidence](semantic-evidence/00245a60.md) |
+| `0025691c` | IOSsTownModeSet(int) | [Evidence](semantic-evidence/0025691c.md) |
