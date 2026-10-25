@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **32/1258** pending functions.
+Evidence collected: **40/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -43,3 +43,11 @@ These reports do not constitute semantic verification.
 | `0019df84` | AccountEmploy() | [Evidence](semantic-evidence/0019df84.md) |
 | `0026abac` | timeevt_chk() | [Evidence](semantic-evidence/0026abac.md) |
 | `00247884` | birthday_change(CTLINFO*) | [Evidence](semantic-evidence/00247884.md) |
+| `00270520` | valnumwin_set(int, unsigned long, int, _POINT*) | [Evidence](semantic-evidence/00270520.md) |
+| `00267ad0` | ctlret_main(CTLINFO*) | [Evidence](semantic-evidence/00267ad0.md) |
+| `0015a988` | sBattleTouchRotationMain() | [Evidence](semantic-evidence/0015a988.md) |
+| `0024f4e8` | ctltipsmes_init(int) | [Evidence](semantic-evidence/0024f4e8.md) |
+| `0019dde8` | BuyEmploy() | [Evidence](semantic-evidence/0019dde8.md) |
+| `0024e734` | ctlperson_init() | [Evidence](semantic-evidence/0024e734.md) |
+| `0021ef4c` | InitPermanentEffect() | [Evidence](semantic-evidence/0021ef4c.md) |
+| `00285f8c` | hockRead(void*, int, unsigned int) | [Evidence](semantic-evidence/00285f8c.md) |
