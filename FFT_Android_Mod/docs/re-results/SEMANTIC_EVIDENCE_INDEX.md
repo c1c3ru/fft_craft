@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **824/1258** pending functions.
+Evidence collected: **832/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -835,3 +835,11 @@ These reports do not constitute semantic verification.
 | `002a2ce0` | PCwrite | [Evidence](semantic-evidence/002a2ce0.md) |
 | `002ae8c0` | GlTexEnv_GetSprite(int) | [Evidence](semantic-evidence/002ae8c0.md) |
 | `002ae8e0` | GlTexEnv_GetTextureHandle(int) | [Evidence](semantic-evidence/002ae8e0.md) |
+| `002b01e0` | GlTexEnv_GetTextureHandle_2X(int) | [Evidence](semantic-evidence/002b01e0.md) |
+| `002b2358` | Music_Play(int, int, int, int) | [Evidence](semantic-evidence/002b2358.md) |
+| `002b871c` | iOS_isTouchBegan() | [Evidence](semantic-evidence/002b871c.md) |
+| `000d961c` | setplatetime(int) | [Evidence](semantic-evidence/000d961c.md) |
+| `000d9748` | iOS_battle_scrollwindow_tap() | [Evidence](semantic-evidence/000d9748.md) |
+| `000e628c` | Get_bravebreak() | [Evidence](semantic-evidence/000e628c.md) |
+| `000e62a8` | Set_bravebreak(unsigned short) | [Evidence](semantic-evidence/000e62a8.md) |
+| `00101434` | Wsetplatetime(int) | [Evidence](semantic-evidence/00101434.md) |
