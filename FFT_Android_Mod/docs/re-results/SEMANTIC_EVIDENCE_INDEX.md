@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **144/1258** pending functions.
+Evidence collected: **152/1258** pending functions.
 These reports do not constitute semantic verification.
 
 | Address | Function | Evidence |
@@ -153,3 +153,11 @@ These reports do not constitute semantic verification.
 | `00225210` | DoPermanentEffect() | [Evidence](semantic-evidence/00225210.md) |
 | `00255180` | ctlmap_active(CTLINFO*) | [Evidence](semantic-evidence/00255180.md) |
 | `000e0fb8` | initdrmode(DR_MODE*, int) | [Evidence](semantic-evidence/000e0fb8.md) |
+| `001bc334` | GetSttsApos(short) | [Evidence](semantic-evidence/001bc334.md) |
+| `00225790` | InitObjectManager() | [Evidence](semantic-evidence/00225790.md) |
+| `002b1ff8` | Debug_DrawFPS() | [Evidence](semantic-evidence/002b1ff8.md) |
+| `0010fa1c` | Winitdrmode(DR_MODE*, int) | [Evidence](semantic-evidence/0010fa1c.md) |
+| `00188348` | allitem_count() | [Evidence](semantic-evidence/00188348.md) |
+| `001caa10` | set_ct_weapon(ACT*) | [Evidence](semantic-evidence/001caa10.md) |
+| `00253a68` | ctlcenter_main(CTLINFO*) | [Evidence](semantic-evidence/00253a68.md) |
+| `001b799c` | SystemWarningTime(int, int) | [Evidence](semantic-evidence/001b799c.md) |
