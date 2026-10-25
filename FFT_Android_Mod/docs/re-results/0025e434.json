@@ -1,0 +1,19 @@
+{
+  "address": "0025e434",
+  "name": "mouke_app_chk(int, int)",
+  "size": 212,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "103400",
+    "25e2ac",
+    "25e310"
+  ],
+  "log": "=== jtable.py: 0x25e434..0x25e508 (212 bytes) ===\ncoverage: 53 of ~53 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x103400 x4   Wread_eventflag(int) \n  0x25e2ac x1   mouke_tbl_get(MOUINFO*, int) \n  0x25e310 x1   sun_to_ivarisday(int*, int*) \n\n-- branches: 8 total, 4 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

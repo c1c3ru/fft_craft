@@ -1,0 +1,27 @@
+{
+  "address": "0028b638",
+  "name": "FFT_Main(void*)",
+  "size": 188,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 97.87,
+  "distinct_bl": 11,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2160f4",
+    "21b0d0",
+    "28b610",
+    "28b630",
+    "291c48",
+    "292708",
+    "294980",
+    "294d44",
+    "294ed4",
+    "295520",
+    "2a2fd0"
+  ],
+  "log": "=== jtable.py: 0x28b638..0x28b6f4 (188 bytes) ===\ncoverage: 46 of ~47 instruction slots (98%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 11 distinct --\n  0x2160f4 x1   ps_main() \n  0x21b0d0 x1   InitEffectLoadAddress() \n  0x28b610 x1   initXpHeap() \n  0x28b630 x1   exitXpHeap() \n  0x291c48 x1   xpLibgpuInit \n  0x292708 x1   xpLibgpuDrawCallBackSet \n  0x294980 x1   xpLibgpuVramChangeDispMode \n  0x294d44 x1   xpLibgpuVramInit \n  0x294ed4 x1   xpLibgpuVramAddrGet \n  0x295520 x1   xpLibgpuDispListSetFromEdram \n  0x2a2fd0 x1   xpInitSPAD \n\n-- branches: 2 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

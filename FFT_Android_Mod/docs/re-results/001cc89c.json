@@ -1,0 +1,18 @@
+{
+  "address": "001cc89c",
+  "name": "check_hide_reset(BWORK*)",
+  "size": 180,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 93.33,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1c88f8",
+    "1cb064"
+  ],
+  "log": "=== jtable.py: 0x1cc89c..0x1cc950 (180 bytes) ===\ncoverage: 42 of ~45 instruction slots (93%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x1c88f8 x1   sub_1c88f8 LOCAL(no-dynsym)\n  0x1cb064 x1   init_target_result(A_RESULT*) \n\n-- branches: 2 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

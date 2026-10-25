@@ -1,0 +1,17 @@
+{
+  "address": "00255e14",
+  "name": "ctlfsetnum_init(int, int)",
+  "size": 204,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 86.27,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "270520"
+  ],
+  "log": "=== jtable.py: 0x255e14..0x255ee0 (204 bytes) ===\ncoverage: 44 of ~51 instruction slots (86%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x270520 x1   valnumwin_set(int, unsigned long, int, _POINT*) \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

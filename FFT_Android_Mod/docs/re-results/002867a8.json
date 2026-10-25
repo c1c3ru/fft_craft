@@ -1,0 +1,17 @@
+{
+  "address": "002867a8",
+  "name": "getMovieEventNum(int)",
+  "size": 216,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 68.52,
+  "distinct_bl": 1,
+  "tables_resolved": 1,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "286794"
+  ],
+  "log": "=== jtable.py: 0x2867a8..0x286880 (216 bytes) ===\ncoverage: 37 of ~54 instruction slots (69%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0x2867e8, dispatch @0x2867ec: 14 cases, 5 distinct handlers\n    targets: ['0x286860', '0x28686c', '0x286854', '0x286848', '0x28686c', '0x28686c', '0x286848', '0x28686c', '0x286848', '0x286848', '0x28682c', '0x28682c', '0x28682c', '0x28682c']\n\n-- bl targets: 1 distinct --\n  0x286794 x6   setEventStatus(int) \n\n-- branches: 6 total, 5 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

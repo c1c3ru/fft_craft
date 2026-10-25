@@ -1,0 +1,26 @@
+{
+  "address": "0028a6a0",
+  "name": "pspTitleSaveCheck()",
+  "size": 204,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 98.04,
+  "distinct_bl": 10,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "289880",
+    "289898",
+    "289968",
+    "28996c",
+    "289970",
+    "289ac0",
+    "289fac",
+    "28c320",
+    "28c590",
+    "28e5c0"
+  ],
+  "log": "=== jtable.py: 0x28a6a0..0x28a76c (204 bytes) ===\ncoverage: 50 of ~51 instruction slots (98%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 10 distinct --\n  0x289880 x1   pspClearSaveEnv() \n  0x289898 x1   pspSaveInit() \n  0x289968 x1   pspSaveUpdate() \n  0x28996c x2   pspSaveExit() \n  0x289970 x1   pspIsNoneSaveData(int) \n  0x289ac0 x1   pspFftLoad(int, FFT_SAVE_DATA*, int*, int) \n  0x289fac x1   pspLoadSystemFile() \n  0x28c320 x1   CFFT_STATE::GetParam(int) \n  0x28c590 x1   CFFT_STATE::SetParam(int, int) \n  0x28e5c0 x1   VSync \n\n-- branches: 9 total, 5 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

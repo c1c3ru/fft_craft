@@ -1,0 +1,18 @@
+{
+  "address": "001cd490",
+  "name": "set_learning(BWORK*)",
+  "size": 184,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 97.83,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "187618",
+    "1d7538"
+  ],
+  "log": "=== jtable.py: 0x1cd490..0x1cd548 (184 bytes) ===\ncoverage: 45 of ~46 instruction slots (98%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x187618 x1   GetLocalJobNumber(short) \n  0x1d7538 x1   get_command_ability(int, int) \n\n-- branches: 4 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

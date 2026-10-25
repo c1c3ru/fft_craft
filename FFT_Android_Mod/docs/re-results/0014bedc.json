@@ -1,0 +1,18 @@
+{
+  "address": "0014bedc",
+  "name": "joinfaceuvclut(tagPOLY_FT4*, int, int*)",
+  "size": 204,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 96.08,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "291348",
+    "29138c"
+  ],
+  "log": "=== jtable.py: 0x14bedc..0x14bfa8 (204 bytes) ===\ncoverage: 49 of ~51 instruction slots (96%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x291348 x1   GetTPage \n  0x29138c x1   GetClut \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

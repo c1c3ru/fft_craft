@@ -1,0 +1,21 @@
+{
+  "address": "0020e314",
+  "name": "moveToPanel(int, SVECTOR*, int, int, int)",
+  "size": 184,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 5,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1e4e48",
+    "1eb00c",
+    "1fecc0",
+    "20c600",
+    "714b8"
+  ],
+  "log": "=== jtable.py: 0x20e314..0x20e3cc (184 bytes) ===\ncoverage: 46 of ~46 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 5 distinct --\n  0x714b8 x1   sub_714b8 LOCAL(no-dynsym)\n  0x1e4e48 x1   search_root_ev(int, int, int, int, int, int, int, int) \n  0x1eb00c x1   searchAnimationByID(unsigned short) \n  0x1fecc0 x1   rideOffChokobo(tag_animation*) \n  0x20c600 x1   warningHandler(int) \n\n-- branches: 2 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

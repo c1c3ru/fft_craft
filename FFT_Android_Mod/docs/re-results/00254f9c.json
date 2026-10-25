@@ -1,0 +1,15 @@
+{
+  "address": "00254f9c",
+  "name": "ctltownset_init(int, int)",
+  "size": 184,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 86.96,
+  "distinct_bl": 0,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [],
+  "log": "=== jtable.py: 0x254f9c..0x255054 (184 bytes) ===\ncoverage: 40 of ~46 instruction slots (87%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 0 distinct --\n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

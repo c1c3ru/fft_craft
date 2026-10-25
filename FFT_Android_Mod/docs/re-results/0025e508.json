@@ -1,0 +1,17 @@
+{
+  "address": "0025e508",
+  "name": "person_year_up()",
+  "size": 196,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 93.88,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "103400"
+  ],
+  "log": "=== jtable.py: 0x25e508..0x25e5cc (196 bytes) ===\ncoverage: 46 of ~49 instruction slots (94%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x103400 x4   Wread_eventflag(int) \n\n-- branches: 6 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

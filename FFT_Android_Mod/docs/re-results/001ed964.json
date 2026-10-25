@@ -1,0 +1,20 @@
+{
+  "address": "001ed964",
+  "name": "getTapedDirection()",
+  "size": 180,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1ed94c",
+    "29ae00",
+    "2b7b40",
+    "2b7b54"
+  ],
+  "log": "=== jtable.py: 0x1ed964..0x1eda18 (180 bytes) ===\ncoverage: 45 of ~45 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x1ed94c x1   getDirectionVector(int) \n  0x29ae00 x1   xpLibGetOffset(int*, int*) \n  0x2b7b40 x2   iOS_getTouchNowX() \n  0x2b7b54 x2   iOS_getTouchNowY() \n\n-- branches: 5 total, 4 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
