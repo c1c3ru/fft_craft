@@ -92,7 +92,7 @@ def analyze_one(row: dict, so: Path, timeout: int, references: dict,
               "size": row["size"], "previous_status": row["status"]}
     label = family(row["demangled"])
     reference = references.get(label) if label else None
-    if reference and reference["address"] != row["address"]:
+    if reference and not enable_v3 and reference["address"] != row["address"]:
         try:
             cmd = [sys.executable, str(TOOLS / "family_sim.py"), str(so),
                    reference["address"], f"+{reference['size']}",
@@ -152,6 +152,16 @@ def analyze_one(row: dict, so: Path, timeout: int, references: dict,
         result["structural_version"] = structural_v3.VERSION
         result["structural_fingerprint"] = structural_v3.fingerprint()
     return result
+
+
+def needs_v3_upgrade(previous, digest, size, current_fingerprint):
+    """Retry only a valid review checkpoint when the structural rules changed."""
+    return (previous.get("status") == "needs_review"
+            and previous.get("binary_sha256") == digest
+            and previous.get("size") == size
+            and previous.get("pipeline_version") == PIPELINE_VERSION
+            and (previous.get("structural_version") != structural_v3.VERSION
+                 or previous.get("structural_fingerprint") != current_fingerprint))
 
 
 def main() -> int:
@@ -222,12 +232,8 @@ def main() -> int:
                 if args.upgrade_v3:
                     # Reanalyze only when the binary/size is unchanged,
                     # structural rules differ, and review is still pending.
-                    if not (previous.get("status") == "needs_review"
-                            and previous.get("binary_sha256") == binary_hash
-                            and previous.get("size") == row["size"]
-                            and previous.get("pipeline_version") == PIPELINE_VERSION
-                            and (previous.get("structural_version") != structural_v3.VERSION
-                                 or previous.get("structural_fingerprint") != current_fingerprint)):
+                    if not needs_v3_upgrade(
+                            previous, binary_hash, row["size"], current_fingerprint):
                         continue
                     queue.append(row)
                     if len(queue) >= args.limit:
