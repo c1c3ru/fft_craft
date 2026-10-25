@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **680/1258** pending functions.
+Evidence collected: **688/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -691,3 +691,11 @@ These reports do not constitute semantic verification.
 | `0021b8c4` | PopGravity() | [Evidence](semantic-evidence/0021b8c4.md) |
 | `0021ceb0` | WhoUnlockEffect(long) | [Evidence](semantic-evidence/0021ceb0.md) |
 | `00243560` | fRoll_xawait(short*) | [Evidence](semantic-evidence/00243560.md) |
+| `00249474` | vOpn_fadein(int) | [Evidence](semantic-evidence/00249474.md) |
+| `00256e70` | ctltownmenu_active(CTLINFO*) | [Evidence](semantic-evidence/00256e70.md) |
+| `00256e9c` | ctltownmenu_deactive(CTLINFO*) | [Evidence](semantic-evidence/00256e9c.md) |
+| `00269e6c` | snpl_sndstop() | [Evidence](semantic-evidence/00269e6c.md) |
+| `0027b53c` | LoadImage_menuData() | [Evidence](semantic-evidence/0027b53c.md) |
+| `0027f180` | iOS_ClearRectHit(int) | [Evidence](semantic-evidence/0027f180.md) |
+| `00280590` | GetAbilityName(int) | [Evidence](semantic-evidence/00280590.md) |
+| `00287044` | get_timing_true() | [Evidence](semantic-evidence/00287044.md) |
