@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **536/1258** pending functions.
+Evidence collected: **544/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -547,3 +547,11 @@ These reports do not constitute semantic verification.
 | `0021cbd0` | s1d_ifScheduleEnd(_EffectTCB*) | [Evidence](semantic-evidence/0021cbd0.md) |
 | `0024552c` | cdxa_stop() | [Evidence](semantic-evidence/0024552c.md) |
 | `00249278` | vOpn_init(int) | [Evidence](semantic-evidence/00249278.md) |
+| `0026a570` | snpl_fadewait() | [Evidence](semantic-evidence/0026a570.md) |
+| `0026ebf0` | ctlsentuto_active(CTLINFO*) | [Evidence](semantic-evidence/0026ebf0.md) |
+| `00273b38` | SetSafePanelAhead(int) | [Evidence](semantic-evidence/00273b38.md) |
+| `0028b080` | pspWorldCallBackExec() | [Evidence](semantic-evidence/0028b080.md) |
+| `0028be80` | _ps_test() | [Evidence](semantic-evidence/0028be80.md) |
+| `002a3028` | xpFree | [Evidence](semantic-evidence/002a3028.md) |
+| `002b8888` | iOS_InitMovie(int) | [Evidence](semantic-evidence/002b8888.md) |
+| `00101980` | Wsend_sttslinecol(char*) | [Evidence](semantic-evidence/00101980.md) |
