@@ -2,8 +2,8 @@
 
 Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Analyzed in current binary: 1729
-Automatically triaged: 145,512 bytes / 1,837,392 inventory bytes (7.92%); **this is newly triaged coverage, not total project coverage**.
+Analyzed in current binary: 1829
+Automatically triaged: 145,872 bytes / 1,837,392 inventory bytes (7.94%); **this is newly triaged coverage, not total project coverage**.
 
 | Address | Function | Size (B) | Coverage | Status |
 |---|---|---:|---:|---|
@@ -1731,8 +1731,108 @@ Automatically triaged: 145,512 bytes / 1,837,392 inventory bytes (7.92%); **this
 | `0010729c` | Wtutorial_padcontrol(int*) | 24 | 83.33% | needs_review |
 | `0010fa04` | Wloadcdst(int, int) | 24 | 83.33% | needs_review |
 | `00150690` | setNetErrorCutFlg() | 24 | 83.33% | needs_review |
+| `001506bc` | rsetNetErrorCutFlg() | 24 | 83.33% | needs_review |
+| `001506d4` | SetgMission_Successflg() | 24 | 83.33% | needs_review |
+| `001531cc` | ResetgMission_Successflg() | 24 | 83.33% | needs_review |
+| `001556f0` | worldcursorposset(int) | 24 | 83.33% | needs_review |
+| `00155d70` | reactive_worldstatus() | 24 | 83.33% | needs_review |
+| `00155dd4` | active_worldstatus() | 24 | 83.33% | needs_review |
+| `00155dec` | teach_onocursor(int, int) | 24 | 83.33% | needs_review |
+| `0015a72c` | iOSScrollButtonDTap() | 24 | 83.33% | needs_review |
+| `0015ff88` | iOSCircleCtrl(unsigned short) | 24 | 100.0% | auto_structural |
+| `00161e60` | iOSSetRotMode() | 24 | 83.33% | needs_review |
+| `001a9228` | GetItemPrice(short) | 24 | 100.0% | auto_structural |
+| `001d9930` | copyACTst(ACT*, ACT*) | 24 | 100.0% | auto_structural |
+| `001ed94c` | getDirectionVector(int) | 24 | 83.33% | needs_review |
+| `001eee48` | getShapeWaitType(unsigned short) | 24 | 83.33% | needs_review |
+| `001fd2ac` | resetTurnOrder() | 24 | 83.33% | needs_review |
+| `0020f4fc` | clearOverSpecCtr() | 24 | 83.33% | needs_review |
 | `0020f538` | restartAnimation() | 24 | 83.33% | needs_review |
 | `0020f8a0` | finishAttackTeamSelect() | 24 | 83.33% | needs_review |
+| `0020f8ec` | resetFrameRate() | 24 | 83.33% | needs_review |
+| `0020ffec` | iOS_InitializeHot2() | 24 | 100.0% | auto_structural |
+| `002160f4` | ps_main() | 24 | 100.0% | auto_structural |
 | `00216128` | iOS_resetTexCacheLine() | 24 | 83.33% | needs_review |
+| `00216848` | getMusicPointer(int) | 24 | 83.33% | needs_review |
+| `00218628` | SetAnimationMode(effectAnimation*, short) | 24 | 100.0% | auto_structural |
+| `0021b4f4` | largeFileRead(long, char*, unsigned long) | 24 | 100.0% | auto_structural |
+| `0021b8f0` | PushAirDensity() | 24 | 83.33% | needs_review |
+| `0021b908` | PopAirDensity() | 24 | 83.33% | needs_review |
+| `0021c1e4` | s2c_samplingMSQFrame(_EffectTCB*) | 24 | 100.0% | auto_structural |
+| `0021c1fc` | s2d_samplingSQLFrame(_EffectTCB*) | 24 | 100.0% | auto_structural |
+| `0021c214` | dmyFnc(_EffectTCB*) | 24 | 100.0% | auto_structural |
+| `00228c44` | CreateObjectWithTableWithParentData(short, int, int, int, _Object*) | 24 | 100.0% | auto_structural |
+| `00228c5c` | OgataInit() | 24 | 100.0% | auto_structural |
+| `00245a40` | strKickCD(CdlLOC*) | 24 | 100.0% | auto_structural |
+| `00248598` | iOS_TestDraw(unsigned long*) | 24 | 83.33% | needs_review |
+| `0024dcc0` | ctlkiroku_deactive(CTLINFO*) | 24 | 83.33% | needs_review |
+| `0024e904` | ctlperson_deactive(CTLINFO*) | 24 | 83.33% | needs_review |
+| `00259750` | ctlhistory_active(CTLINFO*) | 24 | 83.33% | needs_review |
+| `00259768` | ctlhistory_deactive(CTLINFO*) | 24 | 83.33% | needs_review |
+| `00259ea4` | ctlhouk_deactive(CTLINFO*) | 24 | 83.33% | needs_review |
+| `0025e294` | mkadrtbl_calc(int) | 24 | 83.33% | needs_review |
+| `0025ffe0` | iOS_IsTutoStart() | 24 | 83.33% | needs_review |
+| `002602f4` | ctlmouke_deactive(CTLINFO*) | 24 | 83.33% | needs_review |
+| `002675f4` | ctlret_deactive(CTLINFO*) | 24 | 83.33% | needs_review |
+| `0026c400` | ctltresure_deactive(CTLINFO*) | 24 | 83.33% | needs_review |
+| `0026df30` | ctlhentuto_deactive(CTLINFO*) | 24 | 83.33% | needs_review |
+| `0026ec30` | ctlsentuto_deactive(CTLINFO*) | 24 | 83.33% | needs_review |
+| `00271284` | Ssd_Init(unsigned short) | 24 | 83.33% | needs_review |
+| `0027d468` | disableCancelDisableArea() | 24 | 83.33% | needs_review |
+| `0027f5d8` | Resume_Get_WORK_MU_FontID() | 24 | 83.33% | needs_review |
+| `0027f5f0` | Resume_Get_WORK_MU_BWorkFontID() | 24 | 83.33% | needs_review |
+| `0027f608` | Resume_Get_WORK_MU_BWorkAnimationID() | 24 | 83.33% | needs_review |
+| `00280540` | iOS_fftSave() | 24 | 83.33% | needs_review |
+| `002806f0` | iOS_clearDebugPrimNum() | 24 | 83.33% | needs_review |
+| `0028164c` | iOS_v2menuSetScreenSize(int, int) | 24 | 83.33% | needs_review |
+| `00283fb0` | mapclip_setpath(char*) | 24 | 83.33% | needs_review |
+| `002847c0` | new_ColorVectorDataBase(unsigned int) | 24 | 83.33% | needs_review |
 | `00287588` | reset_g_NetIcon_DrawFlg() | 24 | 83.33% | needs_review |
+| `002885a0` | pspOpenCheckFlg(PSP_OPEN_FLG) | 24 | 83.33% | needs_review |
+| `00288f18` | pspgFreamBufCountCountReset() | 24 | 83.33% | needs_review |
+| `0028982c` | pspPrimReetWorkBuf_current() | 24 | 83.33% | needs_review |
+| `00289880` | pspClearSaveEnv() | 24 | 83.33% | needs_review |
+| `0028a114` | FFT_GetCurrentSystemFile() | 24 | 83.33% | needs_review |
+| `0028b068` | pspWorldCallBackSet(PSP_WORLD_CALLBACK_ID, void (*)()) | 24 | 83.33% | needs_review |
+| `0028b3c4` | pspWorldDataBackBufGet(int) | 24 | 83.33% | needs_review |
+| `0028d688` | tlFreeAll() | 24 | 83.33% | needs_review |
 | `00291a84` | SetShadeTex | 24 | 100.0% | auto_structural |
+| `0029b6d0` | GsSetWorkBase | 24 | 83.33% | needs_review |
+| `0029fd90` | GteGetDataReg(int) | 24 | 83.33% | needs_review |
+| `0029fdbc` | GteSetDataReg(long, long) | 24 | 83.33% | needs_review |
+| `0029fe70` | InitGeom | 24 | 83.33% | needs_review |
+| `0029febc` | PSX_csin | 24 | 83.33% | needs_review |
+| `002a0954` | MulRotMatrix | 24 | 100.0% | auto_structural |
+| `002a13f0` | SetFogNearFar | 24 | 83.33% | needs_review |
+| `002a1ad4` | read_sxsy0(long*) | 24 | 83.33% | needs_review |
+| `002a1aec` | read_sxsy1(long*) | 24 | 83.33% | needs_review |
+| `002a1b04` | read_sxsy2(long*) | 24 | 83.33% | needs_review |
+| `002a1b44` | read_rgb0(long*) | 24 | 83.33% | needs_review |
+| `002a1b5c` | read_rgb1(long*) | 24 | 83.33% | needs_review |
+| `002a1b74` | read_rgb2(long*) | 24 | 83.33% | needs_review |
+| `002a1b8c` | read_flag(long*) | 24 | 83.33% | needs_review |
+| `002a1ba4` | read_p(long*) | 24 | 83.33% | needs_review |
+| `002a25c8` | read_otz(long*) | 24 | 83.33% | needs_review |
+| `002a25e0` | read_opz(long*) | 24 | 83.33% | needs_review |
+| `002a2728` | xpPadAnalogAssign | 24 | 83.33% | needs_review |
+| `002a2a34` | xpPadUpdateData | 24 | 83.33% | needs_review |
+| `002a2a68` | xpPadWorkBufGet | 24 | 83.33% | needs_review |
+| `002a2a80` | xpPadTriggerGet | 24 | 83.33% | needs_review |
+| `002a2a98` | xpPadGet | 24 | 83.33% | needs_review |
+| `002a2ab0` | xpPadAnalogXGet | 24 | 83.33% | needs_review |
+| `002a2ac8` | xpPadAnalogYGet | 24 | 83.33% | needs_review |
+| `002a2ae0` | xpPadPspPadDataGet | 24 | 83.33% | needs_review |
+| `002a2af8` | xpPadRepeatGet | 24 | 83.33% | needs_review |
+| `002a2b2c` | xpPadKeyTblSet | 24 | 83.33% | needs_review |
+| `002a2b44` | xpPadKeyTblGet | 24 | 83.33% | needs_review |
+| `002a2fb8` | PCcreat | 24 | 83.33% | needs_review |
+| `002ab608` | GuEmu_SetLineInterval(int) | 24 | 83.33% | needs_review |
+| `002b36bc` | Error_Init() | 24 | 83.33% | needs_review |
+| `002b376c` | Error_SetError(int, char*) | 24 | 83.33% | needs_review |
+| `002b701c` | iOSHelpButtonCheck() | 24 | 83.33% | needs_review |
+| `002b7a5c` | SetDisableMapTouch() | 24 | 83.33% | needs_review |
+| `002b7a74` | ClearDisableMapTouch() | 24 | 83.33% | needs_review |
+| `002bef4c` | iOS_isExistResumeData() | 24 | 83.33% | needs_review |
+| `002befbc` | iOS_ClearMenuTouchKeyInput() | 24 | 83.33% | needs_review |
+| `002bf008` | chkSeDouble() | 24 | 100.0% | auto_structural |
+| `002c53e8` | Movie_Init() | 24 | 83.33% | needs_review |
