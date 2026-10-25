@@ -110,16 +110,29 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_entry_prefix.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_return_call.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_callee_v2icon.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_v2icon_execute.py
           python3 - <<'PY'
           from pathlib import Path
           report = (Path("FFT_Android_Mod/docs/re-results") /
                     "SEMANTIC_V2ICON_CALLEE.md").read_text(encoding="utf-8")
           assert all(token in report for token in (
               "0x25a298", "0x2b7ccc", "iOS_getV2Icon(V2ICON_DATA)",
-              "All six original ARM instructions", "not inferred solely"))
-          for address in range(0x2b7ccc, 0x2b7ccc + 24, 4):
+              "Five executable ARM instructions", "No semantic equivalence claimed"))
+          for address in range(0x2b7ccc, 0x2b7ccc + 20, 4):
               assert f"0x{address:x}" in report
-          print("PASS: ELF BL/V2Icon six-instruction ABI boundary evidence")
+          assert "One PC-relative literal" in report
+          assert "0x2b7ce0" in report
+          print("PASS: five executable V2Icon opcodes plus data literal")
+          PY
+          python3 - <<'PY'
+          from pathlib import Path
+          report = (Path("FFT_Android_Mod/docs/re-results") /
+                    "SEMANTIC_V2ICON_EXECUTION.md").read_text(encoding="utf-8")
+          assert "V2Icon isolated micro-executions: 120/120 PASS" in report
+          assert "Exactly two 32-bit reads" in report
+          assert "No memory writes" in report
+          assert "synthetic" in report and "complete-function equivalence" in report
+          print("PASS: original ELF V2Icon call-target getter machine execution")
           PY
           python3 - <<'PY'
           from pathlib import Path
