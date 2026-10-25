@@ -117,6 +117,16 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_three_callees_exec.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_sound_chain.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_sound_dispatch_audit.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_sound_icon_microexec.py
+          python3 - <<'PY'
+          from pathlib import Path
+          report = Path("FFT_Android_Mod/docs/re-results/SEMANTIC_SOUND_ICON_MICROEXEC.md").read_text()
+          assert "Sound dispatcher microexecutions: 10/10 PASS" in report
+          assert "Icon prologue microexecutions: 10/10 PASS" in report
+          assert all(x in report for x in ("0x2b2b7c", "0x2b8928",
+                      "72 bytes", "not", "synthetic"))
+          print("PASS: bounded ARM sound dispatch and icon-position prologue on real ELF")
+          PY
           python3 - <<'PY'
           from pathlib import Path
           report = Path("FFT_Android_Mod/docs/re-results/SEMANTIC_SOUND_DISPATCH_AUDIT.md").read_text()
