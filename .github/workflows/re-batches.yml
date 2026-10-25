@@ -1,6 +1,10 @@
 name: Automated ARM reverse engineering batches
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/re-batches.yml'
   workflow_dispatch:
     inputs:
       limit:
