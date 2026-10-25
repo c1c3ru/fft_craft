@@ -98,6 +98,9 @@ jobs:
       - name: Export prioritized manual review queue
         run: |
           python3 FFT_Android_Mod/docs/re-tools/export_review_queue.py
+      - name: Collect ARM instruction evidence for 8 priority reviews
+        run: |
+          python3 FFT_Android_Mod/docs/re-tools/semantic_evidence.py --limit 8
       - name: Count newly checkpointed functions
         id: progress
         env:
