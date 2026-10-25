@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1256/1258** pending functions.
+Evidence collected: **1258/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1267,3 +1267,5 @@ These reports do not constitute semantic verification.
 | `0029fe88` | rsin | [Evidence](semantic-evidence/0029fe88.md) |
 | `002a1324` | SetGeomOffset | [Evidence](semantic-evidence/002a1324.md) |
 | `0028a08c` | Savedata_GetAddr() | [Evidence](semantic-evidence/0028a08c.md) |
+| `002a3120` | xpGetHeapSize | [Evidence](semantic-evidence/002a3120.md) |
+| `000823d4` | zlibVersion | [Evidence](semantic-evidence/000823d4.md) |
