@@ -42,8 +42,8 @@ class EvidenceTests(unittest.TestCase):
         other = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(other)
         report = other.render_triage([])
-        self.assertIn("# ARM semantic review triage\\n\\n", report)
-        self.assertNotIn("\\\\n", report)
+        self.assertIn("# ARM semantic review triage\n\n", report)
+        self.assertNotIn("\\\n", report)
 
 
 if __name__ == "__main__":
