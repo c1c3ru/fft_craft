@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **992/1258** pending functions.
+Evidence collected: **1000/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1003,3 +1003,11 @@ These reports do not constitute semantic verification.
 | `0015a314` | iOSsTchBtlFlagGet() | [Evidence](semantic-evidence/0015a314.md) |
 | `0015a328` | iOSsTchBtlFlagSet(int) | [Evidence](semantic-evidence/0015a328.md) |
 | `0015a8a0` | iOSScrollgStatusModeGet() | [Evidence](semantic-evidence/0015a8a0.md) |
+| `0015da20` | iOSGetTchCurLimit() | [Evidence](semantic-evidence/0015da20.md) |
+| `0015fff4` | iOSGetTchRotDY() | [Evidence](semantic-evidence/0015fff4.md) |
+| `00161944` | iOSHelpInputWaitGet() | [Evidence](semantic-evidence/00161944.md) |
+| `00161958` | iOSHelpInputWaitSet(int) | [Evidence](semantic-evidence/00161958.md) |
+| `0018f994` | eStopGetPad(int) | [Evidence](semantic-evidence/0018f994.md) |
+| `001a4858` | iOSLearnTypeSet(int) | [Evidence](semantic-evidence/001a4858.md) |
+| `001ac8b4` | dispFT4num() | [Evidence](semantic-evidence/001ac8b4.md) |
+| `001adc68` | FadeMask(int) | [Evidence](semantic-evidence/001adc68.md) |
