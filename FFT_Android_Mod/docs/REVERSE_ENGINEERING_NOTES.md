@@ -18511,8 +18511,9 @@ unwind das tabelas `.ARM.extab`/`.ARM.exidx`. `_Unwind_VRS_Pop`
 por 1 tabela não resolvida: o switch real por classe de registrador
 — core/VFP/FPA/wCGR — não bate no padrão `add pc,pc,rX,lsl#2`).
 `_Unwind_VRS_Get`/`_Unwind_VRS_Set` (92 B cada, `0x2ccfb8`/`0x2cd03c`)
-ficam **não resolvidos** mesmo automaticamente (22%/0% de cobertura) —
-permanecem `unread` nesta seção, só citados como chamadores.
+ficavam não resolvidos nesta seção (22%/0% de cobertura) — **atualização
+no §614**: o checkpoint do CI já resolve a tabela de ambas (74% de
+cobertura, 5 casos/3 handlers cada), promovidas pra `read_structural`.
 
 **libgcc/compiler-rt soft-float de precisão dupla** (ABI padrão ARM
 EABI para aritmética `double` em hardware sem FPU de double, citada
@@ -21719,3 +21720,124 @@ nenhum subsistema.
 | `0x000bd450` | `COggMemMapFile::~COggMemMapFile()` | 20 | 100.0% | `COggMemMapFile::Close()` |
 
 **Status CSV**: `read_structural` para as 261 (identidade e call-graph confirmados via checkpoint; nenhuma teve blocos lidos instrução a instrução). Esgota o pool `auto_structural` com cobertura ≥95% e 0 tabela pendente — próximo passo: pool `needs_review`.
+
+## 614. Pool `needs_review` esgotado por completo — 33 últimas funções, maioria com tabela de salto pequena resolvida mesmo com cobertura <95% (2026-10-25, Fase 3, nonagésimo quarto lote)
+
+Só restavam 33 checkpoints `needs_review` ainda não reconciliados
+(o resto já tinha sido fechado nos lotes 79-84, via forks, ou
+reclassificado pelo próprio pipeline ao longo da sessão). Diferente
+do pool `auto_structural`, aqui a baixa cobertura automática é real
+(não artefato de métrica) — mas a maioria ainda tem uma tabela de
+salto pequena **resolvida**, o que já basta pra identificar o
+propósito sem exigir leitura byte a byte de cada caso.
+
+### 614.1 Achado de alto valor: `onGotoNextMode(int)` — confirma a hipótese da §35, revela os 8 "módulos de tela" de topo do app
+
+`onGotoNextMode(int)` (`0x2b20f4`, 324 B, 72%) — já citada na §35
+("o nome praticamente confirma que é a função que MUDA
+`*g_gameMode`, ainda que o corpo não tivesse sido lido"). Confirmado
+agora: **2 tabelas de 9 casos cada** (guardas em `0x2b2108`/`0x2b215c`)
+despachando pra 8 `bl` distintos, todos **destrutores "Uninit" de
+módulos de tela de topo do app**: `Boot_Uninit()`, `Error_Uninit()`,
+`Link_Uninit()`, `Logo_Uninit()`, `Main_Uninit()`, `Movie_Uninit()`,
+`Settings_Uninit()`, `SettingsWnd_Uninit()`. Isso revela, pela
+primeira vez, a lista completa dos módulos de tela de nível mais
+alto do app (acima até do par `Main_FrameMove`/`Main_FrameRender`,
+§34/35, que são só o módulo "Main"): **Boot → Logo → Link → Main
+(jogo) / Movie / Settings / SettingsWnd / Error**, cada um com seu
+próprio ciclo `Init`/`Uninit` (par de `Boot_Init()`, ver §614.2
+abaixo). `onGotoNextMode` é o despachante que desliga o módulo atual
+antes de trocar pra outro — a contraparte exata, uma camada acima,
+do padrão "screen manager" já confirmado dentro de `Main_FrameRender`
+(§34.4, que delega só entre `NowLoading`/`SettingsWnd`/jogo normal,
+sub-conjunto deste nível).
+
+### 614.2 Outros achados de jogo
+
+- **`initMap(int, int)`** (`0x210eac`, 368 B, 82%, tabela de 13 casos,
+  19 `bl`): inicialização real de um mapa de batalha — liga
+  `ASHURA_on_disp`/`ASHURA_GNS_Garage` (motor 3D, §32.3),
+  `entryAnimations`/`initEntryEnemyAnimations` (§263), a fila de CLUT
+  completa (`loadBackGradation`/`loadAnbient`/`loadFlatColor`/
+  `transferClutData`/`initChangeClut`, §70/120), `set_playerwork`,
+  `time_flies`, `stopEffect` e `BattleRoutineInit()` (§607) — o
+  bootstrap que une praticamente todos os subsistemas de batalha já
+  documentados separadamente.
+- **`Boot_Init()`** (`0x2b3464`, 300 B, 92%, 12 `bl`): abre
+  `CFILE_DAT` (contêiner de asset, §579) via `Project_Archive_GetFile`,
+  registra uma thread (`CTHREAD::Register`) e inicializa a tela de
+  carregamento (`NowLoading_Init()`) — confirma que o boot do app
+  carrega o arquivo de projeto e dispara I/O assíncrono numa thread
+  dedicada antes mesmo do primeiro frame.
+- **`Savedata_Load(unsigned char*, int*)`** (`0x27fe84`, 384 B, 95%,
+  17 `bl`): mesma pilha de I/O (`CFILE::*`) e API de plataforma
+  (`CAPP_INFO::GetRootPath`/`GetStoragePath`, `pspGetFftPspSaveDataSize`)
+  já confirmada em `Savedata_LoadGameCleared` (lote 86) — o
+  carregamento geral de save, par completo da família `Savedata_*`.
+- **`pspFftSave(int, FFT_SAVE_DATA*, int*)`**/**`pspFftDelete(int*)`**
+  (288/320 B, 64%/58%, ambas com tabela resolvida): delegam pra
+  `xpLibapiSaveStart`/`SaveEnd`/`SaveCheck` (fachada `xpLibapi*` já
+  confirmada sobre `pspSaveBase`, §568) — as duas operações reais de
+  salvar/deletar save do PSP.
+- **`MessageDataSet(int)`**/**`pspMsgGet(unsigned int)`** (284/232 B,
+  tabelas de 9 casos cada): `MessageDataSet` despacha pra
+  `pspMsgGet` (9×) — getter de texto de mensagem por categoria,
+  completa o par setter/getter de dados de mensagem.
+- **`set_casting_status(BWORK*, unsigned char)`** (`0x1dc944`, 272 B,
+  85%, tabela de 9/6, 3 `bl`): liga `_changeAnimationStatus_`/
+  `set_temp_status`/`set_cco_SD`, cluster de status de unidade já
+  mapeado — status real de "conjurando magia".
+- **`set_ct_weapon(ACT*)`** (`0x1caa10`, 248 B, 68%, tabela de 16/4):
+  chama `pspItemIsEmpty` — resolve a arma equipada pra uma ação de
+  combate (`ACT*`), tratando o caso "sem arma".
+- **`houkoku_talkunit(int)`** (`0x25b78c`, 236 B, 86%, tabela de 4/4):
+  chama `get_unitwork_add_wld` — fecha mais um elo do cluster
+  "houkoku" (relatório de campo, §577/592).
+- **`getNextSENo(int)`**/**`getMovieEventNum(int)`**/
+  **`siOS_TCurSucCheck(unsigned int)`** (220/216/208 B, tabelas
+  pequenas resolvidas): utilitários de lookup — próximo efeito
+  sonoro, número de evento de filme, checagem de sucesso de cursor
+  touch (liga a `siOS_TCurPosGet`).
+- **`iOSsetCursorByTouch(...)`**/**`setCursorByTouch(...)`** (392/308
+  B, pair W-like, mesmos 2 locais `sub_1fba1c`/`sub_202ff0`,
+  tabela de 33 casos/3 handlers cada): par de resolvedores de posição
+  de cursor por toque — variante "iOS" vs. genérica.
+- **`get_shape2(BWORK*, uchar*)`**/**`get_mapid(int,int,int,int)`**/
+  **`_ReadTMD(TMD_PRIM*)`**/**`CdControl`** (tabelas resolvidas, 0
+  `bl` — dispatchers puros por tabela de dados): `_ReadTMD` é achado
+  novo (parser do formato `TMD` de modelo 3D do PS1); `CdControl` é
+  achado novo (dispatcher de 27 casos pro controle de CD real,
+  mesma API citada em `fftCdLoopTim` §610 e `numa_vOpn_CdRead` §580).
+- **`Wload_replaceitems(int,int)`**/**`load_replaceitems(int,int)`**
+  (par W/sem-W, 120 B cada, tabela de 12/7): confirma que existe um
+  sistema real de "substituição de item" (provável randomizador ou
+  correção de item quebrado em save antigo), nunca citado por nome
+  completo antes.
+
+### 614.3 `_Unwind_VRS_Get`/`_Unwind_VRS_Set` promovidas (ver nota no §569)
+
+Ambas (92 B, 74% cobertura) agora têm a tabela de 5 casos/3 handlers
+resolvida pelo checkpoint do CI — mesma arquitetura de switch por
+classe de registrador já confirmada em `_Unwind_VRS_Pop` (§569).
+Promovidas de `mentioned_unverified` pra `read_structural`.
+
+### 614.4 Cauda final de compiler-rt/C++ runtime
+
+`__gedf2`/`__gesf2` (comparação "maior-ou-igual" double/float, par
+exato de `__aeabi_*cmp*` do §613), `__aeabi_ul2f`/`__aeabi_ul2d`
+(conversão `unsigned long`→float/double) e `operator delete[](void*)`
+— identidade certa por especificação de ABI/C++, mesmo critério do
+§613, marcadas `read_structural`. Já `__gxx_personality_v0`,
+`__cxa_call_unexpected`, `__cxa_begin_cleanup` e
+`_Unwind_DeleteException` (0 `bl`, 0 tabela, cobertura muito baixa —
+7%/0%/67%/63%) são código de borda de exceção C++ real quase nunca
+exercitado pela descida automática; ficam `mentioned_unverified` —
+identificadas por nome/ABI, não por conteúdo lido.
+
+**Status CSV**: `read_structural` para 29 das 33 (todas com tabela
+resolvida ou identidade certa por ABI), `mentioned_unverified` para
+as 4 restantes (`__gxx_personality_v0`/`__cxa_call_unexpected`/
+`__cxa_begin_cleanup`/`_Unwind_DeleteException`). **Esgota por
+completo o pool `needs_review`** — todos os checkpoints do CI
+(auto_structural + needs_review) estão agora reconciliados no
+`RE_FUNCTION_INVENTORY.csv`.
