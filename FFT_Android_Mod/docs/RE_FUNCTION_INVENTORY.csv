@@ -412,7 +412,7 @@ address,size,mangled,demangled,status,section_ref
 0024b09c,900,_Z13barmenu_resetP7CTLINFO,barmenu_reset(CTLINFO*),read_structural,NOTES §368
 0020023c,896,_Z19iOSexecuteMoveProcsP13tag_animation,iOSexecuteMoveProcs(tag_animation*),read_structural,NOTES §369
 00174724,892,_Z20cMakeSmallWindowFuncPh,cMakeSmallWindowFunc(unsigned char*),read_structural,NOTES §358
-002cdb20,892,__gnu_unwind_execute,__gnu_unwind_execute,unread,
+002cdb20,892,__gnu_unwind_execute,__gnu_unwind_execute,read_structural,NOTES §569
 001aa6b0,884,_Z15GetShopItemListsssPsi,"GetShopItemList(short, short, short, short*, int)",read_structural,NOTES §373
 000d0dec,880,_Z25Ddisp_selectrefleshwindowv,Ddisp_selectrefleshwindow(),read_structural,NOTES §351
 00123624,880,_Z25Edisp_selectrefleshwindowv,Edisp_selectrefleshwindow(),read_structural,NOTES §351
@@ -430,8 +430,8 @@ address,size,mangled,demangled,status,section_ref
 00086b40,860,vorbis_staticbook_pack,vorbis_staticbook_pack,read_structural,NOTES §336
 000ffafc,860,_Z12Wcount_wordsPsS_Pc,"Wcount_words(short*, short*, char*)",read_structural,NOTES §352
 00210384,860,_Z14placeNameStartv,placeNameStart(),read_structural,NOTES §380
-000736ac,856,adler32,adler32,unread,
-002cd594,856,_Unwind_VRS_Pop,_Unwind_VRS_Pop,unread,
+000736ac,856,adler32,adler32,read_structural,NOTES §569
+002cd594,856,_Unwind_VRS_Pop,_Unwind_VRS_Pop,mentioned_unverified,NOTES §569
 002660b8,852,_Z8wld_animP6ANMPACP4GsOT,"wld_anim(ANMPAC*, GsOT*)",read_full,NOTES §12.5
 0025361c,848,_Z14ctlzodiac_mainP7CTLINFO,ctlzodiac_main(CTLINFO*),read_structural,NOTES §362
 000a4b38,844,_ZN15CG2D_LOADER_TGA4SaveEPviiP9_G2D_SAVE,"CG2D_LOADER_TGA::Save(void*, int, int, _G2D_SAVE*)",read_structural,NOTES §316
@@ -471,7 +471,7 @@ address,size,mangled,demangled,status,section_ref
 001abf20,772,_Z6EggChki,EggChk(int),read_full,NOTES §396
 00260574,772,_Z13ctlmouke_mainP7CTLINFO,ctlmouke_main(CTLINFO*),read_structural,NOTES §383
 0028b0c0,772,_Z21pspWorldBlackSpotDrawP4GsOTi,"pspWorldBlackSpotDraw(GsOT*, int)",read_full,NOTES §448
-0009c9a0,764,drft_init,drft_init,unread,
+0009c9a0,764,drft_init,drft_init,read_structural,NOTES §569
 001fe718,764,_Z21changeAnimationStatusiii,"changeAnimationStatus(int, int, int)",read_structural,NOTES §411
 0025f694,764,_Z13wldnormal_lopv,wldnormal_lop(),read_full,NOTES §11.1
 0026a874,764,_Z9snpl_initi,snpl_init(int),read_structural,NOTES §431
@@ -493,7 +493,7 @@ address,size,mangled,demangled,status,section_ref
 000cbf7c,736,_Z9card_callPmmi,"card_call(unsigned long*, unsigned long, int)",read_structural,NOTES §392
 0021df6c,736,_Z29doMetaschedulePtclCommandOncetP10_EffectTCB,"doMetaschedulePtclCommandOnce(unsigned short, _EffectTCB*)",read_structural,NOTES §393
 002450c4,736,_Z11fft_openingi,fft_opening(int),read_structural,NOTES §394
-00090e08,732,mdct_init,mdct_init,unread,
+00090e08,732,mdct_init,mdct_init,read_structural,NOTES §569
 000ab164,732,_ZN9CEGL2_FBO13RenderFromFBOEjffffffhhi,"CEGL2_FBO::RenderFromFBO(unsigned int, float, float, float, float, float, float, unsigned char, unsigned char, int)",read_full,NOTES §485
 001908bc,732,_Z20eMakeSmallWindowFuncPh,eMakeSmallWindowFunc(unsigned char*),read_structural,NOTES §358
 001bc5a0,732,_Z6Bottunssssss,"Bottun(short, short, short, short, short, short)",read_structural,NOTES §408
@@ -502,7 +502,7 @@ address,size,mangled,demangled,status,section_ref
 00103068,728,_Z12Wcalcformulaiiii,"Wcalcformula(int, int, int, int)",read_structural,NOTES §399
 001bbbb8,728,_Z10CurChrChg2v,CurChrChg2(),read_structural,NOTES §402
 0026ec48,728,_Z15ctlsentuto_mainP7CTLINFO,ctlsentuto_main(CTLINFO*),read_structural,NOTES §404
-00076ef8,724,deflateInit2_,deflateInit2_,unread,
+00076ef8,724,deflateInit2_,deflateInit2_,read_structural,NOTES §569
 0008742c,724,vorbis_book_decodevs_add,vorbis_book_decodevs_add,read_structural,NOTES §336
 0010fd08,720,_Z23Wmultiwindow_packetinitP6RECT16P9COMRECORDP10PRIMPACKET,"Wmultiwindow_packetinit(RECT16*, COMRECORD*, PRIMPACKET*)",read_structural,NOTES §400
 000a6314,716,_ZN15CG2D_LOADER_TIM4CopyEPv,CG2D_LOADER_TIM::Copy(void*),read_structural,NOTES §316
@@ -532,15 +532,15 @@ address,size,mangled,demangled,status,section_ref
 0011dd88,692,_Z18extend_systemframeiiP6RECT16i,"extend_systemframe(int, int, RECT16*, int)",read_structural,NOTES §426
 00162e94,692,_Z18ASHURA_LightSwitchl,ASHURA_LightSwitch(long),read_structural,NOTES §427
 0029b134,692,_Z17xpLib_DebugImportv,xpLib_DebugImport(),read_full,NOTES §531
-002ca8a0,688,__aeabi_dsub,__aeabi_dsub,unread,
+002ca8a0,688,__aeabi_dsub,__aeabi_dsub,mentioned_unverified,NOTES §569
 00187264,688,_Z10MakeHeaderiiP11CARD_HEADER,"MakeHeader(int, int, CARD_HEADER*)",read_structural,NOTES §437
 0026883c,688,_Z9rute_findii,"rute_find(int, int)",read_structural,NOTES §422
-002ca8a0,688,__subdf3,__subdf3,unread,
-002ca8a4,684,__aeabi_dadd,__aeabi_dadd,unread,
+002ca8a0,688,__subdf3,__subdf3,mentioned_unverified,NOTES §569
+002ca8a4,684,__aeabi_dadd,__aeabi_dadd,mentioned_unverified,NOTES §569
 000af120,684,_ZN16CEGL2_TEX_HYBRID11GL_IsUpdateEjPiP9_RECT_S32,"CEGL2_TEX_HYBRID::GL_IsUpdate(unsigned int, int*, _RECT_S32*)",read_full,NOTES §13.11
 001f2cd8,684,_Z18getDisplayPositionv,getDisplayPosition(),read_full,NOTES §425
 00270c90,684,_Z12pagewin_mainP11PAGEWININFO,pagewin_main(PAGEWININFO*),read_structural,NOTES §381
-002ca8a4,684,__adddf3,__adddf3,unread,
+002ca8a4,684,__adddf3,__adddf3,mentioned_unverified,NOTES §569
 001c245c,680,_Z8UnitSortv,UnitSort(),read_structural,NOTES §433
 00220548,680,_Z13p15_deathFuncv,p15_deathFunc(),read_structural,NOTES §410
 00263fcc,680,_Z17ctlnobelstop_initv,ctlnobelstop_init(),read_structural,NOTES §432
@@ -581,7 +581,7 @@ address,size,mangled,demangled,status,section_ref
 001da6f8,640,_Z16set_playerwork_jP5BWORKii,"set_playerwork_j(BWORK*, int, int)",read_structural,NOTES §460
 002b8378,640,_Z12IS_GAME_AREAii,"IS_GAME_AREA(int, int)",read_structural,NOTES §466
 002106e0,640,_Z12placeNameEndv,placeNameEnd(),read_full,NOTES §462
-00088978,636,_ve_envelope_search,_ve_envelope_search,unread,
+00088978,636,_ve_envelope_search,_ve_envelope_search,read_structural,NOTES §569
 0024f238,632,_Z12ctltips_initi,ctltips_init(int),read_structural,NOTES §468
 00291c48,632,xpLibgpuInit,xpLibgpuInit,read_structural,NOTES §483
 0028ca3c,632,_ZN9CAUTOSAVE4LoadEv,CAUTOSAVE::Load(),read_structural,NOTES §458
@@ -594,11 +594,11 @@ address,size,mangled,demangled,status,section_ref
 001876b0,624,_Z7eSwapDBii,"eSwapDB(int, int)",read_structural,NOTES §421
 002a27c4,624,_ZN8xpLibpad6UpdateEi,xpLibpad::Update(int),read_full,NOTES §474
 002b2fe8,624,_Z16musicPlayer_Playiiii,"musicPlayer_Play(int, int, int, int)",read_structural,NOTES §473
-002cac50,620,__aeabi_dmul,__aeabi_dmul,unread,
+002cac50,620,__aeabi_dmul,__aeabi_dmul,mentioned_unverified,NOTES §569
 000868a4,620,vorbis_synthesis_lapout,vorbis_synthesis_lapout,read_structural,NOTES §336
 0026b378,620,_Z14wldssd_controlv,wldssd_control(),read_full,NOTES §12.7
 002b5bec,620,_Z16Logo_FrameRenderv,Logo_FrameRender(),read_structural,NOTES §472
-002cac50,620,__muldf3,__muldf3,unread,
+002cac50,620,__muldf3,__muldf3,mentioned_unverified,NOTES §569
 00083900,616,ogg_stream_iovecin,ogg_stream_iovecin,read_structural,NOTES §336
 00087ecc,616,vorbis_book_decodevv_add,vorbis_book_decodevv_add,read_structural,NOTES §336
 00288f30,616,_Z15pspPrimBackDrawiittPmPh,"pspPrimBackDraw(int, int, unsigned short, unsigned short, unsigned long*, unsigned char*)",read_full,NOTES §480
@@ -634,7 +634,7 @@ address,size,mangled,demangled,status,section_ref
 00268c74,592,_Z12walkrute_setii,"walkrute_set(int, int)",read_structural,NOTES §496
 00289d5c,592,_Z15pspFftSizeCheckPiS_S_,"pspFftSizeCheck(int*, int*, int*)",read_structural,NOTES §498
 0028c7ec,592,_ZN9CAUTOSAVE4SaveEj,CAUTOSAVE::Save(unsigned int),read_full,NOTES §19.1
-0009541c,588,_vp_offset_and_mix,_vp_offset_and_mix,unread,
+0009541c,588,_vp_offset_and_mix,_vp_offset_and_mix,read_structural,NOTES §569
 001d9968,588,_Z15resist_savedataP5BWORKi,"resist_savedata(BWORK*, int)",read_full,NOTES §508
 002a0124,588,MulMatrix0,MulMatrix0,read_full,NOTES §513
 00172660,588,_Z8cDB_initP2DBPmP10tagPOLY_F3P11tagPOLY_FT3P10tagPOLY_F4P11tagPOLY_FT4P10tagPOLY_G3P11tagPOLY_GT3P10tagPOLY_G4P11tagPOLY_GT4P10tagLINE_F2P10tagLINE_F3P10tagLINE_F4P10tagLINE_G2P10tagLINE_G3P9tagLINEG4P7tagTILEP9tagTILE_1P9tagTILE_8P10tagTILE_16P7tagSPRTP9tagSPRT_8P10tagSPRT_16P7DR_MOVEP7DR_AREA,"cDB_init(DB*, unsigned long*, tagPOLY_F3*, tagPOLY_FT3*, tagPOLY_F4*, tagPOLY_FT4*, tagPOLY_G3*, tagPOLY_GT3*, tagPOLY_G4*, tagPOLY_GT4*, tagLINE_F2*, tagLINE_F3*, tagLINE_F4*, tagLINE_G2*, tagLINE_G3*, tagLINEG4*, tagTILE*, tagTILE_1*, tagTILE_8*, tagTILE_16*, tagSPRT*, tagSPRT_8*, tagSPRT_16*, DR_MOVE*, DR_AREA*)",read_full,NOTES §506
@@ -655,12 +655,12 @@ address,size,mangled,demangled,status,section_ref
 0027286c,576,_Z26DattoNoGotokuNigeyoRoutinev,DattoNoGotokuNigeyoRoutine(),read_structural,NOTES §517
 001d1374,572,_Z16set_monomane_actP5BWORK,set_monomane_act(BWORK*),read_structural,NOTES §518
 00257c20,572,_Z12ctleeff_initi,ctleeff_init(int),read_structural,NOTES §521
-000962d0,568,res0_unpack,res0_unpack,unread,
-0009734c,568,res2_inverse,res2_inverse,unread,
+000962d0,568,res0_unpack,res0_unpack,read_structural,NOTES §569
+0009734c,568,res2_inverse,res2_inverse,read_structural,NOTES §569
 00167a80,568,_Z17ASURA_PKT_AnalyzePm,ASURA_PKT_Analyze(unsigned long*),read_full,NOTES §520
 001729d4,568,_Z17cDrawPluralFT4RGBPhP5COLORittii,"cDrawPluralFT4RGB(unsigned char*, COLOR*, int, unsigned short, unsigned short, int, int)",read_full,NOTES §505
 0024f688,568,_Z12ctltips_mainP7CTLINFO,ctltips_main(CTLINFO*),read_structural,NOTES §461
-00096508,564,res0_look,res0_look,unread,
+00096508,564,res0_look,res0_look,read_structural,NOTES §569
 00189fb0,564,_Z11eDrawFT4RGBP6RECT16iiP5COLORitti,"eDrawFT4RGB(RECT16*, int, int, COLOR*, int, unsigned short, unsigned short, int)",read_full,NOTES §514
 001ac8c8,564,_Z16DrawPluralFT4RGBPhP5COLORittii,"DrawPluralFT4RGB(unsigned char*, COLOR*, int, unsigned short, unsigned short, int, int)",read_full,NOTES §505
 001bd8e8,564,_Z17DrawEggWithShadowsP7DVECTORiP5COLORii,"DrawEggWithShadow(short, DVECTOR*, int, COLOR*, int, int)",read_full,NOTES §522
@@ -668,7 +668,7 @@ address,size,mangled,demangled,status,section_ref
 0026760c,564,_Z18moukeevtinf_windowP7CTLINFOii,"moukeevtinf_window(CTLINFO*, int, int)",read_structural,NOTES §516
 00259ebc,564,_Z12ctlhouk_mainP7CTLINFO,ctlhouk_main(CTLINFO*),read_structural,NOTES §441
 0025f990,564,_Z11wldfast_lopv,wldfast_lop(),read_structural,NOTES §528
-0009c55c,560,drft_forward,drft_forward,unread,
+0009c55c,560,drft_forward,drft_forward,read_structural,NOTES §569
 000bc2bc,560,_ZN12CSOUND_IF_SL19Stream_CreatePlayerEiii,"CSOUND_IF_SL::Stream_CreatePlayer(int, int, int)",read_full,NOTES §17.6
 000dc3d4,560,_Z6direc1Pc,direc1(char*),read_structural,NOTES §525
 00224e44,560,_Z14CheckGunResultiP7SVECTORi,"CheckGunResult(int, SVECTOR*, int)",read_full,NOTES §523
@@ -687,28 +687,28 @@ address,size,mangled,demangled,status,section_ref
 00253b60,548,_Z16ctlrutegrow_mainP7CTLINFO,ctlrutegrow_main(CTLINFO*),read_structural,NOTES §496
 0027abb4,548,_Z17MakeMapCostToDestPh,MakeMapCostToDest(unsigned char*),read_full,NOTES §558
 002847d8,548,_Z21Vector_ColorTransformP15VECTOR_DATABASE,Vector_ColorTransform(VECTOR_DATABASE*),read_full,NOTES §563
-000753c0,544,deflateSetDictionary,deflateSetDictionary,unread,
+000753c0,544,deflateSetDictionary,deflateSetDictionary,read_structural,NOTES §569
 00153cb8,544,_Z22iOS_RESUME_SET_WORK_IWP23IOS_RESUME_DATA_WORK_IW24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_WORK_IW(IOS_RESUME_DATA_WORK_IW*, IOS_RESUME_DATACOPY_MODE)",read_structural,NOTES §555
 001bdc0c,544,_Z18DrawUnitWithShadowsP7DVECTORP5COLORii,"DrawUnitWithShadow(short, DVECTOR*, COLOR*, int, int)",read_full,NOTES §558
 000bd740,540,_ZN17CSOUND_LOADER_OGG6DecodeEPaixxPi,"CSOUND_LOADER_OGG::Decode(signed char*, int, long long, long long, int*)",read_full,NOTES §17.7
 0028179c,540,_Z17iOS_v2menuSetType11V2MENU_TYPE,iOS_v2menuSetType(V2MENU_TYPE),unread,
 00193a10,540,_Z15jGetAbilityListssiPsi,"jGetAbilityList(short, short, int, short*, int)",read_structural,NOTES §390
-0029a618,540,ClearImage2,ClearImage2,unread,
+0029a618,540,ClearImage2,ClearImage2,read_structural,NOTES §570
 000dca14,536,_Z6direc2Pci,"direc2(char*, int)",read_full,NOTES §525
 002b75d0,536,_Z17RayPick_GT4_inputP11tagPOLY_GT4iiii,"RayPick_GT4_input(tagPOLY_GT4*, int, int, int, int)",read_full,NOTES §558
 002b1124,536,_Z19SettingsBundle_Initv,SettingsBundle_Init(),read_structural,NOTES §558
-0009c78c,532,drft_backward,drft_backward,unread,
+0009c78c,532,drft_backward,drft_backward,read_structural,NOTES §569
 00279cc0,532,_Z22GetDirectionOfAutoUnitv,GetDirectionOfAutoUnit(),mentioned_unverified,
 000aab58,528,_ZN9CEGL2_FBO4SaveEP9_RECT_S32PciP9_G2D_SAVE,"CEGL2_FBO::Save(_RECT_S32*, char*, int, _G2D_SAVE*)",mentioned_unverified,
 0015b388,528,_Z17iOSMapCursorCheckv,iOSMapCursorCheck(),read_structural,NOTES §565
 001a9e04,528,_Z11GetItemListssaPsth,"GetItemList(short, short, signed char, short*, unsigned short, unsigned char)",read_full,NOTES §549
 001b8a28,528,_Z22iOS_RESUME_SET_RESERVEP23IOS_RESUME_DATA_RESERVE24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_RESERVE(IOS_RESUME_DATA_RESERVE*, IOS_RESUME_DATACOPY_MODE)",read_full,NOTES §555
-00244200,528,_Z13vEnd_rollprocv,vEnd_rollproc(),unread,
+00244200,528,_Z13vEnd_rollprocv,vEnd_rollproc(),read_structural,NOTES §571
 0027e470,528,_ZN22iOS_CMenuTouchSaveLoad21setMenuAssistPositionEi,iOS_CMenuTouchSaveLoad::setMenuAssistPosition(int),read_structural,NOTES §364
 000ef5e0,524,_Z17make_statusscrollv,make_statusscroll(),read_structural,NOTES §524
 000df864,524,_Z16event_status_settt,"event_status_set(unsigned short, unsigned short)",unread,
 0024c070,524,_Z10wldbg_initv,wldbg_init(),read_full,NOTES §12.2
-00088718,520,_ve_envelope_init,_ve_envelope_init,unread,
+00088718,520,_ve_envelope_init,_ve_envelope_init,read_structural,NOTES §569
 001639ac,520,_Z14ASHURA_CVECTORlP7CVECTOR,"ASHURA_CVECTOR(long, CVECTOR*)",read_full,NOTES §562
 000dfebc,520,_Z10event_initv,event_init(),mentioned_unverified,
 00159e5c,520,_Z13iosAsmBoxCopyPcS_P10tCOPYFIELDS1_,"iosAsmBoxCopy(char*, char*, tCOPYFIELD*, tCOPYFIELD*)",unread,
@@ -717,21 +717,21 @@ address,size,mangled,demangled,status,section_ref
 00198614,520,_Z11jCursolFuncP7DVECTORPti,"jCursolFunc(DVECTOR*, unsigned short*, int)",read_structural,NOTES §451
 002494c8,520,_Z13vOpn_fadeprocPm,vOpn_fadeproc(unsigned long*),unread,
 002708fc,520,_Z12pagewin_initP11PAGEWININFO,pagewin_init(PAGEWININFO*),read_structural,NOTES §381
-002caebc,516,__aeabi_ddiv,__aeabi_ddiv,unread,
+002caebc,516,__aeabi_ddiv,__aeabi_ddiv,mentioned_unverified,NOTES §569
 00168088,516,_Z22ASHURA_EVENT_CLUT_LOADi,ASHURA_EVENT_CLUT_LOAD(int),read_structural,NOTES §562
 001753f4,516,_Z11cCursolFuncP7DVECTORPti,"cCursolFunc(DVECTOR*, unsigned short*, int)",read_structural,NOTES §451
 0028d854,516,_Z19tlGarbageCollectionv,tlGarbageCollection(),unread,
-002caebc,516,__divdf3,__divdf3,unread,
+002caebc,516,__divdf3,__divdf3,mentioned_unverified,NOTES §569
 000b7cd8,512,_ZN10CFILE_UTIL10FileInsertEPcS0_,"CFILE_UTIL::FileInsert(char*, char*)",read_structural,NOTES §342
 00177cd0,512,_Z11bDrawGT4RGBPsP5COLORii,"bDrawGT4RGB(short*, COLOR*, int, int)",read_full,NOTES §548
 001ad634,512,_Z10DrawGT4RGBPsP5COLORii,"DrawGT4RGB(short*, COLOR*, int, int)",read_full,NOTES §548
-0021a9ec,512,_Z25SetCameraWorkWithSchedules,SetCameraWorkWithSchedule(short),unread,
+0021a9ec,512,_Z25SetCameraWorkWithSchedules,SetCameraWorkWithSchedule(short),read_structural,NOTES §572
 0025d33c,512,_Z14wldstart_checkv,wldstart_check(),read_full,NOTES §12.2
-00273910,512,_Z12SetSafePanelii,"SetSafePanel(int, int)",unread,
+00273910,512,_Z12SetSafePanelii,"SetSafePanel(int, int)",read_full,NOTES §573
 00177ad4,508,_Z12bDrawFT4RGB2iiiiiiiiP5COLORitti,"bDrawFT4RGB2(int, int, int, int, int, int, int, int, COLOR*, int, unsigned short, unsigned short, int)",read_full,NOTES §551
 00182380,508,_Z11bCursolFuncP7DVECTORPti,"bCursolFunc(DVECTOR*, unsigned short*, int)",read_structural,NOTES §451
 00192f08,508,_Z7jSwapDBii,"jSwapDB(int, int)",read_structural,NOTES §421
-001a8914,508,_Z19GetTotalAbilityListsiPs,"GetTotalAbilityList(short, int, short*)",unread,
+001a8914,508,_Z19GetTotalAbilityListsiPs,"GetTotalAbilityList(short, int, short*)",read_full,NOTES §574
 0025a228,508,_Z12houkoku_okngP7CTLINFO,houkoku_okng(CTLINFO*),unread,
 002b2448,508,_Z10EnvSE_Playi,EnvSE_Play(int),unread,
 00271ba4,508,_Z18SetBaseTargetGroupii,"SetBaseTargetGroup(int, int)",mentioned_unverified,
@@ -752,7 +752,7 @@ address,size,mangled,demangled,status,section_ref
 0021cc84,500,_Z11StartEffectllP11EffectOrder,"StartEffect(long, long, EffectOrder*)",read_structural,NOTES §420
 0024eadc,500,_Z14ctlperson_mainP7CTLINFO,ctlperson_main(CTLINFO*),unread,
 002576e0,500,_Z15ctlevtinfo_initi,ctlevtinfo_init(int),unread,
-000969bc,496,res2_class,res2_class,unread,
+000969bc,496,res2_class,res2_class,read_structural,NOTES §569
 0015813c,496,_Z10unittofacei,unittoface(int),unread,
 001896e4,496,_Z12eGetItemListssaPsth,"eGetItemList(short, short, signed char, short*, unsigned short, unsigned char)",read_full,NOTES §549
 00194048,496,_Z11jDrawFT4RGBP6RECT16iiP5COLORitti,"jDrawFT4RGB(RECT16*, int, int, COLOR*, int, unsigned short, unsigned short, int)",read_full,NOTES §514

@@ -18202,3 +18202,280 @@ limitação de sub-fork) — o trabalho de identificação por prefixo de
 subsistema continua rendendo achados de primeira leitura (`CLIST`,
 `CCAMERA`, ponte JNI completa, chamadores reais do sistema de
 resume).
+
+## 569. Grab-bag de 19 funções de runtime/biblioteca de terceiros — zlib, Tremor (libvorbis de ponto fixo), libgcc ARM EHABI e soft-float (2026-10-25, Fase 3, septuagésimo oitavo lote)
+
+**Contexto novo desta sessão**: a partir desta data, o projeto passou a
+ter um **pipeline de CI/CD próprio** (`.github/workflows/re-batches.yml` +
+`re-pipeline.yml`, ferramentas em `docs/re-tools/parallel_loop.py`/
+`progress_report.py`/`check_smoke.py`), que roda `jtable.py` em lote
+sobre toda função `unread`/`needs_review` do inventário, grava um
+checkpoint JSON por função em `docs/re-results/<endereço>.json`
+(`status: auto_structural` ou `needs_review`, cobertura, tabelas,
+catálogo de `bl`) e se autoencadeia via `workflow_dispatch` até não
+haver checkpoint novo. **Isso já varreu estruturalmente 100% do
+binário** (`PROGRESS.md`: "Not yet checkpointed: 0 functions"; 3.002
+checkpoints = 1.744 `auto_structural` + 1.258 `needs_review`). Esse
+checkpoint é *triagem estrutural automática, não revisão semântica*
+(frase do próprio `re-tools/README.md`) e **não altera o
+`RE_FUNCTION_INVENTORY.csv`** — a conversão em `read_full`/
+`read_structural` com narrativa real (o que esta seção e as seguintes
+fazem) continua sendo trabalho desta camada de coordenação. Os 19
+endereços abaixo já tinham checkpoint (confirma os mesmos números de
+cobertura obtidos de novo manualmente via `jtable.py`), mas nenhuma
+leitura semântica — esta seção fecha essa lacuna para a cauda de
+funções de biblioteca de terceiros estaticamente linkadas.
+
+**zlib** (identidade confirmada por assinatura/API exata, já eram o
+tema das seções 7/397 sobre DEFLATE real): `adler32` (`0x736ac`, 856
+B, 100% cob., função folha, 0 `bl` — soma rolante clássica, sem laço
+de biblioteca por cima) · `deflateInit2_` (`0x76ef8`, 724 B, 98%,
+1 `bl`→`deflateEnd`) · `deflateSetDictionary` (`0x753c0`, 544 B, 100%,
+3 `bl`: `adler32`, mais dois helpers locais sem símbolo). Todas três
+são a API pública padrão da zlib, byte-idênticas em comportamento ao
+código-fonte aberto do projeto — não há lógica específica deste jogo
+para rastrear além de "é exatamente a zlib real".
+
+**Tremor (port de ponto fixo da libvorbis/Ogg, já confirmado nas
+seções 17.x como o decodificador de streaming de áudio real)**:
+`drft_init`/`drft_forward`/`drft_backward` (`0x9c9a0`/`0x9c55c`/
+`0x9c78c`, FFT real de Bluestein — a mesma família citada na §17.7 por
+nome, agora com o trio completo fechado, 98-100% cob., `bl` resolvidos
+contra helpers locais sem símbolo + `__divsi3`) · `mdct_init` (
+`0x90e08`, 732 B, 98%, 13 `bl` — setup da MDCT que usa o DRFT acima)
+· `_ve_envelope_init`/`_ve_envelope_search` (`0x88718`/`0x88978`,
+98-100%, a primeira chama `mdct_init` diretamente — confirma a
+dependência real envelope→MDCT da fase de psicoacústica) ·
+`_vp_offset_and_mix` (`0x9541c`, 95%, 9 `bl` de aritmética
+float/double) · `res0_unpack`/`res0_look`/`res2_inverse`/`res2_class`
+(família de decodificação de "residue", 100% cob. cada, chamando
+`oggpack_read`, `vorbis_book_decode(vv_add)`, `_vorbis_block_alloc`,
+`ov_ilog` — todos nomes públicos exatos da API interna do Tremor).
+Mesma conclusão de sempre: biblioteca de terceiros genuína, útil para
+confirmar QUE partes do pipeline de áudio existem, não para revelar
+lógica proprietária do jogo.
+
+**libgcc ARM EHABI (unwinder de exceção C++, nunca antes tocado neste
+projeto)**: `__gnu_unwind_execute` (`0x2cdb20`, 892 B, **100% cob.**,
+4 `bl` distintos: `_Unwind_VRS_Get`/`Set`/`Pop` + 1 helper local
+10×) — o motor real de desenrolamento de pilha ARM EHABI
+(`unwind-arm.c` do runtime do GCC), que interpreta os bytecodes de
+unwind das tabelas `.ARM.extab`/`.ARM.exidx`. `_Unwind_VRS_Pop`
+(`0x2cd594`, 856 B) tem cobertura automática baixa (3% nesta sessão,
+97% no checkpoint do CI após nova tentativa — ainda `needs_review`
+por 1 tabela não resolvida: o switch real por classe de registrador
+— core/VFP/FPA/wCGR — não bate no padrão `add pc,pc,rX,lsl#2`).
+`_Unwind_VRS_Get`/`_Unwind_VRS_Set` (92 B cada, `0x2ccfb8`/`0x2cd03c`)
+ficam **não resolvidos** mesmo automaticamente (22%/0% de cobertura) —
+permanecem `unread` nesta seção, só citados como chamadores.
+
+**libgcc/compiler-rt soft-float de precisão dupla** (ABI padrão ARM
+EABI para aritmética `double` em hardware sem FPU de double, citada
+indiretamente desde a seção 7.x mas nunca processada): `__aeabi_dadd`
+(=`__adddf3`, `0x2ca8a4`), `__aeabi_dsub` (=`__subdf3`, `0x2ca8a0`),
+`__aeabi_dmul` (=`__muldf3`, `0x2cac50`), `__aeabi_ddiv`
+(=`__divdf3`, `0x2caebc`). Cobertura automática muito baixa
+(6–73% dependendo da função, confirmada tanto nesta sessão quanto no
+checkpoint do CI) porque o corpo real trata os casos especiais do
+IEEE-754 (NaN, infinito, denormal, round-to-nearest) com uma cascata
+de comparações que a descida recursiva do `jtable.py` não segue por
+completo. **Identidade e comportamento são garantidos pela
+especificação do ABI** (toda `double` compilada por este GCC para ARM
+usa exatamente essas quatro rotinas, bit-a-bit IEEE-754) — não pela
+leitura byte a byte, que continua incompleta. Por isso ficam
+`needs_review`/sem pass estrutural fechado, e no CSV como
+`mentioned_unverified`, não `read_structural` — mantendo a régua de
+honestidade do projeto (seção "Critério de zerado").
+
+**Status CSV**: `read_structural` para as 15 funções de zlib/Tremor/
+`__gnu_unwind_execute` (identidade de API + call-graph confirmados,
+corpo não lido instrução a instrução por ser biblioteca de terceiros
+padrão); `mentioned_unverified` para as 7 restantes (`_Unwind_VRS_Pop`/
+`Get`/`Set`, os quatro soft-float `__aeabi_d*`) — citadas e
+identificadas por ABI/assinatura, mas sem passe estrutural fechado.
+
+## 570. `ClearImage2()` — wrapper que repete `xpLibgpuClearImage` 3× com callbacks locais intercalados (2026-10-25, Fase 3, septuagésimo oitavo lote)
+
+`ClearImage2()` (`0x29a618`, 540 B, 96% cobertura, 0 tabela de salto,
+12 branches/6 de retrocesso): 6 chamadas `bl` em 4 alvos distintos —
+`xpLibgpuClearImage` (seção 554, já confirmada como a tradução real
+do primitivo PSX `ClearImage` da família `xpLib*`) chamada 3×,
+intercalada com 3 funções locais sem símbolo dinâmico (`sub_28e6f0`,
+`sub_28e798`, `sub_28e998`, uma chamada cada, nenhuma catalogada em
+seções anteriores). O padrão de branches (6 de retrocesso para 12
+totais) é consistente com uma sequência de 3 blocos quase idênticos,
+cada um fazendo setup via um `sub_` local seguido de
+`xpLibgpuClearImage`. A função vizinha imediata no binário,
+`ClearImage` (`0x29a834`, 36 B, ainda `mentioned_unverified`), é
+provavelmente a wrapper direta de 1 chamada que esta função
+generaliza para 3 — fica como pista para uma iteração futura. Sem
+leitura byte a byte dos blocos internos nem resolução dos 3 `sub_`
+locais, não é possível confirmar se os três clears usam parâmetros
+diferentes (ex.: regiões/paletas distintas) ou são idênticos.
+
+**Status CSV: `read_structural`.**
+
+## 571. `vEnd_rollproc()` — callback por-quadro dos créditos finais, confirma o "skip" por toque (2026-10-25, Fase 3, septuagésimo oitavo lote)
+
+`vEnd_rollproc()` (`0x244200`, 528 B) — `jtable.py`: 121 de ~132
+instruções (92%), 0 tabela de salto, 10 branches/5 de retrocesso;
+disassembly linear completo conferido a mão (capstone) para confirmar
+a lógica dos blocos, não só o catálogo de `bl`.
+
+6 `bl` distintos: `iOS_getTouchFreeTap()`, `drawListStaffroll(int)`
+(seção 271), `drawMessage(int)`, `deleteMessage()`,
+`setMoviePlayFlg__Fi(int)`, `iOS_soundDirect(int)`. Confirma por
+completo a hipótese já registrada na seção 124 (`ctlendroll_main`) de
+que esta é a função "end roll proc" — o callback por quadro chamado
+pelo state machine dos créditos finais:
+
+- Sem toque: segue o caminho normal — resolve um índice de array e
+  grava num global de controle, limpa o bit `0x40` de uma flags word,
+  incrementa dois contadores de frame contra duas constantes grandes
+  (`0x335`/`0x604` — prováveis durações fixas de scroll de créditos e
+  de faixa de áudio), chamando `drawListStaffroll(int)` a cada quadro
+  dentro do limite.
+- Com toque (`iOS_getTouchFreeTap()` verdadeiro): se o estado global
+  ainda não é `0x100`, seta a flag de "movie play" via
+  `setMoviePlayFlg__Fi(4)`, avança os mesmos contadores direto pro
+  valor de "fim" e dispara `iOS_soundDirect(1)` — ou seja, **o toque
+  pula direto pro final** da sequência em vez de interrompê-la
+  abruptamente.
+- Quando o contador excede o segundo limiar (`cmp r2,#0x2b`): chama
+  `drawListStaffroll(0)` uma última vez, segue pro bloco de término
+  (`drawMessage(0)`/`deleteMessage()`) e seta o bit `0x1000` de uma
+  flags word compartilhada — provavelmente o sinal de "créditos
+  terminados" lido de volta pelo switch de 5 casos do
+  `ctlendroll_main` (seção 124).
+
+Os globais PC-relative tocados não foram nomeados individualmente
+(contadores/flags do próprio `vEnd_rollproc`/`ctlendroll_main`, não
+ponteiros de função de outro subsistema). Falta processar
+`vOpn_fadeproc(unsigned long*)` (`0x2494c8`) para fechar o par
+"Opn"/"End" do mesmo `v*_*proc`.
+
+**Status CSV: `read_structural`** (lógica de blocos rastreada e
+confirmada; os globais PC-relative individuais não foram
+nomeados/resolvidos — não atinge o padrão de `read_full`).
+
+## 572. `SetCameraWorkWithSchedule(short)` — camada "schedule" plana, irmã direta de `SetCameraWorkWithMetaschedule` (seção 307) (2026-10-25, Fase 3, septuagésimo oitavo lote)
+
+`SetCameraWorkWithSchedule(short)` (`0x21a9ec`, 512 B) — contígua na
+memória, logo antes de `SetCameraWorkWithMetaschedule` (`0x21abec`,
+seção 307): 123 de ~128 instruções (96%), sem tabela de salto; 8
+branches, 5 de retrocesso; 6 `bl` distintos.
+
+Chama exatamente o mesmo trio de setters de trabalho de câmera por
+eixo já documentado (`SetEffectAngleCameraWork` §327,
+`SetEffectTransCameraWork` §326, `SetEffectScaleCameraWork` §563, 1×
+cada), os mesmos helpers de igualdade de vetor
+(`EqualSVectorToVECTOR`/`EqualSVectorToSVECTOR`, usados para detectar
+convergência) e **`SearchNextScheduleDividePos`** — o par exato, só
+sem o prefixo "Meta", de `SearchNextMetascheduleDividePos` citado em
+§307. Confirma a hipótese que §307 deixava implícita: existe um par
+real **schedule plano vs. metaschedule**, cada um com sua própria
+função de busca de ponto de divisão de timeline, mas despachando para
+os mesmos três setters de baixo nível por eixo. Mesmo padrão
+estrutural do irmão (chamadas e proporção de branches equivalentes),
+apenas ~40% do tamanho (sem a camada extra de sub-segmentação "meta").
+
+Como em §307, não houve traço de cada bloco/instrução individualmente
+(só grafo de chamadas + branches resolvidos via `jtable.py`) — mesma
+régua de honestidade já aplicada ao par.
+
+**Status CSV: `read_structural`.**
+
+## 573. `SetSafePanel(int, int)` — varredura completa do grid de mapa por painéis "seguros" para a IA de fuga (2026-10-25, Fase 3, septuagésimo oitavo lote)
+
+`SetSafePanel(int, int)` (`0x273910`, 512 B) — `jtable.py`: 99%
+(127/128 slots), **0 tabelas de salto, 0 `bl`** (função folha). Sem
+catálogo de `bl` pra cruzar, a leitura foi linha a linha via
+disassembly completo (capstone direto).
+
+Função pura sobre um array estático global indexado por um campo de
+estado em `r2+0xe2d` (contador de camada/uso), com dois contadores de
+dimensão do grid em `r2+0xe3a`/`r2+0xe3b` (eixos do mapa de batalha).
+Corpo: dois loops aninhados quase idênticos (um por valor de `r1`,
+o 2º parâmetro — direção/modo de varredura: `r1==0` usa o bloco em
+`0x273974`, qualquer outro valor cai no bloco espelhado em
+`0x273a88`), cada um percorrendo as duas camadas do grid (`r3` de 0 a
+2) × todos os painéis do eixo secundário (`r5`, até `r2+0xe3b`) ×
+todos os painéis do eixo principal (até `r2+0xe3a`), lendo por painel
+um valor de altura de 16 bits (`+0xa70+4`) e um campo de 8 bits
+adicional (`+0x174`) combinados em `altura16 | campo8<<16`, comparado
+contra o parâmetro `r0` (limiar de altura/alcance) com a lógica: só
+aceita o painel se `altura_combinada <= r0` **e** o valor combinado
+for maior que o melhor candidato já visto (inicializado com
+`INT_MIN`). Quando um painel melhor é encontrado, grava 4 bytes
+(índice de camada, índice de eixo secundário, índice de eixo
+principal, flag booleano calculado) no array de resultado apontado
+por `r8` — endereço calculado a partir do contador de uso em
+`r2+0xe2d`, ou seja, a função **escreve a entrada "atual" de uma
+lista de painéis seguros**, não substitui a lista inteira. Retorno:
+`1` se nenhum painel válido foi encontrado, senão `0`.
+
+Confirma, por cruzamento com a seção 517 (`DattoNoGotokuNigeyoRoutine`,
+handler de fuga da IA — "foge como lebre"), que `SetSafePanel(int,int)`
+é chamada ali para restringir o movimento da unidade a painéis cuja
+altura/elevação combinada fica dentro do limiar passado como `r0`
+(provavelmente o alcance de ataque do inimigo mais próximo), com `r1`
+escolhendo a direção de varredura. Mesma família de
+`SetSafePanelAhead(int)` (`0x273b38`, 64 B) e `SetSafePanelInRange(int)`
+(`0x273b10`, 40 B, vizinhos diretos no binário) e
+`SetMoveAreaSafePanelOnly()`/`StayAtSafePanel()` — nenhuma das quatro
+lida ainda.
+
+**Status CSV: `read_full`** (leitura instrução a instrução completa,
+99% de cobertura, sem `bl` para verificar externamente, lógica dos
+blocos rastreada por completo).
+
+## 574. `GetTotalAbilityList(short, int, short*)` — agregador real da lista completa de habilidades de um job: soma + bubble-sort + merge (2026-10-25, Fase 3, septuagésimo oitavo lote)
+
+`GetTotalAbilityList(short,int,short*)` (`0x1a8914`, 508 B, 99% cob.,
+0 tabela de salto, 8 branches/4 de retrocesso) — lida instrução a
+instrução via disassembly direto (capstone). 2 `bl` distintos:
+`GetSpecialJob(short)` (1×) e `GetAbilityList(short,short,int,short*,int)`
+(4×, já documentada na seção 390).
+
+Lógica traçada: a função monta, num buffer local de pilha, a lista
+combinada de IDs de habilidade de **cinco fontes**, cada uma via uma
+chamada a `GetAbilityList` (2º parâmetro = slot/job id consultado):
+(1) `GetSpecialJob(job)` como 1º slot; (2) loop `slot = 0x4b..0x5c`
+(18 slots, mesma faixa de "tiers" de job vista em outras famílias);
+(3) slots `0xa0`/`0xa1` (dois slots genéricos extras, prováveis
+"habilidades compartilhadas"). Cada chamada devolve uma contagem
+somada e usada pra avançar o ponteiro de escrita, concatenando os
+resultados das 5 fontes num único array de `short`.
+
+Depois da concatenação, roda um **bubble sort ascendente real**
+(`0x1a89ec`–`0x1a8a1c`): compara pares adjacentes e troca quando fora
+de ordem — confirma que o array final é entregue ordenado por ID de
+habilidade, não na ordem de descoberta. Em seguida percorre o array
+ordenado reescrevendo-o no buffer de saída do caller (3º parâmetro):
+para cada entrada, verifica o sentinela de término (`0xFFFF`) e, se
+não for, decide se deve ser **remapeada** para um ID "mesclado" fixo
+(constantes `0x41d8`/`0x41d9`/`0x41dd`) quando o valor bate contra uma
+pequena janela de constantes **e** o resultado de `GetSpecialJob` é
+exatamente `0x4b`/`0x4e`/`0x54`/`0x59` — a remapeação só ocorre para
+certos jobs especiais, fundindo entradas duplicadas entre o slot do
+job especial e os slots numéricos num único ID canônico. O array de
+saída termina com o sentinela `0xFFFF`.
+
+**Aberto**: o significado exato dos IDs mesclados `0x41d8`/`0x41d9`/
+`0x41dd` (prováveis categorias de habilidade padrão/comum
+compartilhada entre jobs especiais) não está confirmado por nenhuma
+string ou seção já escrita — inferência pura da aritmética observada.
+O resto (concatenação, soma, bubble sort, sentinela) foi lido e
+confirmado byte a byte.
+
+Fecha, junto com a seção 390 (`GetAbilityList`), o lado "consulta
+agregada" da família de habilidades por job — `GetAbilityList` devolve
+a lista de UM slot, `GetTotalAbilityList` soma e deduplica TODOS os
+slots relevantes de um job num único array ordenado (provavelmente
+consumido por `AbilityMenu`, seção 57, ou `eAbilityMenu`, ainda não
+lida).
+
+**Status CSV: `read_full`** (corpo lido instrução a instrução,
+algoritmo de concatenação/soma + bubble-sort + remapeamento
+confirmado; só o significado semântico exato das 3 constantes de
+remapeação fica como lacuna anotada).
