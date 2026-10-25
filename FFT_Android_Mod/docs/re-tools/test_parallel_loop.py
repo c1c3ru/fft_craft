@@ -25,6 +25,34 @@ class PipelineTests(unittest.TestCase):
                             "00000020,100,b,big(),pending,x\n")
             self.assertEqual([r["size"] for r in loop.load_inventory(file)], [100, 12])
 
+
+    def test_core_priority_precedes_larger_general_function(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "core.csv"
+            path.write_text("address,size,mangled,demangled,status,section_ref\n"
+                            "00000010,12,a,core(),unread,\n")
+            rows = [
+                {"address": "00000020", "size": 100, "status": "unread"},
+                {"address": "00000010", "size": 12, "status": "unread"},
+                {"address": "00000030", "size": 50, "status": "unread"},
+            ]
+            ranked = loop.prioritize(rows, path)
+            self.assertEqual([x["address"] for x in ranked],
+                             ["00000010", "00000020", "00000030"])
+            self.assertEqual(rows[1]["status"], "unread")
+
+    def test_priority_disable_keeps_inventory_order(self):
+        rows = [{"address": "00000020"}, {"address": "00000010"}]
+        self.assertEqual(loop.prioritize(rows, None), rows)
+
+    def test_duplicate_priority_addresses_do_not_duplicate_work(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "core.csv"
+            path.write_text("address\n00000010\n00000010\n000000ff\n")
+            rows = [{"address": "00000020"}, {"address": "00000010"}]
+            self.assertEqual([x["address"] for x in loop.prioritize(rows, path)],
+                             ["00000010", "00000020"])
+
     def test_automatic_no_jump_table(self):
         output = ("=== jtable.py: 0x10..0x74 (100 bytes) ===\n"
                   "coverage: 25 of ~25 instruction slots (100%)\n"

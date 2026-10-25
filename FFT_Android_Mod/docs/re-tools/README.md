@@ -59,3 +59,15 @@ O workflow `.github/workflows/re-pipeline.yml` executa os testes de regressão n
 Os arquivos JSON em `docs/re-results` são intermediários descartáveis; acompanhe-os usando o SHA-256 do binário. O campo `pipeline_version` invalida checkpoints antigos após mudanças relevantes no processo. Resultados `error` são repetidos automaticamente; `--retry-review` repete também os `needs_review`.
 
 **Importante:** o teste unitário não prova que a resolução ARM está correta para todas as funções. Rodar um lote pequeno e comparar amostras com as notas históricas permanece necessário antes de aprovar uma mesclagem.
+
+## Prioridade do núcleo
+
+O coordenador agora lê `docs/alvos_prioritarios_nucleo.csv` e antepõe seus endereços pendentes à fila do inventário geral. Dentro de cada grupo, as funções continuam ordenadas por tamanho decrescente. Status e tamanhos válidos são os do inventário canônico; o CSV prioritário é apenas uma lista de seleção, não substitui evidências nem reprocessa funções já concluídas. Checkpoints existentes (inclusive `needs_review`) continuam respeitados.
+
+```bash
+python3 docs/re-tools/parallel_loop.py --workers 5 --limit 100
+# Ordem antiga, sem prioridade:
+python3 docs/re-tools/parallel_loop.py --no-priority --workers 5 --limit 100
+```
+
+Para revisar casos já examinados, execute separadamente com `--retry-review`. O commit/merge automático continua condicionado aos testes e à ausência de erros; `needs_review` não equivale a conclusão semântica.

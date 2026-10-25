@@ -20,6 +20,7 @@ ROOT = Path(__file__).resolve().parents[2]
 TOOLS = Path(__file__).resolve().parent
 DEFAULT_SO = ROOT / "src/lib/armeabi/libgl2jni.so"
 DEFAULT_CSV = ROOT / "docs/RE_FUNCTION_INVENTORY.csv"
+DEFAULT_PRIORITY_CSV = ROOT / "docs/alvos_prioritarios_nucleo.csv"
 CONFIRMED = {"read_structural", "read_full", "confirmed_by_similarity"}
 RETRYABLE = {"error", "needs_review"}
 PIPELINE_VERSION = 2
@@ -50,6 +51,22 @@ def load_inventory(path: Path) -> list[dict]:
     for row in rows:
         row["size"] = int(row["size"])
     return sorted(rows, key=lambda row: -row["size"])
+
+
+def prioritize(rows: list[dict], priority_csv: Path | None) -> list[dict]:
+    """Core addresses first, then remaining inventory by descending byte size.
+
+    The canonical inventory owns status and size; the priority file only
+    supplies a rank. Missing or already reviewed addresses are harmless.
+    """
+    if priority_csv is None:
+        return rows
+    with priority_csv.open(newline="", encoding="utf-8") as handle:
+        priority_addresses = {row["address"].strip().lower()
+                              for row in csv.DictReader(handle)}
+    core = [row for row in rows if row["address"].lower() in priority_addresses]
+    other = [row for row in rows if row["address"].lower() not in priority_addresses]
+    return core + other
 
 
 def signature(row: dict) -> str:
@@ -128,6 +145,9 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--so", type=Path, default=DEFAULT_SO)
     parser.add_argument("--inventory", type=Path, default=DEFAULT_CSV)
+    parser.add_argument("--priority-csv", type=Path, default=DEFAULT_PRIORITY_CSV,
+                        help="Prioritize core targets; use --no-priority to disable")
+    parser.add_argument("--no-priority", action="store_true")
     parser.add_argument("--output", type=Path, default=ROOT / "docs/re-results")
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--limit", type=int, default=25)
@@ -145,9 +165,10 @@ def main() -> int:
         parser.error("timeout must be positive")
     if not args.so.is_file():
         parser.error(f"library missing: {args.so}")
-    rows = load_inventory(args.inventory)
+    rows = prioritize(load_inventory(args.inventory),
+                      None if args.no_priority else args.priority_csv)
     references = {}
-    for row in rows:
+    for row in sorted(rows, key=lambda item: -item["size"]):
         label = family(row["demangled"])
         if label and row["status"] in {"read_structural", "read_full"}:
             references.setdefault(label, row)
