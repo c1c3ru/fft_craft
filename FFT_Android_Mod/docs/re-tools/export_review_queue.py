@@ -4,6 +4,7 @@ import argparse
 import csv
 import hashlib
 import json
+from collections import Counter
 from pathlib import Path
 
 
@@ -49,6 +50,35 @@ def build(inventory, core, results, binary):
     return output
 
 
+def render_triage(rows):
+    counts = Counter(r["review_reason"] for r in rows)
+    core = Counter(r["review_reason"] for r in rows if r["core_priority"])
+    lines = ["# ARM semantic review triage", "",
+             f"Unverified checkpoints: **{len(rows)}**; core targets: **{sum(core.values())}**.", "",
+             "These are structural observations, not semantic equivalence proofs.", "",
+             "| Review reason | Total | Core |",
+             "|---|---:|---:|"]
+    for reason in sorted(counts):
+        lines.append(f"| {reason} | {counts[reason]} | {core[reason]} |")
+    lines += ["", "## Highest priority evidence collection", "",
+              "| Address | Function | Coverage | Reason | Next check |",
+              "|---|---|---:|---|---|"]
+    checks = {
+      "unresolved_jump_table": "Recover bounds and every indirect target",
+      "resolved_jump_table_check": "Verify guard, all cases and default path",
+      "coverage_below_95": "Disassemble uncovered blocks and side effects",
+      "indirect_flow_or_manual_check": "Validate outputs, memory writes and return paths",
+    }
+    for r in rows[:30]:
+        label = str(r["name"]).replace("|", "/")
+        lines.append(f'| `{r["address"]}` | {label} | {r["coverage_pct"]}% | '
+                     f'{r["review_reason"]} | {checks[r["review_reason"]]} |')
+    lines += ["", "Approval requires instruction-level control-flow evidence, "
+              "input/output invariants, and ideally differential tests or execution traces. "
+              "Do not change needs_review solely from these summaries.", ""]
+    return "\\n".join(lines)
+
+
 def main():
     parser = argparse.ArgumentParser()
     root = Path(__file__).resolve().parents[2]
@@ -66,6 +96,7 @@ def main():
         writer = csv.DictWriter(f, fieldnames=fields)
         writer.writeheader()
         writer.writerows(rows)
+    (args.results / "REVIEW_TRIAGE.md").write_text(render_triage(rows), encoding="utf-8")
     print(f"Review queue: {len(rows)} rows, {sum(x['core_priority'] for x in rows)} core")
 
 
