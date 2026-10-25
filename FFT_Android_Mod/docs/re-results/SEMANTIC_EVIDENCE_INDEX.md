@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1032/1258** pending functions.
+Evidence collected: **1040/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1043,3 +1043,11 @@ These reports do not constitute semantic verification.
 | `0027b514` | getCmdKindNum() | [Evidence](semantic-evidence/0027b514.md) |
 | `0027b528` | getCmdKind(unsigned int) | [Evidence](semantic-evidence/0027b528.md) |
 | `0027fc14` | chk_ucResumeDataSetAddr(unsigned char*) | [Evidence](semantic-evidence/0027fc14.md) |
+| `0028051c` | iOS_fftDelete() | [Evidence](semantic-evidence/0028051c.md) |
+| `00281664` | iOS_v2menuGetAddr() | [Evidence](semantic-evidence/00281664.md) |
+| `00281694` | iOS_v2menuSetDecide(int) | [Evidence](semantic-evidence/00281694.md) |
+| `002816a8` | iOS_v2menuGetDecide() | [Evidence](semantic-evidence/002816a8.md) |
+| `002819b8` | iOS_v2menuGetType() | [Evidence](semantic-evidence/002819b8.md) |
+| `00282274` | iOS_v2menuGetYline() | [Evidence](semantic-evidence/00282274.md) |
+| `002843a0` | new_VectorDataBase(unsigned int) | [Evidence](semantic-evidence/002843a0.md) |
+| `00285f38` | pspMsgLzwBaseGet(FFTPSP_MSG_LZW) | [Evidence](semantic-evidence/00285f38.md) |
