@@ -115,6 +115,16 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_v2icon_destinations.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_three_callees_audit.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_three_callees_exec.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_sound_chain.py
+          python3 - <<'PY'
+          from pathlib import Path
+          r=Path("FFT_Android_Mod/docs/re-results/SEMANTIC_SOUND_CHAIN.md").read_text()
+          assert "Sound tail-branch microexecutions: 10/10 PASS" in r
+          assert "0x26b374" in r and "0x2168e0" in r
+          assert "sound playback" in r and "not proven" in r
+          assert "Stop **before**" in r
+          print("PASS: original ELF sound_request bounded direct-B chain")
+          PY
           python3 - <<'PY'
           from pathlib import Path
           report = Path("FFT_Android_Mod/docs/re-results/SEMANTIC_THREE_CALLEES_EXECUTION.md").read_text()
