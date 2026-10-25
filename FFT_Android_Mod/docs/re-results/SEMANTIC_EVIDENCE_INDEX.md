@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1168/1258** pending functions.
+Evidence collected: **1176/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1179,3 +1179,11 @@ These reports do not constitute semantic verification.
 | `0026b5e4` | ssd_request(int, int) | [Evidence](semantic-evidence/0026b5e4.md) |
 | `002cba30` | __fixunsdfdi | [Evidence](semantic-evidence/002cba30.md) |
 | `002775dc` | JudgeMovable(int) | [Evidence](semantic-evidence/002775dc.md) |
+| `002b29b4` | SE_StopAll() | [Evidence](semantic-evidence/002b29b4.md) |
+| `002ccfb8` | _Unwind_VRS_Get | [Evidence](semantic-evidence/002ccfb8.md) |
+| `002cd03c` | _Unwind_VRS_Set | [Evidence](semantic-evidence/002cd03c.md) |
+| `001a6530` | ScriptRead(int, TUTRIAL*) | [Evidence](semantic-evidence/001a6530.md) |
+| `0025f63c` | wldlop_chk() | [Evidence](semantic-evidence/0025f63c.md) |
+| `00273cc8` | IsAlmostNullUnit(int) | [Evidence](semantic-evidence/00273cc8.md) |
+| `0028c768` | CFFT_STATE::AttackTeamFaceIDToUnitATFID(int) | [Evidence](semantic-evidence/0028c768.md) |
+| `0024b02c` | wldmapEntry(int) | [Evidence](semantic-evidence/0024b02c.md) |
