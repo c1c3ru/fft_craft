@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **792/1258** pending functions.
+Evidence collected: **800/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -803,3 +803,11 @@ These reports do not constitute semantic verification.
 | `001022cc` | Wchk_nexteventtype(int) | [Evidence](semantic-evidence/001022cc.md) |
 | `00153c84` | iOS_updateDispCameraIconSetting() | [Evidence](semantic-evidence/00153c84.md) |
 | `00155c8c` | stop_adventuremessage(int) | [Evidence](semantic-evidence/00155c8c.md) |
+| `0015832c` | rewrite_worldscroll(int) | [Evidence](semantic-evidence/0015832c.md) |
+| `0015a5ec` | siOS_TCurGet(unsigned int) | [Evidence](semantic-evidence/0015a5ec.md) |
+| `0015bf38` | iOSTchMovingModeCheck() | [Evidence](semantic-evidence/0015bf38.md) |
+| `0015c01c` | iOSTchHoseiControl() | [Evidence](semantic-evidence/0015c01c.md) |
+| `001adc48` | FadeCondition() | [Evidence](semantic-evidence/001adc48.md) |
+| `001b9d84` | iOS_clearTutorialbreak() | [Evidence](semantic-evidence/001b9d84.md) |
+| `001d66f8` | set_td(unsigned char*) | [Evidence](semantic-evidence/001d66f8.md) |
+| `00202efc` | iOS_BattleEventCheck() | [Evidence](semantic-evidence/00202efc.md) |
