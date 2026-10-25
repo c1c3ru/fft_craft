@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **856/1258** pending functions.
+Evidence collected: **864/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -867,3 +867,11 @@ These reports do not constitute semantic verification.
 | `002885d4` | pspOpenEnableFlg(PSP_OPEN_FLG) | [Evidence](semantic-evidence/002885d4.md) |
 | `0028da90` | tlMallocErrorFunc(void (*)(TL_MALLOC_ERROR)) | [Evidence](semantic-evidence/0028da90.md) |
 | `0028e5c4` | VSyncCallback | [Evidence](semantic-evidence/0028e5c4.md) |
+| `0028e6d4` | xpSetWaitVSyncFunc(int (*)()) | [Evidence](semantic-evidence/0028e6d4.md) |
+| `00290e6c` | DrawSyncCallback | [Evidence](semantic-evidence/00290e6c.md) |
+| `0029fed4` | PSX_ccos | [Evidence](semantic-evidence/0029fed4.md) |
+| `002a1440` | SetLightMatrix | [Evidence](semantic-evidence/002a1440.md) |
+| `002a148c` | SetColorMatrix | [Evidence](semantic-evidence/002a148c.md) |
+| `002a2a4c` | xpPadKeyBufGet | [Evidence](semantic-evidence/002a2a4c.md) |
+| `002a2b10` | xpPadDebugSet | [Evidence](semantic-evidence/002a2b10.md) |
+| `002acb2c` | GuEmu_GetRAW(int) | [Evidence](semantic-evidence/002acb2c.md) |
