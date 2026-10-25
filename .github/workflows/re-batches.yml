@@ -98,9 +98,20 @@ jobs:
       - name: Export prioritized manual review queue
         run: |
           python3 FFT_Android_Mod/docs/re-tools/export_review_queue.py
-      - name: Collect ARM instruction evidence for 8 priority reviews
+      - name: Collect next 8 pending ARM evidence reports
+        id: evidence
         run: |
-          python3 FFT_Android_Mod/docs/re-tools/semantic_evidence.py --limit 8
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/semantic_evidence.py --limit 8 | tee /tmp/re-evidence.log
+          generated=$(sed -n 's/^EVIDENCE_GENERATED=//p' /tmp/re-evidence.log | tail -1)
+          if [[ ! "$generated" =~ ^[0-9]+$ ]]; then
+            echo 'Missing evidence count'; exit 1
+          fi
+          if [ "$generated" -gt 0 ]; then
+            echo "has_new=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_new=false" >> "$GITHUB_OUTPUT"
+          fi
       - name: Count newly checkpointed functions
         id: progress
         env:
@@ -140,9 +151,9 @@ jobs:
           retention-days: 30
 
       - name: Start next batch after successful merge
-        if: ${{ success() && steps.progress.outputs.has_new == 'true' }}
+        if: ${{ success() && (steps.progress.outputs.has_new == 'true' || steps.evidence.outputs.has_new == 'true') }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh workflow run re-batches.yml --repo "$GITHUB_REPOSITORY" --ref main -f limit=100
-          echo "Triggered next 100-function batch"
+          echo "Triggered next batch to continue checkpoints or semantic evidence"
