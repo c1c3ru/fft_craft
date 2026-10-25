@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **152/1258** pending functions.
+Evidence collected: **160/1258** pending functions.
 These reports do not constitute semantic verification.
 
 | Address | Function | Evidence |
@@ -161,3 +161,11 @@ These reports do not constitute semantic verification.
 | `001caa10` | set_ct_weapon(ACT*) | [Evidence](semantic-evidence/001caa10.md) |
 | `00253a68` | ctlcenter_main(CTLINFO*) | [Evidence](semantic-evidence/00253a68.md) |
 | `001b799c` | SystemWarningTime(int, int) | [Evidence](semantic-evidence/001b799c.md) |
+| `00100844` | Wcheckkeyok() | [Evidence](semantic-evidence/00100844.md) |
+| `00211b98` | ExecuteChangePalette() | [Evidence](semantic-evidence/00211b98.md) |
+| `0025c3ac` | mkdaypt_calc() | [Evidence](semantic-evidence/0025c3ac.md) |
+| `0025c838` | ctlshogou_init() | [Evidence](semantic-evidence/0025c838.md) |
+| `000ef4f4` | hook_jobmenu() | [Evidence](semantic-evidence/000ef4f4.md) |
+| `00101650` | Whook_jobmenu() | [Evidence](semantic-evidence/00101650.md) |
+| `0015ce74` | iOSMapIconModeSet(int) | [Evidence](semantic-evidence/0015ce74.md) |
+| `001f35dc` | EndAnimation(tag_animation*) | [Evidence](semantic-evidence/001f35dc.md) |
