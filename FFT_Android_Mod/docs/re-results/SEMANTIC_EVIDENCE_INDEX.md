@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1152/1258** pending functions.
+Evidence collected: **1160/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1163,3 +1163,11 @@ These reports do not constitute semantic verification.
 | `0025f1e8` | wldmes_load(int) | [Evidence](semantic-evidence/0025f1e8.md) |
 | `002161e0` | loadMusic(int) | [Evidence](semantic-evidence/002161e0.md) |
 | `0026640c` | wldpac_draw(GsOT*, unsigned long*, int) | [Evidence](semantic-evidence/0026640c.md) |
+| `00268be0` | wldcenter_set(_POINT*, SVECTOR*) | [Evidence](semantic-evidence/00268be0.md) |
+| `002766f4` | GetHightDistance(unsigned char*, BWORK*) | [Evidence](semantic-evidence/002766f4.md) |
+| `0025e204` | wldfade_mask() | [Evidence](semantic-evidence/0025e204.md) |
+| `00216154` | loadMusicBuffer(int, int) | [Evidence](semantic-evidence/00216154.md) |
+| `00269798` | snpl_wait() | [Evidence](semantic-evidence/00269798.md) |
+| `0026a120` | snpl_rndjp() | [Evidence](semantic-evidence/0026a120.md) |
+| `00159924` | asmTaskEntry() | [Evidence](semantic-evidence/00159924.md) |
+| `0025da0c` | wldkey_repinit() | [Evidence](semantic-evidence/0025da0c.md) |
