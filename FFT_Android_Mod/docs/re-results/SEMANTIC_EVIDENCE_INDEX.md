@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **392/1258** pending functions.
+Evidence collected: **400/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -403,3 +403,11 @@ These reports do not constitute semantic verification.
 | `00155d14` | reactive_worldwindow() | [Evidence](semantic-evidence/00155d14.md) |
 | `00156b90` | hook_tuto(int) | [Evidence](semantic-evidence/00156b90.md) |
 | `0018e358` | esys_warning(int, int) | [Evidence](semantic-evidence/0018e358.md) |
+| `002423f4` | ctlendmov_init(int, int, int) | [Evidence](semantic-evidence/002423f4.md) |
+| `0026adc0` | snpl_jpageflg_sub(int) | [Evidence](semantic-evidence/0026adc0.md) |
+| `00288ebc` | pspGetpspPrimWorkBuf(int) | [Evidence](semantic-evidence/00288ebc.md) |
+| `002b1e14` | NowLoading_Init() | [Evidence](semantic-evidence/002b1e14.md) |
+| `002b74d4` | IS_GAME_ROT_AREA(int, int) | [Evidence](semantic-evidence/002b74d4.md) |
+| `002b7530` | IS_GAME_MOV_AREA(int, int) | [Evidence](semantic-evidence/002b7530.md) |
+| `001ca9b8` | reset_toumei_afterskill(BWORK*) | [Evidence](semantic-evidence/001ca9b8.md) |
+| `0021b518` | LoadOverlayBin(long) | [Evidence](semantic-evidence/0021b518.md) |
