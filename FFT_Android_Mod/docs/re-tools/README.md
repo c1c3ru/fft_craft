@@ -71,3 +71,13 @@ python3 docs/re-tools/parallel_loop.py --no-priority --workers 5 --limit 100
 ```
 
 Para revisar casos já examinados, execute separadamente com `--retry-review`. O commit/merge automático continua condicionado aos testes e à ausência de erros; `needs_review` não equivale a conclusão semântica.
+
+## Fila de reanálise
+
+Para reanalisar apenas os checkpoints que já possuem status `needs_review`, sem retirar funções novas da fila geral:
+
+```bash
+python3 docs/re-tools/parallel_loop.py --review-only --retry-review --limit 100 --workers 5
+```
+
+A reanálise não implica aprovação: casos que continuam com saltos indiretos, tabelas de salto ou cobertura abaixo do limiar permanecem com `needs_review`. Preserve os checkpoints originais sob controle de versão antes da reanálise.
