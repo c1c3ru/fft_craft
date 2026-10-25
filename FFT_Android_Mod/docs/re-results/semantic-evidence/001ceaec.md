@@ -1,0 +1,68 @@
+# ARM evidence: `001ceaec` — set_status_all_sp(int, int)
+
+Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may be literal data. No semantic equivalence is proved.
+
+- Binary address: `0x1ceaec`; size: 40 bytes
+- Checkpoint status: `needs_review` (unchanged)
+- Instruction set: ARM
+- Scan method: ARM recursive descent (heuristic)
+- Heuristically decoded instruction slots: 9/10
+- Trailing bytes outside complete instructions: 0
+- ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
+- Evidence schema: v2
+- Unvisited 4-byte slots: 1 (not necessarily code)
+- Unvisited slots referenced by PC-relative LDR: 1
+- Other unvisited slots: 0
+- Candidate memory stores: 3; true BL/BLX calls: 1
+- Candidate local bitmask effects: 0
+- Resolved ARM jump dispatches: 0; unresolved: 0
+
+## Candidate dispatch destinations
+
+None resolved by this pass.
+
+## Potential memory writes (first 30)
+
+- `0x001ceaec: push {r4, lr}`
+- `0x001ceafc: str r3, [r4]`
+- `0x001ceb08: str r3, [r4]`
+
+## Candidate path-local bitmask effects
+
+These sequences are instruction-local observations, not global postconditions, equivalence proofs, or executed traces.
+
+None identified by conservative adjacent-instruction rules.
+
+## Calls (first 30)
+
+- `0x001ceb00: bl #0x1cd600`
+
+## Candidate PC-relative literal words
+
+A reference suggests data, not a proven classification; it may overlap code.
+
+- `0x1ceb10`: 0x0017887c; referenced by 0x1ceaf0
+
+## Other unvisited instruction slots (first 40)
+
+None
+
+## Visited instructions (first 70)
+
+```asm
+0x001ceaec: push {r4, lr}
+0x001ceaf0: ldr r4, [pc, #0x18]
+0x001ceaf4: mov r3, #2
+0x001ceaf8: ldr r4, [pc, r4]
+0x001ceafc: str r3, [r4]
+0x001ceb00: bl #0x1cd600
+0x001ceb04: mov r3, #0
+0x001ceb08: str r3, [r4]
+0x001ceb0c: pop {r4, pc}
+```
+
+## Still required for semantic validation
+
+- Verify control-flow paths, input/output invariants and memory side effects.
+- Compare return values and state changes against a specification or executable reference.
+- Perform differential tests or execution traces before marking semantic equivalence.

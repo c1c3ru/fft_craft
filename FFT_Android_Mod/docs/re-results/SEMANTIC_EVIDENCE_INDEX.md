@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **704/1258** pending functions.
+Evidence collected: **712/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -715,3 +715,11 @@ These reports do not constitute semantic verification.
 | `001599a8` | asmGetInput1() | [Evidence](semantic-evidence/001599a8.md) |
 | `0015e040` | iOSActUnitCurSet() | [Evidence](semantic-evidence/0015e040.md) |
 | `0015ebf4` | iOSMapTouchCancel() | [Evidence](semantic-evidence/0015ebf4.md) |
+| `001875f0` | GetSaveDataInit() | [Evidence](semantic-evidence/001875f0.md) |
+| `001a3eb4` | PoachUnit() | [Evidence](semantic-evidence/001a3eb4.md) |
+| `001baea0` | unitans_init() | [Evidence](semantic-evidence/001baea0.md) |
+| `001ca954` | net_getknockback(unsigned char*, unsigned char*, unsigned char*) | [Evidence](semantic-evidence/001ca954.md) |
+| `001cb7d4` | check_reaction_deny(BWORK*) | [Evidence](semantic-evidence/001cb7d4.md) |
+| `001ceaec` | set_status_all_sp(int, int) | [Evidence](semantic-evidence/001ceaec.md) |
+| `001cebfc` | set_target_table2(unsigned char*) | [Evidence](semantic-evidence/001cebfc.md) |
+| `001d73ec` | clear_unitwork() | [Evidence](semantic-evidence/001d73ec.md) |
