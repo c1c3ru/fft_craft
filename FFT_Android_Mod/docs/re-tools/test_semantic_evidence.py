@@ -64,7 +64,7 @@ class EvidenceTests(unittest.TestCase):
                 addr = f"{i:08x}"
                 rows.append({"address": addr, "name": f"f_{addr}"})
                 (results / f"{addr}.json").write_text(json.dumps({
-                    "address": addr, "size": 8,
+                    "address": addr, "name": f"f_{addr}", "size": 8,
                     "status": "needs_review", "pipeline_version": 2,
                     "binary_sha256": digest,
                 }))
