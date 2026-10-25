@@ -15,10 +15,8 @@ def bl_word(source, target):
     return (0xEB000000 | ((delta >> 2) & 0x00FFFFFF)).to_bytes(4, "little")
 
 
-FAKE_BODY = (
-    bytes.fromhex("0100a0e3")  # mov r0, #1
-    + bytes.fromhex("0000a0e1") * 4  # mov r0,r0 (synthetic only)
-    + bytes.fromhex("1eff2fe1")  # bx lr
+FAKE_BODY = bytes.fromhex(
+    "0c309fe5 03308fe0 000183e0 040d90e5 1eff2fe1 00100000"
 )
 
 
@@ -35,9 +33,10 @@ class V2IconTargetTests(unittest.TestCase):
 
         with patch.object(callee.semantic_evidence, "read_function",
                           side_effect=get_data):
-            instruction, body = callee.decode(Path("/nonexistent"))
+            instruction, body, literal = callee.decode(Path("/nonexistent"))
         self.assertEqual(instruction.mnemonic, "bl")
-        self.assertEqual(len(body), 6)
+        self.assertEqual(len(body), 5)
+        self.assertEqual(literal, 0x1000)
         self.assertEqual(body[0].address, callee.CALLEE)
         self.assertEqual(body[-1].op_str, "lr")
 
@@ -53,8 +52,15 @@ class V2IconTargetTests(unittest.TestCase):
                     if address == callee.CALLSITE else FAKE_BODY[:-4])
         with patch.object(callee.semantic_evidence, "read_function",
                           side_effect=get_data):
-            with self.assertRaisesRegex(ValueError, "exactly six"):
+            with self.assertRaisesRegex(ValueError, "truncated"):
                 callee.decode(Path("/nonexistent"))
+
+    def test_literal_is_data_and_table_has_word_stride(self):
+        self.assertEqual(callee.LITERAL_ADDR, callee.CALLEE + 20)
+        base = callee.indexed_address(0x1000, 0)
+        self.assertEqual(callee.indexed_address(0x1000, 7), base + 28)
+        with self.assertRaisesRegex(ValueError, "32-bit"):
+            callee.indexed_address(0, -1)
 
     def test_inventory_requires_exact_symbol_size_address(self):
         with tempfile.TemporaryDirectory() as temp:
