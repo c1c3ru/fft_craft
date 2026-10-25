@@ -1,0 +1,18 @@
+{
+  "address": "002a257c",
+  "name": "RotNclip3_nom",
+  "size": 76,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 94.74,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2a251c"
+  ],
+  "log": "=== jtable.py: 0x2a257c..0x2a25c8 (76 bytes) ===\ncoverage: 18 of ~19 instruction slots (95%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x2a251c x1   RotNclip3 \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
