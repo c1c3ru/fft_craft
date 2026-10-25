@@ -112,6 +112,16 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_callee_v2icon.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_v2icon_execute.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_v2icon_call_flow.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_v2icon_destinations.py
+          python3 - <<'PY'
+          from pathlib import Path
+          report = Path("FFT_Android_Mod/docs/re-results/SEMANTIC_V2ICON_DESTINATIONS.md").read_text()
+          assert "Post-getter branch micro-executions: 288/288 PASS" in report
+          assert all(v in report for v in (
+              "0x25a2bc", "0x25a310", "0x25a328", "0x710100",
+              "BL", "not the effect", "synthetic"))
+          print("PASS: real ARM post-getter stores, conditional paths and boundaries")
+          PY
           python3 - <<'PY'
           from pathlib import Path
           report = Path("FFT_Android_Mod/docs/re-results/SEMANTIC_V2ICON_CALL_FLOW.md").read_text()
