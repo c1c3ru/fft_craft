@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **689/689** pending functions.
+Evidence collected: **590/590** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -82,107 +82,8 @@ These reports do not constitute semantic verification.
 | `002cabdc` | __aeabi_ul2d | [Evidence](semantic-evidence/002cabdc.md) |
 | `002cb830` | __gesf2 | [Evidence](semantic-evidence/002cb830.md) |
 | `0019e134` | SuccessEmploy() | [Evidence](semantic-evidence/0019e134.md) |
-| `001eedf4` | getWpnSequenceAddress(unsigned short) | [Evidence](semantic-evidence/001eedf4.md) |
-| `00202150` | standerdExecution() | [Evidence](semantic-evidence/00202150.md) |
-| `00204268` | startLeftTurn(int) | [Evidence](semantic-evidence/00204268.md) |
-| `00204298` | startRightTurn(int) | [Evidence](semantic-evidence/00204298.md) |
-| `00213e48` | stopAllColorRotation() | [Evidence](semantic-evidence/00213e48.md) |
-| `00215d2c` | battleFileRead() | [Evidence](semantic-evidence/00215d2c.md) |
-| `0021b860` | SetGravity(Vector*) | [Evidence](semantic-evidence/0021b860.md) |
-| `00243184` | fRoll_scroll(short*) | [Evidence](semantic-evidence/00243184.md) |
-| `0024337c` | fRoll_cdxafin(short*) | [Evidence](semantic-evidence/0024337c.md) |
-| `002433ac` | fRoll_cdxafout(short*) | [Evidence](semantic-evidence/002433ac.md) |
-| `0024932c` | vOpn_loopinit() | [Evidence](semantic-evidence/0024932c.md) |
-| `0024ad94` | openEntry(int) | [Evidence](semantic-evidence/0024ad94.md) |
-| `0025f138` | townpic_load(int) | [Evidence](semantic-evidence/0025f138.md) |
-| `0025ffb0` | iOSSDNovelGetOT(int) | [Evidence](semantic-evidence/0025ffb0.md) |
-| `00270460` | curhis_get(int) | [Evidence](semantic-evidence/00270460.md) |
-| `0028e6a4` | xpInitVblankFunc() | [Evidence](semantic-evidence/0028e6a4.md) |
-| `002a145c` | ReadLightMatrix | [Evidence](semantic-evidence/002a145c.md) |
-| `002a14a8` | ReadColorMatrix | [Evidence](semantic-evidence/002a14a8.md) |
-| `002a2ff8` | xpInitHeap | [Evidence](semantic-evidence/002a2ff8.md) |
-| `002b2260` | RETINA_SCALE(int) | [Evidence](semantic-evidence/002b2260.md) |
-| `002b2378` | Music_Stop() | [Evidence](semantic-evidence/002b2378.md) |
-| `002b23a8` | Music_Pause() | [Evidence](semantic-evidence/002b23a8.md) |
-| `000d6f54` | allocatewindowinit() | [Evidence](semantic-evidence/000d6f54.md) |
-| `000d9810` | hook_disp_option() | [Evidence](semantic-evidence/000d9810.md) |
-| `000da610` | set_autobattletarget(int, int) | [Evidence](semantic-evidence/000da610.md) |
-| `000fea78` | Wallocatewindowinit() | [Evidence](semantic-evidence/000fea78.md) |
-| `00101624` | Whook_disp_option() | [Evidence](semantic-evidence/00101624.md) |
-| `001021dc` | Wset_autobattletarget(int, int) | [Evidence](semantic-evidence/001021dc.md) |
-| `001599d0` | asmGetInput2() | [Evidence](semantic-evidence/001599d0.md) |
-| `001599fc` | asmGetInput3() | [Evidence](semantic-evidence/001599fc.md) |
-| `00159a28` | asmGetActiveF() | [Evidence](semantic-evidence/00159a28.md) |
-| `0015df10` | iOSGT4_MapT9Get(unsigned long) | [Evidence](semantic-evidence/0015df10.md) |
-| `001cb878` | bcp_roll(BWORK*) | [Evidence](semantic-evidence/001cb878.md) |
-| `001d1d8c` | disappare_unit_f(int) | [Evidence](semantic-evidence/001d1d8c.md) |
-| `001d2968` | get_bwp(int) | [Evidence](semantic-evidence/001d2968.md) |
-| `001d94f0` | get_rangedata(unsigned short) | [Evidence](semantic-evidence/001d94f0.md) |
-| `001d951c` | get_effectdata(unsigned short) | [Evidence](semantic-evidence/001d951c.md) |
-| `0021b8c4` | PopGravity() | [Evidence](semantic-evidence/0021b8c4.md) |
-| `0021ceb0` | WhoUnlockEffect(long) | [Evidence](semantic-evidence/0021ceb0.md) |
-| `00243560` | fRoll_xawait(short*) | [Evidence](semantic-evidence/00243560.md) |
-| `00249474` | vOpn_fadein(int) | [Evidence](semantic-evidence/00249474.md) |
-| `00256e70` | ctltownmenu_active(CTLINFO*) | [Evidence](semantic-evidence/00256e70.md) |
-| `00256e9c` | ctltownmenu_deactive(CTLINFO*) | [Evidence](semantic-evidence/00256e9c.md) |
-| `00269e6c` | snpl_sndstop() | [Evidence](semantic-evidence/00269e6c.md) |
-| `0027b53c` | LoadImage_menuData() | [Evidence](semantic-evidence/0027b53c.md) |
-| `0027f180` | iOS_ClearRectHit(int) | [Evidence](semantic-evidence/0027f180.md) |
-| `00280590` | GetAbilityName(int) | [Evidence](semantic-evidence/00280590.md) |
-| `00287044` | get_timing_true() | [Evidence](semantic-evidence/00287044.md) |
-| `0028846c` | free_hight_font() | [Evidence](semantic-evidence/0028846c.md) |
-| `0028a054` | pspClearCurrentSystemFile() | [Evidence](semantic-evidence/0028a054.md) |
-| `0028baa4` | TE_task_stop(long) | [Evidence](semantic-evidence/0028baa4.md) |
-| `002a0900` | MulRotMatrix0 | [Evidence](semantic-evidence/002a0900.md) |
-| `002b23d8` | Music_Replay() | [Evidence](semantic-evidence/002b23d8.md) |
-| `000daac0` | settaskkind(int) | [Evidence](semantic-evidence/000daac0.md) |
-| `000e0eec` | jobstts_call(unsigned long*, unsigned long) | [Evidence](semantic-evidence/000e0eec.md) |
-| `001024bc` | Wreaded_mapchange() | [Evidence](semantic-evidence/001024bc.md) |
-| `0010278c` | Wsettaskkind(int) | [Evidence](semantic-evidence/0010278c.md) |
-| `0010de7c` | Wimport_localpad(int) | [Evidence](semantic-evidence/0010de7c.md) |
-| `0010f8cc` | Wjobstts_call(unsigned long*, unsigned long) | [Evidence](semantic-evidence/0010f8cc.md) |
-| `0012f19c` | get_pitno() | [Evidence](semantic-evidence/0012f19c.md) |
-| `00155cec` | tutorialstatusget(int) | [Evidence](semantic-evidence/00155cec.md) |
-| `001599a8` | asmGetInput1() | [Evidence](semantic-evidence/001599a8.md) |
-| `0015e040` | iOSActUnitCurSet() | [Evidence](semantic-evidence/0015e040.md) |
-| `0015ebf4` | iOSMapTouchCancel() | [Evidence](semantic-evidence/0015ebf4.md) |
-| `001875f0` | GetSaveDataInit() | [Evidence](semantic-evidence/001875f0.md) |
-| `001a3eb4` | PoachUnit() | [Evidence](semantic-evidence/001a3eb4.md) |
-| `001baea0` | unitans_init() | [Evidence](semantic-evidence/001baea0.md) |
-| `001ca954` | net_getknockback(unsigned char*, unsigned char*, unsigned char*) | [Evidence](semantic-evidence/001ca954.md) |
-| `001cb7d4` | check_reaction_deny(BWORK*) | [Evidence](semantic-evidence/001cb7d4.md) |
-| `001ceaec` | set_status_all_sp(int, int) | [Evidence](semantic-evidence/001ceaec.md) |
-| `001cebfc` | set_target_table2(unsigned char*) | [Evidence](semantic-evidence/001cebfc.md) |
-| `001d73ec` | clear_unitwork() | [Evidence](semantic-evidence/001d73ec.md) |
-| `001d8d28` | get_jobdata(int) | [Evidence](semantic-evidence/001d8d28.md) |
-| `001eedcc` | getWpnShapeAddress(unsigned short) | [Evidence](semantic-evidence/001eedcc.md) |
-| `001fd2c4` | endInterventionMode() | [Evidence](semantic-evidence/001fd2c4.md) |
-| `0020c5d8` | errorHandler(int) | [Evidence](semantic-evidence/0020c5d8.md) |
-| `0020c600` | warningHandler(int) | [Evidence](semantic-evidence/0020c600.md) |
-| `0020c74c` | initSoundHeap() | [Evidence](semantic-evidence/0020c74c.md) |
-| `0020c99c` | initFileBuffer() | [Evidence](semantic-evidence/0020c99c.md) |
-| `0020d060` | setMapScrollXYZ(VECTOR*) | [Evidence](semantic-evidence/0020d060.md) |
-| `0020d2b8` | setMapScroll(VECTOR*) | [Evidence](semantic-evidence/0020d2b8.md) |
-| `0020d5d8` | setMapScale(VECTOR*) | [Evidence](semantic-evidence/0020d5d8.md) |
-| `0020d84c` | setMapAngle(SVECTOR*) | [Evidence](semantic-evidence/0020d84c.md) |
-| `0020f5a8` | getMapSize(SVECTOR*) | [Evidence](semantic-evidence/0020f5a8.md) |
-| `0021695c` | stopAllEffect() | [Evidence](semantic-evidence/0021695c.md) |
-| `00218dcc` | InitCamera() | [Evidence](semantic-evidence/00218dcc.md) |
-| `002231b0` | GetReachableHeight(int) | [Evidence](semantic-evidence/002231b0.md) |
-| `00246360` | ctlstartmov_main(CTLINFO*) | [Evidence](semantic-evidence/00246360.md) |
-| `002494a0` | vOpn_fadeout(int) | [Evidence](semantic-evidence/002494a0.md) |
-| `0024adc4` | endEntry() | [Evidence](semantic-evidence/0024adc4.md) |
-| `00267340` | iOS_add_anmpac_max(int) | [Evidence](semantic-evidence/00267340.md) |
-| `0026a64c` | snplinf_init(int) | [Evidence](semantic-evidence/0026a64c.md) |
-| `002808b8` | iOS_initTransFace() | [Evidence](semantic-evidence/002808b8.md) |
-| `0028b3f0` | pspWorldDataRectSet(RECT16*) | [Evidence](semantic-evidence/0028b3f0.md) |
-| `0028dc30` | SetRCnt | [Evidence](semantic-evidence/0028dc30.md) |
-| `002a1aac` | read_sxsy_fifo3(long*, long*, long*) | [Evidence](semantic-evidence/002a1aac.md) |
 | `002a1b1c` | read_rgb_fifo(long*, long*, long*) | [Evidence](semantic-evidence/002a1b1c.md) |
 | `002a25f8` | read_mt(long*, long*, long*) | [Evidence](semantic-evidence/002a25f8.md) |
-| `002b2238` | IS_TEX_2X() | [Evidence](semantic-evidence/002b2238.md) |
-| `002b2404` | Music_SetVol(int, int) | [Evidence](semantic-evidence/002b2404.md) |
-| `002b7a34` | SetDisableMapTouchRect(RECT16*) | [Evidence](semantic-evidence/002b7a34.md) |
 | `002cb484` | __floatunsisf | [Evidence](semantic-evidence/002cb484.md) |
 | `000da7e4` | readed_mapchange() | [Evidence](semantic-evidence/000da7e4.md) |
 | `00153350` | task_start(long) | [Evidence](semantic-evidence/00153350.md) |

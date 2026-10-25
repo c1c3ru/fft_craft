@@ -7,12 +7,12 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | Inventory total | 6,455 functions / 1,837,392 bytes |
 | Previously analyzed in CSV | 3,451 functions / 1,551,512 bytes |
 | JSON checkpoints (all statuses) | 3,002 |
-| Newly accepted structurally | 2,313 functions / 256,764 bytes |
-| Needs review | 689 functions |
+| Newly accepted structurally | 2,412 functions / 261,024 bytes |
+| Needs review | 590 functions |
 | Core targets in inventory | 4,642 functions |
 | Core targets checkpointed | 2,345 functions |
-| Core accepted structurally | 1,798 functions |
-| Core needs review | 547 functions |
+| Core accepted structurally | 1,897 functions |
+| Core needs review | 448 functions |
 | Core not yet checkpointed | 0 functions |
 | Not yet checkpointed | 0 functions / 0 bytes |
 
@@ -20,8 +20,8 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 
 | Status | Functions |
 |---|---:|
-| auto_structural | 2,313 |
-| needs_review | 689 |
+| auto_structural | 2,412 |
+| needs_review | 590 |
 
 ## Review queue (largest first)
 
@@ -196,122 +196,23 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | `00258e3c` | evt_town_clr() (needs_review) | 52 | 92.31 | 0 | 0 |
 | `00258e08` | evt_town_set() (needs_review) | 52 | 92.31 | 0 | 0 |
 | `000bd538` | CSOUND_LOADER_OGG::CSOUND_LOADER_OGG() (needs_review) | 52 | 92.31 | 0 | 0 |
-| `002b23a8` | Music_Pause() (needs_review) | 48 | 91.67 | 0 | 0 |
-| `002b2378` | Music_Stop() (needs_review) | 48 | 91.67 | 0 | 0 |
-| `002b2260` | RETINA_SCALE(int) (needs_review) | 48 | 91.67 | 0 | 0 |
 | `002a38a8` | pspSaveList::pspSaveList() (needs_review) | 48 | 91.67 | 0 | 0 |
-| `002a2ff8` | xpInitHeap (needs_review) | 48 | 91.67 | 0 | 0 |
-| `002a14a8` | ReadColorMatrix (needs_review) | 48 | 91.67 | 0 | 0 |
-| `002a145c` | ReadLightMatrix (needs_review) | 48 | 91.67 | 0 | 0 |
-| `0028e6a4` | xpInitVblankFunc() (needs_review) | 48 | 83.33 | 0 | 0 |
 | `0028e538` | CdRead (needs_review) | 48 | 91.67 | 0 | 0 |
 | `0027fc48` | cSaveFFT::Create(char*) (needs_review) | 48 | 91.67 | 0 | 0 |
-| `00270460` | curhis_get(int) (needs_review) | 48 | 83.33 | 0 | 0 |
 | `00269e98` | snpl_exit() (needs_review) | 48 | 91.67 | 0 | 0 |
 | `0026998c` | snpl_subpara() (needs_review) | 48 | 91.67 | 0 | 0 |
 | `0026995c` | snpl_addpara() (needs_review) | 48 | 91.67 | 0 | 0 |
-| `0025ffb0` | iOSSDNovelGetOT(int) (needs_review) | 48 | 83.33 | 0 | 0 |
-| `0025f138` | townpic_load(int) (needs_review) | 48 | 91.67 | 0 | 0 |
-| `0024ad94` | openEntry(int) (needs_review) | 48 | 91.67 | 0 | 0 |
-| `0024932c` | vOpn_loopinit() (needs_review) | 48 | 83.33 | 0 | 0 |
-| `002433ac` | fRoll_cdxafout(short*) (needs_review) | 48 | 91.67 | 0 | 0 |
-| `0024337c` | fRoll_cdxafin(short*) (needs_review) | 48 | 91.67 | 0 | 0 |
-| `00243184` | fRoll_scroll(short*) (needs_review) | 48 | 91.67 | 0 | 0 |
-| `0021b860` | SetGravity(Vector*) (needs_review) | 48 | 91.67 | 0 | 0 |
-| `00215d2c` | battleFileRead() (needs_review) | 48 | 83.33 | 0 | 0 |
-| `00213e48` | stopAllColorRotation() (needs_review) | 48 | 91.67 | 0 | 0 |
-| `00204298` | startRightTurn(int) (needs_review) | 48 | 91.67 | 0 | 0 |
-| `00204268` | startLeftTurn(int) (needs_review) | 48 | 91.67 | 0 | 0 |
-| `00202150` | standerdExecution() (needs_review) | 48 | 91.67 | 0 | 0 |
-| `001eedf4` | getWpnSequenceAddress(unsigned short) (needs_review) | 48 | 83.33 | 0 | 0 |
 | `000da47c` | event_init_system() (needs_review) | 48 | 91.67 | 0 | 0 |
-| `002b23d8` | Music_Replay() (needs_review) | 44 | 90.91 | 0 | 0 |
-| `002a0900` | MulRotMatrix0 (needs_review) | 44 | 90.91 | 0 | 0 |
-| `0028baa4` | TE_task_stop(long) (needs_review) | 44 | 90.91 | 0 | 0 |
-| `0028a054` | pspClearCurrentSystemFile() (needs_review) | 44 | 90.91 | 0 | 0 |
-| `0028846c` | free_hight_font() (needs_review) | 44 | 90.91 | 0 | 0 |
-| `00287044` | get_timing_true() (needs_review) | 44 | 90.91 | 0 | 0 |
-| `00280590` | GetAbilityName(int) (needs_review) | 44 | 81.82 | 0 | 0 |
-| `0027f180` | iOS_ClearRectHit(int) (needs_review) | 44 | 90.91 | 0 | 0 |
-| `0027b53c` | LoadImage_menuData() (needs_review) | 44 | 90.91 | 0 | 0 |
 | `0027334c` | SetDestUnit(int) (needs_review) | 44 | 90.91 | 0 | 0 |
-| `00269e6c` | snpl_sndstop() (needs_review) | 44 | 90.91 | 0 | 0 |
 | `00269930` | snpl_setpara() (needs_review) | 44 | 90.91 | 0 | 0 |
-| `00256e9c` | ctltownmenu_deactive(CTLINFO*) (needs_review) | 44 | 90.91 | 0 | 0 |
-| `00256e70` | ctltownmenu_active(CTLINFO*) (needs_review) | 44 | 90.91 | 0 | 0 |
-| `00249474` | vOpn_fadein(int) (needs_review) | 44 | 90.91 | 0 | 0 |
-| `00243560` | fRoll_xawait(short*) (needs_review) | 44 | 90.91 | 0 | 0 |
-| `0021ceb0` | WhoUnlockEffect(long) (needs_review) | 44 | 90.91 | 0 | 0 |
-| `0021b8c4` | PopGravity() (needs_review) | 44 | 90.91 | 0 | 0 |
-| `001d951c` | get_effectdata(unsigned short) (needs_review) | 44 | 90.91 | 0 | 0 |
-| `001d94f0` | get_rangedata(unsigned short) (needs_review) | 44 | 90.91 | 0 | 0 |
 | `001d6404` | set_guard_status(int) (needs_review) | 44 | 90.91 | 0 | 0 |
-| `001d2968` | get_bwp(int) (needs_review) | 44 | 90.91 | 0 | 0 |
-| `001d1d8c` | disappare_unit_f(int) (needs_review) | 44 | 90.91 | 0 | 0 |
-| `001cb878` | bcp_roll(BWORK*) (needs_review) | 44 | 90.91 | 0 | 0 |
-| `0015df10` | iOSGT4_MapT9Get(unsigned long) (needs_review) | 44 | 90.91 | 0 | 0 |
-| `00159a28` | asmGetActiveF() (needs_review) | 44 | 81.82 | 0 | 0 |
-| `001599fc` | asmGetInput3() (needs_review) | 44 | 81.82 | 0 | 0 |
-| `001599d0` | asmGetInput2() (needs_review) | 44 | 81.82 | 0 | 0 |
-| `001021dc` | Wset_autobattletarget(int, int) (needs_review) | 44 | 90.91 | 0 | 0 |
-| `00101624` | Whook_disp_option() (needs_review) | 44 | 90.91 | 0 | 0 |
-| `000fea78` | Wallocatewindowinit() (needs_review) | 44 | 90.91 | 0 | 0 |
-| `000da610` | set_autobattletarget(int, int) (needs_review) | 44 | 90.91 | 0 | 0 |
-| `000d9810` | hook_disp_option() (needs_review) | 44 | 90.91 | 0 | 0 |
-| `000d6f54` | allocatewindowinit() (needs_review) | 44 | 90.91 | 0 | 0 |
 | `002cb484` | __floatunsisf (needs_review) | 40 | 80.0 | 0 | 0 |
-| `002b7a34` | SetDisableMapTouchRect(RECT16*) (needs_review) | 40 | 90.0 | 0 | 0 |
-| `002b2404` | Music_SetVol(int, int) (needs_review) | 40 | 90.0 | 0 | 0 |
-| `002b2238` | IS_TEX_2X() (needs_review) | 40 | 90.0 | 0 | 0 |
 | `002a25f8` | read_mt(long*, long*, long*) (needs_review) | 40 | 90.0 | 0 | 0 |
 | `002a1b1c` | read_rgb_fifo(long*, long*, long*) (needs_review) | 40 | 90.0 | 0 | 0 |
-| `002a1aac` | read_sxsy_fifo3(long*, long*, long*) (needs_review) | 40 | 90.0 | 0 | 0 |
-| `0028dc30` | SetRCnt (needs_review) | 40 | 90.0 | 0 | 0 |
 | `0028c668` | CFFT_STATE::UnitIDToFID_SPR(int) (needs_review) | 40 | 90.0 | 0 | 0 |
-| `0028b3f0` | pspWorldDataRectSet(RECT16*) (needs_review) | 40 | 90.0 | 0 | 0 |
-| `002808b8` | iOS_initTransFace() (needs_review) | 40 | 90.0 | 0 | 0 |
 | `0027fbc8` | iOS_WorldMapResumeGetData(unsigned char**, unsigned int*) (needs_review) | 40 | 90.0 | 0 | 0 |
 | `0026b0b8` | snpl_musicreq() (needs_review) | 40 | 90.0 | 0 | 0 |
-| `0026a64c` | snplinf_init(int) (needs_review) | 40 | 80.0 | 0 | 0 |
 | `0026a1a4` | snpl_sndreq() (needs_review) | 40 | 90.0 | 0 | 0 |
-| `00267340` | iOS_add_anmpac_max(int) (needs_review) | 40 | 90.0 | 0 | 0 |
-| `0024adc4` | endEntry() (needs_review) | 40 | 90.0 | 0 | 0 |
-| `002494a0` | vOpn_fadeout(int) (needs_review) | 40 | 90.0 | 0 | 0 |
-| `00246360` | ctlstartmov_main(CTLINFO*) (needs_review) | 40 | 90.0 | 0 | 0 |
-| `002231b0` | GetReachableHeight(int) (needs_review) | 40 | 90.0 | 0 | 0 |
-| `00218dcc` | InitCamera() (needs_review) | 40 | 90.0 | 0 | 0 |
-| `0021695c` | stopAllEffect() (needs_review) | 40 | 90.0 | 0 | 0 |
-| `0020f5a8` | getMapSize(SVECTOR*) (needs_review) | 40 | 80.0 | 0 | 0 |
-| `0020d84c` | setMapAngle(SVECTOR*) (needs_review) | 40 | 90.0 | 0 | 0 |
-| `0020d5d8` | setMapScale(VECTOR*) (needs_review) | 40 | 90.0 | 0 | 0 |
-| `0020d2b8` | setMapScroll(VECTOR*) (needs_review) | 40 | 90.0 | 0 | 0 |
-| `0020d060` | setMapScrollXYZ(VECTOR*) (needs_review) | 40 | 90.0 | 0 | 0 |
-| `0020c99c` | initFileBuffer() (needs_review) | 40 | 90.0 | 0 | 0 |
-| `0020c74c` | initSoundHeap() (needs_review) | 40 | 90.0 | 0 | 0 |
-| `0020c600` | warningHandler(int) (needs_review) | 40 | 90.0 | 0 | 0 |
-| `0020c5d8` | errorHandler(int) (needs_review) | 40 | 90.0 | 0 | 0 |
-| `001fd2c4` | endInterventionMode() (needs_review) | 40 | 80.0 | 0 | 0 |
-| `001eedcc` | getWpnShapeAddress(unsigned short) (needs_review) | 40 | 80.0 | 0 | 0 |
-| `001d8d28` | get_jobdata(int) (needs_review) | 40 | 90.0 | 0 | 0 |
-| `001d73ec` | clear_unitwork() (needs_review) | 40 | 90.0 | 0 | 0 |
-| `001cebfc` | set_target_table2(unsigned char*) (needs_review) | 40 | 90.0 | 0 | 0 |
-| `001ceaec` | set_status_all_sp(int, int) (needs_review) | 40 | 90.0 | 0 | 0 |
-| `001cb7d4` | check_reaction_deny(BWORK*) (needs_review) | 40 | 90.0 | 0 | 0 |
-| `001ca954` | net_getknockback(unsigned char*, unsigned char*, unsigned char*) (needs_review) | 40 | 90.0 | 0 | 0 |
-| `001baea0` | unitans_init() (needs_review) | 40 | 90.0 | 0 | 0 |
-| `001a3eb4` | PoachUnit() (needs_review) | 40 | 90.0 | 0 | 0 |
-| `001875f0` | GetSaveDataInit() (needs_review) | 40 | 90.0 | 0 | 0 |
-| `0015ebf4` | iOSMapTouchCancel() (needs_review) | 40 | 80.0 | 0 | 0 |
-| `0015e040` | iOSActUnitCurSet() (needs_review) | 40 | 90.0 | 0 | 0 |
-| `001599a8` | asmGetInput1() (needs_review) | 40 | 80.0 | 0 | 0 |
-| `00155cec` | tutorialstatusget(int) (needs_review) | 40 | 90.0 | 0 | 0 |
-| `0012f19c` | get_pitno() (needs_review) | 40 | 90.0 | 0 | 0 |
-| `0010f8cc` | Wjobstts_call(unsigned long*, unsigned long) (needs_review) | 40 | 90.0 | 0 | 0 |
-| `0010de7c` | Wimport_localpad(int) (needs_review) | 40 | 80.0 | 0 | 0 |
-| `0010278c` | Wsettaskkind(int) (needs_review) | 40 | 80.0 | 0 | 0 |
-| `001024bc` | Wreaded_mapchange() (needs_review) | 40 | 90.0 | 0 | 0 |
-| `000e0eec` | jobstts_call(unsigned long*, unsigned long) (needs_review) | 40 | 90.0 | 0 | 0 |
-| `000daac0` | settaskkind(int) (needs_review) | 40 | 80.0 | 0 | 0 |
 | `000bceac` | CSOUND_LOADER_PCM::CSOUND_LOADER_PCM() (needs_review) | 40 | 90.0 | 0 | 0 |
 | `000829ec` | oggpackB_writecopy (needs_review) | 40 | 90.0 | 0 | 0 |
 | `000829c4` | oggpack_writecopy (needs_review) | 40 | 90.0 | 0 | 0 |
