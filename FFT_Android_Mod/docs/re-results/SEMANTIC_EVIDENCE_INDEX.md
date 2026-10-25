@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **672/1258** pending functions.
+Evidence collected: **680/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -683,3 +683,11 @@ These reports do not constitute semantic verification.
 | `001599fc` | asmGetInput3() | [Evidence](semantic-evidence/001599fc.md) |
 | `00159a28` | asmGetActiveF() | [Evidence](semantic-evidence/00159a28.md) |
 | `0015df10` | iOSGT4_MapT9Get(unsigned long) | [Evidence](semantic-evidence/0015df10.md) |
+| `001cb878` | bcp_roll(BWORK*) | [Evidence](semantic-evidence/001cb878.md) |
+| `001d1d8c` | disappare_unit_f(int) | [Evidence](semantic-evidence/001d1d8c.md) |
+| `001d2968` | get_bwp(int) | [Evidence](semantic-evidence/001d2968.md) |
+| `001d94f0` | get_rangedata(unsigned short) | [Evidence](semantic-evidence/001d94f0.md) |
+| `001d951c` | get_effectdata(unsigned short) | [Evidence](semantic-evidence/001d951c.md) |
+| `0021b8c4` | PopGravity() | [Evidence](semantic-evidence/0021b8c4.md) |
+| `0021ceb0` | WhoUnlockEffect(long) | [Evidence](semantic-evidence/0021ceb0.md) |
+| `00243560` | fRoll_xawait(short*) | [Evidence](semantic-evidence/00243560.md) |
