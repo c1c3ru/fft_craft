@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **368/1258** pending functions.
+Evidence collected: **376/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -379,3 +379,11 @@ These reports do not constitute semantic verification.
 | `001d18e4` | Resume_MK_BSTR_IsLoaded(int) | [Evidence](semantic-evidence/001d18e4.md) |
 | `0020c6e4` | freeForSound(void*) | [Evidence](semantic-evidence/0020c6e4.md) |
 | `0021cfe4` | GetEffectTCB() | [Evidence](semantic-evidence/0021cfe4.md) |
+| `00269e04` | snpl_mfadein() | [Evidence](semantic-evidence/00269e04.md) |
+| `0026a1cc` | snpl_musicstop() | [Evidence](semantic-evidence/0026a1cc.md) |
+| `000cbab8` | createEndModeWindow() | [Evidence](semantic-evidence/000cbab8.md) |
+| `000f15a0` | disp_backtotitle_yesno() | [Evidence](semantic-evidence/000f15a0.md) |
+| `0010638c` | Wdisp_backtotitle_yesno() | [Evidence](semantic-evidence/0010638c.md) |
+| `001d1a18` | set_playerwork_sp(PENTRY*, unsigned char*, int) | [Evidence](semantic-evidence/001d1a18.md) |
+| `001e20c0` | dec_party_item(BWORK*, unsigned short, int) | [Evidence](semantic-evidence/001e20c0.md) |
+| `0028d1c4` | tlPushHeap(void*) | [Evidence](semantic-evidence/0028d1c4.md) |
