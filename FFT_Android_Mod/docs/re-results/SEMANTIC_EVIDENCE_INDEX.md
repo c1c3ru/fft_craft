@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1240/1258** pending functions.
+Evidence collected: **1248/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1251,3 +1251,11 @@ These reports do not constitute semantic verification.
 | `0027f620` | iOS_ResumeGetData(unsigned char**, unsigned int*) | [Evidence](semantic-evidence/0027f620.md) |
 | `0029ae70` | xpLib_GetTPage(int*) | [Evidence](semantic-evidence/0029ae70.md) |
 | `002ccf98` | _Unwind_DeleteException | [Evidence](semantic-evidence/002ccf98.md) |
+| `000726e0` | JNI_OnLoad | [Evidence](semantic-evidence/000726e0.md) |
+| `0024b080` | wldbinEntry() | [Evidence](semantic-evidence/0024b080.md) |
+| `00258ac8` | evt_skip1() | [Evidence](semantic-evidence/00258ac8.md) |
+| `00258ae4` | evt_skip2() | [Evidence](semantic-evidence/00258ae4.md) |
+| `00258b38` | evt_item() | [Evidence](semantic-evidence/00258b38.md) |
+| `00258b54` | evt_eqp() | [Evidence](semantic-evidence/00258b54.md) |
+| `0026973c` | snpl_endpage() | [Evidence](semantic-evidence/0026973c.md) |
+| `00269758` | snpl_startpage() | [Evidence](semantic-evidence/00269758.md) |
