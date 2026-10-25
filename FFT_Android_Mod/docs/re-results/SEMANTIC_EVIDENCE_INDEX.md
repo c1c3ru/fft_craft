@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1096/1258** pending functions.
+Evidence collected: **1104/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1107,3 +1107,11 @@ These reports do not constitute semantic verification.
 | `000d6d98` | getStatusPad() | [Evidence](semantic-evidence/000d6d98.md) |
 | `00101fc0` | WgetStatusPad() | [Evidence](semantic-evidence/00101fc0.md) |
 | `0018377c` | fileopen(unsigned char*, unsigned int) | [Evidence](semantic-evidence/0018377c.md) |
+| `001a6368` | iOSLearnTypeGet() | [Evidence](semantic-evidence/001a6368.md) |
+| `001eee24` | getEffShapeAddress() | [Evidence](semantic-evidence/001eee24.md) |
+| `0020d050` | getMapScrollXYZ() | [Evidence](semantic-evidence/0020d050.md) |
+| `0020d2a8` | getMapScroll() | [Evidence](semantic-evidence/0020d2a8.md) |
+| `0020d5c8` | getMapScale() | [Evidence](semantic-evidence/0020d5c8.md) |
+| `0020d83c` | getMapAngle() | [Evidence](semantic-evidence/0020d83c.md) |
+| `0020dac8` | getBackColor() | [Evidence](semantic-evidence/0020dac8.md) |
+| `0025690c` | IOSsTownModeGet() | [Evidence](semantic-evidence/0025690c.md) |
