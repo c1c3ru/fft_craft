@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **96/1258** pending functions.
+Evidence collected: **104/1258** pending functions.
 These reports do not constitute semantic verification.
 
 | Address | Function | Evidence |
@@ -105,3 +105,11 @@ These reports do not constitute semantic verification.
 | `0025a0f0` | ctlhoukmes_init(int) | [Evidence](semantic-evidence/0025a0f0.md) |
 | `002b2d10` | Jingle_Play(int) | [Evidence](semantic-evidence/002b2d10.md) |
 | `00203070` | setCursorByTouch(int, int, int) | [Evidence](semantic-evidence/00203070.md) |
+| `001d67a8` | get_mapid(int, int, int, int) | [Evidence](semantic-evidence/001d67a8.md) |
+| `00225514` | MemoryMapper() | [Evidence](semantic-evidence/00225514.md) |
+| `0024717c` | ctlsound_init() | [Evidence](semantic-evidence/0024717c.md) |
+| `002530b8` | ctlbrst_zodiac() | [Evidence](semantic-evidence/002530b8.md) |
+| `00255054` | ctlmap_eventchk() | [Evidence](semantic-evidence/00255054.md) |
+| `00256ec8` | ctltownmenu_exit(CTLINFO*, int) | [Evidence](semantic-evidence/00256ec8.md) |
+| `00257af4` | ctlparty_main(CTLINFO*) | [Evidence](semantic-evidence/00257af4.md) |
+| `002b3464` | Boot_Init() | [Evidence](semantic-evidence/002b3464.md) |
