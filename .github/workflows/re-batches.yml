@@ -15,6 +15,7 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/semantic_branch_microexec.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_guarded_block.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_two_guards.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_entry_prefix.py'
       - 'FFT_Android_Mod/docs/re-tools/structural_v3.py'
       - 'FFT_Android_Mod/docs/re-tools/structural_v3_report.py'
       - 'FFT_Android_Mod/docs/re-tools/parallel_loop.py'
@@ -144,6 +145,7 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_branch_microexec.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_guarded_block.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_two_guards.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_entry_prefix.py
       - name: Publish v3 coverage diagnostics and migration counts
         run: |
           python3 FFT_Android_Mod/docs/re-tools/structural_v3_report.py
