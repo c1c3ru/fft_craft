@@ -7,12 +7,12 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | Inventory total | 6,455 functions / 1,837,392 bytes |
 | Previously analyzed in CSV | 3,451 functions / 1,551,512 bytes |
 | JSON checkpoints (all statuses) | 3,002 |
-| Newly accepted structurally | 2,412 functions / 261,024 bytes |
-| Needs review | 590 functions |
+| Newly accepted structurally | 2,512 functions / 264,348 bytes |
+| Needs review | 490 functions |
 | Core targets in inventory | 4,642 functions |
 | Core targets checkpointed | 2,345 functions |
-| Core accepted structurally | 1,897 functions |
-| Core needs review | 448 functions |
+| Core accepted structurally | 1,997 functions |
+| Core needs review | 348 functions |
 | Core not yet checkpointed | 0 functions |
 | Not yet checkpointed | 0 functions / 0 bytes |
 
@@ -20,8 +20,8 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 
 | Status | Functions |
 |---|---:|
-| auto_structural | 2,412 |
-| needs_review | 590 |
+| auto_structural | 2,512 |
+| needs_review | 490 |
 
 ## Review queue (largest first)
 
@@ -207,8 +207,6 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | `00269930` | snpl_setpara() (needs_review) | 44 | 90.91 | 0 | 0 |
 | `001d6404` | set_guard_status(int) (needs_review) | 44 | 90.91 | 0 | 0 |
 | `002cb484` | __floatunsisf (needs_review) | 40 | 80.0 | 0 | 0 |
-| `002a25f8` | read_mt(long*, long*, long*) (needs_review) | 40 | 90.0 | 0 | 0 |
-| `002a1b1c` | read_rgb_fifo(long*, long*, long*) (needs_review) | 40 | 90.0 | 0 | 0 |
 | `0028c668` | CFFT_STATE::UnitIDToFID_SPR(int) (needs_review) | 40 | 90.0 | 0 | 0 |
 | `0027fbc8` | iOS_WorldMapResumeGetData(unsigned char**, unsigned int*) (needs_review) | 40 | 90.0 | 0 | 0 |
 | `0026b0b8` | snpl_musicreq() (needs_review) | 40 | 90.0 | 0 | 0 |
@@ -216,101 +214,15 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | `000bceac` | CSOUND_LOADER_PCM::CSOUND_LOADER_PCM() (needs_review) | 40 | 90.0 | 0 | 0 |
 | `000829ec` | oggpackB_writecopy (needs_review) | 40 | 90.0 | 0 | 0 |
 | `000829c4` | oggpack_writecopy (needs_review) | 40 | 90.0 | 0 | 0 |
-| `002a1408` | SetFogFar (needs_review) | 36 | 88.89 | 0 | 0 |
-| `0029b654` | GsSetClip2D (needs_review) | 36 | 88.89 | 0 | 0 |
 | `0029a834` | ClearImage (needs_review) | 36 | 77.78 | 0 | 0 |
-| `00294e64` | GetDrawEnv (needs_review) | 36 | 88.89 | 0 | 0 |
-| `0029128c` | MoveImage (needs_review) | 36 | 77.78 | 0 | 0 |
-| `00291154` | StoreImage (needs_review) | 36 | 77.78 | 0 | 0 |
-| `00291074` | PSX_LoadImage (needs_review) | 36 | 77.78 | 0 | 0 |
-| `0028de4c` | DisableEvent (needs_review) | 36 | 88.89 | 0 | 0 |
-| `0028de28` | EnableEvent (needs_review) | 36 | 88.89 | 0 | 0 |
-| `0028d228` | tlPopHeap() (needs_review) | 36 | 77.78 | 0 | 0 |
 | `0028c644` | CFFT_STATE::FaceIDToFID(int) (needs_review) | 36 | 88.89 | 0 | 0 |
-| `0028bad0` | TE_is_task_end(long) (needs_review) | 36 | 88.89 | 0 | 0 |
-| `00284494` | Clear_VectorDataBase() (needs_review) | 36 | 88.89 | 0 | 0 |
-| `002806cc` | iOS_HookAddPrim() (needs_review) | 36 | 88.89 | 0 | 0 |
-| `0027fbf0` | iOS_WorldMapResumeGetData2(unsigned char**, unsigned int*) (needs_review) | 36 | 88.89 | 0 | 0 |
-| `0026c238` | iOSNovelModeBackup() (needs_review) | 36 | 88.89 | 0 | 0 |
 | `00269b08` | snpl_effmode() (needs_review) | 36 | 88.89 | 0 | 0 |
 | `00269774` | snpl_jp() (needs_review) | 36 | 88.89 | 0 | 0 |
-| `00263fa8` | iOSSDNovelSysCurCheck() (needs_review) | 36 | 88.89 | 0 | 0 |
-| `0021b244` | SetEditTSQPtr() (needs_review) | 36 | 77.78 | 0 | 0 |
-| `0021b220` | SetEditANMPtr() (needs_review) | 36 | 77.78 | 0 | 0 |
-| `00216860` | stopMusic() (needs_review) | 36 | 88.89 | 0 | 0 |
-| `0020f514` | stopAnimation() (needs_review) | 36 | 88.89 | 0 | 0 |
-| `0020d5a4` | popMapScale() (needs_review) | 36 | 77.78 | 0 | 0 |
-| `0020d580` | pushMapScale() (needs_review) | 36 | 77.78 | 0 | 0 |
-| `0020d284` | popMapScroll() (needs_review) | 36 | 77.78 | 0 | 0 |
-| `0020d260` | pushMapScroll() (needs_review) | 36 | 77.78 | 0 | 0 |
-| `0020d02c` | popMapScrollXYZ() (needs_review) | 36 | 77.78 | 0 | 0 |
-| `0020d008` | pushMapScrollXYZ() (needs_review) | 36 | 77.78 | 0 | 0 |
-| `001fd1dc` | nextTurnOrder() (needs_review) | 36 | 88.89 | 0 | 0 |
-| `001f4a64` | initEntryEnemyAnimations(int) (needs_review) | 36 | 88.89 | 0 | 0 |
-| `001eb2d8` | vramDeleteUsed() (needs_review) | 36 | 88.89 | 0 | 0 |
-| `001ca580` | get_net_rival_weapon_range() (needs_review) | 36 | 88.89 | 0 | 0 |
-| `001baac4` | event_warning(short, int) (needs_review) | 36 | 88.89 | 0 | 0 |
-| `0018e334` | equans_init() (needs_review) | 36 | 88.89 | 0 | 0 |
-| `00161d74` | iOSPosH(int) (needs_review) | 36 | 88.89 | 0 | 0 |
-| `00161d50` | iOSPosW(int) (needs_review) | 36 | 88.89 | 0 | 0 |
-| `0015deec` | iOSGT4_MapT9(unsigned long, long) (needs_review) | 36 | 88.89 | 0 | 0 |
-| `0015391c` | check_eventtool(int, int) (needs_review) | 36 | 88.89 | 0 | 0 |
-| `00153638` | Wtask_stop(long) (needs_review) | 36 | 88.89 | 0 | 0 |
-| `00153614` | Wtask_start(long) (needs_review) | 36 | 88.89 | 0 | 0 |
-| `00153374` | task_stop(long) (needs_review) | 36 | 88.89 | 0 | 0 |
-| `00153350` | task_start(long) (needs_review) | 36 | 88.89 | 0 | 0 |
-| `000da7e4` | readed_mapchange() (needs_review) | 36 | 88.89 | 0 | 0 |
 | `002ccf98` | _Unwind_DeleteException (needs_review) | 32 | 62.5 | 0 | 0 |
-| `002b871c` | iOS_isTouchBegan() (needs_review) | 32 | 87.5 | 0 | 0 |
-| `002b2358` | Music_Play(int, int, int, int) (needs_review) | 32 | 87.5 | 0 | 0 |
-| `002b01e0` | GlTexEnv_GetTextureHandle_2X(int) (needs_review) | 32 | 87.5 | 0 | 0 |
-| `002ae8e0` | GlTexEnv_GetTextureHandle(int) (needs_review) | 32 | 87.5 | 0 | 0 |
-| `002ae8c0` | GlTexEnv_GetSprite(int) (needs_review) | 32 | 87.5 | 0 | 0 |
-| `002a2ce0` | PCwrite (needs_review) | 32 | 87.5 | 0 | 0 |
-| `002a2ca8` | PClseek (needs_review) | 32 | 87.5 | 0 | 0 |
-| `002a2c70` | PCread (needs_review) | 32 | 87.5 | 0 | 0 |
-| `002a1350` | ReadGeomOffset (needs_review) | 32 | 87.5 | 0 | 0 |
 | `0029ae70` | xpLib_GetTPage(int*) (needs_review) | 32 | 87.5 | 0 | 0 |
-| `00294e44` | GetDispEnv (needs_review) | 32 | 87.5 | 0 | 0 |
-| `0028ce58` | sceCtrlPeekBufferPositive (needs_review) | 32 | 87.5 | 0 | 0 |
-| `0028ba84` | TE_task_start(long) (needs_review) | 32 | 87.5 | 0 | 0 |
-| `0028b610` | initXpHeap() (needs_review) | 32 | 87.5 | 0 | 0 |
-| `00288a58` | pspPrimDirectParamSet(int, RECT16*) (needs_review) | 32 | 87.5 | 0 | 0 |
-| `0028082c` | IOS_PSP2IOS_Y(int) (needs_review) | 32 | 87.5 | 0 | 0 |
-| `0028080c` | IOS_PSP2IOS_X(int) (needs_review) | 32 | 87.5 | 0 | 0 |
 | `0027f620` | iOS_ResumeGetData(unsigned char**, unsigned int*) (needs_review) | 32 | 75.0 | 0 | 0 |
-| `00270500` | curhis_clr(int) (needs_review) | 32 | 87.5 | 0 | 0 |
-| `0026df10` | ctlhentuto_active(CTLINFO*) (needs_review) | 32 | 87.5 | 0 | 0 |
-| `0024f4b0` | ctltips_active(CTLINFO*) (needs_review) | 32 | 87.5 | 0 | 0 |
-| `0021f308` | PermanentEffectEndRequest(unsigned char) (needs_review) | 32 | 87.5 | 0 | 0 |
-| `0021cefc` | LockEffectCompelBreak() (needs_review) | 32 | 87.5 | 0 | 0 |
-| `0021cedc` | UnlockEffect() (needs_review) | 32 | 87.5 | 0 | 0 |
-| `0021b8a4` | PushGravity() (needs_review) | 32 | 87.5 | 0 | 0 |
-| `002119a0` | ResetChangePalette() (needs_review) | 32 | 87.5 | 0 | 0 |
-| `0020f8cc` | setFrameRate(int) (needs_review) | 32 | 87.5 | 0 | 0 |
-| `0020696c` | iOS_IsEnableFlicker() (needs_review) | 32 | 87.5 | 0 | 0 |
-| `002064a8` | iOS_IsEnableMenuItemTouch() (needs_review) | 32 | 87.5 | 0 | 0 |
-| `00202efc` | iOS_BattleEventCheck() (needs_review) | 32 | 87.5 | 0 | 0 |
-| `001d66f8` | set_td(unsigned char*) (needs_review) | 32 | 87.5 | 0 | 0 |
-| `001b9d84` | iOS_clearTutorialbreak() (needs_review) | 32 | 87.5 | 0 | 0 |
-| `001adc48` | FadeCondition() (needs_review) | 32 | 87.5 | 0 | 0 |
-| `0015c01c` | iOSTchHoseiControl() (needs_review) | 32 | 87.5 | 0 | 0 |
-| `0015bf38` | iOSTchMovingModeCheck() (needs_review) | 32 | 87.5 | 0 | 0 |
-| `0015a5ec` | siOS_TCurGet(unsigned int) (needs_review) | 32 | 87.5 | 0 | 0 |
-| `0015832c` | rewrite_worldscroll(int) (needs_review) | 32 | 87.5 | 0 | 0 |
-| `00155c8c` | stop_adventuremessage(int) (needs_review) | 32 | 87.5 | 0 | 0 |
-| `00153c84` | iOS_updateDispCameraIconSetting() (needs_review) | 32 | 87.5 | 0 | 0 |
 | `00153714` | Wtask_status(long) (needs_review) | 32 | 87.5 | 0 | 0 |
 | `00153450` | task_status(long) (needs_review) | 32 | 87.5 | 0 | 0 |
-| `001022cc` | Wchk_nexteventtype(int) (needs_review) | 32 | 87.5 | 0 | 0 |
-| `001005ec` | Wstartmenutransfer() (needs_review) | 32 | 87.5 | 0 | 0 |
-| `001005cc` | Wstopmenutransfer() (needs_review) | 32 | 87.5 | 0 | 0 |
-| `000da700` | chk_nexteventtype(int) (needs_review) | 32 | 87.5 | 0 | 0 |
-| `000d891c` | startmenutransfer() (needs_review) | 32 | 87.5 | 0 | 0 |
-| `000d88fc` | stopmenutransfer() (needs_review) | 32 | 87.5 | 0 | 0 |
-| `000c8178` | tool_readsquare(int, int, int) (needs_review) | 32 | 87.5 | 0 | 0 |
-| `000c8158` | tool_writesquare(int, int, int) (needs_review) | 32 | 87.5 | 0 | 0 |
-| `002befa0` | iOS_OrMenuTouchKeyInput(unsigned int) (needs_review) | 28 | 85.71 | 0 | 0 |
 | `002b7034` | iOSCancelButtonCheck() (needs_review) | 28 | 85.71 | 0 | 0 |
 | `002b242c` | Music_IsPlaying() (needs_review) | 28 | 85.71 | 0 | 0 |
 | `002b1bcc` | NowLoading_Bootup() (needs_review) | 28 | 71.43 | 0 | 0 |
@@ -342,7 +254,6 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | `0024d948` | iOS_BRST_CHECK() (needs_review) | 28 | 85.71 | 0 | 0 |
 | `0024b080` | wldbinEntry() (needs_review) | 28 | 85.71 | 0 | 0 |
 | `0021f2ec` | GetPEffectStatus(unsigned char) (needs_review) | 28 | 85.71 | 0 | 0 |
-| `001d751c` | erase_unit(int) (needs_review) | 28 | 85.71 | 0 | 0 |
 | `001d357c` | set_playerwork2(PENTRY*, unsigned char*) (needs_review) | 28 | 85.71 | 0 | 0 |
 | `001ca938` | net_setknockback(unsigned char, unsigned char, unsigned char) (needs_review) | 28 | 85.71 | 0 | 0 |
 | `001c7218` | TEST_TEST() (needs_review) | 28 | 85.71 | 0 | 0 |
@@ -350,17 +261,6 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | `001a8604` | Mituryo(short) (needs_review) | 28 | 85.71 | 0 | 0 |
 | `00196ea0` | MenuSelSideDirect(unsigned char, unsigned char) (needs_review) | 28 | 85.71 | 0 | 0 |
 | `0018378c` | fileclose(unsigned int) (needs_review) | 28 | 85.71 | 0 | 0 |
-| `00159a54` | asmGetActiveTask(int) (needs_review) | 28 | 85.71 | 0 | 0 |
-| `00155c5c` | ret_optionstatus() (needs_review) | 28 | 85.71 | 0 | 0 |
-| `00155870` | set_worldmoney(int) (needs_review) | 28 | 85.71 | 0 | 0 |
-| `00155854` | set_worldday(int, int) (needs_review) | 28 | 85.71 | 0 | 0 |
-| `00101fa4` | Wchangeflame(int) (needs_review) | 28 | 85.71 | 0 | 0 |
-| `0010155c` | WiOS_battle_scrollwindow_tap() (needs_review) | 28 | 85.71 | 0 | 0 |
-| `00101434` | Wsetplatetime(int) (needs_review) | 28 | 85.71 | 0 | 0 |
-| `000e62a8` | Set_bravebreak(unsigned short) (needs_review) | 28 | 85.71 | 0 | 0 |
-| `000e628c` | Get_bravebreak() (needs_review) | 28 | 85.71 | 0 | 0 |
-| `000d9748` | iOS_battle_scrollwindow_tap() (needs_review) | 28 | 85.71 | 0 | 0 |
-| `000d961c` | setplatetime(int) (needs_review) | 28 | 85.71 | 0 | 0 |
 | `000726e0` | JNI_OnLoad (needs_review) | 28 | 85.71 | 0 | 0 |
 | `002c53e8` | Movie_Init() (needs_review) | 24 | 83.33 | 0 | 0 |
 | `002befbc` | iOS_ClearMenuTouchKeyInput() (needs_review) | 24 | 83.33 | 0 | 0 |
