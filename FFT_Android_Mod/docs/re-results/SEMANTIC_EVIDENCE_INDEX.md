@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **280/1258** pending functions.
+Evidence collected: **288/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -291,3 +291,11 @@ These reports do not constitute semantic verification.
 | `000ff718` | Wsttsback_normal(STTSWINDOWBACK*) | [Evidence](semantic-evidence/000ff718.md) |
 | `001bb504` | SetSttsBoth(int) | [Evidence](semantic-evidence/001bb504.md) |
 | `0021627c` | readMusicBuffer(int, int) | [Evidence](semantic-evidence/0021627c.md) |
+| `00245e38` | ctlstartmov_init(int, int, int, int) | [Evidence](semantic-evidence/00245e38.md) |
+| `002562fc` | sthelp_curpos_set(CTLINFO*) | [Evidence](semantic-evidence/002562fc.md) |
+| `002cb4ac` | __aeabi_ul2f | [Evidence](semantic-evidence/002cb4ac.md) |
+| `000e5680` | disp_status2() | [Evidence](semantic-evidence/000e5680.md) |
+| `000e5708` | disp_status2right() | [Evidence](semantic-evidence/000e5708.md) |
+| `00228d40` | InitPermanentShape() | [Evidence](semantic-evidence/00228d40.md) |
+| `002b85f8` | RayPick_GT4(tagPOLY_GT4*, int, int) | [Evidence](semantic-evidence/002b85f8.md) |
+| `002b8680` | RayPick_GT3(tagPOLY_GT3*, int, int) | [Evidence](semantic-evidence/002b8680.md) |
