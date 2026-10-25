@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **648/1258** pending functions.
+Evidence collected: **656/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -659,3 +659,11 @@ These reports do not constitute semantic verification.
 | `00243184` | fRoll_scroll(short*) | [Evidence](semantic-evidence/00243184.md) |
 | `0024337c` | fRoll_cdxafin(short*) | [Evidence](semantic-evidence/0024337c.md) |
 | `002433ac` | fRoll_cdxafout(short*) | [Evidence](semantic-evidence/002433ac.md) |
+| `0024932c` | vOpn_loopinit() | [Evidence](semantic-evidence/0024932c.md) |
+| `0024ad94` | openEntry(int) | [Evidence](semantic-evidence/0024ad94.md) |
+| `0025f138` | townpic_load(int) | [Evidence](semantic-evidence/0025f138.md) |
+| `0025ffb0` | iOSSDNovelGetOT(int) | [Evidence](semantic-evidence/0025ffb0.md) |
+| `00270460` | curhis_get(int) | [Evidence](semantic-evidence/00270460.md) |
+| `00289970` | pspIsNoneSaveData(int) | [Evidence](semantic-evidence/00289970.md) |
+| `0028ba54` | TE_task_create(int, void (*)(), int) | [Evidence](semantic-evidence/0028ba54.md) |
+| `0028e6a4` | xpInitVblankFunc() | [Evidence](semantic-evidence/0028e6a4.md) |
