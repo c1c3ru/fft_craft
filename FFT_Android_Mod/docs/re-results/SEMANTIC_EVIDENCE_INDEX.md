@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **560/1258** pending functions.
+Evidence collected: **568/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -571,3 +571,11 @@ These reports do not constitute semantic verification.
 | `002819cc` | iOS_v2menuInit() | [Evidence](semantic-evidence/002819cc.md) |
 | `00284784` | ColorVectorDataBase(unsigned int) | [Evidence](semantic-evidence/00284784.md) |
 | `00289844` | pspClearSaveData() | [Evidence](semantic-evidence/00289844.md) |
+| `0028b6fc` | STEP_DISP(char const*) | [Evidence](semantic-evidence/0028b6fc.md) |
+| `0028bf7c` | _ps_cond() | [Evidence](semantic-evidence/0028bf7c.md) |
+| `0029b618` | iOSGsSwapDispBuff() | [Evidence](semantic-evidence/0029b618.md) |
+| `002ab5cc` | GuEmu_Clear() | [Evidence](semantic-evidence/002ab5cc.md) |
+| `002b6fe0` | iOSReleaseButtonAreaCheck() | [Evidence](semantic-evidence/002b6fe0.md) |
+| `000d7ed8` | getvaluelength(int) | [Evidence](semantic-evidence/000d7ed8.md) |
+| `000d88c4` | popmessagepacket() | [Evidence](semantic-evidence/000d88c4.md) |
+| `000e0f68` | loadcsrc(int, int, int, int) | [Evidence](semantic-evidence/000e0f68.md) |
