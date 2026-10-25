@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **416/1258** pending functions.
+Evidence collected: **424/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -427,3 +427,11 @@ These reports do not constitute semantic verification.
 | `0019e134` | SuccessEmploy() | [Evidence](semantic-evidence/0019e134.md) |
 | `001eed30` | getShapeAddress(unsigned short) | [Evidence](semantic-evidence/001eed30.md) |
 | `00245de4` | vOpn_ctlprog() | [Evidence](semantic-evidence/00245de4.md) |
+| `00255758` | iOSHelpCheck() | [Evidence](semantic-evidence/00255758.md) |
+| `00265f84` | iOSSDNovelBackLogCheck() | [Evidence](semantic-evidence/00265f84.md) |
+| `00269db0` | snpl_mfadeout() | [Evidence](semantic-evidence/00269db0.md) |
+| `00289fac` | pspLoadSystemFile() | [Evidence](semantic-evidence/00289fac.md) |
+| `002b5e58` | Logo_Uninit() | [Evidence](semantic-evidence/002b5e58.md) |
+| `000d8830` | makemessagepacket(char*) | [Evidence](semantic-evidence/000d8830.md) |
+| `000e2b78` | statuskanjiprint(int, char*, COPYFIELD*) | [Evidence](semantic-evidence/000e2b78.md) |
+| `00100500` | Wmakemessagepacket(char*) | [Evidence](semantic-evidence/00100500.md) |
