@@ -108,6 +108,16 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_guarded_block.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_two_guards.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_entry_prefix.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_return_call.py
+          python3 - <<'PY'
+          from pathlib import Path
+          r = Path("FFT_Android_Mod/docs/re-results/SEMANTIC_RETURN_CALL_BOUNDARY.md").read_text()
+          assert "Verified entry-to-boundary microexecutions: 2048/2048 PASS" in r
+          assert "Conditional continuation slot clears:" in r
+          assert "POP restores" in r and "first external BL" in r
+          assert "0x67b2f8" in r and "not executed or stubbed" in r
+          print("PASS: original ARM return and pre-call conditional state evidence")
+          PY
           python3 - <<'PY'
           from pathlib import Path
           report = Path("FFT_Android_Mod/docs/re-results/SEMANTIC_ENTRY_PREFIX.md").read_text()
