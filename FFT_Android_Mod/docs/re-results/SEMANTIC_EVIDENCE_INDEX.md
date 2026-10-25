@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1056/1258** pending functions.
+Evidence collected: **1064/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1067,3 +1067,11 @@ These reports do not constitute semantic verification.
 | `00287a2c` | get_g_Soldier_Draw_flg() | [Evidence](semantic-evidence/00287a2c.md) |
 | `002884a0` | Set_NonDrawTaikiIconFlg(int) | [Evidence](semantic-evidence/002884a0.md) |
 | `002884b4` | Get_NonDrawTaikiIconFlg() | [Evidence](semantic-evidence/002884b4.md) |
+| `002884d4` | setBattlePoint(int) | [Evidence](semantic-evidence/002884d4.md) |
+| `002884e8` | getBattlePoint() | [Evidence](semantic-evidence/002884e8.md) |
+| `0028851c` | setMissionNo_CalcMissionPayPoint(int) | [Evidence](semantic-evidence/0028851c.md) |
+| `00288530` | getMissionNo_CalcMissionPayPoint() | [Evidence](semantic-evidence/00288530.md) |
+| `00288544` | setTurnCount_CalcMissionPayPoint(int) | [Evidence](semantic-evidence/00288544.md) |
+| `00288558` | getTurnCount_CalcMissionPayPoint() | [Evidence](semantic-evidence/00288558.md) |
+| `00288578` | pspOpenDataBackBufGet(int) | [Evidence](semantic-evidence/00288578.md) |
+| `0028858c` | pspOpenDataIconBufGet() | [Evidence](semantic-evidence/0028858c.md) |
