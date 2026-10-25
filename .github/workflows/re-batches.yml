@@ -11,6 +11,7 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/semantic_cfg.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_paths.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_facts.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_microexec.py'
   workflow_dispatch:
     inputs:
       limit:
@@ -42,7 +43,7 @@ jobs:
           python-version: '3.11'
       - name: Install requirements and unit test
         run: |
-          python3 -m pip install capstone pyelftools
+          python3 -m pip install capstone pyelftools unicorn
           python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_*.py' -v
       - name: Restore initial batch checkpoints
         env:
@@ -120,6 +121,9 @@ jobs:
       - name: Generate conservative ARM conditional-path contracts
         run: |
           python3 FFT_Android_Mod/docs/re-tools/semantic_path_report.py --limit 12
+      - name: Verify real ELF bit-clearing by isolated ARM microexecution
+        run: |
+          python3 FFT_Android_Mod/docs/re-tools/semantic_microexec.py
       - name: Count newly checkpointed functions
         id: progress
         env:
