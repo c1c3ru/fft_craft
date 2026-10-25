@@ -80,6 +80,9 @@ jobs:
           if any(x.get('status') == 'error' for x in results):
               raise SystemExit('Errors in checkpoints: refusing automated merge')
           PY
+      - name: Generate progress and review queue
+        run: |
+          python3 FFT_Android_Mod/docs/re-tools/progress_report.py
       - name: Create checkpoint PR and merge automatically
         env:
           GH_TOKEN: ${{ github.token }}
