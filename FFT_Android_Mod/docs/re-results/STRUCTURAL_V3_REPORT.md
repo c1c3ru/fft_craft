@@ -4,20 +4,23 @@ Automatic structural acceptance checks all ARM instruction slots, candidate PC-r
 
 | Metric | Count |
 |---|---:|
-| v3 checkpoints | 996 |
-| Legacy checkpoint records unchanged | 2006 |
-| v3 structurally accepted | 968 |
-| v3 still under review | 28 |
-| Archived v2 originals | 992 |
-| Referenced candidate literal words | 2436 |
-| Unexplained instruction slots | 384 |
+| v3 checkpoints | 1093 |
+| Legacy checkpoint records unchanged | 1909 |
+| v3 structurally accepted | 1055 |
+| v3 still under review | 38 |
+| Archived v2 originals | 1086 |
+| Referenced candidate literal words | 2602 |
+| Unexplained instruction slots | 711 |
 | Independently checked jump tables | 0 |
-| Unsafe / unresolved checked tables | 21 |
+| Unsafe / unresolved checked tables | 27 |
 
 ## Remaining v3 review examples
 
 | Address | Unexplained slots | Reason |
 |---|---:|---|
+| `000a7ec4` | 9 | unverified_jump_table |
+| `000ab4b0` | 7 | unverified_jump_table |
+| `000aecb8` | 7 | unverified_jump_table |
 | `000d7e00` | 13 | unverified_jump_table |
 | `000ff9ec` | 13 | unverified_jump_table |
 | `0015a65c` | 11 | unverified_jump_table |
@@ -32,6 +35,7 @@ Automatic structural acceptance checks all ARM instruction slots, candidate PC-r
 | `0021d544` | 8 | unverified_jump_table |
 | `0022a6a4` | 10 | unverified_jump_table |
 | `0025b78c` | 5 | unverified_jump_table |
+| `00271ba4` | 10 | unverified_jump_table |
 | `0027fe84` | 0 | instruction_conflict |
 | `00285e50` | 12 | unverified_jump_table |
 | `002867a8` | 15 | unverified_jump_table |
@@ -40,12 +44,10 @@ Automatic structural acceptance checks all ARM instruction slots, candidate PC-r
 | `0028e2e4` | 28 | unverified_jump_table |
 | `002b20f4` | 20 | unverified_jump_table |
 | `002b3464` | 0 | instruction_conflict |
+| `002c9121` | 0 | non_arm_aligned_or_empty |
 | `002c9b11` | 0 | non_arm_aligned_or_empty |
-| `002cabdc` | 7 | unexplained_code_slots |
-| `002cb0c0` | 3 | unexplained_code_slots |
-| `002cb484` | 2 | unexplained_code_slots |
-| `002cb4ac` | 6 | unexplained_code_slots |
-| `002cb830` | 3 | unexplained_code_slots |
+| `002ca215` | 0 | non_arm_aligned_or_empty |
+| `002ca8a0` | 123 | unexplained_code_slots |
 
 ## Migration contract
 
