@@ -22,13 +22,13 @@ DEFAULT_SO = ROOT / "src/lib/armeabi/libgl2jni.so"
 DEFAULT_CSV = ROOT / "docs/RE_FUNCTION_INVENTORY.csv"
 CONFIRMED = {"read_structural", "read_full", "confirmed_by_similarity"}
 FAMILY_PATTERNS = (
-    ("Mdl", re.compile(r"^Mdl\\d+")),
+    ("Mdl", re.compile(r"^Mdl\d+")),
     ("personalwindow", re.compile(r"^(?:[WACDE])?disp_personalwindow")),
 )
-COVERAGE = re.compile(r"coverage:\\s*(\\d+) of ~?(\\d+) instruction slots \\((\\d+)%\\)")
-UNRESOLVED = re.compile(r"\\[WARN\\] jump table")
-BL = re.compile(r"^\\s*0x([0-9a-f]+) x\\d+\\s+", re.M)
-TABLES = re.compile(r"-- jump tables resolved: (\\d+) --")
+COVERAGE = re.compile(r"coverage:\s*(\d+) of ~?(\d+) instruction slots \((\d+)%\)")
+UNRESOLVED = re.compile(r"\[WARN\] jump table")
+BL = re.compile(r"^\s*0x([0-9a-f]+) x\d+\s+", re.M)
+TABLES = re.compile(r"-- jump tables resolved: (\d+) --")
 
 
 def family(name: str) -> str | None:
@@ -80,10 +80,10 @@ def analyze_one(row: dict, so: Path, timeout: int, references: dict,
             if proc.returncode:
                 raise RuntimeError(proc.stderr[-600:])
             match = re.search(
-                r"candidate .*?\\((\\d+)%\\), (\\d+) bl targets, "
-                r"jaccard=([\\d.]+), jt_unresolved=(\\d+)", proc.stdout)
-            refmatch = re.search(r"reference .*?\\((\\d+)%\\), (\\d+) distinct "
-                                 r"bl targets, (\\d+) unresolved", proc.stdout)
+                r"candidate .*?\((\d+)%\), (\d+) bl targets, "
+                r"jaccard=([\d.]+), jt_unresolved=(\d+)", proc.stdout)
+            refmatch = re.search(r"reference .*?\((\d+)%\), (\d+) distinct "
+                                 r"bl targets, (\d+) unresolved", proc.stdout)
             if match and refmatch:
                 cov, count, similarity, jumps = match.groups()
                 result["similarity"] = float(similarity)
@@ -196,7 +196,7 @@ def main() -> int:
     accepted = {"auto_structural", "confirmed_by_similarity"}
     validated_bytes = sum(r["size"] for r in recorded if r["status"] in accepted)
     lines = ["# Parallel reverse-engineering loop", "",
-             f"Binary SHA-256: \`{binary_hash}\`", "",
+             f"Binary SHA-256: `{binary_hash}`", "",
              f"Analyzed in current binary: {len(recorded)}",
              f"Automatically triaged: {validated_bytes:,} bytes / "
              f"{total_bytes:,} inventory bytes "
@@ -205,10 +205,10 @@ def main() -> int:
              "| Address | Function | Size (B) | Coverage | Status |",
              "|---|---|---:|---:|---|"]
     for item in recorded:
-        name = item["name"].replace("|", "\\|")
-        lines.append(f"| \`{item['address']}\` | {name} | {item['size']} | "
+        name = item["name"].replace("|", "\|")
+        lines.append(f"| `{item['address']}` | {name} | {item['size']} | "
                      f"{item.get('coverage_pct', '—')}% | {item['status']} |")
-    (args.output / "SUMMARY.md").write_text("\\n".join(lines) + "\\n",
+    (args.output / "SUMMARY.md").write_text("\n".join(lines) + "\n",
                                              encoding="utf-8")
     return 1 if any(item["status"] == "error" for item in completed) else 0
 
