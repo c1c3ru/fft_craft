@@ -18,7 +18,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
-  actions: read
+  actions: write
 
 concurrency:
   group: re-automated-batches
@@ -53,6 +53,11 @@ jobs:
         run: |
           python3 FFT_Android_Mod/docs/re-tools/check_smoke.py \
             FFT_Android_Mod/docs/re-results
+      - name: Record starting checkpoint count
+        id: starting
+        run: |
+          count=$(find FFT_Android_Mod/docs/re-results -maxdepth 1 -name '*.json' | wc -l)
+          echo "count=$count" >> "$GITHUB_OUTPUT"
       - name: Analyze next bounded batch
         env:
           REQUESTED_LIMIT: ${{ inputs.limit }}
@@ -90,6 +95,18 @@ jobs:
       - name: Generate progress and review queue
         run: |
           python3 FFT_Android_Mod/docs/re-tools/progress_report.py
+      - name: Count newly checkpointed functions
+        id: progress
+        env:
+          BEFORE: ${{ steps.starting.outputs.count }}
+        run: |
+          after=$(find FFT_Android_Mod/docs/re-results -maxdepth 1 -name '*.json' | wc -l)
+          if [ "$after" -gt "$BEFORE" ]; then
+            echo "has_new=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_new=false" >> "$GITHUB_OUTPUT"
+          fi
+          echo "Checkpoint count: $BEFORE -> $after"
       - name: Create checkpoint PR and merge automatically
         env:
           GH_TOKEN: ${{ github.token }}
@@ -115,3 +132,11 @@ jobs:
           name: automated-re-batch
           path: FFT_Android_Mod/docs/re-results/
           retention-days: 30
+
+      - name: Start next batch after successful merge
+        if: ${{ success() && steps.progress.outputs.has_new == 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run re-batches.yml --repo "$GITHUB_REPOSITORY" --ref main -f limit=100
+          echo "Triggered next 100-function batch"
