@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **512/1258** pending functions.
+Evidence collected: **520/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -523,3 +523,11 @@ These reports do not constitute semantic verification.
 | `002b758c` | IS_ICON_AREA(int) | [Evidence](semantic-evidence/002b758c.md) |
 | `000d9a80` | send_sttslinecol(char*) | [Evidence](semantic-evidence/000d9a80.md) |
 | `000d9eec` | extend_endornot() | [Evidence](semantic-evidence/000d9eec.md) |
+| `000f1560` | disp_resume_yesno() | [Evidence](semantic-evidence/000f1560.md) |
+| `000fb554` | chkMessagepacket() | [Evidence](semantic-evidence/000fb554.md) |
+| `00101ba8` | Wextend_endornot() | [Evidence](semantic-evidence/00101ba8.md) |
+| `0010212c` | Wevent_start() | [Evidence](semantic-evidence/0010212c.md) |
+| `0010634c` | Wdisp_resume_yesno() | [Evidence](semantic-evidence/0010634c.md) |
+| `00153398` | task_killmyself() | [Evidence](semantic-evidence/00153398.md) |
+| `0015365c` | Wtask_killmyself() | [Evidence](semantic-evidence/0015365c.md) |
+| `00155cac` | world_stopnoend(int) | [Evidence](semantic-evidence/00155cac.md) |
