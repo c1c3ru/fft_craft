@@ -1,0 +1,16 @@
+{
+  "address": "002cd03c",
+  "name": "_Unwind_VRS_Set",
+  "size": 92,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 73.91,
+  "distinct_bl": 0,
+  "tables_resolved": 1,
+  "tables_unresolved": 0,
+  "bl_targets": [],
+  "log": "=== jtable.py: 0x2cd03c..0x2cd098 (92 bytes) ===\ncoverage: 17 of ~23 instruction slots (74%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0x2cd03c, dispatch @0x2cd040: 5 cases, 3 distinct handlers\n    targets: ['0x2cd064', '0x2cd05c', '0x2cd090', '0x2cd05c', '0x2cd05c']\n\n-- bl targets: 0 distinct --\n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

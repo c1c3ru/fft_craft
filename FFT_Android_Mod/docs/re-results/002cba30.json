@@ -3,7 +3,7 @@
   "name": "__aeabi_d2ulz",
   "size": 104,
   "previous_status": "unread",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 92.31,
   "distinct_bl": 4,
   "tables_resolved": 0,
@@ -15,7 +15,29 @@
     "2cdf18"
   ],
   "log": "=== jtable.py: 0x2cba30..0x2cba98 (104 bytes) ===\ncoverage: 24 of ~26 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x2ca8a0 x1   __subdf3 \n  0x2cab50 x1   __aeabi_ui2d \n  0x2cac50 x2   __muldf3 \n  0x2cdf18 x2   __fixunsdfsi \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x2cba30",
+    "total_slots": 26,
+    "code_slots": 24,
+    "instruction_slots": 24,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x2cba90",
+      "0x2cba94"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

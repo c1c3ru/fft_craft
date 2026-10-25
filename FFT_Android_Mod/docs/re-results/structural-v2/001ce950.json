@@ -1,0 +1,19 @@
+{
+  "address": "001ce950",
+  "name": "setskillresult_caster(int)",
+  "size": 188,
+  "previous_status": "mentioned_unverified",
+  "status": "needs_review",
+  "coverage_pct": 87.23,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1cda4c",
+    "1d9948"
+  ],
+  "log": "=== jtable.py: 0x1ce950..0x1cea0c (188 bytes) ===\ncoverage: 41 of ~47 instruction slots (87%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x1cda4c x1   setskillresult(int) \n  0x1d9948 x1   copy_struct_data(void const*, void*, int) \n\n-- branches: 2 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
