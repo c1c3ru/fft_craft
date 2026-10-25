@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **312/1258** pending functions.
+Evidence collected: **320/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -323,3 +323,11 @@ These reports do not constitute semantic verification.
 | `002b3590` | Boot_FrameMove() | [Evidence](semantic-evidence/002b3590.md) |
 | `00105510` | Wwait_direc(int) | [Evidence](semantic-evidence/00105510.md) |
 | `00161ef8` | wasmTaskEntry() | [Evidence](semantic-evidence/00161ef8.md) |
+| `0016a14c` | ASURA_soundStop() | [Evidence](semantic-evidence/0016a14c.md) |
+| `001baae8` | SttsAMovingChk() | [Evidence](semantic-evidence/001baae8.md) |
+| `0020c550` | db_swap_generate(unsigned long*, unsigned long*) | [Evidence](semantic-evidence/0020c550.md) |
+| `0024a544` | vOpn_add_winpac(unsigned long*, int*) | [Evidence](semantic-evidence/0024a544.md) |
+| `002665d8` | add_anmpac(unsigned long*, int*) | [Evidence](semantic-evidence/002665d8.md) |
+| `0028bec0` | TE_VSync(int) | [Evidence](semantic-evidence/0028bec0.md) |
+| `002b2798` | SE_CorrectFID(int) | [Evidence](semantic-evidence/002b2798.md) |
+| `002b2a18` | SE_StopVFX(int) | [Evidence](semantic-evidence/002b2a18.md) |
