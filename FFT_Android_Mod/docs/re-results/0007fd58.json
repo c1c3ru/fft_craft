@@ -1,0 +1,19 @@
+{
+  "address": "0007fd58",
+  "name": "uncompress",
+  "size": 192,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 97.92,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "7b180",
+    "7b200",
+    "7cbfc"
+  ],
+  "log": "=== jtable.py: 0x7fd58..0x7fe18 (192 bytes) ===\ncoverage: 47 of ~48 instruction slots (98%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x7b180 x1   inflateInit_ \n  0x7b200 x1   inflate \n  0x7cbfc x2   inflateEnd \n\n-- branches: 5 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

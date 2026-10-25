@@ -1,0 +1,20 @@
+{
+  "address": "00216308",
+  "name": "readMusic(int)",
+  "size": 180,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 93.33,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "20c5d8",
+    "20c628",
+    "20cbb8",
+    "28c2e8"
+  ],
+  "log": "=== jtable.py: 0x216308..0x2163bc (180 bytes) ===\ncoverage: 42 of ~45 instruction slots (93%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x20c5d8 x1   errorHandler(int) \n  0x20c628 x1   mallocForSound(unsigned int) \n  0x20cbb8 x1   fileReadRequest(unsigned long, unsigned long, void*) \n  0x28c2e8 x1   CFFT_STATE::SetMusicBuffer(int, int) \n\n-- branches: 6 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

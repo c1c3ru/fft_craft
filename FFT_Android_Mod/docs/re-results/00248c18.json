@@ -1,0 +1,17 @@
+{
+  "address": "00248c18",
+  "name": "ctlpremov_main(CTLINFO*)",
+  "size": 180,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 88.89,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "290b40"
+  ],
+  "log": "=== jtable.py: 0x248c18..0x248ccc (180 bytes) ===\ncoverage: 40 of ~45 instruction slots (89%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x290b40 x1   SetDispMask \n\n-- branches: 4 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

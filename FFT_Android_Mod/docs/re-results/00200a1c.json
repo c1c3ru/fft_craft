@@ -1,0 +1,17 @@
+{
+  "address": "00200a1c",
+  "name": "startKnockBack(tag_animation*, tag_animation*)",
+  "size": 204,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1e3988"
+  ],
+  "log": "=== jtable.py: 0x200a1c..0x200ae8 (204 bytes) ===\ncoverage: 51 of ~51 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x1e3988 x1   get_movetype(BWORK*) \n\n-- branches: 5 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

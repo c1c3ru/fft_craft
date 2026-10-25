@@ -1,0 +1,18 @@
+{
+  "address": "00215a28",
+  "name": "transferClutData()",
+  "size": 180,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 95.56,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "291074",
+    "29128c"
+  ],
+  "log": "=== jtable.py: 0x215a28..0x215adc (180 bytes) ===\ncoverage: 43 of ~45 instruction slots (96%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x291074 x1   PSX_LoadImage \n  0x29128c x1   MoveImage \n\n-- branches: 3 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

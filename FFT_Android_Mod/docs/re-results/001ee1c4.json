@@ -1,0 +1,19 @@
+{
+  "address": "001ee1c4",
+  "name": "drawItem(tag_animation*)",
+  "size": 180,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "16f794",
+    "1e9e28",
+    "21036c"
+  ],
+  "log": "=== jtable.py: 0x1ee1c4..0x1ee278 (180 bytes) ===\ncoverage: 45 of ~45 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x16f794 x1   ASHURA_getOTptrZ(int) \n  0x1e9e28 x1   sub_1e9e28 LOCAL(no-dynsym)\n  0x21036c x1   setShortVector(SVECTOR*, int, int, int) \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

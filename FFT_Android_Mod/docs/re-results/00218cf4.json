@@ -1,0 +1,19 @@
+{
+  "address": "00218cf4",
+  "name": "SetDefaultCamera()",
+  "size": 216,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 98.15,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "20d050",
+    "20d5c8",
+    "20d83c"
+  ],
+  "log": "=== jtable.py: 0x218cf4..0x218dcc (216 bytes) ===\ncoverage: 53 of ~54 instruction slots (98%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x20d050 x1   getMapScrollXYZ() \n  0x20d5c8 x1   getMapScale() \n  0x20d83c x1   getMapAngle() \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

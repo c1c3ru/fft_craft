@@ -1,0 +1,22 @@
+{
+  "address": "002101a8",
+  "name": "loadPlayerPartyData(int)",
+  "size": 180,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 93.33,
+  "distinct_bl": 6,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1d73ec",
+    "1dbba0",
+    "210004",
+    "210108",
+    "2419cc",
+    "28e5c0"
+  ],
+  "log": "=== jtable.py: 0x2101a8..0x21025c (180 bytes) ===\ncoverage: 42 of ~45 instruction slots (93%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x1d73ec x1   clear_unitwork() \n  0x1dbba0 x1   employ_from_entry(unsigned char*, int, int, int) \n  0x210004 x1   requestReadEntryData() \n  0x210108 x2   requestEntryData() \n  0x2419cc x2   fftCdLoop(CDREC*) \n  0x28e5c0 x2   VSync \n\n-- branches: 7 total, 4 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

@@ -6,17 +6,22 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 |---|---:|
 | Inventory total | 6,455 functions / 1,837,392 bytes |
 | Previously analyzed in CSV | 3,373 functions / 1,513,492 bytes |
-| JSON checkpoints (all statuses) | 444 |
-| Newly accepted structurally | 250 functions / 90,928 bytes |
-| Needs review | 194 functions |
-| Not yet checkpointed | 2,629 functions / 160,608 bytes |
+| JSON checkpoints (all statuses) | 544 |
+| Newly accepted structurally | 304 functions / 101,664 bytes |
+| Needs review | 240 functions |
+| Core targets in inventory | 4,642 functions |
+| Core targets checkpointed | 441 functions |
+| Core accepted structurally | 221 functions |
+| Core needs review | 220 functions |
+| Core not yet checkpointed | 1,925 functions |
+| Not yet checkpointed | 2,529 functions / 140,588 bytes |
 
 ## Checkpoint status
 
 | Status | Functions |
 |---|---:|
-| auto_structural | 250 |
-| needs_review | 194 |
+| auto_structural | 304 |
+| needs_review | 240 |
 
 ## Review queue (largest first)
 
@@ -206,6 +211,8 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | `00285e50` | pspMsgGet(unsigned int) (needs_review) | 232 | 63.79 | 1 | 0 |
 | `0028d6ec` | tlCheckHeap() (needs_review) | 228 | 92.98 | 0 | 0 |
 | `001eb67c` | myInitShape() (needs_review) | 228 | 78.95 | 0 | 0 |
+| `00264378` | ctlnblwldinfo_init() (needs_review) | 224 | 78.57 | 0 | 0 |
+| `002541c4` | ctlcenter_init(int) (needs_review) | 224 | 85.71 | 0 | 0 |
 | `001cea0c` | set_walker_result(BWORK*, REWARD*) (needs_review) | 224 | 94.64 | 0 | 0 |
 | `0015a33c` | iOSsTchBtlEnd() (needs_review) | 224 | 76.79 | 0 | 0 |
 | `0015588c` | title_menuinit() (needs_review) | 224 | 91.07 | 0 | 0 |
@@ -216,6 +223,50 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | `001252d0` | Wdisp_eventwindow() (needs_review) | 224 | 92.86 | 0 | 0 |
 | `00123994` | Edisp_eventwaitwindow() (needs_review) | 224 | 92.86 | 0 | 0 |
 | `000d115c` | Ddisp_eventwaitwindow() (needs_review) | 224 | 92.86 | 0 | 0 |
+| `002b54b4` | Link_Uninit() (needs_review) | 220 | 92.73 | 0 | 0 |
+| `002b2ea0` | Jingle_FrameMove() (needs_review) | 220 | 92.73 | 0 | 0 |
+| `002ab620` | GuEmu_ClearTexCache() (needs_review) | 220 | 94.55 | 0 | 0 |
+| `0021d544` | getNextSENo(int) (needs_review) | 220 | 80.0 | 1 | 0 |
+| `00187514` | TimeConvert(int) (needs_review) | 220 | 89.09 | 0 | 0 |
+| `002867a8` | getMovieEventNum(int) (needs_review) | 216 | 68.52 | 1 | 0 |
+| `000fef24` | Wdisposewindow(MESSAGEPACKET*) (needs_review) | 216 | 94.44 | 0 | 0 |
+| `0025f280` | snpl_load(int) (needs_review) | 212 | 86.79 | 0 | 0 |
+| `002531e4` | ctltuto_zodiac() (needs_review) | 212 | 90.57 | 0 | 0 |
+| `0024b6bc` | ctlbar_active(CTLINFO*) (needs_review) | 212 | 94.34 | 0 | 0 |
+| `00249f94` | vOpn_pacinit() (needs_review) | 212 | 86.79 | 0 | 0 |
+| `001c02d4` | JobToAbiChg() (needs_review) | 212 | 92.45 | 0 | 0 |
+| `002b2644` | EnvSE_Stop(int) (needs_review) | 208 | 94.23 | 0 | 0 |
+| `00290cf0` | ResetGraph (needs_review) | 208 | 90.38 | 0 | 0 |
+| `00255584` | ctlhelp2_main(CTLINFO*) (needs_review) | 208 | 86.54 | 0 | 0 |
+| `001bab78` | GetIwaPadData() (needs_review) | 208 | 88.46 | 0 | 0 |
+| `001a9158` | IsItem(int) (needs_review) | 208 | 94.23 | 0 | 0 |
+| `0015a65c` | siOS_TCurSucCheck(unsigned int) (needs_review) | 208 | 78.85 | 1 | 0 |
+| `00255e14` | ctlfsetnum_init(int, int) (needs_review) | 204 | 86.27 | 0 | 0 |
+| `00228c74` | InitShape() (needs_review) | 204 | 82.35 | 0 | 0 |
+| `002b1e70` | NowLoading_FrameMove() (needs_review) | 200 | 90.0 | 0 | 0 |
+| `00257a2c` | ctlparty_init() (needs_review) | 200 | 86.0 | 0 | 0 |
+| `0015a7d8` | iOSScrollButtonMove() (needs_review) | 200 | 90.0 | 0 | 0 |
+| `00100df8` | Wget_cursoroffset(int) (needs_review) | 200 | 92.0 | 0 | 0 |
+| `000d8fe0` | get_cursoroffset(int) (needs_review) | 200 | 92.0 | 0 | 0 |
+| `0025e508` | person_year_up() (needs_review) | 196 | 93.88 | 0 | 0 |
+| `00242268` | vOpn_arzpic_init(int) (needs_review) | 196 | 89.8 | 0 | 0 |
+| `00211e50` | setPresentClutDataAsDefault(unsigned int, unsigned int, int) (needs_review) | 196 | 93.88 | 0 | 0 |
+| `0021025c` | InitializePartyItem() (needs_review) | 196 | 93.88 | 0 | 0 |
+| `00200f44` | startFukanChange() (needs_review) | 196 | 91.84 | 0 | 0 |
+| `001383a4` | maptest() (needs_review) | 196 | 85.71 | 0 | 0 |
+| `000da720` | tutorial_hookfunc() (needs_review) | 196 | 85.71 | 0 | 0 |
+| `00269870` | snpl_syscur() (needs_review) | 192 | 89.58 | 0 | 0 |
+| `00291098` | StoreImage2 (needs_review) | 188 | 93.62 | 0 | 0 |
+| `00261b0c` | mouke_eventday_chg() (needs_review) | 188 | 93.62 | 0 | 0 |
+| `0020f43c` | debugEffectWait() (needs_review) | 188 | 80.85 | 0 | 0 |
+| `0020c19c` | fftVSyncCallback() (needs_review) | 188 | 87.23 | 0 | 0 |
+| `000dfa94` | makemessagestructure() (needs_review) | 188 | 91.49 | 0 | 0 |
+| `00254f9c` | ctltownset_init(int, int) (needs_review) | 184 | 86.96 | 0 | 0 |
+| `00248c18` | ctlpremov_main(CTLINFO*) (needs_review) | 180 | 88.89 | 0 | 0 |
+| `0021cf30` | InitEffect() (needs_review) | 180 | 86.67 | 0 | 0 |
+| `00216308` | readMusic(int) (needs_review) | 180 | 93.33 | 0 | 0 |
+| `002101a8` | loadPlayerPartyData(int) (needs_review) | 180 | 93.33 | 0 | 0 |
+| `001cc89c` | check_hide_reset(BWORK*) (needs_review) | 180 | 93.33 | 0 | 0 |
 
 > Structural acceptance does not establish semantic equivalence.
 > Counts distinguish historical CSV statuses, new accepted checkpoints, and review cases.
