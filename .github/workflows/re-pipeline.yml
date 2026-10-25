@@ -90,6 +90,10 @@ jobs:
           assert "v3 checkpoints | 8" in report
           print("PASS: real ELF v3 upgrades are versioned, bounded and archived")
           PY
+          # Structural upgrades change checkpoint statuses; both dependent
+          # reports must be regenerated before reading the review queue.
+          python3 FFT_Android_Mod/docs/re-tools/progress_report.py
+          python3 FFT_Android_Mod/docs/re-tools/export_review_queue.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_evidence.py --limit 8
           python3 FFT_Android_Mod/docs/re-tools/semantic_path_report.py --limit 12
           python3 FFT_Android_Mod/docs/re-tools/semantic_microexec.py
