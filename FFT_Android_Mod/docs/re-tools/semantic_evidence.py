@@ -6,7 +6,7 @@ import hashlib
 import json
 from pathlib import Path
 
-from capstone import Cs, CS_ARCH_ARM, CS_MODE_ARM
+from capstone import Cs, CS_ARCH_ARM, CS_MODE_ARM, CS_MODE_THUMB
 from capstone.arm import ARM_INS_LDR, ARM_OP_MEM, ARM_REG_PC
 from elftools.elf.elffile import ELFFile
 
@@ -19,8 +19,8 @@ DISCLAIMER = ("Static ARM-mode disassembly only. Reachability is heuristic; "
 
 def read_function(binary, start, size):
     """Read one function from an executable, file-backed ELF LOAD segment."""
-    if size <= 0 or size % 4 or start % 4:
-        raise ValueError("ARM start and size must be nonzero multiples of four")
+    if size <= 0 or start % 2:
+        raise ValueError("Executable start must be halfword aligned and size positive")
     with binary.open("rb") as stream:
         elf = ELFFile(stream)
         for segment in elf.iter_segments():
@@ -65,7 +65,24 @@ def collect(data, start):
     return found, tables, sorted(unresolved)
 
 
-def pc_relative_literals(instructions, start, data):
+def collect_thumb(data, start):
+    """Bounded Thumb linear scan, NOT a reachable-control-flow reconstruction.
+
+    Thumb instructions are 2 or 4 bytes. Stop at a recognizable return; data
+    may be interleaved with code, so no semantic validity is asserted.
+    """
+    md = Cs(CS_ARCH_ARM, CS_MODE_THUMB)
+    md.detail = True
+    decoded = {}
+    for insn in md.disasm(data, start):
+        decoded[insn.address] = insn
+        if ((insn.mnemonic in ("bx", "bx.w") and insn.op_str == "lr")
+                or (insn.mnemonic.startswith("pop") and "pc" in insn.op_str)):
+            break
+    return decoded, [], []
+
+
+def pc_relative_literals(instructions, start, data, thumb=False):
     """Identify in-range, PC-relative ARM LDR words as *candidate* literal pool data.
 
     This is not a semantic proof: referenced words may overlap code.
@@ -79,7 +96,7 @@ def pc_relative_literals(instructions, start, data):
         if (operand.type != ARM_OP_MEM or operand.mem.base != ARM_REG_PC
                 or operand.mem.index):
             continue
-        target = ((address + 8) & ~3) + int(operand.mem.disp)
+        target = ((address + (4 if thumb else 8)) & ~3) + int(operand.mem.disp)
         if not (start <= target <= end - 4 and target % 4 == 0):
             continue
         offset = target - start
@@ -89,11 +106,18 @@ def pc_relative_literals(instructions, start, data):
 
 
 def evidence(record, data, limit_lines=70, binary_sha256=None):
-    start = int(record["address"], 16)
-    seen, tables, unresolved = collect(data, start)
-    slots = list(range(start, start + len(data), 4))
-    gaps = [addr for addr in slots if addr not in seen]
-    literals = pc_relative_literals(seen, start, data)
+    tagged_start = int(record["address"], 16)
+    thumb = bool(tagged_start & 1)
+    start = tagged_start & ~1 if thumb else tagged_start
+    seen, tables, unresolved = (collect_thumb(data, start) if thumb
+                                else collect(data, start))
+    alignment = 2 if thumb else 4
+    slot_end = start + len(data) - (len(data) % alignment)
+    slots = list(range(start, slot_end, alignment))
+    observed = {ins.address + offset for ins in seen.values()
+                for offset in range(0, ins.size, alignment)}
+    gaps = [addr for addr in slots if addr not in observed]
+    literals = pc_relative_literals(seen, start, data, thumb=thumb)
     referenced_gaps = [addr for addr in gaps if addr in literals]
     other_gaps = [addr for addr in gaps if addr not in literals]
     stores = [(addr, ins) for addr, ins in sorted(seen.items())
@@ -113,9 +137,11 @@ def evidence(record, data, limit_lines=70, binary_sha256=None):
              f'- Unvisited slots referenced by PC-relative LDR: {len(referenced_gaps)}',
              f'- Other unvisited slots: {len(other_gaps)}',
              f'- Candidate memory stores: {len(stores)}; calls: {len(calls)}',
-             f'- Resolved jump dispatches: {len(tables)}; unresolved: {len(unresolved)}',
+             f'- Resolved ARM jump dispatches: {len(tables)}; unresolved: {len(unresolved)}',
              "", "## Candidate dispatch destinations", ""]
-    if not tables:
+    if thumb:
+        lines.append("Thumb jump-table analysis was not performed; unknown, not zero.")
+    elif not tables:
         lines.append("None resolved by this pass.")
     for guard, dispatch, targets in tables:
         lines.append(f'- guard 0x{guard:x}, dispatch 0x{dispatch:x}, '
@@ -181,7 +207,7 @@ def run(binary, results, output, limit):
                 or record.get("status") != "needs_review"
                 or record.get("pipeline_version") != 2):
             raise ValueError(f"Stale/invalid checkpoint {addr}")
-        data = read_function(binary, int(addr, 16), int(record["size"]))
+        data = read_function(binary, int(addr, 16) & ~1, int(record["size"]))
         (output / f"{addr}.md").write_text(
             evidence(record, data, binary_sha256=digest), encoding="utf-8")
 
