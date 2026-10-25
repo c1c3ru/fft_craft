@@ -37,6 +37,24 @@ class ReviewQueueTests(unittest.TestCase):
             self.assertEqual(rows[0]["checkpoint_path"],
                              "FFT_Android_Mod/docs/re-results/00000010.json")
 
+    def test_triage_summary_counts_core_and_reason(self):
+        rows = [
+            {"address": "00000010", "name": "core()", "coverage_pct": 80,
+             "review_reason": "coverage_below_95", "core_priority": 1},
+            {"address": "00000020", "name": "other()", "coverage_pct": 99,
+             "review_reason": "resolved_jump_table_check", "core_priority": 0},
+        ]
+        report = module.render_triage(rows)
+        self.assertIn("Unverified checkpoints: **2**; core targets: **1**", report)
+        self.assertIn("| coverage_below_95 | 1 | 1 |", report)
+        self.assertIn("| resolved_jump_table_check | 1 | 0 |", report)
+
+    def test_empty_triage_is_safe(self):
+        self.assertIn("Unverified checkpoints: **0**", module.render_triage([]))
+
+    def test_triage_does_not_claim_verification(self):
+        self.assertIn("not semantic equivalence proofs", module.render_triage([]))
+
     def test_unresolved_table_takes_precedence(self):
         self.assertEqual(module.classify({"tables_unresolved": 1, "coverage_pct": 10}),
                          "unresolved_jump_table")
