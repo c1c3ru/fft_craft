@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **440/1258** pending functions.
+Evidence collected: **448/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -451,3 +451,11 @@ These reports do not constitute semantic verification.
 | `001004b4` | Wexport_localstatus(char*, char*, char*) | [Evidence](semantic-evidence/001004b4.md) |
 | `00155d88` | active_worldwindow() | [Evidence](semantic-evidence/00155d88.md) |
 | `0015a27c` | iOSPressArea() | [Evidence](semantic-evidence/0015a27c.md) |
+| `0015a2c8` | iOSTapArea() | [Evidence](semantic-evidence/0015a2c8.md) |
+| `0015ddf8` | iOSGT4_MapXYZ(unsigned long, long, long, long) | [Evidence](semantic-evidence/0015ddf8.md) |
+| `001baa78` | sys_warning(int, int) | [Evidence](semantic-evidence/001baa78.md) |
+| `00200ae8` | startLeftTurnSub(int) | [Evidence](semantic-evidence/00200ae8.md) |
+| `00200b34` | startRightTurnSub(int) | [Evidence](semantic-evidence/00200b34.md) |
+| `0020da7c` | popBackColor() | [Evidence](semantic-evidence/0020da7c.md) |
+| `0021b570` | SeekEffect() | [Evidence](semantic-evidence/0021b570.md) |
+| `00243a14` | deleteMessage() | [Evidence](semantic-evidence/00243a14.md) |
