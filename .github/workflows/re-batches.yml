@@ -20,6 +20,7 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/semantic_callee_v2icon.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_v2icon_execute.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_v2icon_call_flow.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_v2icon_destinations.py'
       - 'FFT_Android_Mod/docs/re-tools/structural_v3.py'
       - 'FFT_Android_Mod/docs/re-tools/structural_v3_report.py'
       - 'FFT_Android_Mod/docs/re-tools/parallel_loop.py'
@@ -154,6 +155,7 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_callee_v2icon.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_v2icon_execute.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_v2icon_call_flow.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_v2icon_destinations.py
       - name: Publish v3 coverage diagnostics and migration counts
         run: |
           python3 FFT_Android_Mod/docs/re-tools/structural_v3_report.py
