@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **816/1258** pending functions.
+Evidence collected: **824/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -827,3 +827,11 @@ These reports do not constitute semantic verification.
 | `00288a58` | pspPrimDirectParamSet(int, RECT16*) | [Evidence](semantic-evidence/00288a58.md) |
 | `0028b610` | initXpHeap() | [Evidence](semantic-evidence/0028b610.md) |
 | `0028ba84` | TE_task_start(long) | [Evidence](semantic-evidence/0028ba84.md) |
+| `0028ce58` | sceCtrlPeekBufferPositive | [Evidence](semantic-evidence/0028ce58.md) |
+| `00294e44` | GetDispEnv | [Evidence](semantic-evidence/00294e44.md) |
+| `002a1350` | ReadGeomOffset | [Evidence](semantic-evidence/002a1350.md) |
+| `002a2c70` | PCread | [Evidence](semantic-evidence/002a2c70.md) |
+| `002a2ca8` | PClseek | [Evidence](semantic-evidence/002a2ca8.md) |
+| `002a2ce0` | PCwrite | [Evidence](semantic-evidence/002a2ce0.md) |
+| `002ae8c0` | GlTexEnv_GetSprite(int) | [Evidence](semantic-evidence/002ae8c0.md) |
+| `002ae8e0` | GlTexEnv_GetTextureHandle(int) | [Evidence](semantic-evidence/002ae8e0.md) |
