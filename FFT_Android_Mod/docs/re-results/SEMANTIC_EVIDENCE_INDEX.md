@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **200/1258** pending functions.
+Evidence collected: **208/1258** pending functions.
 These reports do not constitute semantic verification.
 
 | Address | Function | Evidence |
@@ -209,3 +209,11 @@ These reports do not constitute semantic verification.
 | `00100df8` | Wget_cursoroffset(int) | [Evidence](semantic-evidence/00100df8.md) |
 | `0015a7d8` | iOSScrollButtonMove() | [Evidence](semantic-evidence/0015a7d8.md) |
 | `00257a2c` | ctlparty_init() | [Evidence](semantic-evidence/00257a2c.md) |
+| `002b1e70` | NowLoading_FrameMove() | [Evidence](semantic-evidence/002b1e70.md) |
+| `000da720` | tutorial_hookfunc() | [Evidence](semantic-evidence/000da720.md) |
+| `001383a4` | maptest() | [Evidence](semantic-evidence/001383a4.md) |
+| `00200f44` | startFukanChange() | [Evidence](semantic-evidence/00200f44.md) |
+| `0021025c` | InitializePartyItem() | [Evidence](semantic-evidence/0021025c.md) |
+| `00211e50` | setPresentClutDataAsDefault(unsigned int, unsigned int, int) | [Evidence](semantic-evidence/00211e50.md) |
+| `00242268` | vOpn_arzpic_init(int) | [Evidence](semantic-evidence/00242268.md) |
+| `0025e508` | person_year_up() | [Evidence](semantic-evidence/0025e508.md) |
