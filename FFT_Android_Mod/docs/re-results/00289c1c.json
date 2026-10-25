@@ -14,6 +14,7 @@
     "28e0c8"
   ],
   "log": "=== jtable.py: 0x289c1c..0x289d5c (320 bytes) ===\ncoverage: 46 of ~80 instruction slots (58%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0x289c48, dispatch @0x289c4c: 16 cases, 3 distinct handlers\n    targets: ['0x289ce0', '0x289ce0', '0x289ce0', '0x289ce0', '0x289ce0', '0x289ce0', '0x289ce0', '0x289ce0', '0x289ce0', '0x289ce0', '0x289ce0', '0x289ce0', '0x289ce0', '0x289cd8', '0x289d04', '0x289ce0']\n\n-- bl targets: 3 distinct --\n  0x28e010 x1   xpLibapiSaveStart \n  0x28e0a4 x1   xpLibapiSaveEnd \n  0x28e0c8 x1   xpLibapiSaveCheck \n\n-- branches: 2 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

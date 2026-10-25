@@ -21,6 +21,7 @@
     "2b8888"
   ],
   "log": "=== jtable.py: 0x242498..0x242618 (384 bytes) ===\ncoverage: 84 of ~96 instruction slots (88%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 10 distinct --\n  0x20cc90 x1   fileReadCD(unsigned long, unsigned long, void*) \n  0x2435f0 x1   vEnd_rollinit() \n  0x248e6c x1   vOpn_scrinit(int) \n  0x249bcc x2   vOpn_loadwait() \n  0x249c44 x2   numa_vOpn_CdRead(CDREC*, unsigned long, unsigned long, unsigned long, unsigned long*) \n  0x2868a8 x1   set_gEventMovieNo(int) \n  0x28b500 x1   set_SoundOnly_Flg__Fi(int) \n  0x290b40 x1   SetDispMask \n  0x2a3100 x2   xpMallocIO \n  0x2b8888 x1   iOS_InitMovie(int) \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

@@ -19,6 +19,7 @@
     "2c8a88"
   ],
   "log": "=== jtable.py: 0x2b20f4..0x2b2238 (324 bytes) ===\ncoverage: 58 of ~81 instruction slots (72%)\n\n-- jump tables resolved: 2 --\n  guard cmp @0x2b2108, dispatch @0x2b210c: 9 cases, 9 distinct handlers\n    targets: ['0x2b21cc', '0x2b21d8', '0x2b21e4', '0x2b21f0', '0x2b21fc', '0x2b2208', '0x2b2214', '0x2b2224', '0x2b2138']\n  guard cmp @0x2b215c, dispatch @0x2b2160: 9 cases, 9 distinct handlers\n    targets: ['0x2b21c4', '0x2b21bc', '0x2b21b4', '0x2b21ac', '0x2b21a4', '0x2b219c', '0x2b2194', '0x2b2220', '0x2b218c']\n\n-- bl targets: 8 distinct --\n  0x2b36b8 x1   Boot_Uninit() \n  0x2b3758 x1   Error_Uninit() \n  0x2b54b4 x1   Link_Uninit() \n  0x2b5e58 x1   Logo_Uninit() \n  0x2b6b38 x1   Main_Uninit() \n  0x2c54ac x1   Movie_Uninit() \n  0x2c6ebc x1   Settings_Uninit() \n  0x2c8a88 x1   SettingsWnd_Uninit() \n\n-- branches: 16 total, 8 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

@@ -13,6 +13,7 @@
     "2ca79c"
   ],
   "log": "=== jtable.py: 0x1022ec..0x1024bc (464 bytes) ===\ncoverage: 103 of ~116 instruction slots (89%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x1b8e50 x1   get_tutrial_pad() \n  0x2ca79c x3   __divsi3 \n\n-- branches: 5 total, 1 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

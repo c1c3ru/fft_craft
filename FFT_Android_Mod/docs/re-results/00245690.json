@@ -1,0 +1,22 @@
+{
+  "address": "00245690",
+  "name": "strInit(int, void (*)())",
+  "size": 144,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 97.22,
+  "distinct_bl": 6,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "241938",
+    "2419cc",
+    "28b49c",
+    "28b4e0",
+    "28b4f0",
+    "28e5c0"
+  ],
+  "log": "=== jtable.py: 0x245690..0x245720 (144 bytes) ===\ncoverage: 35 of ~36 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x241938 x1   fftCdRead2(CDREC*, int, int, int, unsigned long*) \n  0x2419cc x1   fftCdLoop(CDREC*) \n  0x28b49c x1   StSetStream \n  0x28b4e0 x1   DecDCTReset \n  0x28b4f0 x1   DecDCToutCallback \n  0x28e5c0 x1   VSync \n\n-- branches: 2 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
