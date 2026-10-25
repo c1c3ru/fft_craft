@@ -2,8 +2,8 @@
 
 Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Analyzed in current binary: 1531
-Automatically triaged: 143,452 bytes / 1,837,392 inventory bytes (7.81%); **this is newly triaged coverage, not total project coverage**.
+Analyzed in current binary: 1630
+Automatically triaged: 144,788 bytes / 1,837,392 inventory bytes (7.88%); **this is newly triaged coverage, not total project coverage**.
 
 | Address | Function | Size (B) | Coverage | Status |
 |---|---|---:|---:|---|
@@ -1525,16 +1525,115 @@ Automatically triaged: 143,452 bytes / 1,837,392 inventory bytes (7.81%); **this
 | `000d8710` | getanimpos3dl(int, long*) | 36 | 100.0% | auto_structural |
 | `000da7e4` | readed_mapchange() | 36 | 88.89% | needs_review |
 | `000dfa70` | wait_anmend(int) | 36 | 100.0% | auto_structural |
+| `001003e4` | Wgetanimpos3dl(int, long*) | 36 | 100.0% | auto_structural |
+| `00108e28` | Wwait_anmend(int) | 36 | 100.0% | auto_structural |
+| `0010f99c` | WiOS_touchNum_addlocalprim2(iOS_CMenuTouchNum*) | 36 | 100.0% | auto_structural |
 | `0011dd64` | extend_windowframe(int, int, RECT16*, int, int) | 36 | 100.0% | auto_structural |
+| `0011e668` | Wextend_windowframe(int, int, RECT16*, int, int) | 36 | 100.0% | auto_structural |
 | `00153254` | task_wait(long) | 36 | 100.0% | auto_structural |
+| `00153350` | task_start(long) | 36 | 88.89% | needs_review |
 | `00153374` | task_stop(long) | 36 | 88.89% | needs_review |
+| `00153518` | Wtask_wait(long) | 36 | 100.0% | auto_structural |
+| `00153614` | Wtask_start(long) | 36 | 88.89% | needs_review |
+| `00153638` | Wtask_stop(long) | 36 | 88.89% | needs_review |
+| `0015391c` | check_eventtool(int, int) | 36 | 88.89% | needs_review |
+| `0015b664` | iOSTchInputCheck() | 36 | 100.0% | auto_structural |
+| `0015deec` | iOSGT4_MapT9(unsigned long, long) | 36 | 88.89% | needs_review |
 | `00161d50` | iOSPosW(int) | 36 | 88.89% | needs_review |
 | `00161d74` | iOSPosH(int) | 36 | 88.89% | needs_review |
+| `0018e334` | equans_init() | 36 | 88.89% | needs_review |
+| `001baac4` | event_warning(short, int) | 36 | 88.89% | needs_review |
+| `001ca580` | get_net_rival_weapon_range() | 36 | 88.89% | needs_review |
+| `001ccc18` | get_trap_no(BWORK*) | 36 | 100.0% | auto_structural |
+| `001eb2d8` | vramDeleteUsed() | 36 | 88.89% | needs_review |
+| `001f4a64` | initEntryEnemyAnimations(int) | 36 | 88.89% | needs_review |
+| `001f5be4` | terminateAnimation(int) | 36 | 100.0% | auto_structural |
+| `001fd1dc` | nextTurnOrder() | 36 | 88.89% | needs_review |
+| `0020d008` | pushMapScrollXYZ() | 36 | 77.78% | needs_review |
+| `0020d02c` | popMapScrollXYZ() | 36 | 77.78% | needs_review |
+| `0020d260` | pushMapScroll() | 36 | 77.78% | needs_review |
+| `0020d284` | popMapScroll() | 36 | 77.78% | needs_review |
+| `0020d580` | pushMapScale() | 36 | 77.78% | needs_review |
+| `0020d5a4` | popMapScale() | 36 | 77.78% | needs_review |
 | `0020f514` | stopAnimation() | 36 | 88.89% | needs_review |
+| `00215c98` | fadeMapClut(int, unsigned short*) | 36 | 100.0% | auto_structural |
 | `00216860` | stopMusic() | 36 | 88.89% | needs_review |
+| `0021b220` | SetEditANMPtr() | 36 | 77.78% | needs_review |
+| `0021b244` | SetEditTSQPtr() | 36 | 77.78% | needs_review |
+| `0021d26c` | s2a_initScheduleControl(_EffectTCB*) | 36 | 100.0% | auto_structural |
+| `0021eb8c` | DoEffect() | 36 | 100.0% | auto_structural |
 | `00263fa8` | iOSSDNovelSysCurCheck() | 36 | 88.89% | needs_review |
+| `0026c238` | iOSNovelModeBackup() | 36 | 88.89% | needs_review |
+| `0027fbf0` | iOS_WorldMapResumeGetData2(unsigned char**, unsigned int*) | 36 | 88.89% | needs_review |
+| `002806cc` | iOS_HookAddPrim() | 36 | 88.89% | needs_review |
+| `00281a08` | iOS_v2menuCheckSEError() | 36 | 100.0% | auto_structural |
+| `00284494` | Clear_VectorDataBase() | 36 | 88.89% | needs_review |
+| `00285e1c` | pspJobIsSpecialJob(int) | 36 | 100.0% | auto_structural |
+| `0028bad0` | TE_is_task_end(long) | 36 | 88.89% | needs_review |
+| `0028d228` | tlPopHeap() | 36 | 77.78% | needs_review |
+| `0028de28` | EnableEvent | 36 | 88.89% | needs_review |
+| `0028de4c` | DisableEvent | 36 | 88.89% | needs_review |
+| `0028e470` | CdIntToPos | 36 | 100.0% | auto_structural |
+| `0028e494` | CdPosToInt | 36 | 100.0% | auto_structural |
 | `00291074` | PSX_LoadImage | 36 | 77.78% | needs_review |
 | `00291154` | StoreImage | 36 | 77.78% | needs_review |
 | `0029128c` | MoveImage | 36 | 77.78% | needs_review |
 | `002914e4` | SetSprt | 36 | 100.0% | auto_structural |
+| `00291508` | SetSprt16 | 36 | 100.0% | auto_structural |
+| `0029152c` | SetSprt8 | 36 | 100.0% | auto_structural |
 | `00291628` | SetTile | 36 | 100.0% | auto_structural |
+| `0029164c` | SetTile1 | 36 | 100.0% | auto_structural |
+| `00291670` | SetTile16 | 36 | 100.0% | auto_structural |
+| `00291694` | SetTile8 | 36 | 100.0% | auto_structural |
+| `00291800` | SetDrawMove | 36 | 100.0% | auto_structural |
+| `00294e64` | GetDrawEnv | 36 | 88.89% | needs_review |
+| `0029b654` | GsSetClip2D | 36 | 88.89% | needs_review |
+| `002a1408` | SetFogFar | 36 | 88.89% | needs_review |
+| `002cab50` | __aeabi_ui2d | 36 | 100.0% | auto_structural |
+| `000c8158` | tool_writesquare(int, int, int) | 32 | 87.5% | needs_review |
+| `000c8178` | tool_readsquare(int, int, int) | 32 | 87.5% | needs_review |
+| `000d88fc` | stopmenutransfer() | 32 | 87.5% | needs_review |
+| `000d891c` | startmenutransfer() | 32 | 87.5% | needs_review |
+| `000da700` | chk_nexteventtype(int) | 32 | 87.5% | needs_review |
+| `001005cc` | Wstopmenutransfer() | 32 | 87.5% | needs_review |
+| `001005ec` | Wstartmenutransfer() | 32 | 87.5% | needs_review |
+| `001022cc` | Wchk_nexteventtype(int) | 32 | 87.5% | needs_review |
+| `00153c84` | iOS_updateDispCameraIconSetting() | 32 | 87.5% | needs_review |
+| `00155c8c` | stop_adventuremessage(int) | 32 | 87.5% | needs_review |
+| `0015832c` | rewrite_worldscroll(int) | 32 | 87.5% | needs_review |
+| `0015a5ec` | siOS_TCurGet(unsigned int) | 32 | 87.5% | needs_review |
+| `0015ad18` | iOSCurIsInGame(int, int) | 32 | 100.0% | auto_structural |
+| `0015bf38` | iOSTchMovingModeCheck() | 32 | 87.5% | needs_review |
+| `0015c01c` | iOSTchHoseiControl() | 32 | 87.5% | needs_review |
+| `001adc48` | FadeCondition() | 32 | 87.5% | needs_review |
+| `001b9d84` | iOS_clearTutorialbreak() | 32 | 87.5% | needs_review |
+| `001d66f8` | set_td(unsigned char*) | 32 | 87.5% | needs_review |
+| `001d98a8` | get_shape2_plus(BWORK*, unsigned char*) | 32 | 100.0% | auto_structural |
+| `001d9910` | get_ability_flag(BWORK*, int) | 32 | 100.0% | auto_structural |
+| `001d9948` | copy_struct_data(void const*, void*, int) | 32 | 100.0% | auto_structural |
+| `001da018` | clear_cmemory(void*, int) | 32 | 100.0% | auto_structural |
+| `001ffb30` | callAnimationSound(tag_animation*, int) | 32 | 100.0% | auto_structural |
+| `00202efc` | iOS_BattleEventCheck() | 32 | 87.5% | needs_review |
+| `002044e0` | iOSpreCommandInit() | 32 | 100.0% | auto_structural |
+| `002064a8` | iOS_IsEnableMenuItemTouch() | 32 | 87.5% | needs_review |
+| `0020696c` | iOS_IsEnableFlicker() | 32 | 87.5% | needs_review |
+| `0020e720` | resetAnimationHFlip(int) | 32 | 100.0% | auto_structural |
+| `0020f6c0` | startModelAnimation(int, int) | 32 | 100.0% | auto_structural |
+| `0020f6f4` | startVRAMAnimation(int, int) | 32 | 100.0% | auto_structural |
+| `0020f8cc` | setFrameRate(int) | 32 | 87.5% | needs_review |
+| `002119a0` | ResetChangePalette() | 32 | 87.5% | needs_review |
+| `0021b8a4` | PushGravity() | 32 | 87.5% | needs_review |
+| `0021bcd8` | s0_end(_EffectTCB*) | 32 | 100.0% | auto_structural |
+| `0021bcf8` | s1_goto(_EffectTCB*) | 32 | 100.0% | auto_structural |
+| `0021c31c` | s9_pushMapScrollXYZ(_EffectTCB*) | 32 | 100.0% | auto_structural |
+| `0021c33c` | sa_popMapScrollXYZ(_EffectTCB*) | 32 | 100.0% | auto_structural |
+| `0021c3ac` | sc_pushMapAngle(_EffectTCB*) | 32 | 100.0% | auto_structural |
+| `0021c3cc` | sd_popMapAngle(_EffectTCB*) | 32 | 100.0% | auto_structural |
+| `0021c434` | sf_pushMapScale(_EffectTCB*) | 32 | 100.0% | auto_structural |
+| `0021cedc` | UnlockEffect() | 32 | 87.5% | needs_review |
+| `0021f308` | PermanentEffectEndRequest(unsigned char) | 32 | 87.5% | needs_review |
+| `0028ba84` | TE_task_start(long) | 32 | 87.5% | needs_review |
+| `002a2c70` | PCread | 32 | 87.5% | needs_review |
+| `002a2ca8` | PClseek | 32 | 87.5% | needs_review |
+| `002b2358` | Music_Play(int, int, int, int) | 32 | 87.5% | needs_review |
+| `002b871c` | iOS_isTouchBegan() | 32 | 87.5% | needs_review |

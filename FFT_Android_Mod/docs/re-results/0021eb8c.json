@@ -1,0 +1,19 @@
+{
+  "address": "0021eb8c",
+  "name": "DoEffect()",
+  "size": 36,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "219728",
+    "21e7d8",
+    "225210"
+  ],
+  "log": "=== jtable.py: 0x21eb8c..0x21ebb0 (36 bytes) ===\ncoverage: 9 of ~9 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x219728 x1   DoEffectCameraWork() \n  0x21e7d8 x1   doEffect_sub() \n  0x225210 x1   DoPermanentEffect() \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
