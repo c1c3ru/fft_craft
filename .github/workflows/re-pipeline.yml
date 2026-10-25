@@ -73,6 +73,15 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_path_report.py --limit 12
           python3 FFT_Android_Mod/docs/re-tools/semantic_microexec.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_branch_microexec.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_guarded_block.py
+          python3 - <<'PY'
+          from pathlib import Path
+          report = Path("FFT_Android_Mod/docs/re-results/SEMANTIC_GUARDED_BLOCK.md").read_text()
+          assert "Guarded block micro-executions:** 256/256 PASS" in report
+          assert "BLE taken" in report and "BLE not taken" in report
+          assert "needs_review" in report and "mid-function" in report
+          print("PASS: genuine ELF branch-through-global-write microexecution")
+          PY
           python3 - <<'PY'
           from pathlib import Path
           report = Path("FFT_Android_Mod/docs/re-results/SEMANTIC_BRANCH_MICROEXEC.md").read_text()
