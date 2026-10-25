@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **176/1258** pending functions.
+Evidence collected: **184/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -187,3 +187,11 @@ These reports do not constitute semantic verification.
 | `001cea0c` | set_walker_result(BWORK*, REWARD*) | [Evidence](semantic-evidence/001cea0c.md) |
 | `002541c4` | ctlcenter_init(int) | [Evidence](semantic-evidence/002541c4.md) |
 | `00264378` | ctlnblwldinfo_init() | [Evidence](semantic-evidence/00264378.md) |
+| `00187514` | TimeConvert(int) | [Evidence](semantic-evidence/00187514.md) |
+| `0021d544` | getNextSENo(int) | [Evidence](semantic-evidence/0021d544.md) |
+| `002ab620` | GuEmu_ClearTexCache() | [Evidence](semantic-evidence/002ab620.md) |
+| `002b2ea0` | Jingle_FrameMove() | [Evidence](semantic-evidence/002b2ea0.md) |
+| `002b54b4` | Link_Uninit() | [Evidence](semantic-evidence/002b54b4.md) |
+| `000fef24` | Wdisposewindow(MESSAGEPACKET*) | [Evidence](semantic-evidence/000fef24.md) |
+| `002867a8` | getMovieEventNum(int) | [Evidence](semantic-evidence/002867a8.md) |
+| `001c02d4` | JobToAbiChg() | [Evidence](semantic-evidence/001c02d4.md) |
