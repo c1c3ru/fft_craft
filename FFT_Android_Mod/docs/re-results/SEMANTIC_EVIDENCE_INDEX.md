@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **320/1258** pending functions.
+Evidence collected: **328/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -331,3 +331,11 @@ These reports do not constitute semantic verification.
 | `0028bec0` | TE_VSync(int) | [Evidence](semantic-evidence/0028bec0.md) |
 | `002b2798` | SE_CorrectFID(int) | [Evidence](semantic-evidence/002b2798.md) |
 | `002b2a18` | SE_StopVFX(int) | [Evidence](semantic-evidence/002b2a18.md) |
+| `002b36dc` | Error_FrameRender() | [Evidence](semantic-evidence/002b36dc.md) |
+| `000d7e00` | load_replaceitems(int, int) | [Evidence](semantic-evidence/000d7e00.md) |
+| `000dcc2c` | wait_direc(int) | [Evidence](semantic-evidence/000dcc2c.md) |
+| `000ff9ec` | Wload_replaceitems(int, int) | [Evidence](semantic-evidence/000ff9ec.md) |
+| `0015d2ac` | iOS_GameAreaCheck() | [Evidence](semantic-evidence/0015d2ac.md) |
+| `001a47e0` | pspAbilityCompareSupport(short, short) | [Evidence](semantic-evidence/001a47e0.md) |
+| `001e4e94` | get_step_no(BWORK*) | [Evidence](semantic-evidence/001e4e94.md) |
+| `0021e760` | doSequence(short) | [Evidence](semantic-evidence/0021e760.md) |
