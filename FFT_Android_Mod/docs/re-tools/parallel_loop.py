@@ -14,7 +14,10 @@ import json
 import re
 import subprocess
 import sys
+import shutil
 from pathlib import Path
+
+import structural_v3
 
 ROOT = Path(__file__).resolve().parents[2]
 TOOLS = Path(__file__).resolve().parent
@@ -23,7 +26,7 @@ DEFAULT_CSV = ROOT / "docs/RE_FUNCTION_INVENTORY.csv"
 DEFAULT_PRIORITY_CSV = ROOT / "docs/alvos_prioritarios_nucleo.csv"
 CONFIRMED = {"read_structural", "read_full", "confirmed_by_similarity"}
 RETRYABLE = {"error", "needs_review"}
-PIPELINE_VERSION = 2
+PIPELINE_VERSION = 2  # Checkpoint JSON schema; structural analyzer uses its own version.
 FAMILY_PATTERNS = (
     ("Mdl", re.compile(r"^Mdl\d+")),
     ("personalwindow", re.compile(r"^(?:[WACDE])?disp_personalwindow")),
@@ -84,12 +87,12 @@ def run_script(script: str, so: Path, row: dict, timeout: int) -> str:
 
 
 def analyze_one(row: dict, so: Path, timeout: int, references: dict,
-                min_targets: int, threshold: float) -> dict:
+                min_targets: int, threshold: float, enable_v3: bool = False) -> dict:
     result = {"address": row["address"], "name": row["demangled"],
               "size": row["size"], "previous_status": row["status"]}
     label = family(row["demangled"])
     reference = references.get(label) if label else None
-    if reference and reference["address"] != row["address"]:
+    if reference and not enable_v3 and reference["address"] != row["address"]:
         try:
             cmd = [sys.executable, str(TOOLS / "family_sim.py"), str(so),
                    reference["address"], f"+{reference['size']}",
@@ -138,7 +141,27 @@ def analyze_one(row: dict, so: Path, timeout: int, references: dict,
                   distinct_bl=len(targets), tables_resolved=resolved,
                   tables_unresolved=unresolved,
                   bl_targets=sorted(targets), log=output)
+    if enable_v3:
+        # V3 does not trust jtable's raw 95% score or blanket reject all
+        # resolved tables. A separate byte-level check must pass first.
+        diagnostic = structural_v3.inspect_binary(
+            so, int(row["address"], 16), row["size"])
+        result["v2_structural_status"] = status
+        result["status"] = diagnostic["status"]
+        result["structural_v3"] = diagnostic
+        result["structural_version"] = structural_v3.VERSION
+        result["structural_fingerprint"] = structural_v3.fingerprint()
     return result
+
+
+def needs_v3_upgrade(previous, digest, size, current_fingerprint):
+    """Retry only a valid review checkpoint when the structural rules changed."""
+    return (previous.get("status") == "needs_review"
+            and previous.get("binary_sha256") == digest
+            and previous.get("size") == size
+            and previous.get("pipeline_version") == PIPELINE_VERSION
+            and (previous.get("structural_version") != structural_v3.VERSION
+                 or previous.get("structural_fingerprint") != current_fingerprint))
 
 
 def main() -> int:
@@ -161,12 +184,16 @@ def main() -> int:
                         help="Maximum total review passes per unchanged binary (default 2)")
     parser.add_argument("--retry-review", action="store_true",
                         help="Reprocess results flagged for manual review")
+    parser.add_argument("--upgrade-v3", action="store_true",
+                        help="Only upgrade stale needs_review checkpoints to structural v3")
     args = parser.parse_args()
     if not (1 <= args.workers <= 16 and args.limit >= 1 and
             0 < args.similarity <= 1 and args.min_bl >= 1):
         parser.error("invalid worker/limit/similarity/min-bl setting")
     if args.review_only and not args.retry_review:
         parser.error("--review-only requires --retry-review")
+    if args.upgrade_v3 and not (args.review_only and args.retry_review):
+        parser.error("--upgrade-v3 requires --review-only --retry-review")
     if args.max_review_attempts < 1:
         parser.error("--max-review-attempts must be positive")
     if args.timeout < 1:
@@ -184,6 +211,7 @@ def main() -> int:
     binary_hash = hashlib.sha256(args.so.read_bytes()).hexdigest()
     queue = []
     review_attempts = {}
+    current_fingerprint = structural_v3.fingerprint()
     for row in rows:
         if not args.include_reviewed and row["status"] in CONFIRMED:
             continue
@@ -201,6 +229,16 @@ def main() -> int:
         if destination.exists():
             try:
                 previous = json.loads(destination.read_text(encoding="utf-8"))
+                if args.upgrade_v3:
+                    # Reanalyze only when the binary/size is unchanged,
+                    # structural rules differ, and review is still pending.
+                    if not needs_v3_upgrade(
+                            previous, binary_hash, row["size"], current_fingerprint):
+                        continue
+                    queue.append(row)
+                    if len(queue) >= args.limit:
+                        break
+                    continue
                 if (args.retry_review and previous.get("status") == "needs_review"
                         and previous.get("binary_sha256") == binary_hash
                         and previous.get("pipeline_version") == PIPELINE_VERSION):
@@ -222,7 +260,8 @@ def main() -> int:
     completed = []
     with cf.ThreadPoolExecutor(max_workers=args.workers) as executor:
         futures = {executor.submit(analyze_one, row, args.so, args.timeout,
-                                   references, args.min_bl, args.similarity): row
+                                   {} if args.upgrade_v3 else references,
+                                   args.min_bl, args.similarity, True): row
                    for row in queue}
         for future in cf.as_completed(futures):
             row = futures[future]
@@ -240,6 +279,15 @@ def main() -> int:
             result["pipeline_version"] = PIPELINE_VERSION
             completed.append(result)
             target = args.output / (row["address"] + ".json")
+            if args.upgrade_v3 and target.is_file():
+                original = json.loads(target.read_text(encoding="utf-8"))
+                if original.get("structural_version") != structural_v3.VERSION:
+                    archive = args.output / "structural-v2" / target.name
+                    archive.parent.mkdir(parents=True, exist_ok=True)
+                    if not archive.exists():
+                        shutil.copyfile(target, archive)
+                    result["archived_previous_checkpoint"] = (
+                        "FFT_Android_Mod/docs/re-results/structural-v2/" + target.name)
             temp = target.with_suffix(".json.tmp")
             temp.write_text(json.dumps(result, ensure_ascii=False, indent=2),
                             encoding="utf-8")
@@ -275,6 +323,8 @@ def main() -> int:
     summary_tmp = summary.with_suffix(".md.tmp")
     summary_tmp.write_text("\n".join(lines) + "\n", encoding="utf-8")
     summary_tmp.replace(summary)
+    if args.upgrade_v3:
+        print(f"V3_UPGRADED={len(completed)}", flush=True)
     return 1 if any(item["status"] == "error" for item in completed) else 0
 
 

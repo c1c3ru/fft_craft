@@ -14,6 +14,9 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/semantic_microexec.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_branch_microexec.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_guarded_block.py'
+      - 'FFT_Android_Mod/docs/re-tools/structural_v3.py'
+      - 'FFT_Android_Mod/docs/re-tools/structural_v3_report.py'
+      - 'FFT_Android_Mod/docs/re-tools/parallel_loop.py'
   workflow_dispatch:
     inputs:
       limit:
@@ -81,10 +84,21 @@ jobs:
             --workers 5 --limit "$LIMIT" --timeout 120
           python3 FFT_Android_Mod/docs/re-tools/check_smoke.py \
             FFT_Android_Mod/docs/re-results
-      - name: Reanalyze up to 100 review checkpoints
+      - name: Upgrade up to 100 stale review checkpoints with structural v3
+        id: upgrade
         run: |
+          set -euo pipefail
           python3 FFT_Android_Mod/docs/re-tools/parallel_loop.py \
-            --review-only --retry-review --workers 5 --limit 100 --timeout 120
+            --review-only --retry-review --upgrade-v3 --workers 5 --limit 100 --timeout 120 | tee /tmp/re-v3-upgrade.log
+          count=$(sed -n 's/^V3_UPGRADED=//p' /tmp/re-v3-upgrade.log | tail -1)
+          if [[ ! "$count" =~ ^[0-9]+$ ]]; then
+            echo "Missing structural v3 upgrade count"; exit 1
+          fi
+          if [ "$count" -gt 0 ]; then
+            echo "has_new=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_new=false" >> "$GITHUB_OUTPUT"
+          fi
           python3 FFT_Android_Mod/docs/re-tools/check_smoke.py \
             FFT_Android_Mod/docs/re-results
       - name: Summarize accepted vs review
@@ -128,6 +142,9 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_microexec.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_branch_microexec.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_guarded_block.py
+      - name: Publish v3 coverage diagnostics and migration counts
+        run: |
+          python3 FFT_Android_Mod/docs/re-tools/structural_v3_report.py
       - name: Count newly checkpointed functions
         id: progress
         env:
@@ -167,7 +184,7 @@ jobs:
           retention-days: 30
 
       - name: Start next batch after successful merge
-        if: ${{ success() && (steps.progress.outputs.has_new == 'true' || steps.evidence.outputs.has_new == 'true') }}
+        if: ${{ success() && (steps.progress.outputs.has_new == 'true' || steps.evidence.outputs.has_new == 'true' || steps.upgrade.outputs.has_new == 'true') }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
