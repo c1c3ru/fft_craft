@@ -3,7 +3,7 @@
   "name": "ctlhelp_init(int, int)",
   "size": 260,
   "previous_status": "unread",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 87.69,
   "distinct_bl": 5,
   "tables_resolved": 0,
@@ -16,7 +16,36 @@
     "26b374"
   ],
   "log": "=== jtable.py: 0x255654..0x255758 (260 bytes) ===\ncoverage: 57 of ~65 instruction slots (88%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 5 distinct --\n  0x100500 x1   Wmakemessagepacket(char*) \n  0x100550 x1   Wpushmessagepacket() \n  0x153584 x1   Wtask_create(long, char*) \n  0x153734 x1   Wsend_taskparamater(long, long, long, long) \n  0x26b374 x1   sound_request(int) \n\n-- branches: 2 total, 1 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x255654",
+    "total_slots": 65,
+    "code_slots": 57,
+    "instruction_slots": 57,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x255738",
+      "0x25573c",
+      "0x255740",
+      "0x255744",
+      "0x255748",
+      "0x25574c",
+      "0x255750",
+      "0x255754"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/00255654.json"
 }

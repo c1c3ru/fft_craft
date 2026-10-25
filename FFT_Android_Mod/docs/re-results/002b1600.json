@@ -3,7 +3,7 @@
   "name": "GX_Init(int)",
   "size": 400,
   "previous_status": "unread",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 91.0,
   "distinct_bl": 10,
   "tables_resolved": 0,
@@ -21,7 +21,37 @@
     "aec18"
   ],
   "log": "=== jtable.py: 0x2b1600..0x2b1790 (400 bytes) ===\ncoverage: 91 of ~100 instruction slots (91%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 10 distinct --\n  0xa2754 x1   CG2D_LOADER::CalcAsTexture(int, int, int*, int*) \n  0xa7d1c x1   CEGL2_IF::CEGL2_IF() \n  0xa8218 x1   CEGL2_IF::LoadShaderAll(char*) \n  0xa856c x3   CEGL2_IF::AllocPacket(int, int) \n  0xa9430 x1   CEGL2_IF::Init() \n  0xaa980 x2   CEGL2_FBO::Create(int, int, int, int, int) \n  0xadf14 x1   CEGL2_SPRITE::OnResume() \n  0xaec18 x1   CEGL2_SPRITE::CEGL2_SPRITE() \n  0x2b04f0 x1   CAPP_INFO::GetRootPath() \n  0x2cdf6c x2   sub_2cdf6c LOCAL(no-dynsym)\n\n-- branches: 4 total, 3 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x2b1600",
+    "total_slots": 100,
+    "code_slots": 91,
+    "instruction_slots": 91,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x2b176c",
+      "0x2b1770",
+      "0x2b1774",
+      "0x2b1778",
+      "0x2b177c",
+      "0x2b1780",
+      "0x2b1784",
+      "0x2b1788",
+      "0x2b178c"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/002b1600.json"
 }

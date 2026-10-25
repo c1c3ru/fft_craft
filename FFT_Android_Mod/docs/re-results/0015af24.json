@@ -3,7 +3,7 @@
   "name": "iOSexecuteScroll()",
   "size": 352,
   "previous_status": "unread",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 92.05,
   "distinct_bl": 11,
   "tables_resolved": 0,
@@ -22,7 +22,35 @@
     "2cb92c"
   ],
   "log": "=== jtable.py: 0x15af24..0x15b084 (352 bytes) ===\ncoverage: 81 of ~88 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 11 distinct --\n  0x29fe88 x1   rsin \n  0x29fea0 x1   rcos \n  0x2b7a8c x1   iOS_getTouchTap() \n  0x2cb2f0 x1   __subsf3 \n  0x2cb2f4 x1   __addsf3 \n  0x2cb48c x2   __floatsisf \n  0x2cb538 x2   __mulsf3 \n  0x2cb6d0 x1   __divsf3 \n  0x2cb8f0 x1   __aeabi_fcmple \n  0x2cb918 x1   __aeabi_fcmpgt \n  0x2cb92c x2   __fixsfsi \n\n-- branches: 4 total, 1 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x15af24",
+    "total_slots": 88,
+    "code_slots": 81,
+    "instruction_slots": 81,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x15b068",
+      "0x15b06c",
+      "0x15b070",
+      "0x15b074",
+      "0x15b078",
+      "0x15b07c",
+      "0x15b080"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/0015af24.json"
 }

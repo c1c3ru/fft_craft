@@ -1,0 +1,20 @@
+{
+  "address": "00210c9c",
+  "name": "setMapVector(SVECTOR*, SVECTOR*)",
+  "size": 256,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 89.06,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1d6718",
+    "21036c",
+    "21037c"
+  ],
+  "log": "=== jtable.py: 0x210c9c..0x210d9c (256 bytes) ===\ncoverage: 57 of ~64 instruction slots (89%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x1d6718 x1   get_mapstp(int, int, int) \n  0x21036c x1   setShortVector(SVECTOR*, int, int, int) \n  0x21037c x1   setLongVector(VECTOR*, int, int, int) \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

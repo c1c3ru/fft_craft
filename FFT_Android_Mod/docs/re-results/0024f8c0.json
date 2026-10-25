@@ -3,7 +3,7 @@
   "name": "ctltipsmes_main(CTLINFO*)",
   "size": 372,
   "previous_status": "unread",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 93.55,
   "distinct_bl": 6,
   "tables_resolved": 0,
@@ -17,7 +17,34 @@
     "270f3c"
   ],
   "log": "=== jtable.py: 0x24f8c0..0x24fa34 (372 bytes) ===\ncoverage: 87 of ~93 instruction slots (94%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x24f238 x1   ctltips_init(int) \n  0x26b374 x1   sound_request(int) \n  0x26d774 x1   iOSTutoReset() \n  0x26d7a8 x1   iOSTutoFlagCheck(int) \n  0x26d7bc x1   iOSTutoFlagSet(int, int) \n  0x270f3c x1   iOSpagewin_main(PAGEWININFO*) \n\n-- branches: 4 total, 2 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x24f8c0",
+    "total_slots": 93,
+    "code_slots": 87,
+    "instruction_slots": 87,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x24fa1c",
+      "0x24fa20",
+      "0x24fa24",
+      "0x24fa28",
+      "0x24fa2c",
+      "0x24fa30"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/0024f8c0.json"
 }

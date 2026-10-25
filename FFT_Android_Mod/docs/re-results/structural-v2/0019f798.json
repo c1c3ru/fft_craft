@@ -1,0 +1,24 @@
+{
+  "address": "0019f798",
+  "name": "MainShop()",
+  "size": 380,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 89.47,
+  "distinct_bl": 7,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "153734",
+    "1b7074",
+    "1b7ad8",
+    "1bb62c",
+    "1c03e0",
+    "27f14c",
+    "2b9cac"
+  ],
+  "log": "=== jtable.py: 0x19f798..0x19f914 (380 bytes) ===\ncoverage: 85 of ~95 instruction slots (89%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 7 distinct --\n  0x153734 x2   Wsend_taskparamater(long, long, long, long) \n  0x1b7074 x1   DrawMessage(int, COMRECORD*) \n  0x1b7ad8 x1   SetMenuSelSide(unsigned char, short) \n  0x1bb62c x1   CurChrChg() \n  0x1c03e0 x1   WindowPositionInit() \n  0x27f14c x1   iOS_ClearRectHitAll() \n  0x2b9cac x1   iOS_setV2Icon(V2ICON_DATA, int) \n\n-- branches: 11 total, 6 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

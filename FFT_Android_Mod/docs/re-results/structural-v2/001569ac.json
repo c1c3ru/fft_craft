@@ -1,0 +1,29 @@
+{
+  "address": "001569ac",
+  "name": "editdirect()",
+  "size": 484,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 91.74,
+  "distinct_bl": 12,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "103340",
+    "103400",
+    "15596c",
+    "155e04",
+    "1568fc",
+    "1c0930",
+    "216820",
+    "28e5c0",
+    "290dc0",
+    "29a834",
+    "2b7ccc",
+    "2b9cac"
+  ],
+  "log": "=== jtable.py: 0x1569ac..0x156b90 (484 bytes) ===\ncoverage: 111 of ~121 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 12 distinct --\n  0x103340 x2   Wwrite_eventflag(int, int) \n  0x103400 x2   Wread_eventflag(int) \n  0x15596c x1   worldmap_startinit() \n  0x155e04 x1   changewindowamb(int, int, int) \n  0x1568fc x2   worldmap_restart() \n  0x1c0930 x1   UnitList(int, int) \n  0x216820 x1   initializeMusicBuffer() \n  0x28e5c0 x3   VSync \n  0x290dc0 x4   DrawSync \n  0x29a834 x2   ClearImage \n  0x2b7ccc x1   iOS_getV2Icon(V2ICON_DATA) \n  0x2b9cac x5   iOS_setV2Icon(V2ICON_DATA, int) \n\n-- branches: 3 total, 2 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

@@ -19,7 +19,68 @@
     "2c8a88"
   ],
   "log": "=== jtable.py: 0x2b20f4..0x2b2238 (324 bytes) ===\ncoverage: 58 of ~81 instruction slots (72%)\n\n-- jump tables resolved: 2 --\n  guard cmp @0x2b2108, dispatch @0x2b210c: 9 cases, 9 distinct handlers\n    targets: ['0x2b21cc', '0x2b21d8', '0x2b21e4', '0x2b21f0', '0x2b21fc', '0x2b2208', '0x2b2214', '0x2b2224', '0x2b2138']\n  guard cmp @0x2b215c, dispatch @0x2b2160: 9 cases, 9 distinct handlers\n    targets: ['0x2b21c4', '0x2b21bc', '0x2b21b4', '0x2b21ac', '0x2b21a4', '0x2b219c', '0x2b2194', '0x2b2220', '0x2b218c']\n\n-- bl targets: 8 distinct --\n  0x2b36b8 x1   Boot_Uninit() \n  0x2b3758 x1   Error_Uninit() \n  0x2b54b4 x1   Link_Uninit() \n  0x2b5e58 x1   Logo_Uninit() \n  0x2b6b38 x1   Main_Uninit() \n  0x2c54ac x1   Movie_Uninit() \n  0x2c6ebc x1   Settings_Uninit() \n  0x2c8a88 x1   SettingsWnd_Uninit() \n\n-- branches: 16 total, 8 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "needs_review",
+    "reason": "unverified_jump_table",
+    "function_start": "0x2b20f4",
+    "total_slots": 81,
+    "code_slots": 58,
+    "instruction_slots": 58,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x2b222c",
+      "0x2b2230",
+      "0x2b2234"
+    ],
+    "unexplained_slots": [
+      "0x2b2110",
+      "0x2b2114",
+      "0x2b2118",
+      "0x2b211c",
+      "0x2b2120",
+      "0x2b2124",
+      "0x2b2128",
+      "0x2b212c",
+      "0x2b2130",
+      "0x2b2134",
+      "0x2b2164",
+      "0x2b2168",
+      "0x2b216c",
+      "0x2b2170",
+      "0x2b2174",
+      "0x2b2178",
+      "0x2b217c",
+      "0x2b2180",
+      "0x2b2184",
+      "0x2b2188"
+    ],
+    "unexplained_count": 20,
+    "unresolved_dispatches": [],
+    "tables_safe": false,
+    "tables": [
+      {
+        "guard": "0x2b2108",
+        "dispatch": "0x2b210c",
+        "cases": 9,
+        "safe": false,
+        "reason": "missing or unbounded CMP/ADD dispatch"
+      },
+      {
+        "guard": "0x2b215c",
+        "dispatch": "0x2b2160",
+        "cases": 9,
+        "safe": false,
+        "reason": "missing or unbounded CMP/ADD dispatch"
+      }
+    ],
+    "code_coverage_pct": 74.36,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
+  "review_attempts": 1,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/002b20f4.json"
 }

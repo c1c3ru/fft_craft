@@ -23,7 +23,35 @@
     "b9eb0"
   ],
   "log": "=== jtable.py: 0x2b3464..0x2b3590 (300 bytes) ===\ncoverage: 69 of ~75 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 12 distinct --\n  0x714a0 x1   sub_714a0 LOCAL(no-dynsym)\n  0x714ac x1   sub_714ac LOCAL(no-dynsym)\n  0x715cc x1   sub_715cc LOCAL(no-dynsym)\n  0xb6834 x1   CFILE_DAT::CFILE_DAT() \n  0xb68ac x1   CFILE_DAT::Open(char*, int, int) \n  0xb6b60 x1   CFILE_DAT::~CFILE_DAT() \n  0xb9eb0 x1   CTHREAD::Register(unsigned int (*)(void*), void*) \n  0x2b04f0 x1   CAPP_INFO::GetRootPath() \n  0x2b14d0 x1   Project_Archive_GetFile(int) \n  0x2b1e14 x1   NowLoading_Init() \n  0x2cdf6c x1   sub_2cdf6c LOCAL(no-dynsym)\n  0x2cdf9c x1   sub_2cdf9c LOCAL(no-dynsym)\n\n-- branches: 5 total, 2 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "needs_review",
+    "reason": "instruction_conflict",
+    "function_start": "0x2b3464",
+    "total_slots": 75,
+    "code_slots": 69,
+    "instruction_slots": 69,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x2b3578",
+      "0x2b357c",
+      "0x2b3580",
+      "0x2b3584",
+      "0x2b3588",
+      "0x2b358c"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
+  "review_attempts": 1,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/002b3464.json"
 }

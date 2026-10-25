@@ -3,7 +3,7 @@
   "name": "SetJobName()",
   "size": 296,
   "previous_status": "unread",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 90.54,
   "distinct_bl": 3,
   "tables_resolved": 0,
@@ -14,7 +14,35 @@
     "1b6f14"
   ],
   "log": "=== jtable.py: 0x1b2ac8..0x1b2bf0 (296 bytes) ===\ncoverage: 67 of ~74 instruction slots (91%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x1b672c x1   GetMesAdr(unsigned char*, short, int) \n  0x1b6b10 x1   MakeTextureMessage(unsigned char*, short*, RECT16*, int) \n  0x1b6f14 x1   CountWidthMessage(unsigned char*) \n\n-- branches: 1 total, 1 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x1b2ac8",
+    "total_slots": 74,
+    "code_slots": 67,
+    "instruction_slots": 67,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x1b2bd4",
+      "0x1b2bd8",
+      "0x1b2bdc",
+      "0x1b2be0",
+      "0x1b2be4",
+      "0x1b2be8",
+      "0x1b2bec"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/001b2ac8.json"
 }

@@ -1,0 +1,23 @@
+{
+  "address": "001597c0",
+  "name": "disp_worlddhelpmenu()",
+  "size": 348,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 91.95,
+  "distinct_bl": 6,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "10dea4",
+    "11173c",
+    "153734",
+    "161f7c",
+    "2806b0",
+    "2b9cac"
+  ],
+  "log": "=== jtable.py: 0x1597c0..0x15991c (348 bytes) ===\ncoverage: 80 of ~87 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x10dea4 x1   Wexport_localpad(long*) \n  0x11173c x1   Wmesputmain() \n  0x153734 x1   Wsend_taskparamater(long, long, long, long) \n  0x161f7c x1   wasmGetInput1() \n  0x2806b0 x2   iOS_hook_worldhelpmenu() \n  0x2b9cac x2   iOS_setV2Icon(V2ICON_DATA, int) \n\n-- branches: 8 total, 5 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

@@ -3,7 +3,7 @@
   "name": "setMapVector(SVECTOR*, SVECTOR*)",
   "size": 256,
   "previous_status": "unread",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 89.06,
   "distinct_bl": 3,
   "tables_resolved": 0,
@@ -14,7 +14,35 @@
     "21037c"
   ],
   "log": "=== jtable.py: 0x210c9c..0x210d9c (256 bytes) ===\ncoverage: 57 of ~64 instruction slots (89%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x1d6718 x1   get_mapstp(int, int, int) \n  0x21036c x1   setShortVector(SVECTOR*, int, int, int) \n  0x21037c x1   setLongVector(VECTOR*, int, int, int) \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x210c9c",
+    "total_slots": 64,
+    "code_slots": 57,
+    "instruction_slots": 57,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x210d80",
+      "0x210d84",
+      "0x210d88",
+      "0x210d8c",
+      "0x210d90",
+      "0x210d94",
+      "0x210d98"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/00210c9c.json"
 }

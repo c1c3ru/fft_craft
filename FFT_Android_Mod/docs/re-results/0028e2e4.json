@@ -10,7 +10,68 @@
   "tables_unresolved": 0,
   "bl_targets": [],
   "log": "=== jtable.py: 0x28e2e4..0x28e464 (384 bytes) ===\ncoverage: 66 of ~96 instruction slots (69%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0x28e2f0, dispatch @0x28e2f4: 27 cases, 9 distinct handlers\n    targets: ['0x28e368', '0x28e410', '0x28e404', '0x28e368', '0x28e368', '0x28e368', '0x28e368', '0x28e368', '0x28e368', '0x28e378', '0x28e368', '0x28e368', '0x28e368', '0x28e390', '0x28e378', '0x28e42c', '0x28e44c', '0x28e378', '0x28e3ec', '0x28e378', '0x28e368', '0x28e368', '0x28e378', '0x28e378', '0x28e378', '0x28e378', '0x28e41c']\n\n-- bl targets: 0 distinct --\n\n-- branches: 9 total, 6 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "needs_review",
+    "reason": "unverified_jump_table",
+    "function_start": "0x28e2e4",
+    "total_slots": 96,
+    "code_slots": 66,
+    "instruction_slots": 66,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x28e45c",
+      "0x28e460"
+    ],
+    "unexplained_slots": [
+      "0x28e2f8",
+      "0x28e2fc",
+      "0x28e300",
+      "0x28e304",
+      "0x28e308",
+      "0x28e30c",
+      "0x28e310",
+      "0x28e314",
+      "0x28e318",
+      "0x28e31c",
+      "0x28e320",
+      "0x28e324",
+      "0x28e328",
+      "0x28e32c",
+      "0x28e330",
+      "0x28e334",
+      "0x28e338",
+      "0x28e33c",
+      "0x28e340",
+      "0x28e344",
+      "0x28e348",
+      "0x28e34c",
+      "0x28e350",
+      "0x28e354",
+      "0x28e358",
+      "0x28e35c",
+      "0x28e360",
+      "0x28e364"
+    ],
+    "unexplained_count": 28,
+    "unresolved_dispatches": [],
+    "tables_safe": false,
+    "tables": [
+      {
+        "guard": "0x28e2f0",
+        "dispatch": "0x28e2f4",
+        "cases": 27,
+        "safe": false,
+        "reason": "missing or unbounded CMP/ADD dispatch"
+      }
+    ],
+    "code_coverage_pct": 70.21,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
+  "review_attempts": 1,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/0028e2e4.json"
 }

@@ -3,7 +3,7 @@
   "name": "SetChangePaletteData(unsigned short, unsigned short, unsigned short, unsigned short, unsigned short)",
   "size": 368,
   "previous_status": "unread",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 91.3,
   "distinct_bl": 3,
   "tables_resolved": 0,
@@ -14,7 +14,36 @@
     "2ca79c"
   ],
   "log": "=== jtable.py: 0x211a28..0x211b98 (368 bytes) ===\ncoverage: 84 of ~92 instruction slots (91%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x20f94c x1   iOS_GetFrameRate() \n  0x2919c0 x1   SetDrawMode \n  0x2ca79c x4   __divsi3 \n\n-- branches: 3 total, 2 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x211a28",
+    "total_slots": 92,
+    "code_slots": 84,
+    "instruction_slots": 84,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x211b78",
+      "0x211b7c",
+      "0x211b80",
+      "0x211b84",
+      "0x211b88",
+      "0x211b8c",
+      "0x211b90",
+      "0x211b94"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/00211a28.json"
 }

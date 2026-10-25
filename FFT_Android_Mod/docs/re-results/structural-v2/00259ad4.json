@@ -1,0 +1,18 @@
+{
+  "address": "00259ad4",
+  "name": "ctlhismes_main(CTLINFO*)",
+  "size": 260,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 90.77,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "270c90"
+  ],
+  "log": "=== jtable.py: 0x259ad4..0x259bd8 (260 bytes) ===\ncoverage: 59 of ~65 instruction slots (91%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x270c90 x1   pagewin_main(PAGEWININFO*) \n\n-- branches: 3 total, 2 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

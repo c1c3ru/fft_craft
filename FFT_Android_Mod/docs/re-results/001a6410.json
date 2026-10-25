@@ -12,7 +12,50 @@
     "285e50"
   ],
   "log": "=== jtable.py: 0x1a6410..0x1a652c (284 bytes) ===\ncoverage: 59 of ~71 instruction slots (83%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0x1a641c, dispatch @0x1a6420: 9 cases, 9 distinct handlers\n    targets: ['0x1a6464', '0x1a647c', '0x1a6494', '0x1a64ac', '0x1a64c4', '0x1a64dc', '0x1a64f4', '0x1a650c', '0x1a644c']\n\n-- bl targets: 1 distinct --\n  0x285e50 x9   pspMsgGet(unsigned int) \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "needs_review",
+    "reason": "unverified_jump_table",
+    "function_start": "0x1a6410",
+    "total_slots": 71,
+    "code_slots": 59,
+    "instruction_slots": 59,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x1a6524",
+      "0x1a6528"
+    ],
+    "unexplained_slots": [
+      "0x1a6424",
+      "0x1a6428",
+      "0x1a642c",
+      "0x1a6430",
+      "0x1a6434",
+      "0x1a6438",
+      "0x1a643c",
+      "0x1a6440",
+      "0x1a6444",
+      "0x1a6448"
+    ],
+    "unexplained_count": 10,
+    "unresolved_dispatches": [],
+    "tables_safe": false,
+    "tables": [
+      {
+        "guard": "0x1a641c",
+        "dispatch": "0x1a6420",
+        "cases": 9,
+        "safe": false,
+        "reason": "missing or unbounded CMP/ADD dispatch"
+      }
+    ],
+    "code_coverage_pct": 85.51,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
+  "review_attempts": 1,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/001a6410.json"
 }

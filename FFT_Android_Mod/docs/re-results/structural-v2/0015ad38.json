@@ -1,0 +1,30 @@
+{
+  "address": "0015ad38",
+  "name": "iOSexecuteCurSlide()",
+  "size": 492,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 93.5,
+  "distinct_bl": 13,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "15ad18",
+    "207d6c",
+    "29fe88",
+    "29fea0",
+    "29fef0",
+    "2b7ac8",
+    "2b7af0",
+    "2b7b18",
+    "2b7b2c",
+    "2b7b40",
+    "2b7b54",
+    "2b7ccc",
+    "2b9cac"
+  ],
+  "log": "=== jtable.py: 0x15ad38..0x15af24 (492 bytes) ===\ncoverage: 115 of ~123 instruction slots (93%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 13 distinct --\n  0x15ad18 x2   iOSCurIsInGame(int, int) \n  0x207d6c x1   iOS_mapVectorLimit() \n  0x29fe88 x1   rsin \n  0x29fea0 x1   rcos \n  0x29fef0 x1   ratan2 \n  0x2b7ac8 x1   iOS_getTouchRelease() \n  0x2b7af0 x1   iOS_getTouchPress() \n  0x2b7b18 x1   iOS_getTouchBeginX() \n  0x2b7b2c x1   iOS_getTouchBeginY() \n  0x2b7b40 x2   iOS_getTouchNowX() \n  0x2b7b54 x2   iOS_getTouchNowY() \n  0x2b7ccc x4   iOS_getV2Icon(V2ICON_DATA) \n  0x2b9cac x2   iOS_setV2Icon(V2ICON_DATA, int) \n\n-- branches: 9 total, 3 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
