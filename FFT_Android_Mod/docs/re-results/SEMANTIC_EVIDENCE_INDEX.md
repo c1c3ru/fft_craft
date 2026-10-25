@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1144/1258** pending functions.
+Evidence collected: **1152/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1155,3 +1155,11 @@ These reports do not constitute semantic verification.
 | `002a37b0` | pspSaveBase::pspSaveBase() | [Evidence](semantic-evidence/002a37b0.md) |
 | `001ce950` | setskillresult_caster(int) | [Evidence](semantic-evidence/001ce950.md) |
 | `002856fc` | pspItemGetWeaponData | [Evidence](semantic-evidence/002856fc.md) |
+| `00258e70` | evt_town_cent() | [Evidence](semantic-evidence/00258e70.md) |
+| `00290dc0` | DrawSync | [Evidence](semantic-evidence/00290dc0.md) |
+| `002b2a94` | SE_SetVol(int, int) | [Evidence](semantic-evidence/002b2a94.md) |
+| `00216458` | disposeMusic(int) | [Evidence](semantic-evidence/00216458.md) |
+| `00273d20` | IsNullUnit(int) | [Evidence](semantic-evidence/00273d20.md) |
+| `0025f1e8` | wldmes_load(int) | [Evidence](semantic-evidence/0025f1e8.md) |
+| `002161e0` | loadMusic(int) | [Evidence](semantic-evidence/002161e0.md) |
+| `0026640c` | wldpac_draw(GsOT*, unsigned long*, int) | [Evidence](semantic-evidence/0026640c.md) |
