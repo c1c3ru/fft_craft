@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **928/1258** pending functions.
+Evidence collected: **936/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -939,3 +939,11 @@ These reports do not constitute semantic verification.
 | `00287588` | reset_g_NetIcon_DrawFlg() | [Evidence](semantic-evidence/00287588.md) |
 | `002885a0` | pspOpenCheckFlg(PSP_OPEN_FLG) | [Evidence](semantic-evidence/002885a0.md) |
 | `00288f18` | pspgFreamBufCountCountReset() | [Evidence](semantic-evidence/00288f18.md) |
+| `0028982c` | pspPrimReetWorkBuf_current() | [Evidence](semantic-evidence/0028982c.md) |
+| `00289880` | pspClearSaveEnv() | [Evidence](semantic-evidence/00289880.md) |
+| `0028a114` | FFT_GetCurrentSystemFile() | [Evidence](semantic-evidence/0028a114.md) |
+| `0028b068` | pspWorldCallBackSet(PSP_WORLD_CALLBACK_ID, void (*)()) | [Evidence](semantic-evidence/0028b068.md) |
+| `0028b3c4` | pspWorldDataBackBufGet(int) | [Evidence](semantic-evidence/0028b3c4.md) |
+| `0028d688` | tlFreeAll() | [Evidence](semantic-evidence/0028d688.md) |
+| `0029b6d0` | GsSetWorkBase | [Evidence](semantic-evidence/0029b6d0.md) |
+| `0029fd90` | GteGetDataReg(int) | [Evidence](semantic-evidence/0029fd90.md) |
