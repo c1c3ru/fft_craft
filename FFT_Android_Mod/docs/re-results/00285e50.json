@@ -1,0 +1,15 @@
+{
+  "address": "00285e50",
+  "name": "pspMsgGet(unsigned int)",
+  "size": 232,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 63.79,
+  "distinct_bl": 0,
+  "tables_resolved": 1,
+  "tables_unresolved": 0,
+  "bl_targets": [],
+  "log": "=== jtable.py: 0x285e50..0x285f38 (232 bytes) ===\ncoverage: 37 of ~58 instruction slots (64%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0x285e50, dispatch @0x285e54: 9 cases, 9 distinct handlers\n    targets: ['0x285e80', '0x285e8c', '0x285ea0', '0x285eb0', '0x285ec0', '0x285ecc', '0x285ee0', '0x285ef0', '0x285efc']\n\n-- bl targets: 0 distinct --\n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

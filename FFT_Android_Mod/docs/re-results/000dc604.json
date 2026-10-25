@@ -1,0 +1,21 @@
+{
+  "address": "000dc604",
+  "name": "eventsetchrcol(char*)",
+  "size": 232,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 5,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "20f94c",
+    "215c08",
+    "2ca79c",
+    "d6828",
+    "dc2a4"
+  ],
+  "log": "=== jtable.py: 0xdc604..0xdc6ec (232 bytes) ===\ncoverage: 58 of ~58 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 5 distinct --\n  0xd6828 x1   sub_d6828 LOCAL(no-dynsym)\n  0xdc2a4 x1   sub_dc2a4 LOCAL(no-dynsym)\n  0x20f94c x1   iOS_GetFrameRate() \n  0x215c08 x1   changeCharacterClut(int, int, int, short, short, short) \n  0x2ca79c x2   __divsi3 \n\n-- branches: 6 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

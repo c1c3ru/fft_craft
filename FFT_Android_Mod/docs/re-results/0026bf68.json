@@ -1,0 +1,17 @@
+{
+  "address": "0026bf68",
+  "name": "town_touch(_POINT, int*, int*)",
+  "size": 240,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 98.33,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "26be7c"
+  ],
+  "log": "=== jtable.py: 0x26bf68..0x26c058 (240 bytes) ===\ncoverage: 59 of ~60 instruction slots (98%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x26be7c x1   town_find3(_POINT, int) \n\n-- branches: 2 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

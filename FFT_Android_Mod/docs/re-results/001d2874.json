@@ -1,0 +1,17 @@
+{
+  "address": "001d2874",
+  "name": "set_succession_data(BWORK*, int)",
+  "size": 244,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 96.72,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1cb064"
+  ],
+  "log": "=== jtable.py: 0x1d2874..0x1d2968 (244 bytes) ===\ncoverage: 59 of ~61 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x1cb064 x1   init_target_result(A_RESULT*) \n\n-- branches: 6 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

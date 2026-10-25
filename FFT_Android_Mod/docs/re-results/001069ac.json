@@ -1,0 +1,22 @@
+{
+  "address": "001069ac",
+  "name": "Weventanmreq(char*)",
+  "size": 240,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 6,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "104668",
+    "106898",
+    "20e6b0",
+    "20e6dc",
+    "fc4a8",
+    "fe370"
+  ],
+  "log": "=== jtable.py: 0x1069ac..0x106a9c (240 bytes) ===\ncoverage: 60 of ~60 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0xfc4a8 x1   sub_fc4a8 LOCAL(no-dynsym)\n  0xfe370 x1   sub_fe370 LOCAL(no-dynsym)\n  0x104668 x1   sub_104668 LOCAL(no-dynsym)\n  0x106898 x1   sub_106898 LOCAL(no-dynsym)\n  0x20e6b0 x1   requestAnimationFlipOFF(int) \n  0x20e6dc x1   requestAnimationFlipON(int) \n\n-- branches: 10 total, 5 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

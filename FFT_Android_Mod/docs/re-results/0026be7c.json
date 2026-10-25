@@ -1,0 +1,20 @@
+{
+  "address": "0026be7c",
+  "name": "town_find3(_POINT, int)",
+  "size": 236,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 96.61,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "103400",
+    "2cb48c",
+    "2cb92c",
+    "719f8"
+  ],
+  "log": "=== jtable.py: 0x26be7c..0x26bf68 (236 bytes) ===\ncoverage: 57 of ~59 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x719f8 x1   sub_719f8 LOCAL(no-dynsym)\n  0x103400 x1   Wread_eventflag(int) \n  0x2cb48c x1   __floatsisf \n  0x2cb92c x1   __fixsfsi \n\n-- branches: 5 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

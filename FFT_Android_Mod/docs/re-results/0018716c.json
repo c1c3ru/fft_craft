@@ -1,0 +1,25 @@
+{
+  "address": "0018716c",
+  "name": "CardAccess3()",
+  "size": 248,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 95.16,
+  "distinct_bl": 9,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "103340",
+    "15685c",
+    "1568fc",
+    "184174",
+    "1875f0",
+    "27fbf0",
+    "289b78",
+    "289fac",
+    "28b034"
+  ],
+  "log": "=== jtable.py: 0x18716c..0x187264 (248 bytes) ===\ncoverage: 59 of ~62 instruction slots (95%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 9 distinct --\n  0x103340 x1   Wwrite_eventflag(int, int) \n  0x15685c x1   load_worldname() \n  0x1568fc x1   worldmap_restart() \n  0x184174 x1   SetLoadData(int) \n  0x1875f0 x1   GetSaveDataInit() \n  0x27fbf0 x1   iOS_WorldMapResumeGetData2(unsigned char**, unsigned int*) \n  0x289b78 x1   pspSaveDataGet() \n  0x289fac x1   pspLoadSystemFile() \n  0x28b034 x1   pspWorldDisableFlg(PSP_WORLD_FLG) \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

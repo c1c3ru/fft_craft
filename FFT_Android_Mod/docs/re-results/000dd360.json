@@ -1,0 +1,22 @@
+{
+  "address": "000dd360",
+  "name": "eventanmreq(char*)",
+  "size": 240,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 6,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "20e6b0",
+    "20e6dc",
+    "d4c4c",
+    "d6828",
+    "dc2a4",
+    "dd24c"
+  ],
+  "log": "=== jtable.py: 0xdd360..0xdd450 (240 bytes) ===\ncoverage: 60 of ~60 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0xd4c4c x1   sub_d4c4c LOCAL(no-dynsym)\n  0xd6828 x1   sub_d6828 LOCAL(no-dynsym)\n  0xdc2a4 x1   sub_dc2a4 LOCAL(no-dynsym)\n  0xdd24c x1   sub_dd24c LOCAL(no-dynsym)\n  0x20e6b0 x1   requestAnimationFlipOFF(int) \n  0x20e6dc x1   requestAnimationFlipON(int) \n\n-- branches: 10 total, 5 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

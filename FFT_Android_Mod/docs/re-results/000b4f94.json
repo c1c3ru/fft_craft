@@ -1,0 +1,19 @@
+{
+  "address": "000b4f94",
+  "name": "CRECT::FrameMove(int, int)",
+  "size": 236,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2cb48c",
+    "2cb6d0",
+    "2cb92c"
+  ],
+  "log": "=== jtable.py: 0xb4f94..0xb5080 (236 bytes) ===\ncoverage: 59 of ~59 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x2cb48c x2   __floatsisf \n  0x2cb6d0 x2   __divsf3 \n  0x2cb92c x2   __fixsfsi \n\n-- branches: 4 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

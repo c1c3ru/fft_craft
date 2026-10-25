@@ -1,0 +1,18 @@
+{
+  "address": "00282374",
+  "name": "DispClipedPolygonNo(int, int, int)",
+  "size": 260,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 96.92,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "280740",
+    "280758"
+  ],
+  "log": "=== jtable.py: 0x282374..0x282478 (260 bytes) ===\ncoverage: 63 of ~65 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x280740 x1   iOS_setClipoffNoFT4(int) \n  0x280758 x1   iOS_setClipoffNoFT3(int) \n\n-- branches: 15 total, 7 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

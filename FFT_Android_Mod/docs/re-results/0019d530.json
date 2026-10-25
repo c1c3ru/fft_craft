@@ -1,0 +1,22 @@
+{
+  "address": "0019d530",
+  "name": "FighterName()",
+  "size": 260,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 86.15,
+  "distinct_bl": 6,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "153584",
+    "153734",
+    "15ef7c",
+    "1a1450",
+    "1bac48",
+    "1bb164"
+  ],
+  "log": "=== jtable.py: 0x19d530..0x19d634 (260 bytes) ===\ncoverage: 56 of ~65 instruction slots (86%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x153584 x1   Wtask_create(long, char*) \n  0x153734 x1   Wsend_taskparamater(long, long, long, long) \n  0x15ef7c x1   iOSUnitListWinOnOff(int) \n  0x1a1450 x1   Name(unsigned char*, short*) \n  0x1bac48 x1   iOSWldUnitListWinSet(int) \n  0x1bb164 x1   SetSttsA(int) \n\n-- branches: 3 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

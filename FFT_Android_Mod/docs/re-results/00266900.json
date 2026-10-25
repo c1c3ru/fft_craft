@@ -1,0 +1,18 @@
+{
+  "address": "00266900",
+  "name": "infonumber_put(int, int, GsSPRITE*, GsOT*)",
+  "size": 256,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 96.88,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "29c340",
+    "2ca79c"
+  ],
+  "log": "=== jtable.py: 0x266900..0x266a00 (256 bytes) ===\ncoverage: 62 of ~64 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x29c340 x1   GsSortFastSprite \n  0x2ca79c x1   __divsi3 \n\n-- branches: 5 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
