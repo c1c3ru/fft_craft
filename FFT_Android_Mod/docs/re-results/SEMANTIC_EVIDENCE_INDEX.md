@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **784/1258** pending functions.
+Evidence collected: **792/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -795,3 +795,11 @@ These reports do not constitute semantic verification.
 | `002a1408` | SetFogFar | [Evidence](semantic-evidence/002a1408.md) |
 | `000c8158` | tool_writesquare(int, int, int) | [Evidence](semantic-evidence/000c8158.md) |
 | `000c8178` | tool_readsquare(int, int, int) | [Evidence](semantic-evidence/000c8178.md) |
+| `000d88fc` | stopmenutransfer() | [Evidence](semantic-evidence/000d88fc.md) |
+| `000d891c` | startmenutransfer() | [Evidence](semantic-evidence/000d891c.md) |
+| `000da700` | chk_nexteventtype(int) | [Evidence](semantic-evidence/000da700.md) |
+| `001005cc` | Wstopmenutransfer() | [Evidence](semantic-evidence/001005cc.md) |
+| `001005ec` | Wstartmenutransfer() | [Evidence](semantic-evidence/001005ec.md) |
+| `001022cc` | Wchk_nexteventtype(int) | [Evidence](semantic-evidence/001022cc.md) |
+| `00153c84` | iOS_updateDispCameraIconSetting() | [Evidence](semantic-evidence/00153c84.md) |
+| `00155c8c` | stop_adventuremessage(int) | [Evidence](semantic-evidence/00155c8c.md) |
