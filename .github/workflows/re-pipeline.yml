@@ -26,7 +26,7 @@ jobs:
       - run: python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_*.py' -v
 
   structural-smoke:
-    if: github.event_name == 'workflow_dispatch'
+    # Bounded smoke tests run on PRs as well as manual dispatches.
     needs: unit-tests
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -38,9 +38,12 @@ jobs:
       - name: Install analysis dependencies
         run: python3 -m pip install capstone pyelftools
       - name: Structural batch
+        env:
+          REQUESTED_LIMIT: ${{ inputs.limit }}
         run: |
+          LIMIT="${REQUESTED_LIMIT:-3}"
           python3 FFT_Android_Mod/docs/re-tools/parallel_loop.py \
-            --workers 5 --limit "${{ inputs.limit }}" --timeout 180
+            --workers 3 --limit "$LIMIT" --timeout 120
       - uses: actions/upload-artifact@v4
         if: always()
         with:
