@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **576/1258** pending functions.
+Evidence collected: **584/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -587,3 +587,11 @@ These reports do not constitute semantic verification.
 | `001d1ce8` | erase_unit_f(int) | [Evidence](semantic-evidence/001d1ce8.md) |
 | `001d3d24` | gc_bwp(int) | [Evidence](semantic-evidence/001d3d24.md) |
 | `001f5f44` | iOS_resetAnimationIrowake() | [Evidence](semantic-evidence/001f5f44.md) |
+| `00200b80` | endTrunAction() | [Evidence](semantic-evidence/00200b80.md) |
+| `0021b0d0` | InitEffectLoadAddress() | [Evidence](semantic-evidence/0021b0d0.md) |
+| `0021b4a8` | GetSQLFrameRate(_EffectTCB*) | [Evidence](semantic-evidence/0021b4a8.md) |
+| `0021ce78` | IsPermanentEffect(long) | [Evidence](semantic-evidence/0021ce78.md) |
+| `00269a68` | snpl_hidepara() | [Evidence](semantic-evidence/00269a68.md) |
+| `00269d08` | snpl_clrstat() | [Evidence](semantic-evidence/00269d08.md) |
+| `00269d40` | snpl_setlocal() | [Evidence](semantic-evidence/00269d40.md) |
+| `00269d78` | snpl_clrlocal() | [Evidence](semantic-evidence/00269d78.md) |
