@@ -1,0 +1,24 @@
+{
+  "address": "002169d0",
+  "name": "InitSound()",
+  "size": 324,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 91.36,
+  "distinct_bl": 7,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "20c74c",
+    "20cbe8",
+    "20cc68",
+    "271284",
+    "2712a8",
+    "2712c0",
+    "2712f8"
+  ],
+  "log": "=== jtable.py: 0x2169d0..0x216b14 (324 bytes) ===\ncoverage: 74 of ~81 instruction slots (91%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 7 distinct --\n  0x20c74c x1   initSoundHeap() \n  0x20cbe8 x5   fileOpenForSndCD(unsigned long, unsigned long) \n  0x20cc68 x4   fileOpenCD(unsigned long, unsigned long, void*) \n  0x271284 x1   Ssd_Init(unsigned short) \n  0x2712a8 x1   Ssd_AddWaveData(void*) \n  0x2712c0 x2   Ssd_AddEffectData(void*) \n  0x2712f8 x1   Ssd_AddVagPackData(void*) \n\n-- branches: 1 total, 1 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

@@ -3,7 +3,7 @@
   "name": "disp_worlddhelpmenu()",
   "size": 348,
   "previous_status": "unread",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 91.95,
   "distinct_bl": 6,
   "tables_resolved": 0,
@@ -17,7 +17,35 @@
     "2b9cac"
   ],
   "log": "=== jtable.py: 0x1597c0..0x15991c (348 bytes) ===\ncoverage: 80 of ~87 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x10dea4 x1   Wexport_localpad(long*) \n  0x11173c x1   Wmesputmain() \n  0x153734 x1   Wsend_taskparamater(long, long, long, long) \n  0x161f7c x1   wasmGetInput1() \n  0x2806b0 x2   iOS_hook_worldhelpmenu() \n  0x2b9cac x2   iOS_setV2Icon(V2ICON_DATA, int) \n\n-- branches: 8 total, 5 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x1597c0",
+    "total_slots": 87,
+    "code_slots": 80,
+    "instruction_slots": 80,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x159900",
+      "0x159904",
+      "0x159908",
+      "0x15990c",
+      "0x159910",
+      "0x159914",
+      "0x159918"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/001597c0.json"
 }

@@ -3,7 +3,7 @@
   "name": "ctltownset_main(CTLINFO*)",
   "size": 324,
   "previous_status": "unread",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 92.59,
   "distinct_bl": 2,
   "tables_resolved": 0,
@@ -13,7 +13,34 @@
     "26b374"
   ],
   "log": "=== jtable.py: 0x253d84..0x253ec8 (324 bytes) ===\ncoverage: 75 of ~81 instruction slots (93%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x103340 x2   Wwrite_eventflag(int, int) \n  0x26b374 x2   sound_request(int) \n\n-- branches: 8 total, 3 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x253d84",
+    "total_slots": 81,
+    "code_slots": 75,
+    "instruction_slots": 75,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x253eb0",
+      "0x253eb4",
+      "0x253eb8",
+      "0x253ebc",
+      "0x253ec0",
+      "0x253ec4"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/00253d84.json"
 }

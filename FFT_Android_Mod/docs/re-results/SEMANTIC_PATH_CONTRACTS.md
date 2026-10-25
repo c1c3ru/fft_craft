@@ -283,11 +283,11 @@ A route in this graph is a candidate, not a proven executable path. An absent ro
 No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
 
 
-## `0025f44c` — frmbuf_get()
+## `002472a8` — ctlsound_main(CTLINFO*)
 
-Observed direct compare/branch pairs: **0**; local bitmask sequences: **0**.
+Observed direct compare/branch pairs: **4**; local bitmask sequences: **0**.
 
-Modeled ARM CFG nodes: **113**; entry-reachable: **113**; unmodeled outgoing edges/transfers: **0**.
+Modeled ARM CFG nodes: **113**; entry-reachable: **113**; unmodeled outgoing edges/transfers: **1**.
 
 Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
 
@@ -295,7 +295,10 @@ A route in this graph is a candidate, not a proven executable path. An absent ro
 
 | Compare / branch | Taken edge | Fallthrough edge |
 |---|---|---|
-| No directly adjacent CMP/TST-branch pair | — | — |
+| `0x2472e8` tst r3, #0x820; `0x2472ec` bne #0x2473e4 | (r3 & 0x820) != 0 → `0x2473e4` | (r3 & 0x820) == 0 → `0x2472f0` |
+| `0x247300` cmp r0, #0; `0x247304` beq #0x247350 | r0 == 0x0 → `0x247350` | r0 != 0x0 → `0x247308` |
+| `0x247358` cmp r0, #0; `0x24735c` bne #0x24736c | r0 != 0x0 → `0x24736c` | r0 == 0x0 → `0x247360` |
+| `0x247364` tst r3, #0x100; `0x247368` beq #0x2473e0 | (r3 & 0x100) == 0 → `0x2473e0` | (r3 & 0x100) != 0 → `0x24736c` |
 
 ### Local memory-bit effects and direct incoming edges
 

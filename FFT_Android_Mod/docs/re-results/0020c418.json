@@ -3,7 +3,7 @@
   "name": "db_swap(unsigned long*, unsigned long*)",
   "size": 312,
   "previous_status": "unread",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 89.74,
   "distinct_bl": 7,
   "tables_resolved": 0,
@@ -18,7 +18,36 @@
     "29a2d8"
   ],
   "log": "=== jtable.py: 0x20c418..0x20c550 (312 bytes) ===\ncoverage: 70 of ~78 instruction slots (90%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 7 distinct --\n  0x288f18 x1   pspgFreamBufCountCountReset() \n  0x28e5c0 x3   VSync \n  0x290dc0 x2   DrawSync \n  0x290e9c x1   FntFlush \n  0x291bc0 x1   PutDrawEnv \n  0x294af8 x1   PutDispEnv \n  0x29a2d8 x1   DrawOTag \n\n-- branches: 8 total, 4 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x20c418",
+    "total_slots": 78,
+    "code_slots": 70,
+    "instruction_slots": 70,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x20c530",
+      "0x20c534",
+      "0x20c538",
+      "0x20c53c",
+      "0x20c540",
+      "0x20c544",
+      "0x20c548",
+      "0x20c54c"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/0020c418.json"
 }

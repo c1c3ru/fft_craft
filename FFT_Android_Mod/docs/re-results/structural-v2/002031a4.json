@@ -1,0 +1,20 @@
+{
+  "address": "002031a4",
+  "name": "iOSsetCursorByTouch(int, int, int, int, int)",
+  "size": 392,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 57.14,
+  "distinct_bl": 3,
+  "tables_resolved": 1,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "15a480",
+    "1fba1c",
+    "202ff0"
+  ],
+  "log": "=== jtable.py: 0x2031a4..0x20332c (392 bytes) ===\ncoverage: 56 of ~98 instruction slots (57%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0x20323c, dispatch @0x203240: 33 cases, 3 distinct handlers\n    targets: ['0x2032cc', '0x2032dc', '0x2032dc', '0x2032dc', '0x2032dc', '0x2032dc', '0x2032dc', '0x2032dc', '0x2032dc', '0x2032dc', '0x2032dc', '0x2032dc', '0x2032dc', '0x2032cc', '0x2032dc', '0x2032dc', '0x2032dc', '0x2032dc', '0x2032dc', '0x2032dc', '0x2032dc', '0x2032dc', '0x2032dc', '0x2032ec', '0x2032dc', '0x2032dc', '0x2032dc', '0x2032dc', '0x2032dc', '0x2032dc', '0x2032dc', '0x2032dc', '0x2032cc']\n\n-- bl targets: 3 distinct --\n  0x15a480 x1   iOSSoundSESet(int) \n  0x1fba1c x1   sub_1fba1c LOCAL(no-dynsym)\n  0x202ff0 x1   sub_202ff0 LOCAL(no-dynsym)\n\n-- branches: 4 total, 1 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

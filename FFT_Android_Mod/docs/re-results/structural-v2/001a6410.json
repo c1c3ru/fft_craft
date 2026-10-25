@@ -1,0 +1,18 @@
+{
+  "address": "001a6410",
+  "name": "MessageDataSet(int)",
+  "size": 284,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 83.1,
+  "distinct_bl": 1,
+  "tables_resolved": 1,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "285e50"
+  ],
+  "log": "=== jtable.py: 0x1a6410..0x1a652c (284 bytes) ===\ncoverage: 59 of ~71 instruction slots (83%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0x1a641c, dispatch @0x1a6420: 9 cases, 9 distinct handlers\n    targets: ['0x1a6464', '0x1a647c', '0x1a6494', '0x1a64ac', '0x1a64c4', '0x1a64dc', '0x1a64f4', '0x1a650c', '0x1a644c']\n\n-- bl targets: 1 distinct --\n  0x285e50 x9   pspMsgGet(unsigned int) \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

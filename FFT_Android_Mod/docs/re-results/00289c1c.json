@@ -14,7 +14,72 @@
     "28e0c8"
   ],
   "log": "=== jtable.py: 0x289c1c..0x289d5c (320 bytes) ===\ncoverage: 46 of ~80 instruction slots (58%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0x289c48, dispatch @0x289c4c: 16 cases, 3 distinct handlers\n    targets: ['0x289ce0', '0x289ce0', '0x289ce0', '0x289ce0', '0x289ce0', '0x289ce0', '0x289ce0', '0x289ce0', '0x289ce0', '0x289ce0', '0x289ce0', '0x289ce0', '0x289ce0', '0x289cd8', '0x289d04', '0x289ce0']\n\n-- bl targets: 3 distinct --\n  0x28e010 x1   xpLibapiSaveStart \n  0x28e0a4 x1   xpLibapiSaveEnd \n  0x28e0c8 x1   xpLibapiSaveCheck \n\n-- branches: 2 total, 0 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "needs_review",
+    "reason": "unverified_jump_table",
+    "function_start": "0x289c1c",
+    "total_slots": 80,
+    "code_slots": 46,
+    "instruction_slots": 46,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x289d3c",
+      "0x289d40",
+      "0x289d44",
+      "0x289d48",
+      "0x289d4c",
+      "0x289d50"
+    ],
+    "unexplained_slots": [
+      "0x289c50",
+      "0x289c54",
+      "0x289c58",
+      "0x289c5c",
+      "0x289c60",
+      "0x289c64",
+      "0x289c68",
+      "0x289c6c",
+      "0x289c70",
+      "0x289c74",
+      "0x289c78",
+      "0x289c7c",
+      "0x289c80",
+      "0x289c84",
+      "0x289c88",
+      "0x289c8c",
+      "0x289c90",
+      "0x289d18",
+      "0x289d1c",
+      "0x289d20",
+      "0x289d24",
+      "0x289d28",
+      "0x289d2c",
+      "0x289d30",
+      "0x289d34",
+      "0x289d38",
+      "0x289d54",
+      "0x289d58"
+    ],
+    "unexplained_count": 28,
+    "unresolved_dispatches": [],
+    "tables_safe": false,
+    "tables": [
+      {
+        "guard": "0x289c48",
+        "dispatch": "0x289c4c",
+        "cases": 16,
+        "safe": false,
+        "reason": "missing or unbounded CMP/ADD dispatch"
+      }
+    ],
+    "code_coverage_pct": 62.16,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
+  "review_attempts": 1,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/00289c1c.json"
 }

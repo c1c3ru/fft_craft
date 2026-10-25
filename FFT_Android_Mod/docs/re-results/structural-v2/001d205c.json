@@ -1,0 +1,20 @@
+{
+  "address": "001d205c",
+  "name": "check_trap(unsigned char, unsigned char, unsigned char)",
+  "size": 380,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 93.68,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1d1ffc",
+    "1e2308",
+    "db83c"
+  ],
+  "log": "=== jtable.py: 0x1d205c..0x1d21d8 (380 bytes) ===\ncoverage: 89 of ~95 instruction slots (94%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0xdb83c x1   read_eventflag(int) \n  0x1d1ffc x1   check_item_left(int, int, int) \n  0x1e2308 x1   check_coord2(int, int, int, unsigned char) \n\n-- branches: 18 total, 12 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

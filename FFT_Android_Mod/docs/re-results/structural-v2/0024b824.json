@@ -1,0 +1,27 @@
+{
+  "address": "0024b824",
+  "name": "ctlbar_exit(CTLINFO*)",
+  "size": 356,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 92.13,
+  "distinct_bl": 10,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "245074",
+    "253ec8",
+    "256930",
+    "25caac",
+    "25ddb8",
+    "25dee0",
+    "26c05c",
+    "286c90",
+    "28b034",
+    "29a5c4"
+  ],
+  "log": "=== jtable.py: 0x24b824..0x24b988 (356 bytes) ===\ncoverage: 82 of ~89 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 10 distinct --\n  0x245074 x1   iOS_setDispMenuTouch(char) \n  0x253ec8 x1   wldctl_deactive() \n  0x256930 x1   ctltownmenu_init(int) \n  0x25caac x1   wldframe_clr(int) \n  0x25ddb8 x1   wlddisp_mask(int) \n  0x25dee0 x1   wldfade_set(int, int) \n  0x26c05c x1   townmenu_check(int, int*) \n  0x286c90 x1   pspNetEntranceMapThumUnLoad() \n  0x28b034 x3   pspWorldDisableFlg(PSP_WORLD_FLG) \n  0x29a5c4 x3   xpLibgpuClearImage \n\n-- branches: 1 total, 1 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

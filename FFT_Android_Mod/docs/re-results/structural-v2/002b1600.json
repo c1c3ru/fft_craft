@@ -1,0 +1,27 @@
+{
+  "address": "002b1600",
+  "name": "GX_Init(int)",
+  "size": 400,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 91.0,
+  "distinct_bl": 10,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2b04f0",
+    "2cdf6c",
+    "a2754",
+    "a7d1c",
+    "a8218",
+    "a856c",
+    "a9430",
+    "aa980",
+    "adf14",
+    "aec18"
+  ],
+  "log": "=== jtable.py: 0x2b1600..0x2b1790 (400 bytes) ===\ncoverage: 91 of ~100 instruction slots (91%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 10 distinct --\n  0xa2754 x1   CG2D_LOADER::CalcAsTexture(int, int, int*, int*) \n  0xa7d1c x1   CEGL2_IF::CEGL2_IF() \n  0xa8218 x1   CEGL2_IF::LoadShaderAll(char*) \n  0xa856c x3   CEGL2_IF::AllocPacket(int, int) \n  0xa9430 x1   CEGL2_IF::Init() \n  0xaa980 x2   CEGL2_FBO::Create(int, int, int, int, int) \n  0xadf14 x1   CEGL2_SPRITE::OnResume() \n  0xaec18 x1   CEGL2_SPRITE::CEGL2_SPRITE() \n  0x2b04f0 x1   CAPP_INFO::GetRootPath() \n  0x2cdf6c x2   sub_2cdf6c LOCAL(no-dynsym)\n\n-- branches: 4 total, 3 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

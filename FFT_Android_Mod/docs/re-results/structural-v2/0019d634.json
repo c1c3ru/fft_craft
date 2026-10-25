@@ -1,0 +1,26 @@
+{
+  "address": "0019d634",
+  "name": "MonsterNameInput()",
+  "size": 368,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 88.04,
+  "distinct_bl": 9,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "153584",
+    "153734",
+    "15ee2c",
+    "15ef7c",
+    "1a1450",
+    "1a73a4",
+    "1bac48",
+    "1bb164",
+    "1bde2c"
+  ],
+  "log": "=== jtable.py: 0x19d634..0x19d7a4 (368 bytes) ===\ncoverage: 81 of ~92 instruction slots (88%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 9 distinct --\n  0x153584 x1   Wtask_create(long, char*) \n  0x153734 x1   Wsend_taskparamater(long, long, long, long) \n  0x15ee2c x1   iOSUnitListWinReset() \n  0x15ef7c x1   iOSUnitListWinOnOff(int) \n  0x1a1450 x1   Name(unsigned char*, short*) \n  0x1a73a4 x1   ChrNameSet(short, unsigned char*) \n  0x1bac48 x1   iOSWldUnitListWinSet(int) \n  0x1bb164 x1   SetSttsA(int) \n  0x1bde2c x1   UnitTable(short, short, short, short, short, int (*)(int), int (*)(int), int) \n\n-- branches: 4 total, 1 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

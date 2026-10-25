@@ -3,7 +3,7 @@
   "name": "ctlcard_main(CTLINFO*)",
   "size": 340,
   "previous_status": "unread",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 89.41,
   "distinct_bl": 3,
   "tables_resolved": 0,
@@ -14,7 +14,37 @@
     "290b40"
   ],
   "log": "=== jtable.py: 0x248cd0..0x248e24 (340 bytes) ===\ncoverage: 76 of ~85 instruction slots (89%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x2168e0 x2   callSystemSound(int) \n  0x2494a0 x2   vOpn_fadeout(int) \n  0x290b40 x1   SetDispMask \n\n-- branches: 10 total, 5 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x248cd0",
+    "total_slots": 85,
+    "code_slots": 76,
+    "instruction_slots": 76,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x248e00",
+      "0x248e04",
+      "0x248e08",
+      "0x248e0c",
+      "0x248e10",
+      "0x248e14",
+      "0x248e18",
+      "0x248e1c",
+      "0x248e20"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/00248cd0.json"
 }

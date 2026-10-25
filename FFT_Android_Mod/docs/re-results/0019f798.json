@@ -3,7 +3,7 @@
   "name": "MainShop()",
   "size": 380,
   "previous_status": "unread",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 89.47,
   "distinct_bl": 7,
   "tables_resolved": 0,
@@ -18,7 +18,38 @@
     "2b9cac"
   ],
   "log": "=== jtable.py: 0x19f798..0x19f914 (380 bytes) ===\ncoverage: 85 of ~95 instruction slots (89%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 7 distinct --\n  0x153734 x2   Wsend_taskparamater(long, long, long, long) \n  0x1b7074 x1   DrawMessage(int, COMRECORD*) \n  0x1b7ad8 x1   SetMenuSelSide(unsigned char, short) \n  0x1bb62c x1   CurChrChg() \n  0x1c03e0 x1   WindowPositionInit() \n  0x27f14c x1   iOS_ClearRectHitAll() \n  0x2b9cac x1   iOS_setV2Icon(V2ICON_DATA, int) \n\n-- branches: 11 total, 6 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x19f798",
+    "total_slots": 95,
+    "code_slots": 85,
+    "instruction_slots": 85,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x19f8ec",
+      "0x19f8f0",
+      "0x19f8f4",
+      "0x19f8f8",
+      "0x19f8fc",
+      "0x19f900",
+      "0x19f904",
+      "0x19f908",
+      "0x19f90c",
+      "0x19f910"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/0019f798.json"
 }

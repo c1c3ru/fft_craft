@@ -1,0 +1,25 @@
+{
+  "address": "00249ac0",
+  "name": "vOpn_padread()",
+  "size": 268,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 91.04,
+  "distinct_bl": 8,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "215db4",
+    "249a80",
+    "2712d8",
+    "2712e0",
+    "280648",
+    "28065c",
+    "28e5e0",
+    "290dc0"
+  ],
+  "log": "=== jtable.py: 0x249ac0..0x249bcc (268 bytes) ===\ncoverage: 61 of ~67 instruction slots (91%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 8 distinct --\n  0x215db4 x1   resetFFT() \n  0x249a80 x1   vOpn_SetCDVolume(int, int) \n  0x2712d8 x1   Ssd_SetAttenuator(short) \n  0x2712e0 x1   Ssd_SetSpuVolume(short, short) \n  0x280648 x1   iOS_setReset(int) \n  0x28065c x1   iOS_getReset() \n  0x28e5e0 x1   pspNetPadRead \n  0x290dc0 x1   DrawSync \n\n-- branches: 7 total, 3 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

@@ -1,0 +1,23 @@
+{
+  "address": "002b7378",
+  "name": "RENDER_TO_SCREEN(int, int, int*, int*)",
+  "size": 276,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 91.3,
+  "distinct_bl": 6,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2b2238",
+    "2cb48c",
+    "2cb538",
+    "2cb6d0",
+    "2cb92c",
+    "a7390"
+  ],
+  "log": "=== jtable.py: 0x2b7378..0x2b748c (276 bytes) ===\ncoverage: 63 of ~69 instruction slots (91%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0xa7390 x1   CGX_SCREEN_CORRECT::Area_ToScreen(int, int, int, int*, int*) \n  0x2b2238 x1   IS_TEX_2X() \n  0x2cb48c x4   __floatsisf \n  0x2cb538 x2   __mulsf3 \n  0x2cb6d0 x2   __divsf3 \n  0x2cb92c x2   __fixsfsi \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

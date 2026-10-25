@@ -3,7 +3,7 @@
   "name": "frmbuf_get()",
   "size": 496,
   "previous_status": "unread",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 91.13,
   "distinct_bl": 23,
   "tables_resolved": 0,
@@ -34,7 +34,39 @@
     "29c5ec"
   ],
   "log": "=== jtable.py: 0x25f44c..0x25f63c (496 bytes) ===\ncoverage: 113 of ~124 instruction slots (91%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 23 distinct --\n  0x24c27c x1   wldbg_draw(GsOT*) \n  0x257e5c x1   ctleeff_draw(GsOT*) \n  0x25d64c x1   wldiwasaki_put(GsOT*) \n  0x25d7f0 x1   wldfrm_rect(int, RECT16*) \n  0x26640c x2   wldpac_draw(GsOT*, unsigned long*, int) \n  0x266c84 x1   wldday_put(GsOT*) \n  0x266df8 x1   wldtname_put(GsOT*) \n  0x266f30 x1   wldinfo_put(GsOT*) \n  0x267f3c x1   wldrute_draw(GsOT*) \n  0x26b86c x1   wldsymbol_draw() \n  0x26ba18 x1   wldtown_draw() \n  0x286124 x1   SetSpadStack(unsigned long) \n  0x286128 x1   ResetSpadStack() \n  0x28b050 x1   pspWorldCheckFlg(PSP_WORLD_FLG) \n  0x28e5c0 x1   VSync \n  0x290dc0 x4   DrawSync \n  0x291154 x1   StoreImage \n  0x29b428 x1   GsGetActiveBuff \n  0x29b544 x2   GsClearOt \n  0x29b5d0 x1   GsSwapDispBuff \n  0x29b6d0 x1   GsSetWorkBase \n  0x29b6fc x2   GsDrawOt \n  0x29c5ec x1   GsSortClear \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x25f44c",
+    "total_slots": 124,
+    "code_slots": 113,
+    "instruction_slots": 113,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x25f610",
+      "0x25f614",
+      "0x25f618",
+      "0x25f61c",
+      "0x25f620",
+      "0x25f624",
+      "0x25f628",
+      "0x25f62c",
+      "0x25f630",
+      "0x25f634",
+      "0x25f638"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/0025f44c.json"
 }

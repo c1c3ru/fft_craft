@@ -1,0 +1,24 @@
+{
+  "address": "001d21d8",
+  "name": "get_stop_event(BWORK*)",
+  "size": 332,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 93.98,
+  "distinct_bl": 7,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1ca5a4",
+    "1cb064",
+    "1cd600",
+    "1d1f48",
+    "1d1f8c",
+    "1d205c",
+    "1e2308"
+  ],
+  "log": "=== jtable.py: 0x1d21d8..0x1d2324 (332 bytes) ===\ncoverage: 78 of ~83 instruction slots (94%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 7 distinct --\n  0x1ca5a4 x1   change_status_adjust(int) \n  0x1cb064 x1   init_target_result(A_RESULT*) \n  0x1cd600 x1   set_status_all(int, int) \n  0x1d1f48 x1   check_move_ability(BWORK*) \n  0x1d1f8c x1   check_charge(BWORK*, int) \n  0x1d205c x1   check_trap(unsigned char, unsigned char, unsigned char) \n  0x1e2308 x1   check_coord2(int, int, int, unsigned char) \n\n-- branches: 6 total, 3 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

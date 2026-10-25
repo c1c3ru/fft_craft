@@ -1,0 +1,18 @@
+{
+  "address": "00200cdc",
+  "name": "startZoomChange(int)",
+  "size": 268,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 94.03,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2168e0"
+  ],
+  "log": "=== jtable.py: 0x200cdc..0x200de8 (268 bytes) ===\ncoverage: 63 of ~67 instruction slots (94%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x2168e0 x4   callSystemSound(int) \n\n-- branches: 8 total, 2 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

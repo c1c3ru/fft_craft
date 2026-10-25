@@ -1,0 +1,16 @@
+{
+  "address": "0028e2e4",
+  "name": "CdControl",
+  "size": 384,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 68.75,
+  "distinct_bl": 0,
+  "tables_resolved": 1,
+  "tables_unresolved": 0,
+  "bl_targets": [],
+  "log": "=== jtable.py: 0x28e2e4..0x28e464 (384 bytes) ===\ncoverage: 66 of ~96 instruction slots (69%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0x28e2f0, dispatch @0x28e2f4: 27 cases, 9 distinct handlers\n    targets: ['0x28e368', '0x28e410', '0x28e404', '0x28e368', '0x28e368', '0x28e368', '0x28e368', '0x28e368', '0x28e368', '0x28e378', '0x28e368', '0x28e368', '0x28e368', '0x28e390', '0x28e378', '0x28e42c', '0x28e44c', '0x28e378', '0x28e3ec', '0x28e378', '0x28e368', '0x28e368', '0x28e378', '0x28e378', '0x28e378', '0x28e378', '0x28e41c']\n\n-- bl targets: 0 distinct --\n\n-- branches: 9 total, 6 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

@@ -3,7 +3,7 @@
   "name": "sBattleTouchRotationMain()",
   "size": 416,
   "previous_status": "unread",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 94.23,
   "distinct_bl": 7,
   "tables_resolved": 0,
@@ -18,7 +18,34 @@
     "2cb92c"
   ],
   "log": "=== jtable.py: 0x15a988..0x15ab28 (416 bytes) ===\ncoverage: 98 of ~104 instruction slots (94%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 7 distinct --\n  0x2b7a8c x1   iOS_getTouchTap() \n  0x2b7b18 x2   iOS_getTouchBeginX() \n  0x2b7b40 x2   iOS_getTouchNowX() \n  0x2b7b90 x2   iOS_getTouchSwype() \n  0x2cb48c x2   __floatsisf \n  0x2cb538 x2   __mulsf3 \n  0x2cb92c x2   __fixsfsi \n\n-- branches: 10 total, 5 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x15a988",
+    "total_slots": 104,
+    "code_slots": 98,
+    "instruction_slots": 98,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x15ab10",
+      "0x15ab14",
+      "0x15ab18",
+      "0x15ab1c",
+      "0x15ab20",
+      "0x15ab24"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/0015a988.json"
 }

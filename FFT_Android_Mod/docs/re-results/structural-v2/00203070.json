@@ -1,0 +1,19 @@
+{
+  "address": "00203070",
+  "name": "setCursorByTouch(int, int, int)",
+  "size": 308,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 49.35,
+  "distinct_bl": 2,
+  "tables_resolved": 1,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1fba1c",
+    "202ff0"
+  ],
+  "log": "=== jtable.py: 0x203070..0x2031a4 (308 bytes) ===\ncoverage: 38 of ~77 instruction slots (49%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0x2030d8, dispatch @0x2030dc: 33 cases, 3 distinct handlers\n    targets: ['0x203174', '0x203188', '0x203188', '0x203188', '0x203188', '0x203188', '0x203188', '0x203188', '0x203188', '0x203188', '0x203188', '0x203188', '0x203188', '0x203174', '0x203188', '0x203188', '0x203188', '0x203188', '0x203188', '0x203188', '0x203188', '0x203188', '0x203188', '0x203168', '0x203188', '0x203188', '0x203188', '0x203188', '0x203188', '0x203188', '0x203188', '0x203188', '0x203174']\n\n-- bl targets: 2 distinct --\n  0x1fba1c x1   sub_1fba1c LOCAL(no-dynsym)\n  0x202ff0 x1   sub_202ff0 LOCAL(no-dynsym)\n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
