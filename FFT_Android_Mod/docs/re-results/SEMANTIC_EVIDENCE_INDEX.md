@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **256/1258** pending functions.
+Evidence collected: **264/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -267,3 +267,11 @@ These reports do not constitute semantic verification.
 | `000da63c` | export_suc(int) | [Evidence](semantic-evidence/000da63c.md) |
 | `000e14f4` | statusfigprint10(int, int, char*, COPYFIELD*) | [Evidence](semantic-evidence/000e14f4.md) |
 | `000fe1a4` | Waddlocalprim(tagPOLY_FT4*) | [Evidence](semantic-evidence/000fe1a4.md) |
+| `00102208` | Wexport_suc(int) | [Evidence](semantic-evidence/00102208.md) |
+| `0015a744` | iOSScrollButtonAreaCheck() | [Evidence](semantic-evidence/0015a744.md) |
+| `0015d6b4` | iOSTchCurUnitCheck() | [Evidence](semantic-evidence/0015d6b4.md) |
+| `00268ec4` | wldcenter_move() | [Evidence](semantic-evidence/00268ec4.md) |
+| `002b6b38` | Main_Uninit() | [Evidence](semantic-evidence/002b6b38.md) |
+| `002b715c` | setPspDispNum(short, short, short) | [Evidence](semantic-evidence/002b715c.md) |
+| `002bb678` | iOSMenuOkCancelHelpGet(int, int) | [Evidence](semantic-evidence/002bb678.md) |
+| `00097b70` | _float32_pack | [Evidence](semantic-evidence/00097b70.md) |
