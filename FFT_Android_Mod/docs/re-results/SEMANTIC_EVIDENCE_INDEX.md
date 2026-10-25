@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **16/1258** pending functions.
+Evidence collected: **24/1258** pending functions.
 These reports do not constitute semantic verification.
 
 | Address | Function | Evidence |
@@ -25,3 +25,11 @@ These reports do not constitute semantic verification.
 | `001569ac` | editdirect() | [Evidence](semantic-evidence/001569ac.md) |
 | `002472a8` | ctlsound_main(CTLINFO*) | [Evidence](semantic-evidence/002472a8.md) |
 | `00253f20` | ctlmap_init() | [Evidence](semantic-evidence/00253f20.md) |
+| `0026c680` | ctltresure_main(CTLINFO*) | [Evidence](semantic-evidence/0026c680.md) |
+| `002553a8` | ctlhelp2_init(int, int) | [Evidence](semantic-evidence/002553a8.md) |
+| `0019dc10` | SttsEmploy() | [Evidence](semantic-evidence/0019dc10.md) |
+| `001022ec` | Wtutorial_hookfunc() | [Evidence](semantic-evidence/001022ec.md) |
+| `0026dd40` | ctlhentuto_init() | [Evidence](semantic-evidence/0026dd40.md) |
+| `002608c0` | ctlokng_init(_POINT) | [Evidence](semantic-evidence/002608c0.md) |
+| `0025990c` | ctlhistory_main(CTLINFO*) | [Evidence](semantic-evidence/0025990c.md) |
+| `001b8c38` | sort_init() | [Evidence](semantic-evidence/001b8c38.md) |
