@@ -33,3 +33,21 @@ no PATH. Alvo: `src/lib/armeabi/libgl2jni.so`.
 automática) foi testado e abandonado — gerou falsos positivos de
 tabela de salto. Não está aqui; não vale retomar sem entender a causa
 raiz dos falsos positivos.
+
+
+## Orquestração paralela (nova)
+
+```bash
+cd FFT_Android_Mod
+python3 -m pip install capstone pyelftools
+python3 docs/re-tools/parallel_loop.py --workers 5 --limit 50
+```
+
+- A fila é ordenada por **bytes decrescentes** a partir de `RE_FUNCTION_INVENTORY.csv`. Funções já confirmadas no inventário são ignoradas por padrão.
+- Cinco subprocessos podem analisar funções distintas em paralelo. Somente o coordenador grava os arquivos `docs/re-results/<address>.json` (escrita atômica) e `SUMMARY.md`. O binário é apenas lido, não modificado.
+- Resultados são retomáveis: itens já analisados para o mesmo SHA-256 do binário e tamanho são ignorados. `--include-reviewed` habilita reanálise de funções já confirmadas.
+- Para famílias identificadas, usa `family_sim.py` antes do passe completo. A similaridade exige Jaccard >= 90%, pelo menos 5 destinos `bl`, cobertura >= 95% nos dois membros e nenhuma tabela não resolvida.
+- Na ausência de confirmação por similaridade, executa `jtable.py`. Sem tabelas de salto, com cobertura >=95% e nenhuma advertência de tabela não resolvida, sinaliza `auto_structural`; demais casos ficam `needs_review`.
+- Status automáticos **não alteram o CSV nem equivalem a revisão semântica**. A aceitação é uma triagem estrutural; verifique chamadas indiretas, saltos computados não reconhecidos e lacunas relevantes antes de considerar uma função inteiramente compreendida.
+- O script depende das ferramentas existentes e dos binutils `readelf` e `c++filt`. Há opção `--timeout` por função e erros ficam registrados individualmente no JSON. Para refazer uma análise, apague o JSON do respectivo endereço.
+- Não rode dois coordenadores com a mesma pasta de resultados. Use pastas diferentes via `--output` para execuções independentes e consolide após a conclusão.
