@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1176/1258** pending functions.
+Evidence collected: **1184/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1187,3 +1187,11 @@ These reports do not constitute semantic verification.
 | `00273cc8` | IsAlmostNullUnit(int) | [Evidence](semantic-evidence/00273cc8.md) |
 | `0028c768` | CFFT_STATE::AttackTeamFaceIDToUnitATFID(int) | [Evidence](semantic-evidence/0028c768.md) |
 | `0024b02c` | wldmapEntry(int) | [Evidence](semantic-evidence/0024b02c.md) |
+| `0026a27c` | snpl_fadein() | [Evidence](semantic-evidence/0026a27c.md) |
+| `0028c690` | CFFT_STATE::UnitIDToFID_SP2(int, int) | [Evidence](semantic-evidence/0028c690.md) |
+| `00258f1c` | evt_gil_high() | [Evidence](semantic-evidence/00258f1c.md) |
+| `0026a5b0` | snpl_meswait() | [Evidence](semantic-evidence/0026a5b0.md) |
+| `0026b694` | wldssd_wait() | [Evidence](semantic-evidence/0026b694.md) |
+| `00270108` | wldmess_put(int, int, _POINT, unsigned long*) | [Evidence](semantic-evidence/00270108.md) |
+| `0029ae00` | xpLibGetOffset(int*, int*) | [Evidence](semantic-evidence/0029ae00.md) |
+| `002c99b5` | operator new(unsigned int) | [Evidence](semantic-evidence/002c99b5.md) |
