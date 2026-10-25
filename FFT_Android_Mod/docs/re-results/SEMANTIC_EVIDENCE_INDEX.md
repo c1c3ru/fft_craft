@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **448/1258** pending functions.
+Evidence collected: **456/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -459,3 +459,11 @@ These reports do not constitute semantic verification.
 | `0020da7c` | popBackColor() | [Evidence](semantic-evidence/0020da7c.md) |
 | `0021b570` | SeekEffect() | [Evidence](semantic-evidence/0021b570.md) |
 | `00243a14` | deleteMessage() | [Evidence](semantic-evidence/00243a14.md) |
+| `002496d0` | vOpn_key_repinit() | [Evidence](semantic-evidence/002496d0.md) |
+| `0024aa60` | vOpnmess_put(int, int, _POINT, unsigned long*) | [Evidence](semantic-evidence/0024aa60.md) |
+| `00258f68` | evt_gil_low() | [Evidence](semantic-evidence/00258f68.md) |
+| `0025e888` | day_to_month(int, int*, int*) | [Evidence](semantic-evidence/0025e888.md) |
+| `00263abc` | iOSNovelBrightOn() | [Evidence](semantic-evidence/00263abc.md) |
+| `00270414` | defscrwin_set(int, int, _POINT*, _POINT*) | [Evidence](semantic-evidence/00270414.md) |
+| `0028d6a0` | tlSetMallocUserPointer(void**) | [Evidence](semantic-evidence/0028d6a0.md) |
+| `002a257c` | RotNclip3_nom | [Evidence](semantic-evidence/002a257c.md) |
