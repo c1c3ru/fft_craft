@@ -81,6 +81,10 @@ jobs:
               "Real ARM must preserve local 0x40 clearing evidence")
           assert "Modeled ARM CFG nodes:" in report, (
               "New bounded CFG section must be included")
+          assert "Entry-relative modeled dominators:" in report, (
+              "Missing entry-rooted dominator evidence")
+          assert "not global or dynamic dominance" in report, (
+              "Dominance limitation must be explicit")
           assert "Modeled direct predecessors:" in report, (
               "Real ARM effects must have decoded incoming edges")
           assert "NOT a dominance or impossibility proof" in report or (
