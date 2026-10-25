@@ -114,6 +114,16 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_v2icon_call_flow.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_v2icon_destinations.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_three_callees_audit.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_three_callees_exec.py
+          python3 - <<'PY'
+          from pathlib import Path
+          report = Path("FFT_Android_Mod/docs/re-results/SEMANTIC_THREE_CALLEES_EXECUTION.md").read_text()
+          assert "Three-callee and caller tests: 72/72 PASS" in report
+          assert all(x in report for x in (
+              "0x2168e0", "0x2b8900", "index 49",
+              "index 52", "synthetic", "not executed"))
+          print("PASS: real ELF callee and caller machine contracts with explicit unknown targets")
+          PY
           python3 - <<'PY'
           from pathlib import Path
           report = Path("FFT_Android_Mod/docs/re-results/SEMANTIC_THREE_CALLEES_AUDIT.md").read_text()
