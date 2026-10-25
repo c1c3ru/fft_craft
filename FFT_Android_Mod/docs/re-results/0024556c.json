@@ -1,0 +1,26 @@
+{
+  "address": "0024556c",
+  "name": "movie_exit(int)",
+  "size": 164,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 97.56,
+  "distinct_bl": 10,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "24552c",
+    "28b498",
+    "28b4f0",
+    "28b4f8",
+    "28b500",
+    "28b508",
+    "290b40",
+    "290dc0",
+    "294ed4",
+    "714b8"
+  ],
+  "log": "=== jtable.py: 0x24556c..0x245610 (164 bytes) ===\ncoverage: 40 of ~41 instruction slots (98%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 10 distinct --\n  0x714b8 x1   sub_714b8 LOCAL(no-dynsym)\n  0x24552c x1   cdxa_stop() \n  0x28b498 x1   StUnSetRing \n  0x28b4f0 x1   DecDCToutCallback \n  0x28b4f8 x1   get_SoundOnly_Flg__Fv() \n  0x28b500 x1   set_SoundOnly_Flg__Fi(int) \n  0x28b508 x1   pspMovieEnd__Fv() \n  0x290b40 x1   SetDispMask \n  0x290dc0 x1   DrawSync \n  0x294ed4 x2   xpLibgpuVramAddrGet \n\n-- branches: 5 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

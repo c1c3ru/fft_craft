@@ -1,0 +1,23 @@
+{
+  "address": "0027faa0",
+  "name": "iOS_SuspendWorldMap()",
+  "size": 156,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 97.44,
+  "distinct_bl": 7,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "11cbb4",
+    "153cb8",
+    "1ac224",
+    "1b8a28",
+    "1e736c",
+    "20f970",
+    "28a0a0"
+  ],
+  "log": "=== jtable.py: 0x27faa0..0x27fb3c (156 bytes) ===\ncoverage: 38 of ~39 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 7 distinct --\n  0x11cbb4 x1   iOS_RESUME_SET_EVENT_W(IOS_RESUME_DATA_EVENT_W*, IOS_RESUME_DATACOPY_MODE) \n  0x153cb8 x1   iOS_RESUME_SET_WORK_IW(IOS_RESUME_DATA_WORK_IW*, IOS_RESUME_DATACOPY_MODE) \n  0x1ac224 x1   iOS_RESUME_SET_FFTDATA_UNITLIST(IOS_RESUME_DATA_FFTDATA_UNITLIST*, IOS_RESUME_DATACOPY_MODE) \n  0x1b8a28 x1   iOS_RESUME_SET_RESERVE(IOS_RESUME_DATA_RESERVE*, IOS_RESUME_DATACOPY_MODE) \n  0x1e736c x1   iOS_RESUME_SET_UNIT_SD(IOS_RESUME_DATA_UNIT_SD*, IOS_RESUME_DATACOPY_MODE) \n  0x20f970 x1   iOS_RESUME_SET_GLBLWORK(IOS_RESUME_DATA_GLBLWORK*, IOS_RESUME_DATACOPY_MODE) \n  0x28a0a0 x1   iOS_RESUME_SET_PSPSAVE(IOS_RESUME_DATA_PSPSAVE*, IOS_RESUME_DATACOPY_MODE) \n\n-- branches: 1 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

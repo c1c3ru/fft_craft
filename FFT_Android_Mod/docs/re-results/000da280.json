@@ -1,0 +1,17 @@
+{
+  "address": "000da280",
+  "name": "recieve_statusinfo()",
+  "size": 156,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 92.31,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "159a54"
+  ],
+  "log": "=== jtable.py: 0xda280..0xda31c (156 bytes) ===\ncoverage: 36 of ~39 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x159a54 x2   asmGetActiveTask(int) \n\n-- branches: 7 total, 4 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

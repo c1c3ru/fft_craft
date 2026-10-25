@@ -1,0 +1,18 @@
+{
+  "address": "001d4008",
+  "name": "check_monsterup(BWORK*)",
+  "size": 160,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1d3c10",
+    "1e10c8"
+  ],
+  "log": "=== jtable.py: 0x1d4008..0x1d40a8 (160 bytes) ===\ncoverage: 40 of ~40 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x1d3c10 x4   sub_1d3c10 LOCAL(no-dynsym)\n  0x1e10c8 x1   get_unit_height(int) \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

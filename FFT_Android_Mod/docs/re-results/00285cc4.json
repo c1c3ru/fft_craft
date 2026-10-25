@@ -1,0 +1,22 @@
+{
+  "address": "00285cc4",
+  "name": "pspJobGetJobChangeFlag(unsigned char*, unsigned char, unsigned char (*) [3], int)",
+  "size": 168,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 97.62,
+  "distinct_bl": 6,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "187618",
+    "1a84f8",
+    "1b87b4",
+    "1b87ec",
+    "1d82a8",
+    "1d9250"
+  ],
+  "log": "=== jtable.py: 0x285cc4..0x285d6c (168 bytes) ===\ncoverage: 41 of ~42 instruction slots (98%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x187618 x1   GetLocalJobNumber(short) \n  0x1a84f8 x1   GetCommandNumber(int) \n  0x1b87b4 x1   SetBitStream(unsigned char*) \n  0x1b87ec x1   GetBitStream(unsigned int) \n  0x1d82a8 x1   get_ability(int, int) \n  0x1d9250 x1   get_job_change_flag(unsigned char*, unsigned char) \n\n-- branches: 5 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

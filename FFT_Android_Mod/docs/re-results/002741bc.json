@@ -1,0 +1,18 @@
+{
+  "address": "002741bc",
+  "name": "SetMove()",
+  "size": 176,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 95.45,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "279c34",
+    "28612c"
+  ],
+  "log": "=== jtable.py: 0x2741bc..0x27426c (176 bytes) ===\ncoverage: 42 of ~44 instruction slots (95%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x279c34 x2   MemCpyW(unsigned short*, unsigned short const*, int) \n  0x28612c x1   ps_rand() \n\n-- branches: 3 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

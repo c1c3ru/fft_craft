@@ -1,0 +1,21 @@
+{
+  "address": "001568fc",
+  "name": "worldmap_restart()",
+  "size": 176,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 81.82,
+  "distinct_bl": 5,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "100500",
+    "101fe4",
+    "1020f8",
+    "15685c",
+    "290dc0"
+  ],
+  "log": "=== jtable.py: 0x1568fc..0x1569ac (176 bytes) ===\ncoverage: 36 of ~44 instruction slots (82%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 5 distinct --\n  0x100500 x1   Wmakemessagepacket(char*) \n  0x101fe4 x1   Wevent_init_memory() \n  0x1020f8 x1   Wevent_init_system() \n  0x15685c x1   load_worldname() \n  0x290dc0 x2   DrawSync \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

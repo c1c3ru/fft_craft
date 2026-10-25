@@ -1,0 +1,23 @@
+{
+  "address": "0029a3ec",
+  "name": "DrawPrim",
+  "size": 164,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 90.24,
+  "distinct_bl": 7,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "290b54",
+    "290c6c",
+    "291ae4",
+    "291f08",
+    "2956a0",
+    "2ab718",
+    "2abd1c"
+  ],
+  "log": "=== jtable.py: 0x29a3ec..0x29a490 (164 bytes) ===\ncoverage: 37 of ~41 instruction slots (90%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 7 distinct --\n  0x290b54 x1   ClearOTag \n  0x290c6c x1   AddPrim \n  0x291ae4 x1   xpLibgpuStartRender \n  0x291f08 x1   sub_291f08 LOCAL(no-dynsym)\n  0x2956a0 x1   sub_2956a0 LOCAL(no-dynsym)\n  0x2ab718 x1   sceGuEnable \n  0x2abd1c x1   sceGuTexFunc \n\n-- branches: 3 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
