@@ -11,6 +11,9 @@ from capstone.arm import ARM_INS_LDR, ARM_OP_MEM, ARM_REG_PC
 from elftools.elf.elffile import ELFFile
 
 import jtable
+import semantic_facts
+
+EVIDENCE_VERSION = 2
 
 ROOT = Path(__file__).resolve().parents[2]
 DISCLAIMER = ("Static ARM-mode disassembly only. Reachability is heuristic; "
@@ -123,8 +126,8 @@ def evidence(record, data, limit_lines=70, binary_sha256=None):
     stores = [(addr, ins) for addr, ins in sorted(seen.items())
               if ins.mnemonic.startswith(("str", "stm", "vstr", "vstm", "strex", "swp"))
               or ins.mnemonic in ("push", "vpush")]
-    calls = [(addr, ins) for addr, ins in sorted(seen.items())
-             if ins.mnemonic.startswith(("bl", "blx"))]
+    calls = semantic_facts.calls(seen)
+    bitmask_facts = semantic_facts.bitmask_effects(seen)
     def line(addr, ins):
         return f"0x{addr:08x}: {ins.mnemonic} {ins.op_str}".rstrip()
     lines = [f'# ARM evidence: \x60{record["address"]}\x60 — {record["name"]}',
@@ -136,10 +139,12 @@ def evidence(record, data, limit_lines=70, binary_sha256=None):
              f'- Heuristically decoded instruction slots: {len(observed)}/{len(slots)}',
              f'- Trailing bytes outside complete instructions: {len(data) % alignment}',
              f'- ELF SHA-256: `{binary_sha256 or "not supplied"}`',
+             f'- Evidence schema: v{EVIDENCE_VERSION}',
              f'- Unvisited {alignment}-byte slots: {len(gaps)} (not necessarily code)',
              f'- Unvisited slots referenced by PC-relative LDR: {len(referenced_gaps)}',
              f'- Other unvisited slots: {len(other_gaps)}',
-             f'- Candidate memory stores: {len(stores)}; calls: {len(calls)}',
+             f'- Candidate memory stores: {len(stores)}; true BL/BLX calls: {len(calls)}',
+             f'- Candidate local bitmask effects: {len(bitmask_facts)}',
              f'- Resolved ARM jump dispatches: {len(tables)}; unresolved: {len(unresolved)}',
              "", "## Candidate dispatch destinations", ""]
     if thumb:
@@ -153,6 +158,19 @@ def evidence(record, data, limit_lines=70, binary_sha256=None):
         lines.append(f'- unresolved dispatch 0x{addr:x}')
     lines.extend(["", "## Potential memory writes (first 30)", ""])
     lines += [f'- \x60{line(a, i)}\x60' for a, i in stores[:30]] or ["None identified."]
+    lines.extend(["", "## Candidate path-local bitmask effects", "",
+                  "These sequences are instruction-local observations, not global "
+                  "postconditions, equivalence proofs, or executed traces.", ""])
+    for fact in bitmask_facts[:30]:
+        action = "clear" if fact["kind"] == "clear_bits" else "set"
+        addresses = ", ".join(f"0x{a:x}" for a in fact["addresses"])
+        guard = f'condition {fact["condition"]}'
+        if fact["test_mask"] is not None:
+            guard += f' following TST mask 0x{fact["test_mask"]:x}'
+        lines.append(f'- Candidate {action} bits 0x{fact["mask"]:x} in '
+                     f'`{fact["memory"]}` ({guard}); instructions {addresses}')
+    if not bitmask_facts:
+        lines.append("None identified by conservative adjacent-instruction rules.")
     lines.extend(["", "## Calls (first 30)", ""])
     lines += [f'- \x60{line(a, i)}\x60' for a, i in calls[:30]] or ["None identified."]
     lines.extend(["", "## Candidate PC-relative literal words", "",
@@ -184,10 +202,12 @@ def run(binary, results, output, limit):
         rows = list(csv.DictReader(stream))
     output.mkdir(parents=True, exist_ok=True)
     marker = f"ELF SHA-256: `{digest}`"
+    version_marker = f"Evidence schema: v{EVIDENCE_VERSION}"
 
     def is_current(path):
         try:
-            return path.is_file() and marker in path.read_text(encoding="utf-8")
+            return (path.is_file() and marker in path.read_text(encoding="utf-8")
+                    and version_marker in path.read_text(encoding="utf-8"))
         except OSError:
             return False
 
@@ -216,6 +236,7 @@ def run(binary, results, output, limit):
 
     index = ["# ARM review evidence index", "", DISCLAIMER, "",
              f"ELF SHA-256: `{digest}`", "",
+             f"Evidence schema: v{EVIDENCE_VERSION}", "",
              "These reports do not constitute semantic verification.", "",
              "| Address | Function | Evidence |",
              "|---|---|---|"]
