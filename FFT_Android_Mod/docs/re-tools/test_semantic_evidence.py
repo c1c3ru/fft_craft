@@ -85,11 +85,33 @@ class EvidenceTests(unittest.TestCase):
             index = (results / "SEMANTIC_EVIDENCE_INDEX.md").read_text()
             self.assertIn("Evidence collected: **3/3**", index)
 
-    def test_reject_unaligned_arm_ranges(self):
-        with self.assertRaisesRegex(ValueError, "multiples of four"):
+    def test_reject_invalid_executable_range(self):
+        with self.assertRaisesRegex(ValueError, "halfword aligned"):
             module.read_function(Path("/nonexistent"), 0x1001, 8)
-        with self.assertRaisesRegex(ValueError, "multiples of four"):
+        with self.assertRaisesRegex(ValueError, "size positive"):
+            module.read_function(Path("/nonexistent"), 0x1000, 0)
+        # A short non-word-multiple symbol is valid input to the reader.
+        with self.assertRaises(FileNotFoundError):
             module.read_function(Path("/nonexistent"), 0x1000, 7)
+
+    def test_thumb_tagged_symbol_is_decoded_in_thumb_mode(self):
+        # Thumb: movs r0, #1; bx lr; .word data
+        data = bytes.fromhex("0120 7047 78563412")
+        report = module.evidence({
+            "address": "00001001", "name": "__gxx_personality_v0",
+            "status": "needs_review",
+        }, data)
+        self.assertIn("Instruction set: Thumb (tagged symbol address)", report)
+        self.assertIn("0x00001000: movs r0, #1", report)
+        self.assertIn("Thumb jump-table analysis was not performed", report)
+        self.assertIn("Other unvisited slots", report)
+        self.assertIn("linear, stops at first recognized return; NOT a CFG", report)
+
+    def test_thumb_literal_reference_uses_thumb_pc_offset(self):
+        data = bytes.fromhex("0048 7047 78563412")
+        found, _, _ = module.collect_thumb(data, 0x1000)
+        refs = module.pc_relative_literals(found, 0x1000, data, thumb=True)
+        self.assertEqual(refs[0x1004]["value"], 0x12345678)
 
     def test_markdown_contains_real_newlines(self):
         spec = importlib.util.spec_from_file_location(
