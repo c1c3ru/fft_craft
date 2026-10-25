@@ -6,22 +6,22 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 |---|---:|
 | Inventory total | 6,455 functions / 1,837,392 bytes |
 | Previously analyzed in CSV | 3,373 functions / 1,513,492 bytes |
-| JSON checkpoints (all statuses) | 1,630 |
-| Newly accepted structurally | 798 functions / 144,788 bytes |
-| Needs review | 832 functions |
+| JSON checkpoints (all statuses) | 1,729 |
+| Newly accepted structurally | 823 functions / 145,512 bytes |
+| Needs review | 906 functions |
 | Core targets in inventory | 4,642 functions |
-| Core targets checkpointed | 1,527 functions |
-| Core accepted structurally | 715 functions |
-| Core needs review | 812 functions |
-| Core not yet checkpointed | 825 functions |
-| Not yet checkpointed | 1,429 functions / 50,560 bytes |
+| Core targets checkpointed | 1,626 functions |
+| Core accepted structurally | 740 functions |
+| Core needs review | 886 functions |
+| Core not yet checkpointed | 725 functions |
+| Not yet checkpointed | 1,329 functions / 47,752 bytes |
 
 ## Checkpoint status
 
 | Status | Functions |
 |---|---:|
-| auto_structural | 798 |
-| needs_review | 832 |
+| auto_structural | 823 |
+| needs_review | 906 |
 
 ## Review queue (largest first)
 
@@ -831,10 +831,25 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | `000da7e4` | readed_mapchange() (needs_review) | 36 | 88.89 | 0 | 0 |
 | `002b871c` | iOS_isTouchBegan() (needs_review) | 32 | 87.5 | 0 | 0 |
 | `002b2358` | Music_Play(int, int, int, int) (needs_review) | 32 | 87.5 | 0 | 0 |
+| `002b01e0` | GlTexEnv_GetTextureHandle_2X(int) (needs_review) | 32 | 87.5 | 0 | 0 |
+| `002ae8e0` | GlTexEnv_GetTextureHandle(int) (needs_review) | 32 | 87.5 | 0 | 0 |
+| `002ae8c0` | GlTexEnv_GetSprite(int) (needs_review) | 32 | 87.5 | 0 | 0 |
+| `002a2ce0` | PCwrite (needs_review) | 32 | 87.5 | 0 | 0 |
 | `002a2ca8` | PClseek (needs_review) | 32 | 87.5 | 0 | 0 |
 | `002a2c70` | PCread (needs_review) | 32 | 87.5 | 0 | 0 |
+| `002a1350` | ReadGeomOffset (needs_review) | 32 | 87.5 | 0 | 0 |
+| `00294e44` | GetDispEnv (needs_review) | 32 | 87.5 | 0 | 0 |
+| `0028ce58` | sceCtrlPeekBufferPositive (needs_review) | 32 | 87.5 | 0 | 0 |
 | `0028ba84` | TE_task_start(long) (needs_review) | 32 | 87.5 | 0 | 0 |
+| `0028b610` | initXpHeap() (needs_review) | 32 | 87.5 | 0 | 0 |
+| `00288a58` | pspPrimDirectParamSet(int, RECT16*) (needs_review) | 32 | 87.5 | 0 | 0 |
+| `0028082c` | IOS_PSP2IOS_Y(int) (needs_review) | 32 | 87.5 | 0 | 0 |
+| `0028080c` | IOS_PSP2IOS_X(int) (needs_review) | 32 | 87.5 | 0 | 0 |
+| `00270500` | curhis_clr(int) (needs_review) | 32 | 87.5 | 0 | 0 |
+| `0026df10` | ctlhentuto_active(CTLINFO*) (needs_review) | 32 | 87.5 | 0 | 0 |
+| `0024f4b0` | ctltips_active(CTLINFO*) (needs_review) | 32 | 87.5 | 0 | 0 |
 | `0021f308` | PermanentEffectEndRequest(unsigned char) (needs_review) | 32 | 87.5 | 0 | 0 |
+| `0021cefc` | LockEffectCompelBreak() (needs_review) | 32 | 87.5 | 0 | 0 |
 | `0021cedc` | UnlockEffect() (needs_review) | 32 | 87.5 | 0 | 0 |
 | `0021b8a4` | PushGravity() (needs_review) | 32 | 87.5 | 0 | 0 |
 | `002119a0` | ResetChangePalette() (needs_review) | 32 | 87.5 | 0 | 0 |
@@ -859,6 +874,65 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | `000d88fc` | stopmenutransfer() (needs_review) | 32 | 87.5 | 0 | 0 |
 | `000c8178` | tool_readsquare(int, int, int) (needs_review) | 32 | 87.5 | 0 | 0 |
 | `000c8158` | tool_writesquare(int, int, int) (needs_review) | 32 | 87.5 | 0 | 0 |
+| `002befa0` | iOS_OrMenuTouchKeyInput(unsigned int) (needs_review) | 28 | 85.71 | 0 | 0 |
+| `002b7034` | iOSCancelButtonCheck() (needs_review) | 28 | 85.71 | 0 | 0 |
+| `002b242c` | Music_IsPlaying() (needs_review) | 28 | 85.71 | 0 | 0 |
+| `002b1bcc` | NowLoading_Bootup() (needs_review) | 28 | 71.43 | 0 | 0 |
+| `002acb2c` | GuEmu_GetRAW(int) (needs_review) | 28 | 85.71 | 0 | 0 |
+| `002a2b10` | xpPadDebugSet (needs_review) | 28 | 85.71 | 0 | 0 |
+| `002a2a4c` | xpPadKeyBufGet (needs_review) | 28 | 85.71 | 0 | 0 |
+| `002a148c` | SetColorMatrix (needs_review) | 28 | 85.71 | 0 | 0 |
+| `002a1440` | SetLightMatrix (needs_review) | 28 | 85.71 | 0 | 0 |
+| `0029fed4` | PSX_ccos (needs_review) | 28 | 85.71 | 0 | 0 |
+| `00290e6c` | DrawSyncCallback (needs_review) | 28 | 85.71 | 0 | 0 |
+| `0028e6d4` | xpSetWaitVSyncFunc(int (*)()) (needs_review) | 28 | 85.71 | 0 | 0 |
+| `0028e5c4` | VSyncCallback (needs_review) | 28 | 85.71 | 0 | 0 |
+| `0028da90` | tlMallocErrorFunc(void (*)(TL_MALLOC_ERROR)) (needs_review) | 28 | 85.71 | 0 | 0 |
+| `002885d4` | pspOpenEnableFlg(PSP_OPEN_FLG) (needs_review) | 28 | 85.71 | 0 | 0 |
+| `002885b8` | pspOpenDisableFlg(PSP_OPEN_FLG) (needs_review) | 28 | 85.71 | 0 | 0 |
+| `00281678` | iOS_v2menuGetItem() (needs_review) | 28 | 85.71 | 0 | 0 |
+| `0026c25c` | iOSNovelModeRestore() (needs_review) | 28 | 85.71 | 0 | 0 |
+| `00258b1c` | evt_skip4() (needs_review) | 28 | 85.71 | 0 | 0 |
+| `00258b00` | evt_skip3() (needs_review) | 28 | 85.71 | 0 | 0 |
+| `0024d948` | iOS_BRST_CHECK() (needs_review) | 28 | 85.71 | 0 | 0 |
+| `0021f2ec` | GetPEffectStatus(unsigned char) (needs_review) | 28 | 85.71 | 0 | 0 |
+| `001d751c` | erase_unit(int) (needs_review) | 28 | 85.71 | 0 | 0 |
+| `001d357c` | set_playerwork2(PENTRY*, unsigned char*) (needs_review) | 28 | 85.71 | 0 | 0 |
+| `001ca938` | net_setknockback(unsigned char, unsigned char, unsigned char) (needs_review) | 28 | 85.71 | 0 | 0 |
+| `001c7218` | TEST_TEST() (needs_review) | 28 | 85.71 | 0 | 0 |
+| `001b70f4` | DrawMessageWithPosition(int, COMRECORD*, int) (needs_review) | 28 | 85.71 | 0 | 0 |
+| `001a8604` | Mituryo(short) (needs_review) | 28 | 85.71 | 0 | 0 |
+| `00196ea0` | MenuSelSideDirect(unsigned char, unsigned char) (needs_review) | 28 | 85.71 | 0 | 0 |
+| `0018378c` | fileclose(unsigned int) (needs_review) | 28 | 85.71 | 0 | 0 |
+| `00159a54` | asmGetActiveTask(int) (needs_review) | 28 | 85.71 | 0 | 0 |
+| `00155c5c` | ret_optionstatus() (needs_review) | 28 | 85.71 | 0 | 0 |
+| `00155870` | set_worldmoney(int) (needs_review) | 28 | 85.71 | 0 | 0 |
+| `00155854` | set_worldday(int, int) (needs_review) | 28 | 85.71 | 0 | 0 |
+| `00101fa4` | Wchangeflame(int) (needs_review) | 28 | 85.71 | 0 | 0 |
+| `0010155c` | WiOS_battle_scrollwindow_tap() (needs_review) | 28 | 85.71 | 0 | 0 |
+| `00101434` | Wsetplatetime(int) (needs_review) | 28 | 85.71 | 0 | 0 |
+| `000e62a8` | Set_bravebreak(unsigned short) (needs_review) | 28 | 85.71 | 0 | 0 |
+| `000e628c` | Get_bravebreak() (needs_review) | 28 | 85.71 | 0 | 0 |
+| `000d9748` | iOS_battle_scrollwindow_tap() (needs_review) | 28 | 85.71 | 0 | 0 |
+| `000d961c` | setplatetime(int) (needs_review) | 28 | 85.71 | 0 | 0 |
+| `00287588` | reset_g_NetIcon_DrawFlg() (needs_review) | 24 | 83.33 | 0 | 0 |
+| `00216128` | iOS_resetTexCacheLine() (needs_review) | 24 | 83.33 | 0 | 0 |
+| `0020f8a0` | finishAttackTeamSelect() (needs_review) | 24 | 83.33 | 0 | 0 |
+| `0020f538` | restartAnimation() (needs_review) | 24 | 83.33 | 0 | 0 |
+| `00150690` | setNetErrorCutFlg() (needs_review) | 24 | 83.33 | 0 | 0 |
+| `0010fa04` | Wloadcdst(int, int) (needs_review) | 24 | 83.33 | 0 | 0 |
+| `0010729c` | Wtutorial_padcontrol(int*) (needs_review) | 24 | 83.33 | 0 | 0 |
+| `001024e4` | Wwhatweather() (needs_review) | 24 | 83.33 | 0 | 0 |
+| `00101578` | WiOS_set_status_pad(unsigned long*) (needs_review) | 24 | 83.33 | 0 | 0 |
+| `000e0fa0` | loadcdst(int, int) (needs_review) | 24 | 83.33 | 0 | 0 |
+| `000ddd48` | tutorial_padcontrol(int*) (needs_review) | 24 | 83.33 | 0 | 0 |
+| `000da808` | whatweather() (needs_review) | 24 | 83.33 | 0 | 0 |
+| `000da5f8` | return_actionstructure() (needs_review) | 24 | 83.33 | 0 | 0 |
+| `000cbd78` | pspEntrySquareDataGet() (needs_review) | 24 | 83.33 | 0 | 0 |
+| `000cbb30` | resetYLine() (needs_review) | 24 | 83.33 | 0 | 0 |
+| `000c8198` | tool_squarecursor(int, int) (needs_review) | 24 | 83.33 | 0 | 0 |
+| `000c8138` | return_pentry() (needs_review) | 24 | 83.33 | 0 | 0 |
+| `000823ec` | zError (needs_review) | 24 | 83.33 | 0 | 0 |
 
 > Structural acceptance does not establish semantic equivalence.
 > Counts distinguish historical CSV statuses, new accepted checkpoints, and review cases.
