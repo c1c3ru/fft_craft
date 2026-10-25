@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **240/1258** pending functions.
+Evidence collected: **248/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -251,3 +251,11 @@ These reports do not constitute semantic verification.
 | `0020f728` | checkScrolling() | [Evidence](semantic-evidence/0020f728.md) |
 | `00211c88` | DisplayChangePalette() | [Evidence](semantic-evidence/00211c88.md) |
 | `00217ebc` | NewEffectAnimation(short) | [Evidence](semantic-evidence/00217ebc.md) |
+| `00261bc8` | endevent_count(int) | [Evidence](semantic-evidence/00261bc8.md) |
+| `000da280` | recieve_statusinfo() | [Evidence](semantic-evidence/000da280.md) |
+| `001bb224` | SetSttsEqu2(int) | [Evidence](semantic-evidence/001bb224.md) |
+| `001cd9b0` | inc_party_item(BWORK*, unsigned short, BWORK*) | [Evidence](semantic-evidence/001cd9b0.md) |
+| `00221028` | RequestBowEffect(long, EffectOrder*) | [Evidence](semantic-evidence/00221028.md) |
+| `00125238` | Wrecover_windows(int, int) | [Evidence](semantic-evidence/00125238.md) |
+| `0013819c` | recover_windows(int, int) | [Evidence](semantic-evidence/0013819c.md) |
+| `001bd3cc` | UnitListInit() | [Evidence](semantic-evidence/001bd3cc.md) |
