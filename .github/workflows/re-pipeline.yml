@@ -29,7 +29,7 @@ jobs:
     # Bounded smoke tests run on PRs as well as manual dispatches.
     needs: unit-tests
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -49,6 +49,19 @@ jobs:
         run: |
           python3 FFT_Android_Mod/docs/re-tools/check_smoke.py \
             FFT_Android_Mod/docs/re-results
+      - name: Batch 1 — 100 pending functions
+        run: |
+          python3 FFT_Android_Mod/docs/re-tools/parallel_loop.py \
+            --workers 5 --limit 100 --timeout 120
+          mkdir -p FFT_Android_Mod/docs/re-results/batch-summaries
+          cp FFT_Android_Mod/docs/re-results/SUMMARY.md \
+            FFT_Android_Mod/docs/re-results/batch-summaries/batch-100.md
+      - name: Batch 2 — 150 more pending functions
+        run: |
+          python3 FFT_Android_Mod/docs/re-tools/parallel_loop.py \
+            --workers 5 --limit 150 --timeout 120
+          cp FFT_Android_Mod/docs/re-results/SUMMARY.md \
+            FFT_Android_Mod/docs/re-results/batch-summaries/batch-250.md
       - uses: actions/upload-artifact@v4
         if: always()
         with:
