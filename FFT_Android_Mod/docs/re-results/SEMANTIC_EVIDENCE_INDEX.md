@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1024/1258** pending functions.
+Evidence collected: **1032/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1035,3 +1035,11 @@ These reports do not constitute semantic verification.
 | `002450b0` | TEST_getClearOt() | [Evidence](semantic-evidence/002450b0.md) |
 | `00245a60` | o_SelectCard(int) | [Evidence](semantic-evidence/00245a60.md) |
 | `0025691c` | IOSsTownModeSet(int) | [Evidence](semantic-evidence/0025691c.md) |
+| `0025f3d8` | iOS_wld_pad_trg(unsigned long) | [Evidence](semantic-evidence/0025f3d8.md) |
+| `0025f3fc` | iOSSnapshotSet(int) | [Evidence](semantic-evidence/0025f3fc.md) |
+| `0025f410` | iOSSDNovelHelpTrgSet(long) | [Evidence](semantic-evidence/0025f410.md) |
+| `0025f424` | iOSSDNovelHelpTrgGet() | [Evidence](semantic-evidence/0025f424.md) |
+| `0027b480` | setDrawPrimNum(int) | [Evidence](semantic-evidence/0027b480.md) |
+| `0027b514` | getCmdKindNum() | [Evidence](semantic-evidence/0027b514.md) |
+| `0027b528` | getCmdKind(unsigned int) | [Evidence](semantic-evidence/0027b528.md) |
+| `0027fc14` | chk_ucResumeDataSetAddr(unsigned char*) | [Evidence](semantic-evidence/0027fc14.md) |
