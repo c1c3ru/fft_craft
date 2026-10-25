@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **104/1258** pending functions.
+Evidence collected: **112/1258** pending functions.
 These reports do not constitute semantic verification.
 
 | Address | Function | Evidence |
@@ -113,3 +113,11 @@ These reports do not constitute semantic verification.
 | `00256ec8` | ctltownmenu_exit(CTLINFO*, int) | [Evidence](semantic-evidence/00256ec8.md) |
 | `00257af4` | ctlparty_main(CTLINFO*) | [Evidence](semantic-evidence/00257af4.md) |
 | `002b3464` | Boot_Init() | [Evidence](semantic-evidence/002b3464.md) |
+| `001b2ac8` | SetJobName() | [Evidence](semantic-evidence/001b2ac8.md) |
+| `00200bb8` | eventZoomChange(int) | [Evidence](semantic-evidence/00200bb8.md) |
+| `002702f0` | scrwin_para_set(int, int, _POINT*, _POINT*) | [Evidence](semantic-evidence/002702f0.md) |
+| `000c18cc` | disp_maptitle() | [Evidence](semantic-evidence/000c18cc.md) |
+| `000da35c` | event_init_memory() | [Evidence](semantic-evidence/000da35c.md) |
+| `00221d64` | RequestHitMarkEffect(long, EffectOrder*, long) | [Evidence](semantic-evidence/00221d64.md) |
+| `002899a0` | pspFftSave(int, FFT_SAVE_DATA*, int*) | [Evidence](semantic-evidence/002899a0.md) |
+| `0019f914` | ExitShop() | [Evidence](semantic-evidence/0019f914.md) |
