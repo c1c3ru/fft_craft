@@ -41,7 +41,7 @@ def build(inventory, core, results, binary):
                 "review_reason": reason, "tables_resolved": r.get("tables_resolved", 0),
                 "tables_unresolved": r.get("tables_unresolved", 0),
                 "review_attempts": r.get("review_attempts", 1),
-                "checkpoint_path": p.as_posix(),
+                "checkpoint_path": (Path("FFT_Android_Mod/docs/re-results") / p.name).as_posix(),
             })
         except (OSError, ValueError, TypeError):
             continue
