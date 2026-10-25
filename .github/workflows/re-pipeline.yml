@@ -113,6 +113,16 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_v2icon_execute.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_v2icon_call_flow.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_v2icon_destinations.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_three_callees_audit.py
+          python3 - <<'PY'
+          from pathlib import Path
+          report = Path("FFT_Android_Mod/docs/re-results/SEMANTIC_THREE_CALLEES_AUDIT.md").read_text()
+          assert all(x in report for x in (
+              "0x2b9cac", "0x26b374", "0x282268",
+              "iOS_setV2Icon", "sound_request", "iOS_clearOkNg",
+              "Original word", "No full-function semantic equivalence"))
+          print("PASS: three original ELF callee instruction audits")
+          PY
           python3 - <<'PY'
           from pathlib import Path
           report = Path("FFT_Android_Mod/docs/re-results/SEMANTIC_V2ICON_DESTINATIONS.md").read_text()
