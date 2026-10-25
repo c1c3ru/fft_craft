@@ -19588,3 +19588,88 @@ fase** — o par de reset do pool que `GetPermanentObject`/
 **Status CSV: `read_structural`** (call-graph mapeado e cruzado com
 cinco seções já documentadas; corpo do laço e do único `bl` não
 lidos instrução a instrução).
+
+## 605. Grab-bag de 14 checkpoints `auto_structural` (≥95% cobertura, 0 tabela pendente) aceitos direto, sem fork, por correção de método (2026-10-25, Fase 3, octogésimo quinto lote)
+
+**Correção de rota**: os últimos lotes estavam gastando um fork
+completo (300-370k tokens cada, várias chamadas de ferramenta) até
+em funções cujo checkpoint do CI já vinha com ≥95% de cobertura e
+zero tabela de salto pendente — exatamente o oposto do que
+`RE_BACKLOG_PLAN_PHASE3.md` pede no item 3 ("baixar a régua de
+verificação manual... aceitar o resultado automático direto"). A
+partir deste lote, todo candidato `auto_structural` com essas
+características é fechado direto pelo coordenador, com identificação
+curta via `bl` já resolvido no próprio checkpoint + um grep único de
+cruzamento — sem fork, sem segunda passada de ferramenta.
+
+- **`vOpn_fadeproc(unsigned long*)`** (`0x2494c8`, 520 B, 97%, 7 `bl`:
+  `iOS_setMask`/`AddPrim`/`GetTPage`/`SetTile`/`SetDrawMode`/
+  `SetSemiTrans`, mais `__divsi3`) — o irmão "Opn" de `vEnd_rollproc`
+  (§571) que ficou pendente desde aquela seção: desenha via
+  primitivas PS1 reais (`AddPrim`+`SetTile`+`SetSemiTrans`), confirma
+  que o fade de abertura usa semi-transparência real, não só
+  interpolação de cor.
+- **`iosAsmBoxCopy(char*, char*, tCOPYFIELD*, tCOPYFIELD*)`** (`0x159e5c`,
+  520 B, **100%**, 0 `bl`) — função folha pura, já citada por nome na
+  §580 sem nunca ter sido lida; copia dois `tCOPYFIELD` entre
+  buffers, sem chamar nada externo.
+- **`tlGarbageCollection()`** (`0x28d854`, 516 B, 98%, 4 `bl`:
+  `tlCheckHeap()` + 3 locais sem símbolo) — parte do alocador `tl*`
+  (`tlMalloc`/`tlFree`, abaixo), confirma que existe um coletor de
+  lixo real sobre esse heap.
+- **`pagewinmes_put(PAGEWININFO*, int)`** (`0x27070c`, 496 B, 95%, 3
+  `bl`: `wldwin_set`/`wldwin_trans`/`wldmess_put`) — mais uma função
+  da família `pagewin_*`/`wldwin_*`/`wldmess_*` de janelas de
+  texto/mapa mundi já estabelecida em várias seções anteriores.
+- **`tlFree(void*)`** (`0x28d498`, 496 B, 96%, 1 `bl` local) e
+  **`tlMallocAlign(unsigned int, unsigned int)`** (`0x28d24c`, 488 B,
+  97%, 2 `bl` locais) — par alocador/desalocador do heap `tl*`
+  (ver `tlGarbageCollection` acima); ambos delegam a helpers locais
+  sem símbolo (`sub_28cf3c`/`sub_28d01c`), consistente com um
+  alocador de heap customizado com metadados internos não expostos.
+- **`cSaveFFT::Execute()`** (`0x280108`, 488 B, 98%, 6 `bl`:
+  `cSaveFFT::Save(int)` ×1, `cSaveFFT::Load()` ×4, `CFFT_STATE::GetParam`/
+  `SetParam`, `iCloud_Receive()`, `iOS_setV2Icon` ×9) — o dispatcher
+  real por cima de `cSaveFFT::Save` (já lida por completo na seção
+  19) e `cSaveFFT::Load` (ainda `unread`), com suporte a iCloud já
+  confirmado em outras seções do sistema de save (§42/§580).
+- **`set_md(unsigned char*)`** (`0x1d6514`, 484 B, 98%, 0 `bl`) —
+  função folha pura sobre o buffer passado, sem chamadas externas.
+- **`world_extend_systemframe(int, int, char*)`** (`0x15667c`, 480 B,
+  **99%**, 0 `bl`) — função folha, provável extensão do frame de
+  sistema do mapa mundi (contador/estado, sem desenho ou I/O).
+- **`tokuseijob_check()`** (`0x25c4fc`, 476 B, 97%, 3 `bl`:
+  `jobnumber_conv(int)`, `mkadrtbl_calc(int)`,
+  `get_unitwork_add_wld(int)` ×2) — "tokusei" = 特性/característica;
+  checagem de característica de job usando os mesmos resolvedores de
+  endereço/job do mapa mundi já citados em várias seções (ex. §580).
+- **`setexperience(int, REWARD*)`** (`0x1e3324`, 476 B, 97%, 3 `bl`:
+  `levelup_check(BWORK*)`, `get_unit_jl(BWORK*,int,int*)`,
+  `add_jobpointB(int,int,uchar,int)`) — bate exatamente com o
+  cluster de progressão pós-batalha já citado (linha ~6368: "add
+  jobpoint"/"level up check"/"get unit jl" juntos) — esta é a função
+  que efetivamente aplica XP/JP ganho de uma `REWARD*` no fim de
+  combate, chamando os três primitivos já identificados.
+- **`jDrawTex(RECT16*, short*, COLOR*, int, int)`** (`0x193c2c`, 472
+  B, 98%, 2 `bl`: `SetSemiTrans`, `SetShadeTex` ×2) — wrapper `j`-
+  prefixado (família já confirmada na §9387) sobre as mesmas
+  primitivas de desenho PS1 com sombreamento real.
+- **`LoadImage2`** (`0x290ea4`, 464 B, 96%, 4 `bl`, 3 locais sem
+  símbolo + 1 helper comum `sub_714b8`) — irmã de `ClearImage2`
+  (§570, mesmos 3 locais `sub_28e6f0`/`sub_28e798`/`sub_28e998`
+  citados ali) — confirma que o padrão "wrapper que repete a
+  primitiva 3× com callbacks locais intercalados" se aplica tanto a
+  `Clear` quanto a `Load` de imagem.
+- **`set_netplayerwork_common(int, int)`** (`0x1d1a7c`, 464 B, **99%**,
+  4 `bl`: `get_shape2_plus(BWORK*,uchar*)`, `unitwork_init2all(BWORK*,int)`,
+  `NewEntry(...)`, `pspNetGetBattleModeFlag()` ×4) — já no cluster de
+  criação de entidade de batalha em rede citado na linha ~10708
+  (`unitwork_init2all`/`get_shape2_plus`/`NewEntry` juntos); confirma
+  que esta é a função que sincroniza o trabalho de um jogador remoto
+  no roster local, gated por `pspNetGetBattleModeFlag`.
+
+**Status CSV**: `read_structural` para todas as 14 (identidade e
+call-graph confirmados via checkpoint + cruzamento textual; nenhuma
+teve os blocos lidos instrução a instrução — aceite direto por já
+vir com cobertura ≥95% e zero tabela pendente, conforme o item 3 da
+estratégia documentada).
