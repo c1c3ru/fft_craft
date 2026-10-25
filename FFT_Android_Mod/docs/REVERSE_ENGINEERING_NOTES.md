@@ -18783,3 +18783,219 @@ pelo `jtable.py`, nenhuma chegou a ser lida bloco a bloco):
 confirmada via `readelf --dyn-syms`/`c++filt` + cruzamento textual;
 nenhuma teve os blocos internos lidos instrução a instrução — typing
 honesto, não `read_full`).
+
+## 581. `iOS_v2menuSetType(V2MENU_TYPE)` — configura layout/escala dos 11 campos de posição do menu V2 por tipo, lendo a tabela de sprite-IDs correspondente (2026-10-25, Fase 3, octogésimo primeiro lote, revisão semântica sobre checkpoint do CI)
+
+`iOS_v2menuSetType(V2MENU_TYPE)` (`0x28179c`, 540 B) — checkpoint do
+pipeline automatizado (`docs/re-results/0028179c.json`, não
+reexecutado nesta sessão): 128 de ~135 instruções possíveis (95%), 0
+tabelas de salto, 5 branches/4 de retrocesso. 2 `bl` distintos, 12
+chamadas: `RETINA_SCALE(int)` (×11) e `iOS_getv2menuSprIdTbl()` (×1).
+
+Já era citada por nome como parte do grupo de funções do sistema de
+ícones "V2" (`iOS_getV2Icon`/`iOS_setV2Icon`, §577), e `RETINA_SCALE`
+é a função de escala de DPI mais chamada do projeto inteiro (recorde
+de 131 chamadas em `Main_FrameRender`, sempre junto de
+`CGX_SCREEN_CORRECT::Scaled`). O padrão — 11 chamadas a
+`RETINA_SCALE` dentro de um laço com 4 branches de retrocesso — é
+consistente com a função escalando ~11 campos de posição/tamanho dos
+elementos visuais do menu V2 (ícones, texto, molduras) de acordo com
+a densidade de pixels do dispositivo, depois de resolver o conjunto
+de sprite-IDs certo pra aquele tipo de menu via
+`iOS_getv2menuSprIdTbl()`. Consistente com o nome ("SetType"): recebe
+um enum `V2MENU_TYPE` e configura todo o layout escalado daquele tipo
+de menu de uma vez, provavelmente uma vez por troca de tela/contexto,
+não por quadro. A ligação exata entre `V2MENU_TYPE` e quais 11 campos
+recebem qual escala não foi rastreada bloco a bloco.
+
+**Nota de metodologia**: `docs/RE_SEMANTIC_REVIEW_INITIAL.md` mantém
+esta função como `needs_review` sob um padrão mais rigoroso e
+deliberadamente separado (reconstrução de invariante por bloco +
+teste diferencial antes de aceitar qualquer hipótese). Esta seção usa
+o padrão `read_structural` em vigor desde a seção 1 do projeto (grafo
+de chamadas + cruzamento textual) — os dois status coexistem porque
+medem coisas diferentes, não são contraditórios.
+
+**Status CSV: `read_structural`.**
+
+## 582. `ctlperson_main(CTLINFO*)` — loop por-frame da tela de roster de personagens, mesmo esqueleto padrão `wldctl_active`+`sound_request`+`curhis_get/clr` já visto em dezenas de outros `ctl*_main` (2026-10-25, Fase 3, octogésimo primeiro lote, revisão semântica sobre checkpoint do CI)
+
+`ctlperson_main(CTLINFO*)` (`0x24eadc`, 500 B) — checkpoint do
+pipeline automatizado (`docs/re-results/0024eadc.json`): 115 de ~125
+instruções possíveis (92%), **0 tabelas de salto**, 12 branches/3 de
+retrocesso. 7 `bl` distintos, resolvidos por nome no checkpoint:
+`Wtask_status(long)`, `Wsend_taskparamater(long,long,long,long)`
+(×2), `ctlperson_deactive(CTLINFO*)` (chamada a si-mesma/transição de
+saída), `wldctl_active()`, `sound_request(int)` (×2),
+`curhis_get(int)`, `curhis_clr(int)`.
+
+Esse catálogo é exatamente o esqueleto padrão já fechado em dezenas de
+outros controladores `ctl*_main` do mesmo framework (`wldctl_active`
++ `sound_request` ×2 + `curhis_get`/`curhis_clr` + chamada ao próprio
+`_deactive`). `curhis_get`/`curhis_clr` fazem o bookkeeping do
+histórico de posição de cursor gravado pelo `_init` via `curhis_put`
+— confirma exatamente o par irmão imediato: `ctlperson_init()` (§580)
+grava a posição inicial do cursor via `curhis_put` antes desta função
+assumir o loop por frame. Sem tabela de salto, consistente com um
+loop simples de "navegar lista → tocar som ao mover seleção → ao
+confirmar, limpar histórico e chamar `ctlperson_deactive`" em vez de
+um switch de fases grande como `ctlhoukmes_main` (§117).
+`Wtask_status`/`Wsend_taskparamater` seguem o padrão de notificação de
+task já visto em `houkoku_okng` (§577). Nenhum bloco lido instrução a
+instrução.
+
+**Status CSV: `read_structural`.**
+
+## 583. `unittoface(int)` — resolução rápida de ID de rosto por unidade, mesma forma de switch (36 casos/4 handlers) de `attack_assumechr`/`attack_assumeface` (§121/122), mas sem a pipeline de carregamento de asset (2026-10-25, Fase 3, octogésimo primeiro lote, revisão semântica sobre checkpoint do CI)
+
+`unittoface(int)` (`0x15813c`, 496 B) — checkpoint do CI
+(`docs/re-results/0015813c.json`): **69% de cobertura** (86/124
+slots), abaixo do usual — sinalizado especificamente pelo
+`review_reason: resolved_jump_table_check`. **1 tabela de salto
+resolvida** (guarda `cmp`@`0x1581e8`, dispatch@`0x1581ec`): 36 casos,
+só **4 handlers distintos** — caso `0`→`0x1582cc`, caso `1`→`0x1582a8`,
+casos `2`-`33` (32 casos, a maioria) convergem no handler default em
+`0x158300`, e os últimos casos (`34`-`35`) caem num quarto handler em
+`0x158284`. 17 branches, 8 de retrocesso. 2 `bl` distintos:
+`get_unitwork_add(int)` e `get_jobdata(int)`.
+
+A forma do switch (36 casos, 4 handlers, um dominando a maioria) é
+**idêntica** à de `attack_assumechr()` (§121, `0xc8730`) e
+`attack_assumeface()` (§122, `0xc8fcc`) — ambas já confirmadas
+despachando por job/tipo de recurso durante um preview de ataque. A
+diferença central: aquelas duas têm 18-19 `bl` cada (carregamento de
+arquivo via `mallocForFile`/`numa_fileReadCD`, pipeline
+`PSX_LoadImage`/`StoreImage`, leitura binpack), enquanto `unittoface`
+só chama duas funções de lookup — confirma que é a **versão "pura"**
+da resolução de ID, sem carga de asset: `get_unitwork_add(int)`
+resolve o ponteiro `BWORK`/registro de trabalho da unidade,
+`get_jobdata(int)` busca os dados do emprego, e o switch de 36 casos
+(quase certamente indexado por ID de emprego — a faixa conhecida de
+~32-36 empregos jogáveis mais casos especiais nas pontas) escolhe
+qual campo do resultado de `get_jobdata` vira o ID de rosto final.
+Corpos dos 4 handlers não lidos instrução a instrução.
+
+**Conexão**: fecha, junto com §121/§122, a família dos resolvedores de
+rosto/ícone por switch de 36 casos.
+
+**Status CSV: `read_structural`** (call-graph + forma da tabela
+mapeados e cruzados com §121/122; corpos dos 4 handlers não lidos
+byte a byte, cobertura automática de só 69%).
+
+## 584. `getTrapResultDamage(BWORK*, int)` — resolução de armadilha de painel por 7 tipos, aplica status via `change_status_adjust` (§355) com RNG sincronizado por rede (2026-10-25, Fase 3, octogésimo primeiro lote, revisão semântica sobre checkpoint do CI)
+
+`getTrapResultDamage(BWORK*, int)` (`0x1ccc3c`, 496 B) — checkpoint do
+pipeline automatizado (`docs/re-results/001ccc3c.json`): 89% de
+cobertura (110/124 slots), **1 tabela de salto resolvida** (guarda
+`cmp`@`0x1ccc64`, despacho@`0x1ccc68`: **7 casos, 7 handlers
+distintos** — nenhum colapso, cada caso tem corpo próprio). 6
+branches, 5 de retrocesso. 2 `bl` distintos (5 chamadas):
+`change_status_adjust(int)` (×4) e `_pspNetRand(char const*, int)`
+(×1).
+
+Os dois alvos de `bl` já estão documentados: `change_status_adjust(int)`
+(`0x1ca5a4`, §355) é o filtro de exclusividade de status + gate de
+"duty" de rede que opera sobre os offsets de `BWORK` mapeados em
+§349. `_pspNetRand(char const*, int)` é o RNG **sincronizado por
+rede** (não `rand()` local) já confirmado em `check_tobe_crystal`
+(§558) para decisões que precisam dar o mesmo resultado em todos os
+clientes de uma partida multiplayer (ali era "virar cristal"; aqui é
+dano/efeito de armadilha).
+
+`getTrapResultDamage` resolve uma armadilha de painel de batalha (2º
+parâmetro = provável tipo/ID da armadilha, selecionando um dos 7
+casos), decide com RNG sincronizado se/quanto efeito aplica, e chama
+`change_status_adjust` até 4 vezes pra gravar o(s) status resultante(s)
+na unidade — coerente com armadilhas que infligem mais de um status
+por acionamento. Fica na vizinhança de `change_status_adjust`
+(`0x1ca5a4`) e do cluster de status/BWORK das seções 349/355, **não**
+no cluster de rede `pspNetTrap*` (§557, detecção de trapaça de rede)
+— são dois "trap" homônimos não relacionados. Os 7 corpos de caso não
+foram lidos individualmente.
+
+**Status CSV: `read_structural`** (tabela de salto e call-graph
+resolvidos e cruzados com §355/§558; os 7 corpos de caso não lidos
+instrução a instrução).
+
+## 585. `asm_function(ulong×6)` — não é um interpretador de opcode: é o trampolim genérico de chamada indireta por aridade (0–5 argumentos) usado pelo sistema de task (2026-10-25, Fase 3, octogésimo primeiro lote, revisão semântica sobre checkpoint do CI)
+
+`asm_function(unsigned long×6)` (`0x159aac`, 404 B) — checkpoint do CI
+marcava `needs_review` (80% de cobertura automática, 2 tabelas de
+salto resolvidas, 0 `bl`). Lida por completo via disassembly direto
+(capstone) nesta sessão, instrução a instrução, do início ao epílogo
+— os ~20% "não cobertos" pelo `jtable.py` são literal pool (constantes
+PC-relative embutidas inline, não código).
+
+**Corrige a hipótese da seção 578**: `TE_asmTaskEntry` especulava que
+esta fosse "o interpretador real do bytecode/'asm' que dá nome à
+função". Não é. `asm_function` é um **trampolim de chamada indireta
+genérico por contagem de argumentos** — dado `r0` (0 a 5) como
+seletor de aridade e até 5 valores reais nos parâmetros 2–6, a função
+chama um ponteiro de função lido de um slot global (GOT-indireto),
+deslocando os registradores/pilha pra montar a chamada com exatamente
+N argumentos na convenção C real (`r0==0`: sem argumentos;
+`r0==1..3`: desloca `r1..r3` pra `r0..r2`; `r0==4`: + lê o 4º
+argumento de `[sp+0x18]`; `r0==5`: + relê o 5º de `[sp+0x1c]` e
+regrava em `[sp]` do próprio frame).
+
+Há duas tabelas de salto idênticas (mesmos 5 primeiros destinos),
+escolhidas por um teste prévio: lê um global (`r4 = *ponteiro_global`,
+GOT-indireto) e, se não-nulo, zera dois campos (`+0x30`/`+0x34`)
+antes de despachar pela 2ª tabela (cujo único caso diferente é
+`r0==5`). Esse global é um ponteiro pro contexto/task "atual" — com
+contexto ativo, a função reseta dois campos (prováveis slots de
+"resultado"/"código de erro" da chamada anterior) antes de invocar o
+callback; sem contexto, despacha direto. O ponteiro de função chamado
+também vem de um slot global — quem é chamado é decidido pelo
+chamador, `asm_function` só adapta a aridade; não há decodificação de
+opcode aqui.
+
+**Conexão**: explica por que dezenas de seções `ctl*_main` citam
+`asm_function`/`wasm_function` sem nunca tê-las lido — são o
+primitivo de baixo nível que permite ao framework de task invocar um
+callback registrado em runtime com a aridade certa, sem um `switch`
+de aridade em cada call site.
+
+**Status CSV: `read_full`** (toda a lógica de blocos — ambas as
+tabelas, os 6 handlers, os dois globais GOT-indiretos — lida
+instrução a instrução via disassembly manual completo).
+
+## 586. `wasm_function(ulong×6)` — byte a byte idêntica a `asm_function` (§585), confirma o par "w"/sem-"w" de motores de task paralelos (2026-10-25, Fase 3, octogésimo primeiro lote, revisão semântica sobre checkpoint do CI)
+
+`wasm_function(unsigned long×6)` (`0x162080`, 404 B) e `asm_function`
+(`0x159aac`, §585) são **byte a byte idênticas** — confirmado por
+disassembly Capstone completo das duas: mesma sequência de
+mnemônicos/operandos em cada instrução, com todos os alvos de salto
+deslocados pelo mesmo delta fixo (`0x162080 − 0x159aac = 0x85d4`, cada
+endereço de tabela/handler bate exatamente com esse delta). São a
+mesma função compilada duas vezes, cada uma operando sobre seu
+próprio par de slots globais — o padrão "W"/sem-"W" de sistemas
+paralelos já estabelecido no projeto (`mesputmain`/`Wmesputmain` §37,
+`event_status_set`/`Wevent_status_set` §230/§575), aqui aplicado aos
+dois motores de task `asm`/`wasm` citados dezenas de vezes mas nunca
+lidos (§578).
+
+Lógica completa (lida instrução a instrução): carrega um ponteiro
+duplo-indireto `r4` (o "contexto do motor"); se nulo, zera dois campos
+e usa uma segunda tabela de salto, senão a primeira (idênticas nos
+casos 0–4, só divergem no caso 5). `r0` é o número de argumentos a
+repassar (0 a 5), não um opcode — despacha pra 6 handlers idênticos em
+estrutura aos de `asm_function`, com o caso 5 sendo o único sensível
+ao estado de inicialização (slot B no caminho "já inicializado", slot
+C no caminho "primeira chamada").
+
+**Conclusão**: nem `asm_function` nem `wasm_function` são o
+interpretador de opcodes do sistema "asm" — são a chamada indireta
+genérica (`call_with_n_args`) que o motor de task usa pra invocar "o
+handler atualmente registrado" com a aridade certa. O caso de 5
+argumentos sendo o único sensível à inicialização sugere que é usado
+na chamada de **entrada** de uma task nova, enquanto os casos 0–4 são
+chamadas de **continuação**. O verdadeiro interpretador de opcodes —
+quem *escreve* os slots de função globais — ainda não foi
+identificado (candidatos citados em §578: `sub_71b0c`/`sub_71b18`/
+`sub_71b3c`, ainda sem símbolo).
+
+**Status CSV: `read_full`** (todas as 7 ramificações — no-op + 5
+aridades + guarda de inicialização — lidas instrução a instrução via
+disassembly direto; só a identidade dos slots de função, dados e não
+código, permanece em aberto).
