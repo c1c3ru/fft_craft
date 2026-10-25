@@ -4368,7 +4368,7 @@ build (linkagem da zlib).
 comportamento de jogo entre as duas arquiteturas — testado só 1
 função; o restante do binário x86 continua inteiramente não lido.
 
-## 32. `battle()` — passe estrutural (não linha a linha) — primeiro item da Fase 3, cobertura total (2026-10-17)
+## 32. `battle()` — passe estrutural (não linha a linha), ampliado em 2026-10-25 (95% cobertura, 201 chamadas, 3 desvios de guarda lidos por completo) — primeiro item da Fase 3 (2026-10-17 + atualização 2026-10-25)
 
 **Mudança de metodologia, documentada no `RE_BACKLOG_PLAN_PHASE3.md`**:
 `battle()` (`0x207e10`, 17.156 B) é a maior função do binário inteiro
@@ -4506,6 +4506,110 @@ tabela). Ler os 70 handlers de verdade é trabalho de várias iterações
 futuras — ver `RE_FUNCTION_INVENTORY.csv` (`battle()` marcada
 `read_structural`, não `read_full`).
 
+### Atualização (2026-10-25): `jtable.py` atual resolve a tabela automaticamente — 95% de cobertura, 201 chamadas, desce por dentro dos handlers pela 1ª vez
+
+O passe de 32.1-32.3 foi escrito quando o `jtable.py` ainda não
+resolvia tabelas de salto sozinho — a descida nunca seguia os 70
+alvos. A versão atual da ferramenta resolve a MESMA tabela (102
+entradas, 70 endereços distintos — idêntica à de 32.2, nenhum
+endereço mudou) automaticamente e semeia a descida com todos os 70
+alvos, alcançando **4.086 de ~4.289 slots de instrução (95%)** e
+**201 `bl` distintos** (contra 94 antes) — ou seja, pela primeira vez
+a ferramenta efetivamente desceu por dentro dos handlers de estado,
+não só no código de despacho.
+
+### 32.6 Os 3 desvios de guarda, antes "não seguidos", agora lidos instrução a instrução
+
+A seção 32.1 listava três desvios do código de guarda pré-switch
+(`0x20aa50`/`0x20afb0`/`0x20afbc`) como não investigados. Lidos agora
+via disassembly direto:
+
+- **`0x20aa50`** (alvo de `iOS_getV2Icon(0x13) != 0`, ícone "19"):
+  `resetTurnOrder()` → `callSystemSound(1)` → zera um campo via
+  ponteiro `fp`-relativo → `request_atlist()` → grava **`0x4b` (75)
+  diretamente no contador de estado** (`str r3,[sl]` com `r3=0x4b`) e
+  retorna `-1`. É uma transição de estado explícita e hard-coded:
+  quando o ícone 19 está ativo, a função força `*g_battleState = 75`
+  — o estado 75 (`0x2089fc`, handler próprio, 260 B) passa a ser um
+  candidato forte a "handler de reinício de turno" dado que é
+  precedido por `resetTurnOrder`.
+- **`0x20afb0`**: `iOS_setV2Icon(0xb3 /*179*/, ...)` e desvia pra
+  `0x20844c` (volta pro início do código de despacho, não pro switch).
+- **`0x20afbc`**: `iOS_getV2Icon(0xc9 /*201*/)`; se não-zero desvia
+  pra `0x20b3f8`, senão lê `*sl` e desvia pra `0x208480` (também
+  antes do switch). **Achado novo**: os ícones usados nesses dois
+  desvios (179/201) são diferentes dos três já catalogados em 32.1
+  (19/202/203) — confirma que o bloco de guarda pré-switch
+  consulta/seta pelo menos 5 ícones V2 distintos, não só 3.
+
+### 32.7 Subsistemas confirmados como usados DE DENTRO dos handlers (não só no código de despacho)
+
+Dos ~107 nomes novos no catálogo (201 vs. 94), a maioria já tem seção
+própria em outro lugar do projeto — a novidade é confirmar que
+`battle()` de fato os invoca, não só sistemas-irmãos:
+
+- **Pipeline de animação de combate** (grupo mais denso):
+  `searchActiveAnimation`/`searchCurrentAnimation`/
+  `searchAnimationByPositionBattle`/`searchAnimationByID`/
+  `searchAnimationByBattleID`, `ExecuteAnimations()` (§263),
+  `DisplayAnimations()` (switch de 74 casos, §200), `EndAllAnimation()`,
+  `resetActionAnimation`, `requestCast1Animation`,
+  `setActivePanelFromAnimation`/`setActivePanelFromAction`,
+  `getDisplayPosition()` (§425), `countCrystalAnimation()`,
+  `myInitShape`/`myStartShape`. Confirma `battle()` como chamador
+  real de todo esse pipeline a cada quadro, não só orquestrador.
+- **Fila de troca de paleta/CLUT**: `executeChangeClut()` (§70) +
+  `transferClutData`/`ExecuteChangePalette`/`DisplayChangePalette`.
+  Confirma `battle()` como chamador real da fila alimentada por
+  `requestChangeClut` (§120).
+- **Ciclo de vida de "Permanent Effect"**: `LoadEffect()` (§429),
+  `IsPermanentEffect`, `WhoUnlockEffect`/`UnlockEffect`, `DoEffect()`
+  (§348, dispara state machine de 6 fases), `InitPermanentEffect()`
+  (§604) — as seis funções do cluster todas chamadas de dentro de
+  `battle()`: pelo menos um dos 70 estados é dedicado ao ciclo
+  completo de um efeito visual persistente.
+- **Rede**: `pspNetSetCharacterWaitFlag`/`pspNetGetCharacterWaitFlag`/
+  `pspNetCheckDuty`/`get_netdatamode`/`get_netmodeadhoc`/
+  `pspNetSetAttackTimingFrame` — sincronização de turno/timing de
+  ataque entre clientes.
+- **`menu_call`** (§156) chamada **27 vezes** — maior contagem de
+  qualquer entrada de task nomeada, confirma que abrir o menu de
+  comando é operação central e repetida do loop.
+- **`generateAttackTeam()`** (§206, setup de batalha em rede) —
+  confirma que a inicialização de rede acontece dentro de um estado.
+- **`standerdExecution()`** (38 chamadas, 2ª maior do catálogo, atrás
+  só de `iOS_setV2Icon`) e **`isInputEnable()`** (7×) — ainda sem
+  seção própria; a frequência altíssima de `standerdExecution`
+  sugere polling/tick genérico chamado por muitos estados —
+  candidato de alto valor pra próxima leitura.
+
+### 32.8 Honestidade sobre o que isto é e não é
+
+**Isto não é `read_full`.** 95% de cobertura e 201 chamadas
+confirmam muito mais do call-graph (inclusive de dentro dos
+handlers), mas nenhum controle de fluxo em nível de bloco foi
+rastreado dentro dos 70 handlers individualmente — não se sabe, pra
+nenhum dos 70 estados, a sequência exata de comparações/gravações de
+memória, só que ele chama tais funções. O log do `jtable.py` só dá
+contagens agregadas pro binário inteiro da função, sem endereço de
+call-site — não há como atribuir com confiança qual chamada
+pertence a qual handler sem decodificar cada bloco individualmente
+(o trabalho de "ler os handlers" ainda pendente). A única exceção
+real são os três desvios de guarda da 32.6, lidos instrução a
+instrução via disassembly manual direto.
+
+Trabalho pendente de maior valor, em ordem: (1) os 68 handlers de
+estado reais (21 caem no default, 13 num segundo handler
+compartilhado — tabela de 32.2 permanece válida); (2) os ~40 nomes
+locais sem símbolo que a descida agora alcança mas não resolve; (3)
+`standerdExecution`/`isInputEnable`, chamados dezenas de vezes sem
+seção própria.
+
+**Status CSV: `read_structural`** (mantém — a cobertura estrutural
+subiu de ~2.200 pra 4.086 instruções e o catálogo de chamadas mais
+que dobrou, mas nenhum handler individual foi lido por dentro, exceto
+os 3 desvios de guarda da 32.6).
+
 ## 33. `Wmesputmain()` — passe estrutural — 2ª maior função do binário, revela um sistema de tasks nunca visto (2026-10-17, Fase 3)
 
 `Wmesputmain()` (`0x11173c`, 16.312 B) — mesmo tratamento da seção 32:
@@ -4600,7 +4704,7 @@ locais sem símbolo. Marcada `read_structural` no
 comparar contra esta e confirmar se é duplicação por idioma/plataforma
 ou lógica genuinamente diferente — não lida ainda.
 
-## 34. `Main_FrameRender()` — passe estrutural — o renderizador principal do jogo inteiro, nunca tocado (2026-10-17, Fase 3)
+## 34. `Main_FrameRender()` — passe estrutural, ampliado em 2026-10-25 (2 tabelas de salto reais resolvidas + lidas byte a byte, `sub_2b6110` identificada) — o renderizador principal do jogo inteiro (2026-10-17 + atualização 2026-10-25)
 
 `Main_FrameRender()` (`0x2c141c`, 16.164 B, 3ª maior função do
 binário) — mesmo tratamento das seções 32/33. Descida recursiva:
@@ -4679,7 +4783,67 @@ branches, a ordem exata de decisão entre "jogo normal"/"loading"/
 o estado" em vez de "desenha") é a candidata natural de próximo
 passe estrutural, pro par ficar completo.
 
-## 35. `Main_FrameMove()` — passe estrutural — completa o par com `Main_FrameRender`, revela DOIS switches de estado (2026-10-17, Fase 3)
+### Atualização (2026-10-25): `jtable.py` atual resolve 2 tabelas de salto que a passada original dizia não existir — 98% de cobertura, 110 `bl`
+
+A afirmação original ("sem tabela de salto computada") estava errada
+por limitação da ferramenta na época. O `jtable.py` atual resolve
+automaticamente **2 tabelas de 6 casos cada**: guarda `cmp`@`0x2c3910`,
+despacho@`0x2c3914`; guarda `cmp`@`0x2c3948`, despacho@`0x2c394c`.
+Cobertura sobe a **98% (3.967/4.041 slots)**. Tudo o que 34.1-34.4
+estabeleceram continua válido sem alteração.
+
+### 34.6 As duas tabelas, lidas byte a byte: não são modos de renderização — são seletor de quadro de animação de ícone
+
+Desmontagem manual (Capstone) da região `0x2c38fc`–`0x2c3a50`
+confirma a estrutura exata, idêntica nas duas tabelas:
+
+```c
+iOS_setV2Icon(0xbe, ...);                 // zera/reseta o ícone companheiro
+r0 = iOS_getV2Icon(0xbd) - 1;             // lê estado do ícone (1..6)
+switch (r0) { /* 6 casos, addls pc,pc,r0,lsl#2 */
+  case 0: goto shared_B;                    // usa valor de contador já existente
+  case 1: contador_B = 0; goto shared_B;
+  case 2: contador_B = 1; goto shared_B;
+  case 3: contador_B = 2; goto shared_B;
+  case 4: contador_B = 3; goto shared_B;
+  case 5: contador_B = 4; goto shared_B;
+}
+```
+
+(a segunda tabela, sobre `iOS_getV2Icon(0xbb)`, é idêntica em forma,
+alimentando um segundo contador independente.) Os 12 corpos de caso
+são todos triviais — cada um só grava um valor 0–4 num slot de pilha
+(`[sp+0x70]`/`[sp+0x74]`) e salta pro mesmo bloco de desenho
+compartilhado. As duas "tabelas de salto" não são dois modos de
+renderização diferentes — são só a forma que o compilador gerou pra
+**mapear o estado 1–6 de um ícone V2 num índice de quadro 0–4**
+antes de desenhar.
+
+O bloco de desenho compartilhado (`0x2c3974`+, também lido byte a
+byte): calcula um alfa via `0,5f * fração` (`__mulsf3`/`__addsf3`
+reais), indexa uma tabela de dados PC-relative por `contador*16` (3
+floats por entrada — x/y/escala do quadro de animação daquele
+ícone), converte a área de jogo pra coordenada de tela via
+`CGX_SCREEN_CORRECT::Area_ToScreen` (§34.2), monta os parâmetros
+(posição, escala, cor `0xff/0xff/0xff`) e chama **`sub_2b6110`** —
+exatamente a função local citada em 34.5 como "a mais frequente,
+candidata forte a wrapper de ícone, não investigada" (43 chamadas).
+**Confirmado agora**: é literalmente a primitiva real de desenho de
+um ícone/sprite de efeito V2, usada por ambos os seletores de quadro.
+
+Isso explica por que `iOS_getV2Icon`/`iOS_setV2Icon` aparecem
+138+33=171 vezes só nesta função: não são flags booleanas simples —
+IDs como `0xbb`–`0xbe` são contadores de **estado de animação por
+quadro** de efeitos de ícone individuais, cada par (set/get)
+controlando um slot visual.
+
+**Status CSV: ainda `read_structural`** — a leitura byte a byte
+cobriu só as duas tabelas + seus 12 casos + o bloco de desenho
+compartilhado (fração pequena dos 16 KB da função); o resto (corpo
+principal fora dessas tabelas, ~100 `bl` restantes, lógica completa
+do padrão screen-manager) continua no nível de passe estrutural.
+
+## 35. `Main_FrameMove()` — passe estrutural, ampliado em 2026-10-25 (93% cobertura, 6 dos 7 casos do switch externo lidos byte a byte) — completa o par com `Main_FrameRender` (2026-10-17 + atualização 2026-10-25)
 
 `Main_FrameMove()` (`0x2bbb74`, 13.272 B) — mesmo tratamento das
 seções 32–34. Descida recursiva alcançou só **2.580 de ~3.318
@@ -4775,6 +4939,87 @@ papel preciso de `onGotoNextMode`. Marcada `read_structural` no
 `Main_FrameMove`/`Main_FrameRender` — o loop principal do jogo
 inteiro — tem agora pelo menos um passe estrutural completo dos dois
 lados.
+
+### Atualização (2026-10-25): `jtable.py` atual resolve as duas tabelas quase por completo (93%, antes 78%) e 6 dos 7 casos do switch externo foram lidos byte a byte
+
+A versão original foi escrita quando o `jtable.py` só alcançava 78%
+porque a descida não seguia as duas tabelas até o fim. A versão
+atual resolve **ambas por completo** (os mesmos 9+43 casos/7+32
+destinos de 35.1/35.2, byte a byte iguais — nenhuma tabela mudou) e
+alcança **93% (3.095/3.318 instruções) e 126 `bl` distintos**. As
+seções 35.1/35.2 continuam válidas sem alteração.
+
+### 35.3' Leitura real dos 6 casos pequenos do switch externo (instrução a instrução, via disassembly direto)
+
+Com a cobertura mais alta, foi possível ler por completo os 6
+handlers pequenos do switch externo (todos exceto o caso 6, que
+contém o switch interno — ver abaixo):
+
+- **Caso 8** (`*g_gameMode == 11`, `0x2bc7b8`, 5 instruções): só
+  `iOSNovelBrightOn()` e cai no default — **modo "Novel/Adventure"**,
+  ligando direto ao sistema `ctlnobel_main`/`stop_adventuremessage`/
+  `timeevt_chk` já fechado (§96/§269/§592).
+- **Default** (`0x2bc7cc`, 60 instruções, 1 loop): consulta
+  `iOS_getDisableInterrupt()`/`iOS_getV2Icon` repetidamente — modo
+  genérico de espera/transição comum a vários valores.
+- **Caso 7** (`*g_gameMode == 10`, `0x2bc8bc`, 8 instruções, 0 `bl`):
+  só um laço sem chamada nenhuma — "espera pura".
+- **Caso 2** (`*g_gameMode == 5`, `0x2bc8dc`, 11 instruções): chama
+  `iOS_v2menuSetType` — **modo de menu V2** (§577/§581/§606).
+- **Caso 0** (`*g_gameMode == 3`, `0x2bc908`, 8 instruções, 0 `bl`):
+  igual ao caso 7.
+- **Caso 1** (`*g_gameMode == 4`, `0x2bc928`, 11 instruções): chama
+  `iOS_v2menuSetType` de novo — outro modo de menu V2.
+- **Caso 6** (`*g_gameMode == 9`, `0x2bc954`): **não é um handler
+  pequeno** — o código entre `0x2bc954` e o dispatch do switch
+  interno (`0x2bd114`) soma quase 2.000 bytes só por este caso, de
+  longe o maior dos 7, e o switch interno de 43 casos vive dentro
+  dele. Confirma a suspeita de 35.2: **o modo de jogo 9 é o modo
+  "jogo ativo"** (mapa mundi/batalha/menu em jogo), estruturalmente
+  muito mais complexo que os outros 6, todos estados simples de
+  transição/overlay.
+
+### 35.4' Catálogo de chamadas novo, não citado na versão original
+
+- **Cluster de toque de batalha, ligando direto à §32**: mais de 20
+  funções `iOS*` (`iOSsTchBtlFlagGet`, `iOSBtlUnitMoveCheck`,
+  `iOSUnitStatusLRGet`, `iOSScrollButtonDTap`, `iOSRotateButtonDTap`,
+  `iOSSlideIconReset`, `iOSMapCurModeGet/Set`, `iOSTchInputCheckCur`,
+  `iOSRotSlidCls`, `iOSTapCalcu`, `iOSBtlStsOutWinReset`,
+  `iOSMapTouchCancel`, `iOSUnitListFlagGet`, `iOSYajiEffectSetLR/TGA`)
+  — exatamente a mesma família `iOSSlide*`/`iOSRot*`/`iOSTch*` que a
+  §32 citou como achado só de `battle()`. Fecha a ponta: `Main_FrameMove`
+  também chama esse cluster de toque a cada quadro, não só `battle()`
+  — os dois compartilham o mesmo subsistema.
+- **Sistema de menu V2 completo**: `iOS_v2menuSetDecide`/`SetEnable`/
+  `SetType`/`GetType`/`Init`/`GetYline` — liga a `iOS_v2menuSetType`
+  (§581) e ao cluster de ícones V2 (§577).
+- **`executeTaskEmu()`** — achado novo, possível ligação com o
+  cluster `asm`/`wasm`/`TE_` (§578/§585/§586).
+- **`SettingsBundle_Get()`/`SettingsBundle_IsLeftHand()`** — achado
+  novo: confirma uma opção real de "jogador canhoto" persistida.
+- **`SysSE_PlayUI(int)`** (10 chamadas) — terceira variante de efeito
+  sonoro (contexto "UI"), irmã de `SysSE_Play`/`EnvSE_Play` (§579/§608).
+- **`Resume_Init_WORK_MU()`** (§387) e **`iOS_RectHitExecute()`**
+  (§428) — confirma que `Main_FrameMove` participa do ciclo de
+  resume/save e fecha o ciclo registro→execução de hit-test.
+- **`fftVSyncCallback()`**/**`xpPadUpdateData`** — achados novos:
+  callback real de VSync e leitura direta do pad PS1.
+- **`CEGL2_IF::ClearBackdrop`/`CEGL2_SPRITE::Unload/LoadBegin/LoadEnd`**
+  — chamadas normalmente só esperadas em `Main_FrameRender` (§34)
+  aparecem também aqui — sugere que a tela de configurações/alguma
+  transição dispara carregamento de sprite fora do ciclo de render.
+- **`Android_Web_Open(char const*, int)`** — abertura de URL no
+  navegador, ao lado de `Android_Movie_Play`/`Android_Vibrator_Vibrate`.
+
+O corpo real do caso 6 ("jogo ativo") e dos 32 handlers do switch
+interno continua não lido (quase 80% do total da função). Os 6
+locais sem símbolo também não foram resolvidos.
+
+**Status CSV: `read_structural`** (progresso real — 6 dos 7 casos do
+switch externo agora lidos por completo — mas o caso 6, que
+concentra quase toda a função e todo o switch interno, continua não
+lido; não atinge `read_full`).
 
 ## 36. `BattleUnitList` — passe estrutural — revela uma família `b*` inteira de primitivas PS1 de batalha, nunca vista (2026-10-17, Fase 3)
 
