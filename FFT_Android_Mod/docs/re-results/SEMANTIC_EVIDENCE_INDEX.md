@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **736/1258** pending functions.
+Evidence collected: **744/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -747,3 +747,11 @@ These reports do not constitute semantic verification.
 | `0028b3f0` | pspWorldDataRectSet(RECT16*) | [Evidence](semantic-evidence/0028b3f0.md) |
 | `0028dc30` | SetRCnt | [Evidence](semantic-evidence/0028dc30.md) |
 | `002a1aac` | read_sxsy_fifo3(long*, long*, long*) | [Evidence](semantic-evidence/002a1aac.md) |
+| `002a1b1c` | read_rgb_fifo(long*, long*, long*) | [Evidence](semantic-evidence/002a1b1c.md) |
+| `002a25f8` | read_mt(long*, long*, long*) | [Evidence](semantic-evidence/002a25f8.md) |
+| `002b2238` | IS_TEX_2X() | [Evidence](semantic-evidence/002b2238.md) |
+| `002b2404` | Music_SetVol(int, int) | [Evidence](semantic-evidence/002b2404.md) |
+| `002b7a34` | SetDisableMapTouchRect(RECT16*) | [Evidence](semantic-evidence/002b7a34.md) |
+| `002cb484` | __floatunsisf | [Evidence](semantic-evidence/002cb484.md) |
+| `000da7e4` | readed_mapchange() | [Evidence](semantic-evidence/000da7e4.md) |
+| `00153350` | task_start(long) | [Evidence](semantic-evidence/00153350.md) |
