@@ -2,8 +2,8 @@
 
 Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Analyzed in current binary: 1433
-Automatically triaged: 142,192 bytes / 1,837,392 inventory bytes (7.74%); **this is newly triaged coverage, not total project coverage**.
+Analyzed in current binary: 1531
+Automatically triaged: 143,452 bytes / 1,837,392 inventory bytes (7.81%); **this is newly triaged coverage, not total project coverage**.
 
 | Address | Function | Size (B) | Coverage | Status |
 |---|---|---:|---:|---|
@@ -1433,10 +1433,108 @@ Automatically triaged: 142,192 bytes / 1,837,392 inventory bytes (7.74%); **this
 | `0021ceb0` | WhoUnlockEffect(long) | 44 | 90.91% | needs_review |
 | `00243560` | fRoll_xawait(short*) | 44 | 90.91% | needs_review |
 | `00249474` | vOpn_fadein(int) | 44 | 90.91% | needs_review |
+| `00256e70` | ctltownmenu_active(CTLINFO*) | 44 | 90.91% | needs_review |
+| `00256e9c` | ctltownmenu_deactive(CTLINFO*) | 44 | 90.91% | needs_review |
+| `00269e6c` | snpl_sndstop() | 44 | 90.91% | needs_review |
 | `0027134c` | Ssd_StopEffect(long) | 44 | 100.0% | auto_structural |
 | `0027b53c` | LoadImage_menuData() | 44 | 90.91% | needs_review |
 | `0027f180` | iOS_ClearRectHit(int) | 44 | 90.91% | needs_review |
+| `00280590` | GetAbilityName(int) | 44 | 81.82% | needs_review |
+| `00284620` | new_VectorXYZ(VECTOR_DATABASE*, short, short, short) | 44 | 100.0% | auto_structural |
 | `00287044` | get_timing_true() | 44 | 90.91% | needs_review |
 | `0028846c` | free_hight_font() | 44 | 90.91% | needs_review |
+| `0028a054` | pspClearCurrentSystemFile() | 44 | 90.91% | needs_review |
 | `0028baa4` | TE_task_stop(long) | 44 | 90.91% | needs_review |
+| `002a0900` | MulRotMatrix0 | 44 | 90.91% | needs_review |
+| `002a096c` | ApplyMatrix | 44 | 100.0% | auto_structural |
+| `002a0a54` | ApplyMatrixSV | 44 | 100.0% | auto_structural |
+| `002a1148` | SquareSL0 | 44 | 100.0% | auto_structural |
+| `002b23d8` | Music_Replay() | 44 | 90.91% | needs_review |
 | `002bef74` | PIE_OFFSET(unsigned int) | 44 | 100.0% | auto_structural |
+| `00081a94` | unztell64 | 40 | 100.0% | auto_structural |
+| `000940a0` | _vi_gpsy_free | 40 | 100.0% | auto_structural |
+| `000940c8` | _vi_psy_free | 40 | 100.0% | auto_structural |
+| `000daac0` | settaskkind(int) | 40 | 80.0% | needs_review |
+| `000e0eec` | jobstts_call(unsigned long*, unsigned long) | 40 | 90.0% | needs_review |
+| `001024bc` | Wreaded_mapchange() | 40 | 90.0% | needs_review |
+| `0010278c` | Wsettaskkind(int) | 40 | 80.0% | needs_review |
+| `0010de7c` | Wimport_localpad(int) | 40 | 80.0% | needs_review |
+| `0010f8cc` | Wjobstts_call(unsigned long*, unsigned long) | 40 | 90.0% | needs_review |
+| `0012f19c` | get_pitno() | 40 | 90.0% | needs_review |
+| `00155cec` | tutorialstatusget(int) | 40 | 90.0% | needs_review |
+| `001599a8` | asmGetInput1() | 40 | 80.0% | needs_review |
+| `0015e040` | iOSActUnitCurSet() | 40 | 90.0% | needs_review |
+| `0015ebf4` | iOSMapTouchCancel() | 40 | 80.0% | needs_review |
+| `001875f0` | GetSaveDataInit() | 40 | 90.0% | needs_review |
+| `001a3eb4` | PoachUnit() | 40 | 90.0% | needs_review |
+| `001baea0` | unitans_init() | 40 | 90.0% | needs_review |
+| `001ca954` | net_getknockback(unsigned char*, unsigned char*, unsigned char*) | 40 | 90.0% | needs_review |
+| `001cb7d4` | check_reaction_deny(BWORK*) | 40 | 90.0% | needs_review |
+| `001ceaec` | set_status_all_sp(int, int) | 40 | 90.0% | needs_review |
+| `001cebfc` | set_target_table2(unsigned char*) | 40 | 90.0% | needs_review |
+| `001d73ec` | clear_unitwork() | 40 | 90.0% | needs_review |
+| `001d8d28` | get_jobdata(int) | 40 | 90.0% | needs_review |
+| `001dbcc4` | unitwork_init2all(BWORK*, int) | 40 | 100.0% | auto_structural |
+| `001eedcc` | getWpnShapeAddress(unsigned short) | 40 | 80.0% | needs_review |
+| `001f6374` | setPositionToLongPosition(tag_animation*) | 40 | 100.0% | auto_structural |
+| `001fd2c4` | endInterventionMode() | 40 | 80.0% | needs_review |
+| `0020c5d8` | errorHandler(int) | 40 | 90.0% | needs_review |
+| `0020c600` | warningHandler(int) | 40 | 90.0% | needs_review |
+| `0020c74c` | initSoundHeap() | 40 | 90.0% | needs_review |
+| `0020c99c` | initFileBuffer() | 40 | 90.0% | needs_review |
+| `0020d060` | setMapScrollXYZ(VECTOR*) | 40 | 90.0% | needs_review |
+| `0020d2b8` | setMapScroll(VECTOR*) | 40 | 90.0% | needs_review |
+| `0020d5d8` | setMapScale(VECTOR*) | 40 | 90.0% | needs_review |
+| `0020d84c` | setMapAngle(SVECTOR*) | 40 | 90.0% | needs_review |
+| `0020f5a8` | getMapSize(SVECTOR*) | 40 | 80.0% | needs_review |
+| `0020f5d0` | getMapIDFromAnimationID(int) | 40 | 100.0% | auto_structural |
+| `0020f5f8` | getMapIDFromBattleID(int) | 40 | 100.0% | auto_structural |
+| `0021695c` | stopAllEffect() | 40 | 90.0% | needs_review |
+| `00218dcc` | InitCamera() | 40 | 90.0% | needs_review |
+| `002231b0` | GetReachableHeight(int) | 40 | 90.0% | needs_review |
+| `0022a994` | EqualRShift12VECTORToVECTOR(VECTOR*, VECTOR*) | 40 | 100.0% | auto_structural |
+| `0022a9bc` | EqualLShift12VECTORToVECTOR(VECTOR*, VECTOR*) | 40 | 100.0% | auto_structural |
+| `0022a9e4` | EqualAnd0xfffSVECTORToSVECTOR(SVECTOR*, SVECTOR*) | 40 | 100.0% | auto_structural |
+| `00246360` | ctlstartmov_main(CTLINFO*) | 40 | 90.0% | needs_review |
+| `002494a0` | vOpn_fadeout(int) | 40 | 90.0% | needs_review |
+| `0024adc4` | endEntry() | 40 | 90.0% | needs_review |
+| `0025bc50` | jobnumber_conv(int) | 40 | 100.0% | auto_structural |
+| `00267340` | iOS_add_anmpac_max(int) | 40 | 90.0% | needs_review |
+| `0026a64c` | snplinf_init(int) | 40 | 80.0% | needs_review |
+| `00273b10` | SetSafePanelInRange(int) | 40 | 100.0% | auto_structural |
+| `002808b8` | iOS_initTransFace() | 40 | 90.0% | needs_review |
+| `0028b3f0` | pspWorldDataRectSet(RECT16*) | 40 | 90.0% | needs_review |
+| `0028dc30` | SetRCnt | 40 | 90.0% | needs_review |
+| `0028e66c` | PadInit | 40 | 100.0% | auto_structural |
+| `0029ff34` | cln | 40 | 100.0% | auto_structural |
+| `002a081c` | SetMulMatrix | 40 | 100.0% | auto_structural |
+| `002a092c` | SetMulRotMatrix | 40 | 100.0% | auto_structural |
+| `002a13c8` | Intpl | 40 | 100.0% | auto_structural |
+| `002a150c` | ColorCol | 40 | 100.0% | auto_structural |
+| `002a156c` | DpqColor | 40 | 100.0% | auto_structural |
+| `002a1aac` | read_sxsy_fifo3(long*, long*, long*) | 40 | 90.0% | needs_review |
+| `002a1b1c` | read_rgb_fifo(long*, long*, long*) | 40 | 90.0% | needs_review |
+| `002a25f8` | read_mt(long*, long*, long*) | 40 | 90.0% | needs_review |
+| `002b2238` | IS_TEX_2X() | 40 | 90.0% | needs_review |
+| `002b2404` | Music_SetVol(int, int) | 40 | 90.0% | needs_review |
+| `002b7a34` | SetDisableMapTouchRect(RECT16*) | 40 | 90.0% | needs_review |
+| `002cb484` | __floatunsisf | 40 | 80.0% | needs_review |
+| `00077500` | gzeof | 36 | 100.0% | auto_structural |
+| `00081a70` | unztell | 36 | 100.0% | auto_structural |
+| `000b9f88` | CTHREAD::~CTHREAD() | 36 | 100.0% | auto_structural |
+| `000d8710` | getanimpos3dl(int, long*) | 36 | 100.0% | auto_structural |
+| `000da7e4` | readed_mapchange() | 36 | 88.89% | needs_review |
+| `000dfa70` | wait_anmend(int) | 36 | 100.0% | auto_structural |
+| `0011dd64` | extend_windowframe(int, int, RECT16*, int, int) | 36 | 100.0% | auto_structural |
+| `00153254` | task_wait(long) | 36 | 100.0% | auto_structural |
+| `00153374` | task_stop(long) | 36 | 88.89% | needs_review |
+| `00161d50` | iOSPosW(int) | 36 | 88.89% | needs_review |
+| `00161d74` | iOSPosH(int) | 36 | 88.89% | needs_review |
+| `0020f514` | stopAnimation() | 36 | 88.89% | needs_review |
+| `00216860` | stopMusic() | 36 | 88.89% | needs_review |
+| `00263fa8` | iOSSDNovelSysCurCheck() | 36 | 88.89% | needs_review |
+| `00291074` | PSX_LoadImage | 36 | 77.78% | needs_review |
+| `00291154` | StoreImage | 36 | 77.78% | needs_review |
+| `0029128c` | MoveImage | 36 | 77.78% | needs_review |
+| `002914e4` | SetSprt | 36 | 100.0% | auto_structural |
+| `00291628` | SetTile | 36 | 100.0% | auto_structural |

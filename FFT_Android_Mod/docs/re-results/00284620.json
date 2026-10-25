@@ -1,0 +1,17 @@
+{
+  "address": "00284620",
+  "name": "new_VectorXYZ(VECTOR_DATABASE*, short, short, short)",
+  "size": 44,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "284594"
+  ],
+  "log": "=== jtable.py: 0x284620..0x28464c (44 bytes) ===\ncoverage: 11 of ~11 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x284594 x1   new_Vector(VECTOR_DATABASE*, SVECTOR const*) \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

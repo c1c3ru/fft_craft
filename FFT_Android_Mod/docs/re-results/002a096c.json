@@ -1,0 +1,20 @@
+{
+  "address": "002a096c",
+  "name": "ApplyMatrix",
+  "size": 44,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "29ca08",
+    "29cf68",
+    "29d6bc",
+    "29df24"
+  ],
+  "log": "=== jtable.py: 0x2a096c..0x2a0998 (44 bytes) ===\ncoverage: 11 of ~11 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x29ca08 x1   _gte_ldv0(SVECTOR*) \n  0x29cf68 x1   _gte_SetRotMatrix(MATRIX*) \n  0x29d6bc x1   _gte_stlvnl(VECTOR*) \n  0x29df24 x1   _gte_rtv0() \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

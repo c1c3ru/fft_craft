@@ -1,0 +1,19 @@
+{
+  "address": "002a156c",
+  "name": "DpqColor",
+  "size": 40,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "29cb88",
+    "29cce8",
+    "29f4d0"
+  ],
+  "log": "=== jtable.py: 0x2a156c..0x2a1594 (40 bytes) ===\ncoverage: 10 of ~10 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x29cb88 x1   _gte_ldrgb(CVECTOR*) \n  0x29cce8 x1   _gte_lddp(long) \n  0x29f4d0 x1   _gte_dpcs() \n\n-- branches: 1 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
