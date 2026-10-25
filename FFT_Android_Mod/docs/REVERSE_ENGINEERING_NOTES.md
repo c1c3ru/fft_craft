@@ -20016,3 +20016,86 @@ Mesma rota dos §605-608.
 **Status CSV**: `read_structural` para as 20 (identidade e call-graph
 confirmados via checkpoint + cruzamento textual; nenhuma teve os
 blocos lidos instrução a instrução).
+
+## 610. Grab-bag de 20 checkpoints `auto_structural` (≥95% cobertura, 0 tabela pendente) aceitos direto, sem fork (2026-10-25, Fase 3, nonagésimo lote)
+
+Mesma rota dos §605-609.
+
+- **`Wdisp_staticwindow2()`** (`0x135080`, 320 B, 98%, 13 `bl`) — o
+  par **W exato** de `disp_staticwindow2()` (§609, base sem prefixo):
+  mesmo catálogo ponto a ponto, só com `W`/`wasm` em vez de sem
+  prefixo/`asm` (`Wdisposememory`/`Wmultiwindow_*`/`Wstatuskanjiprint`/
+  `Wtask_killmyself`/`wasmTaskEntry`/`wasmGetInput1`). Com isso, a
+  família "janela estática 2" fica com **5 membros confirmados**
+  (base/`C`/`D`/`E`/`W`) — mesmo padrão de duplicação por letra já
+  previsto desde `disp_personalwindow` (§46, que citava variantes
+  `A/C/D/E/W`), só que aqui pra uma função-irmã diferente. Falta só
+  o `A`.
+- **`Wfaceuvclut(tagPOLY_FT4*, int, int*)`** (`0x100704`, 316 B, 97%,
+  2 `bl`: `GetTPage`/`GetClut`) e **`attackfaceuvclut(tagPOLY_FT4*, int)`**
+  (`0xc9504`, 316 B, 97%, mesmos 2 `bl`) — fecham o trio completo
+  junto de `faceuvclut` (§606): três contextos (genérico/`W`/ataque)
+  do mesmo cálculo de UV/CLUT de rosto, todos já previstos na §125.
+- **`levelup_one(BWORK*, int)`**/**`levelup_eggmonster(UM_WORK*, int)`**/
+  **`add_jobpointB(int,int,uchar,int)`** (`0x1dc778`/`0x1d8fd0`/
+  `0x1e31f0`, 308-312 B, 99-100%) — fecham o cluster de progressão
+  pós-batalha já citado desde `setexperience` (§605): `levelup_one`
+  chama `adjust_equip_change` (thunk já documentado, §409) +
+  `__udivsi3`; `levelup_eggmonster` é a variante pra monstro
+  "ovo"/recém-nascido; `add_jobpointB` grava o JP via
+  `set_jcflag`/`get_joblevel`/`pspJobGetJobChangeFlag` (API PSP real
+  de troca de job, já citada na linha 6161/11065).
+- **`doSchedulePtclCommandOnce(ushort,uchar,_EffectTCB*)`** (`0x21d408`,
+  316 B, 96%, 4 `bl`: `requestTargetAnimation`/`requestDamageNumber`/
+  `requestDamageResult`/`requestAnimation`) — catálogo idêntico ao
+  já documentado em outra seção (linha 13439-13451: "aciona o
+  pipeline de dano real... e de animação... a partir de scripts de
+  efeito `_EffectTCB*`") — confirma mais um disparador do mesmo
+  pipeline `request*` de dano/animação.
+- **`MakeMapChantedAction()`** (`0x27add8`, 312 B, 99%, 3 `bl`:
+  `CheckCrystalAndTresureBox`, `SetThisDestination`,
+  `EvaluationFunction`) — irmã direta de `ForChantedAction` (§607),
+  mesmo núcleo de avaliação de IA (linha 229), variante "mapa"
+  (provável contexto de magia de área vs. ação única).
+- **`GetBowReachableTangent(BowCheckWork*,int*,int*)`** (`0x2231d8`,
+  312 B, **100%**, 4 `bl`: `getMapIDFromBattleID`,
+  `GetReachableHeight`, `SquareRoot12`, `__divsi3`) — cálculo real de
+  alcance de arco (tangente + raiz quadrada de precisão 12-bit, mesma
+  primitiva de `CheckEventGunResult` §607) — confirma que armas de
+  longo alcance (arco, e provavelmente arma) usam geometria real de
+  trajetória, não só distância em painéis.
+- **`OuterProduct0`** (`0x2a0eec`, 312 B, **100%**, 4 `bl`:
+  **`sceVfpuVector4Set`/`sceVfpuVector4OuterProductXYZ`** + soft-float)
+  — achado novo: primeira referência ao **VFPU** (unidade de ponto
+  flutuante vetorial de hardware do PSP) no projeto — confirma que o
+  motor usa aceleração vetorial real do PSP pra produto externo
+  (cross product), não só o GTE do PS1 emulado em software.
+- **`unzLocateFile`** (`0x81494`, 332 B, **100%**, 7 `bl`, delega pra
+  `unzStringFileNameCompare`/`unzGetCurrentFileInfo64`/`unzGoToFirstFile`/
+  `unzGoToNextFile`, todos já reconhecidos minizip) — API real do
+  minizip, mesma família do §568.
+- **`worldmap_faceload()`** (`0x15570c`, 328 B, 95%, 9 `bl`:
+  `fileDispose`/`saveVram`/`numa_fileAllocateCD`/`__bpGetFileNum`/
+  `__bpInitBinpackData`/`__bpGetBinaryData`/`DrawSync`/`PSX_LoadImage`
+  ×6) — carregamento de rosto no mapa mundi via binpack + CD real,
+  mesma pilha de I/O já confirmada em outras seções de carregamento.
+- **`fftCdLoopTim(CDREC*)`**/**`activateCompressedAnimation(int,int)`**
+  (316/304 B, 97-99%) — `fftCdLoopTim` carrega imagem via `PSX_LoadImage`
+  em loop (provável tela de loading com animação de CD); `activateCompressedAnimation`
+  usa `searchAnimationByID` + `defrost` (descompressão) + `MoveImage`
+  — confirma que existem animações comprimidas descompactadas em
+  tempo real.
+- **`fRoll_mesput(short*)`** (`0x243048`, 316 B, 99%, 2 `bl`:
+  `rolladr_calc`, `create_rollline` — já lida por completo, §293,
+  "parseia linha de crédito, monta primitivo pra `tagSTAFFROLL`") —
+  fecha mais um elo direto do sistema de créditos finais
+  (`vEnd_rollproc`/`vEnd_rollinit`, §571/580).
+- **`pageupdown_cursor(PAGEWININFO*)`** (`0x270b5c`, 308 B, 97%, 1 `bl`
+  local) — navegação de página do widget `pagewin_*` já estabelecido.
+- **`pspMapTexUVCorrect(...)`**/**`xpSetDrawMove`**/**`_tr_stored_block`**
+  (zlib real + 2 funções folha do mapa mundi/PS1) — mais primitivas
+  de baixo nível, mesmo tema de lotes anteriores.
+
+**Status CSV**: `read_structural` para as 20 (identidade e call-graph
+confirmados via checkpoint + cruzamento textual; nenhuma teve os
+blocos lidos instrução a instrução).
