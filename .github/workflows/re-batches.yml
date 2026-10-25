@@ -24,6 +24,8 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/semantic_three_callees_audit.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_three_callees_exec.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_sound_chain.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_sound_dispatch_audit.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_sound_icon_microexec.py'
       - 'FFT_Android_Mod/docs/re-tools/structural_v3.py'
       - 'FFT_Android_Mod/docs/re-tools/structural_v3_report.py'
       - 'FFT_Android_Mod/docs/re-tools/parallel_loop.py'
@@ -162,6 +164,8 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_three_callees_audit.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_three_callees_exec.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_sound_chain.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_sound_dispatch_audit.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_sound_icon_microexec.py
       - name: Publish v3 coverage diagnostics and migration counts
         run: |
           python3 FFT_Android_Mod/docs/re-tools/structural_v3_report.py
