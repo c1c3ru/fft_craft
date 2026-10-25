@@ -87,7 +87,7 @@ class StatusGeralTests(unittest.TestCase):
         self.assertNotIn("PR #299", report)
         self.assertLess(report.index("PR #293"), report.index("PR #291"))
         self.assertIn("/pull/293", report)
-        self.assertIn("metadados", status.render(metrics(), self.results))
+        self.assertIn("Metadados dos PRs", status.render(metrics(), self.results))
 
     def test_impossible_checkpoint_count_is_error(self):
         with self.assertRaisesRegex(ValueError, "status accounting"):
