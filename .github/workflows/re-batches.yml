@@ -113,6 +113,9 @@ jobs:
           else
             echo "has_new=false" >> "$GITHUB_OUTPUT"
           fi
+      - name: Generate conservative ARM conditional-path contracts
+        run: |
+          python3 FFT_Android_Mod/docs/re-tools/semantic_path_report.py --limit 12
       - name: Count newly checkpointed functions
         id: progress
         env:
