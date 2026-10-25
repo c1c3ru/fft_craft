@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **328/1258** pending functions.
+Evidence collected: **336/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -339,3 +339,11 @@ These reports do not constitute semantic verification.
 | `001a47e0` | pspAbilityCompareSupport(short, short) | [Evidence](semantic-evidence/001a47e0.md) |
 | `001e4e94` | get_step_no(BWORK*) | [Evidence](semantic-evidence/001e4e94.md) |
 | `0021e760` | doSequence(short) | [Evidence](semantic-evidence/0021e760.md) |
+| `0024a4cc` | vOpn_add_anmpac(unsigned long*, int*) | [Evidence](semantic-evidence/0024a4cc.md) |
+| `002c5434` | Movie_FrameRender() | [Evidence](semantic-evidence/002c5434.md) |
+| `00077524` | gzerror | [Evidence](semantic-evidence/00077524.md) |
+| `000c81c4` | tool_squareinit() | [Evidence](semantic-evidence/000c81c4.md) |
+| `000d8c00` | checkkeyok() | [Evidence](semantic-evidence/000d8c00.md) |
+| `000e2b04` | statusnowprint(char*, COPYFIELD*) | [Evidence](semantic-evidence/000e2b04.md) |
+| `000ff43c` | Wallocatememoryinit() | [Evidence](semantic-evidence/000ff43c.md) |
+| `001b7ef4` | TruePadRead(int) | [Evidence](semantic-evidence/001b7ef4.md) |
