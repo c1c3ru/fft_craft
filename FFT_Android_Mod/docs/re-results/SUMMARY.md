@@ -2,8 +2,8 @@
 
 Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Analyzed in current binary: 1033
-Automatically triaged: 133,404 bytes / 1,837,392 inventory bytes (7.26%); **this is newly triaged coverage, not total project coverage**.
+Analyzed in current binary: 1133
+Automatically triaged: 136,008 bytes / 1,837,392 inventory bytes (7.40%); **this is newly triaged coverage, not total project coverage**.
 
 | Address | Function | Size (B) | Coverage | Status |
 |---|---|---:|---:|---|
@@ -1039,4 +1039,104 @@ Automatically triaged: 133,404 bytes / 1,837,392 inventory bytes (7.26%); **this
 | `00077400` | gzbuffer | 76 | 100.0% | auto_structural |
 | `000d87e4` | export_localstatus(char*, char*, char*) | 76 | 94.74% | needs_review |
 | `000e3010` | statuskanjiprintwithptr(char*, COPYFIELD*, char*) | 76 | 89.47% | needs_review |
+| `001004b4` | Wexport_localstatus(char*, char*, char*) | 76 | 94.74% | needs_review |
+| `00155d88` | active_worldwindow() | 76 | 94.74% | needs_review |
+| `0015a27c` | iOSPressArea() | 76 | 89.47% | needs_review |
+| `0015a2c8` | iOSTapArea() | 76 | 89.47% | needs_review |
+| `0015ddf8` | iOSGT4_MapXYZ(unsigned long, long, long, long) | 76 | 84.21% | needs_review |
+| `001baa78` | sys_warning(int, int) | 76 | 89.47% | needs_review |
+| `001cb064` | init_target_result(A_RESULT*) | 76 | 100.0% | auto_structural |
 | `001d4cf4` | set_itemitem(int, unsigned char, unsigned char*) | 76 | 100.0% | auto_structural |
+| `001d4fc8` | set_katanaitem(int, unsigned char, unsigned char*) | 76 | 100.0% | auto_structural |
+| `001d50f0` | set_sanjutsuability2(int, unsigned char, short*) | 76 | 100.0% | auto_structural |
+| `001d513c` | set_sanjutsuability1(int, unsigned char, short*) | 76 | 100.0% | auto_structural |
+| `001f0504` | resetTargetAnimation(tag_animation*) | 76 | 100.0% | auto_structural |
+| `001feb0c` | rideOffChokoboS(tag_animation*) | 76 | 100.0% | auto_structural |
+| `00200ae8` | startLeftTurnSub(int) | 76 | 78.95% | needs_review |
+| `00200b34` | startRightTurnSub(int) | 76 | 78.95% | needs_review |
+| `0020da7c` | popBackColor() | 76 | 89.47% | needs_review |
+| `0020e44c` | rideOnChokoboForced(int, int) | 76 | 100.0% | auto_structural |
+| `0020ea90` | activateAnimation(int) | 76 | 100.0% | auto_structural |
+| `0021b570` | SeekEffect() | 76 | 89.47% | needs_review |
+| `002233f4` | GetLinearPos(VECTOR*, int, int, VECTOR*) | 76 | 100.0% | auto_structural |
+| `00243a14` | deleteMessage() | 76 | 89.47% | needs_review |
+| `002496d0` | vOpn_key_repinit() | 76 | 84.21% | needs_review |
+| `0024aa60` | vOpnmess_put(int, int, _POINT, unsigned long*) | 76 | 94.74% | needs_review |
+| `00258f68` | evt_gil_low() | 76 | 94.74% | needs_review |
+| `0025e888` | day_to_month(int, int*, int*) | 76 | 94.74% | needs_review |
+| `00263abc` | iOSNovelBrightOn() | 76 | 94.74% | needs_review |
+| `00270414` | defscrwin_set(int, int, _POINT*, _POINT*) | 76 | 89.47% | needs_review |
+| `0028469c` | ForEachVector(VECTOR_DATABASE*, short) | 76 | 100.0% | auto_structural |
+| `0028bb3c` | TE_task_killmyself() | 76 | 100.0% | auto_structural |
+| `0028d6a0` | tlSetMallocUserPointer(void**) | 76 | 94.74% | needs_review |
+| `0029ad6c` | xpSetDrawOffset | 76 | 100.0% | auto_structural |
+| `002a257c` | RotNclip3_nom | 76 | 94.74% | needs_review |
+| `0007744c` | gztell64 | 72 | 100.0% | auto_structural |
+| `00077b38` | gzclearerr | 72 | 100.0% | auto_structural |
+| `00079010` | gzputs | 72 | 100.0% | auto_structural |
+| `00101f3c` | Wrecieve_statusinfo() | 72 | 100.0% | auto_structural |
+| `00153278` | task_wait_fast(long) | 72 | 100.0% | auto_structural |
+| `001533d8` | task_init() | 72 | 88.89% | needs_review |
+| `0015353c` | Wtask_wait_fast(long) | 72 | 100.0% | auto_structural |
+| `0015369c` | Wtask_init() | 72 | 88.89% | needs_review |
+| `0015de44` | iOSGT4_MapXYZClear(unsigned long) | 72 | 83.33% | needs_review |
+| `0019f750` | DrawFunds() | 72 | 83.33% | needs_review |
+| `001a93dc` | ChgShopStockItem(short, int) | 72 | 94.44% | needs_review |
+| `001cb7fc` | check_reaction_deny2(BWORK*) | 72 | 94.44% | needs_review |
+| `001d189c` | Resume_MK_BSTR_Init() | 72 | 88.89% | needs_review |
+| `001d533c` | set_chargeability(int, unsigned char, short*) | 72 | 100.0% | auto_structural |
+| `001eed84` | getSequenceAddress(unsigned short) | 72 | 83.33% | needs_review |
+| `00201c5c` | resetTargetDirection(tag_animation*) | 72 | 100.0% | auto_structural |
+| `00216984` | stopEffect(int) | 72 | 94.44% | needs_review |
+| `0021c154` | s22_addValue(_EffectTCB*) | 72 | 100.0% | auto_structural |
+| `0021c19c` | s23_subValue(_EffectTCB*) | 72 | 100.0% | auto_structural |
+| `0021c22c` | s6_setPersonalProc(_EffectTCB*) | 72 | 94.44% | needs_review |
+| `0021c3ec` | se_mapScale(_EffectTCB*) | 72 | 100.0% | auto_structural |
+| `00242450` | vEnd_ctlinit() | 72 | 88.89% | needs_review |
+| `00248e24` | vEnd_exit() | 72 | 100.0% | auto_structural |
+| `00249a38` | vOpn_month2day(int, int) | 72 | 94.44% | needs_review |
+| `002594e8` | evt_brave_low() | 72 | 94.44% | needs_review |
+| `00259578` | evt_faith_low() | 72 | 94.44% | needs_review |
+| `0025e840` | month_to_day(int, int) | 72 | 94.44% | needs_review |
+| `0026a234` | snpl_fadeout() | 72 | 88.89% | needs_review |
+| `0027d420` | setCancelDisableArea(int, int, int, int, int) | 72 | 88.89% | needs_review |
+| `0028464c` | delete_Vector(VECTOR_DATABASE*, short) | 72 | 100.0% | auto_structural |
+| `0028674c` | get_movie_filename(int) | 72 | 77.78% | needs_review |
+| `0028baf4` | TE_task_get_no() | 72 | 94.44% | needs_review |
+| `0028dd2c` | CloseEvent | 72 | 94.44% | needs_review |
+| `0029a9dc` | LoadClut2 | 72 | 100.0% | auto_structural |
+| `002a2678` | set_trans_matrix(long, long, long) | 72 | 88.89% | needs_review |
+| `002a3068` | xpMalloc | 72 | 94.44% | needs_review |
+| `002b3258` | musicPlayer_Pause() | 72 | 88.89% | needs_review |
+| `002b32a0` | musicPlayer_Replay() | 72 | 88.89% | needs_review |
+| `002b748c` | isInRectUi(_RECT_UI*, int, int) | 72 | 100.0% | auto_structural |
+| `002b8750` | iOS_isMovedDist() | 72 | 94.44% | needs_review |
+| `000816d4` | unzGoToFilePos | 68 | 100.0% | auto_structural |
+| `00081c58` | unzClose | 68 | 100.0% | auto_structural |
+| `00097c00` | _float32_unpack | 68 | 100.0% | auto_structural |
+| `000d8880` | pushmessagepacket() | 68 | 88.24% | needs_review |
+| `000da558` | event_start() | 68 | 88.24% | needs_review |
+| `00100550` | Wpushmessagepacket() | 68 | 88.24% | needs_review |
+| `0010f9c0` | Wloadcsrc(int, int, int, int) | 68 | 94.12% | needs_review |
+| `0019d7a4` | DrawPrice() | 68 | 82.35% | needs_review |
+| `001ab7e0` | IsUntauchableAbility(int) | 68 | 94.12% | needs_review |
+| `001cab08` | clear_addeffect() | 68 | 88.24% | needs_review |
+| `001cd16c` | get_weatherdata() | 68 | 94.12% | needs_review |
+| `001cec5c` | setCasterDirection(int, unsigned char) | 68 | 82.35% | needs_review |
+| `001dc408` | set_temp_status(BWORK*, int, unsigned char, int) | 68 | 100.0% | auto_structural |
+| `001e0384` | check_chokobo(BWORK*) | 68 | 100.0% | auto_structural |
+| `001e207c` | getskilldata(int) | 68 | 94.12% | needs_review |
+| `001f37e4` | ExecuteAnimations() | 68 | 94.12% | needs_review |
+| `001f6d4c` | resetCharacterPanelPosition(tag_animation*) | 68 | 100.0% | auto_structural |
+| `002016c4` | reserveCharacterPosition(tag_animation*) | 68 | 100.0% | auto_structural |
+| `00204210` | iOS_isCursorOnUnit() | 68 | 82.35% | needs_review |
+| `0020e7fc` | getBattleWorkIDFromAnimation(unsigned int) | 68 | 100.0% | auto_structural |
+| `00210960` | MenuTest() | 68 | 88.24% | needs_review |
+| `00216414` | readMusicBlock(int) | 68 | 94.12% | needs_review |
+| `00216618` | effectFadeoutMusic(int, int) | 68 | 94.12% | needs_review |
+| `00216740` | tempoMusic(int, int) | 68 | 94.12% | needs_review |
+| `00216784` | pitchMusic(int, int) | 68 | 94.12% | needs_review |
+| `0029a858` | SetDefDispEnv | 68 | 100.0% | auto_structural |
+| `0029fef0` | ratan2 | 68 | 94.12% | needs_review |
+| `002a0878` | PushMatrix | 68 | 88.24% | needs_review |
+| `002a08bc` | PopMatrix | 68 | 88.24% | needs_review |

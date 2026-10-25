@@ -1,0 +1,18 @@
+{
+  "address": "00201c5c",
+  "name": "resetTargetDirection(tag_animation*)",
+  "size": 72,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1eb03c",
+    "201b84"
+  ],
+  "log": "=== jtable.py: 0x201c5c..0x201ca4 (72 bytes) ===\ncoverage: 18 of ~18 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x1eb03c x1   searchAnimationByBattleID(unsigned short) \n  0x201b84 x1   resetActionDirection(tag_animation*) \n\n-- branches: 3 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

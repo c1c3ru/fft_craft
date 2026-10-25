@@ -1,0 +1,21 @@
+{
+  "address": "000da558",
+  "name": "event_start()",
+  "size": 68,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 88.24,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "159a54",
+    "d49ac",
+    "d5ca4",
+    "da4ac"
+  ],
+  "log": "=== jtable.py: 0xda558..0xda59c (68 bytes) ===\ncoverage: 15 of ~17 instruction slots (88%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0xd49ac x1   sub_d49ac LOCAL(no-dynsym)\n  0xd5ca4 x1   sub_d5ca4 LOCAL(no-dynsym)\n  0xda4ac x1   event_init_light() \n  0x159a54 x1   asmGetActiveTask(int) \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
