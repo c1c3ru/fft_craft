@@ -4605,10 +4605,169 @@ locais sem símbolo que a descida agora alcança mas não resolve; (3)
 `standerdExecution`/`isInputEnable`, chamados dezenas de vezes sem
 seção própria.
 
-**Status CSV: `read_structural`** (mantém — a cobertura estrutural
-subiu de ~2.200 pra 4.086 instruções e o catálogo de chamadas mais
-que dobrou, mas nenhum handler individual foi lido por dentro, exceto
-os 3 desvios de guarda da 32.6).
+## 32.9 Leitura instrução a instrução dos primeiros 30 handlers de estado (de 68) — 5 forks paralelos, disassembly Capstone direto (2026-10-25, Fase 3, nonagésimo nono lote)
+
+Início da conversão real de `battle()` pra `read_full`: cada handler
+abaixo foi lido por completo (toda comparação, gravação de memória e
+`bl` resolvidos), não só o catálogo agregado da atualização anterior.
+Dois achados estruturais atravessam quase todos os 30:
+
+- **Dois pontos de epílogo compartilhado**, `0x2088d0` (caminho
+  completo: recarrega o estado e segue o loop) e `0x20868c` (caminho
+  "continuar esperando" — estado não mudou desde o quadro anterior).
+  Praticamente todo handler termina caindo num dos dois, em vez de
+  ter seu próprio retorno — explica por que a cobertura automática
+  nunca batia 100%: o verdadeiro "fim" de cada handler é um salto pra
+  fora da região ingenuamente calculada por endereço.
+- **Transições de estado hard-coded por `*g_battleState = N`**: já
+  achado uma vez na 32.6 (ícone 19 → estado 75); agora confirmado
+  **três vezes mais** dentro dos próprios handlers — estado 10 grava
+  `8`, estado 26 grava `25` (condicionalmente, enquanto
+  `recieve_statusinfo()!=2`), estado 29 grava `30` (condicionalmente,
+  sob 4 flags globais). Confirma que o "switch de 102 estados" não é
+  só dirigido por eventos externos — boa parte da transição é o
+  próprio corpo de um estado decidindo pra onde ir a seguir.
+
+### Estados 1-6 — abertura/reabertura do menu de comando, highlight de seleção, gate de rede, tutorial
+
+- **Estado 1** (`0x20a5f4`): liga ícones 4/5, reset condicional por
+  `recieve_statusinfo()!=2`, termina em `ASHURA_getOTptrZ(0)` +
+  `menu_call(...)` (§156) — **abre o menu de comando real**. Hipótese:
+  "selecionar comando", entrada do turno do jogador.
+- **Estado 2** (`0x20a41c`): setup condicionado ao bit 0x80 de uma
+  flags word global (pular na 2ª+ passagem); `iOS_resetAnimationIrowake()`
+  ("irowake" = distinção por cor) só dispara quando o estado mudou
+  desde o quadro anterior — reset de highlight de seleção só na
+  entrada, não todo quadro. Hipótese: "aguardando seleção de
+  unidade/alvo".
+- **Estado 3** (`0x20a518`): gate de rede real — `pspNetCheckDuty()`
+  decide se é a vez do cliente local, `pspNetGetCharacterWaitFlag()`
+  evita reentrância, `sub_202180()` seguido de releitura do próprio
+  `*g_battleState` (polling). Hipótese: "esperar minha vez (rede)".
+- **Estado 4** (`0x20a4a8`): corpo inteiro gateado por `iOSTutoCheck()`
+  — só roda com tutorial ativo; trava input, busca ação/animação
+  atual, dispara popup (`sub_206b00`) só se **não** em rede ad-hoc.
+  Hipótese: "popup de explicação de tutorial".
+- **Estado 5** (`0x20a598`): variante simplificada do gate de rede do
+  estado 3 (mesmo `pspNetCheckDuty`, sem o polling de `CharacterWaitFlag`).
+  Hipótese: "confirmar ação antes de executar (rede)".
+- **Estado 6** (`0x209780`): quase idêntico ao estado 1, mas com
+  checagem real de `searchActiveAnimation()` — se há animação ativa
+  do tipo esperado, deixa terminar em outro lugar; se tipo
+  inesperado, cancela (`sub_1fa468`) antes de reabrir o menu.
+  Hipótese: "reabrir o menu de comando" (contraparte do estado 1 pra
+  retorno de sub-menu).
+
+### Estados 7-12 — abertura de menu (variante com efeito 3D), template de espera assíncrona, dispatch por tipo de ação
+
+- **Estado 7** (`0x20a2c8`): liga 5 ícones (incl. `0xe9`, novo);
+  desvio condicional por `*g_flagsA & 0x40` decide se
+  `ASHURA_set_Mesh(0,1)` + `callSystemSound(2)` (highlight 3D + som
+  de abertura) acontece antes do `menu_call`. Confirma **estado real
+  de abertura do menu de comando**, com efeito visual/sonoro
+  condicional.
+- **Estados 8 e 9** (`0x20a254`/`0x20a1ec`): mesmo "template" de
+  espera assíncrona — `iOS_setDisableInterrupt(1)`, dispara uma
+  operação local (`sub_2040bc`/`sub_202854`, diferente em cada), só
+  reabilita input quando um valor cacheado diverge do estado atual.
+  Estado 8 tem uma guarda extra (`iOS_getOptionAddOfsMode()`) que o 9
+  não tem — duas instâncias do mesmo template, provável par de
+  sub-passos sequenciais.
+- **Estado 10** (`0x20a14c`): **grava `8` direto em `*g_battleState`**
+  (transição hard-coded); chama `ASHURA_set_Mesh(0,3)` e
+  `request_turnwindowrestart()` (achado novo); tem uma saída
+  alternativa (`0x2088a4`, diferente do epílogo padrão) quando o
+  ícone `0x14` está ativo.
+- **Estados 11 e 12** (`0x2096c4`/`0x209648`): pollam o menu
+  (`menu_call`) e despacham pelo tipo de ação de
+  `return_actionstructure()` — tipos `7`/`8`/`0xff` tratados como
+  grupo especial (provável "sem ação"/"cancelado"), qualquer outro
+  valor = ação de combate real. Estado 12 tem guarda extra
+  (`isInputEnable()`) e trata os 3 tipos com destinos individuais em
+  vez de agrupados.
+
+### Estados 13-18 (+ bônus 28) — fase de ação do jogador, polling de status 7/8/0xff, limpeza de ícones
+
+- **Estado 13** (`0x20a3a4`): gateado por `isInputEnable()`; liga
+  ícones 4/0xa/0xc, habilita toque/scroll real de unidade via
+  `iOSUnitTapSet`/`iOSScrollButtonMove`. Hipótese: "aguardando
+  comando do jogador".
+- **Estados 14, 15, 16** (`0x2095fc`/`0x20a0f4`/`0x20a010`): mesmo
+  padrão — `menu_call` + `return_actionstructure()`, testando o
+  campo 0 (chamado de "status de ação") contra `7`/`8`/`0xff`. 14/15
+  tratam esse grupo igual; **16 bifurca o caso 7 pra um destino
+  diferente de 8/0xff** e é o único que chama `searchActiveAnimation()`.
+  15 tem checagem extra de `iOS_getTouchTap()` (saída antecipada por
+  toque).
+- **Estados 17 e 28** (`0x209d5c`/`0x209dac`): desligam ícones
+  3/4/5(/0xa/0xc) e delegam a um local não resolvido — par de
+  "encerramento de sub-fase"; 28 grava uma flag extra (`*ptr=1`) num
+  endereço vindo da pilha do chamador.
+- **Estado 18** (`0x209d10`): mesmo gate `isInputEnable()` do 13, mas
+  desliga (em vez de ligar) ícones 3/0xa e sai por destino
+  condicionado a `iOS_IsEnableMenuItemTouch()` — hipótese: par de
+  saída do estado 13.
+
+### Estados 19-24 — limpeza pós-ação, trava de cursor, reentrância, dispatch de menu (2ª variante)
+
+- **Estado 19** (`0x209fc8`): limpa 4 ícones, consulta
+  `pspNetCheckDuty()` pra decidir entre dois caminhos que convergem
+  no mesmo destino externo.
+- **Estado 20** (`0x209f80`): só avança com input habilitado; marca
+  flag local e limita cursor (`iOSTchCurLimit(1)`) condicionado a
+  `pspNetCheckDuty()`.
+- **Estado 21** (`0x20a080`): **guarda de reentrância via ícone
+  `0x88`** — se já ativo, pula o corpo inteiro; senão liga 4 ícones,
+  chama local, e só desarma o guard se `*g_battleState` ainda for
+  literalmente `21` (`0x15` hex) nesse ponto.
+- **Estados 22 e 24** (`0x209914`/`0x209b4c`): **o mecanismo real de
+  "abrir menu de comando → despachar pela ação escolhida"** —
+  `standerdExecution`→`ASHURA_getOTptrZ`→`menu_call`→
+  `return_actionstructure`, despachando por tipo (7/8/0xff = grupo
+  especial). 22 tem guarda de input/reset de ícone 3 que 24 não tem
+  — duas entradas pro mesmo mecanismo.
+- **Estado 23** (`0x209f3c`): único dos seis sem nenhum desvio
+  condicional — libera cursor, liga 0xa/0xc, desliga 3, chama
+  `iOSScrollButtonMove()`. Hipótese: "transição livre de bloqueio",
+  devolvendo controle de câmera/scroll normal.
+
+### Estados 25-30 — ícones de espera de turno, transições hard-coded 26→25 e 29→30, herança de sub-animação
+
+- **Estado 25** (`0x209ac8`): só roda com input bloqueado
+  (`isInputEnable()==0`); liga ícones 10/12/13, desliga 3 — hipótese:
+  "mostrar ícones de comando enquanto o jogador não pode agir".
+- **Estado 26** (`0x209a68`): poll de `recieve_statusinfo()`; **se
+  ainda não é `2`, grava `25` direto em `*g_battleState`** (transição
+  hard-coded 26→25, loop de espera de rede).
+- **Estado 27** (`0x209df0`): contraparte de saída do 25 — desliga
+  10/3, espelha um bit de flag da animação atual no ícone 4; só
+  chama `standerdExecution()` se `pspNetCheckDuty()` confirmar.
+- **Estado 28**: ver bloco "Estados 17 e 28" acima.
+- **Estado 29** (`0x209e40`, o mais rico dos 30): tipo de ação
+  7/8/0xff marca um flag especial; sob uma combinação de 4 flags
+  globais, **grava `30` direto em `*g_battleState`** (transição
+  hard-coded 29→30); copia 20 bytes + 1 halfword de uma
+  sub-animação referenciada (`+0x134`) pra dentro da animação atual
+  (`+0x160`/`+0x138`) — hipótese: "herdar posição/estado de uma
+  animação vinculada" (alvo/projétil ligado ao atacante).
+- **Estado 30** (`0x20972c`): mesmo trio `standerdExecution`/
+  `ASHURA_getOTptrZ`/`menu_call` que 26 e 29 — o bloco `0x20971c`
+  (16 B antes do início do 30) é provavelmente esse trio deduplicado
+  pelo compilador, com 26/29 desviando pra lá em vez de repetir
+  inline (mesmo fenômeno de handler-compartilhado da 32.2, num grão
+  menor).
+
+**O que ainda falta**: 38 dos 68 handlers reais, os blocos de
+epílogo compartilhado (`0x2088d0`/`0x20868c`/`0x20971c`) em si, e
+~40 funções locais sem símbolo citadas acima (`sub_203990`,
+`sub_204f30`, `sub_200de8`, `sub_1fc4cc`, `sub_202180`, `sub_1fa468`,
+`sub_2040bc`, `sub_202854`, `sub_207970`, `sub_207bcc`, `sub_2024f0`,
+`sub_206b00`, etc.).
+
+**Status CSV: `read_structural`** (mantém — 30 de 68 handlers reais
+agora têm leitura byte a byte completa, mas `battle()` só vira
+`read_full` quando os 68 + os epílogos compartilhados estiverem
+todos lidos).
 
 ## 33. `Wmesputmain()` — passe estrutural — 2ª maior função do binário, revela um sistema de tasks nunca visto (2026-10-17, Fase 3)
 
