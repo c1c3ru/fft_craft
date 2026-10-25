@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **568/1258** pending functions.
+Evidence collected: **576/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -579,3 +579,11 @@ These reports do not constitute semantic verification.
 | `000d7ed8` | getvaluelength(int) | [Evidence](semantic-evidence/000d7ed8.md) |
 | `000d88c4` | popmessagepacket() | [Evidence](semantic-evidence/000d88c4.md) |
 | `000e0f68` | loadcsrc(int, int, int, int) | [Evidence](semantic-evidence/000e0f68.md) |
+| `000ffac4` | Wgetvaluelength(int) | [Evidence](semantic-evidence/000ffac4.md) |
+| `00100594` | Wpopmessagepacket() | [Evidence](semantic-evidence/00100594.md) |
+| `0019f718` | iOSShopHelpStatusCheck() | [Evidence](semantic-evidence/0019f718.md) |
+| `001cec24` | copy_target_table2(unsigned char*) | [Evidence](semantic-evidence/001cec24.md) |
+| `001ceca0` | _rand_() | [Evidence](semantic-evidence/001ceca0.md) |
+| `001d1ce8` | erase_unit_f(int) | [Evidence](semantic-evidence/001d1ce8.md) |
+| `001d3d24` | gc_bwp(int) | [Evidence](semantic-evidence/001d3d24.md) |
+| `001f5f44` | iOS_resetAnimationIrowake() | [Evidence](semantic-evidence/001f5f44.md) |
