@@ -1,0 +1,18 @@
+{
+  "address": "0020c5d8",
+  "name": "errorHandler(int)",
+  "size": 40,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 90.0,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "20c5d0"
+  ],
+  "log": "=== jtable.py: 0x20c5d8..0x20c600 (40 bytes) ===\ncoverage: 9 of ~10 instruction slots (90%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x20c5d0 x1   system_error(int, int) \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
