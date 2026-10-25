@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **360/1258** pending functions.
+Evidence collected: **368/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -371,3 +371,11 @@ These reports do not constitute semantic verification.
 | `001a9370` | GetTotalItemBackup(short) | [Evidence](semantic-evidence/001a9370.md) |
 | `0020c930` | freeForFile(void*) | [Evidence](semantic-evidence/0020c930.md) |
 | `002151e8` | resetClutData(unsigned int, unsigned int, int) | [Evidence](semantic-evidence/002151e8.md) |
+| `00245c0c` | o_GetCardState() | [Evidence](semantic-evidence/00245c0c.md) |
+| `00249c58` | vOpn_bk_load(int, unsigned long*) | [Evidence](semantic-evidence/00249c58.md) |
+| `00281730` | iOS_v2menuGetEnable(V2_MENU_ITEM) | [Evidence](semantic-evidence/00281730.md) |
+| `002b2f7c` | musicPlayer_Stop() | [Evidence](semantic-evidence/002b2f7c.md) |
+| `0010044c` | Wimport_localstatus(char*, char*, char*, char*) | [Evidence](semantic-evidence/0010044c.md) |
+| `001d18e4` | Resume_MK_BSTR_IsLoaded(int) | [Evidence](semantic-evidence/001d18e4.md) |
+| `0020c6e4` | freeForSound(void*) | [Evidence](semantic-evidence/0020c6e4.md) |
+| `0021cfe4` | GetEffectTCB() | [Evidence](semantic-evidence/0021cfe4.md) |
