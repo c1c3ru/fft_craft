@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **390/390** pending functions.
+Evidence collected: **290/290** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -83,94 +83,16 @@ These reports do not constitute semantic verification.
 | `002cb830` | __gesf2 | [Evidence](semantic-evidence/002cb830.md) |
 | `0019e134` | SuccessEmploy() | [Evidence](semantic-evidence/0019e134.md) |
 | `002cb484` | __floatunsisf | [Evidence](semantic-evidence/002cb484.md) |
-| `0028d688` | tlFreeAll() | [Evidence](semantic-evidence/0028d688.md) |
-| `0029fd90` | GteGetDataReg(int) | [Evidence](semantic-evidence/0029fd90.md) |
-| `0029fdbc` | GteSetDataReg(long, long) | [Evidence](semantic-evidence/0029fdbc.md) |
-| `0029febc` | PSX_csin | [Evidence](semantic-evidence/0029febc.md) |
-| `002a13f0` | SetFogNearFar | [Evidence](semantic-evidence/002a13f0.md) |
-| `002a1ad4` | read_sxsy0(long*) | [Evidence](semantic-evidence/002a1ad4.md) |
-| `002a1aec` | read_sxsy1(long*) | [Evidence](semantic-evidence/002a1aec.md) |
-| `002a1b04` | read_sxsy2(long*) | [Evidence](semantic-evidence/002a1b04.md) |
-| `002a1b44` | read_rgb0(long*) | [Evidence](semantic-evidence/002a1b44.md) |
-| `002a1b5c` | read_rgb1(long*) | [Evidence](semantic-evidence/002a1b5c.md) |
-| `002a1b74` | read_rgb2(long*) | [Evidence](semantic-evidence/002a1b74.md) |
-| `002a1b8c` | read_flag(long*) | [Evidence](semantic-evidence/002a1b8c.md) |
-| `002a1ba4` | read_p(long*) | [Evidence](semantic-evidence/002a1ba4.md) |
-| `002a25c8` | read_otz(long*) | [Evidence](semantic-evidence/002a25c8.md) |
-| `002a25e0` | read_opz(long*) | [Evidence](semantic-evidence/002a25e0.md) |
-| `002a2728` | xpPadAnalogAssign | [Evidence](semantic-evidence/002a2728.md) |
-| `002a2a34` | xpPadUpdateData | [Evidence](semantic-evidence/002a2a34.md) |
-| `002a2a68` | xpPadWorkBufGet | [Evidence](semantic-evidence/002a2a68.md) |
-| `002a2a80` | xpPadTriggerGet | [Evidence](semantic-evidence/002a2a80.md) |
-| `002a2a98` | xpPadGet | [Evidence](semantic-evidence/002a2a98.md) |
-| `002a2ab0` | xpPadAnalogXGet | [Evidence](semantic-evidence/002a2ab0.md) |
-| `002a2ac8` | xpPadAnalogYGet | [Evidence](semantic-evidence/002a2ac8.md) |
-| `002a2ae0` | xpPadPspPadDataGet | [Evidence](semantic-evidence/002a2ae0.md) |
-| `002a2af8` | xpPadRepeatGet | [Evidence](semantic-evidence/002a2af8.md) |
-| `002a2b2c` | xpPadKeyTblSet | [Evidence](semantic-evidence/002a2b2c.md) |
-| `002a2b44` | xpPadKeyTblGet | [Evidence](semantic-evidence/002a2b44.md) |
-| `002a2fb8` | PCcreat | [Evidence](semantic-evidence/002a2fb8.md) |
-| `002b36bc` | Error_Init() | [Evidence](semantic-evidence/002b36bc.md) |
-| `002b376c` | Error_SetError(int, char*) | [Evidence](semantic-evidence/002b376c.md) |
-| `002bef4c` | iOS_isExistResumeData() | [Evidence](semantic-evidence/002bef4c.md) |
-| `002c53e8` | Movie_Init() | [Evidence](semantic-evidence/002c53e8.md) |
-| `000c81b0` | tool_setarrowmode(int) | [Evidence](semantic-evidence/000c81b0.md) |
-| `000cbb1c` | getYLine() | [Evidence](semantic-evidence/000cbb1c.md) |
-| `000d9608` | get_padframe() | [Evidence](semantic-evidence/000d9608.md) |
-| `00101420` | Wget_padframe() | [Evidence](semantic-evidence/00101420.md) |
-| `00101590` | WiOS_getStatusAllgrayf() | [Evidence](semantic-evidence/00101590.md) |
-| `00101fd0` | iOStorideflagGet() | [Evidence](semantic-evidence/00101fd0.md) |
-| `001021c8` | Wreturn_actionstructure() | [Evidence](semantic-evidence/001021c8.md) |
-| `0012f214` | iOSpersonalWinPosClear(int) | [Evidence](semantic-evidence/0012f214.md) |
-| `0012f2dc` | iOSPersonalWinPosSet(int) | [Evidence](semantic-evidence/0012f2dc.md) |
-| `00142840` | WiOS_getOptionAddOfsX() | [Evidence](semantic-evidence/00142840.md) |
-| `00142f4c` | WiOS_getOptionAddOfsMode() | [Evidence](semantic-evidence/00142f4c.md) |
-| `001506a8` | getNetErrorCutFlg() | [Evidence](semantic-evidence/001506a8.md) |
-| `001531e4` | GetgMission_Successflg() | [Evidence](semantic-evidence/001531e4.md) |
-| `00155c78` | ret_adventurestatus() | [Evidence](semantic-evidence/00155c78.md) |
-| `00156550` | send_worldkeymask(unsigned long) | [Evidence](semantic-evidence/00156550.md) |
-| `001579ac` | worldcursormove(int) | [Evidence](semantic-evidence/001579ac.md) |
-| `001579c0` | regist_zodiacot(unsigned int*) | [Evidence](semantic-evidence/001579c0.md) |
-| `0015a16c` | iOSTapTimeAreaGet() | [Evidence](semantic-evidence/0015a16c.md) |
-| `0015a314` | iOSsTchBtlFlagGet() | [Evidence](semantic-evidence/0015a314.md) |
-| `0015a328` | iOSsTchBtlFlagSet(int) | [Evidence](semantic-evidence/0015a328.md) |
-| `0015a8a0` | iOSScrollgStatusModeGet() | [Evidence](semantic-evidence/0015a8a0.md) |
-| `0015da20` | iOSGetTchCurLimit() | [Evidence](semantic-evidence/0015da20.md) |
-| `0015fff4` | iOSGetTchRotDY() | [Evidence](semantic-evidence/0015fff4.md) |
-| `00161944` | iOSHelpInputWaitGet() | [Evidence](semantic-evidence/00161944.md) |
-| `00161958` | iOSHelpInputWaitSet(int) | [Evidence](semantic-evidence/00161958.md) |
-| `0018f994` | eStopGetPad(int) | [Evidence](semantic-evidence/0018f994.md) |
-| `001a4858` | iOSLearnTypeSet(int) | [Evidence](semantic-evidence/001a4858.md) |
-| `001ac8b4` | dispFT4num() | [Evidence](semantic-evidence/001ac8b4.md) |
-| `001adc68` | FadeMask(int) | [Evidence](semantic-evidence/001adc68.md) |
-| `001aec64` | iOSItemTypeSet(int) | [Evidence](semantic-evidence/001aec64.md) |
-| `001aec78` | iOSItemTypeGet() | [Evidence](semantic-evidence/001aec78.md) |
-| `001b4c20` | IsDark(int) | [Evidence](semantic-evidence/001b4c20.md) |
-| `001b8e50` | get_tutrial_pad() | [Evidence](semantic-evidence/001b8e50.md) |
-| `001bab64` | GetSttsAMovingTime() | [Evidence](semantic-evidence/001bab64.md) |
-| `001d15b0` | get_originalability() | [Evidence](semantic-evidence/001d15b0.md) |
-| `001eee34` | getEffSequenceAddress() | [Evidence](semantic-evidence/001eee34.md) |
-| `001fcdf0` | iOSgetCursorVisible() | [Evidence](semantic-evidence/001fcdf0.md) |
-| `002010b8` | iOSmapVectorScrollCheck() | [Evidence](semantic-evidence/002010b8.md) |
-| `002041e8` | setStartBattleFlg(int) | [Evidence](semantic-evidence/002041e8.md) |
-| `002041fc` | getStartBattleFlg() | [Evidence](semantic-evidence/002041fc.md) |
-| `00204254` | setTurning(int) | [Evidence](semantic-evidence/00204254.md) |
-| `0020f428` | eventEffectExecute() | [Evidence](semantic-evidence/0020f428.md) |
-| `0020f8b8` | getFrameTicks() | [Evidence](semantic-evidence/0020f8b8.md) |
 | `00216604` | checkActiveMusic() | [Evidence](semantic-evidence/00216604.md) |
-| `002168e8` | callEnvEffect(int) | [Evidence](semantic-evidence/002168e8.md) |
 | `0021b4e0` | GetPlugInFuncAdr(short) | [Evidence](semantic-evidence/0021b4e0.md) |
 | `0021b890` | SetAirDensity(long) | [Evidence](semantic-evidence/0021b890.md) |
-| `0021cf1c` | GetEffectStatus() | [Evidence](semantic-evidence/0021cf1c.md) |
 | `00228dd0` | GetShapePrimPtNow() | [Evidence](semantic-evidence/00228dd0.md) |
-| `0024509c` | TEST_setClearOt(int) | [Evidence](semantic-evidence/0024509c.md) |
 | `002450b0` | TEST_getClearOt() | [Evidence](semantic-evidence/002450b0.md) |
 | `00245a60` | o_SelectCard(int) | [Evidence](semantic-evidence/00245a60.md) |
 | `0025691c` | IOSsTownModeSet(int) | [Evidence](semantic-evidence/0025691c.md) |
 | `0025f3d8` | iOS_wld_pad_trg(unsigned long) | [Evidence](semantic-evidence/0025f3d8.md) |
 | `0025f3fc` | iOSSnapshotSet(int) | [Evidence](semantic-evidence/0025f3fc.md) |
 | `0025f410` | iOSSDNovelHelpTrgSet(long) | [Evidence](semantic-evidence/0025f410.md) |
-| `0025f424` | iOSSDNovelHelpTrgGet() | [Evidence](semantic-evidence/0025f424.md) |
 | `0027b480` | setDrawPrimNum(int) | [Evidence](semantic-evidence/0027b480.md) |
 | `0027b514` | getCmdKindNum() | [Evidence](semantic-evidence/0027b514.md) |
 | `0027b528` | getCmdKind(unsigned int) | [Evidence](semantic-evidence/0027b528.md) |
@@ -179,28 +101,11 @@ These reports do not constitute semantic verification.
 | `00281664` | iOS_v2menuGetAddr() | [Evidence](semantic-evidence/00281664.md) |
 | `00281694` | iOS_v2menuSetDecide(int) | [Evidence](semantic-evidence/00281694.md) |
 | `002816a8` | iOS_v2menuGetDecide() | [Evidence](semantic-evidence/002816a8.md) |
-| `002819b8` | iOS_v2menuGetType() | [Evidence](semantic-evidence/002819b8.md) |
 | `00282274` | iOS_v2menuGetYline() | [Evidence](semantic-evidence/00282274.md) |
-| `002843a0` | new_VectorDataBase(unsigned int) | [Evidence](semantic-evidence/002843a0.md) |
-| `00285f38` | pspMsgLzwBaseGet(FFTPSP_MSG_LZW) | [Evidence](semantic-evidence/00285f38.md) |
-| `002862e8` | IsMapTexAsideLoad(unsigned int) | [Evidence](semantic-evidence/002862e8.md) |
-| `00286794` | setEventStatus(int) | [Evidence](semantic-evidence/00286794.md) |
-| `00286880` | getEventStatus() | [Evidence](semantic-evidence/00286880.md) |
-| `00286894` | get_gEventMovieNo() | [Evidence](semantic-evidence/00286894.md) |
 | `002868a8` | set_gEventMovieNo(int) | [Evidence](semantic-evidence/002868a8.md) |
-| `00286aa0` | get_netdatamode() | [Evidence](semantic-evidence/00286aa0.md) |
 | `00286ab4` | set_netdatamode(int) | [Evidence](semantic-evidence/00286ab4.md) |
 | `00286b0c` | set_limit_turn_flg(int) | [Evidence](semantic-evidence/00286b0c.md) |
-| `00286b20` | get_limit_turn_flg() | [Evidence](semantic-evidence/00286b20.md) |
-| `00286dec` | GetNetmissionNo() | [Evidence](semantic-evidence/00286dec.md) |
-| `00287030` | get_timing_flag() | [Evidence](semantic-evidence/00287030.md) |
-| `00287070` | get_rival() | [Evidence](semantic-evidence/00287070.md) |
-| `00287a18` | set_g_Soldier_Draw_flg(int) | [Evidence](semantic-evidence/00287a18.md) |
-| `00287a2c` | get_g_Soldier_Draw_flg() | [Evidence](semantic-evidence/00287a2c.md) |
-| `002884a0` | Set_NonDrawTaikiIconFlg(int) | [Evidence](semantic-evidence/002884a0.md) |
 | `002884b4` | Get_NonDrawTaikiIconFlg() | [Evidence](semantic-evidence/002884b4.md) |
-| `002884d4` | setBattlePoint(int) | [Evidence](semantic-evidence/002884d4.md) |
-| `002884e8` | getBattlePoint() | [Evidence](semantic-evidence/002884e8.md) |
 | `0028851c` | setMissionNo_CalcMissionPayPoint(int) | [Evidence](semantic-evidence/0028851c.md) |
 | `00288530` | getMissionNo_CalcMissionPayPoint() | [Evidence](semantic-evidence/00288530.md) |
 | `00288544` | setTurnCount_CalcMissionPayPoint(int) | [Evidence](semantic-evidence/00288544.md) |
@@ -214,15 +119,12 @@ These reports do not constitute semantic verification.
 | `0028ba40` | TE_setTaskType(int) | [Evidence](semantic-evidence/0028ba40.md) |
 | `0028d1b0` | tlGetHeap() | [Evidence](semantic-evidence/0028d1b0.md) |
 | `0028dcf0` | StartRCnt | [Evidence](semantic-evidence/0028dcf0.md) |
-| `0028dea8` | InitCARD | [Evidence](semantic-evidence/0028dea8.md) |
 | `0028df7c` | _card_info | [Evidence](semantic-evidence/0028df7c.md) |
 | `0029b6e8` | GsGetWorkBase | [Evidence](semantic-evidence/0029b6e8.md) |
 | `0029fd7c` | GteGetCtrlReg(int) | [Evidence](semantic-evidence/0029fd7c.md) |
 | `0029fda8` | GteSetCtrlReg(long, long) | [Evidence](semantic-evidence/0029fda8.md) |
-| `002a133c` | SetGeomScreen | [Evidence](semantic-evidence/002a133c.md) |
 | `002a1370` | ReadGeomScreen | [Evidence](semantic-evidence/002a1370.md) |
 | `002a13b4` | InitClip | [Evidence](semantic-evidence/002a13b4.md) |
-| `002a2da4` | PCclose | [Evidence](semantic-evidence/002a2da4.md) |
 | `002a2fd0` | xpInitSPAD | [Evidence](semantic-evidence/002a2fd0.md) |
 | `002a3138` | xpSetResume | [Evidence](semantic-evidence/002a3138.md) |
 | `002ab6fc` | GPUCmd_GetGPUCmd_IP() | [Evidence](semantic-evidence/002ab6fc.md) |
@@ -231,8 +133,6 @@ These reports do not constitute semantic verification.
 | `002abd20` | sceGuClutMode | [Evidence](semantic-evidence/002abd20.md) |
 | `002ac000` | sceGuTexMode | [Evidence](semantic-evidence/002ac000.md) |
 | `002b14d0` | Project_Archive_GetFile(int) | [Evidence](semantic-evidence/002b14d0.md) |
-| `002b8708` | iOS_PressTime() | [Evidence](semantic-evidence/002b8708.md) |
-| `002b87e8` | iOS_isInGameArea() | [Evidence](semantic-evidence/002b87e8.md) |
 | `002c53c0` | Main_GetPauseFlag() | [Evidence](semantic-evidence/002c53c0.md) |
 | `002c53d4` | Main_SetPauseFlag(int) | [Evidence](semantic-evidence/002c53d4.md) |
 | `00073c64` | get_crc_table | [Evidence](semantic-evidence/00073c64.md) |
