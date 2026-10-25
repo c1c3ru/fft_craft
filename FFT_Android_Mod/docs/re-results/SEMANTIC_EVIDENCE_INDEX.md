@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **616/1258** pending functions.
+Evidence collected: **624/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -627,3 +627,11 @@ These reports do not constitute semantic verification.
 | `00243014` | fRoll_exit(short*) | [Evidence](semantic-evidence/00243014.md) |
 | `00245a74` | o_ClearCardEvent() | [Evidence](semantic-evidence/00245a74.md) |
 | `00245b34` | o_ClearCardEvent_X() | [Evidence](semantic-evidence/00245b34.md) |
+| `0024dc8c` | ctlkiroku_active(CTLINFO*) | [Evidence](semantic-evidence/0024dc8c.md) |
+| `0024e8d0` | ctlperson_active(CTLINFO*) | [Evidence](semantic-evidence/0024e8d0.md) |
+| `00259e70` | ctlhouk_active(CTLINFO*) | [Evidence](semantic-evidence/00259e70.md) |
+| `002602c0` | ctlmouke_active(CTLINFO*) | [Evidence](semantic-evidence/002602c0.md) |
+| `002675c0` | ctlret_active(CTLINFO*) | [Evidence](semantic-evidence/002675c0.md) |
+| `0026c3cc` | ctltresure_active(CTLINFO*) | [Evidence](semantic-evidence/0026c3cc.md) |
+| `0027b4dc` | setCmdKind(unsigned int) | [Evidence](semantic-evidence/0027b4dc.md) |
+| `0027f14c` | iOS_ClearRectHitAll() | [Evidence](semantic-evidence/0027f14c.md) |
