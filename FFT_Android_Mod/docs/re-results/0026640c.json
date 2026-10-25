@@ -3,7 +3,7 @@
   "name": "wldpac_draw(GsOT*, unsigned long*, int)",
   "size": 148,
   "previous_status": "mentioned_unverified",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 94.59,
   "distinct_bl": 3,
   "tables_resolved": 0,
@@ -14,7 +14,30 @@
     "26679c"
   ],
   "log": "=== jtable.py: 0x26640c..0x2664a0 (148 bytes) ===\ncoverage: 35 of ~37 instruction slots (95%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x2660b8 x1   wld_anim(ANMPAC*, GsOT*) \n  0x266544 x1   iOS_drawMenuAssist_wld(iOS_CMenuTouch*, GsOT*) \n  0x26679c x1   wld_window(WINPAC*, GsOT*) \n\n-- branches: 8 total, 5 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x26640c",
+    "total_slots": 37,
+    "code_slots": 35,
+    "instruction_slots": 35,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x266498",
+      "0x26649c"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/0026640c.json"
 }

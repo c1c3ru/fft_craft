@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **203/203** pending functions.
+Evidence collected: **115/115** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -94,99 +94,11 @@ These reports do not constitute semantic verification.
 | `000aecb8` | CEGL2_SPRITE::ErrorGL(char const*, char const*, unsigned int) | [Evidence](semantic-evidence/000aecb8.md) |
 | `000a7ec4` | CEGL2_IF::SetBlendMode(int) | [Evidence](semantic-evidence/000a7ec4.md) |
 | `002ca215` | __cxa_call_unexpected | [Evidence](semantic-evidence/002ca215.md) |
-| `001e2124` | afterskillhandle(BWORK*) | [Evidence](semantic-evidence/001e2124.md) |
-| `0025efe4` | wlddata_load() | [Evidence](semantic-evidence/0025efe4.md) |
-| `0026ba18` | wldtown_draw() | [Evidence](semantic-evidence/0026ba18.md) |
-| `002a37b0` | pspSaveBase::pspSaveBase() | [Evidence](semantic-evidence/002a37b0.md) |
-| `001ce950` | setskillresult_caster(int) | [Evidence](semantic-evidence/001ce950.md) |
-| `002856fc` | pspItemGetWeaponData | [Evidence](semantic-evidence/002856fc.md) |
-| `00258e70` | evt_town_cent() | [Evidence](semantic-evidence/00258e70.md) |
-| `00290dc0` | DrawSync | [Evidence](semantic-evidence/00290dc0.md) |
-| `002b2a94` | SE_SetVol(int, int) | [Evidence](semantic-evidence/002b2a94.md) |
-| `00216458` | disposeMusic(int) | [Evidence](semantic-evidence/00216458.md) |
-| `00273d20` | IsNullUnit(int) | [Evidence](semantic-evidence/00273d20.md) |
-| `0025f1e8` | wldmes_load(int) | [Evidence](semantic-evidence/0025f1e8.md) |
-| `002161e0` | loadMusic(int) | [Evidence](semantic-evidence/002161e0.md) |
-| `0026640c` | wldpac_draw(GsOT*, unsigned long*, int) | [Evidence](semantic-evidence/0026640c.md) |
-| `00268be0` | wldcenter_set(_POINT*, SVECTOR*) | [Evidence](semantic-evidence/00268be0.md) |
-| `002766f4` | GetHightDistance(unsigned char*, BWORK*) | [Evidence](semantic-evidence/002766f4.md) |
-| `0025e204` | wldfade_mask() | [Evidence](semantic-evidence/0025e204.md) |
-| `00216154` | loadMusicBuffer(int, int) | [Evidence](semantic-evidence/00216154.md) |
-| `00269798` | snpl_wait() | [Evidence](semantic-evidence/00269798.md) |
-| `0026a120` | snpl_rndjp() | [Evidence](semantic-evidence/0026a120.md) |
-| `00159924` | asmTaskEntry() | [Evidence](semantic-evidence/00159924.md) |
-| `0025da0c` | wldkey_repinit() | [Evidence](semantic-evidence/0025da0c.md) |
-| `00269bc0` | snpl_timeset() | [Evidence](semantic-evidence/00269bc0.md) |
-| `00276c28` | CheckCrystalAndTresureBox() | [Evidence](semantic-evidence/00276c28.md) |
-| `00269ec8` | snpl_mesput() | [Evidence](semantic-evidence/00269ec8.md) |
-| `001e6938` | setskilldata(ACT*) | [Evidence](semantic-evidence/001e6938.md) |
-| `00269aa0` | snpl_chgpara() | [Evidence](semantic-evidence/00269aa0.md) |
-| `0026b5e4` | ssd_request(int, int) | [Evidence](semantic-evidence/0026b5e4.md) |
-| `002cba30` | __fixunsdfdi | [Evidence](semantic-evidence/002cba30.md) |
-| `002775dc` | JudgeMovable(int) | [Evidence](semantic-evidence/002775dc.md) |
-| `002b29b4` | SE_StopAll() | [Evidence](semantic-evidence/002b29b4.md) |
 | `002ccfb8` | _Unwind_VRS_Get | [Evidence](semantic-evidence/002ccfb8.md) |
 | `002cd03c` | _Unwind_VRS_Set | [Evidence](semantic-evidence/002cd03c.md) |
-| `001a6530` | ScriptRead(int, TUTRIAL*) | [Evidence](semantic-evidence/001a6530.md) |
-| `0025f63c` | wldlop_chk() | [Evidence](semantic-evidence/0025f63c.md) |
-| `00273cc8` | IsAlmostNullUnit(int) | [Evidence](semantic-evidence/00273cc8.md) |
-| `0028c768` | CFFT_STATE::AttackTeamFaceIDToUnitATFID(int) | [Evidence](semantic-evidence/0028c768.md) |
-| `0024b02c` | wldmapEntry(int) | [Evidence](semantic-evidence/0024b02c.md) |
-| `0026a27c` | snpl_fadein() | [Evidence](semantic-evidence/0026a27c.md) |
-| `0028c690` | CFFT_STATE::UnitIDToFID_SP2(int, int) | [Evidence](semantic-evidence/0028c690.md) |
-| `00258f1c` | evt_gil_high() | [Evidence](semantic-evidence/00258f1c.md) |
-| `0026a5b0` | snpl_meswait() | [Evidence](semantic-evidence/0026a5b0.md) |
-| `0026b694` | wldssd_wait() | [Evidence](semantic-evidence/0026b694.md) |
-| `00270108` | wldmess_put(int, int, _POINT, unsigned long*) | [Evidence](semantic-evidence/00270108.md) |
-| `0029ae00` | xpLibGetOffset(int*, int*) | [Evidence](semantic-evidence/0029ae00.md) |
 | `002c99b5` | operator new(unsigned int) | [Evidence](semantic-evidence/002c99b5.md) |
-| `000bd4bc` | CSOUND_LOADER_OGG::~CSOUND_LOADER_OGG() | [Evidence](semantic-evidence/000bd4bc.md) |
-| `001d98c8` | check_status_data2(BWORK*, int) | [Evidence](semantic-evidence/001d98c8.md) |
-| `00259224` | evt_flag() | [Evidence](semantic-evidence/00259224.md) |
-| `0025926c` | evt_flag_high() | [Evidence](semantic-evidence/0025926c.md) |
-| `002592b4` | evt_flag_low() | [Evidence](semantic-evidence/002592b4.md) |
-| `002594a0` | evt_brave_high() | [Evidence](semantic-evidence/002594a0.md) |
-| `00259530` | evt_faith_high() | [Evidence](semantic-evidence/00259530.md) |
-| `0026b64c` | wldmusic_change(int) | [Evidence](semantic-evidence/0026b64c.md) |
-| `0029b5d0` | GsSwapDispBuff | [Evidence](semantic-evidence/0029b5d0.md) |
-| `00258fb4` | evt_dead_high() | [Evidence](semantic-evidence/00258fb4.md) |
-| `0026b6e0` | iOSwldssd_wait() | [Evidence](semantic-evidence/0026b6e0.md) |
-| `00277640` | SetThisDestination(unsigned char*) | [Evidence](semantic-evidence/00277640.md) |
-| `000b9fe0` | timeGetTime() | [Evidence](semantic-evidence/000b9fe0.md) |
-| `0025ee30` | wldload_wait() | [Evidence](semantic-evidence/0025ee30.md) |
-| `00269b80` | snpl_keywait() | [Evidence](semantic-evidence/00269b80.md) |
-| `00278440` | GetPanelUnderUnit(int, unsigned char*) | [Evidence](semantic-evidence/00278440.md) |
-| `0009403c` | _vp_global_look | [Evidence](semantic-evidence/0009403c.md) |
-| `000ab9cc` | CEGL2_SHADER::CEGL2_SHADER() | [Evidence](semantic-evidence/000ab9cc.md) |
-| `00155e04` | changewindowamb(int, int, int) | [Evidence](semantic-evidence/00155e04.md) |
-| `002164f4` | inactivateMusic() | [Evidence](semantic-evidence/002164f4.md) |
-| `0026a3d0` | snpl_wordcol() | [Evidence](semantic-evidence/0026a3d0.md) |
-| `0026ab70` | snpl_envsndreq() | [Evidence](semantic-evidence/0026ab70.md) |
 | `002ca195` | __cxa_begin_cleanup | [Evidence](semantic-evidence/002ca195.md) |
-| `00258c40` | evt_wldinfo() | [Evidence](semantic-evidence/00258c40.md) |
-| `00269cd0` | snpl_setstat() | [Evidence](semantic-evidence/00269cd0.md) |
-| `0027fc80` | cSaveFFT::Destroy() | [Evidence](semantic-evidence/0027fc80.md) |
 | `0028c288` | CFFT_STATE::GetBackdropColor(float*, float*, float*) | [Evidence](semantic-evidence/0028c288.md) |
-| `000bd538` | CSOUND_LOADER_OGG::CSOUND_LOADER_OGG() | [Evidence](semantic-evidence/000bd538.md) |
-| `00258e08` | evt_town_set() | [Evidence](semantic-evidence/00258e08.md) |
-| `00258e3c` | evt_town_clr() | [Evidence](semantic-evidence/00258e3c.md) |
-| `000da47c` | event_init_system() | [Evidence](semantic-evidence/000da47c.md) |
-| `0026995c` | snpl_addpara() | [Evidence](semantic-evidence/0026995c.md) |
-| `0026998c` | snpl_subpara() | [Evidence](semantic-evidence/0026998c.md) |
-| `00269e98` | snpl_exit() | [Evidence](semantic-evidence/00269e98.md) |
-| `0027fc48` | cSaveFFT::Create(char*) | [Evidence](semantic-evidence/0027fc48.md) |
-| `0028e538` | CdRead | [Evidence](semantic-evidence/0028e538.md) |
-| `002a38a8` | pspSaveList::pspSaveList() | [Evidence](semantic-evidence/002a38a8.md) |
-| `001d6404` | set_guard_status(int) | [Evidence](semantic-evidence/001d6404.md) |
-| `00269930` | snpl_setpara() | [Evidence](semantic-evidence/00269930.md) |
-| `0027334c` | SetDestUnit(int) | [Evidence](semantic-evidence/0027334c.md) |
-| `000829c4` | oggpack_writecopy | [Evidence](semantic-evidence/000829c4.md) |
-| `000829ec` | oggpackB_writecopy | [Evidence](semantic-evidence/000829ec.md) |
-| `000bceac` | CSOUND_LOADER_PCM::CSOUND_LOADER_PCM() | [Evidence](semantic-evidence/000bceac.md) |
-| `0026a1a4` | snpl_sndreq() | [Evidence](semantic-evidence/0026a1a4.md) |
-| `0026b0b8` | snpl_musicreq() | [Evidence](semantic-evidence/0026b0b8.md) |
-| `0027fbc8` | iOS_WorldMapResumeGetData(unsigned char**, unsigned int*) | [Evidence](semantic-evidence/0027fbc8.md) |
-| `0028c668` | CFFT_STATE::UnitIDToFID_SPR(int) | [Evidence](semantic-evidence/0028c668.md) |
 | `00269774` | snpl_jp() | [Evidence](semantic-evidence/00269774.md) |
 | `00269b08` | snpl_effmode() | [Evidence](semantic-evidence/00269b08.md) |
 | `0028c644` | CFFT_STATE::FaceIDToFID(int) | [Evidence](semantic-evidence/0028c644.md) |

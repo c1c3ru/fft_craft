@@ -3,7 +3,7 @@
 Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
 Analyzed in current binary: 3002
-Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **this is newly triaged coverage, not total project coverage**.
+Automatically triaged: 282,496 bytes / 1,837,392 inventory bytes (15.37%); **this is newly triaged coverage, not total project coverage**.
 
 | Address | Function | Size (B) | Coverage | Status |
 |---|---|---:|---:|---|
@@ -475,16 +475,16 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `00218cf4` | SetDefaultCamera() | 216 | 98.15% | auto_structural |
 | `002867a8` | getMovieEventNum(int) | 216 | 68.52% | needs_review |
 | `001c02d4` | JobToAbiChg() | 212 | 92.45% | auto_structural |
-| `001e2124` | afterskillhandle(BWORK*) | 212 | 86.79% | needs_review |
+| `001e2124` | afterskillhandle(BWORK*) | 212 | 86.79% | auto_structural |
 | `001fea38` | rideOnChokobo(tag_animation*, tag_animation*) | 212 | 100.0% | auto_structural |
 | `00216530` | activateMusic(int, int, int) | 212 | 94.34% | auto_structural |
 | `00249f94` | vOpn_pacinit() | 212 | 86.79% | auto_structural |
 | `0024b6bc` | ctlbar_active(CTLINFO*) | 212 | 94.34% | auto_structural |
 | `002531e4` | ctltuto_zodiac() | 212 | 90.57% | auto_structural |
 | `0025e434` | mouke_app_chk(int, int) | 212 | 100.0% | auto_structural |
-| `0025efe4` | wlddata_load() | 212 | 92.45% | needs_review |
+| `0025efe4` | wlddata_load() | 212 | 92.45% | auto_structural |
 | `0025f280` | snpl_load(int) | 212 | 86.79% | auto_structural |
-| `0026ba18` | wldtown_draw() | 212 | 94.34% | needs_review |
+| `0026ba18` | wldtown_draw() | 212 | 94.34% | auto_structural |
 | `0027afdc` | IsNeedlessToFear(int) | 212 | 96.23% | auto_structural |
 | `0029c518` | GsSortLine | 212 | 98.11% | auto_structural |
 | `00082b14` | oggpackB_look | 208 | 100.0% | auto_structural |
@@ -547,12 +547,12 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `0024a924` | vOpnwin_set(int, RECT16, int, unsigned long*) | 192 | 97.92% | auto_structural |
 | `00269870` | snpl_syscur() | 192 | 89.58% | auto_structural |
 | `002a0b04` | ScaleMatrix | 192 | 100.0% | auto_structural |
-| `002a37b0` | pspSaveBase::pspSaveBase() | 192 | 93.75% | needs_review |
+| `002a37b0` | pspSaveBase::pspSaveBase() | 192 | 93.75% | auto_structural |
 | `000d8978` | itemuvclut(tagSPRT*, int) | 188 | 95.74% | auto_structural |
 | `000dfa94` | makemessagestructure() | 188 | 91.49% | auto_structural |
 | `000ff61c` | Wdisposememory(char*) | 188 | 97.87% | auto_structural |
 | `00100648` | Witemuvclut(tagSPRT*, int) | 188 | 95.74% | auto_structural |
-| `001ce950` | setskillresult_caster(int) | 188 | 87.23% | needs_review |
+| `001ce950` | setskillresult_caster(int) | 188 | 87.23% | auto_structural |
 | `0020c19c` | fftVSyncCallback() | 188 | 87.23% | auto_structural |
 | `0020c628` | mallocForSound(unsigned int) | 188 | 95.74% | auto_structural |
 | `0020f43c` | debugEffectWait() | 188 | 80.85% | auto_structural |
@@ -583,7 +583,7 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `0021cf30` | InitEffect() | 180 | 86.67% | auto_structural |
 | `00248c18` | ctlpremov_main(CTLINFO*) | 180 | 88.89% | auto_structural |
 | `0024ab84` | vOpnpicwin_set(int, RECT16, _POINT, int) | 180 | 97.78% | auto_structural |
-| `002856fc` | pspItemGetWeaponData | 180 | 93.33% | needs_review |
+| `002856fc` | pspItemGetWeaponData | 180 | 93.33% | auto_structural |
 | `0029c954` | sceVfpuVector4OuterProductXYZ(ScePspFVector4*, ScePspFVector4 const*, ScePspFVector4 const*) | 180 | 100.0% | auto_structural |
 | `002ab7d4` | sceGuDisable | 180 | 97.78% | auto_structural |
 | `000bd284` | CSOUND_LOADER_OGG::Read(void*, unsigned long, unsigned long*) | 176 | 100.0% | auto_structural |
@@ -611,12 +611,12 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `0021f0e4` | NewPEffectTCB() | 172 | 97.67% | auto_structural |
 | `00225370` | Malloc(unsigned long, long) | 172 | 95.35% | auto_structural |
 | `0024998c` | vOpn_iwaprog() | 172 | 83.72% | auto_structural |
-| `00258e70` | evt_town_cent() | 172 | 86.05% | needs_review |
+| `00258e70` | evt_town_cent() | 172 | 86.05% | auto_structural |
 | `0025903c` | evt_chr() | 172 | 97.67% | auto_structural |
 | `002699bc` | snpl_putpara() | 172 | 83.72% | auto_structural |
 | `0026aeec` | snpl_mreqcore(int) | 172 | 95.35% | auto_structural |
 | `00273ea0` | SetBestMoveAnywhereOK() | 172 | 97.67% | auto_structural |
-| `00290dc0` | DrawSync | 172 | 86.05% | needs_review |
+| `00290dc0` | DrawSync | 172 | 86.05% | auto_structural |
 | `002919c0` | SetDrawMode | 172 | 100.0% | auto_structural |
 | `002aca7c` | GuEmu_FrameMove() | 172 | 93.02% | auto_structural |
 | `002b1f3c` | Offscreen_ReadPixels(int, int, int, int) | 172 | 93.02% | auto_structural |
@@ -645,7 +645,7 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `00276cd4` | JudgeStatus(int, BWORK*, int) | 164 | 100.0% | auto_structural |
 | `00289ac0` | pspFftLoad(int, FFT_SAVE_DATA*, int*, int) | 164 | 92.68% | auto_structural |
 | `0029a3ec` | DrawPrim | 164 | 90.24% | auto_structural |
-| `002b2a94` | SE_SetVol(int, int) | 164 | 92.68% | needs_review |
+| `002b2a94` | SE_SetVol(int, int) | 164 | 92.68% | auto_structural |
 | `002cce40` | __gnu_Unwind_RaiseException | 164 | 100.0% | auto_structural |
 | `00081bb8` | unzCloseCurrentFile | 160 | 100.0% | auto_structural |
 | `000960f0` | res0_free_look | 160 | 100.0% | auto_structural |
@@ -677,10 +677,10 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `001d2d48` | clear_status_animation(BWORK*) | 156 | 100.0% | auto_structural |
 | `001d9104` | set_status_counter(BWORK*, int, int) | 156 | 97.44% | auto_structural |
 | `001ed8b0` | getBattleWorkAnimationHight(tag_animation*) | 156 | 100.0% | auto_structural |
-| `00216458` | disposeMusic(int) | 156 | 94.87% | needs_review |
+| `00216458` | disposeMusic(int) | 156 | 94.87% | auto_structural |
 | `00221028` | RequestBowEffect(long, EffectOrder*) | 156 | 94.87% | auto_structural |
 | `00271504` | GetDirectionForPanel(signed char*, signed char*) | 156 | 100.0% | auto_structural |
-| `00273d20` | IsNullUnit(int) | 156 | 94.87% | needs_review |
+| `00273d20` | IsNullUnit(int) | 156 | 94.87% | auto_structural |
 | `0027faa0` | iOS_SuspendWorldMap() | 156 | 97.44% | auto_structural |
 | `00077b80` | gzrewind | 152 | 100.0% | auto_structural |
 | `0007854c` | gzgetc | 152 | 100.0% | auto_structural |
@@ -695,7 +695,7 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `001ed818` | getOriginalAnimationHight(tag_animation*) | 152 | 100.0% | auto_structural |
 | `0021f328` | GetPermanentObject() | 152 | 89.47% | auto_structural |
 | `002432e4` | fRoll_cdxareq(short*) | 152 | 97.37% | auto_structural |
-| `0025f1e8` | wldmes_load(int) | 152 | 84.21% | needs_review |
+| `0025f1e8` | wldmes_load(int) | 152 | 84.21% | auto_structural |
 | `00263254` | ctlmouketeam_deactive(CTLINFO*) | 152 | 94.74% | auto_structural |
 | `0026b86c` | wldsymbol_draw() | 152 | 97.37% | auto_structural |
 | `0026ff30` | wldwintex_point(int, RECT16, _POINT*) | 152 | 100.0% | auto_structural |
@@ -715,12 +715,12 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `0015da60` | iOSSwap(short*, short*, short*, short*, int, int) | 148 | 100.0% | auto_structural |
 | `001d5968` | set_turn_end(int) | 148 | 97.3% | auto_structural |
 | `001f5b50` | terminateAnimationSub(int, int, short, short, short) | 148 | 100.0% | auto_structural |
-| `002161e0` | loadMusic(int) | 148 | 91.89% | needs_review |
-| `0026640c` | wldpac_draw(GsOT*, unsigned long*, int) | 148 | 94.59% | needs_review |
+| `002161e0` | loadMusic(int) | 148 | 91.89% | auto_structural |
+| `0026640c` | wldpac_draw(GsOT*, unsigned long*, int) | 148 | 94.59% | auto_structural |
 | `00266544` | iOS_drawMenuAssist_wld(iOS_CMenuTouch*, GsOT*) | 148 | 100.0% | auto_structural |
-| `00268be0` | wldcenter_set(_POINT*, SVECTOR*) | 148 | 94.59% | needs_review |
+| `00268be0` | wldcenter_set(_POINT*, SVECTOR*) | 148 | 94.59% | auto_structural |
 | `00268ec4` | wldcenter_move() | 148 | 94.59% | auto_structural |
-| `002766f4` | GetHightDistance(unsigned char*, BWORK*) | 148 | 94.59% | needs_review |
+| `002766f4` | GetHightDistance(unsigned char*, BWORK*) | 148 | 94.59% | auto_structural |
 | `00290b54` | ClearOTag | 148 | 100.0% | auto_structural |
 | `002b6b38` | Main_Uninit() | 148 | 94.59% | auto_structural |
 | `002b715c` | setPspDispNum(short, short, short) | 148 | 89.19% | auto_structural |
@@ -740,7 +740,7 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `0020e228` | get2DPosition(SVECTOR*, SVECTOR*) | 144 | 86.11% | auto_structural |
 | `00221e84` | RequestLandingEffect(EffectOrder*, VECTOR*) | 144 | 94.44% | auto_structural |
 | `00245690` | strInit(int, void (*)()) | 144 | 97.22% | auto_structural |
-| `0025e204` | wldfade_mask() | 144 | 91.67% | needs_review |
+| `0025e204` | wldfade_mask() | 144 | 91.67% | auto_structural |
 | `0026dc2c` | ctltuto_active(CTLINFO*) | 144 | 94.44% | auto_structural |
 | `00273e10` | CompareMove(MOVE*, MOVE*) | 144 | 97.22% | auto_structural |
 | `00291824` | SetDrawLoad | 144 | 100.0% | auto_structural |
@@ -757,7 +757,7 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `001b6a74` | MessageMake(unsigned char*, unsigned char*, short*, int) | 140 | 100.0% | auto_structural |
 | `001bb504` | SetSttsBoth(int) | 140 | 91.43% | auto_structural |
 | `001dc37c` | inc_dead_number(BWORK*) | 140 | 97.14% | auto_structural |
-| `00216154` | loadMusicBuffer(int, int) | 140 | 91.43% | needs_review |
+| `00216154` | loadMusicBuffer(int, int) | 140 | 91.43% | auto_structural |
 | `0021627c` | readMusicBuffer(int, int) | 140 | 94.29% | auto_structural |
 | `0022a618` | _OpenTMD(unsigned long*, int) | 140 | 97.14% | auto_structural |
 | `00245e38` | ctlstartmov_init(int, int, int, int) | 140 | 85.71% | auto_structural |
@@ -780,7 +780,7 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `00224cc4` | GetPermanentEffectAnimationAngle() | 136 | 97.06% | auto_structural |
 | `00228d40` | InitPermanentShape() | 136 | 82.35% | auto_structural |
 | `002433dc` | fRoll_cdxastop(short*) | 136 | 97.06% | auto_structural |
-| `00269798` | snpl_wait() | 136 | 88.24% | needs_review |
+| `00269798` | snpl_wait() | 136 | 88.24% | auto_structural |
 | `002715a0` | CountMap(unsigned short (*) [18]) | 136 | 97.06% | auto_structural |
 | `002b85f8` | RayPick_GT4(tagPOLY_GT4*, int, int) | 136 | 94.12% | auto_structural |
 | `002b8680` | RayPick_GT3(tagPOLY_GT3*, int, int) | 136 | 94.12% | auto_structural |
@@ -794,7 +794,7 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `001abb18` | MakeChr(short) | 132 | 93.94% | auto_structural |
 | `0021a5c4` | SearchNextScheduleDividePos(short, short, long*, long*) | 132 | 96.97% | auto_structural |
 | `0024a414` | vOpn_pacdraw(unsigned long*, unsigned long*, int) | 132 | 96.97% | auto_structural |
-| `0026a120` | snpl_rndjp() | 132 | 93.94% | needs_review |
+| `0026a120` | snpl_rndjp() | 132 | 93.94% | auto_structural |
 | `0026dcbc` | ctltuto_deactive(CTLINFO*) | 132 | 93.94% | auto_structural |
 | `00280498` | cSaveFFT::Delete() | 132 | 100.0% | auto_structural |
 | `0028d7d0` | tlHeapStat(tl_mem_stat_t*) | 132 | 96.97% | auto_structural |
@@ -832,7 +832,7 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `000daff0` | move_ambient() | 124 | 96.77% | auto_structural |
 | `00102aa4` | Wmove_ambient() | 124 | 96.77% | auto_structural |
 | `00105510` | Wwait_direc(int) | 124 | 93.55% | auto_structural |
-| `00159924` | asmTaskEntry() | 124 | 93.55% | needs_review |
+| `00159924` | asmTaskEntry() | 124 | 93.55% | auto_structural |
 | `00161ef8` | wasmTaskEntry() | 124 | 93.55% | auto_structural |
 | `0016a14c` | ASURA_soundStop() | 124 | 90.32% | auto_structural |
 | `001baae8` | SttsAMovingChk() | 124 | 90.32% | auto_structural |
@@ -841,9 +841,9 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `00210d9c` | NewEntry(int, int, int, short, short, short, short, BWORK*, int) | 124 | 96.77% | auto_structural |
 | `0024a544` | vOpn_add_winpac(unsigned long*, int*) | 124 | 93.55% | auto_structural |
 | `0024a9e4` | vOpnwin_trans(int, unsigned long*) | 124 | 96.77% | auto_structural |
-| `0025da0c` | wldkey_repinit() | 124 | 83.87% | needs_review |
+| `0025da0c` | wldkey_repinit() | 124 | 83.87% | auto_structural |
 | `002665d8` | add_anmpac(unsigned long*, int*) | 124 | 93.55% | auto_structural |
-| `00269bc0` | snpl_timeset() | 124 | 83.87% | needs_review |
+| `00269bc0` | snpl_timeset() | 124 | 83.87% | auto_structural |
 | `0027008c` | wldwin_trans(int, unsigned long*) | 124 | 96.77% | auto_structural |
 | `00271da0` | EvaluateAllUnitAction() | 124 | 96.77% | auto_structural |
 | `00279eec` | SetTrapPanel(int, int, int) | 124 | 96.77% | auto_structural |
@@ -932,7 +932,7 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `0026030c` | ctlmouke_exit(CTLINFO*) | 112 | 82.14% | auto_structural |
 | `00270490` | curhis_put(int, int, int) | 112 | 92.86% | auto_structural |
 | `002727fc` | StayAtSafePanel() | 112 | 96.43% | auto_structural |
-| `00276c28` | CheckCrystalAndTresureBox() | 112 | 92.86% | needs_review |
+| `00276c28` | CheckCrystalAndTresureBox() | 112 | 92.86% | auto_structural |
 | `0028d088` | tlSetHeap(void*) | 112 | 85.71% | auto_structural |
 | `0028e25c` | OpenEvent(unsigned long, long, long, long (*)()) | 112 | 92.86% | auto_structural |
 | `002a1798` | gteMIMefunc | 112 | 100.0% | auto_structural |
@@ -964,7 +964,7 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `00249c58` | vOpn_bk_load(int, unsigned long*) | 108 | 88.89% | auto_structural |
 | `00259324` | evt_get_date(int*, int*, int*, int*) | 108 | 96.3% | auto_structural |
 | `0025c6d8` | shogou_mesput(CTLINFO*) | 108 | 100.0% | auto_structural |
-| `00269ec8` | snpl_mesput() | 108 | 92.59% | needs_review |
+| `00269ec8` | snpl_mesput() | 108 | 92.59% | auto_structural |
 | `0026a504` | snpl_jparasmall() | 108 | 96.3% | auto_structural |
 | `00281730` | iOS_v2menuGetEnable(V2_MENU_ITEM) | 108 | 92.59% | auto_structural |
 | `00282648` | wgte_color_set_vec(MATRIX const*, int, SVECTOR const*) | 108 | 100.0% | auto_structural |
@@ -981,20 +981,20 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `0015a180` | iOSLRChgTap(int, int, int, int) | 104 | 100.0% | auto_structural |
 | `001d18e4` | Resume_MK_BSTR_IsLoaded(int) | 104 | 92.31% | auto_structural |
 | `001e0ec4` | check_invincible(int, int*) | 104 | 96.15% | auto_structural |
-| `001e6938` | setskilldata(ACT*) | 104 | 92.31% | needs_review |
+| `001e6938` | setskilldata(ACT*) | 104 | 92.31% | auto_structural |
 | `0020c6e4` | freeForSound(void*) | 104 | 92.31% | auto_structural |
 | `00213da4` | startColorRotation(int, int, int, int) | 104 | 96.15% | auto_structural |
 | `0021cfe4` | GetEffectTCB() | 104 | 88.46% | auto_structural |
 | `00259390` | evt_date_high() | 104 | 96.15% | auto_structural |
 | `002593f8` | evt_date_low() | 104 | 96.15% | auto_structural |
-| `00269aa0` | snpl_chgpara() | 104 | 92.31% | needs_review |
+| `00269aa0` | snpl_chgpara() | 104 | 92.31% | auto_structural |
 | `00269e04` | snpl_mfadein() | 104 | 92.31% | auto_structural |
 | `0026a1cc` | snpl_musicstop() | 104 | 92.31% | auto_structural |
-| `0026b5e4` | ssd_request(int, int) | 104 | 92.31% | needs_review |
+| `0026b5e4` | ssd_request(int, int) | 104 | 92.31% | auto_structural |
 | `002738a8` | SetThresholdDoNothing() | 104 | 96.15% | auto_structural |
 | `00281a2c` | iOS_v2menuIsInMenu(int, int) | 104 | 96.15% | auto_structural |
 | `002a1c78` | RotNclip4 | 104 | 100.0% | auto_structural |
-| `002cba30` | __aeabi_d2ulz | 104 | 92.31% | needs_review |
+| `002cba30` | __aeabi_d2ulz | 104 | 92.31% | auto_structural |
 | `00077498` | gzoffset64 | 100 | 100.0% | auto_structural |
 | `0007d0f4` | inflateMark | 100 | 100.0% | auto_structural |
 | `0007d8b0` | call_zseek64 | 100 | 100.0% | auto_structural |
@@ -1019,14 +1019,14 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `0022a268` | getAbsoluteMaximumOf3(short, short, short) | 100 | 100.0% | auto_structural |
 | `0024358c` | fRoll_autochg(short*) | 100 | 96.0% | auto_structural |
 | `0025e2ac` | mouke_tbl_get(MOUINFO*, int) | 100 | 100.0% | auto_structural |
-| `002775dc` | JudgeMovable(int) | 100 | 92.0% | needs_review |
+| `002775dc` | JudgeMovable(int) | 100 | 92.0% | auto_structural |
 | `0028d1c4` | tlPushHeap(void*) | 100 | 84.0% | auto_structural |
 | `002a1204` | SquareSS12 | 100 | 100.0% | auto_structural |
 | `002a2184` | RotColorDpq | 100 | 100.0% | auto_structural |
 | `002b0200` | GlTexEnv_GetTextureSize(int, float*, float*, float*, float*) | 100 | 96.0% | auto_structural |
 | `002b0264` | GlTexEnv_GetTextureSize_2X(int, float*, float*, float*, float*) | 100 | 96.0% | auto_structural |
 | `002b0718` | CDebugPrint::EngineInit(char*, float) | 100 | 100.0% | auto_structural |
-| `002b29b4` | SE_StopAll() | 100 | 88.0% | needs_review |
+| `002b29b4` | SE_StopAll() | 100 | 88.0% | auto_structural |
 | `002bf020` | iOS_isInCursorRotate() | 100 | 96.0% | auto_structural |
 | `002cb840` | __eqsf2 | 100 | 100.0% | auto_structural |
 | `0007cbfc` | inflateEnd | 96 | 100.0% | auto_structural |
@@ -1105,7 +1105,7 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `001351c0` | Witemmenu_uvclut(short*, int) | 88 | 100.0% | auto_structural |
 | `0014be6c` | Citemmenu_uvclut(short*, int) | 88 | 100.0% | auto_structural |
 | `00187658` | pspWindowCommonIsType(WINOBJ_TYPE, unsigned char, unsigned char, unsigned char, unsigned char) | 88 | 95.45% | auto_structural |
-| `001a6530` | ScriptRead(int, TUTRIAL*) | 88 | 90.91% | needs_review |
+| `001a6530` | ScriptRead(int, TUTRIAL*) | 88 | 90.91% | auto_structural |
 | `001ab3b4` | UnitDismiss(short) | 88 | 95.45% | auto_structural |
 | `001ca9b8` | reset_toumei_afterskill(BWORK*) | 88 | 90.91% | auto_structural |
 | `001d62ec` | set_move_end(int) | 88 | 95.45% | auto_structural |
@@ -1126,12 +1126,12 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `0024aaac` | vOpnmess_frm(int, _POINT*) | 88 | 100.0% | auto_structural |
 | `00253a10` | wldctl_active() | 88 | 81.82% | auto_structural |
 | `00253ec8` | wldctl_deactive() | 88 | 81.82% | auto_structural |
-| `0025f63c` | wldlop_chk() | 88 | 86.36% | needs_review |
+| `0025f63c` | wldlop_chk() | 88 | 86.36% | auto_structural |
 | `0026b31c` | snplread_parcalc() | 88 | 90.91% | auto_structural |
 | `00270b04` | pagenext_cursor(PAGEWININFO*) | 88 | 90.91% | auto_structural |
-| `00273cc8` | IsAlmostNullUnit(int) | 88 | 90.91% | needs_review |
+| `00273cc8` | IsAlmostNullUnit(int) | 88 | 90.91% | auto_structural |
 | `0028b844` | uninitTaskEmu() | 88 | 90.91% | auto_structural |
-| `0028c768` | CFFT_STATE::AttackTeamFaceIDToUnitATFID(int) | 88 | 90.91% | needs_review |
+| `0028c768` | CFFT_STATE::AttackTeamFaceIDToUnitATFID(int) | 88 | 90.91% | auto_structural |
 | `002916b8` | SetDrawArea | 88 | 100.0% | auto_structural |
 | `0029b678` | GsSetDrawBuffClip | 88 | 95.45% | auto_structural |
 | `002a126c` | TransRotPers3 | 88 | 100.0% | auto_structural |
@@ -1164,7 +1164,7 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `002459ec` | strSync(DECENV*, int) | 84 | 100.0% | auto_structural |
 | `00245cd0` | o_CardCheck() | 84 | 100.0% | auto_structural |
 | `00245de4` | vOpn_ctlprog() | 84 | 80.95% | auto_structural |
-| `0024b02c` | wldmapEntry(int) | 84 | 90.48% | needs_review |
+| `0024b02c` | wldmapEntry(int) | 84 | 90.48% | auto_structural |
 | `00255758` | iOSHelpCheck() | 84 | 90.48% | auto_structural |
 | `0025d53c` | world_init() | 84 | 100.0% | auto_structural |
 | `00265f84` | iOSSDNovelBackLogCheck() | 84 | 90.48% | auto_structural |
@@ -1211,7 +1211,7 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `00269820` | snpl_picclr() | 80 | 90.0% | auto_structural |
 | `00269c80` | snpl_selparacalc() | 80 | 95.0% | auto_structural |
 | `00269f34` | snpl_mesput2() | 80 | 90.0% | auto_structural |
-| `0026a27c` | snpl_fadein() | 80 | 90.0% | needs_review |
+| `0026a27c` | snpl_fadein() | 80 | 90.0% | auto_structural |
 | `0026a40c` | snpl_volchg() | 80 | 95.0% | auto_structural |
 | `0026a5fc` | snplinf_clr(SNPLINFO*) | 80 | 100.0% | auto_structural |
 | `0026ae2c` | snpl_jstatflg_sub(int) | 80 | 90.0% | auto_structural |
@@ -1219,7 +1219,7 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `00270154` | wldmess_frm(int, _POINT*) | 80 | 100.0% | auto_structural |
 | `00282478` | iOS_ClippedInit() | 80 | 95.0% | auto_structural |
 | `00288e6c` | pspPopScreenRect(RECT16*, RECT16*) | 80 | 95.0% | auto_structural |
-| `0028c690` | CFFT_STATE::UnitIDToFID_SP2(int, int) | 80 | 90.0% | needs_review |
+| `0028c690` | CFFT_STATE::UnitIDToFID_SP2(int, int) | 80 | 90.0% | auto_structural |
 | `002912f8` | LoadClut | 80 | 100.0% | auto_structural |
 | `0029b4f4` | GsDefDispBuff | 80 | 95.0% | auto_structural |
 | `002a30b0` | xpMallocAlign | 80 | 95.0% | auto_structural |
@@ -1254,19 +1254,19 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `00243a14` | deleteMessage() | 76 | 89.47% | auto_structural |
 | `002496d0` | vOpn_key_repinit() | 76 | 84.21% | auto_structural |
 | `0024aa60` | vOpnmess_put(int, int, _POINT, unsigned long*) | 76 | 94.74% | auto_structural |
-| `00258f1c` | evt_gil_high() | 76 | 94.74% | needs_review |
+| `00258f1c` | evt_gil_high() | 76 | 94.74% | auto_structural |
 | `00258f68` | evt_gil_low() | 76 | 94.74% | auto_structural |
 | `0025e888` | day_to_month(int, int*, int*) | 76 | 94.74% | auto_structural |
 | `00263abc` | iOSNovelBrightOn() | 76 | 94.74% | auto_structural |
-| `0026a5b0` | snpl_meswait() | 76 | 89.47% | needs_review |
-| `0026b694` | wldssd_wait() | 76 | 89.47% | needs_review |
-| `00270108` | wldmess_put(int, int, _POINT, unsigned long*) | 76 | 94.74% | needs_review |
+| `0026a5b0` | snpl_meswait() | 76 | 89.47% | auto_structural |
+| `0026b694` | wldssd_wait() | 76 | 89.47% | auto_structural |
+| `00270108` | wldmess_put(int, int, _POINT, unsigned long*) | 76 | 94.74% | auto_structural |
 | `00270414` | defscrwin_set(int, int, _POINT*, _POINT*) | 76 | 89.47% | auto_structural |
 | `0028469c` | ForEachVector(VECTOR_DATABASE*, short) | 76 | 100.0% | auto_structural |
 | `0028bb3c` | TE_task_killmyself() | 76 | 100.0% | auto_structural |
 | `0028d6a0` | tlSetMallocUserPointer(void**) | 76 | 94.74% | auto_structural |
 | `0029ad6c` | xpSetDrawOffset | 76 | 100.0% | auto_structural |
-| `0029ae00` | xpLibGetOffset(int*, int*) | 76 | 94.74% | needs_review |
+| `0029ae00` | xpLibGetOffset(int*, int*) | 76 | 94.74% | auto_structural |
 | `002a257c` | RotNclip3_nom | 76 | 94.74% | auto_structural |
 | `002c99b5` | operator new(unsigned int) | 76 | 5.26% | needs_review |
 | `0007744c` | gztell64 | 72 | 100.0% | auto_structural |
@@ -1275,7 +1275,7 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `000acab8` | CEGL2_SPRITE::Create(int, int) | 72 | 100.0% | auto_structural |
 | `000ba354` | CSOUND_IF::Resume() | 72 | 100.0% | auto_structural |
 | `000bd474` | CSOUND_LOADER_OGG::Close() | 72 | 100.0% | auto_structural |
-| `000bd4bc` | CSOUND_LOADER_OGG::~CSOUND_LOADER_OGG() | 72 | 88.89% | needs_review |
+| `000bd4bc` | CSOUND_LOADER_OGG::~CSOUND_LOADER_OGG() | 72 | 88.89% | auto_structural |
 | `00101f3c` | Wrecieve_statusinfo() | 72 | 100.0% | auto_structural |
 | `00153278` | task_wait_fast(long) | 72 | 100.0% | auto_structural |
 | `001533d8` | task_init() | 72 | 88.89% | auto_structural |
@@ -1287,7 +1287,7 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `001cb7fc` | check_reaction_deny2(BWORK*) | 72 | 94.44% | auto_structural |
 | `001d189c` | Resume_MK_BSTR_Init() | 72 | 88.89% | auto_structural |
 | `001d533c` | set_chargeability(int, unsigned char, short*) | 72 | 100.0% | auto_structural |
-| `001d98c8` | check_status_data2(BWORK*, int) | 72 | 94.44% | needs_review |
+| `001d98c8` | check_status_data2(BWORK*, int) | 72 | 94.44% | auto_structural |
 | `001eed84` | getSequenceAddress(unsigned short) | 72 | 83.33% | auto_structural |
 | `00201c5c` | resetTargetDirection(tag_animation*) | 72 | 100.0% | auto_structural |
 | `00216984` | stopEffect(int) | 72 | 94.44% | auto_structural |
@@ -1298,23 +1298,23 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `00242450` | vEnd_ctlinit() | 72 | 88.89% | auto_structural |
 | `00248e24` | vEnd_exit() | 72 | 100.0% | auto_structural |
 | `00249a38` | vOpn_month2day(int, int) | 72 | 94.44% | auto_structural |
-| `00259224` | evt_flag() | 72 | 94.44% | needs_review |
-| `0025926c` | evt_flag_high() | 72 | 94.44% | needs_review |
-| `002592b4` | evt_flag_low() | 72 | 94.44% | needs_review |
-| `002594a0` | evt_brave_high() | 72 | 94.44% | needs_review |
+| `00259224` | evt_flag() | 72 | 94.44% | auto_structural |
+| `0025926c` | evt_flag_high() | 72 | 94.44% | auto_structural |
+| `002592b4` | evt_flag_low() | 72 | 94.44% | auto_structural |
+| `002594a0` | evt_brave_high() | 72 | 94.44% | auto_structural |
 | `002594e8` | evt_brave_low() | 72 | 94.44% | auto_structural |
-| `00259530` | evt_faith_high() | 72 | 94.44% | needs_review |
+| `00259530` | evt_faith_high() | 72 | 94.44% | auto_structural |
 | `00259578` | evt_faith_low() | 72 | 94.44% | auto_structural |
 | `0025e840` | month_to_day(int, int) | 72 | 94.44% | auto_structural |
 | `0026a234` | snpl_fadeout() | 72 | 88.89% | auto_structural |
-| `0026b64c` | wldmusic_change(int) | 72 | 94.44% | needs_review |
+| `0026b64c` | wldmusic_change(int) | 72 | 94.44% | auto_structural |
 | `0027d420` | setCancelDisableArea(int, int, int, int, int) | 72 | 88.89% | auto_structural |
 | `0028464c` | delete_Vector(VECTOR_DATABASE*, short) | 72 | 100.0% | auto_structural |
 | `0028674c` | get_movie_filename(int) | 72 | 77.78% | auto_structural |
 | `0028baf4` | TE_task_get_no() | 72 | 94.44% | auto_structural |
 | `0028dd2c` | CloseEvent | 72 | 94.44% | auto_structural |
 | `0029a9dc` | LoadClut2 | 72 | 100.0% | auto_structural |
-| `0029b5d0` | GsSwapDispBuff | 72 | 94.44% | needs_review |
+| `0029b5d0` | GsSwapDispBuff | 72 | 94.44% | auto_structural |
 | `002a2678` | set_trans_matrix(long, long, long) | 72 | 88.89% | auto_structural |
 | `002a3068` | xpMalloc | 72 | 94.44% | auto_structural |
 | `002b3258` | musicPlayer_Pause() | 72 | 88.89% | auto_structural |
@@ -1357,14 +1357,14 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `0022a5d0` | efrand(int, int) | 68 | 100.0% | auto_structural |
 | `00242618` | ctlendmov_main(CTLINFO*) | 68 | 88.24% | auto_structural |
 | `0024a068` | vOpn_pacloop() | 68 | 82.35% | auto_structural |
-| `00258fb4` | evt_dead_high() | 68 | 94.12% | needs_review |
+| `00258fb4` | evt_dead_high() | 68 | 94.12% | auto_structural |
 | `00258ff8` | evt_dead_low() | 68 | 94.12% | auto_structural |
 | `00268b9c` | wldcenter_calc(SVECTOR*, VECTOR*) | 68 | 100.0% | auto_structural |
 | `00269c3c` | snpl_mesput3() | 68 | 94.12% | auto_structural |
-| `0026b6e0` | iOSwldssd_wait() | 68 | 88.24% | needs_review |
+| `0026b6e0` | iOSwldssd_wait() | 68 | 88.24% | auto_structural |
 | `002706c8` | pageanmpac_reset(int, int, int) | 68 | 94.12% | auto_structural |
 | `00273864` | GetDestinationRange() | 68 | 94.12% | auto_structural |
-| `00277640` | SetThisDestination(unsigned char*) | 68 | 94.12% | needs_review |
+| `00277640` | SetThisDestination(unsigned char*) | 68 | 94.12% | auto_structural |
 | `00291348` | GetTPage | 68 | 100.0% | auto_structural |
 | `0029a858` | SetDefDispEnv | 68 | 100.0% | auto_structural |
 | `0029fef0` | ratan2 | 68 | 94.12% | auto_structural |
@@ -1376,7 +1376,7 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `0007a720` | inflateBackEnd | 64 | 100.0% | auto_structural |
 | `0007cf18` | inflateSyncPoint | 64 | 100.0% | auto_structural |
 | `000b41ec` | CINPUT_IF_TOUCH::GetTouchCount() | 64 | 100.0% | auto_structural |
-| `000b9fe0` | timeGetTime() | 64 | 93.75% | needs_review |
+| `000b9fe0` | timeGetTime() | 64 | 93.75% | auto_structural |
 | `000d7ae4` | addstatusback(STTSWINDOWBACK*) | 64 | 100.0% | auto_structural |
 | `000d9a80` | send_sttslinecol(char*) | 64 | 93.75% | auto_structural |
 | `000d9eec` | extend_endornot() | 64 | 93.75% | auto_structural |
@@ -1419,12 +1419,12 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `00249278` | vOpn_init(int) | 64 | 93.75% | auto_structural |
 | `00249a80` | vOpn_SetCDVolume(int, int) | 64 | 100.0% | auto_structural |
 | `00259460` | get_ramza_savework() | 64 | 100.0% | auto_structural |
-| `0025ee30` | wldload_wait() | 64 | 93.75% | needs_review |
-| `00269b80` | snpl_keywait() | 64 | 81.25% | needs_review |
+| `0025ee30` | wldload_wait() | 64 | 93.75% | auto_structural |
+| `00269b80` | snpl_keywait() | 64 | 81.25% | auto_structural |
 | `0026a570` | snpl_fadewait() | 64 | 81.25% | auto_structural |
 | `0026ebf0` | ctlsentuto_active(CTLINFO*) | 64 | 93.75% | auto_structural |
 | `00273b38` | SetSafePanelAhead(int) | 64 | 93.75% | auto_structural |
-| `00278440` | GetPanelUnderUnit(int, unsigned char*) | 64 | 93.75% | needs_review |
+| `00278440` | GetPanelUnderUnit(int, unsigned char*) | 64 | 93.75% | auto_structural |
 | `0028b080` | pspWorldCallBackExec() | 64 | 87.5% | auto_structural |
 | `0028be80` | _ps_test() | 64 | 87.5% | auto_structural |
 | `002a0aa0` | ApplyRotMatrixLV | 64 | 100.0% | auto_structural |
@@ -1434,9 +1434,9 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `002cde9c` | __gnu_unwind_frame | 64 | 100.0% | auto_structural |
 | `0007cd9c` | inflateGetHeader | 60 | 100.0% | auto_structural |
 | `0007d914` | call_ztell64 | 60 | 100.0% | auto_structural |
-| `0009403c` | _vp_global_look | 60 | 93.33% | needs_review |
+| `0009403c` | _vp_global_look | 60 | 93.33% | auto_structural |
 | `000a6d60` | CGX_SCREEN_CORRECT::SetEnable(int) | 60 | 100.0% | auto_structural |
-| `000ab9cc` | CEGL2_SHADER::CEGL2_SHADER() | 60 | 93.33% | needs_review |
+| `000ab9cc` | CEGL2_SHADER::CEGL2_SHADER() | 60 | 93.33% | auto_structural |
 | `000b52a0` | CRECT::SetRect(int, _RECT_S32*) | 60 | 100.0% | auto_structural |
 | `000b52dc` | CRECT::SetRect16(int, _RECT_S16*) | 60 | 100.0% | auto_structural |
 | `000bcdc4` | CSOUND_LOADER_PCM::Close() | 60 | 100.0% | auto_structural |
@@ -1447,7 +1447,7 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `00101980` | Wsend_sttslinecol(char*) | 60 | 93.33% | auto_structural |
 | `001534a4` | send_taskparamater4(long, long, long, long, long) | 60 | 93.33% | auto_structural |
 | `00153768` | Wsend_taskparamater4(long, long, long, long, long) | 60 | 93.33% | auto_structural |
-| `00155e04` | changewindowamb(int, int, int) | 60 | 80.0% | needs_review |
+| `00155e04` | changewindowamb(int, int, int) | 60 | 80.0% | auto_structural |
 | `0015e768` | iOSShiftUnitSet(int) | 60 | 86.67% | auto_structural |
 | `0016f738` | iOS_cacheFilesNameClear() | 60 | 93.33% | auto_structural |
 | `001a7368` | IsDismiss(short) | 60 | 93.33% | auto_structural |
@@ -1459,14 +1459,14 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `001d45c4` | check_turn_frozen(BWORK*) | 60 | 100.0% | auto_structural |
 | `00202f20` | set_direction_sub(tag_animation*, int) | 60 | 100.0% | auto_structural |
 | `00213e0c` | stopColorRotation(unsigned int) | 60 | 93.33% | auto_structural |
-| `002164f4` | inactivateMusic() | 60 | 93.33% | needs_review |
+| `002164f4` | inactivateMusic() | 60 | 93.33% | auto_structural |
 | `002431b4` | fRoll_fadein(short*) | 60 | 86.67% | auto_structural |
 | `002431f0` | fRoll_fadeout(short*) | 60 | 86.67% | auto_structural |
 | `00244938` | numword_chk(int) | 60 | 100.0% | auto_structural |
 | `00249bcc` | vOpn_loadwait() | 60 | 93.33% | auto_structural |
 | `00249c08` | vOpn_CdRead(CDREC*, int, int, unsigned long*) | 60 | 100.0% | auto_structural |
-| `0026a3d0` | snpl_wordcol() | 60 | 93.33% | needs_review |
-| `0026ab70` | snpl_envsndreq() | 60 | 93.33% | needs_review |
+| `0026a3d0` | snpl_wordcol() | 60 | 93.33% | auto_structural |
+| `0026ab70` | snpl_envsndreq() | 60 | 93.33% | auto_structural |
 | `002819cc` | iOS_v2menuInit() | 60 | 93.33% | auto_structural |
 | `00283ed8` | GLIVON_FT4(unsigned long*, tagPOLY_GT4*, short, unsigned long*, unsigned short*) | 60 | 100.0% | auto_structural |
 | `00283f14` | GLIVON_FT3(unsigned long*, tagPOLY_GT3*, short, unsigned long*, unsigned short*) | 60 | 100.0% | auto_structural |
@@ -1520,17 +1520,17 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `0021c014` | s1b_ifChildTaskNonExist(_EffectTCB*) | 56 | 100.0% | auto_structural |
 | `0021ce78` | IsPermanentEffect(long) | 56 | 92.86% | auto_structural |
 | `00254170` | iOSMapNaviCurSet(unsigned long) | 56 | 100.0% | auto_structural |
-| `00258c40` | evt_wldinfo() | 56 | 92.86% | needs_review |
+| `00258c40` | evt_wldinfo() | 56 | 92.86% | auto_structural |
 | `0025ee70` | wldCdRead(CDREC*, int, int, int, unsigned long*) | 56 | 100.0% | auto_structural |
 | `00269a68` | snpl_hidepara() | 56 | 85.71% | auto_structural |
-| `00269cd0` | snpl_setstat() | 56 | 85.71% | needs_review |
+| `00269cd0` | snpl_setstat() | 56 | 85.71% | auto_structural |
 | `00269d08` | snpl_clrstat() | 56 | 85.71% | auto_structural |
 | `00269d40` | snpl_setlocal() | 56 | 85.71% | auto_structural |
 | `00269d78` | snpl_clrlocal() | 56 | 85.71% | auto_structural |
 | `0026a824` | snpl_snsndreq() | 56 | 92.86% | auto_structural |
 | `00279c88` | MemClearDW(int*, int) | 56 | 100.0% | auto_structural |
 | `0027b4a4` | initCmdKind() | 56 | 85.71% | auto_structural |
-| `0027fc80` | cSaveFFT::Destroy() | 56 | 92.86% | needs_review |
+| `0027fc80` | cSaveFFT::Destroy() | 56 | 92.86% | auto_structural |
 | `00280558` | iOS_fftLoad(int) | 56 | 85.71% | auto_structural |
 | `00285f4c` | pspFileManager::hockSeek(int) | 56 | 100.0% | auto_structural |
 | `00287a40` | load_hight_font() | 56 | 100.0% | auto_structural |
@@ -1551,7 +1551,7 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `00081abc` | unzeof | 52 | 100.0% | auto_structural |
 | `000b8a20` | CLIST::GetData(int) | 52 | 100.0% | auto_structural |
 | `000ba230` | CSOUND_IF::CSOUND_IF(int) | 52 | 100.0% | auto_structural |
-| `000bd538` | CSOUND_LOADER_OGG::CSOUND_LOADER_OGG() | 52 | 92.31% | needs_review |
+| `000bd538` | CSOUND_LOADER_OGG::CSOUND_LOADER_OGG() | 52 | 92.31% | auto_structural |
 | `000e7488` | getCodeLength(unsigned char*) | 52 | 92.31% | auto_structural |
 | `0012f2a8` | iOSPersonalWinPos(int) | 52 | 84.62% | auto_structural |
 | `00153470` | send_taskparamater(long, long, long, long) | 52 | 92.31% | auto_structural |
@@ -1582,8 +1582,8 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `0024a498` | iOS_vOpn_touchNum_addprim(iOS_CMenuTouchNum*, unsigned long*, int) | 52 | 100.0% | auto_structural |
 | `0024dc8c` | ctlkiroku_active(CTLINFO*) | 52 | 92.31% | auto_structural |
 | `0024e8d0` | ctlperson_active(CTLINFO*) | 52 | 92.31% | auto_structural |
-| `00258e08` | evt_town_set() | 52 | 92.31% | needs_review |
-| `00258e3c` | evt_town_clr() | 52 | 92.31% | needs_review |
+| `00258e08` | evt_town_set() | 52 | 92.31% | auto_structural |
+| `00258e3c` | evt_town_clr() | 52 | 92.31% | auto_structural |
 | `00259e70` | ctlhouk_active(CTLINFO*) | 52 | 92.31% | auto_structural |
 | `002602c0` | ctlmouke_active(CTLINFO*) | 52 | 92.31% | auto_structural |
 | `00266efc` | pspGetWarFundsOfs(short*, short*) | 52 | 100.0% | auto_structural |
@@ -1611,7 +1611,7 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `000b9d5c` | CWORK_MEM::Delete(int) | 48 | 100.0% | auto_structural |
 | `000b9da4` | CWORK_MEM::New(int) | 48 | 100.0% | auto_structural |
 | `000bd968` | CFRAMERATE::Clear() | 48 | 100.0% | auto_structural |
-| `000da47c` | event_init_system() | 48 | 91.67% | needs_review |
+| `000da47c` | event_init_system() | 48 | 91.67% | auto_structural |
 | `000da6d0` | geteventcategory() | 48 | 83.33% | auto_structural |
 | `000e0538` | import_localpad(int) | 48 | 83.33% | auto_structural |
 | `001020f8` | Wevent_init_system() | 48 | 91.67% | auto_structural |
@@ -1648,19 +1648,19 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `0024ad94` | openEntry(int) | 48 | 91.67% | auto_structural |
 | `0025f138` | townpic_load(int) | 48 | 91.67% | auto_structural |
 | `0025ffb0` | iOSSDNovelGetOT(int) | 48 | 83.33% | auto_structural |
-| `0026995c` | snpl_addpara() | 48 | 91.67% | needs_review |
-| `0026998c` | snpl_subpara() | 48 | 91.67% | needs_review |
-| `00269e98` | snpl_exit() | 48 | 91.67% | needs_review |
+| `0026995c` | snpl_addpara() | 48 | 91.67% | auto_structural |
+| `0026998c` | snpl_subpara() | 48 | 91.67% | auto_structural |
+| `00269e98` | snpl_exit() | 48 | 91.67% | auto_structural |
 | `00270460` | curhis_get(int) | 48 | 83.33% | auto_structural |
 | `00271e1c` | GetDistance(BWORK*, BWORK*) | 48 | 100.0% | auto_structural |
 | `00279c34` | MemCpyW(unsigned short*, unsigned short const*, int) | 48 | 100.0% | auto_structural |
-| `0027fc48` | cSaveFFT::Create(char*) | 48 | 91.67% | needs_review |
+| `0027fc48` | cSaveFFT::Create(char*) | 48 | 91.67% | auto_structural |
 | `00283f50` | GLIVON_F3(unsigned long*, tagPOLY_F3*, short, unsigned long*) | 48 | 100.0% | auto_structural |
 | `00283f80` | GLIVON_F4(unsigned long*, tagPOLY_F4*, short, unsigned long*) | 48 | 100.0% | auto_structural |
 | `00289970` | pspIsNoneSaveData(int) | 48 | 91.67% | auto_structural |
 | `0028ba54` | TE_task_create(int, void (*)(), int) | 48 | 91.67% | auto_structural |
 | `0028bf4c` | _ps_wait() | 48 | 100.0% | auto_structural |
-| `0028e538` | CdRead | 48 | 91.67% | needs_review |
+| `0028e538` | CdRead | 48 | 91.67% | auto_structural |
 | `0028e6a4` | xpInitVblankFunc() | 48 | 83.33% | auto_structural |
 | `0029138c` | GetClut | 48 | 100.0% | auto_structural |
 | `0029c8e8` | xpLibgsAddOt | 48 | 100.0% | auto_structural |
@@ -1669,7 +1669,7 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `002a145c` | ReadLightMatrix | 48 | 91.67% | auto_structural |
 | `002a14a8` | ReadColorMatrix | 48 | 91.67% | auto_structural |
 | `002a2ff8` | xpInitHeap | 48 | 91.67% | auto_structural |
-| `002a38a8` | pspSaveList::pspSaveList() | 48 | 91.67% | needs_review |
+| `002a38a8` | pspSaveList::pspSaveList() | 48 | 91.67% | auto_structural |
 | `002b2260` | RETINA_SCALE(int) | 48 | 91.67% | auto_structural |
 | `002b2378` | Music_Stop() | 48 | 91.67% | auto_structural |
 | `002b23a8` | Music_Pause() | 48 | 91.67% | auto_structural |
@@ -1716,7 +1716,7 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `001cb878` | bcp_roll(BWORK*) | 44 | 90.91% | auto_structural |
 | `001d1d8c` | disappare_unit_f(int) | 44 | 90.91% | auto_structural |
 | `001d2968` | get_bwp(int) | 44 | 90.91% | auto_structural |
-| `001d6404` | set_guard_status(int) | 44 | 90.91% | needs_review |
+| `001d6404` | set_guard_status(int) | 44 | 90.91% | auto_structural |
 | `001d94f0` | get_rangedata(unsigned short) | 44 | 90.91% | auto_structural |
 | `001d951c` | get_effectdata(unsigned short) | 44 | 90.91% | auto_structural |
 | `0020e914` | eventWeaponEquip(int, int) | 44 | 100.0% | auto_structural |
@@ -1729,10 +1729,10 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `00256e70` | ctltownmenu_active(CTLINFO*) | 44 | 90.91% | auto_structural |
 | `00256e9c` | ctltownmenu_deactive(CTLINFO*) | 44 | 90.91% | auto_structural |
 | `0025d7f0` | wldfrm_rect(int, RECT16*) | 44 | 100.0% | auto_structural |
-| `00269930` | snpl_setpara() | 44 | 90.91% | needs_review |
+| `00269930` | snpl_setpara() | 44 | 90.91% | auto_structural |
 | `00269e6c` | snpl_sndstop() | 44 | 90.91% | auto_structural |
 | `0027134c` | Ssd_StopEffect(long) | 44 | 100.0% | auto_structural |
-| `0027334c` | SetDestUnit(int) | 44 | 90.91% | needs_review |
+| `0027334c` | SetDestUnit(int) | 44 | 90.91% | auto_structural |
 | `0027b53c` | LoadImage_menuData() | 44 | 90.91% | auto_structural |
 | `0027f180` | iOS_ClearRectHit(int) | 44 | 90.91% | auto_structural |
 | `00280590` | GetAbilityName(int) | 44 | 81.82% | auto_structural |
@@ -1752,8 +1752,8 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `00081a94` | unztell64 | 40 | 100.0% | auto_structural |
 | `00082450` | oggpack_writecheck | 40 | 100.0% | auto_structural |
 | `00082520` | oggpack_reset | 40 | 100.0% | auto_structural |
-| `000829c4` | oggpack_writecopy | 40 | 90.0% | needs_review |
-| `000829ec` | oggpackB_writecopy | 40 | 90.0% | needs_review |
+| `000829c4` | oggpack_writecopy | 40 | 90.0% | auto_structural |
+| `000829ec` | oggpackB_writecopy | 40 | 90.0% | auto_structural |
 | `00082be4` | oggpack_look1 | 40 | 100.0% | auto_structural |
 | `00094078` | _vp_global_free | 40 | 100.0% | auto_structural |
 | `000940a0` | _vi_gpsy_free | 40 | 100.0% | auto_structural |
@@ -1763,7 +1763,7 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `000b364c` | CINPUT_DATA::SetKeyDelay(int, int, unsigned int) | 40 | 100.0% | auto_structural |
 | `000b45f4` | CINPUT_IF_TOUCH::GetData(int) | 40 | 100.0% | auto_structural |
 | `000b50c0` | CRECT::Init() | 40 | 100.0% | auto_structural |
-| `000bceac` | CSOUND_LOADER_PCM::CSOUND_LOADER_PCM() | 40 | 90.0% | needs_review |
+| `000bceac` | CSOUND_LOADER_PCM::CSOUND_LOADER_PCM() | 40 | 90.0% | auto_structural |
 | `000bd378` | CSOUND_LOADER_OGG::Tell() const | 40 | 100.0% | auto_structural |
 | `000be1b4` | CSTEP_BATCH::CSTEP_BATCH() | 40 | 100.0% | auto_structural |
 | `000daac0` | settaskkind(int) | 40 | 80.0% | auto_structural |
@@ -1814,15 +1814,15 @@ Automatically triaged: 274,460 bytes / 1,837,392 inventory bytes (14.94%); **thi
 | `002592fc` | evt_flagset() | 40 | 100.0% | auto_structural |
 | `0025bc50` | jobnumber_conv(int) | 40 | 100.0% | auto_structural |
 | `00267340` | iOS_add_anmpac_max(int) | 40 | 90.0% | auto_structural |
-| `0026a1a4` | snpl_sndreq() | 40 | 90.0% | needs_review |
+| `0026a1a4` | snpl_sndreq() | 40 | 90.0% | auto_structural |
 | `0026a64c` | snplinf_init(int) | 40 | 80.0% | auto_structural |
-| `0026b0b8` | snpl_musicreq() | 40 | 90.0% | needs_review |
+| `0026b0b8` | snpl_musicreq() | 40 | 90.0% | auto_structural |
 | `0027383c` | ClearMove(MOVE*) | 40 | 100.0% | auto_structural |
 | `00273b10` | SetSafePanelInRange(int) | 40 | 100.0% | auto_structural |
-| `0027fbc8` | iOS_WorldMapResumeGetData(unsigned char**, unsigned int*) | 40 | 90.0% | needs_review |
+| `0027fbc8` | iOS_WorldMapResumeGetData(unsigned char**, unsigned int*) | 40 | 90.0% | auto_structural |
 | `002808b8` | iOS_initTransFace() | 40 | 90.0% | auto_structural |
 | `0028b3f0` | pspWorldDataRectSet(RECT16*) | 40 | 90.0% | auto_structural |
-| `0028c668` | CFFT_STATE::UnitIDToFID_SPR(int) | 40 | 90.0% | needs_review |
+| `0028c668` | CFFT_STATE::UnitIDToFID_SPR(int) | 40 | 90.0% | auto_structural |
 | `0028dc30` | SetRCnt | 40 | 90.0% | auto_structural |
 | `0028e66c` | PadInit | 40 | 100.0% | auto_structural |
 | `00291428` | SetPolyFT4 | 40 | 100.0% | auto_structural |

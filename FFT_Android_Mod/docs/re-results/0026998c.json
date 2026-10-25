@@ -3,14 +3,36 @@
   "name": "snpl_subpara()",
   "size": 48,
   "previous_status": "mentioned_unverified",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 91.67,
   "distinct_bl": 0,
   "tables_resolved": 0,
   "tables_unresolved": 0,
   "bl_targets": [],
   "log": "=== jtable.py: 0x26998c..0x2699bc (48 bytes) ===\ncoverage: 11 of ~12 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 0 distinct --\n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x26998c",
+    "total_slots": 12,
+    "code_slots": 11,
+    "instruction_slots": 11,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x2699b8"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/0026998c.json"
 }

@@ -3,7 +3,7 @@
   "name": "wlddata_load()",
   "size": 212,
   "previous_status": "mentioned_unverified",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 92.45,
   "distinct_bl": 7,
   "tables_resolved": 0,
@@ -18,7 +18,32 @@
     "714b8"
   ],
   "log": "=== jtable.py: 0x25efe4..0x25f0b8 (212 bytes) ===\ncoverage: 49 of ~53 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 7 distinct --\n  0x714b8 x1   sub_714b8 LOCAL(no-dynsym)\n  0x25ee30 x1   wldload_wait() \n  0x25ee70 x2   wldCdRead(CDREC*, int, int, int, unsigned long*) \n  0x25eea8 x1   fftCdLoopTim(CDREC*) \n  0x291074 x1   PSX_LoadImage \n  0x2a3028 x1   xpFree \n  0x2a3100 x1   xpMallocIO \n\n-- branches: 2 total, 1 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x25efe4",
+    "total_slots": 53,
+    "code_slots": 49,
+    "instruction_slots": 49,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x25f0a8",
+      "0x25f0ac",
+      "0x25f0b0",
+      "0x25f0b4"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/0025efe4.json"
 }
