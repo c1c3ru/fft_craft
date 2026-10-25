@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **640/1258** pending functions.
+Evidence collected: **648/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -651,3 +651,11 @@ These reports do not constitute semantic verification.
 | `001e4f0c` | get_fusui_ability(BWORK*) | [Evidence](semantic-evidence/001e4f0c.md) |
 | `001eedf4` | getWpnSequenceAddress(unsigned short) | [Evidence](semantic-evidence/001eedf4.md) |
 | `00202150` | standerdExecution() | [Evidence](semantic-evidence/00202150.md) |
+| `00204268` | startLeftTurn(int) | [Evidence](semantic-evidence/00204268.md) |
+| `00204298` | startRightTurn(int) | [Evidence](semantic-evidence/00204298.md) |
+| `00213e48` | stopAllColorRotation() | [Evidence](semantic-evidence/00213e48.md) |
+| `00215d2c` | battleFileRead() | [Evidence](semantic-evidence/00215d2c.md) |
+| `0021b860` | SetGravity(Vector*) | [Evidence](semantic-evidence/0021b860.md) |
+| `00243184` | fRoll_scroll(short*) | [Evidence](semantic-evidence/00243184.md) |
+| `0024337c` | fRoll_cdxafin(short*) | [Evidence](semantic-evidence/0024337c.md) |
+| `002433ac` | fRoll_cdxafout(short*) | [Evidence](semantic-evidence/002433ac.md) |
