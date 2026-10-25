@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **336/1258** pending functions.
+Evidence collected: **344/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -347,3 +347,11 @@ These reports do not constitute semantic verification.
 | `000e2b04` | statusnowprint(char*, COPYFIELD*) | [Evidence](semantic-evidence/000e2b04.md) |
 | `000ff43c` | Wallocatememoryinit() | [Evidence](semantic-evidence/000ff43c.md) |
 | `001b7ef4` | TruePadRead(int) | [Evidence](semantic-evidence/001b7ef4.md) |
+| `001fd168` | setActivePanelFromAction(tag_animation*) | [Evidence](semantic-evidence/001fd168.md) |
+| `00201708` | setActionStartDirection(tag_animation*) | [Evidence](semantic-evidence/00201708.md) |
+| `002042c8` | startTurnRelative(int) | [Evidence](semantic-evidence/002042c8.md) |
+| `0021cc10` | s1e_ifMetascheduleEnd(_EffectTCB*) | [Evidence](semantic-evidence/0021cc10.md) |
+| `0024fd00` | pspCtltutonet_active(CTLINFO*) | [Evidence](semantic-evidence/0024fd00.md) |
+| `002816bc` | iOS_v2menuSetEnable(V2_MENU_ITEM, int) | [Evidence](semantic-evidence/002816bc.md) |
+| `002cabdc` | __aeabi_ul2d | [Evidence](semantic-evidence/002cabdc.md) |
+| `002cb830` | __gesf2 | [Evidence](semantic-evidence/002cb830.md) |
