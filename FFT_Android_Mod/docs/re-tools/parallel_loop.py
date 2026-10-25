@@ -155,12 +155,16 @@ def main() -> int:
     parser.add_argument("--similarity", type=float, default=0.90)
     parser.add_argument("--min-bl", type=int, default=5)
     parser.add_argument("--include-reviewed", action="store_true")
+    parser.add_argument("--review-only", action="store_true",
+                        help="Process only existing needs_review checkpoints; requires --retry-review")
     parser.add_argument("--retry-review", action="store_true",
                         help="Reprocess results flagged for manual review")
     args = parser.parse_args()
     if not (1 <= args.workers <= 16 and args.limit >= 1 and
             0 < args.similarity <= 1 and args.min_bl >= 1):
         parser.error("invalid worker/limit/similarity/min-bl setting")
+    if args.review_only and not args.retry_review:
+        parser.error("--review-only requires --retry-review")
     if args.timeout < 1:
         parser.error("timeout must be positive")
     if not args.so.is_file():
@@ -179,6 +183,16 @@ def main() -> int:
         if not args.include_reviewed and row["status"] in CONFIRMED:
             continue
         destination = args.output / (row["address"] + ".json")
+        if args.review_only:
+            try:
+                prior = json.loads(destination.read_text(encoding="utf-8"))
+                if not (prior.get("status") == "needs_review"
+                        and prior.get("binary_sha256") == binary_hash
+                        and prior.get("pipeline_version") == PIPELINE_VERSION
+                        and prior.get("size") == row["size"]):
+                    continue
+            except (OSError, ValueError):
+                continue
         if destination.exists():
             try:
                 previous = json.loads(destination.read_text(encoding="utf-8"))
