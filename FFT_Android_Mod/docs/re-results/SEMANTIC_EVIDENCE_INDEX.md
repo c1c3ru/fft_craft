@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1232/1258** pending functions.
+Evidence collected: **1240/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1243,3 +1243,11 @@ These reports do not constitute semantic verification.
 | `0027fbc8` | iOS_WorldMapResumeGetData(unsigned char**, unsigned int*) | [Evidence](semantic-evidence/0027fbc8.md) |
 | `0028c668` | CFFT_STATE::UnitIDToFID_SPR(int) | [Evidence](semantic-evidence/0028c668.md) |
 | `00269774` | snpl_jp() | [Evidence](semantic-evidence/00269774.md) |
+| `00269b08` | snpl_effmode() | [Evidence](semantic-evidence/00269b08.md) |
+| `0028c644` | CFFT_STATE::FaceIDToFID(int) | [Evidence](semantic-evidence/0028c644.md) |
+| `0029a834` | ClearImage | [Evidence](semantic-evidence/0029a834.md) |
+| `00153450` | task_status(long) | [Evidence](semantic-evidence/00153450.md) |
+| `00153714` | Wtask_status(long) | [Evidence](semantic-evidence/00153714.md) |
+| `0027f620` | iOS_ResumeGetData(unsigned char**, unsigned int*) | [Evidence](semantic-evidence/0027f620.md) |
+| `0029ae70` | xpLib_GetTPage(int*) | [Evidence](semantic-evidence/0029ae70.md) |
+| `002ccf98` | _Unwind_DeleteException | [Evidence](semantic-evidence/002ccf98.md) |
