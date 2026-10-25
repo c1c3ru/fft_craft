@@ -21409,3 +21409,313 @@ Nome e assinatura são a única evidência sem disassembly manual:
 | `0x002a1028` | `CompMatrix` | 16 | 100.0% | `MulMatrix0` |
 
 **Status CSV**: `read_structural` para as 500 (identidade e call-graph confirmados via checkpoint; nenhuma teve blocos lidos instrução a instrução).
+## 613. Lote final de 261 funções `auto_structural` (≥95% cobertura, 0 tabela pendente) — esgota o pool de aceite rápido, dominado pela cauda de zlib/Tremor/libgcc/libunwind (2026-10-25, Fase 3, nonagésimo terceiro lote)
+
+Última leva do pool de aceite rápido (checkpoint do CI com ≥95% de
+cobertura e 0 tabela pendente) — depois deste lote, **todo o pool se
+esgota** (zero candidatos restantes nesse critério). Composição bem
+diferente dos lotes anteriores: a essa profundidade na fila, o que
+resta é quase inteiramente a cauda de bibliotecas de terceiros já
+tema de §569/605-612 — zlib, Tremor (libvorbis de ponto fixo),
+libgcc/compiler-rt e o unwinder ARM EHABI.
+
+**Padrão notável, confirmado por conhecimento de biblioteca (não só
+pelo script)**: várias funções de comparação `__aeabi_*cmp*`
+(`fcmpeq`/`fcmple`/`fcmplt`/`fcmpgt`/`fcmpge` para `float`,
+`dcmpeq`/`dcmple`/`dcmplt`/`dcmpgt`/`dcmpge` para `double`, e as
+variantes `__aeabi_c{f,d}{r,}cmple`) são, por especificação do ABI
+ARM EABI, **wrappers triviais de 1 instrução** sobre o resultado de
+uma comparação de ponto flutuante em registrador de condição — cada
+uma só testa um flag diferente do mesmo resultado de `cmp`. O mesmo
+vale pra `_Unwind_GetLanguageSpecificData`/`GetRegionStart`/
+`GetTextRelBase`/`GetDataRelBase`: acessores triviais de 1 campo
+sobre a estrutura de contexto do unwinder ARM EHABI (mesmo sistema
+de `__gnu_unwind_execute`/`_Unwind_VRS_*`, §569). Nenhuma tem lógica
+própria alguma — são a definição de boilerplate de ABI, mesmo
+critério já usado pra `gl3stubInit` (regra 6 original da Fase 1/2).
+
+Além disso: `_vp_psy_clear`/`drft_clear`/`mdct_clear`/
+`oggpack_writeclear`/`res0_free_info`/`oggpack_readinit`/
+`_vp_global_free` (destruidores do Tremor) e `inflateGetDictionary`
+(zlib) todos delegam pra um dos dois helpers genéricos de baixo
+nível já vistos dezenas de vezes (`sub_714c4`/`sub_714dc`, padrão
+`memset`/`free`-like) — confirma mais uma vez que esses dois
+endereços são utilitários de runtime genéricos, não específicos de
+nenhum subsistema.
+
+
+### 613.1 Achados genuinamente novos (30 funções)
+
+- **`inflateInit2_`** (`0x0007b080`, 256 B, 96.88%): chama `inflateReset2`.
+- **`__gnu_Unwind_Backtrace`** (`0x002cd0c4`, 196 B, 100.0%): chama `sub_2ccb14`, `sub_2ccc24`, `sub_2cd098`.
+- **`deflatePrime`** (`0x000757e4`, 172 B, 100.0%): chama `_tr_flush_bits`.
+- **`__gnu_Unwind_RaiseException`** (`0x002cce40`, 164 B, 100.0%): chama `sub_2ccb14`, `sub_2ccc24`, `sub_2cccb0`.
+- **`__gnu_Unwind_Resume`** (`0x002ccf00`, 116 B, 100.0%): chama `sub_71c2c`, `sub_2cccac`, `sub_2cccb0`, `sub_2ccd14`, `__restore_core_regs`.
+- **`__fixdfdi`** (`0x002cb9ec`, 68 B, 100.0%): chama `__aeabi_dcmplt`, `__fixunsdfdi`.
+- **`__aeabi_cdrcmple`** (`0x002cb158`, 48 B, 100.0%): chama `__eqdf2`.
+- **`___Unwind_Resume_or_Rethrow`** (`0x002cda28`, 36 B, 100.0%): chama `__gnu_Unwind_Resume_or_Rethrow`.
+- **`___Unwind_ForcedUnwind`** (`0x002cda4c`, 36 B, 100.0%): chama `__gnu_Unwind_ForcedUnwind`.
+- **`___Unwind_Resume`** (`0x002cda04`, 36 B, 100.0%): chama `__gnu_Unwind_Resume`.
+- **`_Unwind_Backtrace`** (`0x002cda70`, 36 B, 100.0%): chama `__gnu_Unwind_Backtrace`.
+- **`__aeabi_cfrcmple`** (`0x002cb8a4`, 36 B, 100.0%): chama `__eqsf2`.
+- **`___Unwind_RaiseException`** (`0x002cd9e0`, 36 B, 100.0%): chama `__gnu_Unwind_RaiseException`.
+- **`_Unwind_GetLanguageSpecificData`** (`0x002cdeec`, 28 B, 100.0%): chama `sub_2cdb1c`.
+- **`__aeabi_cdcmple`** (`0x002cb174`, 20 B, 100.0%): chama `__eqdf2`.
+- **`__aeabi_cfcmple`** (`0x002cb8b4`, 20 B, 100.0%): chama `__eqsf2`.
+- **`__aeabi_fcmpeq`** (`0x002cb8c8`, 20 B, 100.0%): chama `__aeabi_cfcmple`.
+- **`__aeabi_fcmple`** (`0x002cb8f0`, 20 B, 100.0%): chama `__aeabi_cfcmple`.
+- **`__aeabi_fcmplt`** (`0x002cb8dc`, 20 B, 100.0%): chama `__aeabi_cfcmple`.
+- **`__aeabi_fcmpgt`** (`0x002cb918`, 20 B, 100.0%): chama `__aeabi_cfrcmple`.
+- **`__aeabi_fcmpge`** (`0x002cb904`, 20 B, 100.0%): chama `__aeabi_cfrcmple`.
+- **`__aeabi_dcmplt`** (`0x002cb19c`, 20 B, 100.0%): chama `__aeabi_cdcmple`.
+- **`__aeabi_dcmpeq`** (`0x002cb188`, 20 B, 100.0%): chama `__aeabi_cdcmple`.
+- **`__aeabi_dcmple`** (`0x002cb1b0`, 20 B, 100.0%): chama `__aeabi_cdcmple`.
+- **`__aeabi_dcmpgt`** (`0x002cb1d8`, 20 B, 100.0%): chama `__aeabi_cdrcmple`.
+- **`__aeabi_dcmpge`** (`0x002cb1c4`, 20 B, 100.0%): chama `__aeabi_cdrcmple`.
+- **`_Unwind_GetRegionStart`** (`0x002cdedc`, 16 B, 100.0%): chama `sub_2cdb1c`.
+- **`__aeabi_ldiv0`** (`0x002cb9dc`, 16 B, 100.0%): chama `sub_71c38`.
+- **`_Unwind_GetTextRelBase`** (`0x002cdf10`, 8 B, 100.0%): chama `sub_71c2c`.
+- **`_Unwind_GetDataRelBase`** (`0x002cdf08`, 8 B, 100.0%): chama `sub_71c2c`.
+
+### 613.2 Funções-folha sem chamada externa (203)
+
+| Endereço | Função | Bytes | Cobertura |
+|---|---|---:|---:|
+| `0x000758c8` | `deflateBound` | 288 | 100.0% |
+| `0x00082de4` | `oggpackB_read` | 268 | 100.0% |
+| `0x000793e0` | `inflateBackInit_` | 268 | 97.01% |
+| `0x00082ce0` | `oggpack_read` | 260 | 98.46% |
+| `0x00082b14` | `oggpackB_look` | 208 | 100.0% |
+| `0x00082a48` | `oggpack_look` | 204 | 98.04% |
+| `0x002cb248` | `__truncdfsf2` | 160 | 100.0% |
+| `0x0007af1c` | `inflateResetKeep` | 156 | 100.0% |
+| `0x0007afe8` | `inflateReset2` | 152 | 100.0% |
+| `0x00082ef0` | `oggpack_read1` | 116 | 100.0% |
+| `0x00082f64` | `oggpackB_read1` | 116 | 100.0% |
+| `0x0007b190` | `inflatePrime` | 112 | 100.0% |
+| `0x002ca125` | `__cxa_type_match` | 112 | 100.0% |
+| `0x00082c38` | `oggpack_adv` | 112 | 100.0% |
+| `0x00096eb4` | `res0_inverse` | 108 | 96.3% |
+| `0x000bd220` | `COggMemMapFile::CallbackSeek(void*, long long, int)` | 100 | 100.0% |
+| `0x0007d0f4` | `inflateMark` | 100 | 100.0% |
+| `0x002cabf0` | `__floatdidf` | 96 | 100.0% |
+| `0x002cb92c` | `__fixsfsi` | 92 | 100.0% |
+| `0x002cb1ec` | `__fixdfsi` | 92 | 100.0% |
+| `0x0007d950` | `fill_zlib_filefunc64_32_def_from_filefunc32` | 92 | 100.0% |
+| `0x002cb988` | `__fixunssfsi` | 84 | 100.0% |
+| `0x000824cc` | `oggpackB_writetrunc` | 84 | 95.24% |
+| `0x0008247c` | `oggpack_writetrunc` | 80 | 95.0% |
+| `0x00075794` | `deflatePending` | 80 | 100.0% |
+| `0x0007a720` | `inflateBackEnd` | 64 | 100.0% |
+| `0x0007cf18` | `inflateSyncPoint` | 64 | 100.0% |
+| `0x002cab9c` | `__extendsfdf2` | 64 | 100.0% |
+| `0x0007cd9c` | `inflateGetHeader` | 60 | 100.0% |
+| `0x00075890` | `deflateTune` | 56 | 100.0% |
+| `0x00075760` | `deflateSetHeader` | 52 | 100.0% |
+| `0x0007afb8` | `inflateReset` | 48 | 100.0% |
+| `0x00082cac` | `oggpack_adv1` | 48 | 100.0% |
+| `0x0007d0c4` | `inflateUndermine` | 48 | 100.0% |
+| `0x00082c0c` | `oggpackB_look1` | 44 | 100.0% |
+| `0x002cab74` | `__floatsidf` | 40 | 100.0% |
+| `0x00082450` | `oggpack_writecheck` | 40 | 100.0% |
+| `0x00082be4` | `oggpack_look1` | 40 | 100.0% |
+| `0x00082520` | `oggpack_reset` | 40 | 100.0% |
+| `0x000bd194` | `CSOUND_LOADER_OGG::GetTotalDecoded() const` | 36 | 100.0% |
+| `0x002ccf74` | `__gnu_Unwind_Resume_or_Rethrow` | 32 | 100.0% |
+| `0x000bd170` | `CSOUND_LOADER_OGG::GetFormatDecoded() const` | 28 | 100.0% |
+| `0x00082fd8` | `oggpack_bytes` | 28 | 100.0% |
+| `0x002ccee4` | `__gnu_Unwind_ForcedUnwind` | 28 | 100.0% |
+| `0x00082880` | `oggpackB_writealign` | 24 | 100.0% |
+| `0x000826ec` | `oggpack_writealign` | 24 | 100.0% |
+| `0x00073a04` | `adler32_combine` | 20 | 100.0% |
+| `0x000bd1c8` | `CSOUND_LOADER_OGG::GetLoopOut() const` | 20 | 100.0% |
+| `0x00073a18` | `adler32_combine64` | 20 | 100.0% |
+| `0x000bd464` | `COggMemMapFile::IsOpen() const` | 16 | 100.0% |
+| `0x00082ff4` | `oggpack_bits` | 16 | 100.0% |
+| `0x000bd144` | `CSOUND_LOADER_OGG::IsTerminated() const` | 8 | 100.0% |
+| `0x000bd14c` | `CSOUND_LOADER_OGG::GetSoundFormat()` | 8 | 100.0% |
+| `0x000bd520` | `CSOUND_LOADER_OGG::IsOpen() const` | 8 | 100.0% |
+| `0x002cd58c` | `__aeabi_unwind_cpp_pr2` | 8 | 100.0% |
+| `0x000bd1b8` | `CSOUND_LOADER_OGG::DecodeAll(unsigned char*)` | 8 | 100.0% |
+| `0x000823e4` | `zlibCompileFlags` | 8 | 100.0% |
+| `0x000bd18c` | `CSOUND_LOADER_OGG::GetTotal() const` | 8 | 100.0% |
+| `0x000bd134` | `COggMemMapFile::CallbackClose(void*)` | 8 | 100.0% |
+| `0x002cd57c` | `__aeabi_unwind_cpp_pr0` | 8 | 100.0% |
+| `0x000bd168` | `CSOUND_LOADER_OGG::GetSoundEncode() const` | 8 | 100.0% |
+| `0x000bd13c` | `COggMemMapFile::CallbackTell(void*)` | 8 | 100.0% |
+| `0x0008300c` | `oggpack_get_buffer` | 8 | 100.0% |
+| `0x000bd1c0` | `CSOUND_LOADER_OGG::GetLoopIn() const` | 8 | 100.0% |
+| `0x002cce38` | `_Unwind_GetCFA` | 8 | 100.0% |
+| `0x002cd584` | `__aeabi_unwind_cpp_pr1` | 8 | 100.0% |
+| `0x000d9a08` | `hook_disp_requirement()` | 4 | 100.0% |
+| `0x0027b3a0` | `numa_fileReadRequest(unsigned int, unsigned int, char*)` | 4 | 100.0% |
+| `0x0027b510` | `dispCmdKind()` | 4 | 100.0% |
+| `0x0020ce14` | `fileAllocateCD(unsigned long, unsigned long)` | 4 | 100.0% |
+| `0x0029b428` | `GsGetActiveBuff` | 4 | 100.0% |
+| `0x0028070c` | `hook_pad2()` | 4 | 100.0% |
+| `0x002712ec` | `Ssd_CheckWideMode()` | 4 | 100.0% |
+| `0x0019e7b4` | `shop_dummyfunc()` | 4 | 100.0% |
+| `0x0028c7e8` | `CAUTOSAVE::~CAUTOSAVE()` | 4 | 100.0% |
+| `0x0027fc78` | `initSaveFFT(char*, char*, bool)` | 4 | 100.0% |
+| `0x002712a0` | `Ssd_Enable()` | 4 | 100.0% |
+| `0x00286744` | `rsetmovie_title_flg__Fv()` | 4 | 100.0% |
+| `0x0028b4ec` | `DecDCTout` | 4 | 100.0% |
+| `0x0028b51c` | `setMovieSkipFlg__Fi(int)` | 4 | 100.0% |
+| `0x00159a70` | `asmMUL64(long, long, long)` | 4 | 100.0% |
+| `0x002168fc` | `recallEnvEffect()` | 4 | 100.0% |
+| `0x001d114c` | `set_monomane_direction(BWORK*, unsigned char)` | 4 | 100.0% |
+| `0x0015d2a8` | `iOSexecuteTurn()` | 4 | 100.0% |
+| `0x0028cf0c` | `ContinueDraw` | 4 | 100.0% |
+| `0x000d0dc8` | `Ddisp_floateventwindow()` | 4 | 100.0% |
+| `0x001836cc` | `iOS_addPrim_window(tagPOLY_FT4*)` | 4 | 100.0% |
+| `0x0027b670` | `iOS_DEBUG_multiwindow_break_hook(unsigned long*)` | 4 | 100.0% |
+| `0x00271318` | `Ssd_PlayEnvEffect(long)` | 4 | 100.0% |
+| `0x000d9a0c` | `hook_trophics()` | 4 | 100.0% |
+| `0x00271308` | `Ssd_LinkMusicData(SsdSeqRec*, void*)` | 4 | 100.0% |
+| `0x00286748` | `setmovie_title_flg__Fv()` | 4 | 100.0% |
+| `0x00271410` | `Ssd_InitEffectTrackRecWithStart(short, long, short, short)` | 4 | 100.0% |
+| `0x0028cefc` | `SetDumpFnt` | 4 | 100.0% |
+| `0x00280670` | `hook_write_eventflag(int, int)` | 4 | 100.0% |
+| `0x002815d8` | `hook_num(int, int, int)` | 4 | 100.0% |
+| `0x002a1024` | `OuterProduct12` | 4 | 100.0% |
+| `0x002712b0` | `Ssd_DisposeNormalWave()` | 4 | 100.0% |
+| `0x00287a14` | `Red_Blue_Draw(int)` | 4 | 100.0% |
+| `0x00100640` | `Wdispemptywindow()` | 4 | 100.0% |
+| `0x0028b50c` | `pspMovieInit__FiPCciiii(int, char*, int, int, int, int)` | 4 | 100.0% |
+| `0x00215d20` | `fadeGradation(int, CVECTOR*)` | 4 | 100.0% |
+| `0x000d8974` | `send_statuschrno(int)` | 4 | 100.0% |
+| `0x002712c4` | `Ssd_DisposeEffectData(void*)` | 4 | 100.0% |
+| `0x00271310` | `Ssd_StopMusic(SsdSeqRec*)` | 4 | 100.0% |
+| `0x002806c8` | `hook_chk_speedup(int)` | 4 | 100.0% |
+| `0x0028856c` | `init_AnimList()` | 4 | 100.0% |
+| `0x0028b4c4` | `StRingStatus` | 4 | 100.0% |
+| `0x002b3758` | `Error_Uninit()` | 4 | 100.0% |
+| `0x000d8bfc` | `initstatuscphase()` | 4 | 100.0% |
+| `0x002a0d10` | `SetTransMatrix` | 4 | 100.0% |
+| `0x0027130c` | `Ssd_StartMusic(SsdSeqRec*, short, short)` | 4 | 100.0% |
+| `0x0028cee0` | `DrawOTagIO` | 4 | 100.0% |
+| `0x0028ce54` | `asmmemcpy(void*, void const*, unsigned int)` | 4 | 100.0% |
+| `0x002875a0` | `draw_maru(unsigned long*)` | 4 | 100.0% |
+| `0x000e62c8` | `DEBUG_CHK_ROLL(SCROLLRECORD*)` | 4 | 100.0% |
+| `0x00162048` | `wasmMUL3232(long, long, long, long)` | 4 | 100.0% |
+| `0x00161ef0` | `wasmBoxCopy(char*, char*, COPYFIELD*, COPYFIELD*)` | 4 | 100.0% |
+| `0x0027fc7c` | `cSaveFFT::~cSaveFFT()` | 4 | 100.0% |
+| `0x0028cee8` | `DumpClut` | 4 | 100.0% |
+| `0x000e62c4` | `DEBUGTRACE_hook_connect_camera()` | 4 | 100.0% |
+| `0x00271344` | `Ssd_StopAllEffect()` | 4 | 100.0% |
+| `0x00271340` | `Ssd_PlayEffects03(long, long, long, long)` | 4 | 100.0% |
+| `0x0028cea8` | `KanjiFntClose` | 4 | 100.0% |
+| `0x00281648` | `hook_1284(char*, int)` | 4 | 100.0% |
+| `0x0015a480` | `iOSSoundSESet(int)` | 4 | 100.0% |
+| `0x0021ebb0` | `error(char, long)` | 4 | 100.0% |
+| `0x0027b674` | `iOS_DEBUG_multiwindow_break_hook2(unsigned long*, int)` | 4 | 100.0% |
+| `0x00161d98` | `tDebugBreakCheck(int)` | 4 | 100.0% |
+| `0x002168e0` | `callSystemSound(int)` | 4 | 100.0% |
+| `0x00121718` | `Edisp_floateventwindow()` | 4 | 100.0% |
+| `0x001a652c` | `GetMessagePtr(int)` | 4 | 100.0% |
+| `0x00137b0c` | `value_input()` | 4 | 100.0% |
+| `0x002807f4` | `hook_cliptest()` | 4 | 100.0% |
+| `0x002169cc` | `pauseEnvEffect()` | 4 | 100.0% |
+| `0x002712b4` | `Ssd_DisposeWaveData(SsdWaveSetRec*)` | 4 | 100.0% |
+| `0x00161da0` | `tDebugPointerErr()` | 4 | 100.0% |
+| `0x000cbd68` | `DeleteTrapCancelCommandWindow()` | 4 | 100.0% |
+| `0x0028850c` | `CalcMissionPayPoint(int)` | 4 | 100.0% |
+| `0x002acb28` | `sceGuViewport` | 4 | 100.0% |
+| `0x002b5eb0` | `Logo_Resume()` | 4 | 100.0% |
+| `0x0014e0e4` | `iOSSetjoinus()` | 4 | 100.0% |
+| `0x0014e9a0` | `sol_draw(int, int, int)` | 4 | 100.0% |
+| `0x00280714` | `hook_drive_connect_chrmove2(int)` | 4 | 100.0% |
+| `0x001dca54` | `callSW(int)` | 4 | 100.0% |
+| `0x0020f424` | `eventEffectStart()` | 4 | 100.0% |
+| `0x002712c8` | `Ssd_AllStop()` | 4 | 100.0% |
+| `0x002ab904` | `sceGuDisplay` | 4 | 100.0% |
+| `0x0028b530` | `setToolBgmFlg__Fi(int)` | 4 | 100.0% |
+| `0x002815e4` | `chk_test_addcolor(unsigned int*)` | 4 | 100.0% |
+| `0x00248ccc` | `ctlcard_init()` | 4 | 100.0% |
+| `0x002ab710` | `sceGuClearColor` | 4 | 100.0% |
+| `0x0014e0e8` | `statushookfunc()` | 4 | 100.0% |
+| `0x002712a4` | `Ssd_Disable()` | 4 | 100.0% |
+| `0x00286ec4` | `check_rival_value(int)` | 4 | 100.0% |
+| `0x0028b508` | `pspMovieEnd__Fv()` | 4 | 100.0% |
+| `0x002abc88` | `sceGuShadeModel` | 4 | 100.0% |
+| `0x0028b514` | `pspMovieStart__Fv()` | 4 | 100.0% |
+| `0x0028b4a0` | `StSetEmulate` | 4 | 100.0% |
+| `0x00280710` | `hook_drive_connect_chrmove()` | 4 | 100.0% |
+| `0x00215d24` | `fadeAnbient(int, CVECTOR*)` | 4 | 100.0% |
+| `0x00215d28` | `fadeFlatColor(int, CVECTOR*)` | 4 | 100.0% |
+| `0x00271348` | `Ssd_StopEffectSet(void*)` | 4 | 100.0% |
+| `0x00288498` | `Draw_TuusinIcon(int, int, unsigned long*)` | 4 | 100.0% |
+| `0x00161ef4` | `wasmKanjiCopy(char*, char*, COPYFIELD*, int)` | 4 | 100.0% |
+| `0x0028b490` | `StSetRing` | 4 | 100.0% |
+| `0x0028cf38` | `GetDrawEnv2` | 4 | 100.0% |
+| `0x00225a60` | `objectLG2(_EffectTCB*, _Object*)` | 4 | 100.0% |
+| `0x0028ceec` | `DumpDispEnv` | 4 | 100.0% |
+| `0x002b6bcc` | `Main_Resume()` | 4 | 100.0% |
+| `0x001019bc` | `Wloadonefile(char*, char*)` | 4 | 100.0% |
+| `0x0028849c` | `Draw_Trap_CancelCommandList(int*, int, int, unsigned long*)` | 4 | 100.0% |
+| `0x002a143c` | `SetBackColor` | 4 | 100.0% |
+| `0x0020c5d4` | `system_warning(int, int)` | 4 | 100.0% |
+| `0x00280708` | `hook_pad()` | 4 | 100.0% |
+| `0x002712f4` | `Ssd_ErrorProc(int)` | 4 | 100.0% |
+| `0x0027fc28` | `chk_ucResumeData2(int)` | 4 | 100.0% |
+| `0x000cbd58` | `CreateTrapNameWindowManagerTask()` | 4 | 100.0% |
+| `0x002b5594` | `Link_Resume()` | 4 | 100.0% |
+| `0x0027b5c8` | `rprintfr(RECT16*, int, int, int)` | 4 | 100.0% |
+| `0x000d9ac0` | `loadonefile(char*, char*)` | 4 | 100.0% |
+| `0x0028b468` | `SpuQuit` | 4 | 100.0% |
+| `0x0028b53c` | `setBgmData__Fii(int, int)` | 4 | 100.0% |
+| `0x002a1268` | `TransRotPers` | 4 | 100.0% |
+| `0x00215d5c` | `PadStop` | 4 | 100.0% |
+| `0x0028b60c` | `CdReadBreak` | 4 | 100.0% |
+| `0x002806c4` | `hook_opt()` | 4 | 100.0% |
+| `0x0010190c` | `Whook_trophics()` | 4 | 100.0% |
+| `0x002806bc` | `hook_read_eventflag(int*)` | 4 | 100.0% |
+| `0x002419cc` | `fftCdLoop(CDREC*)` | 4 | 100.0% |
+| `0x000d9a10` | `seekpcfile(char*, char*, int, int)` | 4 | 100.0% |
+| `0x0020c5d0` | `system_error(int, int)` | 4 | 100.0% |
+| `0x00083014` | `oggpackB_get_buffer` | 4 | 100.0% |
+| `0x00082a44` | `oggpackB_readinit` | 4 | 100.0% |
+| `0x002ccf94` | `_Unwind_Complete` | 4 | 100.0% |
+| `0x00082a14` | `oggpackB_writeclear` | 4 | 100.0% |
+| `0x00083008` | `oggpackB_bits` | 4 | 100.0% |
+| `0x00082548` | `oggpackB_reset` | 4 | 100.0% |
+| `0x00083004` | `oggpackB_bytes` | 4 | 100.0% |
+| `0x0008244c` | `oggpackB_writeinit` | 4 | 100.0% |
+| `0x00082478` | `oggpackB_writecheck` | 4 | 100.0% |
+| `0x00082cdc` | `oggpackB_adv1` | 4 | 100.0% |
+| `0x00082ca8` | `oggpackB_adv` | 4 | 100.0% |
+
+### 613.3 Restante com chamadas já documentadas (28)
+
+| Endereço | Função | Bytes | Cobertura | Chama |
+|---|---|---:|---:|---|
+| `0x00096190` | `res0_pack` | 320 | 100.0% | `oggpack_write`, `ov_ilog` |
+| `0x00076cf0` | `deflateParams` | 280 | 97.14% | `deflate` |
+| `0x00088bf4` | `_ve_envelope_mark` | 264 | 100.0% | `__divsi3` |
+| `0x00094bfc` | `_vp_psy_clear` | 216 | 100.0% | `sub_714dc` |
+| `0x00097970` | `res2_forward` | 216 | 100.0% | `_vorbis_block_alloc`, `sub_97584` |
+| `0x000755e0` | `deflateResetKeep` | 204 | 100.0% | `adler32`, `crc32`, `_tr_init` |
+| `0x000756ac` | `deflateReset` | 180 | 97.78% | `sub_714c4`, `deflateResetKeep` |
+| `0x0007ccf0` | `inflateSetDictionary` | 172 | 100.0% | `adler32`, `sub_7ade4` |
+| `0x000960f0` | `res0_free_look` | 160 | 100.0% | `sub_714c4`, `sub_714dc` |
+| `0x0007cc5c` | `inflateGetDictionary` | 148 | 100.0% | `sub_714b8` |
+| `0x00088cfc` | `_ve_envelope_shift` | 116 | 100.0% | `sub_715e4`, `__divsi3` |
+| `0x0009cc9c` | `drft_clear` | 108 | 100.0% | `sub_714dc` |
+| `0x00095668` | `_vp_ampmax_decay` | 108 | 96.3% | `__addsf3`, `__floatsisf`, `__mulsf3`, `__divsf3`... |
+| `0x00088920` | `_ve_envelope_clear` | 88 | 100.0% | `sub_714dc`, `mdct_clear` |
+| `0x000910e4` | `mdct_clear` | 68 | 100.0% | `sub_714dc` |
+| `0x000bd1dc` | `COggMemMapFile::CallbackRead(void*, unsigned int, unsigned int, void*)` | 68 | 100.0% | `sub_714b8` |
+| `0x000bd334` | `CSOUND_LOADER_OGG::Seek(unsigned long)` | 68 | 100.0% | `ov_pcm_seek` |
+| `0x002cde9c` | `__gnu_unwind_frame` | 64 | 100.0% | `__gnu_unwind_execute` |
+| `0x00082414` | `oggpack_writeinit` | 56 | 100.0% | `sub_714c4`, `sub_714e8` |
+| `0x0008254c` | `oggpack_writeclear` | 44 | 100.0% | `sub_714dc` |
+| `0x000960c4` | `res0_free_info` | 44 | 100.0% | `sub_714c4` |
+| `0x00082a18` | `oggpack_readinit` | 44 | 100.0% | `sub_714c4` |
+| `0x00094078` | `_vp_global_free` | 40 | 100.0% | `sub_714c4` |
+| `0x000bd378` | `CSOUND_LOADER_OGG::Tell() const` | 40 | 100.0% | `ov_pcm_tell` |
+| `0x002ca77c` | `__aeabi_uidivmod` | 32 | 100.0% | `__udivsi3` |
+| `0x000bd504` | `CSOUND_LOADER_OGG::~CSOUND_LOADER_OGG()` | 28 | 100.0% | `CSOUND_LOADER_OGG::~CSOUND_LOADER_OGG()`, `sub_2cdf9c` |
+| `0x000bd154` | `CSOUND_LOADER_OGG::GetFormat() const` | 20 | 100.0% | `sub_714b8` |
+| `0x000bd450` | `COggMemMapFile::~COggMemMapFile()` | 20 | 100.0% | `COggMemMapFile::Close()` |
+
+**Status CSV**: `read_structural` para as 261 (identidade e call-graph confirmados via checkpoint; nenhuma teve blocos lidos instrução a instrução). Esgota o pool `auto_structural` com cobertura ≥95% e 0 tabela pendente — próximo passo: pool `needs_review`.
