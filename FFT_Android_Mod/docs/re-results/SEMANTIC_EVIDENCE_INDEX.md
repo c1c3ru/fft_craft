@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **56/1258** pending functions.
+Evidence collected: **64/1258** pending functions.
 These reports do not constitute semantic verification.
 
 | Address | Function | Evidence |
@@ -65,3 +65,11 @@ These reports do not constitute semantic verification.
 | `00242498` | ctlendroll_init() | [Evidence](semantic-evidence/00242498.md) |
 | `002453a4` | fft_ending() | [Evidence](semantic-evidence/002453a4.md) |
 | `0027fe84` | Savedata_Load(unsigned char*, int*) | [Evidence](semantic-evidence/0027fe84.md) |
+| `00287734` | Draw_Lose(int) | [Evidence](semantic-evidence/00287734.md) |
+| `0028e2e4` | CdControl | [Evidence](semantic-evidence/0028e2e4.md) |
+| `0019f798` | MainShop() | [Evidence](semantic-evidence/0019f798.md) |
+| `001b8e64` | TutrialInit(int) | [Evidence](semantic-evidence/001b8e64.md) |
+| `001d205c` | check_trap(unsigned char, unsigned char, unsigned char) | [Evidence](semantic-evidence/001d205c.md) |
+| `001d972c` | get_shape2(BWORK*, unsigned char*) | [Evidence](semantic-evidence/001d972c.md) |
+| `0022a6a4` | _ReadTMD(TMD_PRIM*) | [Evidence](semantic-evidence/0022a6a4.md) |
+| `0020fd1c` | InitializeAll() | [Evidence](semantic-evidence/0020fd1c.md) |
