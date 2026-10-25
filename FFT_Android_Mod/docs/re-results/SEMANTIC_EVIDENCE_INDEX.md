@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **744/1258** pending functions.
+Evidence collected: **752/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -755,3 +755,11 @@ These reports do not constitute semantic verification.
 | `002cb484` | __floatunsisf | [Evidence](semantic-evidence/002cb484.md) |
 | `000da7e4` | readed_mapchange() | [Evidence](semantic-evidence/000da7e4.md) |
 | `00153350` | task_start(long) | [Evidence](semantic-evidence/00153350.md) |
+| `00153374` | task_stop(long) | [Evidence](semantic-evidence/00153374.md) |
+| `00153614` | Wtask_start(long) | [Evidence](semantic-evidence/00153614.md) |
+| `00153638` | Wtask_stop(long) | [Evidence](semantic-evidence/00153638.md) |
+| `0015391c` | check_eventtool(int, int) | [Evidence](semantic-evidence/0015391c.md) |
+| `0015deec` | iOSGT4_MapT9(unsigned long, long) | [Evidence](semantic-evidence/0015deec.md) |
+| `00161d50` | iOSPosW(int) | [Evidence](semantic-evidence/00161d50.md) |
+| `00161d74` | iOSPosH(int) | [Evidence](semantic-evidence/00161d74.md) |
+| `0018e334` | equans_init() | [Evidence](semantic-evidence/0018e334.md) |
