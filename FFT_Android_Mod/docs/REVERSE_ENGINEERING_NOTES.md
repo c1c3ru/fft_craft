@@ -20871,3 +20871,541 @@ Cada uma chama pelo menos um nome já confirmado em seção anterior — tabela 
 | `0x0022a92c` | `GetAnimationPositionFromBattleID(int, int, EffectOrder*, SVECTOR*)` | 48 | 100.0% | `getAnimationIDFormBattleWork(int)` |
 
 **Status CSV**: `read_structural` para as 500 (identidade e call-graph confirmados via checkpoint; nenhuma teve blocos lidos instrução a instrução).
+## 612. Lote de 500 funções `auto_structural` (≥95% cobertura, 0 tabela pendente) — segunda rodada em escala, agora dominada por funções-folha minúsculas (2026-10-25, Fase 3, nonagésimo segundo lote)
+
+Mesma rota do §611 (agrupamento automático por catálogo de `bl`
+idêntico + triagem de achados novos por nome nunca citado), aplicada
+à próxima leva de 500 candidatos do pool `auto_structural`. Como o
+pool já foi "desnatado" pelas maiores primeiro em lotes anteriores,
+esta leva é de funções bem menores (48 a 4 bytes) — **379 das 500 são
+funções-folha** (sem nenhuma chamada), a maior proporção de qualquer
+lote até aqui.
+
+Composição: **2 famílias confirmadas** (14 funções — mas de alto
+valor, ver abaixo), **poucos achados genuinamente novos** (a essa
+profundidade na fila, quase tudo que resta já cita algo conhecido),
+**379 funções-folha** e o restante com chamadas já documentadas.
+
+### 612.1 As duas famílias confirmadas: a API completa de diálogo "Ng" roda como task `asm`/`wasm`
+
+
+- **`disp_attackng()` / `disp_coverng()` / `disp_dismiss_yesno()` / `disp_executeng()` / `disp_okng()` / `disp_yameru_yesno()` / `disp_yesno()`** (`0x000f14b0`, `0x000f1534`, `0x000f14dc`, `0x000f1484`, `0x000f1604`, `0x000f1630`, `0x000f1508`, 44 B cada, variante sem prefixo (`asm`)) — catálogo idêntico nas 7: um local sem símbolo + `asmTaskEntry/asmGetInput2`.
+- **`Wdisp_attackng()` / `Wdisp_coverng()` / `Wdisp_dismiss_yesno()` / `Wdisp_executeng()` / `Wdisp_okng()` / `Wdisp_yameru_yesno()` / `Wdisp_yesno()`** (`0x001062c8`, `0x001063f0`, `0x00106270`, `0x001062f4`, `0x00106320`, `0x0010629c`, `0x0010641c`, 44 B cada, variante com prefixo `W` (`wasm`)) — catálogo idêntico nas 7: um local sem símbolo + `wasmTaskEntry/wasmGetInput2`.
+
+As 14 funções (7+7) são **thunks de registro de task**, não telas
+completas: cada uma só dispara uma task `asm`/`wasm` (framework já
+mapeado em §578/§585/§586) passando, quase certamente, uma constante
+de "tipo de diálogo" diferente por nome (`_yesno`/`_okng`/`_attackng`/
+`_executeng`/`_coverng`/`_dismiss_yesno`/`_yameru_yesno`) pro mesmo
+handler genérico de popup de confirmação (`iOS_dispOkNg`/`ctlokng_init`,
+§577/§580). Confirma, em escala, que toda a família de diálogos
+Sim/Não do jogo (cancelar ataque, confirmar execução, "desistir",
+cobrir ação, etc.) é implementada como uma única máquina de diálogo
+parametrizada por tipo, não 14 implementações separadas — mesmo
+espírito do trampolim genérico `asm_function`/`wasm_function`
+(§585/586), aqui uma camada acima (registro de task, não despacho de
+aridade).
+
+
+### 612.2 Achados genuinamente novos (28 funções)
+
+- **`AverageZ4`** (`0x002a12f4`, 48 B, 100.0%): chama `_gte_ldsz4(long, long, long, long)`, `_gte_stotz(long*)`, `_gte_avsz4()`.
+- **`setMovingAnimationShape()`** (`0x001f1650`, 48 B, 100.0%): chama `searchActiveAnimation()`.
+- **`check_prob(int, int)`** (`0x001d9548`, 48 B, 100.0%): chama `sub_1d6ee0`.
+- **`gzprintf`** (`0x00079178`, 48 B, 100.0%): chama `gzvprintf`.
+- **`Ssd_StopEffect(long)`** (`0x0027134c`, 44 B, 100.0%): chama `SE_CorrectFID(int)`, `SE_StopVFX(int)`.
+- **`SetMulRotMatrix`** (`0x002a092c`, 40 B, 100.0%): chama `_gte_SetRotMatrix(MATRIX*)`, `MulRotMatrix0`.
+- **`PadInit`** (`0x0028e66c`, 40 B, 100.0%): chama `xpPadWorkBufGet`.
+- **`terminateAnimation(int)`** (`0x001f5be4`, 36 B, 100.0%): chama `terminateAnimationSub(int, int, short, short, short)`.
+- **`fadeMapClut(int, unsigned short*)`** (`0x00215c98`, 36 B, 100.0%): chama `requestDestinationClut(int, unsigned int, unsigned int, int, unsigned short*)`.
+- **`get_trap_no(BWORK*)`** (`0x001ccc18`, 36 B, 100.0%): chama `check_trap(unsigned char, unsigned char, unsigned char)`.
+- **`iOS_v2menuCheckSEError()`** (`0x00281a08`, 36 B, 100.0%): chama `iOS_v2menuGetItem()`, `iOS_v2menuGetEnable(V2_MENU_ITEM)`.
+- **`s2a_initScheduleControl(_EffectTCB*)`** (`0x0021d26c`, 36 B, 100.0%): chama `initScheduleControl(_EffectTCB*, short)`.
+- **`sf_pushMapScale(_EffectTCB*)`** (`0x0021c434`, 32 B, 100.0%): chama `pushMapScale()`.
+- **`sc_pushMapAngle(_EffectTCB*)`** (`0x0021c3ac`, 32 B, 100.0%): chama `pushMapAngle()`.
+- **`s24_popMapScale(_EffectTCB*)`** (`0x0021c454`, 32 B, 100.0%): chama `popMapScale()`.
+- **`s9_pushMapScrollXYZ(_EffectTCB*)`** (`0x0021c31c`, 32 B, 100.0%): chama `pushMapScrollXYZ()`.
+- **`s2b_initMetascheduleControl(_EffectTCB*)`** (`0x0021d2c0`, 32 B, 100.0%): chama `initMetascheduleControl(_EffectTCB*)`.
+- **`sd_popMapAngle(_EffectTCB*)`** (`0x0021c3cc`, 32 B, 100.0%): chama `popMapAngle()`.
+- **`sa_popMapScrollXYZ(_EffectTCB*)`** (`0x0021c33c`, 32 B, 100.0%): chama `popMapScrollXYZ()`.
+- **`GsClearDispArea`** (`0x0029b3f0`, 28 B, 100.0%): chama `sceGuClearColor`.
+- **`doublespeed_chk(CDREC*)`** (`0x002419a8`, 28 B, 100.0%): chama `CdFlush`.
+- **`PutDrawEnv`** (`0x00291bc0`, 28 B, 100.0%): chama `sub_29000c`, `xpLibgpuEndRender`.
+- **`OgataInit()`** (`0x00228c5c`, 24 B, 100.0%): chama `InitEffect()`, `InitObjectManager()`, `InitShape()`.
+- **`MulRotMatrix`** (`0x002a0954`, 24 B, 100.0%): chama `MulRotMatrix0`.
+- **`iOS_InitializeHot2()`** (`0x0020ffec`, 24 B, 100.0%): chama `eventflaginit()`, `initBdata()`, `worldmap_new()`.
+- **`charge_break(BWORK*)`** (`0x001d1f78`, 20 B, 100.0%): chama `set_casting_status(BWORK*, unsigned char)`.
+- **`o_WaitCardEvent_X()`** (`0x00245bf0`, 20 B, 100.0%): chama `o_GetCardEvent_X()`.
+- **`set_throwitem(int, unsigned char, unsigned char*)`** (`0x001d4f00`, 16 B, 100.0%): chama `sub_1d4d40`.
+
+### 612.3 Funções-folha sem chamada externa (379)
+
+Nome e assinatura são a única evidência sem disassembly manual:
+
+| Endereço | Função | Bytes | Cobertura |
+|---|---|---:|---:|
+| `0x0021bf40` | `s18_ifObjNumLT(_EffectTCB*)` | 48 | 100.0% |
+| `0x0021bf10` | `s17_ifObjNumGT(_EffectTCB*)` | 48 | 100.0% |
+| `0x0021d290` | `initMetascheduleControl(_EffectTCB*)` | 48 | 100.0% |
+| `0x0021d23c` | `initScheduleControl(_EffectTCB*, short)` | 48 | 100.0% |
+| `0x0021bee0` | `s16_ifObjNumEQU(_EffectTCB*)` | 48 | 100.0% |
+| `0x001d1f48` | `check_move_ability(BWORK*)` | 48 | 100.0% |
+| `0x000773d4` | `gzclose` | 44 | 100.0% |
+| `0x002a1148` | `SquareSL0` | 44 | 100.0% |
+| `0x0025bc50` | `jobnumber_conv(int)` | 40 | 100.0% |
+| `0x0022a994` | `EqualRShift12VECTORToVECTOR(VECTOR*, VECTOR*)` | 40 | 100.0% |
+| `0x001dbcc4` | `unitwork_init2all(BWORK*, int)` | 40 | 100.0% |
+| `0x0022a9e4` | `EqualAnd0xfffSVECTORToSVECTOR(SVECTOR*, SVECTOR*)` | 40 | 100.0% |
+| `0x0022a9bc` | `EqualLShift12VECTORToVECTOR(VECTOR*, VECTOR*)` | 40 | 100.0% |
+| `0x00081a94` | `unztell64` | 40 | 100.0% |
+| `0x001f6374` | `setPositionToLongPosition(tag_animation*)` | 40 | 100.0% |
+| `0x0028e494` | `CdPosToInt` | 36 | 100.0% |
+| `0x0029152c` | `SetSprt8` | 36 | 100.0% |
+| `0x00291628` | `SetTile` | 36 | 100.0% |
+| `0x00291800` | `SetDrawMove` | 36 | 100.0% |
+| `0x00291694` | `SetTile8` | 36 | 100.0% |
+| `0x0029164c` | `SetTile1` | 36 | 100.0% |
+| `0x00291670` | `SetTile16` | 36 | 100.0% |
+| `0x0028e470` | `CdIntToPos` | 36 | 100.0% |
+| `0x00291508` | `SetSprt16` | 36 | 100.0% |
+| `0x00077500` | `gzeof` | 36 | 100.0% |
+| `0x002914e4` | `SetSprt` | 36 | 100.0% |
+| `0x00081a70` | `unztell` | 36 | 100.0% |
+| `0x00285e1c` | `pspJobIsSpecialJob(int)` | 36 | 100.0% |
+| `0x002cab50` | `__aeabi_ui2d` | 36 | 100.0% |
+| `0x0022a2cc` | `getAbsoluteMaximumOf2(short, short)` | 32 | 100.0% |
+| `0x0015ad18` | `iOSCurIsInGame(int, int)` | 32 | 100.0% |
+| `0x001da018` | `clear_cmemory(void*, int)` | 32 | 100.0% |
+| `0x0021bcf8` | `s1_goto(_EffectTCB*)` | 32 | 100.0% |
+| `0x002657d8` | `backpage_put(CTLINFO*, int)` | 32 | 100.0% |
+| `0x001d9948` | `copy_struct_data(void const*, void*, int)` | 32 | 100.0% |
+| `0x0029c934` | `sceVfpuVector4Set(ScePspFVector4*, float, float, float, float)` | 32 | 100.0% |
+| `0x001d9910` | `get_ability_flag(BWORK*, int)` | 32 | 100.0% |
+| `0x0021bcd8` | `s0_end(_EffectTCB*)` | 32 | 100.0% |
+| `0x0007d894` | `call_zopen64` | 28 | 100.0% |
+| `0x0020177c` | `reserveActionDirection(tag_animation*)` | 28 | 100.0% |
+| `0x0022a978` | `EqualSVectorToSVECTOR(SVector*, SVECTOR*)` | 28 | 100.0% |
+| `0x001d9354` | `set_jcflag(unsigned char*, int)` | 28 | 100.0% |
+| `0x0022a95c` | `EqualSVectorToVECTOR(SVector*, VECTOR*)` | 28 | 100.0% |
+| `0x0021c1fc` | `s2d_samplingSQLFrame(_EffectTCB*)` | 24 | 100.0% |
+| `0x00291a84` | `SetShadeTex` | 24 | 100.0% |
+| `0x001d9930` | `copyACTst(ACT*, ACT*)` | 24 | 100.0% |
+| `0x0021c1e4` | `s2c_samplingMSQFrame(_EffectTCB*)` | 24 | 100.0% |
+| `0x0015ff88` | `iOSCircleCtrl(unsigned short)` | 24 | 100.0% |
+| `0x00218628` | `SetAnimationMode(effectAnimation*, short)` | 24 | 100.0% |
+| `0x002c9a25` | `operator new[](unsigned int)` | 20 | 100.0% |
+| `0x00073af0` | `compressBound` | 20 | 100.0% |
+| `0x002826b4` | `iOS_PalleteHosei(unsigned char, int)` | 20 | 100.0% |
+| `0x00215bc0` | `restertMapPaletteAnimation()` | 20 | 100.0% |
+| `0x00215bac` | `stopMapPaletteAnimation()` | 20 | 100.0% |
+| `0x0020f6e0` | `checkModelAnimation(int)` | 20 | 100.0% |
+| `0x00249c44` | `numa_vOpn_CdRead(CDREC*, unsigned long, unsigned long, unsigned long, unsigned long*)` | 20 | 100.0% |
+| `0x00290b40` | `SetDispMask` | 20 | 100.0% |
+| `0x001d6480` | `clear_actendflag(BWORK*)` | 20 | 100.0% |
+| `0x002cd8ec` | `__restore_core_regs` | 20 | 100.0% |
+| `0x0020f714` | `checkVRAMAnimation(int)` | 20 | 100.0% |
+| `0x002a3100` | `xpMallocIO` | 16 | 100.0% |
+| `0x00285e40` | `pspJobGetIndex2Job(int)` | 16 | 100.0% |
+| `0x0021036c` | `setShortVector(SVECTOR*, int, int, int)` | 16 | 100.0% |
+| `0x0022a470` | `getVariationData(int, int, int)` | 16 | 100.0% |
+| `0x0028e694` | `xpSetVblankFunc(void (*)(int, void*), void*)` | 16 | 100.0% |
+| `0x000b9f7c` | `CTHREAD::RequestExit()` | 12 | 100.0% |
+| `0x0021b50c` | `loadData(char*, char**)` | 12 | 100.0% |
+| `0x0028ce48` | `asmClearBuffer(void*, unsigned int)` | 12 | 100.0% |
+| `0x00223f24` | `GetBowFirstSpeed()` | 12 | 100.0% |
+| `0x002a142c` | `SetFogNear` | 12 | 100.0% |
+| `0x0028aec4` | `__bpGetFileNum` | 12 | 100.0% |
+| `0x00282268` | `iOS_clearOkNg()` | 12 | 100.0% |
+| `0x000823c8` | `unzSetOffset` | 12 | 100.0% |
+| `0x00284410` | `Clear_VectorDataBaseObject(VECTOR_DATABASE*)` | 12 | 100.0% |
+| `0x002c9115` | `operator delete(void*)` | 12 | 100.0% |
+| `0x00243a60` | `CreateList(tagLIST_STAFFROLL*, tagSTAFFROLL*)` | 12 | 100.0% |
+| `0x000b9fd4` | `TRACE_Empty(char const*, ...)` | 12 | 100.0% |
+| `0x000b9fb8` | `CTHREAD::RequestResume()` | 12 | 100.0% |
+| `0x00077ab8` | `gzopen` | 12 | 100.0% |
+| `0x001e692c` | `setskilldata_to_ACT(ACT*)` | 12 | 100.0% |
+| `0x0021680c` | `callZingle(int)` | 12 | 100.0% |
+| `0x0020ebb8` | `eventTerminateAnimation(int, int, short, short, short)` | 12 | 100.0% |
+| `0x000b9fac` | `CTHREAD::RequestSuspend()` | 12 | 100.0% |
+| `0x002b2d04` | `SysSE_PlayUI(int)` | 12 | 100.0% |
+| `0x0028afd0` | `__bpGetBinaryData` | 12 | 100.0% |
+| `0x00263f9c` | `ctlnobel_deactive(CTLINFO*)` | 12 | 100.0% |
+| `0x0028afc4` | `__bpGetBinarySize` | 12 | 100.0% |
+| `0x001d8d1c` | `get_itemcommon(unsigned short)` | 12 | 100.0% |
+| `0x00100408` | `Wgetanimpanel(int, SVECTOR*)` | 12 | 100.0% |
+| `0x000ba084` | `Sleep(unsigned int)` | 12 | 100.0% |
+| `0x000d8734` | `getanimpanel(int, SVECTOR*)` | 12 | 100.0% |
+| `0x00077ac4` | `gzopen64` | 12 | 100.0% |
+| `0x002b2cf8` | `SysSE_PlayDef(int)` | 12 | 100.0% |
+| `0x001027b4` | `Whook_wipe()` | 8 | 100.0% |
+| `0x0021037c` | `setLongVector(VECTOR*, int, int, int)` | 8 | 100.0% |
+| `0x002b3444` | `iCloud_Send()` | 8 | 100.0% |
+| `0x00216274` | `checkLoadMusic()` | 8 | 100.0% |
+| `0x00228dc8` | `GetShapePrimPtTopOld()` | 8 | 100.0% |
+| `0x002b36d4` | `Error_FrameMove()` | 8 | 100.0% |
+| `0x0028b500` | `set_SoundOnly_Flg__Fi(int)` | 8 | 100.0% |
+| `0x0028b528` | `getBgmData__FPUsPUs(unsigned short*, unsigned short*)` | 8 | 100.0% |
+| `0x00279f84` | `pspRoutineCheckArithmeticPermission()` | 8 | 100.0% |
+| `0x00245a58` | `getMoviePlayFlg__Fv()` | 8 | 100.0% |
+| `0x0026aee4` | `snpl_jnlocalflg()` | 8 | 100.0% |
+| `0x0026ae24` | `snpl_jnpageflg()` | 8 | 100.0% |
+| `0x0020594c` | `iOS_IsBattleSpeedUp()` | 8 | 100.0% |
+| `0x0008240c` | `zcfree` | 8 | 100.0% |
+| `0x00271424` | `Ssd_GetSeqPlayStatus(SsdSeqRec*)` | 8 | 100.0% |
+| `0x0028b59c` | `CdReadSync` | 8 | 100.0% |
+| `0x002b7a2c` | `GetPanelCursorMode()` | 8 | 100.0% |
+| `0x0028b5f4` | `CdDiskReady` | 8 | 100.0% |
+| `0x0028b5d4` | `CdStatus` | 8 | 100.0% |
+| `0x0028b438` | `sceIoDopen` | 8 | 100.0% |
+| `0x0010fb6c` | `Wcheck_eventtoolmain(int, int)` | 8 | 100.0% |
+| `0x0028b594` | `CdReadFile` | 8 | 100.0% |
+| `0x0028b6f4` | `_FFT_Main()` | 8 | 100.0% |
+| `0x00290e88` | `FntOpen` | 8 | 100.0% |
+| `0x0028cec4` | `SetGraphDebug` | 8 | 100.0% |
+| `0x001024fc` | `Wcopymat(MATRIX*, MATRIX*)` | 8 | 100.0% |
+| `0x0028b488` | `EncSPU2` | 8 | 100.0% |
+| `0x00245814` | `strNextVlc(DECENV*)` | 8 | 100.0% |
+| `0x0028b5a4` | `CdReady` | 8 | 100.0% |
+| `0x00286afc` | `get_vsBattle_bule_trap()` | 8 | 100.0% |
+| `0x002419c4` | `fftCdReset()` | 8 | 100.0% |
+| `0x0028b5dc` | `CdLastCom` | 8 | 100.0% |
+| `0x0020dc5c` | `checkAnimation(unsigned int)` | 8 | 100.0% |
+| `0x000da834` | `copymat(MATRIX*, MATRIX*)` | 8 | 100.0% |
+| `0x0028cf10` | `IsIdleGPU` | 8 | 100.0% |
+| `0x0028b4f8` | `get_SoundOnly_Flg__Fv()` | 8 | 100.0% |
+| `0x0028ced4` | `NextPrim` | 8 | 100.0% |
+| `0x000c8150` | `return_jobdata()` | 8 | 100.0% |
+| `0x00288570` | `Get_AnimList(int)` | 8 | 100.0% |
+| `0x0028b584` | `CdMix` | 8 | 100.0% |
+| `0x00245c04` | `o_WaitCardInfo(int, int)` | 8 | 100.0% |
+| `0x0028b430` | `sceIoDread` | 8 | 100.0% |
+| `0x0028ceb4` | `MargePrim` | 8 | 100.0% |
+| `0x0028b480` | `EncSPU` | 8 | 100.0% |
+| `0x0028b4d8` | `StSetChannel` | 8 | 100.0% |
+| `0x00285f84` | `pspFileManager::hockRead(void*, int)` | 8 | 100.0% |
+| `0x0028b520` | `getToolBgmFlg__Fv()` | 8 | 100.0% |
+| `0x0021bd18` | `s4_killOwnTask(_EffectTCB*)` | 8 | 100.0% |
+| `0x0028cf18` | `GetODE` | 8 | 100.0% |
+| `0x002712a8` | `Ssd_AddWaveData(void*)` | 8 | 100.0% |
+| `0x0028e468` | `CdControlF` | 8 | 100.0% |
+| `0x002ab9e0` | `sceGuSync` | 8 | 100.0% |
+| `0x00280530` | `cSaveFFT::GetMode()` | 8 | 100.0% |
+| `0x0028b55c` | `CdGetSector` | 8 | 100.0% |
+| `0x0028cebc` | `OpenTMD` | 8 | 100.0% |
+| `0x0028b554` | `CdIntstr` | 8 | 100.0% |
+| `0x0028e2dc` | `CdInit` | 8 | 100.0% |
+| `0x0028b428` | `sceIoDclose` | 8 | 100.0% |
+| `0x00286ac8` | `get_netmode()` | 8 | 100.0% |
+| `0x0028b418` | `ScriptCut__Fiii(int, int, int)` | 8 | 100.0% |
+| `0x002884cc` | `getNetBattleJudge()` | 8 | 100.0% |
+| `0x00286ad0` | `get_netmodeadhoc()` | 8 | 100.0% |
+| `0x0028b56c` | `CdDataSync` | 8 | 100.0% |
+| `0x0028b5cc` | `CdReset` | 8 | 100.0% |
+| `0x0028b5bc` | `CdReadyCallback` | 8 | 100.0% |
+| `0x0028ce88` | `GetGraphDebug` | 8 | 100.0% |
+| `0x0028b5b4` | `CdReadCallback` | 8 | 100.0% |
+| `0x00215d60` | `StopCallback` | 8 | 100.0% |
+| `0x001e2b70` | `check_coord(int, int, int)` | 8 | 100.0% |
+| `0x0016f874` | `cfileopen(unsigned char*, unsigned int)` | 8 | 100.0% |
+| `0x000e1110` | `check_eventtoolmain(int, int)` | 8 | 100.0% |
+| `0x0028b4b4` | `StGetNextS` | 8 | 100.0% |
+| `0x001d3598` | `set_playerwork(PENTRY*, unsigned char*)` | 8 | 100.0% |
+| `0x0028b5e4` | `CdLastPos` | 8 | 100.0% |
+| `0x0027b390` | `saveVram(char const*)` | 8 | 100.0% |
+| `0x00286b34` | `net_send` | 8 | 100.0% |
+| `0x0028b564` | `CdGetSector2` | 8 | 100.0% |
+| `0x0028ce80` | `CheckPrim` | 8 | 100.0% |
+| `0x002a0810` | `MulMatrix2` | 8 | 100.0% |
+| `0x002a3114` | `xpMallocErrorFuncSet` | 8 | 100.0% |
+| `0x0028b5fc` | `CdGetDiskType` | 8 | 100.0% |
+| `0x0028b574` | `CdGetToc` | 8 | 100.0% |
+| `0x00290e9c` | `FntFlush` | 8 | 100.0% |
+| `0x00082404` | `zcalloc` | 8 | 100.0% |
+| `0x002b344c` | `iCloud_Receive()` | 8 | 100.0% |
+| `0x001d63fc` | `after_equipchange(BWORK*)` | 8 | 100.0% |
+| `0x00183844` | `CardLoad(unsigned char*, unsigned char*, unsigned long)` | 8 | 100.0% |
+| `0x00244410` | `rolladr_calc(unsigned long, unsigned long)` | 8 | 100.0% |
+| `0x00290e94` | `FntPrint` | 8 | 100.0% |
+| `0x0028ce90` | `GetTimSize` | 8 | 100.0% |
+| `0x0028b4f0` | `DecDCToutCallback` | 8 | 100.0% |
+| `0x00287270` | `GetgTrapCancelResult()` | 8 | 100.0% |
+| `0x001837a8` | `filelseek(int, int, int)` | 8 | 100.0% |
+| `0x0016f87c` | `cfileclose(unsigned int)` | 8 | 100.0% |
+| `0x00286ae0` | `get_main_player()` | 8 | 100.0% |
+| `0x00284694` | `SearchVector(VECTOR_DATABASE*, SVECTOR const*)` | 8 | 100.0% |
+| `0x00101be8` | `Wattackteam_prewait()` | 8 | 100.0% |
+| `0x0028b4e4` | `DecDCTvlc` | 8 | 100.0% |
+| `0x0028ceac` | `Krom2Tim` | 8 | 100.0% |
+| `0x0028b420` | `sceKernelGetGPI()` | 8 | 100.0% |
+| `0x00202fe8` | `get_netTrapLocateModeFlg()` | 8 | 100.0% |
+| `0x000e8094` | `iOS_EventNumberGet()` | 8 | 100.0% |
+| `0x0016f884` | `cfilelseek(int, int, int)` | 8 | 100.0% |
+| `0x0028b470` | `ResetCallback` | 8 | 100.0% |
+| `0x002a0808` | `MulMatrix` | 8 | 100.0% |
+| `0x0028b544` | `CdSearchFile` | 8 | 100.0% |
+| `0x002b3454` | `iCloud_GetSlotCount()` | 8 | 100.0% |
+| `0x00245524` | `movie_loop()` | 8 | 100.0% |
+| `0x00288514` | `getGetItemCount()` | 8 | 100.0% |
+| `0x0015324c` | `return_jobdatafromsmall()` | 8 | 100.0% |
+| `0x0028cf04` | `BreakDraw` | 8 | 100.0% |
+| `0x002712b8` | `Ssd_GetBankWaveSetPtr(short)` | 8 | 100.0% |
+| `0x0028b630` | `exitXpHeap()` | 8 | 100.0% |
+| `0x000d9f2c` | `attackteam_prewait()` | 8 | 100.0% |
+| `0x000b9fc4` | `CTHREAD::SetPriority(int)` | 8 | 100.0% |
+| `0x000b9df0` | `CWORK_MEM::GetAllocSize()` | 8 | 100.0% |
+| `0x0028de74` | `_card_load` | 8 | 100.0% |
+| `0x0028b534` | `getMovieSkipFlg__Fv()` | 8 | 100.0% |
+| `0x0028b4ac` | `StGetNext` | 8 | 100.0% |
+| `0x00241a44` | `vOpn_arzmes_exit()` | 8 | 100.0% |
+| `0x00287268` | `GetgTrapCancelCount()` | 8 | 100.0% |
+| `0x00241930` | `pluge000(short, int, int, int)` | 8 | 100.0% |
+| `0x0028b5ac` | `CdSetDebug` | 8 | 100.0% |
+| `0x002868e4` | `multwindow_keyright_checkexit()` | 8 | 100.0% |
+| `0x0028ce40` | `CAUTOSAVE::GetHeapOffset()` | 8 | 100.0% |
+| `0x0028cf20` | `DrawOTag2` | 8 | 100.0% |
+| `0x0028b604` | `CdReadExec` | 8 | 100.0% |
+| `0x0027131c` | `Ssd_PlayEffect(long)` | 8 | 100.0% |
+| `0x002712fc` | `Ssd_AddMusic(void*)` | 8 | 100.0% |
+| `0x002a26c0` | `PadGetState` | 8 | 100.0% |
+| `0x00286b04` | `get_vsBattle_bule_arithmetic_select()` | 8 | 100.0% |
+| `0x001599a0` | `asmGetGP()` | 8 | 100.0% |
+| `0x0028de84` | `_card_status` | 8 | 100.0% |
+| `0x0028b58c` | `CdRead2` | 8 | 100.0% |
+| `0x0028b5ec` | `CdMode` | 8 | 100.0% |
+| `0x0028de7c` | `_card_read` | 8 | 100.0% |
+| `0x0028ce98` | `IsEndPrim` | 8 | 100.0% |
+| `0x0028b54c` | `CdComstr` | 8 | 100.0% |
+| `0x0028e4b8` | `CdSync` | 8 | 100.0% |
+| `0x0028b5c4` | `CdSyncCallback` | 8 | 100.0% |
+| `0x0026ae84` | `snpl_jnstatflg()` | 8 | 100.0% |
+| `0x00288500` | `getRewardLv()` | 8 | 100.0% |
+| `0x0029ac18` | `GetGraphType` | 8 | 100.0% |
+| `0x0028cecc` | `KanjiFntFlush` | 8 | 100.0% |
+| `0x002815dc` | `test_test_addcolor()` | 8 | 100.0% |
+| `0x0028d434` | `tlMalloc(unsigned int)` | 8 | 100.0% |
+| `0x0028de94` | `nextfile(DIRENTRY*)` | 8 | 100.0% |
+| `0x0028de8c` | `firstfile(char const*, DIRENTRY*)` | 8 | 100.0% |
+| `0x0028b57c` | `CdPlay` | 8 | 100.0% |
+| `0x0028b4d0` | `StGetBackloc` | 8 | 100.0% |
+| `0x000cbd6c` | `CheckTrapCancelCommandWindow()` | 8 | 100.0% |
+| `0x002712d0` | `Ssd_GetStereo()` | 8 | 100.0% |
+| `0x0028ce78` | `ReadTMD` | 8 | 100.0% |
+| `0x0028cea0` | `KanjiFntOpen` | 8 | 100.0% |
+| `0x0028b4a4` | `StFreeRing` | 8 | 100.0% |
+| `0x00286ad8` | `get_parent_child()` | 8 | 100.0% |
+| `0x0028b4bc` | `StNextStatus` | 8 | 100.0% |
+| `0x000b61d4` | `CCOMP_Z_DEC::~CCOMP_Z_DEC()` | 4 | 100.0% |
+| `0x0027129c` | `Ssd_Quit()` | 4 | 100.0% |
+| `0x0028cf34` | `GetDrawOffset` | 4 | 100.0% |
+| `0x0028b540` | `CdFlush` | 4 | 100.0% |
+| `0x001b7ef0` | `CallresetFFT()` | 4 | 100.0% |
+| `0x000cbd74` | `CreateNetStayWindow()` | 4 | 100.0% |
+| `0x00288510` | `Final_CalcMissionPayPoint()` | 4 | 100.0% |
+| `0x002875a4` | `draw_batu(unsigned long*)` | 4 | 100.0% |
+| `0x0028b518` | `setMoviePlayFlg__Fi(int)` | 4 | 100.0% |
+| `0x00271314` | `Ssd_PlaySysEffect(long)` | 4 | 100.0% |
+| `0x0028b4cc` | `StCdInterrupt` | 4 | 100.0% |
+| `0x0028de70` | `_bu_init` | 4 | 100.0% |
+| `0x0029ff94` | `SquareRoot12` | 4 | 100.0% |
+| `0x00286a9c` | `set_nettimer_flag(int, int)` | 4 | 100.0% |
+| `0x0028b498` | `StUnSetRing` | 4 | 100.0% |
+| `0x002c54ac` | `Movie_Uninit()` | 4 | 100.0% |
+| `0x0012b108` | `disp_floateventwindow()` | 4 | 100.0% |
+| `0x00280804` | `hook_win_tail()` | 4 | 100.0% |
+| `0x0028cef8` | `DumpTPage` | 4 | 100.0% |
+| `0x000d8970` | `dispemptywindow()` | 4 | 100.0% |
+| `0x00155708` | `story_faceload()` | 4 | 100.0% |
+| `0x00281640` | `hook_disp_plateorspell(int*)` | 4 | 100.0% |
+| `0x000cbd64` | `CreateTrapCancelCommandWindow()` | 4 | 100.0% |
+| `0x0028b460` | `SpuInit` | 4 | 100.0% |
+| `0x002a3110` | `xpMallocSizeGet` | 4 | 100.0% |
+| `0x0028b46c` | `SetMem` | 4 | 100.0% |
+| `0x0028b510` | `pspMoviePlay__Fv()` | 4 | 100.0% |
+| `0x001019c0` | `LOAD_seekeventfile(int)` | 4 | 100.0% |
+| `0x0028b494` | `StClearRing` | 4 | 100.0% |
+| `0x0021610c` | `iOS_rand()` | 4 | 100.0% |
+| `0x002884c8` | `NetBattleJudge()` | 4 | 100.0% |
+| `0x0028b49c` | `StSetStream` | 4 | 100.0% |
+| `0x002419d0` | `fftCdCancel(CDREC*)` | 4 | 100.0% |
+| `0x002807fc` | `hook_drive_chr(int)` | 4 | 100.0% |
+| `0x000b6584` | `CCRYPT::~CCRYPT()` | 4 | 100.0% |
+| `0x002ab714` | `sceGuClear` | 4 | 100.0% |
+| `0x002b5590` | `Link_Suspend()` | 4 | 100.0% |
+| `0x000feaa4` | `WiOS_chkallocatewindowinit()` | 4 | 100.0% |
+| `0x0028e464` | `CdControlB` | 4 | 100.0% |
+| `0x0027fc2c` | `chk_ucResumeData(unsigned char*, int)` | 4 | 100.0% |
+| `0x002a1038` | `CompMatrixLV` | 4 | 100.0% |
+| `0x000774fc` | `gzoffset` | 4 | 100.0% |
+| `0x0020c5cc` | `myPollhost()` | 4 | 100.0% |
+| `0x002806c0` | `hook_allocate_texture()` | 4 | 100.0% |
+| `0x0020c260` | `fftCdReadCallback()` | 4 | 100.0% |
+| `0x002869f0` | `_pspNetRand(char const*, int)` | 4 | 100.0% |
+| `0x00159920` | `asmKanjiCopy(char*, char*, COPYFIELD*, int)` | 4 | 100.0% |
+| `0x0028cedc` | `CatPrim` | 4 | 100.0% |
+| `0x0028cef0` | `DumpDrawEnv` | 4 | 100.0% |
+| `0x00271304` | `Ssd_DisposeMusic(SsdSeqRec*)` | 4 | 100.0% |
+| `0x00077494` | `gztell` | 4 | 100.0% |
+| `0x00280684` | `hook_musiclod()` | 4 | 100.0% |
+| `0x0028cf30` | `GetDrawArea` | 4 | 100.0% |
+| `0x000ba090` | `SleepM(unsigned int)` | 4 | 100.0% |
+| `0x002ab900` | `sceGuColorFunc` | 4 | 100.0% |
+| `0x002b36b8` | `Boot_Uninit()` | 4 | 100.0% |
+| `0x0028cef4` | `DumpOTag` | 4 | 100.0% |
+| `0x0015991c` | `asmBoxCopy(char*, char*, COPYFIELD*, COPYFIELD*)` | 4 | 100.0% |
+| `0x0020f4f8` | `getCharPrimList(short, Point*, unsigned long*)` | 4 | 100.0% |
+| `0x002a2ff4` | `InitHeap(unsigned long*, unsigned long)` | 4 | 100.0% |
+| `0x001add64` | `unit_dummyfunc()` | 4 | 100.0% |
+| `0x0027b398` | `numa_fileAllocateCD(unsigned long, unsigned long)` | 4 | 100.0% |
+| `0x00176b7c` | `iOSBwork2ChrStts(BWORK*, CHR_STTS*, int)` | 4 | 100.0% |
+| `0x0026c058` | `iOS_debugDispTownCircle(int, int)` | 4 | 100.0% |
+| `0x0028cf2c` | `GetTexWindow` | 4 | 100.0% |
+| `0x0020ce18` | `fileDispose(char*)` | 4 | 100.0% |
+| `0x0020c25c` | `fftCdReadyCallback()` | 4 | 100.0% |
+| `0x00286a98` | `val_letter(int, int, int)` | 4 | 100.0% |
+| `0x0027b678` | `iOS_DEBUG_multiwindow_keyright_hook()` | 4 | 100.0% |
+| `0x0028b464` | `SpuInitHot` | 4 | 100.0% |
+| `0x000c4498` | `attackdebugfunc()` | 4 | 100.0% |
+| `0x002807f8` | `chk_RefLine(int)` | 4 | 100.0% |
+| `0x002b1f38` | `NowLoading_FrameRender()` | 4 | 100.0% |
+| `0x000b63a0` | `CCOMP_Z_ENC::~CCOMP_Z_ENC()` | 4 | 100.0% |
+| `0x0028b4e0` | `DecDCTReset` | 4 | 100.0% |
+| `0x00216818` | `stopZingle(int)` | 4 | 100.0% |
+| `0x00288508` | `CalcRewardLv()` | 4 | 100.0% |
+| `0x0007f384` | `_tr_flush_bits` | 4 | 100.0% |
+| `0x002b5eac` | `Logo_Suspend()` | 4 | 100.0% |
+| `0x00281644` | `hook_code_soundeffect(int)` | 4 | 100.0% |
+| `0x000cbd5c` | `deleteEndModeWindow()` | 4 | 100.0% |
+| `0x0028b4c8` | `StSetMask` | 4 | 100.0% |
+| `0x002712f8` | `Ssd_AddVagPackData(void*)` | 4 | 100.0% |
+| `0x000c4418` | `Adisp_floateventwindow()` | 4 | 100.0% |
+| `0x00225310` | `iOS_CheckPEffect(char const*, int)` | 4 | 100.0% |
+| `0x001a6378` | `iOS_resetCancelDisableAreaForStatusWindow()` | 4 | 100.0% |
+| `0x00100840` | `Winitstatuscphase()` | 4 | 100.0% |
+| `0x00280800` | `hook_fix_bugno_931(int)` | 4 | 100.0% |
+| `0x002a0818` | `SetRotMatrix` | 4 | 100.0% |
+| `0x00280678` | `hook_Debug(char const*)` | 4 | 100.0% |
+| `0x0028cf28` | `GetDrawMode` | 4 | 100.0% |
+| `0x0027b39c` | `numa_fileReadCD(unsigned long, unsigned long, void*)` | 4 | 100.0% |
+| `0x00159a74` | `asmMUL3232(long, long, long, long)` | 4 | 100.0% |
+| `0x002712c0` | `Ssd_AddEffectData(void*)` | 4 | 100.0% |
+| `0x00162044` | `wasmMUL64(long, long, long)` | 4 | 100.0% |
+| `0x00077dc8` | `gzseek` | 4 | 100.0% |
+| `0x00286a94` | `timer_print_screen()` | 4 | 100.0% |
+| `0x002ab888` | `sceGuAlphaFunc` | 4 | 100.0% |
+| `0x00161d9c` | `tDebugBreakTime(int)` | 4 | 100.0% |
+| `0x00290e90` | `FntLoad` | 4 | 100.0% |
+| `0x00101910` | `Wseekpcfile(char*, char*, int, int)` | 4 | 100.0% |
+| `0x00225a64` | `dmyFnc2(_EffectTCB*, _Object*)` | 4 | 100.0% |
+| `0x00280808` | `hook_allSkipTest()` | 4 | 100.0% |
+| `0x00101908` | `Whook_disp_requirement()` | 4 | 100.0% |
+| `0x00286e90` | `rivalCameraWorkProcs()` | 4 | 100.0% |
+| `0x0014b9f8` | `Cdisp_floateventwindow()` | 4 | 100.0% |
+| `0x000e7f0c` | `dmp_tuto(unsigned char*, int)` | 4 | 100.0% |
+| `0x0021681c` | `controlZingle()` | 4 | 100.0% |
+| `0x0028cee4` | `DrawOTagEnv` | 4 | 100.0% |
+| `0x002abd1c` | `sceGuTexFunc` | 4 | 100.0% |
+| `0x00286ae8` | `net_control_ex(void*, void*, int)` | 4 | 100.0% |
+| `0x002884fc` | `setRewardLv(int)` | 4 | 100.0% |
+| `0x00287584` | `load_iconpackdata()` | 4 | 100.0% |
+| `0x00100644` | `Wsend_statuschrno(int)` | 4 | 100.0% |
+| `0x0022a614` | `DumpMemory(int, void*)` | 4 | 100.0% |
+| `0x000cbd50` | `SetTrapNameWindowParam(int, short, int)` | 4 | 100.0% |
+| `0x001f01a8` | `resetActionAnimation(tag_animation*)` | 4 | 100.0% |
+| `0x0028cf00` | `TermPrim` | 4 | 100.0% |
+| `0x00280610` | `iOS_soundDirect(int)` | 4 | 100.0% |
+| `0x0028067c` | `hook_Debug2(char const*)` | 4 | 100.0% |
+| `0x00280680` | `hook_NextEventSet()` | 4 | 100.0% |
+| `0x002b3440` | `Achievement_Unlock(int)` | 4 | 100.0% |
+| `0x002a1438` | `SetFarColor` | 4 | 100.0% |
+| `0x0026ff2c` | `effectdmy()` | 4 | 100.0% |
+| `0x00102128` | `Wevent_init_light()` | 4 | 100.0% |
+| `0x000cbd60` | `SetTrapNameWindowColor(int)` | 4 | 100.0% |
+| `0x0020c258` | `fftDrawSyncCallback()` | 4 | 100.0% |
+| `0x000785e4` | `gzgetc_` | 4 | 100.0% |
+| `0x000cbd54` | `TrapNameWindowManager()` | 4 | 100.0% |
+
+### 612.4 Restante com chamadas já documentadas (79)
+
+| Endereço | Função | Bytes | Cobertura | Chama |
+|---|---|---:|---:|---|
+| `0x000b9da4` | `CWORK_MEM::New(int)` | 48 | 100.0% | `CWORK_MEM::Delete(int)`, `sub_2cdf8c` |
+| `0x0020e560` | `getOffsetAnimationPosition(int)` | 48 | 100.0% | `searchAnimationByID(unsigned short)`, `warningHandler(int)` |
+| `0x0028bf4c` | `_ps_wait()` | 48 | 100.0% | `TE_asmTaskEntry(int)` |
+| `0x00249cc4` | `vEnd_CdReady_Chk()` | 48 | 100.0% | `CdSync` |
+| `0x002b8348` | `Main_IsTitle()` | 48 | 100.0% | `iOS_getV2Icon(V2ICON_DATA)` |
+| `0x00283f50` | `GLIVON_F3(unsigned long*, tagPOLY_F3*, short, unsigned long*)` | 48 | 100.0% | `VectorDataBase(unsigned int)` |
+| `0x00283f80` | `GLIVON_F4(unsigned long*, tagPOLY_F4*, short, unsigned long*)` | 48 | 100.0% | `VectorDataBase(unsigned int)` |
+| `0x0020f874` | `eventWarpEffect(int)` | 44 | 100.0% | `searchAnimationByID(unsigned short)`, `requestTelepoEffect(tag_animation*)` |
+| `0x002a096c` | `ApplyMatrix` | 44 | 100.0% | `_gte_ldv0(SVECTOR*)`, `_gte_SetRotMatrix(MATRIX*)`, `_gte_stlvnl(VECTOR*)`, `_gte_rtv0()` |
+| `0x000f586c` | `attackteam_call(unsigned long*, unsigned long)` | 44 | 100.0% | `event_call(unsigned long*, unsigned long)`, `task_stop(long)`, `pspNetGetErrorCode()` |
+| `0x0015da34` | `iOSCurSameProcs(ActionRequest*)` | 44 | 100.0% | `iOSCurSameOK()` |
+| `0x0020e914` | `eventWeaponEquip(int, int)` | 44 | 100.0% | `searchAnimationByID(unsigned short)` |
+| `0x000d86ac` | `getanimpos2d(int, SVECTOR*)` | 44 | 100.0% | `getAnimationPosition(unsigned int)` |
+| `0x00100380` | `Wgetanimpos2d(int, SVECTOR*)` | 44 | 100.0% | `getAnimationPosition(unsigned int)` |
+| `0x002bef74` | `PIE_OFFSET(unsigned int)` | 44 | 100.0% | `ResumeData_GetHeapOffset()` |
+| `0x002a0a54` | `ApplyMatrixSV` | 44 | 100.0% | `_gte_ldv0(SVECTOR*)`, `_gte_SetRotMatrix(MATRIX*)`, `_gte_stsv(SVECTOR*)`, `_gte_rtv0()` |
+| `0x00284620` | `new_VectorXYZ(VECTOR_DATABASE*, short, short, short)` | 44 | 100.0% | `new_Vector(VECTOR_DATABASE*, SVECTOR const*)` |
+| `0x0020f7c8` | `setCurrentPanel(int)` | 44 | 100.0% | `searchAnimationByBattleID(unsigned short)`, `setActivePanelFromAnimation(tag_animation*)` |
+| `0x0020f5d0` | `getMapIDFromAnimationID(int)` | 40 | 100.0% | `searchAnimationByID(unsigned short)` |
+| `0x002a150c` | `ColorCol` | 40 | 100.0% | `_gte_ldrgb(CVECTOR*)`, `_gte_ldlvl(VECTOR*)`, `_gte_cc()` |
+| `0x002a081c` | `SetMulMatrix` | 40 | 100.0% | `_gte_SetRotMatrix(MATRIX*)`, `MulMatrix0` |
+| `0x002a13c8` | `Intpl` | 40 | 100.0% | `_gte_ldlvl(VECTOR*)`, `_gte_lddp(long)`, `_gte_intpl()` |
+| `0x000940c8` | `_vi_psy_free` | 40 | 100.0% | `sub_714c4` |
+| `0x000940a0` | `_vi_gpsy_free` | 40 | 100.0% | `sub_714c4` |
+| `0x0020f5f8` | `getMapIDFromBattleID(int)` | 40 | 100.0% | `searchAnimationByBattleID(unsigned short)` |
+| `0x0029ff34` | `cln` | 40 | 100.0% | `sub_71b6c`, `__floatsisf`, `__mulsf3`, `__fixsfsi` |
+| `0x00273b10` | `SetSafePanelInRange(int)` | 40 | 100.0% | `SetSafePanel(int, int)` |
+| `0x002a156c` | `DpqColor` | 40 | 100.0% | `_gte_ldrgb(CVECTOR*)`, `_gte_lddp(long)`, `_gte_dpcs()` |
+| `0x001003e4` | `Wgetanimpos3dl(int, long*)` | 36 | 100.0% | `getAnimationPosition(unsigned int)` |
+| `0x000d8710` | `getanimpos3dl(int, long*)` | 36 | 100.0% | `getAnimationPosition(unsigned int)` |
+| `0x0010f99c` | `WiOS_touchNum_addlocalprim2(iOS_CMenuTouchNum*)` | 36 | 100.0% | `Waddlocalprim(tagPOLY_FT4*)` |
+| `0x000dfa70` | `wait_anmend(int)` | 36 | 100.0% | `asmTaskEntry()`, `checkAnimation(unsigned int)` |
+| `0x0021eb8c` | `DoEffect()` | 36 | 100.0% | `DoEffectCameraWork()`, `doEffect_sub()`, `DoPermanentEffect()` |
+| `0x000b9f88` | `CTHREAD::~CTHREAD()` | 36 | 100.0% | `sub_71a58`, `sub_71a64`, `CTHREAD::RequestExit()` |
+| `0x00153518` | `Wtask_wait(long)` | 36 | 100.0% | `wasmTaskEntry()` |
+| `0x00153254` | `task_wait(long)` | 36 | 100.0% | `asmTaskEntry()` |
+| `0x0011dd64` | `extend_windowframe(int, int, RECT16*, int, int)` | 36 | 100.0% | `extend_windowframemain(int, int, RECT16*, int, int, int)` |
+| `0x00108e28` | `Wwait_anmend(int)` | 36 | 100.0% | `wasmTaskEntry()`, `checkAnimation(unsigned int)` |
+| `0x0015b664` | `iOSTchInputCheck()` | 36 | 100.0% | `iOSTchStatusModeGet()`, `iOS_getV2Icon(V2ICON_DATA)` |
+| `0x0011e668` | `Wextend_windowframe(int, int, RECT16*, int, int)` | 36 | 100.0% | `Wextend_windowframemain(int, int, RECT16*, int, int, int)` |
+| `0x0020e720` | `resetAnimationHFlip(int)` | 32 | 100.0% | `searchAnimationByID(unsigned short)` |
+| `0x001ffb30` | `callAnimationSound(tag_animation*, int)` | 32 | 100.0% | `callSoundEffect(int)` |
+| `0x002a1128` | `Square12` | 32 | 100.0% | `_gte_ldlvl(VECTOR*)`, `_gte_stlvnl(VECTOR*)`, `_gte_sqr12()` |
+| `0x0020f6c0` | `startModelAnimation(int, int)` | 32 | 100.0% | `ASHURA_Control(unsigned long, unsigned long, long, long)` |
+| `0x0020f6f4` | `startVRAMAnimation(int, int)` | 32 | 100.0% | `ASHURA_Control(unsigned long, unsigned long, long, long)` |
+| `0x002044e0` | `iOSpreCommandInit()` | 32 | 100.0% | `searchCurrentAnimation()`, `setActivePanelFromAnimation(tag_animation*)` |
+| `0x002a0a80` | `ApplyRotMatrix` | 32 | 100.0% | `_gte_ldv0(SVECTOR*)`, `_gte_stlvnl(VECTOR*)`, `_gte_rtv0()` |
+| `0x001d98a8` | `get_shape2_plus(BWORK*, unsigned char*)` | 32 | 100.0% | `get_shape2(BWORK*, unsigned char*)` |
+| `0x002a1108` | `Square0` | 32 | 100.0% | `_gte_ldlvl(VECTOR*)`, `_gte_stlvnl(VECTOR*)`, `_gte_sqr0()` |
+| `0x0020e694` | `checkAnimationExist(int)` | 28 | 100.0% | `searchAnimationByID(unsigned short)` |
+| `0x00202ee0` | `isInputEnable()` | 28 | 100.0% | `searchCurrentAnimation()` |
+| `0x002a1534` | `LightColor` | 28 | 100.0% | `_gte_ldlvl(VECTOR*)`, `_gte_lc()` |
+| `0x00271324` | `Ssd_PlayEffects01(long, long)` | 28 | 100.0% | `SE_Play(int)` |
+| `0x000daae8` | `hook_wipe()` | 28 | 100.0% | `wait_overlay(int)`, `settaskkind(int)` |
+| `0x002a1550` | `LocalLight` | 28 | 100.0% | `_gte_ldv0(SVECTOR*)`, `_gte_ll()` |
+| `0x00279f68` | `JudgeTimeOut()` | 28 | 100.0% | `VSync` |
+| `0x002bf008` | `chkSeDouble()` | 24 | 100.0% | `iOS_getV2Icon(V2ICON_DATA)` |
+| `0x000b9d8c` | `CWORK_MEM::~CWORK_MEM()` | 24 | 100.0% | `CWORK_MEM::Delete(int)` |
+| `0x00245a40` | `strKickCD(CdlLOC*)` | 24 | 100.0% | `CdRead2` |
+| `0x0021b4f4` | `largeFileRead(long, char*, unsigned long)` | 24 | 100.0% | `system_error(int, int)` |
+| `0x00228c44` | `CreateObjectWithTableWithParentData(short, int, int, int, _Object*)` | 24 | 100.0% | `system_error(int, int)` |
+| `0x0021c214` | `dmyFnc(_EffectTCB*)` | 24 | 100.0% | `system_error(int, int)` |
+| `0x002160f4` | `ps_main()` | 24 | 100.0% | `InitializeAll()`, `PadStop`, `mainLoop()` |
+| `0x001a9228` | `GetItemPrice(short)` | 24 | 100.0% | `pspItemGetCommonData` |
+| `0x0020ea7c` | `loadNewAnimation()` | 20 | 100.0% | `entryAnimations()` |
+| `0x00245b20` | `o_WaitCardEvent()` | 20 | 100.0% | `o_GetCardEvent()` |
+| `0x0029ff98` | `SquareRoot0` | 20 | 100.0% | `sub_719f8`, `__floatsisf`, `__fixsfsi` |
+| `0x000cbc28` | `TrapWindow_Taskchk(int)` | 20 | 100.0% | `task_status(long)` |
+| `0x001a9240` | `GetItemSellPrice(short)` | 20 | 100.0% | `GetItemPrice(short)` |
+| `0x0014bec8` | `disp_requirement()` | 20 | 100.0% | `task_wait(long)` |
+| `0x0020f410` | `eventEffectWait()` | 20 | 100.0% | `LoadEffect()` |
+| `0x0010f110` | `Wattackteam_call(unsigned long*, unsigned long)` | 20 | 100.0% | `Wevent_call(unsigned long*, unsigned long)` |
+| `0x0028bf3c` | `TE_dummy()` | 16 | 100.0% | `TE_asmTaskEntry(int)` |
+| `0x0012b11c` | `disp_abilitywindow()` | 16 | 100.0% | `asmTaskEntry()` |
+| `0x000c442c` | `Adisp_abilitywindow()` | 16 | 100.0% | `asmTaskEntry()` |
+| `0x000d0ddc` | `Ddisp_abilitywindow()` | 16 | 100.0% | `asmTaskEntry()` |
+| `0x0014ba0c` | `Cdisp_abilitywindow()` | 16 | 100.0% | `asmTaskEntry()` |
+| `0x00245b68` | `o_CardInit()` | 16 | 100.0% | `o_ClearCardEvent()` |
+| `0x002a1028` | `CompMatrix` | 16 | 100.0% | `MulMatrix0` |
+
+**Status CSV**: `read_structural` para as 500 (identidade e call-graph confirmados via checkpoint; nenhuma teve blocos lidos instrução a instrução).
