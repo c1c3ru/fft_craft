@@ -76,7 +76,7 @@ def render_triage(rows):
     lines += ["", "Approval requires instruction-level control-flow evidence, "
               "input/output invariants, and ideally differential tests or execution traces. "
               "Do not change needs_review solely from these summaries.", ""]
-    return "\\n".join(lines)
+    return "\n".join(lines)
 
 
 def main():
