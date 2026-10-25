@@ -1,0 +1,15 @@
+{
+  "address": "000d8734",
+  "name": "getanimpanel(int, SVECTOR*)",
+  "size": 12,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 0,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [],
+  "log": "=== jtable.py: 0xd8734..0xd8740 (12 bytes) ===\ncoverage: 3 of ~3 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 0 distinct --\n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
