@@ -6,22 +6,22 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 |---|---:|
 | Inventory total | 6,455 functions / 1,837,392 bytes |
 | Previously analyzed in CSV | 3,373 functions / 1,513,492 bytes |
-| JSON checkpoints (all statuses) | 933 |
-| Newly accepted structurally | 515 functions / 128,308 bytes |
-| Needs review | 418 functions |
+| JSON checkpoints (all statuses) | 1,033 |
+| Newly accepted structurally | 576 functions / 133,404 bytes |
+| Needs review | 457 functions |
 | Core targets in inventory | 4,642 functions |
-| Core targets checkpointed | 830 functions |
-| Core accepted structurally | 432 functions |
-| Core needs review | 398 functions |
-| Core not yet checkpointed | 1,525 functions |
-| Not yet checkpointed | 2,129 functions / 89,784 bytes |
+| Core targets checkpointed | 930 functions |
+| Core accepted structurally | 493 functions |
+| Core needs review | 437 functions |
+| Core not yet checkpointed | 1,425 functions |
+| Not yet checkpointed | 2,029 functions / 81,444 bytes |
 
 ## Checkpoint status
 
 | Status | Functions |
 |---|---:|
-| auto_structural | 515 |
-| needs_review | 418 |
+| auto_structural | 576 |
+| needs_review | 457 |
 
 ## Review queue (largest first)
 
@@ -445,6 +445,45 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | `0018e358` | esys_warning(int, int) (needs_review) | 92 | 86.96 | 0 | 0 |
 | `00156b90` | hook_tuto(int) (needs_review) | 92 | 86.96 | 0 | 0 |
 | `00155d14` | reactive_worldwindow() (needs_review) | 92 | 91.3 | 0 | 0 |
+| `002b2e48` | Jingle_Stop(int) (needs_review) | 88 | 86.36 | 0 | 0 |
+| `002b2290` | GX_ApplyVertexScaling(int) (needs_review) | 88 | 90.91 | 0 | 0 |
+| `002ab908` | sceGuStart (needs_review) | 88 | 90.91 | 0 | 0 |
+| `0028b844` | uninitTaskEmu() (needs_review) | 88 | 90.91 | 0 | 0 |
+| `00270b04` | pagenext_cursor(PAGEWININFO*) (needs_review) | 88 | 90.91 | 0 | 0 |
+| `0026b31c` | snplread_parcalc() (needs_review) | 88 | 90.91 | 0 | 0 |
+| `00253ec8` | wldctl_deactive() (needs_review) | 88 | 81.82 | 0 | 0 |
+| `00253a10` | wldctl_active() (needs_review) | 88 | 81.82 | 0 | 0 |
+| `0021b518` | LoadOverlayBin(long) (needs_review) | 88 | 86.36 | 0 | 0 |
+| `001ca9b8` | reset_toumei_afterskill(BWORK*) (needs_review) | 88 | 90.91 | 0 | 0 |
+| `002b5e58` | Logo_Uninit() (needs_review) | 84 | 90.48 | 0 | 0 |
+| `00289fac` | pspLoadSystemFile() (needs_review) | 84 | 90.48 | 0 | 0 |
+| `00269db0` | snpl_mfadeout() (needs_review) | 84 | 90.48 | 0 | 0 |
+| `00265f84` | iOSSDNovelBackLogCheck() (needs_review) | 84 | 90.48 | 0 | 0 |
+| `00255758` | iOSHelpCheck() (needs_review) | 84 | 90.48 | 0 | 0 |
+| `00245de4` | vOpn_ctlprog() (needs_review) | 84 | 80.95 | 0 | 0 |
+| `001eed30` | getShapeAddress(unsigned short) (needs_review) | 84 | 85.71 | 0 | 0 |
+| `0019e134` | SuccessEmploy() (needs_review) | 84 | 90.48 | 0 | 0 |
+| `0019d7e8` | DrawUnits() (needs_review) | 84 | 85.71 | 0 | 0 |
+| `001531f8` | edit_smallpacket() (needs_review) | 84 | 90.48 | 0 | 0 |
+| `0010dea4` | Wexport_localpad(long*) (needs_review) | 84 | 90.48 | 0 | 0 |
+| `000e2fbc` | statuskanjiprintadv(int, char*, COPYFIELD*) (needs_review) | 84 | 90.48 | 0 | 0 |
+| `000e0568` | export_localpad(long*) (needs_review) | 84 | 90.48 | 0 | 0 |
+| `0026ae8c` | snpl_jlocalflg_sub(int) (needs_review) | 80 | 90.0 | 0 | 0 |
+| `0026ae2c` | snpl_jstatflg_sub(int) (needs_review) | 80 | 90.0 | 0 | 0 |
+| `00269f34` | snpl_mesput2() (needs_review) | 80 | 90.0 | 0 | 0 |
+| `00269820` | snpl_picclr() (needs_review) | 80 | 90.0 | 0 | 0 |
+| `0025396c` | ctlmap_deactive(CTLINFO*) (needs_review) | 80 | 85.0 | 0 | 0 |
+| `00249ec4` | vEnd_dataload() (needs_review) | 80 | 90.0 | 0 | 0 |
+| `00243464` | fRoll_bkput(short*) (needs_review) | 80 | 90.0 | 0 | 0 |
+| `00228e98` | GetShapePrim(int) (needs_review) | 80 | 85.0 | 0 | 0 |
+| `00221f14` | RequestReboundEffect() (needs_review) | 80 | 90.0 | 0 | 0 |
+| `001fce04` | setActivePanelFromAnimation(tag_animation*) (needs_review) | 80 | 85.0 | 0 | 0 |
+| `0015a60c` | siOS_TCurPosGet(unsigned int, int) (needs_review) | 80 | 90.0 | 0 | 0 |
+| `00100500` | Wmakemessagepacket(char*) (needs_review) | 80 | 90.0 | 0 | 0 |
+| `000e2b78` | statuskanjiprint(int, char*, COPYFIELD*) (needs_review) | 80 | 90.0 | 0 | 0 |
+| `000d8830` | makemessagepacket(char*) (needs_review) | 80 | 90.0 | 0 | 0 |
+| `000e3010` | statuskanjiprintwithptr(char*, COPYFIELD*, char*) (needs_review) | 76 | 89.47 | 0 | 0 |
+| `000d87e4` | export_localstatus(char*, char*, char*) (needs_review) | 76 | 94.74 | 0 | 0 |
 
 > Structural acceptance does not establish semantic equivalence.
 > Counts distinguish historical CSV statuses, new accepted checkpoints, and review cases.

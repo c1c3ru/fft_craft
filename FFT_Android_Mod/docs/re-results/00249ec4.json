@@ -1,0 +1,19 @@
+{
+  "address": "00249ec4",
+  "name": "vEnd_dataload()",
+  "size": 80,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 90.0,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "249bcc",
+    "249c44"
+  ],
+  "log": "=== jtable.py: 0x249ec4..0x249f14 (80 bytes) ===\ncoverage: 18 of ~20 instruction slots (90%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x249bcc x1   vOpn_loadwait() \n  0x249c44 x1   numa_vOpn_CdRead(CDREC*, unsigned long, unsigned long, unsigned long, unsigned long*) \n\n-- branches: 1 total, 1 backward (loop candidates) --\n",
+  "review_attempts": 1,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

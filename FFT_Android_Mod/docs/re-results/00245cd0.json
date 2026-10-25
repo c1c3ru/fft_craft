@@ -1,0 +1,19 @@
+{
+  "address": "00245cd0",
+  "name": "o_CardCheck()",
+  "size": 84,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "245a60",
+    "245b68",
+    "245c78"
+  ],
+  "log": "=== jtable.py: 0x245cd0..0x245d24 (84 bytes) ===\ncoverage: 21 of ~21 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x245a60 x2   o_SelectCard(int) \n  0x245b68 x1   o_CardInit() \n  0x245c78 x2   o_Wait_GetCardState(int) \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

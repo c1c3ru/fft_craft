@@ -1,0 +1,19 @@
+{
+  "address": "002bb53c",
+  "name": "Main_Suspend()",
+  "size": 80,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 95.0,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2b7ccc",
+    "b9f44",
+    "ba084"
+  ],
+  "log": "=== jtable.py: 0x2bb53c..0x2bb58c (80 bytes) ===\ncoverage: 19 of ~20 instruction slots (95%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0xb9f44 x1   CTHREAD::Sync() \n  0xba084 x1   Sleep(unsigned int) \n  0x2b7ccc x1   iOS_getV2Icon(V2ICON_DATA) \n\n-- branches: 4 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

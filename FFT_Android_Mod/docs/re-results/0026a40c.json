@@ -1,0 +1,17 @@
+{
+  "address": "0026a40c",
+  "name": "snpl_volchg()",
+  "size": 80,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 95.0,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2712e0"
+  ],
+  "log": "=== jtable.py: 0x26a40c..0x26a45c (80 bytes) ===\ncoverage: 19 of ~20 instruction slots (95%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x2712e0 x1   Ssd_SetSpuVolume(short, short) \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

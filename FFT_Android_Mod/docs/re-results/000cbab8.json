@@ -14,7 +14,7 @@
     "153470"
   ],
   "log": "=== jtable.py: 0xcbab8..0xcbb1c (100 bytes) ===\ncoverage: 23 of ~25 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x1532c0 x1   task_create(long, char*) \n  0x153450 x1   task_status(long) \n  0x153470 x1   send_taskparamater(long, long, long, long) \n\n-- branches: 2 total, 0 backward (loop candidates) --\n",
-  "review_attempts": 1,
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

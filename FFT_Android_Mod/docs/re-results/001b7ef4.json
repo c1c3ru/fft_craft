@@ -14,7 +14,7 @@
     "28e5e0"
   ],
   "log": "=== jtable.py: 0x1b7ef4..0x1b7f68 (116 bytes) ===\ncoverage: 27 of ~29 instruction slots (93%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x18370c x1   CardEventClose() \n  0x1b7ef0 x1   CallresetFFT() \n  0x28e5e0 x1   pspNetPadRead \n\n-- branches: 3 total, 1 backward (loop candidates) --\n",
-  "review_attempts": 1,
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }
