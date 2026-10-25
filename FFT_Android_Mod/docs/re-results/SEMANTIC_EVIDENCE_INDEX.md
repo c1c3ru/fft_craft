@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **552/1258** pending functions.
+Evidence collected: **560/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -563,3 +563,11 @@ These reports do not constitute semantic verification.
 | `001b7bf0` | MenuSelVerticalWithSndDirect(unsigned short, unsigned char, int, int) | [Evidence](semantic-evidence/001b7bf0.md) |
 | `001c7178` | SelectWindowClutEx(int, int) | [Evidence](semantic-evidence/001c7178.md) |
 | `001ca97c` | overlayMonomaneStack() | [Evidence](semantic-evidence/001ca97c.md) |
+| `001d3d5c` | get_active_unit() | [Evidence](semantic-evidence/001d3d5c.md) |
+| `00213e0c` | stopColorRotation(unsigned int) | [Evidence](semantic-evidence/00213e0c.md) |
+| `002431b4` | fRoll_fadein(short*) | [Evidence](semantic-evidence/002431b4.md) |
+| `002431f0` | fRoll_fadeout(short*) | [Evidence](semantic-evidence/002431f0.md) |
+| `00249bcc` | vOpn_loadwait() | [Evidence](semantic-evidence/00249bcc.md) |
+| `002819cc` | iOS_v2menuInit() | [Evidence](semantic-evidence/002819cc.md) |
+| `00284784` | ColorVectorDataBase(unsigned int) | [Evidence](semantic-evidence/00284784.md) |
+| `00289844` | pspClearSaveData() | [Evidence](semantic-evidence/00289844.md) |
