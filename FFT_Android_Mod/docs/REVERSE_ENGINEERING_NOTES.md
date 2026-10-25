@@ -18479,3 +18479,307 @@ lida).
 algoritmo de concatenação/soma + bubble-sort + remapeamento
 confirmado; só o significado semântico exato das 3 constantes de
 remapeação fica como lacuna anotada).
+
+## 575. `event_status_set(unsigned short, unsigned short)` — variante não-`wasm` de `Wevent_status_set` (§230), mesmo propósito via primitivos `asm`/task puro (2026-10-25, Fase 3, septuagésimo nono lote, revisão semântica sobre checkpoint do CI)
+
+`event_status_set(unsigned short, unsigned short)` (`0xdf864`, 524 B)
+— checkpoint do pipeline automatizado (`docs/re-results/000df864.json`,
+não reexecutado nesta sessão): 122 de ~131 instruções possíveis
+(93%), sem tabela de salto; 17 branches, 10 de retrocesso. 9 `bl`
+distintos, já resolvidos por nome no checkpoint: `task_wait(long)`
+(×2), `asm_function(...)` (×2, primitivo genérico de task "asm" — par
+exato do `wasm_function` da seção 230, só sem o prefixo "w"),
+`get_bwp(int)`, `search_controlID(int,int*)` e
+**`getBattleWorkIDFromAnimation(unsigned int)`** (×1 cada) — mais 4
+locais sem símbolo dinâmico (`sub_d6828`, `sub_dc2a4`, `sub_dd678`,
+`sub_df45c`).
+
+Esse catálogo de chamadas é **idêntico em propósito** ao da §230
+(`Wevent_status_set`, 1.540 B, 96% cob., mesma assinatura de 2
+parâmetros `unsigned short`): ambas ligam o status de um evento ao ID
+de trabalho de batalha (`BWORK`) resolvido a partir de uma animação,
+via `get_bwp`/`search_controlID`/`getBattleWorkIDFromAnimation`. A
+diferença é só a camada de task usada — `Wevent_status_set` roda no
+contexto `wasm` (`Wread_eventflag`/`Wtask_wait`/`wasm_function`),
+enquanto esta função usa a camada de task "pura" sem o prefixo W
+(`task_wait`/`asm_function`), explicando por que é ~1/3 do tamanho
+(menos branches de sincronização/estado de task). Confirma mais uma
+vez o padrão já estabelecido de duplicação paralela W/não-W do mesmo
+subsistema (ver `mesputmain`/`Wmesputmain`, §37, e os primitivos
+`asmGet*`/`wasmGet*` citados na §561/568).
+
+Os 4 locais sem símbolo não foram resolvidos nem lidos byte a byte —
+ficam como pista para fechar o par por completo numa iteração futura.
+
+**Status CSV: `read_structural`** (call-graph e controle de fluxo
+mapeados via checkpoint + cruzamento confirmado contra a §230 já
+lida; os 4 blocos locais sem símbolo não foram traçados instrução a
+instrução).
+
+## 576. `GetNearestUnit(int)` — busca de alvo mais próximo pro núcleo de decisão de IA, confirma `GetDistance`/`GetHightDistance`/`IsNullUnit`/`IsNeedlessToFear` como a cadeia real de filtro (2026-10-25, Fase 3, septuagésimo nono lote, revisão semântica sobre checkpoint de CI)
+
+`GetNearestUnit(int)` (`0x27207c`, 472 B) — checkpoint do pipeline
+automatizado (`docs/re-results/0027207c.json`, não reexecutado nesta
+sessão): 92% de cobertura (109/118 slots), 1 tabela de salto resolvida
+(`guard cmp @0x272164, dispatch @0x272168`: 6 casos, 5 handlers
+distintos — dois casos convergem no mesmo handler em `0x2720f0`), 23
+branches dos quais **19 de retrocesso** (fortemente dominado por loop,
+consistente com uma varredura de todas as unidades de batalha). 4
+`bl` distintos: `GetDistance(BWORK*, BWORK*)` (×2),
+`GetHightDistance(unsigned char*, BWORK*)` (×1), `IsNullUnit(int)`
+(×1) e `IsNeedlessToFear(int)` (×1) — nenhum dos quatro tinha seção
+própria antes, todos eram só `mentioned_unverified`.
+
+A função já era citada por nome em dois pontos-chave do cluster de IA
+de batalha já fechado: na seção 150 (`ForAutoCommand`, núcleo de
+decisão de IA/auto-batalha, que lista `GetNearestUnit` entre as
+funções que alimenta) e na seção 517 (`DattoNoGotokuNigeyoRoutine`,
+handler de fuga "foge como lebre", que a chama diretamente junto de
+`SetSafePanel`/`SetMoveAreaSafePanelOnly`/`SetThresholdDoNothing`).
+Essas duas citações, mais o catálogo de `bl` agora resolvido, fecham
+o quadro: `GetNearestUnit(int)` percorre as unidades candidatas (o
+parâmetro `int` provavelmente seleciona o time/filtro-base, mesmo
+padrão de `SetBaseTargetGroup(int,int)` citado ao lado em §150),
+descarta unidades nulas/inválidas via `IsNullUnit`, calcula distância
+planar e de altura via `GetDistance`/`GetHightDistance` (par exato já
+usado em outras rotinas de alcance), e usa `IsNeedlessToFear` como um
+filtro adicional — provavelmente pra ignorar unidades que não
+representam ameaça real ao decidir "o que está mais perto" pra IA de
+fuga, explicando por que `DattoNoGotokuNigeyoRoutine` precisa
+exatamente desta função antes de escolher painel seguro. A tabela de
+salto (6 casos/5 handlers) é consistente com um `switch` sobre tipo de
+alvo ou critério de distância dentro do loop principal, mas os corpos
+dos 5 handlers e do loop não foram lidos instrução a instrução.
+
+**Conexão**: fecha, junto com §150/§517/§573, o ciclo completo
+"decidir fugir → achar unidade mais próxima/ameaça → restringir a
+painel seguro" da IA de combate. `GetDistance`, `GetHightDistance`,
+`IsNullUnit` e `IsNeedlessToFear` ficam como pistas diretas pra
+próxima iteração (nenhuma tem seção própria ainda).
+
+**Status CSV: `read_structural`** (call-graph + tabela de salto
+resolvidos e cruzados com dois sistemas já documentados; corpo dos 5
+handlers e do loop principal não lido byte a byte).
+
+## 577. `houkoku_okng(CTLINFO*)` — handler de confirmação Sim/Não (`OkNg`) do controlador de mensagem de relatório `ctlhoukmes_main` (2026-10-25, Fase 3, septuagésimo nono lote, revisão semântica sobre checkpoint do CI)
+
+`houkoku_okng(CTLINFO*)` (`0x25a228`, 508 B) — checkpoint do
+pipeline automatizado (`docs/re-results/0025a228.json`): 119 de ~127
+instruções possíveis (94%), 0 tabelas de salto, 10 branches/2 de
+retrocesso. 9 `bl` distintos, 12 chamadas, todos já resolvidos por
+nome pelo próprio `jtable.py`: `Wsend_taskparamater(long,long,long,long)`,
+`wldctl_active()`, `iOS_add_anmpac_max(int)` (×2), `sound_request(int)`
+(×2), `iOS_CMenuTouch::setDispAssist(int)`, `iOS_setLockInput(unsigned char)`,
+`iOS_clearOkNg()` (×2), `iOS_getV2Icon(V2ICON_DATA)`,
+`iOS_setV2Icon(V2ICON_DATA, int)`.
+
+Vizinha de endereço direta de `ctlhoukmes_init(int)` (`0x25a0f0`, ver
+§580 abaixo) e logo antes de `ctlhoukmes_main(CTLINFO*)` (`0x25a908`,
+seção 117) — o controlador real da mensagem de "relatório" (`houkoku`
+= 報告 "relatório") em campo, cuja tabela de 101 casos já confirma
+`houkokumes_select`/`houkoku_mesput`/`yokoyari_mesput` como os
+handlers de fase mais quentes. `houkoku_okng` é a contraparte Sim/Não:
+chama `iOS_clearOkNg()` duas vezes (fecha o widget de diálogo
+compartilhado `iOS_dispOkNg`/`iOS_clearOkNg`, já confirmado nas
+seções 42/56 como o mesmo popup de confirmação usado em save/load e
+nomeação de unidade) sem nunca chamar `iOS_dispOkNg` — esta função
+assume que o diálogo já foi aberto por `ctlhoukmes_main` antes da
+transição de fase, e só trata a leitura do resultado + encerramento.
+`wldctl_active()` (predicado de contexto "estou no controlador de
+mapa mundi?", já visto como guarda cross-cutting em várias seções)
+sugere um branch de comportamento diferente quando o relatório
+aparece vindo do mapa mundi vs. de dentro de uma cena/batalha.
+`iOS_add_anmpac_max`/`sound_request` (efeito sonoro de confirmação) e
+`iOS_setLockInput` (trava input durante a transição) completam um
+padrão de "fechar popup + tocar som + travar input + notificar task
+via `Wsend_taskparamater`" idêntico ao fim de outros handlers de
+confirmação já documentados. `iOS_getV2Icon`/`iOS_setV2Icon` são
+prováveis leitura/atualização do ícone do próprio widget de diálogo.
+
+Sem leitura instrução a instrução dos blocos (não há tabela de salto
+para ancorar a descrição por caso, e o catálogo de `bl` foi
+suficiente para a identificação).
+
+**Status CSV: `read_structural`.**
+
+## 578. `TE_asmTaskEntry(int)` — ponto de entrada de um terceiro sistema de task, nunca antes documentado: o "Task Engine" (`TE_`) sincronizado por VSync (2026-10-25, Fase 3, septuagésimo nono lote, revisão semântica sobre checkpoint do CI)
+
+`TE_asmTaskEntry(int)` (`0x28bb88`, 504 B, 91% cobertura via
+checkpoint do CI, 0 tabela de salto, 17 branches/11 de retrocesso, 8
+`bl` distintos) revela um **terceiro namespace de sistema de task** no
+binário, distinto dos dois já documentados (o genérico
+`task_create/start/stop/status`, e o "wasm"
+`Wtask_create/Wtask_status/Wsend_taskparamater`, citado em dezenas de
+seções do framework `ctl*_main`). O prefixo `TE_` (Task Engine) tem
+oito irmãos no inventário, **todos ainda `unread`**: `TE_VSync(int)`,
+`TE_task_start/stop(long)`, `TE_is_task_end(long)`,
+`TE_task_get_no()`, `TE_task_killmyself()`, `TE_setTaskType(int)`,
+`TE_dummy()`.
+
+Catálogo de `bl`: três helpers locais sem símbolo dinâmico
+(`sub_71b0c` ×2, `sub_71b18` ×3, `sub_71b3c` ×2 — mesma faixa de
+endereço `0x71bxx` usada por primitivas de baixo nível em outras
+famílias, prováveis operações do interpretador bytecode/"asm" que dá
+nome à função); `Sleep(unsigned int)` ×3 (yield/espera cooperativa);
+`task_status(long)` ×1 (sistema genérico) **e** `Wtask_status(long)`
+×1 (sistema "wasm") na mesma função — `TE_asmTaskEntry` é um **ponto
+de ponte** que consulta os dois outros sistemas de task já
+conhecidos; `TE_task_get_no()` ×1 (consulta o próprio slot/id dentro
+do Task Engine); e **`__xpLibgpuDrawCallBack(int)`** ×1 — confirma,
+junto com o nome `TE_VSync`, que este terceiro sistema é **disparado
+pelo callback de desenho da GPU (VSync real da PS1/`xpLibgpu`)**, não
+por polling livre como os outros dois.
+
+Conexão: abre uma ponta nova — não há seção anterior sobre `TE_*`.
+Trabalho futuro de maior valor: ler os 7 irmãos pequenos (20–124 B,
+prováveis triviais) e, principalmente, entender o que o interpretador
+"asm" (`sub_71b0c/71b18/71b3c`) realmente executa — é provavelmente o
+alvo real por trás do nome "asmTaskEntry", prioridade mais alta que
+este wrapper de entrada.
+
+Não houve rastreamento de lógica de bloco individual (só grafo de
+chamadas via checkpoint do CI + cross-reference textual).
+
+**Status CSV: `read_structural`.**
+
+## 579. `EnvSE_Play(int)` — dispatcher de 24 casos pra efeitos sonoros ambientais, liga `CFILE_DAT` (contêiner de asset empacotado) a `CSOUND_IF::Load/Play` (2026-10-25, Fase 3, septuagésimo nono lote, revisão semântica sobre checkpoint do CI)
+
+`EnvSE_Play(int)` (`0x2b2448`, 508 B) — checkpoint do CI
+(`re-results/002b2448.json`): 77% de cobertura (98/127 slots), **1
+tabela de salto resolvida** (guarda `cmp`@`0x2b2474`,
+despacho@`0x2b2478`: 24 casos, só **10 handlers distintos** — a
+maioria dos 24 casos colapsa no mesmo handler default em `0x2b25a0`,
+com uns 8 casos específicos desviando pra blocos próprios em
+`0x2b24e0`/`0x2b25a8`/`0x2b25bc`/`0x2b25cc`/`0x2b25dc`/`0x2b25f0`/
+`0x2b2604`/`0x2b2614`/`0x2b2624`). 9 branches, 8 de retrocesso —
+indício de um laço (provavelmente por canal de som ou por tentativa
+de retry), não rastreado byte a byte.
+
+7 `bl` distintos, todos já documentados em seções anteriores:
+- `CFFT_STATE::GetParam(int)` (`0x28c320`, 1×) — accessor trivial já
+  fechado na seção 22 (`*(int*)(this+0x38+id*4)`); aqui provavelmente
+  lê um parâmetro de estado global (volume/modo) antes de decidir
+  tocar.
+- `CFILE_DAT::Unload()`, `GetBuffer(int)`, `GetSize(int)`,
+  `Load(int,int,int)` (`0xb6a28`/`0xb6c70`/`0xb6cd0`/`0xb6cd8`, 1×
+  cada) — a API do contêiner de asset empacotado já referenciada na
+  seção 7.x (o mesmo `CFILE_DAT` cujo `Decrypt` foi confirmado código
+  morto). Aqui é usado pro caso real: carregar o blob de dados da
+  amostra de som ambiental a partir do pacote, sem decriptação.
+- `CSOUND_IF::Load(int,char*,uchar*,uint,uint,int,int,int,int,int,int)`
+  e `CSOUND_IF::Play(int,int,int,int,uchar)` (`0xba9c8`/`0xbad78`, 1×
+  cada) — a API real do mixer de áudio, já com pseudocódigo completo
+  nas seções 16.2/16.3 (`Load` despacha por formato PCM/OGG; `Play`
+  seta estado de canal e inicia fade).
+
+**Conclusão**: `EnvSE_Play(int)` é a função de entrada do subsistema
+de "efeito sonoro ambiental" (nome nunca visto antes no projeto —
+primeira menção de "EnvSE") — recebe um ID, usa o switch de 24 casos
+pra resolver qual slot/asset de áudio ambiental carregar via
+`CFILE_DAT`, e entrega o buffer resultante pra `CSOUND_IF::Load`+
+`Play` tocar no canal de mixagem real já documentado. Fecha o lado
+"ambiente" da trinca de camadas de áudio do motor (música streaming
+Ogg via Tremor, §17.x; efeitos via `CSOUND_IF`, §16.x; agora "EnvSE"
+como terceira categoria, selecionada por ID em vez de ser chamada
+música/SE direta).
+
+Como a cobertura automática ficou em 77% (alguns blocos do switch,
+principalmente o laço de 8 branches de retrocesso, não foram
+individualmente rastreados) e não houve leitura instrução a instrução
+dos 10 handlers do switch, isso é um passe estrutural, não leitura
+completa.
+
+**Status CSV: `read_structural`.**
+
+## 580. Grab-bag de 14 funções `ctl*_init` — testado e refutado: NÃO é família duplicada (Jaccard 0–0,15 contra `ctlworkinginf_init`), cada tela tem setup genuinamente distinto (2026-10-25, Fase 3, octogésimo lote)
+
+**Metodologia nova**: antes de ler individualmente, testamos a
+hipótese de fechamento em lote por `family_sim.py` — comparamos os 14
+candidatos abaixo contra `ctlworkinginf_init` (`0x2514c4`, 776 B, já
+`read_structural`, §384), a referência mais próxima em tamanho/papel
+("tela de 1 ação" dentro do framework `ctl*_init/active/main/deactive`
+já confirmado nas seções 87/92/96/117/314/339/384). **Resultado:
+Jaccard entre 0,00 e 0,15 em todos os 14** — bem abaixo do limiar de
+0,90 exigido pelo próprio `family_sim.py` pra "CONFIRMED-BY-SIMILARITY".
+**Conclusão prática**: diferente da família `Mdl*` (§101, fechada em
+lote com sucesso) ou do boilerplate `gl3stubInit`, os `ctl*_init` NÃO
+são cópias estruturais uns dos outros — cada tela de fato configura
+recursos distintos (mensagens, flags de evento, janelas, música,
+diálogos). A leitura individual abaixo é o catálogo de `bl` resolvido
+via `readelf --dyn-syms` + `c++filt`, suficiente pra identificar o
+propósito de cada tela sem passe estrutural completo de cada uma
+(nenhuma tem tabela de salto, todas 88–93% de cobertura de instrução
+pelo `jtable.py`, nenhuma chegou a ser lida bloco a bloco):
+
+- **`ctlevtinfo_init(int)`** (`0x2576e0`, 500 B): `Wserchmessagepointer(int)`,
+  `Wcount_words2(short*,short*,char*)`, `pagewin_init(PAGEWININFO*)` —
+  tela de "info de evento" é uma janela de texto genérica (`pagewin_*`,
+  família de paginação já citada na §579... na verdade nova aqui,
+  primeira aparição de `pagewin_init`) alimentada por busca de
+  ponteiro de mensagem do sistema `W*`.
+- **`ctlmap_init()`** (`0x253f20`, 480 B): `Wread_eventflag(int)` — só
+  checa uma flag de evento antes de entrar no mapa mundi (consistente
+  com `ctlmap_main`, §92, que já não chama `worldmap_call`
+  diretamente).
+- **`ctlhelp2_init(int, int)`** (`0x2553a8`, 476 B):
+  `Wmakemessagepacket(char*)`, `Wpushmessagepacket()`,
+  `sound_request(int)`, `pagewin_init`, `Wserchmessagepointer`,
+  `Wcount_words2` — tela de ajuda nível 2 monta um pacote de mensagem
+  do zero (`Wmakemessagepacket`/`Wpushmessagepacket`, nunca citados
+  antes) em vez de só buscar um existente, mais som de abertura.
+- **`ctlhentuto_init()`** (`0x26dd40`, 464 B): `snplflg_read(long*,int)`,
+  `iOSTutoFlagSet(int,int)`, `defscrwin_set(int,int,_POINT*,_POINT*)`,
+  `curhis_put(int,int,int)` — tutorial de "hentu" (provável
+  "henshu"/edição ou abreviação local) grava flag de progresso de
+  tutorial real (par de `iOSTutoReset`/`iOSTutoBtlInputSet` já citado
+  na §916).
+- **`ctlokng_init(_POINT)`** (`0x2608c0`, 460 B): `add_winpac(ulong*,int*)`,
+  `wldwin_noropen(int,RECT16,int,int,ulong*)`, **`iOS_dispOkNg(int,int)`**
+  — confirma de cara o nome: é literalmente quem ABRE o popup Sim/Não
+  (par exato da leitura/fechamento em `houkoku_okng`, §577, e das
+  seções 42/56).
+- **`ctlpersmes_init(int)`** (`0x24e91c`, 448 B): `wldmes_load(int)`,
+  `add_winpac` — carrega uma mensagem do mapa mundi (`wldmes_*`, já
+  família confirmada) pra uma janela de "mensagem de personagem".
+- **`ctltipsmes_init(int)`** (`0x24f4e8`, 416 B): `wldload_wait()`,
+  `pagewin_init` — tela de "dica" espera o carregamento do mapa mundi
+  terminar antes de paginar o texto.
+- **`ctlperson_init()`**, **`ctlhistory_init()`** e **`ctltresure_init()`**
+  (`0x24e734`/`0x2595c0`/`0x26c27c`, 412/400/336 B): as três chamam
+  **exatamente o mesmo trio** — `Wread_eventflag(int)`,
+  `defscrwin_set(...)`, `curhis_put(...)` — formando, dentro do
+  grupo de 14, uma mini-família genuína de "tela de lista rolável
+  simples" (roster de personagens / histórico / tesouro), cada uma só
+  diferindo no conteúdo da lista, não na mecânica de janela. Não
+  rodamos `family_sim.py` entre essas três especificamente (ficaria
+  acima do threshold de 90% quase certamente, dado o catálogo
+  idêntico) — pista pronta pra confirmação formal numa iteração
+  futura.
+- **`ctlflagset_init()`** (`0x255a38`, 336 B): `ctlflag_winset(CTLINFO*)`,
+  `add_winpac` — delega a maior parte do setup pra uma função irmã
+  (`ctlflag_winset`, ainda `unread`) em vez de inicializar direto.
+- **`ctlhoukmes_init(int)`** (`0x25a0f0`, 312 B): `wldmusic_change(int)`
+  — só troca a música antes de entrar na tela de relatório (ver §577).
+- **`ctlsound_init()`** (`0x2471 7c`, 300 B): `vOpn_add_anmpac(ulong*,int*)`,
+  `Ssd_GetStereo()` — confirma ser a tela de "teste de som" citada
+  por `ctlopentitle_main` (§87); `Ssd_GetStereo` é achado novo (API
+  de hardware de som estéreo, nunca citada antes).
+- **`ctlendroll_init()`** (`0x242498`, 384 B, o mais rico do grupo):
+  `fileReadCD(ulong,ulong,void*)`, **`vEnd_rollinit()`** (irmã direta
+  de `vEnd_rollproc`, §571!), `vOpn_scrinit(int)`, `vOpn_loadwait()`,
+  `numa_vOpn_CdRead(CDREC*,ulong,ulong,ulong,ulong*)`,
+  `set_gEventMovieNo(int)`, `set_SoundOnly_Flg__Fi(int)`,
+  `SetDispMask`, `xpMallocIO`, **`iOS_InitMovie(int)`**. Confirma que
+  os créditos finais abrem com um **filme CD-XA real** (mesmo padrão
+  do filme de abertura em `ctlopentitle_main`, §87) — `fileReadCD`/
+  `numa_vOpn_CdRead` leem o stream do CD, `xpMallocIO` aloca o buffer
+  de I/O, `iOS_InitMovie` inicializa o player de vídeo da porta iOS, e
+  só então `vEnd_rollinit` prepara o estado que `vEnd_rollproc` (§571)
+  vai avançar quadro a quadro depois que o filme termina. Fecha o
+  ciclo começo/fim do par `vOpn_*`/`vEnd_*` citado como pendente na
+  §571.
+
+**Status CSV**: `read_structural` para as 14 (identidade do call-graph
+confirmada via `readelf --dyn-syms`/`c++filt` + cruzamento textual;
+nenhuma teve os blocos internos lidos instrução a instrução — typing
+honesto, não `read_full`).
