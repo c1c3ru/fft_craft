@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **789/789** pending functions.
+Evidence collected: **689/689** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -82,104 +82,6 @@ These reports do not constitute semantic verification.
 | `002cabdc` | __aeabi_ul2d | [Evidence](semantic-evidence/002cabdc.md) |
 | `002cb830` | __gesf2 | [Evidence](semantic-evidence/002cb830.md) |
 | `0019e134` | SuccessEmploy() | [Evidence](semantic-evidence/0019e134.md) |
-| `0026a570` | snpl_fadewait() | [Evidence](semantic-evidence/0026a570.md) |
-| `00273b38` | SetSafePanelAhead(int) | [Evidence](semantic-evidence/00273b38.md) |
-| `0028be80` | _ps_test() | [Evidence](semantic-evidence/0028be80.md) |
-| `00101980` | Wsend_sttslinecol(char*) | [Evidence](semantic-evidence/00101980.md) |
-| `001534a4` | send_taskparamater4(long, long, long, long, long) | [Evidence](semantic-evidence/001534a4.md) |
-| `00153768` | Wsend_taskparamater4(long, long, long, long, long) | [Evidence](semantic-evidence/00153768.md) |
-| `0015e768` | iOSShiftUnitSet(int) | [Evidence](semantic-evidence/0015e768.md) |
-| `0016f738` | iOS_cacheFilesNameClear() | [Evidence](semantic-evidence/0016f738.md) |
-| `001a7368` | IsDismiss(short) | [Evidence](semantic-evidence/001a7368.md) |
-| `001b7bf0` | MenuSelVerticalWithSndDirect(unsigned short, unsigned char, int, int) | [Evidence](semantic-evidence/001b7bf0.md) |
-| `001c7178` | SelectWindowClutEx(int, int) | [Evidence](semantic-evidence/001c7178.md) |
-| `001ca97c` | overlayMonomaneStack() | [Evidence](semantic-evidence/001ca97c.md) |
-| `001d3d5c` | get_active_unit() | [Evidence](semantic-evidence/001d3d5c.md) |
-| `00213e0c` | stopColorRotation(unsigned int) | [Evidence](semantic-evidence/00213e0c.md) |
-| `002431b4` | fRoll_fadein(short*) | [Evidence](semantic-evidence/002431b4.md) |
-| `002431f0` | fRoll_fadeout(short*) | [Evidence](semantic-evidence/002431f0.md) |
-| `00249bcc` | vOpn_loadwait() | [Evidence](semantic-evidence/00249bcc.md) |
-| `002819cc` | iOS_v2menuInit() | [Evidence](semantic-evidence/002819cc.md) |
-| `00284784` | ColorVectorDataBase(unsigned int) | [Evidence](semantic-evidence/00284784.md) |
-| `00289844` | pspClearSaveData() | [Evidence](semantic-evidence/00289844.md) |
-| `0028b6fc` | STEP_DISP(char const*) | [Evidence](semantic-evidence/0028b6fc.md) |
-| `0028bf7c` | _ps_cond() | [Evidence](semantic-evidence/0028bf7c.md) |
-| `0029b618` | iOSGsSwapDispBuff() | [Evidence](semantic-evidence/0029b618.md) |
-| `002ab5cc` | GuEmu_Clear() | [Evidence](semantic-evidence/002ab5cc.md) |
-| `002b6fe0` | iOSReleaseButtonAreaCheck() | [Evidence](semantic-evidence/002b6fe0.md) |
-| `000d7ed8` | getvaluelength(int) | [Evidence](semantic-evidence/000d7ed8.md) |
-| `000d88c4` | popmessagepacket() | [Evidence](semantic-evidence/000d88c4.md) |
-| `000e0f68` | loadcsrc(int, int, int, int) | [Evidence](semantic-evidence/000e0f68.md) |
-| `000ffac4` | Wgetvaluelength(int) | [Evidence](semantic-evidence/000ffac4.md) |
-| `00100594` | Wpopmessagepacket() | [Evidence](semantic-evidence/00100594.md) |
-| `0019f718` | iOSShopHelpStatusCheck() | [Evidence](semantic-evidence/0019f718.md) |
-| `001cec24` | copy_target_table2(unsigned char*) | [Evidence](semantic-evidence/001cec24.md) |
-| `001ceca0` | _rand_() | [Evidence](semantic-evidence/001ceca0.md) |
-| `001d1ce8` | erase_unit_f(int) | [Evidence](semantic-evidence/001d1ce8.md) |
-| `001d3d24` | gc_bwp(int) | [Evidence](semantic-evidence/001d3d24.md) |
-| `001f5f44` | iOS_resetAnimationIrowake() | [Evidence](semantic-evidence/001f5f44.md) |
-| `00200b80` | endTrunAction() | [Evidence](semantic-evidence/00200b80.md) |
-| `0021b0d0` | InitEffectLoadAddress() | [Evidence](semantic-evidence/0021b0d0.md) |
-| `0021b4a8` | GetSQLFrameRate(_EffectTCB*) | [Evidence](semantic-evidence/0021b4a8.md) |
-| `0021ce78` | IsPermanentEffect(long) | [Evidence](semantic-evidence/0021ce78.md) |
-| `00269a68` | snpl_hidepara() | [Evidence](semantic-evidence/00269a68.md) |
-| `00269d08` | snpl_clrstat() | [Evidence](semantic-evidence/00269d08.md) |
-| `00269d40` | snpl_setlocal() | [Evidence](semantic-evidence/00269d40.md) |
-| `00269d78` | snpl_clrlocal() | [Evidence](semantic-evidence/00269d78.md) |
-| `0026a824` | snpl_snsndreq() | [Evidence](semantic-evidence/0026a824.md) |
-| `0027b4a4` | initCmdKind() | [Evidence](semantic-evidence/0027b4a4.md) |
-| `00280558` | iOS_fftLoad(int) | [Evidence](semantic-evidence/00280558.md) |
-| `0028da58` | tlDumpHeap() | [Evidence](semantic-evidence/0028da58.md) |
-| `0028daac` | tlGetHeapSize() | [Evidence](semantic-evidence/0028daac.md) |
-| `0029aa84` | OpenTIM | [Evidence](semantic-evidence/0029aa84.md) |
-| `002a2f60` | PCopen | [Evidence](semantic-evidence/002a2f60.md) |
-| `002b88c8` | iOS_StartMovie() | [Evidence](semantic-evidence/002b88c8.md) |
-| `002bf32c` | Debug_SetDebugDirectBtn(int) | [Evidence](semantic-evidence/002bf32c.md) |
-| `000e7488` | getCodeLength(unsigned char*) | [Evidence](semantic-evidence/000e7488.md) |
-| `0012f2a8` | iOSPersonalWinPos(int) | [Evidence](semantic-evidence/0012f2a8.md) |
-| `00153470` | send_taskparamater(long, long, long, long) | [Evidence](semantic-evidence/00153470.md) |
-| `00153734` | Wsend_taskparamater(long, long, long, long) | [Evidence](semantic-evidence/00153734.md) |
-| `00161e2c` | iOSIsCurMode() | [Evidence](semantic-evidence/00161e2c.md) |
-| `001a63dc` | bak_read(int, void*) | [Evidence](semantic-evidence/001a63dc.md) |
-| `001cb030` | clear_setstatus(A_RESULT*) | [Evidence](semantic-evidence/001cb030.md) |
-| `001d9370` | get_joblevel(unsigned short) | [Evidence](semantic-evidence/001d9370.md) |
-| `001eb760` | myStartShape() | [Evidence](semantic-evidence/001eb760.md) |
-| `001f36c8` | EndAllAnimation() | [Evidence](semantic-evidence/001f36c8.md) |
-| `001fd278` | startInterventionMode() | [Evidence](semantic-evidence/001fd278.md) |
-| `0020d7d4` | pushMapAngle() | [Evidence](semantic-evidence/0020d7d4.md) |
-| `0020d808` | popMapAngle() | [Evidence](semantic-evidence/0020d808.md) |
-| `0020da48` | pushBackColor() | [Evidence](semantic-evidence/0020da48.md) |
-| `0020eddc` | inactivateEventAnimation(int) | [Evidence](semantic-evidence/0020eddc.md) |
-| `0020f574` | getMapXYZ(SVECTOR*) | [Evidence](semantic-evidence/0020f574.md) |
-| `002119c0` | PushChangePalette() | [Evidence](semantic-evidence/002119c0.md) |
-| `002119f4` | PopChangePalette() | [Evidence](semantic-evidence/002119f4.md) |
-| `0021b474` | GetMSQFrameRate(_EffectTCB*) | [Evidence](semantic-evidence/0021b474.md) |
-| `00228e64` | startShape() | [Evidence](semantic-evidence/00228e64.md) |
-| `00243014` | fRoll_exit(short*) | [Evidence](semantic-evidence/00243014.md) |
-| `00245a74` | o_ClearCardEvent() | [Evidence](semantic-evidence/00245a74.md) |
-| `00245b34` | o_ClearCardEvent_X() | [Evidence](semantic-evidence/00245b34.md) |
-| `0024dc8c` | ctlkiroku_active(CTLINFO*) | [Evidence](semantic-evidence/0024dc8c.md) |
-| `0024e8d0` | ctlperson_active(CTLINFO*) | [Evidence](semantic-evidence/0024e8d0.md) |
-| `00259e70` | ctlhouk_active(CTLINFO*) | [Evidence](semantic-evidence/00259e70.md) |
-| `002602c0` | ctlmouke_active(CTLINFO*) | [Evidence](semantic-evidence/002602c0.md) |
-| `002675c0` | ctlret_active(CTLINFO*) | [Evidence](semantic-evidence/002675c0.md) |
-| `0026c3cc` | ctltresure_active(CTLINFO*) | [Evidence](semantic-evidence/0026c3cc.md) |
-| `0027b4dc` | setCmdKind(unsigned int) | [Evidence](semantic-evidence/0027b4dc.md) |
-| `0027f14c` | iOS_ClearRectHitAll() | [Evidence](semantic-evidence/0027f14c.md) |
-| `002a0844` | ReadRotMatrix | [Evidence](semantic-evidence/002a0844.md) |
-| `002a242c` | RotColorDpq_nom | [Evidence](semantic-evidence/002a242c.md) |
-| `002c5400` | Movie_FrameMove() | [Evidence](semantic-evidence/002c5400.md) |
-| `000da6d0` | geteventcategory() | [Evidence](semantic-evidence/000da6d0.md) |
-| `000e0538` | import_localpad(int) | [Evidence](semantic-evidence/000e0538.md) |
-| `001020f8` | Wevent_init_system() | [Evidence](semantic-evidence/001020f8.md) |
-| `0010229c` | Wgeteventcategory() | [Evidence](semantic-evidence/0010229c.md) |
-| `00153420` | wait_taskend(long) | [Evidence](semantic-evidence/00153420.md) |
-| `001536e4` | Wwait_taskend(long) | [Evidence](semantic-evidence/001536e4.md) |
-| `0015e068` | iOSNumberGet(int) | [Evidence](semantic-evidence/0015e068.md) |
-| `001d1db8` | leave_unit_f(int) | [Evidence](semantic-evidence/001d1db8.md) |
-| `001d2e6c` | get_coord_address(BWORK*) | [Evidence](semantic-evidence/001d2e6c.md) |
-| `001dc914` | set_cco_SD(BWORK*) | [Evidence](semantic-evidence/001dc914.md) |
-| `001e4f0c` | get_fusui_ability(BWORK*) | [Evidence](semantic-evidence/001e4f0c.md) |
 | `001eedf4` | getWpnSequenceAddress(unsigned short) | [Evidence](semantic-evidence/001eedf4.md) |
 | `00202150` | standerdExecution() | [Evidence](semantic-evidence/00202150.md) |
 | `00204268` | startLeftTurn(int) | [Evidence](semantic-evidence/00204268.md) |
@@ -195,8 +97,6 @@ These reports do not constitute semantic verification.
 | `0025f138` | townpic_load(int) | [Evidence](semantic-evidence/0025f138.md) |
 | `0025ffb0` | iOSSDNovelGetOT(int) | [Evidence](semantic-evidence/0025ffb0.md) |
 | `00270460` | curhis_get(int) | [Evidence](semantic-evidence/00270460.md) |
-| `00289970` | pspIsNoneSaveData(int) | [Evidence](semantic-evidence/00289970.md) |
-| `0028ba54` | TE_task_create(int, void (*)(), int) | [Evidence](semantic-evidence/0028ba54.md) |
 | `0028e6a4` | xpInitVblankFunc() | [Evidence](semantic-evidence/0028e6a4.md) |
 | `002a145c` | ReadLightMatrix | [Evidence](semantic-evidence/002a145c.md) |
 | `002a14a8` | ReadColorMatrix | [Evidence](semantic-evidence/002a14a8.md) |
