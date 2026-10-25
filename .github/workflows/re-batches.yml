@@ -7,6 +7,10 @@ on:
       - '.github/workflows/re-batches.yml'
       - 'FFT_Android_Mod/docs/re-tools/progress_report.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_evidence.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_path_report.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_cfg.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_paths.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_facts.py'
   workflow_dispatch:
     inputs:
       limit:
