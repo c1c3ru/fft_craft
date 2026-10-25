@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **480/1258** pending functions.
+Evidence collected: **488/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -491,3 +491,11 @@ These reports do not constitute semantic verification.
 | `002a3068` | xpMalloc | [Evidence](semantic-evidence/002a3068.md) |
 | `002b3258` | musicPlayer_Pause() | [Evidence](semantic-evidence/002b3258.md) |
 | `002b32a0` | musicPlayer_Replay() | [Evidence](semantic-evidence/002b32a0.md) |
+| `002b8750` | iOS_isMovedDist() | [Evidence](semantic-evidence/002b8750.md) |
+| `000d8880` | pushmessagepacket() | [Evidence](semantic-evidence/000d8880.md) |
+| `000da558` | event_start() | [Evidence](semantic-evidence/000da558.md) |
+| `00100550` | Wpushmessagepacket() | [Evidence](semantic-evidence/00100550.md) |
+| `0010f9c0` | Wloadcsrc(int, int, int, int) | [Evidence](semantic-evidence/0010f9c0.md) |
+| `0019d7a4` | DrawPrice() | [Evidence](semantic-evidence/0019d7a4.md) |
+| `001ab7e0` | IsUntauchableAbility(int) | [Evidence](semantic-evidence/001ab7e0.md) |
+| `001cab08` | clear_addeffect() | [Evidence](semantic-evidence/001cab08.md) |
