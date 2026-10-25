@@ -3,7 +3,7 @@
   "name": "get2DPosition(SVECTOR*, SVECTOR*)",
   "size": 144,
   "previous_status": "unread",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 86.11,
   "distinct_bl": 4,
   "tables_resolved": 0,
@@ -15,7 +15,33 @@
     "2a2620"
   ],
   "log": "=== jtable.py: 0x20e228..0x20e2b8 (144 bytes) ===\ncoverage: 31 of ~36 instruction slots (86%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x165388 x1   ASHURA_matrix(MATRIX*, SVECTOR*, VECTOR*, VECTOR*) \n  0x2a0818 x1   SetRotMatrix \n  0x2a0d10 x1   SetTransMatrix \n  0x2a2620 x1   RotTrans \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x20e228",
+    "total_slots": 36,
+    "code_slots": 31,
+    "instruction_slots": 31,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x20e2a4",
+      "0x20e2a8",
+      "0x20e2ac",
+      "0x20e2b0",
+      "0x20e2b4"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/0020e228.json"
 }

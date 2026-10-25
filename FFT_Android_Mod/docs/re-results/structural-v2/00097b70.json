@@ -1,0 +1,26 @@
+{
+  "address": "00097b70",
+  "name": "_float32_pack",
+  "size": 144,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 88.89,
+  "distinct_bl": 9,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2ca8a4",
+    "2cab9c",
+    "2caebc",
+    "2cb1ec",
+    "2cb8dc",
+    "715fc",
+    "7162c",
+    "71680",
+    "71698"
+  ],
+  "log": "=== jtable.py: 0x97b70..0x97c00 (144 bytes) ===\ncoverage: 32 of ~36 instruction slots (89%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 9 distinct --\n  0x715fc x1   sub_715fc LOCAL(no-dynsym)\n  0x7162c x1   sub_7162c LOCAL(no-dynsym)\n  0x71680 x1   sub_71680 LOCAL(no-dynsym)\n  0x71698 x1   sub_71698 LOCAL(no-dynsym)\n  0x2ca8a4 x1   __adddf3 \n  0x2cab9c x1   __extendsfdf2 \n  0x2caebc x1   __divdf3 \n  0x2cb1ec x2   __fixdfsi \n  0x2cb8dc x1   __aeabi_fcmplt \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

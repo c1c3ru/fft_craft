@@ -63,105 +63,11 @@ address,name,size,core_priority,coverage_pct,review_reason,tables_resolved,table
 0021d544,getNextSENo(int),220,1,80.0,resolved_jump_table_check,1,0,1,FFT_Android_Mod/docs/re-results/0021d544.json
 002867a8,getMovieEventNum(int),216,1,68.52,resolved_jump_table_check,1,0,1,FFT_Android_Mod/docs/re-results/002867a8.json
 0015a65c,siOS_TCurSucCheck(unsigned int),208,1,78.85,resolved_jump_table_check,1,0,1,FFT_Android_Mod/docs/re-results/0015a65c.json
-001cd9b0,"inc_party_item(BWORK*, unsigned short, BWORK*)",156,1,94.87,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/001cd9b0.json
-00221028,"RequestBowEffect(long, EffectOrder*)",156,1,94.87,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00221028.json
-00125238,"Wrecover_windows(int, int)",152,1,92.11,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00125238.json
-0013819c,"recover_windows(int, int)",152,1,92.11,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0013819c.json
-001bd3cc,UnitListInit(),152,1,89.47,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/001bd3cc.json
-0021f328,GetPermanentObject(),152,1,89.47,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0021f328.json
-00263254,ctlmouketeam_deactive(CTLINFO*),152,1,94.74,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00263254.json
-002cb0c0,__gedf2,152,1,92.11,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002cb0c0.json
-000d665c,addlocalprim(tagPOLY_FT4*),148,1,94.59,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/000d665c.json
-000d7d6c,sttsback_blue(STTSWINDOWBACK*),148,1,94.59,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/000d7d6c.json
-000da63c,export_suc(int),148,1,91.89,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/000da63c.json
-000e14f4,"statusfigprint10(int, int, char*, COPYFIELD*)",148,1,91.89,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/000e14f4.json
-000fe1a4,Waddlocalprim(tagPOLY_FT4*),148,1,94.59,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/000fe1a4.json
-00102208,Wexport_suc(int),148,1,91.89,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00102208.json
-0015a744,iOSScrollButtonAreaCheck(),148,1,94.59,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0015a744.json
-0015d6b4,iOSTchCurUnitCheck(),148,1,86.49,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0015d6b4.json
-00268ec4,wldcenter_move(),148,1,94.59,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00268ec4.json
-002b6b38,Main_Uninit(),148,1,94.59,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002b6b38.json
-002b715c,"setPspDispNum(short, short, short)",148,1,89.19,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002b715c.json
-002bb678,"iOSMenuOkCancelHelpGet(int, int)",148,1,94.59,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002bb678.json
-00097b70,_float32_pack,144,1,88.89,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00097b70.json
-000d7b24,sttsback_normal(STTSWINDOWBACK*),144,1,94.44,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/000d7b24.json
-000ff95c,Wsttsback_blue(STTSWINDOWBACK*),144,1,94.44,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/000ff95c.json
-001253b0,Wextend_valuefield(int),144,1,91.67,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/001253b0.json
-00138314,extend_valuefield(int),144,1,91.67,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00138314.json
-001532c0,"task_create(long, char*)",144,1,94.44,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/001532c0.json
-00153584,"Wtask_create(long, char*)",144,1,94.44,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00153584.json
-001d6718,"get_mapstp(int, int, int)",144,1,91.67,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/001d6718.json
-00207d6c,iOS_mapVectorLimit(),144,1,91.67,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00207d6c.json
-0020e228,"get2DPosition(SVECTOR*, SVECTOR*)",144,1,86.11,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0020e228.json
-00221e84,"RequestLandingEffect(EffectOrder*, VECTOR*)",144,1,94.44,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00221e84.json
-0026dc2c,ctltuto_active(CTLINFO*),144,1,94.44,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0026dc2c.json
-00292678,__xpLibgpuDrawCallBack(int),144,1,83.33,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00292678.json
-002abc8c,sceGuTexFilter,144,1,94.44,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002abc8c.json
-000ff718,Wsttsback_normal(STTSWINDOWBACK*),140,1,94.29,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/000ff718.json
-001bb504,SetSttsBoth(int),140,1,91.43,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/001bb504.json
-0021627c,"readMusicBuffer(int, int)",140,1,94.29,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0021627c.json
-00245e38,"ctlstartmov_init(int, int, int, int)",140,1,85.71,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00245e38.json
-002562fc,sthelp_curpos_set(CTLINFO*),140,1,94.29,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002562fc.json
-002cb4ac,__aeabi_ul2f,140,1,82.86,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002cb4ac.json
-000e5680,disp_status2(),136,1,85.29,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/000e5680.json
-000e5708,disp_status2right(),136,1,85.29,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/000e5708.json
-00228d40,InitPermanentShape(),136,1,82.35,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00228d40.json
-002b85f8,"RayPick_GT4(tagPOLY_GT4*, int, int)",136,1,94.12,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002b85f8.json
-002b8680,"RayPick_GT3(tagPOLY_GT3*, int, int)",136,1,94.12,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002b8680.json
-0007d9ac,fill_fopen_filefunc,132,1,78.79,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0007d9ac.json
-0007da30,fill_fopen64_filefunc,132,1,78.79,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0007da30.json
-0011bfa8,Wdisp_status2(),132,1,84.85,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0011bfa8.json
-0011c02c,Wdisp_status2right(),132,1,84.85,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0011c02c.json
-0015dfbc,iOSActiveUnitGet(),132,1,93.94,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0015dfbc.json
-001abb18,MakeChr(short),132,1,93.94,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/001abb18.json
-0026dcbc,ctltuto_deactive(CTLINFO*),132,1,93.94,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0026dcbc.json
-002b2714,"EnvSE_SetVol(int, int)",132,1,90.91,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002b2714.json
-000d9790,wait_overlay(int),128,1,90.62,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/000d9790.json
-000d9988,wait_loaddata(int),128,1,90.62,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/000d9988.json
-001015a4,Wwait_overlay(int),128,1,90.62,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/001015a4.json
-00101888,Wwait_loaddata(int),128,1,90.62,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00101888.json
-0015df3c,iOSTapCalcu(),128,1,87.5,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0015df3c.json
-001bc520,scroll_chk(),128,1,87.5,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/001bc520.json
-00245610,"strSetDefDecEnv(DECENV*, int, int, int, int)",128,1,90.62,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00245610.json
-00249f14,vOpn_dataload2(),128,1,93.75,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00249f14.json
-0024fd74,pspCtltutonet_deactive(CTLINFO*),128,1,93.75,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0024fd74.json
-0025f0b8,pic_load(int),128,1,87.5,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0025f0b8.json
-0025f168,bk_load(int),128,1,87.5,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0025f168.json
-0025f358,"psp_bk_load(int, void*)",128,1,90.62,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0025f358.json
-00266654,"add_winpac(unsigned long*, int*)",128,1,93.75,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00266654.json
-002b3590,Boot_FrameMove(),128,1,90.62,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002b3590.json
-00105510,Wwait_direc(int),124,1,93.55,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00105510.json
-00161ef8,wasmTaskEntry(),124,1,93.55,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00161ef8.json
-0016a14c,ASURA_soundStop(),124,1,90.32,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0016a14c.json
-001baae8,SttsAMovingChk(),124,1,90.32,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/001baae8.json
-0020c550,"db_swap_generate(unsigned long*, unsigned long*)",124,1,90.32,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0020c550.json
-0024a544,"vOpn_add_winpac(unsigned long*, int*)",124,1,93.55,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0024a544.json
-002665d8,"add_anmpac(unsigned long*, int*)",124,1,93.55,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002665d8.json
-0028bec0,TE_VSync(int),124,1,90.32,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0028bec0.json
-002b2798,SE_CorrectFID(int),124,1,93.55,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002b2798.json
-002b2a18,SE_StopVFX(int),124,1,90.32,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002b2a18.json
-002b36dc,Error_FrameRender(),124,1,90.32,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002b36dc.json
-000d7e00,"load_replaceitems(int, int)",120,1,56.67,resolved_jump_table_check,1,0,2,FFT_Android_Mod/docs/re-results/000d7e00.json
-000dcc2c,wait_direc(int),120,1,93.33,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/000dcc2c.json
-000ff9ec,"Wload_replaceitems(int, int)",120,1,56.67,resolved_jump_table_check,1,0,2,FFT_Android_Mod/docs/re-results/000ff9ec.json
-0015d2ac,iOS_GameAreaCheck(),120,1,83.33,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0015d2ac.json
-001a47e0,"pspAbilityCompareSupport(short, short)",120,1,90.0,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/001a47e0.json
-001e4e94,get_step_no(BWORK*),120,1,93.33,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/001e4e94.json
-0021e760,doSequence(short),120,1,90.0,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0021e760.json
-0024a4cc,"vOpn_add_anmpac(unsigned long*, int*)",120,1,93.33,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0024a4cc.json
-002c5434,Movie_FrameRender(),120,1,90.0,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002c5434.json
-00077524,gzerror,116,1,93.1,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00077524.json
-000c81c4,tool_squareinit(),116,1,89.66,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/000c81c4.json
-000d8c00,checkkeyok(),116,1,89.66,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/000d8c00.json
-000e2b04,"statusnowprint(char*, COPYFIELD*)",116,1,93.1,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/000e2b04.json
-000ff43c,Wallocatememoryinit(),116,1,93.1,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/000ff43c.json
-001b7ef4,TruePadRead(int),116,1,93.1,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/001b7ef4.json
-001fd168,setActivePanelFromAction(tag_animation*),116,1,89.66,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/001fd168.json
-00201708,setActionStartDirection(tag_animation*),116,1,93.1,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/00201708.json
-002042c8,startTurnRelative(int),116,1,89.66,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002042c8.json
-0021cc10,s1e_ifMetascheduleEnd(_EffectTCB*),116,1,93.1,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0021cc10.json
+002cb0c0,__gedf2,152,1,92.11,coverage_below_95,0,0,1,FFT_Android_Mod/docs/re-results/002cb0c0.json
+002cb4ac,__aeabi_ul2f,140,1,82.86,coverage_below_95,0,0,1,FFT_Android_Mod/docs/re-results/002cb4ac.json
+000d7e00,"load_replaceitems(int, int)",120,1,56.67,resolved_jump_table_check,1,0,1,FFT_Android_Mod/docs/re-results/000d7e00.json
+000ff9ec,"Wload_replaceitems(int, int)",120,1,56.67,resolved_jump_table_check,1,0,1,FFT_Android_Mod/docs/re-results/000ff9ec.json
 0024fd00,pspCtltutonet_active(CTLINFO*),116,1,93.1,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/0024fd00.json
-002816bc,"iOS_v2menuSetEnable(V2_MENU_ITEM, int)",116,1,93.1,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002816bc.json
 002cabdc,__aeabi_ul2d,116,1,75.86,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002cabdc.json
 002cb830,__gesf2,116,1,89.66,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002cb830.json
 000d7880,allocatememoryinit(),112,1,92.86,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/000d7880.json

@@ -1,0 +1,20 @@
+{
+  "address": "002b3590",
+  "name": "Boot_FrameMove()",
+  "size": 128,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 90.62,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2b20f4",
+    "a7e7c",
+    "b9f44"
+  ],
+  "log": "=== jtable.py: 0x2b3590..0x2b3610 (128 bytes) ===\ncoverage: 29 of ~32 instruction slots (91%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0xa7e7c x1   CEGL2_IF::ClearBackdrop(float, float, float) \n  0xb9f44 x1   CTHREAD::Sync() \n  0x2b20f4 x1   onGotoNextMode(int) \n\n-- branches: 2 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

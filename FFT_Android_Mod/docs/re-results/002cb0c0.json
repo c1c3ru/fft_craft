@@ -10,7 +10,31 @@
   "tables_unresolved": 0,
   "bl_targets": [],
   "log": "=== jtable.py: 0x2cb0c0..0x2cb158 (152 bytes) ===\ncoverage: 35 of ~38 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 0 distinct --\n\n-- branches: 6 total, 2 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "needs_review",
+    "reason": "unexplained_code_slots",
+    "function_start": "0x2cb0c0",
+    "total_slots": 38,
+    "code_slots": 35,
+    "instruction_slots": 35,
+    "table_entry_slots": 0,
+    "literal_slots": [],
+    "unexplained_slots": [
+      "0x2cb0c8",
+      "0x2cb0cc",
+      "0x2cb0d0"
+    ],
+    "unexplained_count": 3,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 92.11,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
+  "review_attempts": 1,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }
