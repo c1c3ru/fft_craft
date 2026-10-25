@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **400/1258** pending functions.
+Evidence collected: **408/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -411,3 +411,11 @@ These reports do not constitute semantic verification.
 | `002b7530` | IS_GAME_MOV_AREA(int, int) | [Evidence](semantic-evidence/002b7530.md) |
 | `001ca9b8` | reset_toumei_afterskill(BWORK*) | [Evidence](semantic-evidence/001ca9b8.md) |
 | `0021b518` | LoadOverlayBin(long) | [Evidence](semantic-evidence/0021b518.md) |
+| `00253a10` | wldctl_active() | [Evidence](semantic-evidence/00253a10.md) |
+| `00253ec8` | wldctl_deactive() | [Evidence](semantic-evidence/00253ec8.md) |
+| `0026b31c` | snplread_parcalc() | [Evidence](semantic-evidence/0026b31c.md) |
+| `00270b04` | pagenext_cursor(PAGEWININFO*) | [Evidence](semantic-evidence/00270b04.md) |
+| `0028b844` | uninitTaskEmu() | [Evidence](semantic-evidence/0028b844.md) |
+| `002ab908` | sceGuStart | [Evidence](semantic-evidence/002ab908.md) |
+| `002b2290` | GX_ApplyVertexScaling(int) | [Evidence](semantic-evidence/002b2290.md) |
+| `002b2e48` | Jingle_Stop(int) | [Evidence](semantic-evidence/002b2e48.md) |
