@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1248/1258** pending functions.
+Evidence collected: **1256/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1259,3 +1259,11 @@ These reports do not constitute semantic verification.
 | `00258b54` | evt_eqp() | [Evidence](semantic-evidence/00258b54.md) |
 | `0026973c` | snpl_endpage() | [Evidence](semantic-evidence/0026973c.md) |
 | `00269758` | snpl_startpage() | [Evidence](semantic-evidence/00269758.md) |
+| `0028b018` | pspWorldEnableFlg(PSP_WORLD_FLG) | [Evidence](semantic-evidence/0028b018.md) |
+| `0028b034` | pspWorldDisableFlg(PSP_WORLD_FLG) | [Evidence](semantic-evidence/0028b034.md) |
+| `0029fea0` | rcos | [Evidence](semantic-evidence/0029fea0.md) |
+| `00279ed4` | ClearForBattleRoutine() | [Evidence](semantic-evidence/00279ed4.md) |
+| `0028b050` | pspWorldCheckFlg(PSP_WORLD_FLG) | [Evidence](semantic-evidence/0028b050.md) |
+| `0029fe88` | rsin | [Evidence](semantic-evidence/0029fe88.md) |
+| `002a1324` | SetGeomOffset | [Evidence](semantic-evidence/002a1324.md) |
+| `0028a08c` | Savedata_GetAddr() | [Evidence](semantic-evidence/0028a08c.md) |
