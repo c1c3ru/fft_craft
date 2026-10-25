@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/re-batches.yml'
+      - 'FFT_Android_Mod/docs/re-tools/progress_report.py'
   workflow_dispatch:
     inputs:
       limit:
