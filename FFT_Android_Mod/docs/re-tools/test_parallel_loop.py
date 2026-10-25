@@ -49,6 +49,39 @@ class PipelineTests(unittest.TestCase):
             result = loop.analyze_one(row, Path("/unused"), 10, {}, 5, 0.9)
         self.assertEqual(result["status"], "needs_review")
 
+    def test_unresolved_jump_table_requires_review(self):
+        output = ("[WARN] jump table at 0x20 could not be safely resolved\\n"
+                  "coverage: 25 of ~25 instruction slots (100%)\\n"
+                  "-- jump tables resolved: 0 --\\n"
+                  "-- bl targets: 0 distinct --\\n-- branches: 0 total")
+        row = {"address": "00000010", "size": 100,
+               "demangled": "battle()", "status": "pending"}
+        with patch.object(loop, "run_script", return_value=output):
+            result = loop.analyze_one(row, Path("/unused"), 10, {}, 5, 0.9)
+        self.assertEqual(result["status"], "needs_review")
+        self.assertEqual(result["tables_unresolved"], 1)
+
+    def test_similarity_with_insufficient_calls_falls_back(self):
+        import subprocess
+        sim = ("=== reference 0x10..0x74: 25/25 insns (100%), "
+               "2 distinct bl targets, 0 unresolved jump-table dispatch(es) ===\\n"
+               "-- candidate 0x80..0xe4 (100 B): 25/25 insns "
+               "(100%), 2 bl targets, jaccard=1.00, "
+               "jt_unresolved=0 -> CONFIRMED-BY-SIMILARITY")
+        output = ("coverage: 25 of ~25 instruction slots (100%)\\n"
+                  "-- jump tables resolved: 0 --\\n"
+                  "-- bl targets: 0 distinct --\\n-- branches: 0 total")
+        row = {"address": "00000080", "size": 100,
+               "demangled": "Mdl0025()", "status": "pending"}
+        ref = {"address": "00000010", "size": 100}
+        with patch.object(loop.subprocess, "run",
+                          return_value=subprocess.CompletedProcess([], 0, sim, "")):
+            with patch.object(loop, "run_script", return_value=output):
+                result = loop.analyze_one(
+                    row, Path("/unused"), 10, {"Mdl": ref}, 5, 0.9)
+        self.assertEqual(result["status"], "auto_structural")
+        self.assertEqual(result["reference_address"], ref["address"])
+
     def test_unparsed_output_fails_closed(self):
         row = {"address": "00000010", "size": 100,
                "demangled": "battle()", "status": "pending"}
