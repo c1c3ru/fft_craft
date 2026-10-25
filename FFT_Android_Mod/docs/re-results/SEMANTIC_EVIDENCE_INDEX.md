@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **232/1258** pending functions.
+Evidence collected: **240/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -243,3 +243,11 @@ These reports do not constitute semantic verification.
 | `002116f0` | padReadGenerate() | [Evidence](semantic-evidence/002116f0.md) |
 | `00217e14` | InitEffectAnimation() | [Evidence](semantic-evidence/00217e14.md) |
 | `00248b70` | ctlpremov_init(int, int, int, int, int, char*) | [Evidence](semantic-evidence/00248b70.md) |
+| `002b3610` | Boot_FrameRender() | [Evidence](semantic-evidence/002b3610.md) |
+| `001bb460` | SetSttsAbi(int) | [Evidence](semantic-evidence/001bb460.md) |
+| `001f4a88` | initEntryPlayerAnimations() | [Evidence](semantic-evidence/001f4a88.md) |
+| `00289ac0` | pspFftLoad(int, FFT_SAVE_DATA*, int*, int) | [Evidence](semantic-evidence/00289ac0.md) |
+| `0029a3ec` | DrawPrim | [Evidence](semantic-evidence/0029a3ec.md) |
+| `0020f728` | checkScrolling() | [Evidence](semantic-evidence/0020f728.md) |
+| `00211c88` | DisplayChangePalette() | [Evidence](semantic-evidence/00211c88.md) |
+| `00217ebc` | NewEffectAnimation(short) | [Evidence](semantic-evidence/00217ebc.md) |
