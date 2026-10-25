@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **976/1258** pending functions.
+Evidence collected: **984/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -987,3 +987,11 @@ These reports do not constitute semantic verification.
 | `000d9608` | get_padframe() | [Evidence](semantic-evidence/000d9608.md) |
 | `00101420` | Wget_padframe() | [Evidence](semantic-evidence/00101420.md) |
 | `00101590` | WiOS_getStatusAllgrayf() | [Evidence](semantic-evidence/00101590.md) |
+| `00101fd0` | iOStorideflagGet() | [Evidence](semantic-evidence/00101fd0.md) |
+| `001021c8` | Wreturn_actionstructure() | [Evidence](semantic-evidence/001021c8.md) |
+| `0012f214` | iOSpersonalWinPosClear(int) | [Evidence](semantic-evidence/0012f214.md) |
+| `0012f2dc` | iOSPersonalWinPosSet(int) | [Evidence](semantic-evidence/0012f2dc.md) |
+| `00142840` | WiOS_getOptionAddOfsX() | [Evidence](semantic-evidence/00142840.md) |
+| `00142f4c` | WiOS_getOptionAddOfsMode() | [Evidence](semantic-evidence/00142f4c.md) |
+| `001506a8` | getNetErrorCutFlg() | [Evidence](semantic-evidence/001506a8.md) |
+| `001531e4` | GetgMission_Successflg() | [Evidence](semantic-evidence/001531e4.md) |
