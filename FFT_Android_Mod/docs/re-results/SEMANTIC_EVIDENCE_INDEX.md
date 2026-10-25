@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **592/1258** pending functions.
+Evidence collected: **600/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -603,3 +603,11 @@ These reports do not constitute semantic verification.
 | `0029aa84` | OpenTIM | [Evidence](semantic-evidence/0029aa84.md) |
 | `002a2f60` | PCopen | [Evidence](semantic-evidence/002a2f60.md) |
 | `002b88c8` | iOS_StartMovie() | [Evidence](semantic-evidence/002b88c8.md) |
+| `002bf32c` | Debug_SetDebugDirectBtn(int) | [Evidence](semantic-evidence/002bf32c.md) |
+| `000e7488` | getCodeLength(unsigned char*) | [Evidence](semantic-evidence/000e7488.md) |
+| `0012f2a8` | iOSPersonalWinPos(int) | [Evidence](semantic-evidence/0012f2a8.md) |
+| `00153470` | send_taskparamater(long, long, long, long) | [Evidence](semantic-evidence/00153470.md) |
+| `00153734` | Wsend_taskparamater(long, long, long, long) | [Evidence](semantic-evidence/00153734.md) |
+| `00161e2c` | iOSIsCurMode() | [Evidence](semantic-evidence/00161e2c.md) |
+| `001a63dc` | bak_read(int, void*) | [Evidence](semantic-evidence/001a63dc.md) |
+| `001cb030` | clear_setstatus(A_RESULT*) | [Evidence](semantic-evidence/001cb030.md) |
