@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **912/1258** pending functions.
+Evidence collected: **920/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -923,3 +923,11 @@ These reports do not constitute semantic verification.
 | `0025ffe0` | iOS_IsTutoStart() | [Evidence](semantic-evidence/0025ffe0.md) |
 | `002602f4` | ctlmouke_deactive(CTLINFO*) | [Evidence](semantic-evidence/002602f4.md) |
 | `002675f4` | ctlret_deactive(CTLINFO*) | [Evidence](semantic-evidence/002675f4.md) |
+| `0026c400` | ctltresure_deactive(CTLINFO*) | [Evidence](semantic-evidence/0026c400.md) |
+| `0026df30` | ctlhentuto_deactive(CTLINFO*) | [Evidence](semantic-evidence/0026df30.md) |
+| `0026ec30` | ctlsentuto_deactive(CTLINFO*) | [Evidence](semantic-evidence/0026ec30.md) |
+| `00271284` | Ssd_Init(unsigned short) | [Evidence](semantic-evidence/00271284.md) |
+| `0027d468` | disableCancelDisableArea() | [Evidence](semantic-evidence/0027d468.md) |
+| `0027f5d8` | Resume_Get_WORK_MU_FontID() | [Evidence](semantic-evidence/0027f5d8.md) |
+| `0027f5f0` | Resume_Get_WORK_MU_BWorkFontID() | [Evidence](semantic-evidence/0027f5f0.md) |
+| `0027f608` | Resume_Get_WORK_MU_BWorkAnimationID() | [Evidence](semantic-evidence/0027f608.md) |
