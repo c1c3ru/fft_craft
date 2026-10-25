@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **216/1258** pending functions.
+Evidence collected: **224/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -227,3 +227,11 @@ These reports do not constitute semantic verification.
 | `00291098` | StoreImage2 | [Evidence](semantic-evidence/00291098.md) |
 | `00254f9c` | ctltownset_init(int, int) | [Evidence](semantic-evidence/00254f9c.md) |
 | `001cc89c` | check_hide_reset(BWORK*) | [Evidence](semantic-evidence/001cc89c.md) |
+| `002101a8` | loadPlayerPartyData(int) | [Evidence](semantic-evidence/002101a8.md) |
+| `00216308` | readMusic(int) | [Evidence](semantic-evidence/00216308.md) |
+| `0021cf30` | InitEffect() | [Evidence](semantic-evidence/0021cf30.md) |
+| `00248c18` | ctlpremov_main(CTLINFO*) | [Evidence](semantic-evidence/00248c18.md) |
+| `001568fc` | worldmap_restart() | [Evidence](semantic-evidence/001568fc.md) |
+| `000da4ac` | event_init_light() | [Evidence](semantic-evidence/000da4ac.md) |
+| `001bd320` | UnitTableInitFirst(short) | [Evidence](semantic-evidence/001bd320.md) |
+| `001cc950` | status_handle_main(BWORK*) | [Evidence](semantic-evidence/001cc950.md) |
