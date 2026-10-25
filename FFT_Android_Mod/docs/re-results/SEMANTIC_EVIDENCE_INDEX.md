@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **864/1258** pending functions.
+Evidence collected: **872/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -875,3 +875,11 @@ These reports do not constitute semantic verification.
 | `002a2a4c` | xpPadKeyBufGet | [Evidence](semantic-evidence/002a2a4c.md) |
 | `002a2b10` | xpPadDebugSet | [Evidence](semantic-evidence/002a2b10.md) |
 | `002acb2c` | GuEmu_GetRAW(int) | [Evidence](semantic-evidence/002acb2c.md) |
+| `002b1bcc` | NowLoading_Bootup() | [Evidence](semantic-evidence/002b1bcc.md) |
+| `002b242c` | Music_IsPlaying() | [Evidence](semantic-evidence/002b242c.md) |
+| `002b7034` | iOSCancelButtonCheck() | [Evidence](semantic-evidence/002b7034.md) |
+| `002befa0` | iOS_OrMenuTouchKeyInput(unsigned int) | [Evidence](semantic-evidence/002befa0.md) |
+| `000823ec` | zError | [Evidence](semantic-evidence/000823ec.md) |
+| `000c8138` | return_pentry() | [Evidence](semantic-evidence/000c8138.md) |
+| `000c8198` | tool_squarecursor(int, int) | [Evidence](semantic-evidence/000c8198.md) |
+| `000cbb30` | resetYLine() | [Evidence](semantic-evidence/000cbb30.md) |
