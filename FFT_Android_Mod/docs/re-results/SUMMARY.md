@@ -2,8 +2,8 @@
 
 Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Analyzed in current binary: 2028
-Automatically triaged: 146,752 bytes / 1,837,392 inventory bytes (7.99%); **this is newly triaged coverage, not total project coverage**.
+Analyzed in current binary: 2128
+Automatically triaged: 147,572 bytes / 1,837,392 inventory bytes (8.03%); **this is newly triaged coverage, not total project coverage**.
 
 | Address | Function | Size (B) | Coverage | Status |
 |---|---|---:|---:|---|
@@ -2029,9 +2029,109 @@ Automatically triaged: 146,752 bytes / 1,837,392 inventory bytes (7.99%); **this
 | `0020ebb8` | eventTerminateAnimation(int, int, short, short, short) | 12 | 100.0% | auto_structural |
 | `0021680c` | callZingle(int) | 12 | 100.0% | auto_structural |
 | `0021b50c` | loadData(char*, char**) | 12 | 100.0% | auto_structural |
+| `00223f24` | GetBowFirstSpeed() | 12 | 100.0% | auto_structural |
+| `00243a60` | CreateList(tagLIST_STAFFROLL*, tagSTAFFROLL*) | 12 | 100.0% | auto_structural |
+| `00263f9c` | ctlnobel_deactive(CTLINFO*) | 12 | 100.0% | auto_structural |
 | `00282268` | iOS_clearOkNg() | 12 | 100.0% | auto_structural |
+| `00284410` | Clear_VectorDataBaseObject(VECTOR_DATABASE*) | 12 | 100.0% | auto_structural |
 | `0028aec4` | __bpGetFileNum | 12 | 100.0% | auto_structural |
+| `0028afc4` | __bpGetBinarySize | 12 | 100.0% | auto_structural |
 | `0028afd0` | __bpGetBinaryData | 12 | 100.0% | auto_structural |
 | `0028ce48` | asmClearBuffer(void*, unsigned int) | 12 | 100.0% | auto_structural |
+| `002a142c` | SetFogNear | 12 | 100.0% | auto_structural |
+| `002b2cf8` | SysSE_PlayDef(int) | 12 | 100.0% | auto_structural |
 | `002b2d04` | SysSE_PlayUI(int) | 12 | 100.0% | auto_structural |
 | `002c9115` | operator delete(void*) | 12 | 100.0% | auto_structural |
+| `00082404` | zcalloc | 8 | 100.0% | auto_structural |
+| `0008240c` | zcfree | 8 | 100.0% | auto_structural |
+| `000b9df0` | CWORK_MEM::GetAllocSize() | 8 | 100.0% | auto_structural |
+| `000b9fc4` | CTHREAD::SetPriority(int) | 8 | 100.0% | auto_structural |
+| `000c8150` | return_jobdata() | 8 | 100.0% | auto_structural |
+| `000cbd6c` | CheckTrapCancelCommandWindow() | 8 | 100.0% | auto_structural |
+| `000d9f2c` | attackteam_prewait() | 8 | 100.0% | auto_structural |
+| `000da834` | copymat(MATRIX*, MATRIX*) | 8 | 100.0% | auto_structural |
+| `000e1110` | check_eventtoolmain(int, int) | 8 | 100.0% | auto_structural |
+| `000e8094` | iOS_EventNumberGet() | 8 | 100.0% | auto_structural |
+| `00101be8` | Wattackteam_prewait() | 8 | 100.0% | auto_structural |
+| `001024fc` | Wcopymat(MATRIX*, MATRIX*) | 8 | 100.0% | auto_structural |
+| `001027b4` | Whook_wipe() | 8 | 100.0% | auto_structural |
+| `0010fb6c` | Wcheck_eventtoolmain(int, int) | 8 | 100.0% | auto_structural |
+| `0015324c` | return_jobdatafromsmall() | 8 | 100.0% | auto_structural |
+| `001599a0` | asmGetGP() | 8 | 100.0% | auto_structural |
+| `0016f874` | cfileopen(unsigned char*, unsigned int) | 8 | 100.0% | auto_structural |
+| `0016f87c` | cfileclose(unsigned int) | 8 | 100.0% | auto_structural |
+| `0016f884` | cfilelseek(int, int, int) | 8 | 100.0% | auto_structural |
+| `001837a8` | filelseek(int, int, int) | 8 | 100.0% | auto_structural |
+| `00183844` | CardLoad(unsigned char*, unsigned char*, unsigned long) | 8 | 100.0% | auto_structural |
+| `001d3598` | set_playerwork(PENTRY*, unsigned char*) | 8 | 100.0% | auto_structural |
+| `001d63fc` | after_equipchange(BWORK*) | 8 | 100.0% | auto_structural |
+| `001e2b70` | check_coord(int, int, int) | 8 | 100.0% | auto_structural |
+| `00202fe8` | get_netTrapLocateModeFlg() | 8 | 100.0% | auto_structural |
+| `0020594c` | iOS_IsBattleSpeedUp() | 8 | 100.0% | auto_structural |
+| `0020dc5c` | checkAnimation(unsigned int) | 8 | 100.0% | auto_structural |
+| `0021037c` | setLongVector(VECTOR*, int, int, int) | 8 | 100.0% | auto_structural |
+| `00215d60` | StopCallback | 8 | 100.0% | auto_structural |
+| `00216274` | checkLoadMusic() | 8 | 100.0% | auto_structural |
+| `0021bd18` | s4_killOwnTask(_EffectTCB*) | 8 | 100.0% | auto_structural |
+| `00228dc8` | GetShapePrimPtTopOld() | 8 | 100.0% | auto_structural |
+| `00241930` | pluge000(short, int, int, int) | 8 | 100.0% | auto_structural |
+| `002419c4` | fftCdReset() | 8 | 100.0% | auto_structural |
+| `00241a44` | vOpn_arzmes_exit() | 8 | 100.0% | auto_structural |
+| `00244410` | rolladr_calc(unsigned long, unsigned long) | 8 | 100.0% | auto_structural |
+| `00245524` | movie_loop() | 8 | 100.0% | auto_structural |
+| `00245814` | strNextVlc(DECENV*) | 8 | 100.0% | auto_structural |
+| `00245a58` | getMoviePlayFlg__Fv() | 8 | 100.0% | auto_structural |
+| `00245c04` | o_WaitCardInfo(int, int) | 8 | 100.0% | auto_structural |
+| `0026ae24` | snpl_jnpageflg() | 8 | 100.0% | auto_structural |
+| `0026ae84` | snpl_jnstatflg() | 8 | 100.0% | auto_structural |
+| `0026aee4` | snpl_jnlocalflg() | 8 | 100.0% | auto_structural |
+| `002712a8` | Ssd_AddWaveData(void*) | 8 | 100.0% | auto_structural |
+| `002712b8` | Ssd_GetBankWaveSetPtr(short) | 8 | 100.0% | auto_structural |
+| `002712d0` | Ssd_GetStereo() | 8 | 100.0% | auto_structural |
+| `002712fc` | Ssd_AddMusic(void*) | 8 | 100.0% | auto_structural |
+| `0027131c` | Ssd_PlayEffect(long) | 8 | 100.0% | auto_structural |
+| `00271424` | Ssd_GetSeqPlayStatus(SsdSeqRec*) | 8 | 100.0% | auto_structural |
+| `00279f84` | pspRoutineCheckArithmeticPermission() | 8 | 100.0% | auto_structural |
+| `0027b390` | saveVram(char const*) | 8 | 100.0% | auto_structural |
+| `00280530` | cSaveFFT::GetMode() | 8 | 100.0% | auto_structural |
+| `002815dc` | test_test_addcolor() | 8 | 100.0% | auto_structural |
+| `00284694` | SearchVector(VECTOR_DATABASE*, SVECTOR const*) | 8 | 100.0% | auto_structural |
+| `00285f84` | pspFileManager::hockRead(void*, int) | 8 | 100.0% | auto_structural |
+| `002868e4` | multwindow_keyright_checkexit() | 8 | 100.0% | auto_structural |
+| `00286ac8` | get_netmode() | 8 | 100.0% | auto_structural |
+| `00286ad0` | get_netmodeadhoc() | 8 | 100.0% | auto_structural |
+| `00286ad8` | get_parent_child() | 8 | 100.0% | auto_structural |
+| `00286ae0` | get_main_player() | 8 | 100.0% | auto_structural |
+| `00286afc` | get_vsBattle_bule_trap() | 8 | 100.0% | auto_structural |
+| `00286b04` | get_vsBattle_bule_arithmetic_select() | 8 | 100.0% | auto_structural |
+| `00287268` | GetgTrapCancelCount() | 8 | 100.0% | auto_structural |
+| `00287270` | GetgTrapCancelResult() | 8 | 100.0% | auto_structural |
+| `002884cc` | getNetBattleJudge() | 8 | 100.0% | auto_structural |
+| `00288500` | getRewardLv() | 8 | 100.0% | auto_structural |
+| `00288514` | getGetItemCount() | 8 | 100.0% | auto_structural |
+| `00288570` | Get_AnimList(int) | 8 | 100.0% | auto_structural |
+| `0028b418` | ScriptCut__Fiii(int, int, int) | 8 | 100.0% | auto_structural |
+| `0028b470` | ResetCallback | 8 | 100.0% | auto_structural |
+| `0028b4ac` | StGetNext | 8 | 100.0% | auto_structural |
+| `0028b4f0` | DecDCToutCallback | 8 | 100.0% | auto_structural |
+| `0028b4f8` | get_SoundOnly_Flg__Fv() | 8 | 100.0% | auto_structural |
+| `0028b500` | set_SoundOnly_Flg__Fi(int) | 8 | 100.0% | auto_structural |
+| `0028b534` | getMovieSkipFlg__Fv() | 8 | 100.0% | auto_structural |
+| `0028b58c` | CdRead2 | 8 | 100.0% | auto_structural |
+| `0028b5ac` | CdSetDebug | 8 | 100.0% | auto_structural |
+| `0028b5b4` | CdReadCallback | 8 | 100.0% | auto_structural |
+| `0028b5bc` | CdReadyCallback | 8 | 100.0% | auto_structural |
+| `0028b5cc` | CdReset | 8 | 100.0% | auto_structural |
+| `0028b5d4` | CdStatus | 8 | 100.0% | auto_structural |
+| `0028cec4` | SetGraphDebug | 8 | 100.0% | auto_structural |
+| `0028e2dc` | CdInit | 8 | 100.0% | auto_structural |
+| `0028e468` | CdControlF | 8 | 100.0% | auto_structural |
+| `0028e4b8` | CdSync | 8 | 100.0% | auto_structural |
+| `00290e88` | FntOpen | 8 | 100.0% | auto_structural |
+| `00290e94` | FntPrint | 8 | 100.0% | auto_structural |
+| `00290e9c` | FntFlush | 8 | 100.0% | auto_structural |
+| `002a0808` | MulMatrix | 8 | 100.0% | auto_structural |
+| `002a0810` | MulMatrix2 | 8 | 100.0% | auto_structural |
+| `002b344c` | iCloud_Receive() | 8 | 100.0% | auto_structural |
+| `002b3454` | iCloud_GetSlotCount() | 8 | 100.0% | auto_structural |
+| `002c9121` | operator delete[](void*) | 8 | 0.0% | needs_review |
