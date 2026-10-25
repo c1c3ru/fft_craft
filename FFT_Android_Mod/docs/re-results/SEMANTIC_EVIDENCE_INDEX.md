@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1048/1258** pending functions.
+Evidence collected: **1056/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1059,3 +1059,11 @@ These reports do not constitute semantic verification.
 | `00286aa0` | get_netdatamode() | [Evidence](semantic-evidence/00286aa0.md) |
 | `00286ab4` | set_netdatamode(int) | [Evidence](semantic-evidence/00286ab4.md) |
 | `00286b0c` | set_limit_turn_flg(int) | [Evidence](semantic-evidence/00286b0c.md) |
+| `00286b20` | get_limit_turn_flg() | [Evidence](semantic-evidence/00286b20.md) |
+| `00286dec` | GetNetmissionNo() | [Evidence](semantic-evidence/00286dec.md) |
+| `00287030` | get_timing_flag() | [Evidence](semantic-evidence/00287030.md) |
+| `00287070` | get_rival() | [Evidence](semantic-evidence/00287070.md) |
+| `00287a18` | set_g_Soldier_Draw_flg(int) | [Evidence](semantic-evidence/00287a18.md) |
+| `00287a2c` | get_g_Soldier_Draw_flg() | [Evidence](semantic-evidence/00287a2c.md) |
+| `002884a0` | Set_NonDrawTaikiIconFlg(int) | [Evidence](semantic-evidence/002884a0.md) |
+| `002884b4` | Get_NonDrawTaikiIconFlg() | [Evidence](semantic-evidence/002884b4.md) |
