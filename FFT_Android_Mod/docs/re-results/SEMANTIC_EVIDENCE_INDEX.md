@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **888/1258** pending functions.
+Evidence collected: **896/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -899,3 +899,11 @@ These reports do not constitute semantic verification.
 | `001556f0` | worldcursorposset(int) | [Evidence](semantic-evidence/001556f0.md) |
 | `00155d70` | reactive_worldstatus() | [Evidence](semantic-evidence/00155d70.md) |
 | `00155dd4` | active_worldstatus() | [Evidence](semantic-evidence/00155dd4.md) |
+| `00155dec` | teach_onocursor(int, int) | [Evidence](semantic-evidence/00155dec.md) |
+| `0015a72c` | iOSScrollButtonDTap() | [Evidence](semantic-evidence/0015a72c.md) |
+| `00161e60` | iOSSetRotMode() | [Evidence](semantic-evidence/00161e60.md) |
+| `001ed94c` | getDirectionVector(int) | [Evidence](semantic-evidence/001ed94c.md) |
+| `001eee48` | getShapeWaitType(unsigned short) | [Evidence](semantic-evidence/001eee48.md) |
+| `001fd2ac` | resetTurnOrder() | [Evidence](semantic-evidence/001fd2ac.md) |
+| `0020f4fc` | clearOverSpecCtr() | [Evidence](semantic-evidence/0020f4fc.md) |
+| `0020f538` | restartAnimation() | [Evidence](semantic-evidence/0020f538.md) |
