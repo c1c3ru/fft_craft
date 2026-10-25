@@ -30,6 +30,61 @@ class EvidenceTests(unittest.TestCase):
         self.assertIn("0x100c", report)
         self.assertIn("No semantic equivalence is proved", report)
 
+    def test_pc_relative_literal_not_misreported_as_unexplained_code(self):
+        # ldr r0, [pc]; bx lr; .word 0x12345678
+        data = bytes.fromhex("00009fe5 1eff2fe1 78563412")
+        found, _, _ = module.collect(data, 0x1000)
+        literals = module.pc_relative_literals(found, 0x1000, data)
+        self.assertEqual(literals[0x1008]["value"], 0x12345678)
+        report = module.evidence({
+            "address": "00001000", "name": "literal_test()",
+            "status": "needs_review",
+        }, data)
+        self.assertIn("Unvisited slots referenced by PC-relative LDR: 1", report)
+        self.assertIn("Other unvisited slots: 0", report)
+        self.assertIn("0x1008", report)
+
+    def test_progressive_rotation_skips_existing_evidence(self):
+        import csv
+        import hashlib
+        import json
+        import tempfile
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            binary = root / "fake.so"
+            binary.write_bytes(b"synthetic")
+            digest = hashlib.sha256(b"synthetic").hexdigest()
+            results = root / "results"
+            results.mkdir()
+            output = results / "semantic-evidence"
+            output.mkdir()
+            rows = []
+            for i in (0x1000, 0x2000, 0x3000):
+                addr = f"{i:08x}"
+                rows.append({"address": addr, "name": f"f_{addr}"})
+                (results / f"{addr}.json").write_text(json.dumps({
+                    "address": addr, "size": 8,
+                    "status": "needs_review", "pipeline_version": 2,
+                    "binary_sha256": digest,
+                }))
+            with (results / "REVIEW_QUEUE.csv").open("w", newline="") as stream:
+                writer = csv.DictWriter(stream, fieldnames=["address", "name"])
+                writer.writeheader()
+                writer.writerows(rows)
+            # The first address has valid existing evidence.
+            (output / "00001000.md").write_text(f"ELF SHA-256: `{digest}`")
+            data = bytes.fromhex("0100a0e3 1eff2fe1")
+            with patch.object(module, "read_function", return_value=data) as reader:
+                module.run(binary, results, output, 2)
+                self.assertEqual(reader.call_count, 2)
+                self.assertTrue((output / "00002000.md").exists())
+                self.assertTrue((output / "00003000.md").exists())
+                module.run(binary, results, output, 2)
+                self.assertEqual(reader.call_count, 2)
+            index = (results / "SEMANTIC_EVIDENCE_INDEX.md").read_text()
+            self.assertIn("Evidence collected: **3/3**", index)
+
     def test_reject_unaligned_arm_ranges(self):
         with self.assertRaisesRegex(ValueError, "multiples of four"):
             module.read_function(Path("/nonexistent"), 0x1001, 8)
