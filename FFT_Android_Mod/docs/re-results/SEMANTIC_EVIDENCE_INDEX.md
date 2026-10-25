@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **632/1258** pending functions.
+Evidence collected: **640/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -643,3 +643,11 @@ These reports do not constitute semantic verification.
 | `001020f8` | Wevent_init_system() | [Evidence](semantic-evidence/001020f8.md) |
 | `0010229c` | Wgeteventcategory() | [Evidence](semantic-evidence/0010229c.md) |
 | `00153420` | wait_taskend(long) | [Evidence](semantic-evidence/00153420.md) |
+| `001536e4` | Wwait_taskend(long) | [Evidence](semantic-evidence/001536e4.md) |
+| `0015e068` | iOSNumberGet(int) | [Evidence](semantic-evidence/0015e068.md) |
+| `001d1db8` | leave_unit_f(int) | [Evidence](semantic-evidence/001d1db8.md) |
+| `001d2e6c` | get_coord_address(BWORK*) | [Evidence](semantic-evidence/001d2e6c.md) |
+| `001dc914` | set_cco_SD(BWORK*) | [Evidence](semantic-evidence/001dc914.md) |
+| `001e4f0c` | get_fusui_ability(BWORK*) | [Evidence](semantic-evidence/001e4f0c.md) |
+| `001eedf4` | getWpnSequenceAddress(unsigned short) | [Evidence](semantic-evidence/001eedf4.md) |
+| `00202150` | standerdExecution() | [Evidence](semantic-evidence/00202150.md) |
