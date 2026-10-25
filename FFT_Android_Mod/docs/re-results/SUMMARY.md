@@ -2,8 +2,8 @@
 
 Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Analyzed in current binary: 1630
-Automatically triaged: 144,788 bytes / 1,837,392 inventory bytes (7.88%); **this is newly triaged coverage, not total project coverage**.
+Analyzed in current binary: 1729
+Automatically triaged: 145,512 bytes / 1,837,392 inventory bytes (7.92%); **this is newly triaged coverage, not total project coverage**.
 
 | Address | Function | Size (B) | Coverage | Status |
 |---|---|---:|---:|---|
@@ -1630,10 +1630,109 @@ Automatically triaged: 144,788 bytes / 1,837,392 inventory bytes (7.88%); **this
 | `0021c3ac` | sc_pushMapAngle(_EffectTCB*) | 32 | 100.0% | auto_structural |
 | `0021c3cc` | sd_popMapAngle(_EffectTCB*) | 32 | 100.0% | auto_structural |
 | `0021c434` | sf_pushMapScale(_EffectTCB*) | 32 | 100.0% | auto_structural |
+| `0021c454` | s24_popMapScale(_EffectTCB*) | 32 | 100.0% | auto_structural |
 | `0021cedc` | UnlockEffect() | 32 | 87.5% | needs_review |
+| `0021cefc` | LockEffectCompelBreak() | 32 | 87.5% | needs_review |
+| `0021d2c0` | s2b_initMetascheduleControl(_EffectTCB*) | 32 | 100.0% | auto_structural |
 | `0021f308` | PermanentEffectEndRequest(unsigned char) | 32 | 87.5% | needs_review |
+| `0022a2cc` | getAbsoluteMaximumOf2(short, short) | 32 | 100.0% | auto_structural |
+| `0024f4b0` | ctltips_active(CTLINFO*) | 32 | 87.5% | needs_review |
+| `002657d8` | backpage_put(CTLINFO*, int) | 32 | 100.0% | auto_structural |
+| `0026df10` | ctlhentuto_active(CTLINFO*) | 32 | 87.5% | needs_review |
+| `00270500` | curhis_clr(int) | 32 | 87.5% | needs_review |
+| `0028080c` | IOS_PSP2IOS_X(int) | 32 | 87.5% | needs_review |
+| `0028082c` | IOS_PSP2IOS_Y(int) | 32 | 87.5% | needs_review |
+| `00288a58` | pspPrimDirectParamSet(int, RECT16*) | 32 | 87.5% | needs_review |
+| `0028b610` | initXpHeap() | 32 | 87.5% | needs_review |
 | `0028ba84` | TE_task_start(long) | 32 | 87.5% | needs_review |
+| `0028ce58` | sceCtrlPeekBufferPositive | 32 | 87.5% | needs_review |
+| `00294e44` | GetDispEnv | 32 | 87.5% | needs_review |
+| `0029c934` | sceVfpuVector4Set(ScePspFVector4*, float, float, float, float) | 32 | 100.0% | auto_structural |
+| `002a0a80` | ApplyRotMatrix | 32 | 100.0% | auto_structural |
+| `002a1108` | Square0 | 32 | 100.0% | auto_structural |
+| `002a1128` | Square12 | 32 | 100.0% | auto_structural |
+| `002a1350` | ReadGeomOffset | 32 | 87.5% | needs_review |
 | `002a2c70` | PCread | 32 | 87.5% | needs_review |
 | `002a2ca8` | PClseek | 32 | 87.5% | needs_review |
+| `002a2ce0` | PCwrite | 32 | 87.5% | needs_review |
+| `002ae8c0` | GlTexEnv_GetSprite(int) | 32 | 87.5% | needs_review |
+| `002ae8e0` | GlTexEnv_GetTextureHandle(int) | 32 | 87.5% | needs_review |
+| `002b01e0` | GlTexEnv_GetTextureHandle_2X(int) | 32 | 87.5% | needs_review |
 | `002b2358` | Music_Play(int, int, int, int) | 32 | 87.5% | needs_review |
 | `002b871c` | iOS_isTouchBegan() | 32 | 87.5% | needs_review |
+| `0007d894` | call_zopen64 | 28 | 100.0% | auto_structural |
+| `000d961c` | setplatetime(int) | 28 | 85.71% | needs_review |
+| `000d9748` | iOS_battle_scrollwindow_tap() | 28 | 85.71% | needs_review |
+| `000daae8` | hook_wipe() | 28 | 100.0% | auto_structural |
+| `000e628c` | Get_bravebreak() | 28 | 85.71% | needs_review |
+| `000e62a8` | Set_bravebreak(unsigned short) | 28 | 85.71% | needs_review |
+| `00101434` | Wsetplatetime(int) | 28 | 85.71% | needs_review |
+| `0010155c` | WiOS_battle_scrollwindow_tap() | 28 | 85.71% | needs_review |
+| `00101fa4` | Wchangeflame(int) | 28 | 85.71% | needs_review |
+| `00155854` | set_worldday(int, int) | 28 | 85.71% | needs_review |
+| `00155870` | set_worldmoney(int) | 28 | 85.71% | needs_review |
+| `00155c5c` | ret_optionstatus() | 28 | 85.71% | needs_review |
+| `00159a54` | asmGetActiveTask(int) | 28 | 85.71% | needs_review |
+| `0018378c` | fileclose(unsigned int) | 28 | 85.71% | needs_review |
+| `00196ea0` | MenuSelSideDirect(unsigned char, unsigned char) | 28 | 85.71% | needs_review |
+| `001a8604` | Mituryo(short) | 28 | 85.71% | needs_review |
+| `001b70f4` | DrawMessageWithPosition(int, COMRECORD*, int) | 28 | 85.71% | needs_review |
+| `001c7218` | TEST_TEST() | 28 | 85.71% | needs_review |
+| `001ca938` | net_setknockback(unsigned char, unsigned char, unsigned char) | 28 | 85.71% | needs_review |
+| `001d357c` | set_playerwork2(PENTRY*, unsigned char*) | 28 | 85.71% | needs_review |
+| `001d751c` | erase_unit(int) | 28 | 85.71% | needs_review |
+| `001d9354` | set_jcflag(unsigned char*, int) | 28 | 100.0% | auto_structural |
+| `0020177c` | reserveActionDirection(tag_animation*) | 28 | 100.0% | auto_structural |
+| `00202ee0` | isInputEnable() | 28 | 100.0% | auto_structural |
+| `0020e694` | checkAnimationExist(int) | 28 | 100.0% | auto_structural |
+| `0021f2ec` | GetPEffectStatus(unsigned char) | 28 | 85.71% | needs_review |
+| `0022a95c` | EqualSVectorToVECTOR(SVector*, VECTOR*) | 28 | 100.0% | auto_structural |
+| `0022a978` | EqualSVectorToSVECTOR(SVector*, SVECTOR*) | 28 | 100.0% | auto_structural |
+| `002419a8` | doublespeed_chk(CDREC*) | 28 | 100.0% | auto_structural |
+| `0024d948` | iOS_BRST_CHECK() | 28 | 85.71% | needs_review |
+| `00258b00` | evt_skip3() | 28 | 85.71% | needs_review |
+| `00258b1c` | evt_skip4() | 28 | 85.71% | needs_review |
+| `0026c25c` | iOSNovelModeRestore() | 28 | 85.71% | needs_review |
+| `00271324` | Ssd_PlayEffects01(long, long) | 28 | 100.0% | auto_structural |
+| `00279f68` | JudgeTimeOut() | 28 | 100.0% | auto_structural |
+| `00281678` | iOS_v2menuGetItem() | 28 | 85.71% | needs_review |
+| `002885b8` | pspOpenDisableFlg(PSP_OPEN_FLG) | 28 | 85.71% | needs_review |
+| `002885d4` | pspOpenEnableFlg(PSP_OPEN_FLG) | 28 | 85.71% | needs_review |
+| `0028da90` | tlMallocErrorFunc(void (*)(TL_MALLOC_ERROR)) | 28 | 85.71% | needs_review |
+| `0028e5c4` | VSyncCallback | 28 | 85.71% | needs_review |
+| `0028e6d4` | xpSetWaitVSyncFunc(int (*)()) | 28 | 85.71% | needs_review |
+| `00290e6c` | DrawSyncCallback | 28 | 85.71% | needs_review |
+| `00291bc0` | PutDrawEnv | 28 | 100.0% | auto_structural |
+| `0029b3f0` | GsClearDispArea | 28 | 100.0% | auto_structural |
+| `0029fed4` | PSX_ccos | 28 | 85.71% | needs_review |
+| `002a1440` | SetLightMatrix | 28 | 85.71% | needs_review |
+| `002a148c` | SetColorMatrix | 28 | 85.71% | needs_review |
+| `002a1534` | LightColor | 28 | 100.0% | auto_structural |
+| `002a1550` | LocalLight | 28 | 100.0% | auto_structural |
+| `002a2a4c` | xpPadKeyBufGet | 28 | 85.71% | needs_review |
+| `002a2b10` | xpPadDebugSet | 28 | 85.71% | needs_review |
+| `002acb2c` | GuEmu_GetRAW(int) | 28 | 85.71% | needs_review |
+| `002b1bcc` | NowLoading_Bootup() | 28 | 71.43% | needs_review |
+| `002b242c` | Music_IsPlaying() | 28 | 85.71% | needs_review |
+| `002b7034` | iOSCancelButtonCheck() | 28 | 85.71% | needs_review |
+| `002befa0` | iOS_OrMenuTouchKeyInput(unsigned int) | 28 | 85.71% | needs_review |
+| `000823ec` | zError | 24 | 83.33% | needs_review |
+| `000b9d8c` | CWORK_MEM::~CWORK_MEM() | 24 | 100.0% | auto_structural |
+| `000c8138` | return_pentry() | 24 | 83.33% | needs_review |
+| `000c8198` | tool_squarecursor(int, int) | 24 | 83.33% | needs_review |
+| `000cbb30` | resetYLine() | 24 | 83.33% | needs_review |
+| `000cbd78` | pspEntrySquareDataGet() | 24 | 83.33% | needs_review |
+| `000da5f8` | return_actionstructure() | 24 | 83.33% | needs_review |
+| `000da808` | whatweather() | 24 | 83.33% | needs_review |
+| `000ddd48` | tutorial_padcontrol(int*) | 24 | 83.33% | needs_review |
+| `000e0fa0` | loadcdst(int, int) | 24 | 83.33% | needs_review |
+| `00101578` | WiOS_set_status_pad(unsigned long*) | 24 | 83.33% | needs_review |
+| `001024e4` | Wwhatweather() | 24 | 83.33% | needs_review |
+| `0010729c` | Wtutorial_padcontrol(int*) | 24 | 83.33% | needs_review |
+| `0010fa04` | Wloadcdst(int, int) | 24 | 83.33% | needs_review |
+| `00150690` | setNetErrorCutFlg() | 24 | 83.33% | needs_review |
+| `0020f538` | restartAnimation() | 24 | 83.33% | needs_review |
+| `0020f8a0` | finishAttackTeamSelect() | 24 | 83.33% | needs_review |
+| `00216128` | iOS_resetTexCacheLine() | 24 | 83.33% | needs_review |
+| `00287588` | reset_g_NetIcon_DrawFlg() | 24 | 83.33% | needs_review |
+| `00291a84` | SetShadeTex | 24 | 100.0% | auto_structural |

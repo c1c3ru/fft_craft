@@ -1,0 +1,18 @@
+{
+  "address": "002a1534",
+  "name": "LightColor",
+  "size": 28,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "29cc28",
+    "29f3a0"
+  ],
+  "log": "=== jtable.py: 0x2a1534..0x2a1550 (28 bytes) ===\ncoverage: 7 of ~7 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x29cc28 x1   _gte_ldlvl(VECTOR*) \n  0x29f3a0 x1   _gte_lc() \n\n-- branches: 1 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
