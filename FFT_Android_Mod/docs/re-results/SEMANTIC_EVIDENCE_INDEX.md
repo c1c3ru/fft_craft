@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **848/1258** pending functions.
+Evidence collected: **856/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -859,3 +859,11 @@ These reports do not constitute semantic verification.
 | `001d751c` | erase_unit(int) | [Evidence](semantic-evidence/001d751c.md) |
 | `0021f2ec` | GetPEffectStatus(unsigned char) | [Evidence](semantic-evidence/0021f2ec.md) |
 | `0024d948` | iOS_BRST_CHECK() | [Evidence](semantic-evidence/0024d948.md) |
+| `00258b00` | evt_skip3() | [Evidence](semantic-evidence/00258b00.md) |
+| `00258b1c` | evt_skip4() | [Evidence](semantic-evidence/00258b1c.md) |
+| `0026c25c` | iOSNovelModeRestore() | [Evidence](semantic-evidence/0026c25c.md) |
+| `00281678` | iOS_v2menuGetItem() | [Evidence](semantic-evidence/00281678.md) |
+| `002885b8` | pspOpenDisableFlg(PSP_OPEN_FLG) | [Evidence](semantic-evidence/002885b8.md) |
+| `002885d4` | pspOpenEnableFlg(PSP_OPEN_FLG) | [Evidence](semantic-evidence/002885d4.md) |
+| `0028da90` | tlMallocErrorFunc(void (*)(TL_MALLOC_ERROR)) | [Evidence](semantic-evidence/0028da90.md) |
+| `0028e5c4` | VSyncCallback | [Evidence](semantic-evidence/0028e5c4.md) |
