@@ -2,8 +2,8 @@
 
 Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Analyzed in current binary: 836
-Automatically triaged: 122,284 bytes / 1,837,392 inventory bytes (6.66%); **this is newly triaged coverage, not total project coverage**.
+Analyzed in current binary: 933
+Automatically triaged: 128,308 bytes / 1,837,392 inventory bytes (6.98%); **this is newly triaged coverage, not total project coverage**.
 
 | Address | Function | Size (B) | Coverage | Status |
 |---|---|---:|---:|---|
@@ -685,7 +685,7 @@ Automatically triaged: 122,284 bytes / 1,837,392 inventory bytes (6.66%); **this
 | `00284314` | Init_VectorDataBaseObject(VECTOR_DATABASE_CONTAINER*, unsigned int) | 140 | 100.0% | auto_structural |
 | `00284594` | new_Vector(VECTOR_DATABASE*, SVECTOR const*) | 140 | 100.0% | auto_structural |
 | `002889cc` | pspOffScreenInit(RECT16*, RECT16*) | 140 | 97.14% | auto_structural |
-| `002cb4ac` | __floatundisf | 140 | 82.86% | needs_review |
+| `002cb4ac` | __aeabi_ul2f | 140 | 82.86% | needs_review |
 | `00080844` | unzStringFileNameCompare | 136 | 100.0% | auto_structural |
 | `000e5680` | disp_status2() | 136 | 85.29% | needs_review |
 | `000e5708` | disp_status2right() | 136 | 85.29% | needs_review |
@@ -842,4 +842,101 @@ Automatically triaged: 122,284 bytes / 1,837,392 inventory bytes (6.66%); **this
 | `0026a504` | snpl_jparasmall() | 108 | 96.3% | auto_structural |
 | `00281730` | iOS_v2menuGetEnable(V2_MENU_ITEM) | 108 | 92.59% | needs_review |
 | `00282648` | wgte_color_set_vec(MATRIX const*, int, SVECTOR const*) | 108 | 100.0% | auto_structural |
+| `002a2460` | RotColorMatDpq(SVECTOR*, SVECTOR*, CVECTOR*, long*, CVECTOR*, long, long*) | 108 | 100.0% | auto_structural |
 | `002ab960` | sceGuGetMemory_for_iOS | 108 | 96.3% | auto_structural |
+| `002b2f7c` | musicPlayer_Stop() | 108 | 92.59% | needs_review |
+| `002cb838` | __ltsf2 | 108 | 96.3% | auto_structural |
+| `00077ad0` | gzdopen | 104 | 96.15% | auto_structural |
+| `00082360` | unzSetOffset64 | 104 | 100.0% | auto_structural |
+| `0010044c` | Wimport_localstatus(char*, char*, char*, char*) | 104 | 92.31% | needs_review |
+| `0015a180` | iOSLRChgTap(int, int, int, int) | 104 | 100.0% | auto_structural |
+| `001d18e4` | Resume_MK_BSTR_IsLoaded(int) | 104 | 92.31% | needs_review |
+| `001e0ec4` | check_invincible(int, int*) | 104 | 96.15% | auto_structural |
+| `0020c6e4` | freeForSound(void*) | 104 | 92.31% | needs_review |
+| `00213da4` | startColorRotation(int, int, int, int) | 104 | 96.15% | auto_structural |
+| `0021cfe4` | GetEffectTCB() | 104 | 88.46% | needs_review |
+| `002593f8` | evt_date_low() | 104 | 96.15% | auto_structural |
+| `00269e04` | snpl_mfadein() | 104 | 92.31% | needs_review |
+| `0026a1cc` | snpl_musicstop() | 104 | 92.31% | needs_review |
+| `002738a8` | SetThresholdDoNothing() | 104 | 96.15% | auto_structural |
+| `00281a2c` | iOS_v2menuIsInMenu(int, int) | 104 | 96.15% | auto_structural |
+| `002a1c78` | RotNclip4 | 104 | 100.0% | auto_structural |
+| `00077498` | gzoffset64 | 100 | 100.0% | auto_structural |
+| `0007d8b0` | call_zseek64 | 100 | 100.0% | auto_structural |
+| `000ba020` | timeGetTimeM() | 100 | 96.0% | auto_structural |
+| `000cbab8` | createEndModeWindow() | 100 | 92.0% | needs_review |
+| `000d6e48` | initsprt(tagSPRT*) | 100 | 100.0% | auto_structural |
+| `000d8648` | getanimpos(int) | 100 | 96.0% | auto_structural |
+| `000db440` | eventenvse() | 100 | 100.0% | auto_structural |
+| `000f15a0` | disp_backtotitle_yesno() | 100 | 92.0% | needs_review |
+| `000fe96c` | Winitsprt(tagSPRT*) | 100 | 100.0% | auto_structural |
+| `00102ea0` | Weventenvse() | 100 | 100.0% | auto_structural |
+| `0010638c` | Wdisp_backtotitle_yesno() | 100 | 92.0% | needs_review |
+| `001d1a18` | set_playerwork_sp(PENTRY*, unsigned char*, int) | 100 | 92.0% | needs_review |
+| `001e20c0` | dec_party_item(BWORK*, unsigned short, int) | 100 | 92.0% | needs_review |
+| `001fecc0` | rideOffChokobo(tag_animation*) | 100 | 100.0% | auto_structural |
+| `0020e498` | offsetAnimationPosition(int, SVECTOR*) | 100 | 100.0% | auto_structural |
+| `0020e4fc` | setOffsetAnimationPosition(int, SVECTOR*) | 100 | 100.0% | auto_structural |
+| `00215cbc` | fadeCharacterClut(int, int, unsigned short*) | 100 | 100.0% | auto_structural |
+| `0022a268` | getAbsoluteMaximumOf3(short, short, short) | 100 | 100.0% | auto_structural |
+| `0024358c` | fRoll_autochg(short*) | 100 | 96.0% | auto_structural |
+| `0025e2ac` | mouke_tbl_get(MOUINFO*, int) | 100 | 100.0% | auto_structural |
+| `0028d1c4` | tlPushHeap(void*) | 100 | 84.0% | needs_review |
+| `002a1204` | SquareSS12 | 100 | 100.0% | auto_structural |
+| `002a2184` | RotColorDpq | 100 | 100.0% | auto_structural |
+| `002b0200` | GlTexEnv_GetTextureSize(int, float*, float*, float*, float*) | 100 | 96.0% | auto_structural |
+| `002b0264` | GlTexEnv_GetTextureSize_2X(int, float*, float*, float*, float*) | 100 | 96.0% | auto_structural |
+| `002bf020` | iOS_isInCursorRotate() | 100 | 96.0% | auto_structural |
+| `002cb840` | __eqsf2 | 100 | 100.0% | auto_structural |
+| `000d7e78` | serchmessagepointer(int) | 96 | 95.83% | auto_structural |
+| `000ffa64` | Wserchmessagepointer(int) | 96 | 95.83% | auto_structural |
+| `00100320` | Wgetanimpos(int) | 96 | 95.83% | auto_structural |
+| `0010c79c` | Wmakemessagestructure() | 96 | 87.5% | needs_review |
+| `00150630` | NetEndSyncProc() | 96 | 91.67% | needs_review |
+| `0015b604` | iOSTchStatusModeGet() | 96 | 95.83% | auto_structural |
+| `0015de8c` | iOSGT4_MapOTZGet(unsigned long, short) | 96 | 95.83% | auto_structural |
+| `001a72d8` | ChgMoney(int) | 96 | 95.83% | auto_structural |
+| `001a73a4` | ChrNameSet(short, unsigned char*) | 96 | 95.83% | auto_structural |
+| `001ade40` | GetItemCategoryPos(int) | 96 | 83.33% | needs_review |
+| `001baa18` | unit_isdark() | 96 | 91.67% | needs_review |
+| `001bb1c4` | SetSttsA2(int) | 96 | 91.67% | needs_review |
+| `001cd0cc` | set_calcmode_think() | 96 | 79.17% | needs_review |
+| `001d1ffc` | check_item_left(int, int, int) | 96 | 91.67% | needs_review |
+| `001d639c` | check_turn_end(int) | 96 | 95.83% | auto_structural |
+| `0020f620` | getMapIDFromAnimationPosition(int) | 96 | 95.83% | auto_structural |
+| `00225a68` | GetParentObject(short, short) | 96 | 95.83% | auto_structural |
+| `00228de4` | NewShape2(unsigned char) | 96 | 91.67% | needs_review |
+| `0024322c` | fRoll_wait(short*) | 96 | 95.83% | auto_structural |
+| `00246300` | vOpn_ctlinit(int) | 96 | 91.67% | needs_review |
+| `0025c49c` | houkokuinf_init(int) | 96 | 87.5% | needs_review |
+| `0025d20c` | world_exit() | 96 | 91.67% | needs_review |
+| `0026a674` | op_search(int, int) | 96 | 91.67% | needs_review |
+| `002a251c` | RotNclip3 | 96 | 100.0% | auto_structural |
+| `002ab88c` | sceGuBlendFunc | 96 | 87.5% | needs_review |
+| `000da59c` | initatchrrsvcursor(int) | 92 | 95.65% | auto_structural |
+| `000e10b4` | initdrmode2(DR_MODE*, RECT16*) | 92 | 95.65% | auto_structural |
+| `0010216c` | Winitatchrrsvcursor(int) | 92 | 95.65% | auto_structural |
+| `00155d14` | reactive_worldwindow() | 92 | 91.3% | needs_review |
+| `00156b90` | hook_tuto(int) | 92 | 86.96% | needs_review |
+| `0018e358` | esys_warning(int, int) | 92 | 86.96% | needs_review |
+| `001d52e0` | set_chargeability2(int, unsigned char, short*, unsigned char*, unsigned char*) | 92 | 100.0% | auto_structural |
+| `00216884` | callMusic(int) | 92 | 95.65% | auto_structural |
+| `00216900` | fadeSoundEffect(int, int) | 92 | 95.65% | auto_structural |
+| `002423f4` | ctlendmov_init(int, int, int) | 92 | 86.96% | needs_review |
+| `0026adc0` | snpl_jpageflg_sub(int) | 92 | 91.3% | needs_review |
+| `00288ebc` | pspGetpspPrimWorkBuf(int) | 92 | 91.3% | needs_review |
+| `0028d43c` | tlGetAllocSize(void const*) | 92 | 95.65% | auto_structural |
+| `00291964` | SetDrawTPage | 92 | 100.0% | auto_structural |
+| `002a1174` | SquareSL12 | 92 | 100.0% | auto_structural |
+| `002b1e14` | NowLoading_Init() | 92 | 86.96% | needs_review |
+| `002b74d4` | IS_GAME_ROT_AREA(int, int) | 92 | 91.3% | needs_review |
+| `002b7530` | IS_GAME_MOV_AREA(int, int) | 92 | 91.3% | needs_review |
+| `000c443c` | Aitemmenu_uvclut(short*, int) | 88 | 100.0% | auto_structural |
+| `000d13b0` | Ditemmenu_uvclut(short*, int) | 88 | 100.0% | auto_structural |
+| `0010fb14` | Winitdrmode2(DR_MODE*, RECT16*) | 88 | 95.45% | auto_structural |
+| `00123be8` | Eitemmenu_uvclut(short*, int) | 88 | 100.0% | auto_structural |
+| `0012cd74` | itemmenu_uvclut(short*, int) | 88 | 100.0% | auto_structural |
+| `0020eadc` | inactivateAnimation(int) | 88 | 100.0% | auto_structural |
+| `0020ed84` | activateEventAnimation(int) | 88 | 95.45% | auto_structural |
+| `002163bc` | checkReadMusic() | 88 | 95.45% | auto_structural |
+| `002916b8` | SetDrawArea | 88 | 100.0% | auto_structural |

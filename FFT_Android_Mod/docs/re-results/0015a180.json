@@ -1,0 +1,19 @@
+{
+  "address": "0015a180",
+  "name": "iOSLRChgTap(int, int, int, int)",
+  "size": 104,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2b7ab4",
+    "2b7b18",
+    "2b7b2c"
+  ],
+  "log": "=== jtable.py: 0x15a180..0x15a1e8 (104 bytes) ===\ncoverage: 26 of ~26 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x2b7ab4 x1   iOS_getTouchFreeTap() \n  0x2b7b18 x2   iOS_getTouchBeginX() \n  0x2b7b2c x2   iOS_getTouchBeginY() \n\n-- branches: 3 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

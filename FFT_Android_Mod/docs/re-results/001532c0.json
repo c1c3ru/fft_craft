@@ -12,7 +12,7 @@
     "1599a0"
   ],
   "log": "=== jtable.py: 0x1532c0..0x153350 (144 bytes) ===\ncoverage: 34 of ~36 instruction slots (94%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x1599a0 x1   asmGetGP() \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
-  "review_attempts": 1,
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }
