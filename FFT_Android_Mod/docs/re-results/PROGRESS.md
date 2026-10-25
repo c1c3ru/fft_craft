@@ -6,22 +6,22 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 |---|---:|
 | Inventory total | 6,455 functions / 1,837,392 bytes |
 | Previously analyzed in CSV | 3,373 functions / 1,513,492 bytes |
-| JSON checkpoints (all statuses) | 1,133 |
-| Newly accepted structurally | 612 functions / 136,008 bytes |
-| Needs review | 521 functions |
+| JSON checkpoints (all statuses) | 1,233 |
+| Newly accepted structurally | 648 functions / 138,264 bytes |
+| Needs review | 585 functions |
 | Core targets in inventory | 4,642 functions |
-| Core targets checkpointed | 1,030 functions |
-| Core accepted structurally | 529 functions |
-| Core needs review | 501 functions |
-| Core not yet checkpointed | 1,325 functions |
-| Not yet checkpointed | 1,929 functions / 74,236 bytes |
+| Core targets checkpointed | 1,130 functions |
+| Core accepted structurally | 565 functions |
+| Core needs review | 565 functions |
+| Core not yet checkpointed | 1,225 functions |
+| Not yet checkpointed | 1,829 functions / 67,936 bytes |
 
 ## Checkpoint status
 
 | Status | Functions |
 |---|---:|
-| auto_structural | 612 |
-| needs_review | 521 |
+| auto_structural | 648 |
+| needs_review | 585 |
 
 ## Review queue (largest first)
 
@@ -528,9 +528,18 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | `0015de44` | iOSGT4_MapXYZClear(unsigned long) (needs_review) | 72 | 83.33 | 0 | 0 |
 | `0015369c` | Wtask_init() (needs_review) | 72 | 88.89 | 0 | 0 |
 | `001533d8` | task_init() (needs_review) | 72 | 88.89 | 0 | 0 |
+| `002b758c` | IS_ICON_AREA(int) (needs_review) | 68 | 88.24 | 0 | 0 |
+| `002b2b38` | SysSE_Stop(int) (needs_review) | 68 | 88.24 | 0 | 0 |
 | `002a08bc` | PopMatrix (needs_review) | 68 | 88.24 | 0 | 0 |
 | `002a0878` | PushMatrix (needs_review) | 68 | 88.24 | 0 | 0 |
 | `0029fef0` | ratan2 (needs_review) | 68 | 94.12 | 0 | 0 |
+| `00273864` | GetDestinationRange() (needs_review) | 68 | 94.12 | 0 | 0 |
+| `002706c8` | pageanmpac_reset(int, int, int) (needs_review) | 68 | 94.12 | 0 | 0 |
+| `00269c3c` | snpl_mesput3() (needs_review) | 68 | 94.12 | 0 | 0 |
+| `00258ff8` | evt_dead_low() (needs_review) | 68 | 94.12 | 0 | 0 |
+| `0024a068` | vOpn_pacloop() (needs_review) | 68 | 82.35 | 0 | 0 |
+| `00242618` | ctlendmov_main(CTLINFO*) (needs_review) | 68 | 88.24 | 0 | 0 |
+| `002167c8` | panpotMusic(int, int) (needs_review) | 68 | 94.12 | 0 | 0 |
 | `00216784` | pitchMusic(int, int) (needs_review) | 68 | 94.12 | 0 | 0 |
 | `00216740` | tempoMusic(int, int) (needs_review) | 68 | 94.12 | 0 | 0 |
 | `00216618` | effectFadeoutMusic(int, int) (needs_review) | 68 | 94.12 | 0 | 0 |
@@ -548,6 +557,61 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | `00100550` | Wpushmessagepacket() (needs_review) | 68 | 88.24 | 0 | 0 |
 | `000da558` | event_start() (needs_review) | 68 | 88.24 | 0 | 0 |
 | `000d8880` | pushmessagepacket() (needs_review) | 68 | 88.24 | 0 | 0 |
+| `002b8888` | iOS_InitMovie(int) (needs_review) | 64 | 87.5 | 0 | 0 |
+| `002a3028` | xpFree (needs_review) | 64 | 93.75 | 0 | 0 |
+| `0028be80` | _ps_test() (needs_review) | 64 | 87.5 | 0 | 0 |
+| `0028b080` | pspWorldCallBackExec() (needs_review) | 64 | 87.5 | 0 | 0 |
+| `00273b38` | SetSafePanelAhead(int) (needs_review) | 64 | 93.75 | 0 | 0 |
+| `0026ebf0` | ctlsentuto_active(CTLINFO*) (needs_review) | 64 | 93.75 | 0 | 0 |
+| `0026a570` | snpl_fadewait() (needs_review) | 64 | 81.25 | 0 | 0 |
+| `00249278` | vOpn_init(int) (needs_review) | 64 | 93.75 | 0 | 0 |
+| `0024552c` | cdxa_stop() (needs_review) | 64 | 93.75 | 0 | 0 |
+| `0021cbd0` | s1d_ifScheduleEnd(_EffectTCB*) (needs_review) | 64 | 93.75 | 0 | 0 |
+| `0021c684` | s27_setEnvironmentWithTable(_EffectTCB*) (needs_review) | 64 | 93.75 | 0 | 0 |
+| `0021c08c` | s1f_ifNumTargetEQU(_EffectTCB*) (needs_review) | 64 | 93.75 | 0 | 0 |
+| `0021bd20` | s5_setSequenceID(_EffectTCB*) (needs_review) | 64 | 93.75 | 0 | 0 |
+| `0021665c` | effectFadeinMusic(int) (needs_review) | 64 | 93.75 | 0 | 0 |
+| `0020ef78` | inactivateCompressedAnimation(int) (needs_review) | 64 | 93.75 | 0 | 0 |
+| `0020e880` | getFontIDFormBattleWork(int) (needs_review) | 64 | 93.75 | 0 | 0 |
+| `0020dad8` | setBackColor(unsigned char, unsigned char, unsigned char) (needs_review) | 64 | 93.75 | 0 | 0 |
+| `001eb794` | iOSmyGetShapePrim() (needs_review) | 64 | 93.75 | 0 | 0 |
+| `001eb074` | countCrystalAnimation() (needs_review) | 64 | 93.75 | 0 | 0 |
+| `001e7420` | iOS_AddClearItem() (needs_review) | 64 | 87.5 | 0 | 0 |
+| `001cd12c` | reset_calcmode_think() (needs_review) | 64 | 81.25 | 0 | 0 |
+| `001adea0` | GetItemPos(int) (needs_review) | 64 | 87.5 | 0 | 0 |
+| `0015d9e0` | iOSTchCurLimit(int) (needs_review) | 64 | 93.75 | 0 | 0 |
+| `00155cac` | world_stopnoend(int) (needs_review) | 64 | 93.75 | 0 | 0 |
+| `0015365c` | Wtask_killmyself() (needs_review) | 64 | 87.5 | 0 | 0 |
+| `00153398` | task_killmyself() (needs_review) | 64 | 87.5 | 0 | 0 |
+| `0010634c` | Wdisp_resume_yesno() (needs_review) | 64 | 93.75 | 0 | 0 |
+| `0010212c` | Wevent_start() (needs_review) | 64 | 87.5 | 0 | 0 |
+| `00101ba8` | Wextend_endornot() (needs_review) | 64 | 93.75 | 0 | 0 |
+| `000fb554` | chkMessagepacket() (needs_review) | 64 | 93.75 | 0 | 0 |
+| `000f1560` | disp_resume_yesno() (needs_review) | 64 | 93.75 | 0 | 0 |
+| `000d9eec` | extend_endornot() (needs_review) | 64 | 93.75 | 0 | 0 |
+| `000d9a80` | send_sttslinecol(char*) (needs_review) | 64 | 93.75 | 0 | 0 |
+| `002b6fe0` | iOSReleaseButtonAreaCheck() (needs_review) | 60 | 93.33 | 0 | 0 |
+| `002ab5cc` | GuEmu_Clear() (needs_review) | 60 | 86.67 | 0 | 0 |
+| `0029b618` | iOSGsSwapDispBuff() (needs_review) | 60 | 93.33 | 0 | 0 |
+| `0028bf7c` | _ps_cond() (needs_review) | 60 | 93.33 | 0 | 0 |
+| `0028b6fc` | STEP_DISP(char const*) (needs_review) | 60 | 93.33 | 0 | 0 |
+| `00289844` | pspClearSaveData() (needs_review) | 60 | 93.33 | 0 | 0 |
+| `00284784` | ColorVectorDataBase(unsigned int) (needs_review) | 60 | 93.33 | 0 | 0 |
+| `002819cc` | iOS_v2menuInit() (needs_review) | 60 | 93.33 | 0 | 0 |
+| `00249bcc` | vOpn_loadwait() (needs_review) | 60 | 93.33 | 0 | 0 |
+| `002431f0` | fRoll_fadeout(short*) (needs_review) | 60 | 86.67 | 0 | 0 |
+| `002431b4` | fRoll_fadein(short*) (needs_review) | 60 | 86.67 | 0 | 0 |
+| `00213e0c` | stopColorRotation(unsigned int) (needs_review) | 60 | 93.33 | 0 | 0 |
+| `001d3d5c` | get_active_unit() (needs_review) | 60 | 93.33 | 0 | 0 |
+| `001ca97c` | overlayMonomaneStack() (needs_review) | 60 | 93.33 | 0 | 0 |
+| `001c7178` | SelectWindowClutEx(int, int) (needs_review) | 60 | 86.67 | 0 | 0 |
+| `001b7bf0` | MenuSelVerticalWithSndDirect(unsigned short, unsigned char, int, int) (needs_review) | 60 | 86.67 | 0 | 0 |
+| `001a7368` | IsDismiss(short) (needs_review) | 60 | 93.33 | 0 | 0 |
+| `0016f738` | iOS_cacheFilesNameClear() (needs_review) | 60 | 93.33 | 0 | 0 |
+| `0015e768` | iOSShiftUnitSet(int) (needs_review) | 60 | 86.67 | 0 | 0 |
+| `00153768` | Wsend_taskparamater4(long, long, long, long, long) (needs_review) | 60 | 93.33 | 0 | 0 |
+| `001534a4` | send_taskparamater4(long, long, long, long, long) (needs_review) | 60 | 93.33 | 0 | 0 |
+| `00101980` | Wsend_sttslinecol(char*) (needs_review) | 60 | 93.33 | 0 | 0 |
 
 > Structural acceptance does not establish semantic equivalence.
 > Counts distinguish historical CSV statuses, new accepted checkpoints, and review cases.

@@ -15,6 +15,7 @@
     "290dc0"
   ],
   "log": "=== jtable.py: 0x26a2cc..0x26a3d0 (260 bytes) ===\ncoverage: 61 of ~65 instruction slots (94%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x155e04 x2   changewindowamb(int, int, int) \n  0x28b034 x1   pspWorldDisableFlg(PSP_WORLD_FLG) \n  0x28e5c0 x1   VSync \n  0x290dc0 x1   DrawSync \n\n-- branches: 2 total, 1 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

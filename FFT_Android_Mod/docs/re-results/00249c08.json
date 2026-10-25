@@ -1,0 +1,18 @@
+{
+  "address": "00249c08",
+  "name": "vOpn_CdRead(CDREC*, int, int, unsigned long*)",
+  "size": 60,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "241938",
+    "249bcc"
+  ],
+  "log": "=== jtable.py: 0x249c08..0x249c44 (60 bytes) ===\ncoverage: 15 of ~15 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x241938 x1   fftCdRead2(CDREC*, int, int, int, unsigned long*) \n  0x249bcc x1   vOpn_loadwait() \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
