@@ -1,0 +1,19 @@
+{
+  "address": "002b0200",
+  "name": "GlTexEnv_GetTextureSize(int, float*, float*, float*, float*)",
+  "size": 100,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 96.0,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2cb48c",
+    "acea0",
+    "acec4"
+  ],
+  "log": "=== jtable.py: 0x2b0200..0x2b0264 (100 bytes) ===\ncoverage: 24 of ~25 instruction slots (96%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0xacea0 x1   CEGL2_SPRITE::GetImageSize(int*, int*) \n  0xacec4 x1   CEGL2_SPRITE::GetTextureSize(float*, float*) \n  0x2cb48c x2   __floatsisf \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

@@ -1,0 +1,19 @@
+{
+  "address": "002b2f7c",
+  "name": "musicPlayer_Stop()",
+  "size": 108,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 92.59,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "ba5ac",
+    "ba684"
+  ],
+  "log": "=== jtable.py: 0x2b2f7c..0x2b2fe8 (108 bytes) ===\ncoverage: 25 of ~27 instruction slots (93%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0xba5ac x1   CSOUND_IF::Unload(int) \n  0xba684 x1   CSOUND_IF::Stop(int) \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 1,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

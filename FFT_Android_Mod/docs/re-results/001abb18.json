@@ -14,7 +14,7 @@
     "1dbcec"
   ],
   "log": "=== jtable.py: 0x1abb18..0x1abb9c (132 bytes) ===\ncoverage: 31 of ~33 instruction slots (94%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x1a7e34 x1   GetChrList(short, CHR_STTS**, int) \n  0x1d7414 x1   get_unitwork_add(int) \n  0x1dbcec x1   set_unitdata(int) \n\n-- branches: 1 total, 1 backward (loop candidates) --\n",
-  "review_attempts": 1,
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

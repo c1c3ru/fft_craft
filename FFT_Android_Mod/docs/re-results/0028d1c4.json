@@ -1,0 +1,16 @@
+{
+  "address": "0028d1c4",
+  "name": "tlPushHeap(void*)",
+  "size": 100,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 84.0,
+  "distinct_bl": 0,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [],
+  "log": "=== jtable.py: 0x28d1c4..0x28d228 (100 bytes) ===\ncoverage: 21 of ~25 instruction slots (84%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 0 distinct --\n\n-- branches: 2 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 1,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

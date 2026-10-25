@@ -14,6 +14,7 @@
     "2a3100"
   ],
   "log": "=== jtable.py: 0x242268..0x24232c (196 bytes) ===\ncoverage: 44 of ~49 instruction slots (90%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x249c58 x1   vOpn_bk_load(int, unsigned long*) \n  0x288578 x2   pspOpenDataBackBufGet(int) \n  0x2a3100 x1   xpMallocIO \n\n-- branches: 4 total, 3 backward (loop candidates) --\n",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

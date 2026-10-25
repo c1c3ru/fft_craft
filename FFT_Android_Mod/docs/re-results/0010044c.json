@@ -1,0 +1,18 @@
+{
+  "address": "0010044c",
+  "name": "Wimport_localstatus(char*, char*, char*, char*)",
+  "size": 104,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 92.31,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "714b8"
+  ],
+  "log": "=== jtable.py: 0x10044c..0x1004b4 (104 bytes) ===\ncoverage: 24 of ~26 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x714b8 x3   sub_714b8 LOCAL(no-dynsym)\n\n-- branches: 1 total, 1 backward (loop candidates) --\n",
+  "review_attempts": 1,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

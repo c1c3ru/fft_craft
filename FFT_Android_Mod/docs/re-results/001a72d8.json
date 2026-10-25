@@ -1,0 +1,19 @@
+{
+  "address": "001a72d8",
+  "name": "ChgMoney(int)",
+  "size": 96,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 95.83,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "103340",
+    "103400",
+    "2806b4"
+  ],
+  "log": "=== jtable.py: 0x1a72d8..0x1a7338 (96 bytes) ===\ncoverage: 23 of ~24 instruction slots (96%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x103340 x1   Wwrite_eventflag(int, int) \n  0x103400 x2   Wread_eventflag(int) \n  0x2806b4 x1   iOS_hook_gill() \n\n-- branches: 4 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

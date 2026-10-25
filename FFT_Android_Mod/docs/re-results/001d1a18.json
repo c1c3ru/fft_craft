@@ -1,0 +1,19 @@
+{
+  "address": "001d1a18",
+  "name": "set_playerwork_sp(PENTRY*, unsigned char*, int)",
+  "size": 100,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 92.0,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1da6f8",
+    "1dbcc4"
+  ],
+  "log": "=== jtable.py: 0x1d1a18..0x1d1a7c (100 bytes) ===\ncoverage: 23 of ~25 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x1da6f8 x1   set_playerwork_j(BWORK*, int, int) \n  0x1dbcc4 x1   unitwork_init2all(BWORK*, int) \n\n-- branches: 2 total, 1 backward (loop candidates) --\n",
+  "review_attempts": 1,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
