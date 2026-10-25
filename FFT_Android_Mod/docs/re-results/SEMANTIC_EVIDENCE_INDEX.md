@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **872/1258** pending functions.
+Evidence collected: **880/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -883,3 +883,11 @@ These reports do not constitute semantic verification.
 | `000c8138` | return_pentry() | [Evidence](semantic-evidence/000c8138.md) |
 | `000c8198` | tool_squarecursor(int, int) | [Evidence](semantic-evidence/000c8198.md) |
 | `000cbb30` | resetYLine() | [Evidence](semantic-evidence/000cbb30.md) |
+| `000cbd78` | pspEntrySquareDataGet() | [Evidence](semantic-evidence/000cbd78.md) |
+| `000da5f8` | return_actionstructure() | [Evidence](semantic-evidence/000da5f8.md) |
+| `000da808` | whatweather() | [Evidence](semantic-evidence/000da808.md) |
+| `000ddd48` | tutorial_padcontrol(int*) | [Evidence](semantic-evidence/000ddd48.md) |
+| `000e0fa0` | loadcdst(int, int) | [Evidence](semantic-evidence/000e0fa0.md) |
+| `00101578` | WiOS_set_status_pad(unsigned long*) | [Evidence](semantic-evidence/00101578.md) |
+| `001024e4` | Wwhatweather() | [Evidence](semantic-evidence/001024e4.md) |
+| `0010729c` | Wtutorial_padcontrol(int*) | [Evidence](semantic-evidence/0010729c.md) |
