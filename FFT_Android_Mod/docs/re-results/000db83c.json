@@ -1,0 +1,19 @@
+{
+  "address": "000db83c",
+  "name": "read_eventflag(int)",
+  "size": 136,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 97.06,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "db4a4",
+    "db77c",
+    "db83c"
+  ],
+  "log": "=== jtable.py: 0xdb83c..0xdb8c4 (136 bytes) ===\ncoverage: 33 of ~34 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0xdb4a4 x2   calcformula(int, int, int, int) \n  0xdb77c x1   write_eventflag(int, int) \n  0xdb83c x2   read_eventflag(int) \n\n-- branches: 2 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

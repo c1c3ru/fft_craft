@@ -1,0 +1,21 @@
+{
+  "address": "000b6a58",
+  "name": "CFILE_DAT::Close()",
+  "size": 108,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 5,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2cdf7c",
+    "2cdf9c",
+    "714c4",
+    "b66e8",
+    "b6a28"
+  ],
+  "log": "=== jtable.py: 0xb6a58..0xb6ac4 (108 bytes) ===\ncoverage: 27 of ~27 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 5 distinct --\n  0x714c4 x1   sub_714c4 LOCAL(no-dynsym)\n  0xb66e8 x1   CFILE::~CFILE() \n  0xb6a28 x1   CFILE_DAT::Unload() \n  0x2cdf7c x1   sub_2cdf7c LOCAL(no-dynsym)\n  0x2cdf9c x1   sub_2cdf9c LOCAL(no-dynsym)\n\n-- branches: 2 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

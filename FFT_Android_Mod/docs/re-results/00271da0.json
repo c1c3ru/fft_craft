@@ -1,0 +1,18 @@
+{
+  "address": "00271da0",
+  "name": "EvaluateAllUnitAction()",
+  "size": 124,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 96.77,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "273378",
+    "278f84"
+  ],
+  "log": "=== jtable.py: 0x271da0..0x271e1c (124 bytes) ===\ncoverage: 30 of ~31 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x273378 x1   SetTmp_UA(UnitAction*) \n  0x278f84 x1   FundamentalRoutine() \n\n-- branches: 3 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

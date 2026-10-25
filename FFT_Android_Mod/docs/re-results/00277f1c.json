@@ -1,0 +1,19 @@
+{
+  "address": "00277f1c",
+  "name": "SetBestMove()",
+  "size": 92,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 95.65,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "273e10",
+    "277720",
+    "279c34"
+  ],
+  "log": "=== jtable.py: 0x277f1c..0x277f78 (92 bytes) ===\ncoverage: 22 of ~23 instruction slots (96%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x273e10 x1   CompareMove(MOVE*, MOVE*) \n  0x277720 x1   EvaluationFunction() \n  0x279c34 x1   MemCpyW(unsigned short*, unsigned short const*, int) \n\n-- branches: 4 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

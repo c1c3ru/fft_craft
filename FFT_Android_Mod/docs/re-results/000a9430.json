@@ -1,0 +1,22 @@
+{
+  "address": "000a9430",
+  "name": "CEGL2_IF::Init()",
+  "size": 140,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 97.14,
+  "distinct_bl": 6,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "716b0",
+    "717a0",
+    "717ac",
+    "a918c",
+    "ab654",
+    "b1cdc"
+  ],
+  "log": "=== jtable.py: 0xa9430..0xa94bc (140 bytes) ===\ncoverage: 34 of ~35 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x716b0 x1   sub_716b0 LOCAL(no-dynsym)\n  0x717a0 x1   sub_717a0 LOCAL(no-dynsym)\n  0x717ac x1   sub_717ac LOCAL(no-dynsym)\n  0xa918c x1   CEGL2_IF::ResetStatus() \n  0xab654 x1   CEGL2_SHADER::Init() \n  0xb1cdc x1   gl3stubInit \n\n-- branches: 2 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
