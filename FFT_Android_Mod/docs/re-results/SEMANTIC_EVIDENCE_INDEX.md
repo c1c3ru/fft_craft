@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1184/1258** pending functions.
+Evidence collected: **1192/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1195,3 +1195,11 @@ These reports do not constitute semantic verification.
 | `00270108` | wldmess_put(int, int, _POINT, unsigned long*) | [Evidence](semantic-evidence/00270108.md) |
 | `0029ae00` | xpLibGetOffset(int*, int*) | [Evidence](semantic-evidence/0029ae00.md) |
 | `002c99b5` | operator new(unsigned int) | [Evidence](semantic-evidence/002c99b5.md) |
+| `000bd4bc` | CSOUND_LOADER_OGG::~CSOUND_LOADER_OGG() | [Evidence](semantic-evidence/000bd4bc.md) |
+| `001d98c8` | check_status_data2(BWORK*, int) | [Evidence](semantic-evidence/001d98c8.md) |
+| `00259224` | evt_flag() | [Evidence](semantic-evidence/00259224.md) |
+| `0025926c` | evt_flag_high() | [Evidence](semantic-evidence/0025926c.md) |
+| `002592b4` | evt_flag_low() | [Evidence](semantic-evidence/002592b4.md) |
+| `002594a0` | evt_brave_high() | [Evidence](semantic-evidence/002594a0.md) |
+| `00259530` | evt_faith_high() | [Evidence](semantic-evidence/00259530.md) |
+| `0026b64c` | wldmusic_change(int) | [Evidence](semantic-evidence/0026b64c.md) |
