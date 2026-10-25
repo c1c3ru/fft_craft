@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1216/1258** pending functions.
+Evidence collected: **1224/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1227,3 +1227,11 @@ These reports do not constitute semantic verification.
 | `00258e3c` | evt_town_clr() | [Evidence](semantic-evidence/00258e3c.md) |
 | `000da47c` | event_init_system() | [Evidence](semantic-evidence/000da47c.md) |
 | `0026995c` | snpl_addpara() | [Evidence](semantic-evidence/0026995c.md) |
+| `0026998c` | snpl_subpara() | [Evidence](semantic-evidence/0026998c.md) |
+| `00269e98` | snpl_exit() | [Evidence](semantic-evidence/00269e98.md) |
+| `0027fc48` | cSaveFFT::Create(char*) | [Evidence](semantic-evidence/0027fc48.md) |
+| `0028e538` | CdRead | [Evidence](semantic-evidence/0028e538.md) |
+| `002a38a8` | pspSaveList::pspSaveList() | [Evidence](semantic-evidence/002a38a8.md) |
+| `001d6404` | set_guard_status(int) | [Evidence](semantic-evidence/001d6404.md) |
+| `00269930` | snpl_setpara() | [Evidence](semantic-evidence/00269930.md) |
+| `0027334c` | SetDestUnit(int) | [Evidence](semantic-evidence/0027334c.md) |
