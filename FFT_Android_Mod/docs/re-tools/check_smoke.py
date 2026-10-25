@@ -24,9 +24,20 @@ def verify(folder: Path) -> list[str]:
         except (OSError, ValueError) as exc:
             failures.append(f"{address}: invalid result ({exc})")
             continue
+        # The old baseline contains a table-review case. A v3 result may
+        # advance it only if its table and every non-literal slot are verified.
+        upgraded = record.get("structural_v3", {})
+        safe_v3_acceptance = (
+            expected["status"] == "needs_review"
+            and record.get("status") == "auto_structural"
+            and record.get("structural_version") == 3
+            and upgraded.get("status") == "auto_structural"
+            and upgraded.get("reason") == "all_slots_accounted"
+            and upgraded.get("tables_safe") is True
+            and upgraded.get("unexplained_count") == 0)
         for key, value in (("status", expected["status"]),
                            ("tables_resolved", expected["tables"])):
-            if record.get(key) != value:
+            if record.get(key) != value and not (key == "status" and safe_v3_acceptance):
                 failures.append(f"{address}: {key}={record.get(key)!r}, expected {value!r}")
         if float(record.get("coverage_pct", 0)) < expected["min_coverage"]:
             failures.append(f"{address}: coverage below {expected['min_coverage']}%")
