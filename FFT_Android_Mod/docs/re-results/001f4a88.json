@@ -1,0 +1,20 @@
+{
+  "address": "001f4a88",
+  "name": "initEntryPlayerAnimations()",
+  "size": 164,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 87.8,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1d357c",
+    "1d3598",
+    "c8138",
+    "db83c"
+  ],
+  "log": "=== jtable.py: 0x1f4a88..0x1f4b2c (164 bytes) ===\ncoverage: 36 of ~41 instruction slots (88%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0xc8138 x2   return_pentry() \n  0xdb83c x1   read_eventflag(int) \n  0x1d357c x1   set_playerwork2(PENTRY*, unsigned char*) \n  0x1d3598 x2   set_playerwork(PENTRY*, unsigned char*) \n\n-- branches: 4 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

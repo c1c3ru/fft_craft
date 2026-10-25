@@ -1,0 +1,22 @@
+{
+  "address": "00097e9c",
+  "name": "_book_maptype1_quantvals",
+  "size": 168,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 6,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2cab9c",
+    "2cb1ec",
+    "2cb48c",
+    "2cb6d0",
+    "7162c",
+    "716a4"
+  ],
+  "log": "=== jtable.py: 0x97e9c..0x97f44 (168 bytes) ===\ncoverage: 42 of ~42 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x7162c x1   sub_7162c LOCAL(no-dynsym)\n  0x716a4 x1   sub_716a4 LOCAL(no-dynsym)\n  0x2cab9c x2   __extendsfdf2 \n  0x2cb1ec x1   __fixdfsi \n  0x2cb48c x2   __floatsisf \n  0x2cb6d0 x1   __divsf3 \n\n-- branches: 3 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

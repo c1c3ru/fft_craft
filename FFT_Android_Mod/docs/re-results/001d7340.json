@@ -1,0 +1,18 @@
+{
+  "address": "001d7340",
+  "name": "net_change_bwork()",
+  "size": 172,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "714b8",
+    "715cc"
+  ],
+  "log": "=== jtable.py: 0x1d7340..0x1d73ec (172 bytes) ===\ncoverage: 43 of ~43 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x714b8 x3   sub_714b8 LOCAL(no-dynsym)\n  0x715cc x1   sub_715cc LOCAL(no-dynsym)\n\n-- branches: 2 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

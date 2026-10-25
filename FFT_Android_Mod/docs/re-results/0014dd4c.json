@@ -1,0 +1,23 @@
+{
+  "address": "0014dd4c",
+  "name": "addbpitem(int)",
+  "size": 152,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 7,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1d2968",
+    "1d8d1c",
+    "1d9d70",
+    "2855b8",
+    "2855cc",
+    "db77c",
+    "db83c"
+  ],
+  "log": "=== jtable.py: 0x14dd4c..0x14dde4 (152 bytes) ===\ncoverage: 38 of ~38 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 7 distinct --\n  0xdb77c x1   write_eventflag(int, int) \n  0xdb83c x1   read_eventflag(int) \n  0x1d2968 x1   get_bwp(int) \n  0x1d8d1c x1   get_itemcommon(unsigned short) \n  0x1d9d70 x1   get_item_number(unsigned short, int) \n  0x2855b8 x1   pspItemIsEmpty \n  0x2855cc x1   pspItemIsBarehand \n\n-- branches: 5 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

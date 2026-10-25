@@ -2,8 +2,8 @@
 
 Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Analyzed in current binary: 544
-Automatically triaged: 101,664 bytes / 1,837,392 inventory bytes (5.53%); **this is newly triaged coverage, not total project coverage**.
+Analyzed in current binary: 643
+Automatically triaged: 111,124 bytes / 1,837,392 inventory bytes (6.05%); **this is newly triaged coverage, not total project coverage**.
 
 | Address | Function | Size (B) | Coverage | Status |
 |---|---|---:|---:|---|
@@ -551,3 +551,102 @@ Automatically triaged: 101,664 bytes / 1,837,392 inventory bytes (5.53%); **this
 | `0021cf30` | InitEffect() | 180 | 86.67% | needs_review |
 | `00248c18` | ctlpremov_main(CTLINFO*) | 180 | 88.89% | needs_review |
 | `0024ab84` | vOpnpicwin_set(int, RECT16, _POINT, int) | 180 | 97.78% | auto_structural |
+| `0029c954` | sceVfpuVector4OuterProductXYZ(ScePspFVector4*, ScePspFVector4 const*, ScePspFVector4 const*) | 180 | 100.0% | auto_structural |
+| `002ab7d4` | sceGuDisable | 180 | 97.78% | auto_structural |
+| `001568fc` | worldmap_restart() | 176 | 81.82% | needs_review |
+| `001abb9c` | GetJobShape(short, short, short*) | 176 | 95.45% | auto_structural |
+| `001b6f14` | CountWidthMessage(unsigned char*) | 176 | 97.73% | auto_structural |
+| `001d91a0` | init_entry_status(BWORK*) | 176 | 100.0% | auto_structural |
+| `001e3988` | get_movetype(BWORK*) | 176 | 100.0% | auto_structural |
+| `00201008` | iOSVectorNormal(VECTOR*) | 176 | 97.73% | auto_structural |
+| `00249cf4` | vOpn_timload(unsigned long*) | 176 | 100.0% | auto_structural |
+| `002741bc` | SetMove() | 176 | 95.45% | auto_structural |
+| `00285d6c` | pspJobGetTamanegiLevel(unsigned char (*) [3]) | 176 | 100.0% | auto_structural |
+| `0029a92c` | LoadTPage | 176 | 100.0% | auto_structural |
+| `000da4ac` | event_init_light() | 172 | 88.37% | needs_review |
+| `001049c4` | Weventsetchrcol(char*) | 172 | 100.0% | auto_structural |
+| `001bd320` | UnitTableInitFirst(short) | 172 | 83.72% | needs_review |
+| `001cc950` | status_handle_main(BWORK*) | 172 | 93.02% | needs_review |
+| `001cce2c` | get_trap_result(BWORK*) | 172 | 88.37% | needs_review |
+| `001d7340` | net_change_bwork() | 172 | 100.0% | auto_structural |
+| `0021f0e4` | NewPEffectTCB() | 172 | 97.67% | auto_structural |
+| `00225370` | Malloc(unsigned long, long) | 172 | 95.35% | auto_structural |
+| `0024998c` | vOpn_iwaprog() | 172 | 83.72% | needs_review |
+| `002699bc` | snpl_putpara() | 172 | 83.72% | needs_review |
+| `002919c0` | SetDrawMode | 172 | 100.0% | auto_structural |
+| `002aca7c` | GuEmu_FrameMove() | 172 | 93.02% | needs_review |
+| `002b1f3c` | Offscreen_ReadPixels(int, int, int, int) | 172 | 93.02% | needs_review |
+| `00073a2c` | compress2 | 168 | 97.62% | auto_structural |
+| `00097e9c` | _book_maptype1_quantvals | 168 | 100.0% | auto_structural |
+| `000f39d4` | ask_event(int, int, int, SVECTOR*, int) | 168 | 100.0% | auto_structural |
+| `0010d844` | Wask_event(int, int, int, SVECTOR*, int) | 168 | 100.0% | auto_structural |
+| `001dbba0` | employ_from_entry(unsigned char*, int, int, int) | 168 | 100.0% | auto_structural |
+| `001eec88` | forceChangeAnimation(int, int, tag_animation*) | 168 | 100.0% | auto_structural |
+| `002116f0` | padReadGenerate() | 168 | 88.1% | needs_review |
+| `00217e14` | InitEffectAnimation() | 168 | 92.86% | needs_review |
+| `00248b70` | ctlpremov_init(int, int, int, int, int, char*) | 168 | 88.1% | needs_review |
+| `00272598` | SetMoveAreaSafePanelOnly() | 168 | 97.62% | auto_structural |
+| `00285cc4` | pspJobGetJobChangeFlag(unsigned char*, unsigned char, unsigned char (*) [3], int) | 168 | 97.62% | auto_structural |
+| `002b3610` | Boot_FrameRender() | 168 | 88.1% | needs_review |
+| `002ca6d4` | __udivsi3 | 168 | 100.0% | auto_structural |
+| `0008b4f0` | floor1_interpolate_fit | 164 | 100.0% | auto_structural |
+| `001bb460` | SetSttsAbi(int) | 164 | 92.68% | needs_review |
+| `001f4a88` | initEntryPlayerAnimations() | 164 | 87.8% | needs_review |
+| `0024556c` | movie_exit(int) | 164 | 97.56% | auto_structural |
+| `0025dd14` | iOSwldkey_repSet(unsigned long) | 164 | 95.12% | auto_structural |
+| `00289ac0` | pspFftLoad(int, FFT_SAVE_DATA*, int*, int) | 164 | 92.68% | needs_review |
+| `0029a3ec` | DrawPrim | 164 | 90.24% | needs_review |
+| `00081bb8` | unzCloseCurrentFile | 160 | 100.0% | auto_structural |
+| `000d6da8` | initpolyft4(tagPOLY_FT4*) | 160 | 100.0% | auto_structural |
+| `000fe8cc` | Winitpolyft4(tagPOLY_FT4*) | 160 | 100.0% | auto_structural |
+| `0015685c` | load_worldname() | 160 | 95.0% | auto_structural |
+| `0015e3e4` | iOSAnimeIDCntGet(int, int) | 160 | 97.5% | auto_structural |
+| `001d4008` | check_monsterup(BWORK*) | 160 | 100.0% | auto_structural |
+| `0020de58` | resetAllAnimationDirection() | 160 | 97.5% | auto_structural |
+| `0020f728` | checkScrolling() | 160 | 87.5% | needs_review |
+| `00211c88` | DisplayChangePalette() | 160 | 87.5% | needs_review |
+| `00215254` | loadClutData(unsigned short*, unsigned int, unsigned int, int) | 160 | 97.5% | auto_structural |
+| `00217ebc` | NewEffectAnimation(short) | 160 | 92.5% | needs_review |
+| `0024452c` | rollline_scroll() | 160 | 97.5% | auto_structural |
+| `00261bc8` | endevent_count(int) | 160 | 92.5% | needs_review |
+| `002631b4` | ctlmouketeam_active(CTLINFO*) | 160 | 95.0% | auto_structural |
+| `002a21e8` | RotColorDpq3 | 160 | 100.0% | auto_structural |
+| `00078900` | gzclose_r | 156 | 100.0% | auto_structural |
+| `000da280` | recieve_statusinfo() | 156 | 92.31% | needs_review |
+| `000db3a4` | envvolcontrol() | 156 | 100.0% | auto_structural |
+| `001bb224` | SetSttsEqu2(int) | 156 | 87.18% | needs_review |
+| `001cd9b0` | inc_party_item(BWORK*, unsigned short, BWORK*) | 156 | 94.87% | needs_review |
+| `001d2d48` | clear_status_animation(BWORK*) | 156 | 100.0% | auto_structural |
+| `001d9104` | set_status_counter(BWORK*, int, int) | 156 | 97.44% | auto_structural |
+| `001ed8b0` | getBattleWorkAnimationHight(tag_animation*) | 156 | 100.0% | auto_structural |
+| `00221028` | RequestBowEffect(long, EffectOrder*) | 156 | 94.87% | needs_review |
+| `0027faa0` | iOS_SuspendWorldMap() | 156 | 97.44% | auto_structural |
+| `00077b80` | gzrewind | 152 | 100.0% | auto_structural |
+| `0007854c` | gzgetc | 152 | 100.0% | auto_structural |
+| `00125238` | Wrecover_windows(int, int) | 152 | 92.11% | needs_review |
+| `0013819c` | recover_windows(int, int) | 152 | 92.11% | needs_review |
+| `0014dd4c` | addbpitem(int) | 152 | 100.0% | auto_structural |
+| `0015e484` | iOSAnimeIDCntGet2(BWORK*, int) | 152 | 97.37% | auto_structural |
+| `001a7404` | SetRyoteFlag(short*, int) | 152 | 100.0% | auto_structural |
+| `001bd3cc` | UnitListInit() | 152 | 89.47% | needs_review |
+| `001ed6fc` | getDestAnimationHight(tag_animation*) | 152 | 100.0% | auto_structural |
+| `001ed818` | getOriginalAnimationHight(tag_animation*) | 152 | 100.0% | auto_structural |
+| `0021f328` | GetPermanentObject() | 152 | 89.47% | needs_review |
+| `002432e4` | fRoll_cdxareq(short*) | 152 | 97.37% | auto_structural |
+| `00263254` | ctlmouketeam_deactive(CTLINFO*) | 152 | 94.74% | needs_review |
+| `002cb0c0` | __gedf2 | 152 | 92.11% | needs_review |
+| `000d665c` | addlocalprim(tagPOLY_FT4*) | 148 | 94.59% | needs_review |
+| `000d7d6c` | sttsback_blue(STTSWINDOWBACK*) | 148 | 94.59% | needs_review |
+| `000da63c` | export_suc(int) | 148 | 91.89% | needs_review |
+| `000e14f4` | statusfigprint10(int, int, char*, COPYFIELD*) | 148 | 91.89% | needs_review |
+| `000fe1a4` | Waddlocalprim(tagPOLY_FT4*) | 148 | 94.59% | needs_review |
+| `00102208` | Wexport_suc(int) | 148 | 91.89% | needs_review |
+| `0015a1e8` | iOSLRChgSwype(int, int, int, int) | 148 | 100.0% | auto_structural |
+| `0015a744` | iOSScrollButtonAreaCheck() | 148 | 94.59% | needs_review |
+| `0015d6b4` | iOSTchCurUnitCheck() | 148 | 86.49% | needs_review |
+| `0015da60` | iOSSwap(short*, short*, short*, short*, int, int) | 148 | 100.0% | auto_structural |
+| `001f5b50` | terminateAnimationSub(int, int, short, short, short) | 148 | 100.0% | auto_structural |
+| `00266544` | iOS_drawMenuAssist_wld(iOS_CMenuTouch*, GsOT*) | 148 | 100.0% | auto_structural |
+| `00268ec4` | wldcenter_move() | 148 | 94.59% | needs_review |
+| `00290b54` | ClearOTag | 148 | 100.0% | auto_structural |
+| `002b715c` | setPspDispNum(short, short, short) | 148 | 89.19% | needs_review |

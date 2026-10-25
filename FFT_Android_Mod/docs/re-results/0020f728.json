@@ -1,0 +1,17 @@
+{
+  "address": "0020f728",
+  "name": "checkScrolling()",
+  "size": 160,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 87.5,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "161e2c"
+  ],
+  "log": "=== jtable.py: 0x20f728..0x20f7c8 (160 bytes) ===\ncoverage: 35 of ~40 instruction slots (88%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x161e2c x1   iOSIsCurMode() \n\n-- branches: 6 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

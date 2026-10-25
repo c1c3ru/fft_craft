@@ -1,0 +1,17 @@
+{
+  "address": "002aca7c",
+  "name": "GuEmu_FrameMove()",
+  "size": 172,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 93.02,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2abc8c"
+  ],
+  "log": "=== jtable.py: 0x2aca7c..0x2acb28 (172 bytes) ===\ncoverage: 40 of ~43 instruction slots (93%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x2abc8c x1   sceGuTexFilter \n\n-- branches: 3 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

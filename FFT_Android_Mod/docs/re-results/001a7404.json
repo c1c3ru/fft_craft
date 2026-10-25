@@ -1,0 +1,18 @@
+{
+  "address": "001a7404",
+  "name": "SetRyoteFlag(short*, int)",
+  "size": 152,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2856fc",
+    "285bf8"
+  ],
+  "log": "=== jtable.py: 0x1a7404..0x1a749c (152 bytes) ===\ncoverage: 38 of ~38 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x2856fc x1   pspItemGetWeaponData \n  0x285bf8 x1   pspItemIsType \n\n-- branches: 8 total, 4 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

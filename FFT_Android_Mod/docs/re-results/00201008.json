@@ -1,0 +1,20 @@
+{
+  "address": "00201008",
+  "name": "iOSVectorNormal(VECTOR*)",
+  "size": 176,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 97.73,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2ca79c",
+    "2cb484",
+    "2cb92c",
+    "719f8"
+  ],
+  "log": "=== jtable.py: 0x201008..0x2010b8 (176 bytes) ===\ncoverage: 43 of ~44 instruction slots (98%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x719f8 x1   sub_719f8 LOCAL(no-dynsym)\n  0x2ca79c x3   __divsi3 \n  0x2cb484 x1   __floatunsisf \n  0x2cb92c x1   __fixsfsi \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

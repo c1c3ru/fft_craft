@@ -1,0 +1,19 @@
+{
+  "address": "001f5b50",
+  "name": "terminateAnimationSub(int, int, short, short, short)",
+  "size": 148,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1eb00c",
+    "1eb0b4",
+    "215c08"
+  ],
+  "log": "=== jtable.py: 0x1f5b50..0x1f5be4 (148 bytes) ===\ncoverage: 37 of ~37 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x1eb00c x1   searchAnimationByID(unsigned short) \n  0x1eb0b4 x1   raiseAnimationPriority(int) \n  0x215c08 x1   changeCharacterClut(int, int, int, short, short, short) \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

@@ -6,22 +6,22 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 |---|---:|
 | Inventory total | 6,455 functions / 1,837,392 bytes |
 | Previously analyzed in CSV | 3,373 functions / 1,513,492 bytes |
-| JSON checkpoints (all statuses) | 544 |
-| Newly accepted structurally | 304 functions / 101,664 bytes |
-| Needs review | 240 functions |
+| JSON checkpoints (all statuses) | 643 |
+| Newly accepted structurally | 362 functions / 111,124 bytes |
+| Needs review | 281 functions |
 | Core targets in inventory | 4,642 functions |
-| Core targets checkpointed | 441 functions |
-| Core accepted structurally | 221 functions |
-| Core needs review | 220 functions |
-| Core not yet checkpointed | 1,925 functions |
-| Not yet checkpointed | 2,529 functions / 140,588 bytes |
+| Core targets checkpointed | 540 functions |
+| Core accepted structurally | 279 functions |
+| Core needs review | 261 functions |
+| Core not yet checkpointed | 1,825 functions |
+| Not yet checkpointed | 2,429 functions / 124,440 bytes |
 
 ## Checkpoint status
 
 | Status | Functions |
 |---|---:|
-| auto_structural | 304 |
-| needs_review | 240 |
+| auto_structural | 362 |
+| needs_review | 281 |
 
 ## Review queue (largest first)
 
@@ -267,6 +267,47 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | `00216308` | readMusic(int) (needs_review) | 180 | 93.33 | 0 | 0 |
 | `002101a8` | loadPlayerPartyData(int) (needs_review) | 180 | 93.33 | 0 | 0 |
 | `001cc89c` | check_hide_reset(BWORK*) (needs_review) | 180 | 93.33 | 0 | 0 |
+| `001568fc` | worldmap_restart() (needs_review) | 176 | 81.82 | 0 | 0 |
+| `002b1f3c` | Offscreen_ReadPixels(int, int, int, int) (needs_review) | 172 | 93.02 | 0 | 0 |
+| `002aca7c` | GuEmu_FrameMove() (needs_review) | 172 | 93.02 | 0 | 0 |
+| `002699bc` | snpl_putpara() (needs_review) | 172 | 83.72 | 0 | 0 |
+| `0024998c` | vOpn_iwaprog() (needs_review) | 172 | 83.72 | 0 | 0 |
+| `001cce2c` | get_trap_result(BWORK*) (needs_review) | 172 | 88.37 | 0 | 0 |
+| `001cc950` | status_handle_main(BWORK*) (needs_review) | 172 | 93.02 | 0 | 0 |
+| `001bd320` | UnitTableInitFirst(short) (needs_review) | 172 | 83.72 | 0 | 0 |
+| `000da4ac` | event_init_light() (needs_review) | 172 | 88.37 | 0 | 0 |
+| `002b3610` | Boot_FrameRender() (needs_review) | 168 | 88.1 | 0 | 0 |
+| `00248b70` | ctlpremov_init(int, int, int, int, int, char*) (needs_review) | 168 | 88.1 | 0 | 0 |
+| `00217e14` | InitEffectAnimation() (needs_review) | 168 | 92.86 | 0 | 0 |
+| `002116f0` | padReadGenerate() (needs_review) | 168 | 88.1 | 0 | 0 |
+| `0029a3ec` | DrawPrim (needs_review) | 164 | 90.24 | 0 | 0 |
+| `00289ac0` | pspFftLoad(int, FFT_SAVE_DATA*, int*, int) (needs_review) | 164 | 92.68 | 0 | 0 |
+| `001f4a88` | initEntryPlayerAnimations() (needs_review) | 164 | 87.8 | 0 | 0 |
+| `001bb460` | SetSttsAbi(int) (needs_review) | 164 | 92.68 | 0 | 0 |
+| `00261bc8` | endevent_count(int) (needs_review) | 160 | 92.5 | 0 | 0 |
+| `00217ebc` | NewEffectAnimation(short) (needs_review) | 160 | 92.5 | 0 | 0 |
+| `00211c88` | DisplayChangePalette() (needs_review) | 160 | 87.5 | 0 | 0 |
+| `0020f728` | checkScrolling() (needs_review) | 160 | 87.5 | 0 | 0 |
+| `00221028` | RequestBowEffect(long, EffectOrder*) (needs_review) | 156 | 94.87 | 0 | 0 |
+| `001cd9b0` | inc_party_item(BWORK*, unsigned short, BWORK*) (needs_review) | 156 | 94.87 | 0 | 0 |
+| `001bb224` | SetSttsEqu2(int) (needs_review) | 156 | 87.18 | 0 | 0 |
+| `000da280` | recieve_statusinfo() (needs_review) | 156 | 92.31 | 0 | 0 |
+| `002cb0c0` | __gedf2 (needs_review) | 152 | 92.11 | 0 | 0 |
+| `00263254` | ctlmouketeam_deactive(CTLINFO*) (needs_review) | 152 | 94.74 | 0 | 0 |
+| `0021f328` | GetPermanentObject() (needs_review) | 152 | 89.47 | 0 | 0 |
+| `001bd3cc` | UnitListInit() (needs_review) | 152 | 89.47 | 0 | 0 |
+| `0013819c` | recover_windows(int, int) (needs_review) | 152 | 92.11 | 0 | 0 |
+| `00125238` | Wrecover_windows(int, int) (needs_review) | 152 | 92.11 | 0 | 0 |
+| `002b715c` | setPspDispNum(short, short, short) (needs_review) | 148 | 89.19 | 0 | 0 |
+| `00268ec4` | wldcenter_move() (needs_review) | 148 | 94.59 | 0 | 0 |
+| `0015d6b4` | iOSTchCurUnitCheck() (needs_review) | 148 | 86.49 | 0 | 0 |
+| `0015a744` | iOSScrollButtonAreaCheck() (needs_review) | 148 | 94.59 | 0 | 0 |
+| `00102208` | Wexport_suc(int) (needs_review) | 148 | 91.89 | 0 | 0 |
+| `000fe1a4` | Waddlocalprim(tagPOLY_FT4*) (needs_review) | 148 | 94.59 | 0 | 0 |
+| `000e14f4` | statusfigprint10(int, int, char*, COPYFIELD*) (needs_review) | 148 | 91.89 | 0 | 0 |
+| `000da63c` | export_suc(int) (needs_review) | 148 | 91.89 | 0 | 0 |
+| `000d7d6c` | sttsback_blue(STTSWINDOWBACK*) (needs_review) | 148 | 94.59 | 0 | 0 |
+| `000d665c` | addlocalprim(tagPOLY_FT4*) (needs_review) | 148 | 94.59 | 0 | 0 |
 
 > Structural acceptance does not establish semantic equivalence.
 > Counts distinguish historical CSV statuses, new accepted checkpoints, and review cases.

@@ -1,0 +1,20 @@
+{
+  "address": "001bb224",
+  "name": "SetSttsEqu2(int)",
+  "size": 156,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 87.18,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "153584",
+    "153714",
+    "153734",
+    "1b6b00"
+  ],
+  "log": "=== jtable.py: 0x1bb224..0x1bb2c0 (156 bytes) ===\ncoverage: 34 of ~39 instruction slots (87%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x153584 x1   Wtask_create(long, char*) \n  0x153714 x1   Wtask_status(long) \n  0x153734 x1   Wsend_taskparamater(long, long, long, long) \n  0x1b6b00 x1   WindowDel(int) \n\n-- branches: 5 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

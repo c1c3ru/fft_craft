@@ -1,0 +1,20 @@
+{
+  "address": "00078900",
+  "name": "gzclose_r",
+  "size": 156,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "714dc",
+    "7153c",
+    "77598",
+    "7cbfc"
+  ],
+  "log": "=== jtable.py: 0x78900..0x7899c (156 bytes) ===\ncoverage: 39 of ~39 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x714dc x4   sub_714dc LOCAL(no-dynsym)\n  0x7153c x1   sub_7153c LOCAL(no-dynsym)\n  0x77598 x1   gz_error \n  0x7cbfc x1   inflateEnd \n\n-- branches: 4 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
