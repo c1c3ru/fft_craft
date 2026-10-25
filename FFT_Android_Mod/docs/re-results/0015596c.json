@@ -3,7 +3,7 @@
   "name": "worldmap_startinit()",
   "size": 480,
   "previous_status": "mentioned_unverified",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 93.33,
   "distinct_bl": 17,
   "tables_resolved": 0,
@@ -28,7 +28,36 @@
     "714b8"
   ],
   "log": "=== jtable.py: 0x15596c..0x155b4c (480 bytes) ===\ncoverage: 112 of ~120 instruction slots (93%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 17 distinct --\n  0x714b8 x2   sub_714b8 LOCAL(no-dynsym)\n  0x101fe4 x1   Wevent_init_memory() \n  0x1020f8 x1   Wevent_init_system() \n  0x103340 x5   Wwrite_eventflag(int, int) \n  0x154b88 x1   sub_154b88 LOCAL(no-dynsym)\n  0x15570c x1   worldmap_faceload() \n  0x20cc90 x1   fileReadCD(unsigned long, unsigned long, void*) \n  0x20ce18 x1   fileDispose(char*) \n  0x27b390 x1   saveVram(char const*) \n  0x27b398 x1   numa_fileAllocateCD(unsigned long, unsigned long) \n  0x28061c x1   iOS_hook_common(char const*, int) \n  0x28aec4 x1   __bpGetFileNum \n  0x28af54 x1   __bpInitBinpackData \n  0x28afd0 x1   __bpGetBinaryData \n  0x290dc0 x1   DrawSync \n  0x291074 x2   PSX_LoadImage \n  0x2b9cac x1   iOS_setV2Icon(V2ICON_DATA, int) \n\n-- branches: 2 total, 1 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x15596c",
+    "total_slots": 120,
+    "code_slots": 112,
+    "instruction_slots": 112,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x155b2c",
+      "0x155b30",
+      "0x155b34",
+      "0x155b38",
+      "0x155b3c",
+      "0x155b40",
+      "0x155b44",
+      "0x155b48"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/0015596c.json"
 }

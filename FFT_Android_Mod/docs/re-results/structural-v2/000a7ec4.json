@@ -1,0 +1,19 @@
+{
+  "address": "000a7ec4",
+  "name": "CEGL2_IF::SetBlendMode(int)",
+  "size": 308,
+  "previous_status": "mentioned_unverified",
+  "status": "needs_review",
+  "coverage_pct": 88.31,
+  "distinct_bl": 2,
+  "tables_resolved": 1,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "716ec",
+    "716f8"
+  ],
+  "log": "=== jtable.py: 0xa7ec4..0xa7ff8 (308 bytes) ===\ncoverage: 68 of ~77 instruction slots (88%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0xa7ec8, dispatch @0xa7ecc: 7 cases, 7 distinct handlers\n    targets: ['0xa7f00', '0xa7f30', '0xa7f5c', '0xa7f74', '0xa7f9c', '0xa7fc8', '0xa7ef0']\n\n-- bl targets: 2 distinct --\n  0x716ec x6   sub_716ec LOCAL(no-dynsym)\n  0x716f8 x5   sub_716f8 LOCAL(no-dynsym)\n\n-- branches: 7 total, 7 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
