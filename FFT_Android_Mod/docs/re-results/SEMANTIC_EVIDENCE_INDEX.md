@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **488/1258** pending functions.
+Evidence collected: **496/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -499,3 +499,11 @@ These reports do not constitute semantic verification.
 | `0019d7a4` | DrawPrice() | [Evidence](semantic-evidence/0019d7a4.md) |
 | `001ab7e0` | IsUntauchableAbility(int) | [Evidence](semantic-evidence/001ab7e0.md) |
 | `001cab08` | clear_addeffect() | [Evidence](semantic-evidence/001cab08.md) |
+| `001cd16c` | get_weatherdata() | [Evidence](semantic-evidence/001cd16c.md) |
+| `001cec5c` | setCasterDirection(int, unsigned char) | [Evidence](semantic-evidence/001cec5c.md) |
+| `001e207c` | getskilldata(int) | [Evidence](semantic-evidence/001e207c.md) |
+| `001f37e4` | ExecuteAnimations() | [Evidence](semantic-evidence/001f37e4.md) |
+| `00204210` | iOS_isCursorOnUnit() | [Evidence](semantic-evidence/00204210.md) |
+| `00210960` | MenuTest() | [Evidence](semantic-evidence/00210960.md) |
+| `00216414` | readMusicBlock(int) | [Evidence](semantic-evidence/00216414.md) |
+| `00216618` | effectFadeoutMusic(int, int) | [Evidence](semantic-evidence/00216618.md) |
