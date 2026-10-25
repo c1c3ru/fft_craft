@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **880/1258** pending functions.
+Evidence collected: **888/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -891,3 +891,11 @@ These reports do not constitute semantic verification.
 | `00101578` | WiOS_set_status_pad(unsigned long*) | [Evidence](semantic-evidence/00101578.md) |
 | `001024e4` | Wwhatweather() | [Evidence](semantic-evidence/001024e4.md) |
 | `0010729c` | Wtutorial_padcontrol(int*) | [Evidence](semantic-evidence/0010729c.md) |
+| `0010fa04` | Wloadcdst(int, int) | [Evidence](semantic-evidence/0010fa04.md) |
+| `00150690` | setNetErrorCutFlg() | [Evidence](semantic-evidence/00150690.md) |
+| `001506bc` | rsetNetErrorCutFlg() | [Evidence](semantic-evidence/001506bc.md) |
+| `001506d4` | SetgMission_Successflg() | [Evidence](semantic-evidence/001506d4.md) |
+| `001531cc` | ResetgMission_Successflg() | [Evidence](semantic-evidence/001531cc.md) |
+| `001556f0` | worldcursorposset(int) | [Evidence](semantic-evidence/001556f0.md) |
+| `00155d70` | reactive_worldstatus() | [Evidence](semantic-evidence/00155d70.md) |
+| `00155dd4` | active_worldstatus() | [Evidence](semantic-evidence/00155dd4.md) |
