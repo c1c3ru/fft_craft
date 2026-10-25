@@ -68,6 +68,12 @@ jobs:
             --workers 5 --limit "$LIMIT" --timeout 120
           python3 FFT_Android_Mod/docs/re-tools/check_smoke.py \
             FFT_Android_Mod/docs/re-results
+      - name: Reanalyze up to 100 review checkpoints
+        run: |
+          python3 FFT_Android_Mod/docs/re-tools/parallel_loop.py \
+            --review-only --retry-review --workers 5 --limit 100 --timeout 120
+          python3 FFT_Android_Mod/docs/re-tools/check_smoke.py \
+            FFT_Android_Mod/docs/re-results
       - name: Summarize accepted vs review
         run: |
           python3 - <<'PY'
