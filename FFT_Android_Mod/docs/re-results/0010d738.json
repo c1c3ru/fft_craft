@@ -1,0 +1,19 @@
+{
+  "address": "0010d738",
+  "name": "Wdisp_plateorspell(ACT*, int, int)",
+  "size": 268,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 97.01,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "10cb68",
+    "1d2968",
+    "1d8b58"
+  ],
+  "log": "=== jtable.py: 0x10d738..0x10d844 (268 bytes) ===\ncoverage: 65 of ~67 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x10cb68 x2   sub_10cb68 LOCAL(no-dynsym)\n  0x1d2968 x1   get_bwp(int) \n  0x1d8b58 x1   get_ability_address(int, ABILITY_COMMON_DATA**, void**) \n\n-- branches: 11 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

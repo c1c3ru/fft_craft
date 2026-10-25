@@ -1,0 +1,21 @@
+{
+  "address": "0026d7ec",
+  "name": "wld_tutomenu_reset(CTLINFO*)",
+  "size": 444,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 96.4,
+  "distinct_bl": 5,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "26ffc8",
+    "27008c",
+    "270108",
+    "2b9cac",
+    "b546c"
+  ],
+  "log": "=== jtable.py: 0x26d7ec..0x26d9a8 (444 bytes) ===\ncoverage: 107 of ~111 instruction slots (96%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 5 distinct --\n  0xb546c x1   CRECT::SetEnable(int, int) \n  0x26ffc8 x1   wldwin_set(int, RECT16, int, unsigned long*) \n  0x27008c x1   wldwin_trans(int, unsigned long*) \n  0x270108 x4   wldmess_put(int, int, _POINT, unsigned long*) \n  0x2b9cac x8   iOS_setV2Icon(V2ICON_DATA, int) \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

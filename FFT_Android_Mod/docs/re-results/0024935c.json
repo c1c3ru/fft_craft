@@ -1,0 +1,23 @@
+{
+  "address": "0024935c",
+  "name": "vOpn_swapbuff()",
+  "size": 280,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 95.71,
+  "distinct_bl": 7,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2885a0",
+    "288a58",
+    "290b40",
+    "29128c",
+    "291bc0",
+    "294af8",
+    "29a834"
+  ],
+  "log": "=== jtable.py: 0x24935c..0x249474 (280 bytes) ===\ncoverage: 67 of ~70 instruction slots (96%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 7 distinct --\n  0x2885a0 x1   pspOpenCheckFlg(PSP_OPEN_FLG) \n  0x288a58 x1   pspPrimDirectParamSet(int, RECT16*) \n  0x290b40 x1   SetDispMask \n  0x29128c x1   MoveImage \n  0x291bc0 x1   PutDrawEnv \n  0x294af8 x1   PutDispEnv \n  0x29a834 x1   ClearImage \n\n-- branches: 5 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

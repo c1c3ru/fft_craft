@@ -1,0 +1,18 @@
+{
+  "address": "0024cda0",
+  "name": "ctlbrst_active(CTLINFO*)",
+  "size": 456,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 96.49,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "153734",
+    "245074"
+  ],
+  "log": "=== jtable.py: 0x24cda0..0x24cf68 (456 bytes) ===\ncoverage: 110 of ~114 instruction slots (96%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x153734 x1   Wsend_taskparamater(long, long, long, long) \n  0x245074 x1   iOS_setDispMenuTouch(char) \n\n-- branches: 2 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

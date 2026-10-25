@@ -1,0 +1,15 @@
+{
+  "address": "0020ebc4",
+  "name": "loadEventAnimation(int, unsigned char*)",
+  "size": 448,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 99.11,
+  "distinct_bl": 0,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [],
+  "log": "=== jtable.py: 0x20ebc4..0x20ed84 (448 bytes) ===\ncoverage: 111 of ~112 instruction slots (99%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 0 distinct --\n\n-- branches: 7 total, 6 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

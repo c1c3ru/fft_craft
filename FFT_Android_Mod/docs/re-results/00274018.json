@@ -1,0 +1,22 @@
+{
+  "address": "00274018",
+  "name": "ForChantedAction()",
+  "size": 420,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 98.1,
+  "distinct_bl": 6,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "273dbc",
+    "273f4c",
+    "276c28",
+    "277720",
+    "277f1c",
+    "279c34"
+  ],
+  "log": "=== jtable.py: 0x274018..0x2741bc (420 bytes) ===\ncoverage: 103 of ~105 instruction slots (98%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x273dbc x1   CompareScore(SCORE*, SCORE*) \n  0x273f4c x1   SetBMList() \n  0x276c28 x1   CheckCrystalAndTresureBox() \n  0x277720 x2   EvaluationFunction() \n  0x277f1c x1   SetBestMove() \n  0x279c34 x1   MemCpyW(unsigned short*, unsigned short const*, int) \n\n-- branches: 10 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

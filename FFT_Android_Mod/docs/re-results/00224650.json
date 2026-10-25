@@ -1,0 +1,23 @@
+{
+  "address": "00224650",
+  "name": "CheckBowReachable(unsigned char, unsigned char)",
+  "size": 336,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 98.81,
+  "distinct_bl": 7,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "20e19c",
+    "20f2cc",
+    "21ec2c",
+    "2231d8",
+    "223f30",
+    "29fef0",
+    "29ff94"
+  ],
+  "log": "=== jtable.py: 0x224650..0x2247a0 (336 bytes) ===\ncoverage: 83 of ~84 instruction slots (99%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 7 distinct --\n  0x20e19c x2   getAnimationPositionFromBattleWork(unsigned int, SVECTOR*) \n  0x20f2cc x2   getAnimationHeightFromBattleID(int) \n  0x21ec2c x1   sub_21ec2c LOCAL(no-dynsym)\n  0x2231d8 x1   GetBowReachableTangent(BowCheckWork*, int*, int*) \n  0x223f30 x2   sub_223f30 LOCAL(no-dynsym)\n  0x29fef0 x1   ratan2 \n  0x29ff94 x1   SquareRoot12 \n\n-- branches: 2 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

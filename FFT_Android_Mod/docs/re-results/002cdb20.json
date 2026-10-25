@@ -1,0 +1,20 @@
+{
+  "address": "002cdb20",
+  "name": "__gnu_unwind_execute",
+  "size": 892,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2ccfb8",
+    "2cd03c",
+    "2cd594",
+    "2cda94"
+  ],
+  "log": "=== jtable.py: 0x2cdb20..0x2cde9c (892 bytes) ===\ncoverage: 223 of ~223 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x2ccfb8 x4   _Unwind_VRS_Get \n  0x2cd03c x2   _Unwind_VRS_Set \n  0x2cd594 x2   _Unwind_VRS_Pop \n  0x2cda94 x10  sub_2cda94 LOCAL(no-dynsym)\n\n-- branches: 44 total, 18 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

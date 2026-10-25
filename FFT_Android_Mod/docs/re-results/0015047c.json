@@ -1,0 +1,22 @@
+{
+  "address": "0015047c",
+  "name": "setjoinus_net()",
+  "size": 436,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 99.08,
+  "distinct_bl": 6,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "187618",
+    "1d2968",
+    "1d7414",
+    "1d7438",
+    "1d9948",
+    "285d6c"
+  ],
+  "log": "=== jtable.py: 0x15047c..0x150630 (436 bytes) ===\ncoverage: 108 of ~109 instruction slots (99%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x187618 x1   GetLocalJobNumber(short) \n  0x1d2968 x1   get_bwp(int) \n  0x1d7414 x2   get_unitwork_add(int) \n  0x1d7438 x1   search_empty_savework(int, unsigned char*) \n  0x1d9948 x6   copy_struct_data(void const*, void*, int) \n  0x285d6c x1   pspJobGetTamanegiLevel(unsigned char (*) [3]) \n\n-- branches: 14 total, 6 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

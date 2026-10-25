@@ -1,0 +1,23 @@
+{
+  "address": "001e6368",
+  "name": "forecast_skill(BWORK*, BWORK*, ACT*)",
+  "size": 348,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 91.95,
+  "distinct_bl": 7,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1cb064",
+    "1cba40",
+    "1d2e6c",
+    "1d9930",
+    "1dfcdc",
+    "1e59d4",
+    "286ec4"
+  ],
+  "log": "=== jtable.py: 0x1e6368..0x1e64c4 (348 bytes) ===\ncoverage: 80 of ~87 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 7 distinct --\n  0x1cb064 x1   init_target_result(A_RESULT*) \n  0x1cba40 x1   calc_result(ACT*, unsigned char) \n  0x1d2e6c x1   get_coord_address(BWORK*) \n  0x1d9930 x4   copyACTst(ACT*, ACT*) \n  0x1dfcdc x1   sub_1dfcdc LOCAL(no-dynsym)\n  0x1e59d4 x1   sub_1e59d4 LOCAL(no-dynsym)\n  0x286ec4 x1   check_rival_value(int) \n\n-- branches: 3 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

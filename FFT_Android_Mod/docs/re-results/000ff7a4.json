@@ -1,0 +1,21 @@
+{
+  "address": "000ff7a4",
+  "name": "Winitstatusback(RECT16*, STTSWINDOWBACK*)",
+  "size": 440,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 98.18,
+  "distinct_bl": 5,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "291348",
+    "291550",
+    "2919c0",
+    "fe96c",
+    "ff718"
+  ],
+  "log": "=== jtable.py: 0xff7a4..0xff95c (440 bytes) ===\ncoverage: 108 of ~110 instruction slots (98%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 5 distinct --\n  0xfe96c x1   Winitsprt(tagSPRT*) \n  0xff718 x1   Wsttsback_normal(STTSWINDOWBACK*) \n  0x291348 x2   GetTPage \n  0x291550 x1   SetLineF2 \n  0x2919c0 x2   SetDrawMode \n\n-- branches: 2 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

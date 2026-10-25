@@ -1,0 +1,20 @@
+{
+  "address": "0028d854",
+  "name": "tlGarbageCollection()",
+  "size": 516,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 97.67,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "28cf3c",
+    "28cfb4",
+    "28d6ec",
+    "714b8"
+  ],
+  "log": "=== jtable.py: 0x28d854..0x28da58 (516 bytes) ===\ncoverage: 126 of ~129 instruction slots (98%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x714b8 x1   sub_714b8 LOCAL(no-dynsym)\n  0x28cf3c x1   sub_28cf3c LOCAL(no-dynsym)\n  0x28cfb4 x1   sub_28cfb4 LOCAL(no-dynsym)\n  0x28d6ec x1   tlCheckHeap() \n\n-- branches: 14 total, 6 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

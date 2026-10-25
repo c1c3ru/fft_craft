@@ -1,0 +1,21 @@
+{
+  "address": "00201798",
+  "name": "setActionDirection(tag_animation*, tag_animation*)",
+  "size": 388,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 5,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1d1de8",
+    "1eb00c",
+    "1eb03c",
+    "20177c",
+    "29fef0"
+  ],
+  "log": "=== jtable.py: 0x201798..0x20191c (388 bytes) ===\ncoverage: 97 of ~97 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 5 distinct --\n  0x1d1de8 x2   set_unitcoord(int, unsigned char, unsigned char, unsigned char, unsigned char) \n  0x1eb00c x1   searchAnimationByID(unsigned short) \n  0x1eb03c x1   searchAnimationByBattleID(unsigned short) \n  0x20177c x1   reserveActionDirection(tag_animation*) \n  0x29fef0 x1   ratan2 \n\n-- branches: 10 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

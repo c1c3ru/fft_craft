@@ -1,0 +1,15 @@
+{
+  "address": "0022a6a4",
+  "name": "_ReadTMD(TMD_PRIM*)",
+  "size": 380,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 84.21,
+  "distinct_bl": 0,
+  "tables_resolved": 1,
+  "tables_unresolved": 0,
+  "bl_targets": [],
+  "log": "=== jtable.py: 0x22a6a4..0x22a820 (380 bytes) ===\ncoverage: 80 of ~95 instruction slots (84%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0x22a6cc, dispatch @0x22a6d0: 9 cases, 4 distinct handlers\n    targets: ['0x22a7ac', '0x22a7ec', '0x22a7ec', '0x22a7ec', '0x22a744', '0x22a7ec', '0x22a744', '0x22a7ec', '0x22a6fc']\n\n-- bl targets: 0 distinct --\n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

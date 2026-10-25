@@ -1,0 +1,18 @@
+{
+  "address": "002c8ac4",
+  "name": "IS_SETTINGS_WND_SLIDER_AREA(int, int)",
+  "size": 272,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 97.06,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "b50a0",
+    "b527c"
+  ],
+  "log": "=== jtable.py: 0x2c8ac4..0x2c8bd4 (272 bytes) ===\ncoverage: 66 of ~68 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0xb50a0 x1   CRECT::GetScreenOffset(int*, int*) \n  0xb527c x2   CRECT::GetRect(int, _RECT_S32*) \n\n-- branches: 5 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

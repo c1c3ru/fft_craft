@@ -1,0 +1,19 @@
+{
+  "address": "00077c18",
+  "name": "gzseek64",
+  "size": 432,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "714d0",
+    "77598",
+    "77b80"
+  ],
+  "log": "=== jtable.py: 0x77c18..0x77dc8 (432 bytes) ===\ncoverage: 108 of ~108 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x714d0 x1   sub_714d0 LOCAL(no-dynsym)\n  0x77598 x1   gz_error \n  0x77b80 x1   gzrewind \n\n-- branches: 19 total, 6 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

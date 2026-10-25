@@ -1,0 +1,23 @@
+{
+  "address": "000af818",
+  "name": "CEGL2_TEX_HYBRID::GL_Load(int, unsigned int*, unsigned int, int, int, int, int, unsigned char*)",
+  "size": 392,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 7,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2cb92c",
+    "acd50",
+    "acebc",
+    "acec4",
+    "adb1c",
+    "adcd4",
+    "af644"
+  ],
+  "log": "=== jtable.py: 0xaf818..0xaf9a0 (392 bytes) ===\ncoverage: 98 of ~98 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 7 distinct --\n  0xacd50 x1   CEGL2_SPRITE::Overwrite(unsigned char*, int, int, int, int) \n  0xacebc x2   CEGL2_SPRITE::GetTextureHandle() \n  0xacec4 x1   CEGL2_SPRITE::GetTextureSize(float*, float*) \n  0xadb1c x2   CEGL2_SPRITE::LoadBegin(unsigned char*, int, int, int, int, int, unsigned char, int) \n  0xadcd4 x2   CEGL2_SPRITE::LoadEnd(int, int) \n  0xaf644 x1   CEGL2_TEX_HYBRID::DecodeTexture(unsigned int*, unsigned char*, int, int, unsigned int*, int, int, int, int) \n  0x2cb92c x2   __fixsfsi \n\n-- branches: 5 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

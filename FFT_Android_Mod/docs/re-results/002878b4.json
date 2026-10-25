@@ -1,0 +1,18 @@
+{
+  "address": "002878b4",
+  "name": "Draw_Draw(int)",
+  "size": 352,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 94.32,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "287278",
+    "714b8"
+  ],
+  "log": "=== jtable.py: 0x2878b4..0x287a14 (352 bytes) ===\ncoverage: 83 of ~88 instruction slots (94%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x714b8 x1   sub_714b8 LOCAL(no-dynsym)\n  0x287278 x4   sub_287278 LOCAL(no-dynsym)\n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

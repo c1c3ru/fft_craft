@@ -1,0 +1,17 @@
+{
+  "address": "0026c860",
+  "name": "picsand_draw(GsIMAGE*, int)",
+  "size": 436,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 96.33,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "29a92c"
+  ],
+  "log": "=== jtable.py: 0x26c860..0x26ca14 (436 bytes) ===\ncoverage: 105 of ~109 instruction slots (96%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x29a92c x2   LoadTPage \n\n-- branches: 9 total, 5 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

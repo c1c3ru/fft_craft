@@ -1,0 +1,32 @@
+{
+  "address": "0020fb18",
+  "name": "db_init_all(int, int, int, unsigned char, unsigned char, unsigned char)",
+  "size": 428,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 96.26,
+  "distinct_bl": 16,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2889cc",
+    "28cefc",
+    "290b40",
+    "290cf0",
+    "290dc0",
+    "290e88",
+    "290e90",
+    "291bc0",
+    "294af8",
+    "29a834",
+    "29a858",
+    "29a89c",
+    "29fe70",
+    "2a1324",
+    "2a133c",
+    "714b8"
+  ],
+  "log": "=== jtable.py: 0x20fb18..0x20fcc4 (428 bytes) ===\ncoverage: 103 of ~107 instruction slots (96%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 16 distinct --\n  0x714b8 x1   sub_714b8 LOCAL(no-dynsym)\n  0x2889cc x1   pspOffScreenInit(RECT16*, RECT16*) \n  0x28cefc x1   SetDumpFnt \n  0x290b40 x1   SetDispMask \n  0x290cf0 x1   ResetGraph \n  0x290dc0 x1   DrawSync \n  0x290e88 x1   FntOpen \n  0x290e90 x1   FntLoad \n  0x291bc0 x1   PutDrawEnv \n  0x294af8 x1   PutDispEnv \n  0x29a834 x1   ClearImage \n  0x29a858 x2   SetDefDispEnv \n  0x29a89c x2   SetDefDrawEnv \n  0x29fe70 x1   InitGeom \n  0x2a1324 x1   SetGeomOffset \n  0x2a133c x1   SetGeomScreen \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

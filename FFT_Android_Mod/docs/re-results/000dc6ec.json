@@ -1,0 +1,20 @@
+{
+  "address": "000dc6ec",
+  "name": "direc4(char*)",
+  "size": 356,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 96.63,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "29fef0",
+    "d6828",
+    "d86d8",
+    "dc2a4"
+  ],
+  "log": "=== jtable.py: 0xdc6ec..0xdc850 (356 bytes) ===\ncoverage: 86 of ~89 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0xd6828 x1   sub_d6828 LOCAL(no-dynsym)\n  0xd86d8 x1   getanimpos3d(int, short*) \n  0xdc2a4 x1   sub_dc2a4 LOCAL(no-dynsym)\n  0x29fef0 x1   ratan2 \n\n-- branches: 5 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

@@ -1,0 +1,21 @@
+{
+  "address": "000b5e38",
+  "name": "CUI_SCROLLBAR::FrameMove(float)",
+  "size": 276,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 5,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "b5b3c",
+    "b5d94",
+    "bdbf4",
+    "bdc6c",
+    "be0fc"
+  ],
+  "log": "=== jtable.py: 0xb5e38..0xb5f4c (276 bytes) ===\ncoverage: 69 of ~69 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 5 distinct --\n  0xb5b3c x2   CUI_SCROLLBAR::GetCellRect(int) \n  0xb5d94 x1   CUI_SCROLLBAR::CorrectScrollBounds(int) \n  0xbdbf4 x2   CSTEP::Init(int, int, int, int, unsigned int) \n  0xbdc6c x1   CSTEP::FrameMove(float, unsigned int) \n  0xbe0fc x1   CSTEP::GetData() \n\n-- branches: 3 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

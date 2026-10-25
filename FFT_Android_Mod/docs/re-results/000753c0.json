@@ -1,0 +1,19 @@
+{
+  "address": "000753c0",
+  "name": "deflateSetDictionary",
+  "size": 544,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "714c4",
+    "736ac",
+    "74328"
+  ],
+  "log": "=== jtable.py: 0x753c0..0x755e0 (544 bytes) ===\ncoverage: 136 of ~136 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x714c4 x1   sub_714c4 LOCAL(no-dynsym)\n  0x736ac x1   adler32 \n  0x74328 x2   sub_74328 LOCAL(no-dynsym)\n\n-- branches: 17 total, 7 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

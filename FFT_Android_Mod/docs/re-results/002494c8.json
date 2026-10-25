@@ -1,0 +1,23 @@
+{
+  "address": "002494c8",
+  "name": "vOpn_fadeproc(unsigned long*)",
+  "size": 520,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 96.92,
+  "distinct_bl": 7,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2821ec",
+    "290c6c",
+    "291348",
+    "291628",
+    "2919c0",
+    "291a6c",
+    "2ca79c"
+  ],
+  "log": "=== jtable.py: 0x2494c8..0x2496d0 (520 bytes) ===\ncoverage: 126 of ~130 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 7 distinct --\n  0x2821ec x1   iOS_setMask(int) \n  0x290c6c x1   AddPrim \n  0x291348 x1   GetTPage \n  0x291628 x1   SetTile \n  0x2919c0 x1   SetDrawMode \n  0x291a6c x1   SetSemiTrans \n  0x2ca79c x2   __divsi3 \n\n-- branches: 10 total, 4 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

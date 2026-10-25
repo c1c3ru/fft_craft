@@ -1,0 +1,20 @@
+{
+  "address": "0009c55c",
+  "name": "drft_forward",
+  "size": 560,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2ca79c",
+    "98bbc",
+    "98ea4",
+    "9a298"
+  ],
+  "log": "=== jtable.py: 0x9c55c..0x9c78c (560 bytes) ===\ncoverage: 140 of ~140 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x98bbc x2   sub_98bbc LOCAL(no-dynsym)\n  0x98ea4 x2   sub_98ea4 LOCAL(no-dynsym)\n  0x9a298 x2   sub_9a298 LOCAL(no-dynsym)\n  0x2ca79c x2   __divsi3 \n\n-- branches: 15 total, 7 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

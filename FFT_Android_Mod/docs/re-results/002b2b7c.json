@@ -1,0 +1,24 @@
+{
+  "address": "002b2b7c",
+  "name": "SysSE_Play(int, int)",
+  "size": 380,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 95.79,
+  "distinct_bl": 8,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "28c320",
+    "2bf008",
+    "b6a28",
+    "b6c70",
+    "b6cd0",
+    "b6cd8",
+    "ba9c8",
+    "bad78"
+  ],
+  "log": "=== jtable.py: 0x2b2b7c..0x2b2cf8 (380 bytes) ===\ncoverage: 91 of ~95 instruction slots (96%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 8 distinct --\n  0xb6a28 x1   CFILE_DAT::Unload() \n  0xb6c70 x1   CFILE_DAT::GetBuffer(int) \n  0xb6cd0 x1   CFILE_DAT::GetSize(int) \n  0xb6cd8 x1   CFILE_DAT::Load(int, int, int) \n  0xba9c8 x1   CSOUND_IF::Load(int, char*, unsigned char*, unsigned int, unsigned int, int, int, int, int, int, int) \n  0xbad78 x1   CSOUND_IF::Play(int, int, int, int, unsigned char) \n  0x28c320 x1   CFFT_STATE::GetParam(int) \n  0x2bf008 x1   chkSeDouble() \n\n-- branches: 10 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

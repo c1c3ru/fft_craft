@@ -1,0 +1,22 @@
+{
+  "address": "00155b4c",
+  "name": "worldmap_menuinit()",
+  "size": 272,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 89.71,
+  "distinct_bl": 6,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "101fe4",
+    "1020f8",
+    "103340",
+    "154b88",
+    "27b39c",
+    "28061c"
+  ],
+  "log": "=== jtable.py: 0x155b4c..0x155c5c (272 bytes) ===\ncoverage: 61 of ~68 instruction slots (90%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x101fe4 x1   Wevent_init_memory() \n  0x1020f8 x1   Wevent_init_system() \n  0x103340 x4   Wwrite_eventflag(int, int) \n  0x154b88 x1   sub_154b88 LOCAL(no-dynsym)\n  0x27b39c x1   numa_fileReadCD(unsigned long, unsigned long, void*) \n  0x28061c x1   iOS_hook_common(char const*, int) \n\n-- branches: 2 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

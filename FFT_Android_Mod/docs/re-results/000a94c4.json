@@ -1,0 +1,25 @@
+{
+  "address": "000a94c4",
+  "name": "CEGL2_IF::Draw(CEGL2_SPRITE*, float, float, float, float, float, float, unsigned int, int, int, int, int)",
+  "size": 308,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 9,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2cb2f0",
+    "2cb48c",
+    "2cb538",
+    "2cb988",
+    "a7ec4",
+    "ab7f4",
+    "aba20",
+    "acebc",
+    "ad924"
+  ],
+  "log": "=== jtable.py: 0xa94c4..0xa95f8 (308 bytes) ===\ncoverage: 77 of ~77 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 9 distinct --\n  0xa7ec4 x3   CEGL2_IF::SetBlendMode(int) \n  0xab7f4 x2   CEGL2_SHADER::Begin(int, math::MATRIX4*) \n  0xaba20 x1   CEGL2_SHADER::SetMatrix4(int, math::MATRIX4 const&) \n  0xacebc x1   CEGL2_SPRITE::GetTextureHandle() \n  0xad924 x1   CEGL2_SPRITE::SetAlpha(unsigned char) \n  0x2cb2f0 x1   __subsf3 \n  0x2cb48c x1   __floatsisf \n  0x2cb538 x2   __mulsf3 \n  0x2cb988 x1   __fixunssfsi \n\n-- branches: 5 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

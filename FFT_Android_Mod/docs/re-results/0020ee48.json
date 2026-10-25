@@ -1,0 +1,20 @@
+{
+  "address": "0020ee48",
+  "name": "activateCompressedAnimation(int, int)",
+  "size": 304,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 97.37,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1eb00c",
+    "1eb360",
+    "291074",
+    "29128c"
+  ],
+  "log": "=== jtable.py: 0x20ee48..0x20ef78 (304 bytes) ===\ncoverage: 74 of ~76 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x1eb00c x1   searchAnimationByID(unsigned short) \n  0x1eb360 x1   defrost(char*, char*) \n  0x291074 x1   PSX_LoadImage \n  0x29128c x1   MoveImage \n\n-- branches: 4 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

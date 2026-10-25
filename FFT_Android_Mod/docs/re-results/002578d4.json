@@ -1,0 +1,20 @@
+{
+  "address": "002578d4",
+  "name": "ctlevtinfo_main(CTLINFO*)",
+  "size": 344,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 90.7,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "267340",
+    "26b374",
+    "270c90",
+    "2b9cac"
+  ],
+  "log": "=== jtable.py: 0x2578d4..0x257a2c (344 bytes) ===\ncoverage: 78 of ~86 instruction slots (91%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x267340 x1   iOS_add_anmpac_max(int) \n  0x26b374 x1   sound_request(int) \n  0x270c90 x1   pagewin_main(PAGEWININFO*) \n  0x2b9cac x1   iOS_setV2Icon(V2ICON_DATA, int) \n\n-- branches: 5 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

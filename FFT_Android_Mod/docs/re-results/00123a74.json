@@ -1,0 +1,31 @@
+{
+  "address": "00123a74",
+  "name": "Edisp_staticwindow2()",
+  "size": 372,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 97.85,
+  "distinct_bl": 15,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "11dd88",
+    "153398",
+    "159924",
+    "1599a8",
+    "291074",
+    "714b8",
+    "714c4",
+    "d7a48",
+    "d8ddc",
+    "d8f4c",
+    "da820",
+    "e0fa0",
+    "e12ac",
+    "e2b78",
+    "fb554"
+  ],
+  "log": "=== jtable.py: 0x123a74..0x123be8 (372 bytes) ===\ncoverage: 91 of ~93 instruction slots (98%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 15 distinct --\n  0x714b8 x1   sub_714b8 LOCAL(no-dynsym)\n  0x714c4 x1   sub_714c4 LOCAL(no-dynsym)\n  0xd7a48 x1   disposememory(char*) \n  0xd8ddc x2   multiwindow_break(unsigned long*) \n  0xd8f4c x1   multiwindow_packetcolor(PRIMPACKET*) \n  0xda820 x1   iOS_getLastEventNo() \n  0xe0fa0 x1   loadcdst(int, int) \n  0xe12ac x1   multiwindow_packetinit(RECT16*, COMRECORD*, PRIMPACKET*) \n  0xe2b78 x1   statuskanjiprint(int, char*, COPYFIELD*) \n  0xfb554 x1   chkMessagepacket() \n  0x11dd88 x1   extend_systemframe(int, int, RECT16*, int) \n  0x153398 x1   task_killmyself() \n  0x159924 x3   asmTaskEntry() \n  0x1599a8 x1   asmGetInput1() \n  0x291074 x1   PSX_LoadImage \n\n-- branches: 8 total, 4 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

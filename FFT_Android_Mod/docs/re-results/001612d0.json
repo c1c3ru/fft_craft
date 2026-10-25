@@ -1,0 +1,19 @@
+{
+  "address": "001612d0",
+  "name": "iOSsTchBtlInit()",
+  "size": 324,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 80.25,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "15a328",
+    "160468",
+    "27b53c"
+  ],
+  "log": "=== jtable.py: 0x1612d0..0x161414 (324 bytes) ===\ncoverage: 65 of ~81 instruction slots (80%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x15a328 x1   iOSsTchBtlFlagSet(int) \n  0x160468 x1   iOSSlideYajiSet(int) \n  0x27b53c x1   LoadImage_menuData() \n\n-- branches: 2 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

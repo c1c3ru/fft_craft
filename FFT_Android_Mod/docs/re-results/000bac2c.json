@@ -1,0 +1,21 @@
+{
+  "address": "000bac2c",
+  "name": "CSOUND_IF::FrameMove(int, float)",
+  "size": 332,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 98.8,
+  "distinct_bl": 5,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "ba308",
+    "ba774",
+    "bb834",
+    "bdc6c",
+    "be0fc"
+  ],
+  "log": "=== jtable.py: 0xbac2c..0xbad78 (332 bytes) ===\ncoverage: 82 of ~83 instruction slots (99%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 5 distinct --\n  0xba308 x1   CSOUND_IF::GetEnable() \n  0xba774 x1   CSOUND_IF::IsPlaying(int, int) \n  0xbb834 x1   CSOUND_IF_SL::FrameMove(int, float) \n  0xbdc6c x1   CSTEP::FrameMove(float, unsigned int) \n  0xbe0fc x3   CSTEP::GetData() \n\n-- branches: 16 total, 6 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

@@ -1,0 +1,26 @@
+{
+  "address": "001b8e64",
+  "name": "TutrialInit(int)",
+  "size": 380,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 92.63,
+  "distinct_bl": 10,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "15685c",
+    "183c20",
+    "184174",
+    "1875f0",
+    "1a6530",
+    "20cc90",
+    "26d7bc",
+    "28a76c",
+    "2b9cac",
+    "714b8"
+  ],
+  "log": "=== jtable.py: 0x1b8e64..0x1b8fe0 (380 bytes) ===\ncoverage: 88 of ~95 instruction slots (93%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 10 distinct --\n  0x714b8 x1   sub_714b8 LOCAL(no-dynsym)\n  0x15685c x1   load_worldname() \n  0x183c20 x1   MakeSaveData(int) \n  0x184174 x1   SetLoadData(int) \n  0x1875f0 x1   GetSaveDataInit() \n  0x1a6530 x1   ScriptRead(int, TUTRIAL*) \n  0x20cc90 x1   fileReadCD(unsigned long, unsigned long, void*) \n  0x26d7bc x1   iOSTutoFlagSet(int, int) \n  0x28a76c x1   ConvTutoData(FFT_SAVE_DATA*) \n  0x2b9cac x4   iOS_setV2Icon(V2ICON_DATA, int) \n\n-- branches: 2 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

@@ -1,0 +1,25 @@
+{
+  "address": "0029a2d8",
+  "name": "DrawOTag",
+  "size": 276,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 89.86,
+  "distinct_bl": 9,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "291ae4",
+    "291f08",
+    "2956a0",
+    "2ab718",
+    "2ab7d4",
+    "2ab9e8",
+    "2abc8c",
+    "2abd1c",
+    "2ac838"
+  ],
+  "log": "=== jtable.py: 0x29a2d8..0x29a3ec (276 bytes) ===\ncoverage: 62 of ~69 instruction slots (90%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 9 distinct --\n  0x291ae4 x1   xpLibgpuStartRender \n  0x291f08 x1   sub_291f08 LOCAL(no-dynsym)\n  0x2956a0 x1   sub_2956a0 LOCAL(no-dynsym)\n  0x2ab718 x1   sceGuEnable \n  0x2ab7d4 x3   sceGuDisable \n  0x2ab9e8 x1   sceGuScissor \n  0x2abc8c x1   sceGuTexFilter \n  0x2abd1c x1   sceGuTexFunc \n  0x2ac838 x1   sceGuTexWrap \n\n-- branches: 6 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

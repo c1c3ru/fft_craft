@@ -1,0 +1,19 @@
+{
+  "address": "001e31f0",
+  "name": "add_jobpointB(int, int, unsigned char, int)",
+  "size": 308,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 98.7,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1d9354",
+    "1d9370",
+    "285cc4"
+  ],
+  "log": "=== jtable.py: 0x1e31f0..0x1e3324 (308 bytes) ===\ncoverage: 76 of ~77 instruction slots (99%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x1d9354 x1   set_jcflag(unsigned char*, int) \n  0x1d9370 x1   get_joblevel(unsigned short) \n  0x285cc4 x1   pspJobGetJobChangeFlag(unsigned char*, unsigned char, unsigned char (*) [3], int) \n\n-- branches: 8 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

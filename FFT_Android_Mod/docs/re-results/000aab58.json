@@ -1,0 +1,28 @@
+{
+  "address": "000aab58",
+  "name": "CEGL2_FBO::Save(_RECT_S32*, char*, int, _G2D_SAVE*)",
+  "size": 528,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 12,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2cdf6c",
+    "2cdf7c",
+    "2cdf8c",
+    "2cdf9c",
+    "714a0",
+    "714c4",
+    "715cc",
+    "71758",
+    "7189c",
+    "a1d00",
+    "a1d3c",
+    "a1dc0"
+  ],
+  "log": "=== jtable.py: 0xaab58..0xaad68 (528 bytes) ===\ncoverage: 132 of ~132 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 12 distinct --\n  0x714a0 x3   sub_714a0 LOCAL(no-dynsym)\n  0x714c4 x1   sub_714c4 LOCAL(no-dynsym)\n  0x715cc x1   sub_715cc LOCAL(no-dynsym)\n  0x71758 x1   sub_71758 LOCAL(no-dynsym)\n  0x7189c x1   sub_7189c LOCAL(no-dynsym)\n  0xa1d00 x1   CG2D_LOADER::CG2D_LOADER(int) \n  0xa1d3c x1   CG2D_LOADER::~CG2D_LOADER() \n  0xa1dc0 x1   CG2D_LOADER::Save(void*, int, int, _G2D_SAVE*) \n  0x2cdf6c x1   sub_2cdf6c LOCAL(no-dynsym)\n  0x2cdf7c x1   sub_2cdf7c LOCAL(no-dynsym)\n  0x2cdf8c x1   sub_2cdf8c LOCAL(no-dynsym)\n  0x2cdf9c x1   sub_2cdf9c LOCAL(no-dynsym)\n\n-- branches: 11 total, 4 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

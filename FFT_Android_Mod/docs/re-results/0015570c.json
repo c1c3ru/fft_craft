@@ -1,0 +1,25 @@
+{
+  "address": "0015570c",
+  "name": "worldmap_faceload()",
+  "size": 328,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 95.12,
+  "distinct_bl": 9,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "20ce18",
+    "27b390",
+    "27b398",
+    "28aec4",
+    "28af54",
+    "28afd0",
+    "290dc0",
+    "291074",
+    "714b8"
+  ],
+  "log": "=== jtable.py: 0x15570c..0x155854 (328 bytes) ===\ncoverage: 78 of ~82 instruction slots (95%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 9 distinct --\n  0x714b8 x2   sub_714b8 LOCAL(no-dynsym)\n  0x20ce18 x2   fileDispose(char*) \n  0x27b390 x2   saveVram(char const*) \n  0x27b398 x2   numa_fileAllocateCD(unsigned long, unsigned long) \n  0x28aec4 x1   __bpGetFileNum \n  0x28af54 x1   __bpInitBinpackData \n  0x28afd0 x1   __bpGetBinaryData \n  0x290dc0 x2   DrawSync \n  0x291074 x6   PSX_LoadImage \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

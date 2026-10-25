@@ -1,0 +1,22 @@
+{
+  "address": "0021a9ec",
+  "name": "SetCameraWorkWithSchedule(short)",
+  "size": 512,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 96.09,
+  "distinct_bl": 6,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "218df4",
+    "2191f8",
+    "219608",
+    "21a5c4",
+    "22a95c",
+    "22a978"
+  ],
+  "log": "=== jtable.py: 0x21a9ec..0x21abec (512 bytes) ===\ncoverage: 123 of ~128 instruction slots (96%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x218df4 x1   SetEffectAngleCameraWork(int, int, int, SVECTOR*) \n  0x2191f8 x1   SetEffectTransCameraWork(int, int, int, VECTOR*) \n  0x219608 x1   SetEffectScaleCameraWork(int, int, int, VECTOR*) \n  0x21a5c4 x3   SearchNextScheduleDividePos(short, short, long*, long*) \n  0x22a95c x2   EqualSVectorToVECTOR(SVector*, VECTOR*) \n  0x22a978 x1   EqualSVectorToSVECTOR(SVector*, SVECTOR*) \n\n-- branches: 8 total, 5 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

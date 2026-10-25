@@ -1,0 +1,25 @@
+{
+  "address": "000df864",
+  "name": "event_status_set(unsigned short, unsigned short)",
+  "size": 524,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 93.13,
+  "distinct_bl": 9,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "153254",
+    "159aac",
+    "1d2968",
+    "1d2b00",
+    "20e7fc",
+    "d6828",
+    "dc2a4",
+    "dd678",
+    "df45c"
+  ],
+  "log": "=== jtable.py: 0xdf864..0xdfa70 (524 bytes) ===\ncoverage: 122 of ~131 instruction slots (93%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 9 distinct --\n  0xd6828 x1   sub_d6828 LOCAL(no-dynsym)\n  0xdc2a4 x1   sub_dc2a4 LOCAL(no-dynsym)\n  0xdd678 x1   sub_dd678 LOCAL(no-dynsym)\n  0xdf45c x1   sub_df45c LOCAL(no-dynsym)\n  0x153254 x2   task_wait(long) \n  0x159aac x2   asm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long) \n  0x1d2968 x1   get_bwp(int) \n  0x1d2b00 x1   search_controlID(int, int*) \n  0x20e7fc x1   getBattleWorkIDFromAnimation(unsigned int) \n\n-- branches: 17 total, 10 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

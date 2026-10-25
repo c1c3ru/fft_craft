@@ -1,0 +1,27 @@
+{
+  "address": "0015af24",
+  "name": "iOSexecuteScroll()",
+  "size": 352,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 92.05,
+  "distinct_bl": 11,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "29fe88",
+    "29fea0",
+    "2b7a8c",
+    "2cb2f0",
+    "2cb2f4",
+    "2cb48c",
+    "2cb538",
+    "2cb6d0",
+    "2cb8f0",
+    "2cb918",
+    "2cb92c"
+  ],
+  "log": "=== jtable.py: 0x15af24..0x15b084 (352 bytes) ===\ncoverage: 81 of ~88 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 11 distinct --\n  0x29fe88 x1   rsin \n  0x29fea0 x1   rcos \n  0x2b7a8c x1   iOS_getTouchTap() \n  0x2cb2f0 x1   __subsf3 \n  0x2cb2f4 x1   __addsf3 \n  0x2cb48c x2   __floatsisf \n  0x2cb538 x2   __mulsf3 \n  0x2cb6d0 x1   __divsf3 \n  0x2cb8f0 x1   __aeabi_fcmple \n  0x2cb918 x1   __aeabi_fcmpgt \n  0x2cb92c x2   __fixsfsi \n\n-- branches: 4 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
