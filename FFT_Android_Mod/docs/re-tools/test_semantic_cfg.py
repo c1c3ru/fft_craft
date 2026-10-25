@@ -69,5 +69,54 @@ class ArmCfgTests(unittest.TestCase):
         self.assertFalse(any(x[1] == "pc_write" for x in unknown))
 
 
+    def test_dominator_sets_in_entry_reachable_graph(self):
+        instructions = decode("000050e3 0300000a 002094e5 4020c2e3 002084e5")
+        graph, _ = semantic_cfg.build_cfg(instructions)
+        dom = semantic_cfg.modeled_dominators(graph, 0x1000)
+        self.assertEqual(dom[0x1000], {0x1000})
+        self.assertEqual(dom[0x1008], {0x1000, 0x1004, 0x1008})
+        self.assertIn(0x1004, dom[0x1010])
+        self.assertEqual(len(semantic_cfg.entry_reachable(graph, 0x1000)), 5)
+
+    def test_conditional_gate_is_model_only(self):
+        instructions = decode("000050e3 0300000a 002094e5 4020c2e3 002084e5")
+        graph, _ = semantic_cfg.build_cfg(instructions)
+        effects = semantic_facts.bitmask_effects(instructions)
+        guards = semantic_paths.branch_guards(instructions)
+        enriched = semantic_cfg.modeled_guard_dominance(effects, guards, graph, 0x1000)
+        self.assertTrue(enriched[0]["reachable_from_entry"])
+        self.assertEqual(enriched[0]["modeled_dominating_guards"][0]["branch"], 0x1004)
+        self.assertTrue(enriched[0]["modeled_dominating_guards"][0]["modeled_one_sided"])
+
+    def test_branch_alternatives_reconverge(self):
+        instructions = decode("000050e3 0200000a 002094e5 4020c2e3 002084e5 fbffffea")
+        graph, _ = semantic_cfg.build_cfg(instructions)
+        guards = semantic_paths.branch_guards(instructions)
+        effects = semantic_facts.bitmask_effects(instructions)
+        result = semantic_cfg.modeled_guard_dominance(effects, guards, graph, 0x1000)
+        self.assertFalse(result[0]["modeled_dominating_guards"][0]["modeled_one_sided"])
+
+    def test_unreachable_write_is_not_assigned_dominators(self):
+        graph = {0x1000: [(0x1004, "fallthrough")], 0x1004: [],
+                 0x2000: [(0x2004, "fallthrough")], 0x2004: []}
+        self.assertEqual(semantic_cfg.modeled_dominators(graph, 0x1000),
+                         {0x1000: {0x1000}, 0x1004: {0x1000, 0x1004}})
+        result = semantic_cfg.modeled_guard_dominance(
+            [{"addresses": [0x2004]}], [], graph, 0x1000)
+        self.assertFalse(result[0]["reachable_from_entry"])
+        self.assertEqual(result[0]["modeled_dominating_guards"], [])
+
+    def test_loop_backedge_dominator_fixed_point(self):
+        graph = {
+            0x1000: [(0x1004, "fallthrough")],
+            0x1004: [(0x1008, "taken"), (0x100c, "not_taken")],
+            0x1008: [(0x1004, "backedge")],
+            0x100c: [],
+        }
+        dom = semantic_cfg.modeled_dominators(graph, 0x1000)
+        self.assertEqual(dom[0x100c], {0x1000, 0x1004, 0x100c})
+        self.assertEqual(dom[0x1008], {0x1000, 0x1004, 0x1008})
+
+
 if __name__ == "__main__":
     unittest.main()

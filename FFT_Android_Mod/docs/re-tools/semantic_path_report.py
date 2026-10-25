@@ -41,14 +41,22 @@ def build(binary, results, limit=12):
             int(address, 16))
         guards = semantic_paths.branch_guards(instructions)
         graph, uncertain_edges = semantic_cfg.build_cfg(instructions, tables)
-        effects = semantic_cfg.effect_routes(
-            semantic_paths.incoming_guard_edges(
-                semantic_facts.bitmask_effects(instructions), guards),
-            guards, graph)
+        effects = semantic_cfg.modeled_guard_dominance(
+            semantic_cfg.effect_routes(
+                semantic_paths.incoming_guard_edges(
+                    semantic_facts.bitmask_effects(instructions), guards),
+                guards, graph),
+            guards, graph, int(address, 16))
+        reachable = semantic_cfg.entry_reachable(graph, int(address, 16))
         lines += [f"Observed direct compare/branch pairs: **{len(guards)}**; "
                   f"local bitmask sequences: **{len(effects)}**.", "",
                   f"Modeled ARM CFG nodes: **{len(graph)}**; "
+                  f"entry-reachable: **{len(reachable)}**; "
                   f"unmodeled outgoing edges/transfers: **{len(uncertain_edges)}**.", "",
+                  "Modeled dominators are calculated only for nodes reachable "
+                  "from the function entry. They do not establish dominance "
+                  "across unknown incoming edges, indirect transfers, exceptions "
+                  "or callees.", "",
                   "A route in this graph is a candidate, not a proven executable "
                   "path. An absent route may be due to unresolved indirect jumps, "
                   "callee effects, missing code or exceptional control flow.", ""]
@@ -86,6 +94,33 @@ def build(binary, results, limit=12):
                 lines.append(f"  - Modeled direct predecessors: {display}.")
             else:
                 lines.append("  - No decoded direct predecessor identified.")
+            if not fact["reachable_from_entry"]:
+                lines.append("  - Candidate write is not reachable from the "
+                             "chosen function entry in this graph. No "
+                             "dominance conclusion is available.")
+            else:
+                lines.append(
+                    f'  - Entry-relative modeled dominators: '
+                    f'{fact["modeled_dominator_count"]} decoded nodes '
+                    "(not global or dynamic dominance).")
+            dominating = fact["modeled_dominating_guards"]
+            if dominating:
+                lines.append(
+                    "  - Conditional branches dominating this write "
+                    "in the entry-rooted modeled graph:")
+                for guard in dominating[:6]:
+                    relation = ("Only one successor has a modeled route"
+                                if guard["modeled_one_sided"] else
+                                "Both successors have modeled routes")
+                    lines.append(
+                        f'    - `0x{guard["branch"]:x}` after '
+                        f'`0x{guard["compare"]:x}`: {relation}; '
+                        f'taken [{guard["taken_predicate"]}], '
+                        f'other [{guard["other_predicate"]}]. '
+                        "Not a proof of execution-path exclusivity.")
+            else:
+                lines.append("  - No conditional CMP/TST branch proven to "
+                             "dominate this write even in the bounded model.")
             routes = fact["modeled_guard_routes"]
             # First report modeled single-edge candidates, then alternative
             # paths where both choices might reach the candidate write.
