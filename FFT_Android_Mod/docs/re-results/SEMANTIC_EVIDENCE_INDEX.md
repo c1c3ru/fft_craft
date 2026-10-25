@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **288/1258** pending functions.
+Evidence collected: **296/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -299,3 +299,11 @@ These reports do not constitute semantic verification.
 | `00228d40` | InitPermanentShape() | [Evidence](semantic-evidence/00228d40.md) |
 | `002b85f8` | RayPick_GT4(tagPOLY_GT4*, int, int) | [Evidence](semantic-evidence/002b85f8.md) |
 | `002b8680` | RayPick_GT3(tagPOLY_GT3*, int, int) | [Evidence](semantic-evidence/002b8680.md) |
+| `0007d9ac` | fill_fopen_filefunc | [Evidence](semantic-evidence/0007d9ac.md) |
+| `0007da30` | fill_fopen64_filefunc | [Evidence](semantic-evidence/0007da30.md) |
+| `0011bfa8` | Wdisp_status2() | [Evidence](semantic-evidence/0011bfa8.md) |
+| `0011c02c` | Wdisp_status2right() | [Evidence](semantic-evidence/0011c02c.md) |
+| `0015dfbc` | iOSActiveUnitGet() | [Evidence](semantic-evidence/0015dfbc.md) |
+| `001abb18` | MakeChr(short) | [Evidence](semantic-evidence/001abb18.md) |
+| `0026dcbc` | ctltuto_deactive(CTLINFO*) | [Evidence](semantic-evidence/0026dcbc.md) |
+| `002b2714` | EnvSE_SetVol(int, int) | [Evidence](semantic-evidence/002b2714.md) |
