@@ -5,6 +5,7 @@ on:
     paths:
       - 'FFT_Android_Mod/docs/re-tools/**'
       - '.github/workflows/re-pipeline.yml'
+      - '.github/workflows/re-batches.yml'
   workflow_dispatch:
     inputs:
       limit:
