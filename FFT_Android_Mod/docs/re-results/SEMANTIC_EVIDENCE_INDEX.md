@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **64/1258** pending functions.
+Evidence collected: **72/1258** pending functions.
 These reports do not constitute semantic verification.
 
 | Address | Function | Evidence |
@@ -73,3 +73,11 @@ These reports do not constitute semantic verification.
 | `001d972c` | get_shape2(BWORK*, unsigned char*) | [Evidence](semantic-evidence/001d972c.md) |
 | `0022a6a4` | _ReadTMD(TMD_PRIM*) | [Evidence](semantic-evidence/0022a6a4.md) |
 | `0020fd1c` | InitializeAll() | [Evidence](semantic-evidence/0020fd1c.md) |
+| `0024f8c0` | ctltipsmes_main(CTLINFO*) | [Evidence](semantic-evidence/0024f8c0.md) |
+| `000ff2cc` | Wdisposetexture(RECT16*) | [Evidence](semantic-evidence/000ff2cc.md) |
+| `0019d634` | MonsterNameInput() | [Evidence](semantic-evidence/0019d634.md) |
+| `00210eac` | initMap(int, int) | [Evidence](semantic-evidence/00210eac.md) |
+| `00211a28` | SetChangePaletteData(unsigned short, unsigned short, unsigned short, unsigned short, unsigned short) | [Evidence](semantic-evidence/00211a28.md) |
+| `000ff4b0` | Wallocatememorywait(int) | [Evidence](semantic-evidence/000ff4b0.md) |
+| `0024b824` | ctlbar_exit(CTLINFO*) | [Evidence](semantic-evidence/0024b824.md) |
+| `0015af24` | iOSexecuteScroll() | [Evidence](semantic-evidence/0015af24.md) |
