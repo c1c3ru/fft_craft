@@ -10,6 +10,33 @@ spec.loader.exec_module(module)
 
 
 class ReviewQueueTests(unittest.TestCase):
+    def test_checkpoint_path_is_portable(self):
+        import csv
+        import json
+        import tempfile
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            inv = root / "inventory.csv"
+            inv.write_text("address,size,mangled,demangled,status,section_ref\n"
+                           "00000010,8,a,example(),unread,\n")
+            core = root / "core.csv"
+            core.write_text("address\n00000010\n")
+            binary = root / "bin.so"
+            binary.write_bytes(b"sample")
+            import hashlib
+            results = root / "results"
+            results.mkdir()
+            (results / "00000010.json").write_text(json.dumps({
+                "address": "00000010", "size": 8,
+                "status": "needs_review", "pipeline_version": 2,
+                "binary_sha256": hashlib.sha256(b"sample").hexdigest(),
+                "coverage_pct": 90
+            }))
+            rows = module.build(inv, core, results, binary)
+            self.assertEqual(rows[0]["checkpoint_path"],
+                             "FFT_Android_Mod/docs/re-results/00000010.json")
+
     def test_unresolved_table_takes_precedence(self):
         self.assertEqual(module.classify({"tables_unresolved": 1, "coverage_pct": 10}),
                          "unresolved_jump_table")
