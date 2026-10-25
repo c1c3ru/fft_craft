@@ -6,22 +6,22 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 |---|---:|
 | Inventory total | 6,455 functions / 1,837,392 bytes |
 | Previously analyzed in CSV | 3,373 functions / 1,513,492 bytes |
-| JSON checkpoints (all statuses) | 1,333 |
-| Newly accepted structurally | 686 functions / 140,320 bytes |
-| Needs review | 647 functions |
+| JSON checkpoints (all statuses) | 1,433 |
+| Newly accepted structurally | 727 functions / 142,192 bytes |
+| Needs review | 706 functions |
 | Core targets in inventory | 4,642 functions |
-| Core targets checkpointed | 1,230 functions |
-| Core accepted structurally | 603 functions |
-| Core needs review | 627 functions |
-| Core not yet checkpointed | 1,125 functions |
-| Not yet checkpointed | 1,729 functions / 62,544 bytes |
+| Core targets checkpointed | 1,330 functions |
+| Core accepted structurally | 644 functions |
+| Core needs review | 686 functions |
+| Core not yet checkpointed | 1,025 functions |
+| Not yet checkpointed | 1,629 functions / 57,936 bytes |
 
 ## Checkpoint status
 
 | Status | Functions |
 |---|---:|
-| auto_structural | 686 |
-| needs_review | 647 |
+| auto_structural | 727 |
+| needs_review | 706 |
 
 ## Review queue (largest first)
 
@@ -674,6 +674,65 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | `00153470` | send_taskparamater(long, long, long, long) (needs_review) | 52 | 92.31 | 0 | 0 |
 | `0012f2a8` | iOSPersonalWinPos(int) (needs_review) | 52 | 84.62 | 0 | 0 |
 | `000e7488` | getCodeLength(unsigned char*) (needs_review) | 52 | 92.31 | 0 | 0 |
+| `002b23a8` | Music_Pause() (needs_review) | 48 | 91.67 | 0 | 0 |
+| `002b2378` | Music_Stop() (needs_review) | 48 | 91.67 | 0 | 0 |
+| `002b2260` | RETINA_SCALE(int) (needs_review) | 48 | 91.67 | 0 | 0 |
+| `002a2ff8` | xpInitHeap (needs_review) | 48 | 91.67 | 0 | 0 |
+| `002a14a8` | ReadColorMatrix (needs_review) | 48 | 91.67 | 0 | 0 |
+| `002a145c` | ReadLightMatrix (needs_review) | 48 | 91.67 | 0 | 0 |
+| `0028e6a4` | xpInitVblankFunc() (needs_review) | 48 | 83.33 | 0 | 0 |
+| `0028ba54` | TE_task_create(int, void (*)(), int) (needs_review) | 48 | 91.67 | 0 | 0 |
+| `00289970` | pspIsNoneSaveData(int) (needs_review) | 48 | 91.67 | 0 | 0 |
+| `00270460` | curhis_get(int) (needs_review) | 48 | 83.33 | 0 | 0 |
+| `0025ffb0` | iOSSDNovelGetOT(int) (needs_review) | 48 | 83.33 | 0 | 0 |
+| `0025f138` | townpic_load(int) (needs_review) | 48 | 91.67 | 0 | 0 |
+| `0024ad94` | openEntry(int) (needs_review) | 48 | 91.67 | 0 | 0 |
+| `0024932c` | vOpn_loopinit() (needs_review) | 48 | 83.33 | 0 | 0 |
+| `002433ac` | fRoll_cdxafout(short*) (needs_review) | 48 | 91.67 | 0 | 0 |
+| `0024337c` | fRoll_cdxafin(short*) (needs_review) | 48 | 91.67 | 0 | 0 |
+| `00243184` | fRoll_scroll(short*) (needs_review) | 48 | 91.67 | 0 | 0 |
+| `0021b860` | SetGravity(Vector*) (needs_review) | 48 | 91.67 | 0 | 0 |
+| `00215d2c` | battleFileRead() (needs_review) | 48 | 83.33 | 0 | 0 |
+| `00213e48` | stopAllColorRotation() (needs_review) | 48 | 91.67 | 0 | 0 |
+| `00204298` | startRightTurn(int) (needs_review) | 48 | 91.67 | 0 | 0 |
+| `00204268` | startLeftTurn(int) (needs_review) | 48 | 91.67 | 0 | 0 |
+| `00202150` | standerdExecution() (needs_review) | 48 | 91.67 | 0 | 0 |
+| `001eedf4` | getWpnSequenceAddress(unsigned short) (needs_review) | 48 | 83.33 | 0 | 0 |
+| `001e4f0c` | get_fusui_ability(BWORK*) (needs_review) | 48 | 83.33 | 0 | 0 |
+| `001dc914` | set_cco_SD(BWORK*) (needs_review) | 48 | 91.67 | 0 | 0 |
+| `001d2e6c` | get_coord_address(BWORK*) (needs_review) | 48 | 91.67 | 0 | 0 |
+| `001d1db8` | leave_unit_f(int) (needs_review) | 48 | 91.67 | 0 | 0 |
+| `0015e068` | iOSNumberGet(int) (needs_review) | 48 | 91.67 | 0 | 0 |
+| `001536e4` | Wwait_taskend(long) (needs_review) | 48 | 91.67 | 0 | 0 |
+| `00153420` | wait_taskend(long) (needs_review) | 48 | 91.67 | 0 | 0 |
+| `0010229c` | Wgeteventcategory() (needs_review) | 48 | 83.33 | 0 | 0 |
+| `001020f8` | Wevent_init_system() (needs_review) | 48 | 91.67 | 0 | 0 |
+| `000e0538` | import_localpad(int) (needs_review) | 48 | 83.33 | 0 | 0 |
+| `000da6d0` | geteventcategory() (needs_review) | 48 | 83.33 | 0 | 0 |
+| `0028baa4` | TE_task_stop(long) (needs_review) | 44 | 90.91 | 0 | 0 |
+| `0028846c` | free_hight_font() (needs_review) | 44 | 90.91 | 0 | 0 |
+| `00287044` | get_timing_true() (needs_review) | 44 | 90.91 | 0 | 0 |
+| `0027f180` | iOS_ClearRectHit(int) (needs_review) | 44 | 90.91 | 0 | 0 |
+| `0027b53c` | LoadImage_menuData() (needs_review) | 44 | 90.91 | 0 | 0 |
+| `00249474` | vOpn_fadein(int) (needs_review) | 44 | 90.91 | 0 | 0 |
+| `00243560` | fRoll_xawait(short*) (needs_review) | 44 | 90.91 | 0 | 0 |
+| `0021ceb0` | WhoUnlockEffect(long) (needs_review) | 44 | 90.91 | 0 | 0 |
+| `0021b8c4` | PopGravity() (needs_review) | 44 | 90.91 | 0 | 0 |
+| `001d951c` | get_effectdata(unsigned short) (needs_review) | 44 | 90.91 | 0 | 0 |
+| `001d94f0` | get_rangedata(unsigned short) (needs_review) | 44 | 90.91 | 0 | 0 |
+| `001d2968` | get_bwp(int) (needs_review) | 44 | 90.91 | 0 | 0 |
+| `001d1d8c` | disappare_unit_f(int) (needs_review) | 44 | 90.91 | 0 | 0 |
+| `001cb878` | bcp_roll(BWORK*) (needs_review) | 44 | 90.91 | 0 | 0 |
+| `0015df10` | iOSGT4_MapT9Get(unsigned long) (needs_review) | 44 | 90.91 | 0 | 0 |
+| `00159a28` | asmGetActiveF() (needs_review) | 44 | 81.82 | 0 | 0 |
+| `001599fc` | asmGetInput3() (needs_review) | 44 | 81.82 | 0 | 0 |
+| `001599d0` | asmGetInput2() (needs_review) | 44 | 81.82 | 0 | 0 |
+| `001021dc` | Wset_autobattletarget(int, int) (needs_review) | 44 | 90.91 | 0 | 0 |
+| `00101624` | Whook_disp_option() (needs_review) | 44 | 90.91 | 0 | 0 |
+| `000fea78` | Wallocatewindowinit() (needs_review) | 44 | 90.91 | 0 | 0 |
+| `000da610` | set_autobattletarget(int, int) (needs_review) | 44 | 90.91 | 0 | 0 |
+| `000d9810` | hook_disp_option() (needs_review) | 44 | 90.91 | 0 | 0 |
+| `000d6f54` | allocatewindowinit() (needs_review) | 44 | 90.91 | 0 | 0 |
 
 > Structural acceptance does not establish semantic equivalence.
 > Counts distinguish historical CSV statuses, new accepted checkpoints, and review cases.

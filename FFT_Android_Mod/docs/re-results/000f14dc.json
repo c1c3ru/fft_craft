@@ -1,0 +1,19 @@
+{
+  "address": "000f14dc",
+  "name": "disp_attackng()",
+  "size": 44,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "159924",
+    "1599d0",
+    "f0f84"
+  ],
+  "log": "=== jtable.py: 0xf14dc..0xf1508 (44 bytes) ===\ncoverage: 11 of ~11 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0xf0f84 x1   sub_f0f84 LOCAL(no-dynsym)\n  0x159924 x1   asmTaskEntry() \n  0x1599d0 x1   asmGetInput2() \n\n-- branches: 2 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

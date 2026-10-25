@@ -2,8 +2,8 @@
 
 Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Analyzed in current binary: 1333
-Automatically triaged: 140,320 bytes / 1,837,392 inventory bytes (7.64%); **this is newly triaged coverage, not total project coverage**.
+Analyzed in current binary: 1433
+Automatically triaged: 142,192 bytes / 1,837,392 inventory bytes (7.74%); **this is newly triaged coverage, not total project coverage**.
 
 | Address | Function | Size (B) | Coverage | Status |
 |---|---|---:|---:|---|
@@ -1340,3 +1340,103 @@ Automatically triaged: 140,320 bytes / 1,837,392 inventory bytes (7.64%); **this
 | `002c5400` | Movie_FrameMove() | 52 | 92.31% | needs_review |
 | `00079178` | gzprintf | 48 | 100.0% | auto_structural |
 | `000b9da4` | CWORK_MEM::New(int) | 48 | 100.0% | auto_structural |
+| `000da6d0` | geteventcategory() | 48 | 83.33% | needs_review |
+| `000e0538` | import_localpad(int) | 48 | 83.33% | needs_review |
+| `001020f8` | Wevent_init_system() | 48 | 91.67% | needs_review |
+| `0010229c` | Wgeteventcategory() | 48 | 83.33% | needs_review |
+| `00153420` | wait_taskend(long) | 48 | 91.67% | needs_review |
+| `001536e4` | Wwait_taskend(long) | 48 | 91.67% | needs_review |
+| `0015e068` | iOSNumberGet(int) | 48 | 91.67% | needs_review |
+| `001d1db8` | leave_unit_f(int) | 48 | 91.67% | needs_review |
+| `001d1f48` | check_move_ability(BWORK*) | 48 | 100.0% | auto_structural |
+| `001d2e6c` | get_coord_address(BWORK*) | 48 | 91.67% | needs_review |
+| `001d9548` | check_prob(int, int) | 48 | 100.0% | auto_structural |
+| `001dc914` | set_cco_SD(BWORK*) | 48 | 91.67% | needs_review |
+| `001e4f0c` | get_fusui_ability(BWORK*) | 48 | 83.33% | needs_review |
+| `001eedf4` | getWpnSequenceAddress(unsigned short) | 48 | 83.33% | needs_review |
+| `001f1650` | setMovingAnimationShape() | 48 | 100.0% | auto_structural |
+| `00202150` | standerdExecution() | 48 | 91.67% | needs_review |
+| `00204268` | startLeftTurn(int) | 48 | 91.67% | needs_review |
+| `00204298` | startRightTurn(int) | 48 | 91.67% | needs_review |
+| `0020e560` | getOffsetAnimationPosition(int) | 48 | 100.0% | auto_structural |
+| `00213e48` | stopAllColorRotation() | 48 | 91.67% | needs_review |
+| `00215d2c` | battleFileRead() | 48 | 83.33% | needs_review |
+| `0021b860` | SetGravity(Vector*) | 48 | 91.67% | needs_review |
+| `0021bee0` | s16_ifObjNumEQU(_EffectTCB*) | 48 | 100.0% | auto_structural |
+| `0021bf10` | s17_ifObjNumGT(_EffectTCB*) | 48 | 100.0% | auto_structural |
+| `0021bf40` | s18_ifObjNumLT(_EffectTCB*) | 48 | 100.0% | auto_structural |
+| `0021d23c` | initScheduleControl(_EffectTCB*, short) | 48 | 100.0% | auto_structural |
+| `0021d290` | initMetascheduleControl(_EffectTCB*) | 48 | 100.0% | auto_structural |
+| `0022a92c` | GetAnimationPositionFromBattleID(int, int, EffectOrder*, SVECTOR*) | 48 | 100.0% | auto_structural |
+| `00243184` | fRoll_scroll(short*) | 48 | 91.67% | needs_review |
+| `0024337c` | fRoll_cdxafin(short*) | 48 | 91.67% | needs_review |
+| `002433ac` | fRoll_cdxafout(short*) | 48 | 91.67% | needs_review |
+| `0024932c` | vOpn_loopinit() | 48 | 83.33% | needs_review |
+| `00249cc4` | vEnd_CdReady_Chk() | 48 | 100.0% | auto_structural |
+| `0024ad94` | openEntry(int) | 48 | 91.67% | needs_review |
+| `0025f138` | townpic_load(int) | 48 | 91.67% | needs_review |
+| `0025ffb0` | iOSSDNovelGetOT(int) | 48 | 83.33% | needs_review |
+| `00270460` | curhis_get(int) | 48 | 83.33% | needs_review |
+| `00283f50` | GLIVON_F3(unsigned long*, tagPOLY_F3*, short, unsigned long*) | 48 | 100.0% | auto_structural |
+| `00283f80` | GLIVON_F4(unsigned long*, tagPOLY_F4*, short, unsigned long*) | 48 | 100.0% | auto_structural |
+| `00289970` | pspIsNoneSaveData(int) | 48 | 91.67% | needs_review |
+| `0028ba54` | TE_task_create(int, void (*)(), int) | 48 | 91.67% | needs_review |
+| `0028bf4c` | _ps_wait() | 48 | 100.0% | auto_structural |
+| `0028e6a4` | xpInitVblankFunc() | 48 | 83.33% | needs_review |
+| `002a12c4` | AverageZ3 | 48 | 100.0% | auto_structural |
+| `002a12f4` | AverageZ4 | 48 | 100.0% | auto_structural |
+| `002a145c` | ReadLightMatrix | 48 | 91.67% | needs_review |
+| `002a14a8` | ReadColorMatrix | 48 | 91.67% | needs_review |
+| `002a2ff8` | xpInitHeap | 48 | 91.67% | needs_review |
+| `002b2260` | RETINA_SCALE(int) | 48 | 91.67% | needs_review |
+| `002b2378` | Music_Stop() | 48 | 91.67% | needs_review |
+| `002b23a8` | Music_Pause() | 48 | 91.67% | needs_review |
+| `002b8348` | Main_IsTitle() | 48 | 100.0% | auto_structural |
+| `000773d4` | gzclose | 44 | 100.0% | auto_structural |
+| `000d6f54` | allocatewindowinit() | 44 | 90.91% | needs_review |
+| `000d86ac` | getanimpos2d(int, SVECTOR*) | 44 | 100.0% | auto_structural |
+| `000d9810` | hook_disp_option() | 44 | 90.91% | needs_review |
+| `000da610` | set_autobattletarget(int, int) | 44 | 90.91% | needs_review |
+| `000f1484` | disp_okng() | 44 | 100.0% | auto_structural |
+| `000f14b0` | disp_yesno() | 44 | 100.0% | auto_structural |
+| `000f14dc` | disp_attackng() | 44 | 100.0% | auto_structural |
+| `000f1508` | disp_coverng() | 44 | 100.0% | auto_structural |
+| `000f1534` | disp_executeng() | 44 | 100.0% | auto_structural |
+| `000f1604` | disp_dismiss_yesno() | 44 | 100.0% | auto_structural |
+| `000f1630` | disp_yameru_yesno() | 44 | 100.0% | auto_structural |
+| `000f586c` | attackteam_call(unsigned long*, unsigned long) | 44 | 100.0% | auto_structural |
+| `000fea78` | Wallocatewindowinit() | 44 | 90.91% | needs_review |
+| `00100380` | Wgetanimpos2d(int, SVECTOR*) | 44 | 100.0% | auto_structural |
+| `00101624` | Whook_disp_option() | 44 | 90.91% | needs_review |
+| `001021dc` | Wset_autobattletarget(int, int) | 44 | 90.91% | needs_review |
+| `00106270` | Wdisp_okng() | 44 | 100.0% | auto_structural |
+| `0010629c` | Wdisp_yesno() | 44 | 100.0% | auto_structural |
+| `001062c8` | Wdisp_attackng() | 44 | 100.0% | auto_structural |
+| `001062f4` | Wdisp_coverng() | 44 | 100.0% | auto_structural |
+| `00106320` | Wdisp_executeng() | 44 | 100.0% | auto_structural |
+| `001063f0` | Wdisp_dismiss_yesno() | 44 | 100.0% | auto_structural |
+| `0010641c` | Wdisp_yameru_yesno() | 44 | 100.0% | auto_structural |
+| `001599d0` | asmGetInput2() | 44 | 81.82% | needs_review |
+| `001599fc` | asmGetInput3() | 44 | 81.82% | needs_review |
+| `00159a28` | asmGetActiveF() | 44 | 81.82% | needs_review |
+| `0015da34` | iOSCurSameProcs(ActionRequest*) | 44 | 100.0% | auto_structural |
+| `0015df10` | iOSGT4_MapT9Get(unsigned long) | 44 | 90.91% | needs_review |
+| `001cb878` | bcp_roll(BWORK*) | 44 | 90.91% | needs_review |
+| `001d1d8c` | disappare_unit_f(int) | 44 | 90.91% | needs_review |
+| `001d2968` | get_bwp(int) | 44 | 90.91% | needs_review |
+| `001d94f0` | get_rangedata(unsigned short) | 44 | 90.91% | needs_review |
+| `001d951c` | get_effectdata(unsigned short) | 44 | 90.91% | needs_review |
+| `0020e914` | eventWeaponEquip(int, int) | 44 | 100.0% | auto_structural |
+| `0020f7c8` | setCurrentPanel(int) | 44 | 100.0% | auto_structural |
+| `0020f874` | eventWarpEffect(int) | 44 | 100.0% | auto_structural |
+| `0021b8c4` | PopGravity() | 44 | 90.91% | needs_review |
+| `0021ceb0` | WhoUnlockEffect(long) | 44 | 90.91% | needs_review |
+| `00243560` | fRoll_xawait(short*) | 44 | 90.91% | needs_review |
+| `00249474` | vOpn_fadein(int) | 44 | 90.91% | needs_review |
+| `0027134c` | Ssd_StopEffect(long) | 44 | 100.0% | auto_structural |
+| `0027b53c` | LoadImage_menuData() | 44 | 90.91% | needs_review |
+| `0027f180` | iOS_ClearRectHit(int) | 44 | 90.91% | needs_review |
+| `00287044` | get_timing_true() | 44 | 90.91% | needs_review |
+| `0028846c` | free_hight_font() | 44 | 90.91% | needs_review |
+| `0028baa4` | TE_task_stop(long) | 44 | 90.91% | needs_review |
+| `002bef74` | PIE_OFFSET(unsigned int) | 44 | 100.0% | auto_structural |
