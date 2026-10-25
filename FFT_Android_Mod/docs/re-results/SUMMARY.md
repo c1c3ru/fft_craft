@@ -2,8 +2,8 @@
 
 Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Analyzed in current binary: 2128
-Automatically triaged: 147,572 bytes / 1,837,392 inventory bytes (8.03%); **this is newly triaged coverage, not total project coverage**.
+Analyzed in current binary: 2225
+Automatically triaged: 148,220 bytes / 1,837,392 inventory bytes (8.07%); **this is newly triaged coverage, not total project coverage**.
 
 | Address | Function | Size (B) | Coverage | Status |
 |---|---|---:|---:|---|
@@ -2104,6 +2104,7 @@ Automatically triaged: 147,572 bytes / 1,837,392 inventory bytes (8.03%); **this
 | `00286ae0` | get_main_player() | 8 | 100.0% | auto_structural |
 | `00286afc` | get_vsBattle_bule_trap() | 8 | 100.0% | auto_structural |
 | `00286b04` | get_vsBattle_bule_arithmetic_select() | 8 | 100.0% | auto_structural |
+| `00286b34` | net_send | 8 | 100.0% | auto_structural |
 | `00287268` | GetgTrapCancelCount() | 8 | 100.0% | auto_structural |
 | `00287270` | GetgTrapCancelResult() | 8 | 100.0% | auto_structural |
 | `002884cc` | getNetBattleJudge() | 8 | 100.0% | auto_structural |
@@ -2111,27 +2112,123 @@ Automatically triaged: 147,572 bytes / 1,837,392 inventory bytes (8.03%); **this
 | `00288514` | getGetItemCount() | 8 | 100.0% | auto_structural |
 | `00288570` | Get_AnimList(int) | 8 | 100.0% | auto_structural |
 | `0028b418` | ScriptCut__Fiii(int, int, int) | 8 | 100.0% | auto_structural |
+| `0028b420` | sceKernelGetGPI() | 8 | 100.0% | auto_structural |
+| `0028b428` | sceIoDclose | 8 | 100.0% | auto_structural |
+| `0028b430` | sceIoDread | 8 | 100.0% | auto_structural |
+| `0028b438` | sceIoDopen | 8 | 100.0% | auto_structural |
 | `0028b470` | ResetCallback | 8 | 100.0% | auto_structural |
+| `0028b480` | EncSPU | 8 | 100.0% | auto_structural |
+| `0028b488` | EncSPU2 | 8 | 100.0% | auto_structural |
+| `0028b4a4` | StFreeRing | 8 | 100.0% | auto_structural |
 | `0028b4ac` | StGetNext | 8 | 100.0% | auto_structural |
+| `0028b4b4` | StGetNextS | 8 | 100.0% | auto_structural |
+| `0028b4bc` | StNextStatus | 8 | 100.0% | auto_structural |
+| `0028b4d0` | StGetBackloc | 8 | 100.0% | auto_structural |
+| `0028b4d8` | StSetChannel | 8 | 100.0% | auto_structural |
+| `0028b4e4` | DecDCTvlc | 8 | 100.0% | auto_structural |
 | `0028b4f0` | DecDCToutCallback | 8 | 100.0% | auto_structural |
 | `0028b4f8` | get_SoundOnly_Flg__Fv() | 8 | 100.0% | auto_structural |
 | `0028b500` | set_SoundOnly_Flg__Fi(int) | 8 | 100.0% | auto_structural |
+| `0028b520` | getToolBgmFlg__Fv() | 8 | 100.0% | auto_structural |
+| `0028b528` | getBgmData__FPUsPUs(unsigned short*, unsigned short*) | 8 | 100.0% | auto_structural |
 | `0028b534` | getMovieSkipFlg__Fv() | 8 | 100.0% | auto_structural |
+| `0028b544` | CdSearchFile | 8 | 100.0% | auto_structural |
+| `0028b54c` | CdComstr | 8 | 100.0% | auto_structural |
+| `0028b554` | CdIntstr | 8 | 100.0% | auto_structural |
+| `0028b55c` | CdGetSector | 8 | 100.0% | auto_structural |
+| `0028b564` | CdGetSector2 | 8 | 100.0% | auto_structural |
+| `0028b56c` | CdDataSync | 8 | 100.0% | auto_structural |
+| `0028b574` | CdGetToc | 8 | 100.0% | auto_structural |
+| `0028b57c` | CdPlay | 8 | 100.0% | auto_structural |
+| `0028b584` | CdMix | 8 | 100.0% | auto_structural |
 | `0028b58c` | CdRead2 | 8 | 100.0% | auto_structural |
+| `0028b594` | CdReadFile | 8 | 100.0% | auto_structural |
+| `0028b59c` | CdReadSync | 8 | 100.0% | auto_structural |
+| `0028b5a4` | CdReady | 8 | 100.0% | auto_structural |
 | `0028b5ac` | CdSetDebug | 8 | 100.0% | auto_structural |
 | `0028b5b4` | CdReadCallback | 8 | 100.0% | auto_structural |
 | `0028b5bc` | CdReadyCallback | 8 | 100.0% | auto_structural |
+| `0028b5c4` | CdSyncCallback | 8 | 100.0% | auto_structural |
 | `0028b5cc` | CdReset | 8 | 100.0% | auto_structural |
 | `0028b5d4` | CdStatus | 8 | 100.0% | auto_structural |
+| `0028b5dc` | CdLastCom | 8 | 100.0% | auto_structural |
+| `0028b5e4` | CdLastPos | 8 | 100.0% | auto_structural |
+| `0028b5ec` | CdMode | 8 | 100.0% | auto_structural |
+| `0028b5f4` | CdDiskReady | 8 | 100.0% | auto_structural |
+| `0028b5fc` | CdGetDiskType | 8 | 100.0% | auto_structural |
+| `0028b604` | CdReadExec | 8 | 100.0% | auto_structural |
+| `0028b630` | exitXpHeap() | 8 | 100.0% | auto_structural |
+| `0028b6f4` | _FFT_Main() | 8 | 100.0% | auto_structural |
+| `0028ce40` | CAUTOSAVE::GetHeapOffset() | 8 | 100.0% | auto_structural |
+| `0028ce78` | ReadTMD | 8 | 100.0% | auto_structural |
+| `0028ce80` | CheckPrim | 8 | 100.0% | auto_structural |
+| `0028ce88` | GetGraphDebug | 8 | 100.0% | auto_structural |
+| `0028ce90` | GetTimSize | 8 | 100.0% | auto_structural |
+| `0028ce98` | IsEndPrim | 8 | 100.0% | auto_structural |
+| `0028cea0` | KanjiFntOpen | 8 | 100.0% | auto_structural |
+| `0028ceac` | Krom2Tim | 8 | 100.0% | auto_structural |
+| `0028ceb4` | MargePrim | 8 | 100.0% | auto_structural |
+| `0028cebc` | OpenTMD | 8 | 100.0% | auto_structural |
 | `0028cec4` | SetGraphDebug | 8 | 100.0% | auto_structural |
+| `0028cecc` | KanjiFntFlush | 8 | 100.0% | auto_structural |
+| `0028ced4` | NextPrim | 8 | 100.0% | auto_structural |
+| `0028cf04` | BreakDraw | 8 | 100.0% | auto_structural |
+| `0028cf10` | IsIdleGPU | 8 | 100.0% | auto_structural |
+| `0028cf18` | GetODE | 8 | 100.0% | auto_structural |
+| `0028cf20` | DrawOTag2 | 8 | 100.0% | auto_structural |
+| `0028d434` | tlMalloc(unsigned int) | 8 | 100.0% | auto_structural |
+| `0028de74` | _card_load | 8 | 100.0% | auto_structural |
+| `0028de7c` | _card_read | 8 | 100.0% | auto_structural |
+| `0028de84` | _card_status | 8 | 100.0% | auto_structural |
+| `0028de8c` | firstfile(char const*, DIRENTRY*) | 8 | 100.0% | auto_structural |
+| `0028de94` | nextfile(DIRENTRY*) | 8 | 100.0% | auto_structural |
 | `0028e2dc` | CdInit | 8 | 100.0% | auto_structural |
 | `0028e468` | CdControlF | 8 | 100.0% | auto_structural |
 | `0028e4b8` | CdSync | 8 | 100.0% | auto_structural |
 | `00290e88` | FntOpen | 8 | 100.0% | auto_structural |
 | `00290e94` | FntPrint | 8 | 100.0% | auto_structural |
 | `00290e9c` | FntFlush | 8 | 100.0% | auto_structural |
+| `0029ac18` | GetGraphType | 8 | 100.0% | auto_structural |
 | `002a0808` | MulMatrix | 8 | 100.0% | auto_structural |
 | `002a0810` | MulMatrix2 | 8 | 100.0% | auto_structural |
+| `002a26c0` | PadGetState | 8 | 100.0% | auto_structural |
+| `002a3114` | xpMallocErrorFuncSet | 8 | 100.0% | auto_structural |
+| `002ab9e0` | sceGuSync | 8 | 100.0% | auto_structural |
+| `002b3444` | iCloud_Send() | 8 | 100.0% | auto_structural |
 | `002b344c` | iCloud_Receive() | 8 | 100.0% | auto_structural |
 | `002b3454` | iCloud_GetSlotCount() | 8 | 100.0% | auto_structural |
+| `002b36d4` | Error_FrameMove() | 8 | 100.0% | auto_structural |
+| `002b7a2c` | GetPanelCursorMode() | 8 | 100.0% | auto_structural |
 | `002c9121` | operator delete[](void*) | 8 | 0.0% | needs_review |
+| `00077494` | gztell | 4 | 100.0% | auto_structural |
+| `000774fc` | gzoffset | 4 | 100.0% | auto_structural |
+| `00077dc8` | gzseek | 4 | 100.0% | auto_structural |
+| `000785e4` | gzgetc_ | 4 | 100.0% | auto_structural |
+| `0007f384` | _tr_flush_bits | 4 | 100.0% | auto_structural |
+| `000b61d4` | CCOMP_Z_DEC::~CCOMP_Z_DEC() | 4 | 100.0% | auto_structural |
+| `000b63a0` | CCOMP_Z_ENC::~CCOMP_Z_ENC() | 4 | 100.0% | auto_structural |
+| `000b6584` | CCRYPT::~CCRYPT() | 4 | 100.0% | auto_structural |
+| `000ba090` | SleepM(unsigned int) | 4 | 100.0% | auto_structural |
+| `000c4418` | Adisp_floateventwindow() | 4 | 100.0% | auto_structural |
+| `000c4498` | attackdebugfunc() | 4 | 100.0% | auto_structural |
+| `000cbd50` | SetTrapNameWindowParam(int, short, int) | 4 | 100.0% | auto_structural |
+| `000cbd54` | TrapNameWindowManager() | 4 | 100.0% | auto_structural |
+| `000cbd58` | CreateTrapNameWindowManagerTask() | 4 | 100.0% | auto_structural |
+| `000cbd5c` | deleteEndModeWindow() | 4 | 100.0% | auto_structural |
+| `000cbd60` | SetTrapNameWindowColor(int) | 4 | 100.0% | auto_structural |
+| `000cbd64` | CreateTrapCancelCommandWindow() | 4 | 100.0% | auto_structural |
+| `000cbd68` | DeleteTrapCancelCommandWindow() | 4 | 100.0% | auto_structural |
+| `000cbd74` | CreateNetStayWindow() | 4 | 100.0% | auto_structural |
+| `000d0dc8` | Ddisp_floateventwindow() | 4 | 100.0% | auto_structural |
+| `000d8970` | dispemptywindow() | 4 | 100.0% | auto_structural |
+| `000e62c4` | DEBUGTRACE_hook_connect_camera() | 4 | 100.0% | auto_structural |
+| `0015991c` | asmBoxCopy(char*, char*, COPYFIELD*, COPYFIELD*) | 4 | 100.0% | auto_structural |
+| `00159a70` | asmMUL64(long, long, long) | 4 | 100.0% | auto_structural |
+| `00159a74` | asmMUL3232(long, long, long, long) | 4 | 100.0% | auto_structural |
+| `00161d98` | tDebugBreakCheck(int) | 4 | 100.0% | auto_structural |
+| `0020ce18` | fileDispose(char*) | 4 | 100.0% | auto_structural |
+| `0020f424` | eventEffectStart() | 4 | 100.0% | auto_structural |
+| `0027b39c` | numa_fileReadCD(unsigned long, unsigned long, void*) | 4 | 100.0% | auto_structural |
+| `00280610` | iOS_soundDirect(int) | 4 | 100.0% | auto_structural |
+| `00280684` | hook_musiclod() | 4 | 100.0% | auto_structural |
+| `002806c0` | hook_allocate_texture() | 4 | 100.0% | auto_structural |
