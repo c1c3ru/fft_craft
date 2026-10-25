@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **40/1258** pending functions.
+Evidence collected: **48/1258** pending functions.
 These reports do not constitute semantic verification.
 
 | Address | Function | Evidence |
@@ -49,3 +49,11 @@ These reports do not constitute semantic verification.
 | `0024e734` | ctlperson_init() | [Evidence](semantic-evidence/0024e734.md) |
 | `0021ef4c` | InitPermanentEffect() | [Evidence](semantic-evidence/0021ef4c.md) |
 | `00285f8c` | hockRead(void*, int, unsigned int) | [Evidence](semantic-evidence/00285f8c.md) |
+| `00159aac` | asm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long) | [Evidence](semantic-evidence/00159aac.md) |
+| `0015e5d4` | iOSShiftUnitGet() | [Evidence](semantic-evidence/0015e5d4.md) |
+| `00162080` | wasm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long) | [Evidence](semantic-evidence/00162080.md) |
+| `002595c0` | ctlhistory_init() | [Evidence](semantic-evidence/002595c0.md) |
+| `002b1600` | GX_Init(int) | [Evidence](semantic-evidence/002b1600.md) |
+| `00259780` | ctlhismes_init(int) | [Evidence](semantic-evidence/00259780.md) |
+| `002875a8` | Draw_Win(int) | [Evidence](semantic-evidence/002875a8.md) |
+| `001cd308` | check_learning(int, unsigned short*) | [Evidence](semantic-evidence/001cd308.md) |
