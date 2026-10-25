@@ -1,0 +1,21 @@
+{
+  "address": "000be0fc",
+  "name": "CSTEP::GetData()",
+  "size": 60,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 5,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2cb2f0",
+    "2cb2f4",
+    "2cb918",
+    "2cb92c",
+    "bddd8"
+  ],
+  "log": "=== jtable.py: 0xbe0fc..0xbe138 (60 bytes) ===\ncoverage: 15 of ~15 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 5 distinct --\n  0xbddd8 x1   CSTEP::GetDataF() \n  0x2cb2f0 x1   __subsf3 \n  0x2cb2f4 x1   __addsf3 \n  0x2cb918 x1   __aeabi_fcmpgt \n  0x2cb92c x2   __fixsfsi \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
