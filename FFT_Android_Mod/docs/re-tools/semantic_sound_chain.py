@@ -85,9 +85,11 @@ def emulate(chain, boundary, argument, cpsr):
     for address,(word,_) in chain.items():
         uc.mem_write(address,word)
     uc.mem_write(boundary,bytes.fromhex("0000a0e1"))
+    # Set processor mode first. LR is banked across ARM CPU modes;
+    # seeding it in the default mode then switching CPSR loses the value.
+    uc.reg_write(UC_ARM_REG_CPSR,cpsr)
     uc.reg_write(UC_ARM_REG_R0,argument)
     uc.reg_write(UC_ARM_REG_LR,LR_SEED)
-    uc.reg_write(UC_ARM_REG_CPSR,cpsr)
     trace=[]
     reads=[]
     writes=[]
