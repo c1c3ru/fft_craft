@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **344/1258** pending functions.
+Evidence collected: **352/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -355,3 +355,11 @@ These reports do not constitute semantic verification.
 | `002816bc` | iOS_v2menuSetEnable(V2_MENU_ITEM, int) | [Evidence](semantic-evidence/002816bc.md) |
 | `002cabdc` | __aeabi_ul2d | [Evidence](semantic-evidence/002cabdc.md) |
 | `002cb830` | __gesf2 | [Evidence](semantic-evidence/002cb830.md) |
+| `000d7880` | allocatememoryinit() | [Evidence](semantic-evidence/000d7880.md) |
+| `000daa50` | checktaskkind(int) | [Evidence](semantic-evidence/000daa50.md) |
+| `000db77c` | write_eventflag(int, int) | [Evidence](semantic-evidence/000db77c.md) |
+| `000feeb4` | Wdisposewindowbytask(int) | [Evidence](semantic-evidence/000feeb4.md) |
+| `001026c4` | Wchecktaskkind(int) | [Evidence](semantic-evidence/001026c4.md) |
+| `00103340` | Wwrite_eventflag(int, int) | [Evidence](semantic-evidence/00103340.md) |
+| `00254100` | wldctl_init() | [Evidence](semantic-evidence/00254100.md) |
+| `0026030c` | ctlmouke_exit(CTLINFO*) | [Evidence](semantic-evidence/0026030c.md) |
