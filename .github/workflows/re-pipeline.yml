@@ -69,6 +69,27 @@ jobs:
         run: |
           python3 FFT_Android_Mod/docs/re-tools/progress_report.py
           python3 FFT_Android_Mod/docs/re-tools/export_review_queue.py
+          python3 FFT_Android_Mod/docs/re-tools/parallel_loop.py \
+            --review-only --retry-review --upgrade-v3 --workers 4 --limit 8 --timeout 120 | tee /tmp/re-v3-smoke.log
+          python3 FFT_Android_Mod/docs/re-tools/structural_v3_report.py
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path("FFT_Android_Mod/docs/re-results")
+          assert "V3_UPGRADED=8" in Path("/tmp/re-v3-smoke.log").read_text()
+          archived = list((root / "structural-v2").glob("*.json"))
+          assert len(archived) == 8, "Every replaced v2 checkpoint needs an archived original"
+          for item in archived:
+              prior = json.loads(item.read_text())
+              new = json.loads((root / item.name).read_text())
+              assert prior["pipeline_version"] == new["pipeline_version"] == 2
+              assert new["structural_version"] == 3
+              assert new["structural_fingerprint"]
+              assert new["structural_v3"]["status"] == new["status"]
+          report = (root / "STRUCTURAL_V3_REPORT.md").read_text()
+          assert "v3 checkpoints | 8" in report
+          print("PASS: real ELF v3 upgrades are versioned, bounded and archived")
+          PY
           python3 FFT_Android_Mod/docs/re-tools/semantic_evidence.py --limit 8
           python3 FFT_Android_Mod/docs/re-tools/semantic_path_report.py --limit 12
           python3 FFT_Android_Mod/docs/re-tools/semantic_microexec.py
