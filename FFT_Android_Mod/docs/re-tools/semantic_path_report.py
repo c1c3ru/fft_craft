@@ -9,6 +9,7 @@ from pathlib import Path
 import semantic_evidence as evidence
 import semantic_facts
 import semantic_paths
+import semantic_cfg
 
 
 def build(binary, results, limit=12):
@@ -35,14 +36,22 @@ def build(binary, results, limit=12):
             lines += ["Thumb-tagged address: local ARM CMP/TST branch contract extraction "
                       "not supported; no predicate is inferred.", ""]
             continue
-        instructions, _, _ = evidence.collect(
+        instructions, tables, _ = evidence.collect(
             evidence.read_function(binary, int(address, 16), int(record["size"])),
             int(address, 16))
         guards = semantic_paths.branch_guards(instructions)
-        effects = semantic_paths.incoming_guard_edges(
-            semantic_facts.bitmask_effects(instructions), guards)
+        graph, uncertain_edges = semantic_cfg.build_cfg(instructions, tables)
+        effects = semantic_cfg.effect_routes(
+            semantic_paths.incoming_guard_edges(
+                semantic_facts.bitmask_effects(instructions), guards),
+            guards, graph)
         lines += [f"Observed direct compare/branch pairs: **{len(guards)}**; "
-                  f"local bitmask sequences: **{len(effects)}**.", ""]
+                  f"local bitmask sequences: **{len(effects)}**.", "",
+                  f"Modeled ARM CFG nodes: **{len(graph)}**; "
+                  f"unmodeled outgoing edges/transfers: **{len(uncertain_edges)}**.", "",
+                  "A route in this graph is a candidate, not a proven executable "
+                  "path. An absent route may be due to unresolved indirect jumps, "
+                  "callee effects, missing code or exceptional control flow.", ""]
         lines += ["| Compare / branch | Taken edge | Fallthrough edge |",
                   "|---|---|---|"]
         for g in guards[:30]:
@@ -71,9 +80,37 @@ def build(binary, results, limit=12):
             else:
                 lines.append("  - No direct CMP/TST-branch incoming edge demonstrated; "
                              "entry condition remains unknown.")
+            parents = fact["modeled_predecessors"]
+            if parents:
+                display = ", ".join(f'`0x{a:x}` ({kind})' for a, kind in parents[:8])
+                lines.append(f"  - Modeled direct predecessors: {display}.")
+            else:
+                lines.append("  - No decoded direct predecessor identified.")
+            routes = fact["modeled_guard_routes"]
+            # First report modeled single-edge candidates, then alternative
+            # paths where both choices might reach the candidate write.
+            routes = sorted(routes, key=lambda r: not r["modeled_exclusive"])
+            for route in routes[:6]:
+                taken = route["taken_path"]
+                other = route["other_path"]
+                fmt = lambda p: (" → ".join(f"0x{a:x}" for a in p[:7])
+                                 + (" → ..." if len(p) > 7 else "") if p else
+                                 "no route found in modeled graph")
+                lines.append(
+                    f'  - Branch `0x{route["branch"]:x}` after compare '
+                    f'`0x{route["compare"]:x}`: '
+                    f'[{route["taken_predicate"]}] → {fmt(taken)}; '
+                    f'[{route["other_predicate"]}] → {fmt(other)}. '
+                    + ("Only one modeled successor reaches the write; "
+                       "NOT a dominance or impossibility proof."
+                       if route["modeled_exclusive"] else
+                       "Both modeled successors can reach the write."))
+            if not routes:
+                lines.append("  - No preceding branch guard can reach this "
+                             "write in the bounded decoded graph.")
         lines.append("")
     lines.extend(["## Verification still required", "",
-                  "Inspect complete CFG predecessor sets, aliasing, effects of callees "
+                  "Inspect incomplete/unmodeled CFG predecessor sets, aliasing, effects of callees "
                   "and compare behavior with execution traces before any semantic approval.", ""])
     return "\n".join(lines)
 
