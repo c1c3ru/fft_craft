@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1208/1258** pending functions.
+Evidence collected: **1216/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1219,3 +1219,11 @@ These reports do not constitute semantic verification.
 | `0026ab70` | snpl_envsndreq() | [Evidence](semantic-evidence/0026ab70.md) |
 | `002ca195` | __cxa_begin_cleanup | [Evidence](semantic-evidence/002ca195.md) |
 | `00258c40` | evt_wldinfo() | [Evidence](semantic-evidence/00258c40.md) |
+| `00269cd0` | snpl_setstat() | [Evidence](semantic-evidence/00269cd0.md) |
+| `0027fc80` | cSaveFFT::Destroy() | [Evidence](semantic-evidence/0027fc80.md) |
+| `0028c288` | CFFT_STATE::GetBackdropColor(float*, float*, float*) | [Evidence](semantic-evidence/0028c288.md) |
+| `000bd538` | CSOUND_LOADER_OGG::CSOUND_LOADER_OGG() | [Evidence](semantic-evidence/000bd538.md) |
+| `00258e08` | evt_town_set() | [Evidence](semantic-evidence/00258e08.md) |
+| `00258e3c` | evt_town_clr() | [Evidence](semantic-evidence/00258e3c.md) |
+| `000da47c` | event_init_system() | [Evidence](semantic-evidence/000da47c.md) |
+| `0026995c` | snpl_addpara() | [Evidence](semantic-evidence/0026995c.md) |
