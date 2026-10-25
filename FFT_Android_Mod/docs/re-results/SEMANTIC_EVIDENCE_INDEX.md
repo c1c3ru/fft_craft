@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **656/1258** pending functions.
+Evidence collected: **664/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -667,3 +667,11 @@ These reports do not constitute semantic verification.
 | `00289970` | pspIsNoneSaveData(int) | [Evidence](semantic-evidence/00289970.md) |
 | `0028ba54` | TE_task_create(int, void (*)(), int) | [Evidence](semantic-evidence/0028ba54.md) |
 | `0028e6a4` | xpInitVblankFunc() | [Evidence](semantic-evidence/0028e6a4.md) |
+| `002a145c` | ReadLightMatrix | [Evidence](semantic-evidence/002a145c.md) |
+| `002a14a8` | ReadColorMatrix | [Evidence](semantic-evidence/002a14a8.md) |
+| `002a2ff8` | xpInitHeap | [Evidence](semantic-evidence/002a2ff8.md) |
+| `002b2260` | RETINA_SCALE(int) | [Evidence](semantic-evidence/002b2260.md) |
+| `002b2378` | Music_Stop() | [Evidence](semantic-evidence/002b2378.md) |
+| `002b23a8` | Music_Pause() | [Evidence](semantic-evidence/002b23a8.md) |
+| `000d6f54` | allocatewindowinit() | [Evidence](semantic-evidence/000d6f54.md) |
+| `000d9810` | hook_disp_option() | [Evidence](semantic-evidence/000d9810.md) |
