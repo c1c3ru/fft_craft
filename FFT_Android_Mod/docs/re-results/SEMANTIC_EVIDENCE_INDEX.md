@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1192/1258** pending functions.
+Evidence collected: **1200/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1203,3 +1203,11 @@ These reports do not constitute semantic verification.
 | `002594a0` | evt_brave_high() | [Evidence](semantic-evidence/002594a0.md) |
 | `00259530` | evt_faith_high() | [Evidence](semantic-evidence/00259530.md) |
 | `0026b64c` | wldmusic_change(int) | [Evidence](semantic-evidence/0026b64c.md) |
+| `0029b5d0` | GsSwapDispBuff | [Evidence](semantic-evidence/0029b5d0.md) |
+| `00258fb4` | evt_dead_high() | [Evidence](semantic-evidence/00258fb4.md) |
+| `0026b6e0` | iOSwldssd_wait() | [Evidence](semantic-evidence/0026b6e0.md) |
+| `00277640` | SetThisDestination(unsigned char*) | [Evidence](semantic-evidence/00277640.md) |
+| `000b9fe0` | timeGetTime() | [Evidence](semantic-evidence/000b9fe0.md) |
+| `0025ee30` | wldload_wait() | [Evidence](semantic-evidence/0025ee30.md) |
+| `00269b80` | snpl_keywait() | [Evidence](semantic-evidence/00269b80.md) |
+| `00278440` | GetPanelUnderUnit(int, unsigned char*) | [Evidence](semantic-evidence/00278440.md) |
