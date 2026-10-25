@@ -19749,3 +19749,99 @@ no checkpoint + um grep de cruzamento, sem fork.
 **Status CSV**: `read_structural` para as 16 (identidade e call-graph
 confirmados via checkpoint + cruzamento textual; nenhuma teve os
 blocos lidos instrução a instrução).
+
+## 607. Grab-bag de 18 checkpoints `auto_structural` (≥95% cobertura, 0 tabela pendente) aceitos direto, sem fork (2026-10-25, Fase 3, octogésimo sétimo lote)
+
+Mesma rota dos §605/606.
+
+- **`db_init_all(int,int,int,uchar,uchar,uchar)`** (`0x20fb18`, 428 B,
+  96%, 16 `bl`, **0 branches**) — mesma assinatura exata de `db_init`
+  (§597), mas com um catálogo maior e mais completo: todo o conjunto
+  de `db_init` (`ResetGraph`/`SetDispMask`/`DrawSync`/`PutDrawEnv`/
+  `PutDispEnv`/`ClearImage`/`SetDefDispEnv`×2/`SetDefDrawEnv`×2/
+  `SetGeomOffset`/`SetGeomScreen`) mais `pspOffScreenInit`,
+  `SetDumpFnt`, `FntOpen`/`FntLoad` (fonte de debug via libgpu) e
+  `InitGeom` — é a versão "completa" do bootstrap gráfico, chamada
+  em vez de (ou antes de) `db_init` dependendo do contexto; confirma
+  que `db_init`/`db_init_all` são mesmo uma dupla relacionada, não
+  coincidência de nome como se suspeitava inicialmente — "all"
+  provavelmente = inicializa também fonte/geometria, que a versão
+  simples pula.
+- **`disp_noframe()`**/**`Wdisp_noframe()`** (`0x13728c`/`0x123de0`,
+  408 B cada, 97%, **18 `bl` cada, catálogo idêntico ponto a ponto**)
+  — par W/sem-W exato de uma janela de mensagem **sem moldura**:
+  `addlocalprim`/`disposememory`/`multiwindow_keydown`/
+  `multiwindow_break`/`multiwindow_packetcolor`/`multiwindow_packetanm`/
+  `multiwindow_packetinit`/`statuskanjiprint`/`multiwindow_keyright`/
+  `import_localpad`/`loadcdst`/`extend_systemframe`/`task_killmyself`/
+  **`asmTaskEntry`/`asmGetInput1`/`asmGetActiveF`** (variante sem W) /
+  `wasmTaskEntry`/`wasmGetInput1`/`wasmGetActiveF` (variante W) +
+  `PSX_LoadImage`. Confirma, com um par quase perfeito, que a família
+  `multiwindow_*`/`statuskanjiprint` (já mapeada em `disp_personalwindow`,
+  §46) tem uma variante "sem moldura" rodando como task real via
+  `asmTaskEntry`/`wasmTaskEntry` — o mesmo par já extensivamente
+  documentado em dezenas de seções (ex. linha 4552/5459/7592).
+- **`bgput(tagPOLY_FT4*,RECT16*,RECT16*,BGRECORD*)`**/**`Wbgput(...)`**
+  (`0xe1118`/`0x10fb74`, 404 B cada, **100%**, 1 `bl` cada:
+  `GetTPage`) — outro par W/sem-W idêntico, desenho de fundo (BG)
+  via textura PS1.
+- **`mapclip_load(int)`**/**`Savedata_LoadGameCleared(uchar*,int*)`**
+  (`0x284144`/`0x280304`, 404 B cada, 100%/95%, 11/17 `bl`) — ambas
+  usam a mesma API `CFILE::CFILE`/`Open`/`Read`/`~CFILE` já
+  confirmada em outras seções de I/O de save; `Savedata_LoadGameCleared`
+  adicionalmente chama `pspGetFftPspSaveDataSize`/
+  `CFFT_STATE::GetParam`/`CAPP_INFO::GetRootPath`/`GetStoragePath`
+  (mesmo trio de API de plataforma já citado na seção 19, linha
+  3625/3648) — carrega especificamente a flag/dado de "jogo
+  zerado" salvo, separado do blob de progresso principal.
+- **`AbilityLearning(short,short,short)`** (`0x1ab918`, 408 B, 98%, 5
+  `bl`: `GetLocalJobNumber` ×2, `SetChrListOne` (§606),
+  `GetCommandNumber`, `GetAbilityList` (§390), `get_ability`) —
+  fecha mais um elo do sistema de habilidades, ligando diretamente a
+  `SetChrListOne` recém-fechada no lote anterior.
+- **`get_command_ability(int,int)`** (`0x1d7538`, 396 B, 97%, 0 `bl`)
+  — função folha já referenciada por nome em `check_learning` (§601)
+  sem nunca ter sido lida por dentro; agora confirmada como função
+  folha pura (consulta de tabela, sem delegação).
+- **`Wevent_init()`** (`0x10d8ec`, 396 B, 97%, 10 `bl`:
+  `Wsend_sttslinecol`, `Wevent_init_memory/_system/_light`,
+  `Wmakemessagestructure`, `GetTPage`/`SetTile`/`SetDrawMode`/
+  `SetSemiTrans`) — bootstrap do sistema de eventos `W*`, delega pra
+  3 sub-inicializadores próprios (`_memory`/`_system`/`_light`, novos,
+  ainda `unread`).
+- **`ForChantedAction()`** (`0x274018`, 420 B, 98%, 6 `bl`:
+  `CompareScore`, `SetBMList`, `CheckCrystalAndTresureBox`,
+  `EvaluationFunction` ×2, `SetBestMove`, `MemCpyW`) —
+  `EvaluationFunction`/`CompareScore`/`SetBestMove` já citados como
+  o núcleo de avaliação da IA de batalha (linha 229); esta função é
+  mais um consumidor desse núcleo pra ações "encantadas"/com buff
+  ativo (provável contexto de magia carregada — "chant" = canto de
+  magia).
+- **`get_comwindow_data(int)`** (`0x1d3e18`, 416 B, **100%**, 5 `bl`:
+  `gc_bwp`, `get_active_unit`, `check_act_ok` ×2,
+  `pspNetCheckDuty`, `get_netmodeadhoc`) — resolve dados de janela de
+  comando pra a unidade ativa, com gate de rede real
+  (`pspNetCheckDuty`/`get_netmodeadhoc`).
+- **`mkbasept_calc()`** (`0x25bf88`, 412 B, 96%, 1 `bl`:
+  `mkadrtbl_calc`, já citado em `tokuseijob_check` §605) — mais um
+  consumidor do resolvedor de endereço/job do mapa mundi.
+- **`CheckEventGunResult(int,SVECTOR*,int)`** (`0x225074`, 412 B, 95%,
+  4 `bl`: `get_mapstp`, `getAnimationPositionFromBattleWork` ×3,
+  `getAnimationHeightFromBattleID` ×2, `SquareRoot12`) — cálculo
+  geométrico real (raiz quadrada de precisão 12-bit do PS1) pra
+  resultado de acerto de uma "arma" tipo canhão/tiro, usando posição
+  e altura de animação em tempo real.
+- **`calceffectangle(int,int)`** (`0xda83c`, 392 B, 97%, 2 `bl`:
+  `getanimpanel` ×2, `get_mapid` ×2) — calcula ângulo de efeito
+  visual a partir de dois painéis do mapa.
+- **`pspMapArrayOperate(...)`** (`0x286140`, 424 B, 99%, 0 `bl`,
+  **16 parâmetros `short*`**) — função folha pura, assinatura
+  massiva sugere operação vetorizada sobre várias camadas do mapa
+  simultaneamente (provável rede, prefixo `psp`).
+- **`gzwrite`**/**`__aeabi_frsub`** (`0x78d9c`/`0x2cb2e8`, zlib real +
+  soft-float `float` subtract reverso — mesmo tema do §569/§605/§606,
+  biblioteca de terceiros).
+
+**Status CSV**: `read_structural` para as 18 (identidade e call-graph
+confirmados via checkpoint + cruzamento textual; nenhuma teve os
+blocos lidos instrução a instrução).
