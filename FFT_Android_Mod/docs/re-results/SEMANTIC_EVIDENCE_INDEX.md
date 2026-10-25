@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1008/1258** pending functions.
+Evidence collected: **1016/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1019,3 +1019,11 @@ These reports do not constitute semantic verification.
 | `001d15b0` | get_originalability() | [Evidence](semantic-evidence/001d15b0.md) |
 | `001eee34` | getEffSequenceAddress() | [Evidence](semantic-evidence/001eee34.md) |
 | `001fcdf0` | iOSgetCursorVisible() | [Evidence](semantic-evidence/001fcdf0.md) |
+| `002010b8` | iOSmapVectorScrollCheck() | [Evidence](semantic-evidence/002010b8.md) |
+| `002041e8` | setStartBattleFlg(int) | [Evidence](semantic-evidence/002041e8.md) |
+| `002041fc` | getStartBattleFlg() | [Evidence](semantic-evidence/002041fc.md) |
+| `00204254` | setTurning(int) | [Evidence](semantic-evidence/00204254.md) |
+| `0020f428` | eventEffectExecute() | [Evidence](semantic-evidence/0020f428.md) |
+| `0020f8b8` | getFrameTicks() | [Evidence](semantic-evidence/0020f8b8.md) |
+| `00216604` | checkActiveMusic() | [Evidence](semantic-evidence/00216604.md) |
+| `002168e8` | callEnvEffect(int) | [Evidence](semantic-evidence/002168e8.md) |
