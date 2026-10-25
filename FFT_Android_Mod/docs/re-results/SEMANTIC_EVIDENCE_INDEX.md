@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1088/1258** pending functions.
+Evidence collected: **1096/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1099,3 +1099,11 @@ These reports do not constitute semantic verification.
 | `002abd20` | sceGuClutMode | [Evidence](semantic-evidence/002abd20.md) |
 | `002ac000` | sceGuTexMode | [Evidence](semantic-evidence/002ac000.md) |
 | `002b14d0` | Project_Archive_GetFile(int) | [Evidence](semantic-evidence/002b14d0.md) |
+| `002b8708` | iOS_PressTime() | [Evidence](semantic-evidence/002b8708.md) |
+| `002b87e8` | iOS_isInGameArea() | [Evidence](semantic-evidence/002b87e8.md) |
+| `002c53c0` | Main_GetPauseFlag() | [Evidence](semantic-evidence/002c53c0.md) |
+| `002c53d4` | Main_SetPauseFlag(int) | [Evidence](semantic-evidence/002c53d4.md) |
+| `00073c64` | get_crc_table | [Evidence](semantic-evidence/00073c64.md) |
+| `000d6d98` | getStatusPad() | [Evidence](semantic-evidence/000d6d98.md) |
+| `00101fc0` | WgetStatusPad() | [Evidence](semantic-evidence/00101fc0.md) |
+| `0018377c` | fileopen(unsigned char*, unsigned int) | [Evidence](semantic-evidence/0018377c.md) |
