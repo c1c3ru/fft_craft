@@ -81,3 +81,5 @@ python3 docs/re-tools/parallel_loop.py --review-only --retry-review --limit 100 
 ```
 
 A reanálise não implica aprovação: casos que continuam com saltos indiretos, tabelas de salto ou cobertura abaixo do limiar permanecem com `needs_review`. Preserve os checkpoints originais sob controle de versão antes da reanálise.
+
+A reanálise automática agora tem orçamento padrão de duas passagens por binário inalterado (`--max-review-attempts 2`). Funções que continuam `needs_review` após esse limite permanecem na fila para revisão humana e deixam de consumir diariamente o mesmo lote de trabalhadores. Use um valor maior explicitamente se o analisador for aprimorado.
