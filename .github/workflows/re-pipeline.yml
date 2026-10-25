@@ -109,6 +109,18 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_two_guards.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_entry_prefix.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_return_call.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_callee_v2icon.py
+          python3 - <<'PY'
+          from pathlib import Path
+          report = (Path("FFT_Android_Mod/docs/re-results") /
+                    "SEMANTIC_V2ICON_CALLEE.md").read_text(encoding="utf-8")
+          assert all(token in report for token in (
+              "0x25a298", "0x2b7ccc", "iOS_getV2Icon(V2ICON_DATA)",
+              "All six original ARM instructions", "not inferred solely"))
+          for address in range(0x2b7ccc, 0x2b7ccc + 24, 4):
+              assert f"0x{address:x}" in report
+          print("PASS: ELF BL/V2Icon six-instruction ABI boundary evidence")
+          PY
           python3 - <<'PY'
           from pathlib import Path
           r = Path("FFT_Android_Mod/docs/re-results/SEMANTIC_RETURN_CALL_BOUNDARY.md").read_text()
