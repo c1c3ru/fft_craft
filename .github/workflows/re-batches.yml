@@ -12,6 +12,7 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/semantic_paths.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_facts.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_microexec.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_branch_microexec.py'
   workflow_dispatch:
     inputs:
       limit:
@@ -124,6 +125,7 @@ jobs:
       - name: Verify real ELF bit-clearing by isolated ARM microexecution
         run: |
           python3 FFT_Android_Mod/docs/re-tools/semantic_microexec.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_branch_microexec.py
       - name: Count newly checkpointed functions
         id: progress
         env:
