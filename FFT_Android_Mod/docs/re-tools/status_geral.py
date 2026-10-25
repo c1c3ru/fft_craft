@@ -1,0 +1,236 @@
+#!/usr/bin/env python3
+"""Generate a central, evidence-linked FFT Craft status dashboard.
+
+Only same-ELF verified checkpoint records enter coverage metrics. A merged PR
+is metadata, not evidence of semantic equivalence. The dashboard never
+silently sums overlapping historical CSV and checkpoint populations.
+"""
+import argparse
+import csv
+import json
+import re
+from collections import Counter
+from pathlib import Path
+
+import progress_report
+
+ROOT = Path(__file__).resolve().parents[2]
+RESULTS = ROOT / "docs/re-results"
+REPO = "c1c3ru/fft_craft"
+MILESTONES = (
+    ("SEMANTIC_SOUND_ICON_MICROEXEC.md",
+     "Som até 0x2b2b7c e prólogo de iOS_SetIconPosition até 0x2b8928"),
+    ("SEMANTIC_THREE_CALLEES_EXECUTION.md",
+     "Três callees ARM e duas continuações controladas do chamador"),
+    ("SEMANTIC_V2ICON_CALL_FLOW.md",
+     "BL/BX LR de V2Icon e seleção de três caminhos"),
+    ("SEMANTIC_RETURN_CALL_BOUNDARY.md",
+     "Retorno ARM real e alterações de memória antes da primeira chamada"),
+)
+CURRENT_SEMANTIC_BOUNDARIES = (
+    ("0x2b2b7c", "Analisar o próximo código de som e seus efeitos verificáveis"),
+    ("0x2b8928", "Modelar a primeira leitura global de iOS_SetIconPosition"),
+)
+EVIDENCE_RE = re.compile(r"Evidence collected:\s*\*\*(\d+)/(\d+)\*\*")
+SHA_RE = re.compile(r"ELF SHA-256:\s*`([a-f0-9]{64})`")
+
+
+def percent(numerator, denominator):
+    return "não mensurável" if not denominator else f"{100*numerator/denominator:.1f}%"
+
+
+def current_v3(results, digest):
+    """Only v3 records for the exact same binary with consistent metadata."""
+    counts = Counter()
+    for path in sorted(results.glob("*.json")):
+        try:
+            value = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if (value.get("binary_sha256") != digest
+                or value.get("pipeline_version") != 2
+                or value.get("structural_version") != 3
+                or path.stem.lower() != str(value.get("address", "")).lower()):
+            continue
+        counts["v3"] += 1
+        counts[value.get("status", "unknown")] += 1
+    return counts
+
+
+def evidence_status(results, digest, pending_count):
+    path = results / "SEMANTIC_EVIDENCE_INDEX.md"
+    if not path.is_file():
+        return "Relatório de evidências indisponível (não corresponde a aprovação semântica)."
+    content = path.read_text(encoding="utf-8")
+    match = EVIDENCE_RE.search(content)
+    sha = SHA_RE.search(content)
+    if not match or not sha or sha.group(1) != digest:
+        return "Índice semântico ausente, incompleto ou referente a outro binário."
+    found, total = (int(match.group(1)), int(match.group(2)))
+    status = f"{found}/{total} relatórios estáticos de evidências"
+    if total != pending_count:
+        status += f" — desatualizado perante {pending_count} checkpoints pendentes"
+    return status + ". **Relatórios não são equivalência semântica certificada.**"
+
+
+def queue_rows(results):
+    path = results / "REVIEW_QUEUE.csv"
+    if not path.is_file():
+        return []
+    with path.open(newline="", encoding="utf-8") as stream:
+        return list(csv.DictReader(stream))
+
+
+def recent_prs(raw, repository=REPO):
+    """Filter to merged PRs in this repo and expose normalized safe links."""
+    if not isinstance(raw, list):
+        raise ValueError("GitHub PR metadata must be a JSON array")
+    results = []
+    for pr in raw:
+        if not isinstance(pr, dict) or not pr.get("merged_at"):
+            continue
+        number = pr.get("number")
+        if type(number) is not int or number <= 0:
+            continue
+        # Construct destination from authenticated repository context, not
+        # an arbitrary URL embedded in the metadata.
+        title = str(pr.get("title") or "PR sem título").replace("|", "/")
+        title = title.replace("\n", " ").replace("[", "(").replace("]", ")")
+        results.append((str(pr["merged_at"]), number, title,
+                        f"https://github.com/{repository}/pull/{number}"))
+    results.sort(reverse=True)
+    return results[:5]
+
+
+def render(data, results, prs=None):
+    accepted, review, total = (data["accepted_count"], data["review_count"],
+                               data["checkpoints"])
+    if accepted + review > total:
+        raise ValueError("Invalid checkpoint status accounting")
+    v3 = current_v3(results, data["digest"])
+    open_rows = queue_rows(results)
+    lines = [
+        "# FFT Craft — status geral", "",
+        "> Painel gerado automaticamente com dados do ELF, inventário e "
+        "checkpoints. **Cobertura estrutural não demonstra equivalência semântica.**", "",
+        f"**ELF SHA-256:** `{data['digest']}`", "",
+        "## Visão geral", "",
+        "| Indicador | Resultado | Origem / interpretação |",
+        "|---|---:|---|",
+        f"| Funções no inventário | {data['rows']:,} | Inventário ARM |",
+        f"| Checkpoints JSON válidos para este ELF | {total:,} | Status acompanhados |",
+        f"| Aprovados estruturalmente | {accepted:,} | "
+        "Aprovação automática de estrutura, não de comportamento |",
+        f"| Precisam de revisão | {review:,} | Status `needs_review` |",
+        f"| Aprovação estrutural entre checkpoints | "
+        f"**{percent(accepted,total)}** | {accepted:,}/{total:,}, "
+        "**não** percentual de engenharia reversa completa |",
+        f"| Checkpoints pendentes de criação | {data['pending_count']:,} | "
+        "Não incluem funções cobertas apenas pelo histórico CSV |",
+        f"| Metas de núcleo em revisão | {data['core_review']:,} | "
+        f"De {data['core_checkpointed']:,} checkpoints do núcleo |",
+        f"| v3: checkpoints / aprovados / revisão | {v3['v3']:,} / "
+        f"{v3['auto_structural']:,} / {v3['needs_review']:,} | "
+        "Subconjunto já analisado pelas regras v3 |",
+        "| Funções com **equivalência semântica integral certificada** "
+        "| **não mensurado** | O pipeline atual não mantém certificações "
+        "formais por função; microexecuções não substituem esse certificado |",
+        "", "O histórico CSV contém "
+        f"**{data['historical_count']:,}** registros de análise anterior, "
+        "que podem se sobrepor aos checkpoints. "
+        "**Não somamos esses conjuntos para criar um percentual global fictício.**",
+        "", "## Evidência e testes semânticos", "",
+        evidence_status(results, data["digest"], review), "",
+        "Os relatórios abaixo apresentam **efeitos locais testados sob estados "
+        "sintéticos** e seus limites. Testes passando não significam que "
+        "a função inteira foi reconstruída:", "",
+    ]
+    for filename, description in MILESTONES:
+        if (results / filename).is_file():
+            lines.append(f"- [{description}]({filename})")
+    lines.extend(["", "## Próximas prioridades", "",
+                  "### Lacunas semânticas conhecidas", ""])
+    for address, description in CURRENT_SEMANTIC_BOUNDARIES:
+        lines.append(f"- `{address}`: {description}.")
+    lines += ["", "Estas duas prioridades são **curadas no gerador**; "
+              "quando um limite for resolvido, a descrição deve ser "
+              "atualizada no mesmo PR de análise.", "",
+              "### Revisão estrutural — fila atual do núcleo", "",
+              "| Endereço | Função | Cobertura | Motivo |",
+              "|---|---|---:|---|"]
+    if open_rows:
+        for item in open_rows[:6]:
+            addr = str(item.get("address", "")).lower()
+            name = str(item.get("name", "")).replace("|", "/").replace("\n", " ")
+            lines.append(f"| `{addr}` | {name} | "
+                         f"{item.get('coverage_pct', '—')}% | "
+                         f"{item.get('review_reason', '—')} |")
+    else:
+        lines.append("| — | Fila ausente ou sem itens | — | — |")
+    lines.extend(["", "## Pull requests recentes", ""])
+    if prs is None:
+        lines += ["Metadados dos PRs indisponíveis nesta execução local; "
+                  f"[consultar merges]("
+                  f"https://github.com/{REPO}/pulls?q=is%3Apr+is%3Amerged)."]
+    else:
+        verified = recent_prs(prs)
+        if verified:
+            for _, number, title, url in verified:
+                lines.append(f"- [PR #{number} — {title}]({url})")
+        else:
+            lines.append("Nenhum PR mesclado encontrado nos metadados fornecidos.")
+    lines.extend(["", "## Atualização automática e fontes", "",
+                  "O workflow `re-batches.yml` regenera este arquivo "
+                  "**depois** de calcular progresso, revisar checkpoints v3 "
+                  "e executar os testes semânticos; publica os resultados "
+                  "no PR automático de checkpoints apenas se o CI passar.",
+                  "O workflow `re-pipeline.yml` testa a geração em PRs "
+                  "sem publicar as alterações.",
+                  "- [PROGRESS.md](PROGRESS.md) — dados estruturais do inventário.",
+                  "- [STRUCTURAL_V3_REPORT.md](STRUCTURAL_V3_REPORT.md) — migração v3.",
+                  "- [SEMANTIC_EVIDENCE_INDEX.md](SEMANTIC_EVIDENCE_INDEX.md) "
+                  "— evidência estática das pendências.",
+                  "- [REVIEW_TRIAGE.md](REVIEW_TRIAGE.md) — critérios de priorização.",
+                  f"- [GitHub Actions](https://github.com/{REPO}/actions) "
+                  "— execução e eventuais falhas de CI.",
+                  "", "**Limitação:** o painel não é um contador de "
+                  "reconstrução semântica completa. Uma certificação "
+                  "desse tipo exigiria contratos e testes integrais "
+                  "por função que ainda não são registrados pelo pipeline.",
+                  ""])
+    return "\n".join(lines)
+
+
+def generate(inventory, results, priority, binary, pulls_json=None):
+    data = progress_report.summarize(inventory, results, binary, priority)
+    prs = None
+    if pulls_json is not None and pulls_json.is_file():
+        prs = json.loads(pulls_json.read_text(encoding="utf-8"))
+    return render(data, results, prs)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--inventory", type=Path,
+                        default=ROOT / "docs/RE_FUNCTION_INVENTORY.csv")
+    parser.add_argument("--results", type=Path, default=RESULTS)
+    parser.add_argument("--priority", type=Path,
+                        default=ROOT / "docs/alvos_prioritarios_nucleo.csv")
+    parser.add_argument("--binary", type=Path,
+                        default=ROOT / "src/lib/armeabi/libgl2jni.so")
+    parser.add_argument("--pulls-json", type=Path,
+                        help="Optional GitHub REST merged-PR list saved by workflow")
+    args = parser.parse_args()
+    text = generate(args.inventory, args.results, args.priority, args.binary,
+                    args.pulls_json)
+    dest = args.results / "STATUS_GERAL.md"
+    temporary = dest.with_suffix(".md.tmp")
+    temporary.write_text(text, encoding="utf-8")
+    temporary.replace(dest)
+    print(f"Updated {dest}")
+    print(f"Structural checkpoint completion: {text.split('Aprovação estrutural entre checkpoints | ', 1)[1].split(' |',1)[0]}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
