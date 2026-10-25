@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1128/1258** pending functions.
+Evidence collected: **1136/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1139,3 +1139,11 @@ These reports do not constitute semantic verification.
 | `00276788` | CheckUnitActionOK(unsigned char*) | [Evidence](semantic-evidence/00276788.md) |
 | `000ab4b0` | CEGL2_FBO::ErrorGL(char const*, char const*, unsigned int) | [Evidence](semantic-evidence/000ab4b0.md) |
 | `000aecb8` | CEGL2_SPRITE::ErrorGL(char const*, char const*, unsigned int) | [Evidence](semantic-evidence/000aecb8.md) |
+| `0024581c` | movie_init(int, int, int, int, int, char*) | [Evidence](semantic-evidence/0024581c.md) |
+| `0026baec` | wldtown_init() | [Evidence](semantic-evidence/0026baec.md) |
+| `000a7ec4` | CEGL2_IF::SetBlendMode(int) | [Evidence](semantic-evidence/000a7ec4.md) |
+| `0026b904` | wldsymbol_init() | [Evidence](semantic-evidence/0026b904.md) |
+| `001e21f8` | getskillresult_first(int) | [Evidence](semantic-evidence/001e21f8.md) |
+| `002ca215` | __cxa_call_unexpected | [Evidence](semantic-evidence/002ca215.md) |
+| `0026a2cc` | snpl_scrdisp() | [Evidence](semantic-evidence/0026a2cc.md) |
+| `002590e8` | wld_event(int, int) | [Evidence](semantic-evidence/002590e8.md) |
