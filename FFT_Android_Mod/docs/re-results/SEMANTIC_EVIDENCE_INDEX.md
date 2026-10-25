@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **496/1258** pending functions.
+Evidence collected: **504/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -507,3 +507,11 @@ These reports do not constitute semantic verification.
 | `00210960` | MenuTest() | [Evidence](semantic-evidence/00210960.md) |
 | `00216414` | readMusicBlock(int) | [Evidence](semantic-evidence/00216414.md) |
 | `00216618` | effectFadeoutMusic(int, int) | [Evidence](semantic-evidence/00216618.md) |
+| `00216740` | tempoMusic(int, int) | [Evidence](semantic-evidence/00216740.md) |
+| `00216784` | pitchMusic(int, int) | [Evidence](semantic-evidence/00216784.md) |
+| `002167c8` | panpotMusic(int, int) | [Evidence](semantic-evidence/002167c8.md) |
+| `00242618` | ctlendmov_main(CTLINFO*) | [Evidence](semantic-evidence/00242618.md) |
+| `0024a068` | vOpn_pacloop() | [Evidence](semantic-evidence/0024a068.md) |
+| `00258ff8` | evt_dead_low() | [Evidence](semantic-evidence/00258ff8.md) |
+| `00269c3c` | snpl_mesput3() | [Evidence](semantic-evidence/00269c3c.md) |
+| `002706c8` | pageanmpac_reset(int, int, int) | [Evidence](semantic-evidence/002706c8.md) |
