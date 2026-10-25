@@ -1,0 +1,21 @@
+{
+  "address": "000d9638",
+  "name": "fade_eventlocal(ITEMPRIM*, int)",
+  "size": 272,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 95.59,
+  "distinct_bl": 5,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "291348",
+    "291628",
+    "2919c0",
+    "291a6c",
+    "d665c"
+  ],
+  "log": "=== jtable.py: 0xd9638..0xd9748 (272 bytes) ===\ncoverage: 65 of ~68 instruction slots (96%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 5 distinct --\n  0xd665c x4   addlocalprim(tagPOLY_FT4*) \n  0x291348 x1   GetTPage \n  0x291628 x1   SetTile \n  0x2919c0 x1   SetDrawMode \n  0x291a6c x1   SetSemiTrans \n\n-- branches: 3 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

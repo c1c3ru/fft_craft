@@ -1,0 +1,21 @@
+{
+  "address": "00078d9c",
+  "name": "gzwrite",
+  "size": 400,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 99.0,
+  "distinct_bl": 5,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "714b8",
+    "77598",
+    "7899c",
+    "78ae8",
+    "78ce8"
+  ],
+  "log": "=== jtable.py: 0x78d9c..0x78f2c (400 bytes) ===\ncoverage: 99 of ~100 instruction slots (99%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 5 distinct --\n  0x714b8 x1   sub_714b8 LOCAL(no-dynsym)\n  0x77598 x1   gz_error \n  0x7899c x1   sub_7899c LOCAL(no-dynsym)\n  0x78ae8 x3   sub_78ae8 LOCAL(no-dynsym)\n  0x78ce8 x1   sub_78ce8 LOCAL(no-dynsym)\n\n-- branches: 17 total, 12 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

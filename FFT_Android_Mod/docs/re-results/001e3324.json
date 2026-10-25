@@ -1,0 +1,19 @@
+{
+  "address": "001e3324",
+  "name": "setexperience(int, REWARD*)",
+  "size": 476,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 97.48,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1dc8b0",
+    "1e31b8",
+    "1e31f0"
+  ],
+  "log": "=== jtable.py: 0x1e3324..0x1e3500 (476 bytes) ===\ncoverage: 116 of ~119 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x1dc8b0 x1   levelup_check(BWORK*) \n  0x1e31b8 x2   get_unit_jl(BWORK*, int, int*) \n  0x1e31f0 x2   add_jobpointB(int, int, unsigned char, int) \n\n-- branches: 14 total, 4 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

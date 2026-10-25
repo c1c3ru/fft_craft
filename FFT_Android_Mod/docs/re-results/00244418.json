@@ -1,0 +1,17 @@
+{
+  "address": "00244418",
+  "name": "vEnd_rollline_put(unsigned long*, int)",
+  "size": 276,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 97.1,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "290c6c"
+  ],
+  "log": "=== jtable.py: 0x244418..0x24452c (276 bytes) ===\ncoverage: 67 of ~69 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x290c6c x1   AddPrim \n\n-- branches: 4 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

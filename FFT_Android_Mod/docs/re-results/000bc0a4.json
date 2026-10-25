@@ -1,0 +1,19 @@
+{
+  "address": "000bc0a4",
+  "name": "CSOUND_IF_SL::Play(int, int, int, int, int)",
+  "size": 452,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "bb838",
+    "bb9b4",
+    "bc03c"
+  ],
+  "log": "=== jtable.py: 0xbc0a4..0xbc268 (452 bytes) ===\ncoverage: 113 of ~113 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0xbb838 x2   CSOUND_IF_SL::Stop(int) \n  0xbb9b4 x2   CSOUND_IF_SL::IsPlaying(int) \n  0xbc03c x1   CSOUND_IF_SL::Static_Load(int) \n\n-- branches: 15 total, 4 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

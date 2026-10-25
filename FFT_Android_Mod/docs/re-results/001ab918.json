@@ -1,0 +1,21 @@
+{
+  "address": "001ab918",
+  "name": "AbilityLearning(short, short, short)",
+  "size": 408,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 98.04,
+  "distinct_bl": 5,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "187618",
+    "1a7884",
+    "1a84f8",
+    "1a8620",
+    "1d82a8"
+  ],
+  "log": "=== jtable.py: 0x1ab918..0x1abab0 (408 bytes) ===\ncoverage: 100 of ~102 instruction slots (98%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 5 distinct --\n  0x187618 x2   GetLocalJobNumber(short) \n  0x1a7884 x1   SetChrListOne(int) \n  0x1a84f8 x1   GetCommandNumber(int) \n  0x1a8620 x1   GetAbilityList(short, short, int, short*, int) \n  0x1d82a8 x1   get_ability(int, int) \n\n-- branches: 7 total, 4 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

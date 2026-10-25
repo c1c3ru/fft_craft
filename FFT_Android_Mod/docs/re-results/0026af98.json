@@ -1,0 +1,22 @@
+{
+  "address": "0026af98",
+  "name": "snpl_effcheck(int, int, int)",
+  "size": 288,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 97.22,
+  "distinct_bl": 6,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "103340",
+    "216530",
+    "21669c",
+    "26a7d0",
+    "26aeec",
+    "26b374"
+  ],
+  "log": "=== jtable.py: 0x26af98..0x26b0b8 (288 bytes) ===\ncoverage: 70 of ~72 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x103340 x2   Wwrite_eventflag(int, int) \n  0x216530 x1   activateMusic(int, int, int) \n  0x21669c x1   fadeMusic(int, int) \n  0x26a7d0 x2   snSound_play(int) \n  0x26aeec x1   snpl_mreqcore(int) \n  0x26b374 x2   sound_request(int) \n\n-- branches: 14 total, 6 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

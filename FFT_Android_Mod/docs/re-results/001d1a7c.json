@@ -1,0 +1,20 @@
+{
+  "address": "001d1a7c",
+  "name": "set_netplayerwork_common(int, int)",
+  "size": 464,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 99.14,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1d98a8",
+    "1dbcc4",
+    "210d9c",
+    "286994"
+  ],
+  "log": "=== jtable.py: 0x1d1a7c..0x1d1c4c (464 bytes) ===\ncoverage: 115 of ~116 instruction slots (99%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x1d98a8 x1   get_shape2_plus(BWORK*, unsigned char*) \n  0x1dbcc4 x1   unitwork_init2all(BWORK*, int) \n  0x210d9c x1   NewEntry(int, int, int, short, short, short, short, BWORK*, int) \n  0x286994 x4   pspNetGetBattleModeFlag() \n\n-- branches: 14 total, 7 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

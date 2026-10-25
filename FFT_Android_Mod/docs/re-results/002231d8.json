@@ -1,0 +1,20 @@
+{
+  "address": "002231d8",
+  "name": "GetBowReachableTangent(BowCheckWork*, int*, int*)",
+  "size": 312,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "20f5f8",
+    "2231b0",
+    "29ff94",
+    "2ca79c"
+  ],
+  "log": "=== jtable.py: 0x2231d8..0x223310 (312 bytes) ===\ncoverage: 78 of ~78 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x20f5f8 x1   getMapIDFromBattleID(int) \n  0x2231b0 x1   GetReachableHeight(int) \n  0x29ff94 x1   SquareRoot12 \n  0x2ca79c x2   __divsi3 \n\n-- branches: 2 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

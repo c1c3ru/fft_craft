@@ -1,0 +1,26 @@
+{
+  "address": "002b2814",
+  "name": "SE_Play(int)",
+  "size": 416,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 95.19,
+  "distinct_bl": 10,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "28c320",
+    "2b2798",
+    "2bf008",
+    "b6a28",
+    "b6c70",
+    "b6cd0",
+    "b6cd8",
+    "ba774",
+    "ba9c8",
+    "bad78"
+  ],
+  "log": "=== jtable.py: 0x2b2814..0x2b29b4 (416 bytes) ===\ncoverage: 99 of ~104 instruction slots (95%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 10 distinct --\n  0xb6a28 x1   CFILE_DAT::Unload() \n  0xb6c70 x1   CFILE_DAT::GetBuffer(int) \n  0xb6cd0 x1   CFILE_DAT::GetSize(int) \n  0xb6cd8 x1   CFILE_DAT::Load(int, int, int) \n  0xba774 x1   CSOUND_IF::IsPlaying(int, int) \n  0xba9c8 x1   CSOUND_IF::Load(int, char*, unsigned char*, unsigned int, unsigned int, int, int, int, int, int, int) \n  0xbad78 x1   CSOUND_IF::Play(int, int, int, int, unsigned char) \n  0x28c320 x1   CFFT_STATE::GetParam(int) \n  0x2b2798 x1   SE_CorrectFID(int) \n  0x2bf008 x1   chkSeDouble() \n\n-- branches: 11 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

@@ -1,0 +1,25 @@
+{
+  "address": "002b2d10",
+  "name": "Jingle_Play(int)",
+  "size": 312,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 93.59,
+  "distinct_bl": 9,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "20f94c",
+    "28c320",
+    "2ca79c",
+    "b6c68",
+    "b6cd0",
+    "ba88c",
+    "ba9c8",
+    "bad78",
+    "bb05c"
+  ],
+  "log": "=== jtable.py: 0x2b2d10..0x2b2e48 (312 bytes) ===\ncoverage: 73 of ~78 instruction slots (94%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 9 distinct --\n  0xb6c68 x1   CFILE_DAT::GetOffset(int) \n  0xb6cd0 x1   CFILE_DAT::GetSize(int) \n  0xba88c x1   CSOUND_IF::GetVolume(int) \n  0xba9c8 x1   CSOUND_IF::Load(int, char*, unsigned char*, unsigned int, unsigned int, int, int, int, int, int, int) \n  0xbad78 x1   CSOUND_IF::Play(int, int, int, int, unsigned char) \n  0xbb05c x1   CSOUND_IF::FadeVolume(int, int, int, int) \n  0x20f94c x1   iOS_GetFrameRate() \n  0x28c320 x1   CFFT_STATE::GetParam(int) \n  0x2ca79c x1   __divsi3 \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

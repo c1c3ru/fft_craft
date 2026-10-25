@@ -1,0 +1,19 @@
+{
+  "address": "00247884",
+  "name": "birthday_change(CTLINFO*)",
+  "size": 428,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 94.39,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "24988c",
+    "24a544",
+    "24ab04"
+  ],
+  "log": "=== jtable.py: 0x247884..0x247a30 (428 bytes) ===\ncoverage: 101 of ~107 instruction slots (94%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x24988c x1   vOpn_sun2ivaday(int*, int*) \n  0x24a544 x2   vOpn_add_winpac(unsigned long*, int*) \n  0x24ab04 x2   vOpnwin_noropen(int, RECT16, int, int, unsigned long*) \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

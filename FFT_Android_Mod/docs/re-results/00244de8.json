@@ -1,0 +1,17 @@
+{
+  "address": "00244de8",
+  "name": "roll_bkfade()",
+  "size": 304,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 96.05,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2ca79c"
+  ],
+  "log": "=== jtable.py: 0x244de8..0x244f18 (304 bytes) ===\ncoverage: 73 of ~76 instruction slots (96%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x2ca79c x2   __divsi3 \n\n-- branches: 5 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

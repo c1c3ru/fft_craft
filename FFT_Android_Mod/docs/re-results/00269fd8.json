@@ -1,0 +1,22 @@
+{
+  "address": "00269fd8",
+  "name": "snpl_picput()",
+  "size": 328,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 96.34,
+  "distinct_bl": 6,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "25ee30",
+    "25f0b8",
+    "270224",
+    "2912f8",
+    "29a92c",
+    "29c6b8"
+  ],
+  "log": "=== jtable.py: 0x269fd8..0x26a120 (328 bytes) ===\ncoverage: 79 of ~82 instruction slots (96%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x25ee30 x1   wldload_wait() \n  0x25f0b8 x1   pic_load(int) \n  0x270224 x1   wldpicwin_set(int, RECT16, _POINT, int) \n  0x2912f8 x1   LoadClut \n  0x29a92c x1   LoadTPage \n  0x29c6b8 x1   GsGetTimInfo \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

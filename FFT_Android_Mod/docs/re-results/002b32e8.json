@@ -1,0 +1,25 @@
+{
+  "address": "002b32e8",
+  "name": "musicPlayer_FrameMove()",
+  "size": 344,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 96.51,
+  "distinct_bl": 9,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "20f94c",
+    "2b2f7c",
+    "2b2fe8",
+    "2b3258",
+    "2b32a0",
+    "2ca79c",
+    "ba774",
+    "ba88c",
+    "bb05c"
+  ],
+  "log": "=== jtable.py: 0x2b32e8..0x2b3440 (344 bytes) ===\ncoverage: 83 of ~86 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 9 distinct --\n  0xba774 x1   CSOUND_IF::IsPlaying(int, int) \n  0xba88c x1   CSOUND_IF::GetVolume(int) \n  0xbb05c x1   CSOUND_IF::FadeVolume(int, int, int, int) \n  0x20f94c x1   iOS_GetFrameRate() \n  0x2b2f7c x2   musicPlayer_Stop() \n  0x2b2fe8 x1   musicPlayer_Play(int, int, int, int) \n  0x2b3258 x1   musicPlayer_Pause() \n  0x2b32a0 x1   musicPlayer_Replay() \n  0x2ca79c x1   __divsi3 \n\n-- branches: 12 total, 5 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

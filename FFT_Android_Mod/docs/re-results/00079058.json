@@ -1,0 +1,20 @@
+{
+  "address": "00079058",
+  "name": "gzvprintf",
+  "size": 288,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "71554",
+    "7899c",
+    "78ae8",
+    "78ce8"
+  ],
+  "log": "=== jtable.py: 0x79058..0x79178 (288 bytes) ===\ncoverage: 72 of ~72 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x71554 x1   sub_71554 LOCAL(no-dynsym)\n  0x7899c x1   sub_7899c LOCAL(no-dynsym)\n  0x78ae8 x1   sub_78ae8 LOCAL(no-dynsym)\n  0x78ce8 x1   sub_78ce8 LOCAL(no-dynsym)\n\n-- branches: 14 total, 9 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

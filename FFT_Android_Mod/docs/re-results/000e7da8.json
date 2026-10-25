@@ -1,0 +1,18 @@
+{
+  "address": "000e7da8",
+  "name": "seekcodeplus(int, int, int, int)",
+  "size": 356,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 97.75,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "153398",
+    "e7488"
+  ],
+  "log": "=== jtable.py: 0xe7da8..0xe7f0c (356 bytes) ===\ncoverage: 87 of ~89 instruction slots (98%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0xe7488 x3   getCodeLength(unsigned char*) \n  0x153398 x1   task_killmyself() \n\n-- branches: 20 total, 10 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

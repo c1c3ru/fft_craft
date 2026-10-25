@@ -1,0 +1,23 @@
+{
+  "address": "00249da4",
+  "name": "vOpn_dataload()",
+  "size": 288,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 95.83,
+  "distinct_bl": 7,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "249bcc",
+    "249c44",
+    "249c58",
+    "249cf4",
+    "27b390",
+    "28858c",
+    "2a3100"
+  ],
+  "log": "=== jtable.py: 0x249da4..0x249ec4 (288 bytes) ===\ncoverage: 69 of ~72 instruction slots (96%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 7 distinct --\n  0x249bcc x4   vOpn_loadwait() \n  0x249c44 x4   numa_vOpn_CdRead(CDREC*, unsigned long, unsigned long, unsigned long, unsigned long*) \n  0x249c58 x1   vOpn_bk_load(int, unsigned long*) \n  0x249cf4 x3   vOpn_timload(unsigned long*) \n  0x27b390 x1   saveVram(char const*) \n  0x28858c x1   pspOpenDataIconBufGet() \n  0x2a3100 x1   xpMallocIO \n\n-- branches: 3 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

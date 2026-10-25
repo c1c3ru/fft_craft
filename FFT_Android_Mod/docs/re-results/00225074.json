@@ -1,0 +1,20 @@
+{
+  "address": "00225074",
+  "name": "CheckEventGunResult(int, SVECTOR*, int)",
+  "size": 412,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 95.15,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1d6718",
+    "20e19c",
+    "20f2cc",
+    "29ff94"
+  ],
+  "log": "=== jtable.py: 0x225074..0x225210 (412 bytes) ===\ncoverage: 98 of ~103 instruction slots (95%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x1d6718 x1   get_mapstp(int, int, int) \n  0x20e19c x3   getAnimationPositionFromBattleWork(unsigned int, SVECTOR*) \n  0x20f2cc x2   getAnimationHeightFromBattleID(int) \n  0x29ff94 x1   SquareRoot12 \n\n-- branches: 2 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

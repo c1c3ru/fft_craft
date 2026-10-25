@@ -1,0 +1,19 @@
+{
+  "address": "000962d0",
+  "name": "res0_unpack",
+  "size": 568,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "71608",
+    "82ce0",
+    "960c4"
+  ],
+  "log": "=== jtable.py: 0x962d0..0x96508 (568 bytes) ===\ncoverage: 142 of ~142 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x71608 x1   sub_71608 LOCAL(no-dynsym)\n  0x82ce0 x9   oggpack_read \n  0x960c4 x1   res0_free_info \n\n-- branches: 20 total, 12 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

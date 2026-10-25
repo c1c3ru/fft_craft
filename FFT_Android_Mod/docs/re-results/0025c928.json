@@ -1,0 +1,20 @@
+{
+  "address": "0025c928",
+  "name": "ctlshogou_main(CTLINFO*)",
+  "size": 388,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 95.88,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "155c78",
+    "259bd8",
+    "26b5e4",
+    "2b7a8c"
+  ],
+  "log": "=== jtable.py: 0x25c928..0x25caac (388 bytes) ===\ncoverage: 93 of ~97 instruction slots (96%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x155c78 x1   ret_adventurestatus() \n  0x259bd8 x1   ctlhouk_init() \n  0x26b5e4 x4   ssd_request(int, int) \n  0x2b7a8c x1   iOS_getTouchTap() \n\n-- branches: 15 total, 8 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

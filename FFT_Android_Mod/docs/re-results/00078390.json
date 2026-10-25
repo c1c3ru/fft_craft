@@ -1,0 +1,22 @@
+{
+  "address": "00078390",
+  "name": "gzread",
+  "size": 444,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 99.1,
+  "distinct_bl": 6,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "714b8",
+    "77598",
+    "77dcc",
+    "780d0",
+    "78224",
+    "782f0"
+  ],
+  "log": "=== jtable.py: 0x78390..0x7854c (444 bytes) ===\ncoverage: 110 of ~111 instruction slots (99%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x714b8 x1   sub_714b8 LOCAL(no-dynsym)\n  0x77598 x1   gz_error \n  0x77dcc x1   sub_77dcc LOCAL(no-dynsym)\n  0x780d0 x1   sub_780d0 LOCAL(no-dynsym)\n  0x78224 x1   sub_78224 LOCAL(no-dynsym)\n  0x782f0 x1   sub_782f0 LOCAL(no-dynsym)\n\n-- branches: 20 total, 8 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

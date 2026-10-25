@@ -1,0 +1,19 @@
+{
+  "address": "0026b904",
+  "name": "wldsymbol_init()",
+  "size": 276,
+  "previous_status": "mentioned_unverified",
+  "status": "needs_review",
+  "coverage_pct": 91.3,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "103400",
+    "24bf7c",
+    "268b9c"
+  ],
+  "log": "=== jtable.py: 0x26b904..0x26ba18 (276 bytes) ===\ncoverage: 63 of ~69 instruction slots (91%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x103400 x2   Wread_eventflag(int) \n  0x24bf7c x1   wldpnl_calc() \n  0x268b9c x1   wldcenter_calc(SVECTOR*, VECTOR*) \n\n-- branches: 2 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

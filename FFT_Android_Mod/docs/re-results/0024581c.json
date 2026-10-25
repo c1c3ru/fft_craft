@@ -1,0 +1,27 @@
+{
+  "address": "0024581c",
+  "name": "movie_init(int, int, int, int, int, char*)",
+  "size": 384,
+  "previous_status": "mentioned_unverified",
+  "status": "needs_review",
+  "coverage_pct": 88.54,
+  "distinct_bl": 11,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2419c4",
+    "245610",
+    "245814",
+    "248e6c",
+    "249a80",
+    "2712cc",
+    "2712d0",
+    "28b500",
+    "28b50c",
+    "291bc0",
+    "294af8"
+  ],
+  "log": "=== jtable.py: 0x24581c..0x24599c (384 bytes) ===\ncoverage: 85 of ~96 instruction slots (89%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 11 distinct --\n  0x2419c4 x1   fftCdReset() \n  0x245610 x1   strSetDefDecEnv(DECENV*, int, int, int, int) \n  0x245814 x1   strNextVlc(DECENV*) \n  0x248e6c x1   vOpn_scrinit(int) \n  0x249a80 x2   vOpn_SetCDVolume(int, int) \n  0x2712cc x1   Ssd_SetStereo(int) \n  0x2712d0 x1   Ssd_GetStereo() \n  0x28b500 x1   set_SoundOnly_Flg__Fi(int) \n  0x28b50c x1   pspMovieInit__FiPCciiii(int, char*, int, int, int, int) \n  0x291bc0 x1   PutDrawEnv \n  0x294af8 x1   PutDispEnv \n\n-- branches: 2 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

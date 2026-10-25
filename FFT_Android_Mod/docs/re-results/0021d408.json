@@ -1,0 +1,20 @@
+{
+  "address": "0021d408",
+  "name": "doSchedulePtclCommandOnce(unsigned short, unsigned char, _EffectTCB*)",
+  "size": 316,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 96.2,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1fd794",
+    "1fd7e4",
+    "1fd8d8",
+    "20dbec"
+  ],
+  "log": "=== jtable.py: 0x21d408..0x21d544 (316 bytes) ===\ncoverage: 76 of ~79 instruction slots (96%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x1fd794 x1   requestTargetAnimation(int) \n  0x1fd7e4 x1   requestDamageNumber(int) \n  0x1fd8d8 x1   requestDamageResult(int) \n  0x20dbec x2   requestAnimation(unsigned int, unsigned int) \n\n-- branches: 18 total, 8 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

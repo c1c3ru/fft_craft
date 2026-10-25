@@ -1,0 +1,20 @@
+{
+  "address": "00104a70",
+  "name": "Wdirec4(char*)",
+  "size": 360,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 96.67,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1003ac",
+    "104668",
+    "29fef0",
+    "fe370"
+  ],
+  "log": "=== jtable.py: 0x104a70..0x104bd8 (360 bytes) ===\ncoverage: 87 of ~90 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0xfe370 x1   sub_fe370 LOCAL(no-dynsym)\n  0x1003ac x1   Wgetanimpos3d(int, short*) \n  0x104668 x1   sub_104668 LOCAL(no-dynsym)\n  0x29fef0 x1   ratan2 \n\n-- branches: 5 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

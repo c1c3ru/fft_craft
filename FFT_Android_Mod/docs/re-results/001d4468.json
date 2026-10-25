@@ -1,0 +1,18 @@
+{
+  "address": "001d4468",
+  "name": "check_game_cont()",
+  "size": 348,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 98.85,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1d98c8",
+    "286ad0"
+  ],
+  "log": "=== jtable.py: 0x1d4468..0x1d45c4 (348 bytes) ===\ncoverage: 86 of ~87 instruction slots (99%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x1d98c8 x2   check_status_data2(BWORK*, int) \n  0x286ad0 x2   get_netmodeadhoc() \n\n-- branches: 20 total, 11 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

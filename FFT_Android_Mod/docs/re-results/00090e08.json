@@ -1,0 +1,29 @@
+{
+  "address": "00090e08",
+  "name": "mdct_init",
+  "size": 732,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 97.81,
+  "distinct_bl": 13,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2cab74",
+    "2cab9c",
+    "2cac50",
+    "2caebc",
+    "2cb1ec",
+    "2cb248",
+    "2cb48c",
+    "2cb6d0",
+    "714e8",
+    "715fc",
+    "71614",
+    "7165c",
+    "71680"
+  ],
+  "log": "=== jtable.py: 0x90e08..0x910e4 (732 bytes) ===\ncoverage: 179 of ~183 instruction slots (98%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 13 distinct --\n  0x714e8 x2   sub_714e8 LOCAL(no-dynsym)\n  0x715fc x1   sub_715fc LOCAL(no-dynsym)\n  0x71614 x3   sub_71614 LOCAL(no-dynsym)\n  0x7165c x3   sub_7165c LOCAL(no-dynsym)\n  0x71680 x1   sub_71680 LOCAL(no-dynsym)\n  0x2cab74 x6   __floatsidf \n  0x2cab9c x1   __extendsfdf2 \n  0x2cac50 x5   __muldf3 \n  0x2caebc x4   __divdf3 \n  0x2cb1ec x1   __fixdfsi \n  0x2cb248 x6   __truncdfsf2 \n  0x2cb48c x1   __floatsisf \n  0x2cb6d0 x1   __divsf3 \n\n-- branches: 6 total, 5 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

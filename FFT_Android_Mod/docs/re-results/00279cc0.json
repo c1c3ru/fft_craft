@@ -1,0 +1,19 @@
+{
+  "address": "00279cc0",
+  "name": "GetDirectionOfAutoUnit()",
+  "size": 532,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 96.99,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "271504",
+    "27207c",
+    "278440"
+  ],
+  "log": "=== jtable.py: 0x279cc0..0x279ed4 (532 bytes) ===\ncoverage: 129 of ~133 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x271504 x2   GetDirectionForPanel(signed char*, signed char*) \n  0x27207c x2   GetNearestUnit(int) \n  0x278440 x3   GetPanelUnderUnit(int, unsigned char*) \n\n-- branches: 13 total, 7 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

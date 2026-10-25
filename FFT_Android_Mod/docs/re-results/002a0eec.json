@@ -1,0 +1,20 @@
+{
+  "address": "002a0eec",
+  "name": "OuterProduct0",
+  "size": 312,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "29c934",
+    "29c954",
+    "2cb48c",
+    "2cb538"
+  ],
+  "log": "=== jtable.py: 0x2a0eec..0x2a1024 (312 bytes) ===\ncoverage: 78 of ~78 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x29c934 x3   sceVfpuVector4Set(ScePspFVector4*, float, float, float, float) \n  0x29c954 x1   sceVfpuVector4OuterProductXYZ(ScePspFVector4*, ScePspFVector4 const*, ScePspFVector4 const*) \n  0x2cb48c x9   __floatsisf \n  0x2cb538 x9   __mulsf3 \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

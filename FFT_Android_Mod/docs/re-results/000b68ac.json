@@ -1,0 +1,26 @@
+{
+  "address": "000b68ac",
+  "name": "CFILE_DAT::Open(char*, int, int)",
+  "size": 380,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 10,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2cdf6c",
+    "2cdf8c",
+    "2cdf9c",
+    "714a0",
+    "714b8",
+    "b6620",
+    "b6654",
+    "b66e8",
+    "b6708",
+    "b942c"
+  ],
+  "log": "=== jtable.py: 0xb68ac..0xb6a28 (380 bytes) ===\ncoverage: 95 of ~95 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 10 distinct --\n  0x714a0 x1   sub_714a0 LOCAL(no-dynsym)\n  0x714b8 x2   sub_714b8 LOCAL(no-dynsym)\n  0xb6620 x1   CFILE::CFILE(char*) \n  0xb6654 x1   CFILE::Open(unsigned int) \n  0xb66e8 x1   CFILE::~CFILE() \n  0xb6708 x2   CFILE::Read(void*, unsigned int, unsigned int, unsigned int*) \n  0xb942c x1   CSTR_UTIL::Conv(char, char, char*) \n  0x2cdf6c x1   sub_2cdf6c LOCAL(no-dynsym)\n  0x2cdf8c x2   sub_2cdf8c LOCAL(no-dynsym)\n  0x2cdf9c x1   sub_2cdf9c LOCAL(no-dynsym)\n\n-- branches: 6 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

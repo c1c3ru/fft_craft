@@ -1,0 +1,21 @@
+{
+  "address": "001cced8",
+  "name": "get_ma_result(BWORK*)",
+  "size": 384,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 95.83,
+  "distinct_bl": 5,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1cb064",
+    "1d1f48",
+    "1d98c8",
+    "1e4e94",
+    "286994"
+  ],
+  "log": "=== jtable.py: 0x1cced8..0x1cd058 (384 bytes) ===\ncoverage: 92 of ~96 instruction slots (96%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 5 distinct --\n  0x1cb064 x1   init_target_result(A_RESULT*) \n  0x1d1f48 x1   check_move_ability(BWORK*) \n  0x1d98c8 x1   check_status_data2(BWORK*, int) \n  0x1e4e94 x2   get_step_no(BWORK*) \n  0x286994 x1   pspNetGetBattleModeFlag() \n\n-- branches: 9 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

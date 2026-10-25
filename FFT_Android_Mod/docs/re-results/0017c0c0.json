@@ -1,0 +1,18 @@
+{
+  "address": "0017c0c0",
+  "name": "UnitBakOne(int)",
+  "size": 444,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 97.3,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "177cd0",
+    "17bc80"
+  ],
+  "log": "=== jtable.py: 0x17c0c0..0x17c27c (444 bytes) ===\ncoverage: 108 of ~111 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x177cd0 x1   bDrawGT4RGB(short*, COLOR*, int, int) \n  0x17bc80 x1   sub_17bc80 LOCAL(no-dynsym)\n\n-- branches: 5 total, 4 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

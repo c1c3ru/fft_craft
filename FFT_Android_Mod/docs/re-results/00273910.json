@@ -1,0 +1,15 @@
+{
+  "address": "00273910",
+  "name": "SetSafePanel(int, int)",
+  "size": 512,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 99.22,
+  "distinct_bl": 0,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [],
+  "log": "=== jtable.py: 0x273910..0x273b10 (512 bytes) ===\ncoverage: 127 of ~128 instruction slots (99%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 0 distinct --\n\n-- branches: 14 total, 4 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

@@ -1,0 +1,25 @@
+{
+  "address": "000ba9c8",
+  "name": "CSOUND_IF::Load(int, char*, unsigned char*, unsigned int, unsigned int, int, int, int, int, int, int)",
+  "size": 612,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 9,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "714a0",
+    "714ac",
+    "715cc",
+    "ba308",
+    "ba51c",
+    "ba5ac",
+    "ba8e0",
+    "bbe7c",
+    "bc67c"
+  ],
+  "log": "=== jtable.py: 0xba9c8..0xbac2c (612 bytes) ===\ncoverage: 153 of ~153 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 9 distinct --\n  0x714a0 x3   sub_714a0 LOCAL(no-dynsym)\n  0x714ac x1   sub_714ac LOCAL(no-dynsym)\n  0x715cc x1   sub_715cc LOCAL(no-dynsym)\n  0xba308 x1   CSOUND_IF::GetEnable() \n  0xba51c x1   CSOUND_IF::ClearSavedata(int) \n  0xba5ac x1   CSOUND_IF::Unload(int) \n  0xba8e0 x1   CSOUND_IF::SetVolume(int, int) \n  0xbbe7c x2   CSOUND_IF_SL::LoadPCM(int, char*, unsigned char*, unsigned int, unsigned int, int) \n  0xbc67c x2   CSOUND_IF_SL::LoadOGG(int, char*, unsigned char*, unsigned int, unsigned int, int) \n\n-- branches: 22 total, 9 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

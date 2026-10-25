@@ -1,0 +1,21 @@
+{
+  "address": "001ab67c",
+  "name": "JobEquip(short, short, int)",
+  "size": 356,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 98.88,
+  "distinct_bl": 5,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1a7338",
+    "1a7a48",
+    "1aa014",
+    "1ab40c",
+    "1b799c"
+  ],
+  "log": "=== jtable.py: 0x1ab67c..0x1ab7e0 (356 bytes) ===\ncoverage: 88 of ~89 instruction slots (99%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 5 distinct --\n  0x1a7338 x3   ItemChg(short, int) \n  0x1a7a48 x4   SetChrList() \n  0x1aa014 x1   GetBestEquip(short, short*) \n  0x1ab40c x3   sub_1ab40c LOCAL(no-dynsym)\n  0x1b799c x1   SystemWarningTime(int, int) \n\n-- branches: 10 total, 5 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

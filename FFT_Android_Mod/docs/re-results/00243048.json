@@ -1,0 +1,18 @@
+{
+  "address": "00243048",
+  "name": "fRoll_mesput(short*)",
+  "size": 316,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 98.73,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "244410",
+    "244974"
+  ],
+  "log": "=== jtable.py: 0x243048..0x243184 (316 bytes) ===\ncoverage: 78 of ~79 instruction slots (99%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x244410 x1   rolladr_calc(unsigned long, unsigned long) \n  0x244974 x1   create_rollline(unsigned char*) \n\n-- branches: 9 total, 5 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

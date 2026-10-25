@@ -1,0 +1,29 @@
+{
+  "address": "00135080",
+  "name": "Wdisp_staticwindow2()",
+  "size": 320,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 97.5,
+  "distinct_bl": 13,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "100b2c",
+    "100d64",
+    "1012f8",
+    "10fa04",
+    "10fd08",
+    "1115e8",
+    "11e68c",
+    "15365c",
+    "161ef8",
+    "161f7c",
+    "291074",
+    "714b8",
+    "ff61c"
+  ],
+  "log": "=== jtable.py: 0x135080..0x1351c0 (320 bytes) ===\ncoverage: 78 of ~80 instruction slots (98%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 13 distinct --\n  0x714b8 x1   sub_714b8 LOCAL(no-dynsym)\n  0xff61c x1   Wdisposememory(char*) \n  0x100b2c x2   Wmultiwindow_break(unsigned long*) \n  0x100d64 x1   Wmultiwindow_packetcolor(PRIMPACKET*) \n  0x1012f8 x1   Wmultiwindow_packetadd(PRIMPACKET*, int, int) \n  0x10fa04 x1   Wloadcdst(int, int) \n  0x10fd08 x1   Wmultiwindow_packetinit(RECT16*, COMRECORD*, PRIMPACKET*) \n  0x1115e8 x1   Wstatuskanjiprint(int, char*, COPYFIELD*) \n  0x11e68c x1   Wextend_systemframe(int, int, RECT16*, int) \n  0x15365c x1   Wtask_killmyself() \n  0x161ef8 x3   wasmTaskEntry() \n  0x161f7c x1   wasmGetInput1() \n  0x291074 x1   PSX_LoadImage \n\n-- branches: 5 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

@@ -1,0 +1,17 @@
+{
+  "address": "0028d498",
+  "name": "tlFree(void*)",
+  "size": 496,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 95.97,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "28d01c"
+  ],
+  "log": "=== jtable.py: 0x28d498..0x28d688 (496 bytes) ===\ncoverage: 119 of ~124 instruction slots (96%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x28d01c x1   sub_28d01c LOCAL(no-dynsym)\n\n-- branches: 18 total, 4 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

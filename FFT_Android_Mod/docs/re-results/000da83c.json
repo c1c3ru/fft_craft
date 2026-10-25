@@ -1,0 +1,18 @@
+{
+  "address": "000da83c",
+  "name": "calceffectangle(int, int)",
+  "size": 392,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 96.94,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1d67a8",
+    "d8734"
+  ],
+  "log": "=== jtable.py: 0xda83c..0xda9c4 (392 bytes) ===\ncoverage: 95 of ~98 instruction slots (97%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0xd8734 x2   getanimpanel(int, SVECTOR*) \n  0x1d67a8 x2   get_mapid(int, int, int, int) \n\n-- branches: 5 total, 3 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

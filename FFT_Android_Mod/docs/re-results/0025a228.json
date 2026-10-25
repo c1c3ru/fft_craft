@@ -1,0 +1,25 @@
+{
+  "address": "0025a228",
+  "name": "houkoku_okng(CTLINFO*)",
+  "size": 508,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 93.7,
+  "distinct_bl": 9,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "153734",
+    "253a10",
+    "267340",
+    "26b374",
+    "27d404",
+    "280620",
+    "282268",
+    "2b7ccc",
+    "2b9cac"
+  ],
+  "log": "=== jtable.py: 0x25a228..0x25a424 (508 bytes) ===\ncoverage: 119 of ~127 instruction slots (94%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 9 distinct --\n  0x153734 x1   Wsend_taskparamater(long, long, long, long) \n  0x253a10 x1   wldctl_active() \n  0x267340 x2   iOS_add_anmpac_max(int) \n  0x26b374 x2   sound_request(int) \n  0x27d404 x1   iOS_CMenuTouch::setDispAssist(int) \n  0x280620 x1   iOS_setLockInput(unsigned char) \n  0x282268 x2   iOS_clearOkNg() \n  0x2b7ccc x1   iOS_getV2Icon(V2ICON_DATA) \n  0x2b9cac x1   iOS_setV2Icon(V2ICON_DATA, int) \n\n-- branches: 10 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

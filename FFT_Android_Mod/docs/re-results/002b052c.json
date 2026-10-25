@@ -1,0 +1,24 @@
+{
+  "address": "002b052c",
+  "name": "CAPP_INFO::Init(int)",
+  "size": 372,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 97.85,
+  "distinct_bl": 8,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2cb48c",
+    "2cb538",
+    "2cb92c",
+    "71494",
+    "714a0",
+    "714b8",
+    "729c4",
+    "729e4"
+  ],
+  "log": "=== jtable.py: 0x2b052c..0x2b06a0 (372 bytes) ===\ncoverage: 91 of ~93 instruction slots (98%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 8 distinct --\n  0x71494 x4   sub_71494 LOCAL(no-dynsym)\n  0x714a0 x1   sub_714a0 LOCAL(no-dynsym)\n  0x714b8 x2   sub_714b8 LOCAL(no-dynsym)\n  0x729c4 x1   Android_GetDeviceSize(int*, int*) \n  0x729e4 x4   Android_GetSystemPath(int, char*) \n  0x2cb48c x2   __floatsisf \n  0x2cb538 x2   __mulsf3 \n  0x2cb92c x2   __fixsfsi \n\n-- branches: 3 total, 2 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

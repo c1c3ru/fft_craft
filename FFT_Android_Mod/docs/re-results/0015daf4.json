@@ -1,0 +1,18 @@
+{
+  "address": "0015daf4",
+  "name": "iOSQSort(short*, short*, short*, short*, int, int, int)",
+  "size": 388,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "15da60",
+    "15daf4"
+  ],
+  "log": "=== jtable.py: 0x15daf4..0x15dc78 (388 bytes) ===\ncoverage: 97 of ~97 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x15da60 x2   iOSSwap(short*, short*, short*, short*, int, int) \n  0x15daf4 x1   iOSQSort(short*, short*, short*, short*, int, int, int) \n\n-- branches: 8 total, 5 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

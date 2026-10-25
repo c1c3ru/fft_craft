@@ -1,0 +1,18 @@
+{
+  "address": "001b6c00",
+  "name": "MakeTextureMessage2(unsigned char*, short*, RECT16*, int)",
+  "size": 388,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1b6b10",
+    "715cc"
+  ],
+  "log": "=== jtable.py: 0x1b6c00..0x1b6d84 (388 bytes) ===\ncoverage: 97 of ~97 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x715cc x1   sub_715cc LOCAL(no-dynsym)\n  0x1b6b10 x1   MakeTextureMessage(unsigned char*, short*, RECT16*, int) \n\n-- branches: 13 total, 6 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

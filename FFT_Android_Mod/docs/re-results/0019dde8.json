@@ -1,0 +1,23 @@
+{
+  "address": "0019dde8",
+  "name": "BuyEmploy()",
+  "size": 412,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 92.23,
+  "distinct_bl": 7,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "153714",
+    "153734",
+    "19d500",
+    "19d7a4",
+    "19f750",
+    "1b7074",
+    "2b7a8c"
+  ],
+  "log": "=== jtable.py: 0x19dde8..0x19df84 (412 bytes) ===\ncoverage: 95 of ~103 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 7 distinct --\n  0x153714 x2   Wtask_status(long) \n  0x153734 x4   Wsend_taskparamater(long, long, long, long) \n  0x19d500 x1   sub_19d500 LOCAL(no-dynsym)\n  0x19d7a4 x2   DrawPrice() \n  0x19f750 x2   DrawFunds() \n  0x1b7074 x1   DrawMessage(int, COMRECORD*) \n  0x2b7a8c x1   iOS_getTouchTap() \n\n-- branches: 12 total, 7 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

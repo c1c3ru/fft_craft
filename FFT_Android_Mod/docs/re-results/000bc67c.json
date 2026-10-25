@@ -1,0 +1,28 @@
+{
+  "address": "000bc67c",
+  "name": "CSOUND_IF_SL::LoadOGG(int, char*, unsigned char*, unsigned int, unsigned int, int)",
+  "size": 776,
+  "previous_status": "mentioned_unverified",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 12,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2cdf6c",
+    "2cdf8c",
+    "bbc18",
+    "bbc4c",
+    "bbe30",
+    "bc2bc",
+    "bc4ec",
+    "bc5a4",
+    "bd538",
+    "bd56c",
+    "bd738",
+    "bd740"
+  ],
+  "log": "=== jtable.py: 0xbc67c..0xbc984 (776 bytes) ===\ncoverage: 194 of ~194 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 12 distinct --\n  0xbbc18 x2   CSOUND_IF_SL::GetSLFormat(int) \n  0xbbc4c x2   CSOUND_IF_SL::Static_CreatePlayer(int, int, int) \n  0xbbe30 x1   CSOUND_IF_SL::Static_DeletePlayer(int) \n  0xbc2bc x2   CSOUND_IF_SL::Stream_CreatePlayer(int, int, int) \n  0xbc4ec x1   CSOUND_IF_SL::Stream_DeletePlayer(int) \n  0xbc5a4 x1   CSOUND_IF_SL::Stream_Load(int) \n  0xbd538 x2   CSOUND_LOADER_OGG::CSOUND_LOADER_OGG() \n  0xbd56c x2   CSOUND_LOADER_OGG::Open(char*, unsigned char*, unsigned int, unsigned int) \n  0xbd738 x1   CSOUND_LOADER_OGG::GetPlaySample() \n  0xbd740 x1   CSOUND_LOADER_OGG::Decode(signed char*, int, long long, long long, int*) \n  0x2cdf6c x2   sub_2cdf6c LOCAL(no-dynsym)\n  0x2cdf8c x1   sub_2cdf8c LOCAL(no-dynsym)\n\n-- branches: 23 total, 9 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
