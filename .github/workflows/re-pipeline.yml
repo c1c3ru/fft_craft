@@ -77,7 +77,7 @@ jobs:
           from pathlib import Path
           root = Path("FFT_Android_Mod/docs/re-results")
           import re
-          matched = re.search(r"V3_UPGRADED=(\\d+)",
+          matched = re.search(r"V3_UPGRADED=(\d+)",
                               Path("/tmp/re-v3-smoke.log").read_text())
           assert matched, "v3 smoke did not print an upgrade count"
           count = int(matched.group(1))
