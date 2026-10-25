@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **712/1258** pending functions.
+Evidence collected: **720/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -723,3 +723,11 @@ These reports do not constitute semantic verification.
 | `001ceaec` | set_status_all_sp(int, int) | [Evidence](semantic-evidence/001ceaec.md) |
 | `001cebfc` | set_target_table2(unsigned char*) | [Evidence](semantic-evidence/001cebfc.md) |
 | `001d73ec` | clear_unitwork() | [Evidence](semantic-evidence/001d73ec.md) |
+| `001d8d28` | get_jobdata(int) | [Evidence](semantic-evidence/001d8d28.md) |
+| `001eedcc` | getWpnShapeAddress(unsigned short) | [Evidence](semantic-evidence/001eedcc.md) |
+| `001fd2c4` | endInterventionMode() | [Evidence](semantic-evidence/001fd2c4.md) |
+| `0020c5d8` | errorHandler(int) | [Evidence](semantic-evidence/0020c5d8.md) |
+| `0020c600` | warningHandler(int) | [Evidence](semantic-evidence/0020c600.md) |
+| `0020c74c` | initSoundHeap() | [Evidence](semantic-evidence/0020c74c.md) |
+| `0020c99c` | initFileBuffer() | [Evidence](semantic-evidence/0020c99c.md) |
+| `0020d060` | setMapScrollXYZ(VECTOR*) | [Evidence](semantic-evidence/0020d060.md) |
