@@ -9,10 +9,12 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 - Heuristically decoded instruction slots: 64/71
 - Trailing bytes outside complete instructions: 0
 - ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
+- Evidence schema: v2
 - Unvisited 4-byte slots: 7 (not necessarily code)
 - Unvisited slots referenced by PC-relative LDR: 7
 - Other unvisited slots: 0
-- Candidate memory stores: 6; calls: 5
+- Candidate memory stores: 6; true BL/BLX calls: 4
+- Candidate local bitmask effects: 0
 - Resolved ARM jump dispatches: 0; unresolved: 0
 
 ## Candidate dispatch destinations
@@ -28,12 +30,17 @@ None resolved by this pass.
 - `0x001ccbd8: strb r2, [r3, #0x20]`
 - `0x001ccbf4: strb r2, [r3, #0x27]`
 
+## Candidate path-local bitmask effects
+
+These sequences are instruction-local observations, not global postconditions, equivalence proofs, or executed traces.
+
+None identified by conservative adjacent-instruction rules.
+
 ## Calls (first 30)
 
 - `0x001ccb04: bl #0x1c88f8`
 - `0x001ccb6c: bl #0x1cb064`
 - `0x001ccb74: bl #0x1d2e6c`
-- `0x001ccb98: blt #0x1ccbcc`
 - `0x001ccbdc: bl #0x1ca5a4`
 
 ## Candidate PC-relative literal words

@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **112/1258** pending functions.
+Evidence collected: **120/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -123,3 +123,11 @@ These reports do not constitute semantic verification.
 | `00221d64` | RequestHitMarkEffect(long, EffectOrder*, long) | [Evidence](semantic-evidence/00221d64.md) |
 | `002899a0` | pspFftSave(int, FFT_SAVE_DATA*, int*) | [Evidence](semantic-evidence/002899a0.md) |
 | `0019f914` | ExitShop() | [Evidence](semantic-evidence/0019f914.md) |
+| `001a6410` | MessageDataSet(int) | [Evidence](semantic-evidence/001a6410.md) |
+| `001ccafc` | get_floor_damage(BWORK*) | [Evidence](semantic-evidence/001ccafc.md) |
+| `00163bb4` | iOS_initTouchDisable(int) | [Evidence](semantic-evidence/00163bb4.md) |
+| `00200e2c` | eventFukanChange(int) | [Evidence](semantic-evidence/00200e2c.md) |
+| `0024971c` | vOpn_key_rep(unsigned long) | [Evidence](semantic-evidence/0024971c.md) |
+| `000cbc3c` | TrapWindowTaskManager(int, int, short, int) | [Evidence](semantic-evidence/000cbc3c.md) |
+| `00101fe4` | Wevent_init_memory() | [Evidence](semantic-evidence/00101fe4.md) |
+| `001aec8c` | DrawEquipCategory(int, int, int) | [Evidence](semantic-evidence/001aec8c.md) |
