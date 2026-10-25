@@ -12,10 +12,37 @@ import semantic_paths
 import semantic_cfg
 
 
+def active_review_rows(results, digest, limit):
+    """Guard against stale queue entries after a structural v3 promotion.
+
+    Only same-binary, same-address auto_structural records may disappear
+    from the review queue without an error. Corrupt or mismatched records
+    must continue to fail the report instead of being silently omitted.
+    """
+    with (results / "REVIEW_QUEUE.csv").open(newline="", encoding="utf-8") as f:
+        rows = list(csv.DictReader(f))
+    selected = []
+    for row in rows:
+        address = row["address"].lower()
+        record = json.loads((results / f"{address}.json").read_text(encoding="utf-8"))
+        if (record.get("binary_sha256") != digest
+                or record.get("address", "").lower() != address
+                or record.get("pipeline_version") != 2
+                or int(record.get("size", -1)) != int(row["size"])):
+            raise ValueError(f"Invalid review checkpoint {address}")
+        if record.get("status") == "auto_structural":
+            continue
+        if record.get("status") != "needs_review":
+            raise ValueError(f"Invalid review status for {address}")
+        selected.append((row, record))
+        if len(selected) >= limit:
+            break
+    return selected
+
+
 def build(binary, results, limit=12):
     digest = hashlib.sha256(binary.read_bytes()).hexdigest()
-    with (results / "REVIEW_QUEUE.csv").open(newline="", encoding="utf-8") as f:
-        queue = list(csv.DictReader(f))[:limit]
+    queue = active_review_rows(results, digest, limit)
     lines = [
         "# Priority ARM conditional-path contracts", "",
         f"ELF SHA-256: `{digest}`", "",
@@ -23,13 +50,8 @@ def build(binary, results, limit=12):
         "they are not dominance claims, execution traces, complete path "
         "constraints or proof of semantic equivalence.", "",
     ]
-    for row in queue:
+    for row, record in queue:
         address = row["address"].lower()
-        record = json.loads((results / f"{address}.json").read_text(encoding="utf-8"))
-        if (record.get("binary_sha256") != digest or record.get("status") != "needs_review"
-                or record.get("address", "").lower() != address
-                or record.get("pipeline_version") != 2):
-            raise ValueError(f"Invalid review checkpoint {address}")
         title = str(row["name"]).replace("|", "/")
         lines += [f"## `{address}` — {title}", ""]
         if int(address, 16) & 1:
