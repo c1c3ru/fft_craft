@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **184/1258** pending functions.
+Evidence collected: **192/1258** pending functions.
 These reports do not constitute semantic verification.
 
 | Address | Function | Evidence |
@@ -193,3 +193,11 @@ These reports do not constitute semantic verification.
 | `000fef24` | Wdisposewindow(MESSAGEPACKET*) | [Evidence](semantic-evidence/000fef24.md) |
 | `002867a8` | getMovieEventNum(int) | [Evidence](semantic-evidence/002867a8.md) |
 | `001c02d4` | JobToAbiChg() | [Evidence](semantic-evidence/001c02d4.md) |
+| `00249f94` | vOpn_pacinit() | [Evidence](semantic-evidence/00249f94.md) |
+| `0024b6bc` | ctlbar_active(CTLINFO*) | [Evidence](semantic-evidence/0024b6bc.md) |
+| `002531e4` | ctltuto_zodiac() | [Evidence](semantic-evidence/002531e4.md) |
+| `0025f280` | snpl_load(int) | [Evidence](semantic-evidence/0025f280.md) |
+| `0015a65c` | siOS_TCurSucCheck(unsigned int) | [Evidence](semantic-evidence/0015a65c.md) |
+| `001a9158` | IsItem(int) | [Evidence](semantic-evidence/001a9158.md) |
+| `001bab78` | GetIwaPadData() | [Evidence](semantic-evidence/001bab78.md) |
+| `00255584` | ctlhelp2_main(CTLINFO*) | [Evidence](semantic-evidence/00255584.md) |
