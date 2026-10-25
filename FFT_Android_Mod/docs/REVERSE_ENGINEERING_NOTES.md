@@ -19221,3 +19221,199 @@ normal via `ctlnobelstop_main`.
 **Status CSV: `read_structural`** (call-graph mapeado e cruzado com
 dois sistemas já documentados; corpo do laço e a condição de timeout
 não lidos instrução a instrução).
+
+## 593. `SttsEmploy()` — estágio "exibir status do recruta" do pipeline Soldier Office, confirma a família `*Employ` da seção 338 por dentro pela primeira vez (2026-10-25, Fase 3, octogésimo terceiro lote, revisão semântica sobre checkpoint do CI)
+
+`SttsEmploy()` (`0x19dc10`, 472 B) — checkpoint do pipeline
+automatizado (`docs/re-results/0019dc10.json`, não reexecutado nesta
+sessão): 106 de ~118 instruções possíveis (90%), 0 tabelas de salto,
+7 branches/3 de retrocesso. 11 `bl` distintos: `Wtask_create(long,char*)`,
+`Wtask_status(long)`, `Wsend_taskparamater(long,long,long,long)` (×2),
+`iOSUnitListWinOnOff(int)` (×2), `DrawPrice()` (×2), `DrawFunds()`
+(×2), `WindowDel(int)`, `iOSWldUnitListWinSet(int)` (×2),
+`SetSttsPara(int)`, `iOS_getTouchTap()`, `iOS_setV2Icon(V2ICON_DATA,int)`.
+
+A seção 338 (`MainEmploy`) já havia confirmado a família `*Employ`
+inteira pelo nome e posição contígua no binário (`MainEmploy →
+SttsEmploy → BuyEmploy → AccountEmploy → SuccessEmploy`, dispatcher
+do **Soldier Office** — recrutamento de unidades genéricas pagando
+ouro), mas sem ler nenhum dos 4 estados-irmãos por dentro. Este é o
+primeiro. O catálogo confirma exatamente o papel sugerido pelo nome:
+`SttsEmploy` ("Status Employ") é o estado que **exibe o status/preço
+do recruta antes da confirmação de compra** — repete
+`DrawPrice`/`DrawFunds` e adiciona `SetSttsPara(int)`, que grava o
+parâmetro de status (atributo/classe) da unidade sendo pré-visualizada
+na janela de lista (`iOSUnitListWinOnOff`/`iOSWldUnitListWinSet`).
+`Wtask_create` (chamada nova) sugere que este estado dispara uma
+sub-task própria (talvez a animação/preview do ícone via
+`iOS_setV2Icon`), encerrada por `WindowDel` ao sair do estado.
+
+Sem tabela de salto, nenhum bloco lido instrução a instrução.
+
+**Conexão**: fecha, junto com §338, mais um elo da cadeia Soldier
+Office.
+
+**Status CSV: `read_structural`.**
+
+## 594. `BuyEmploy()` — estado "confirmar compra" do recrutamento de unidade no Soldier Office, 2º da família `*Employ` já mapeada no §338 (2026-10-25, Fase 3, octogésimo terceiro lote, revisão semântica sobre checkpoint do CI)
+
+`BuyEmploy()` (`0x19dde8`, 412 B) — checkpoint do pipeline
+automatizado (`docs/re-results/0019dde8.json`): 95 de ~103 instruções
+possíveis (92%), 0 tabelas de salto, 12 branches/7 de retrocesso. 7
+`bl` distintos: `Wtask_status(long)` (×2),
+`Wsend_taskparamater(long,long,long,long)` (×4), `DrawPrice()` (×2),
+`DrawFunds()` (×2), `DrawMessage(int,COMRECORD*)` (×1),
+`iOS_getTouchTap()` (×1), mais um local sem símbolo dinâmico
+(`sub_19d500`, ×1).
+
+Confirma e refina o papel já sugerido na §338: é o estado de
+**confirmação de compra** — desenha o preço e os fundos atuais a
+cada quadro, lê o toque de confirmação via `iOS_getTouchTap()`, e usa
+`DrawMessage` pra exibir uma mensagem de resultado (provavelmente
+"fundos insuficientes" quando a compra falha, já que a transação real
+de débito — `ChgMoney`/`ItemCheck`/`MakeChr` — já foi documentada em
+`MainEmploy` §338, não aqui). `Wtask_status`/`Wsend_taskparamater`
+(×4, o maior número de despachos de task da família) consultam/
+notificam os outros 3 estados irmãos — consistente com `BuyEmploy`
+sendo o ponto central de decisão "confirmar ou voltar" entre
+`SttsEmploy` (§593) e `AccountEmploy`.
+
+`sub_19d500` (local, sem símbolo) fica como pista aberta — pelo
+endereço, fica imediatamente antes de `SttsEmploy` (`0x19dc10`) na
+memória, sugerindo ser um helper estático compartilhado por toda a
+família `*Employ`, não específico de `BuyEmploy`.
+
+**Status CSV: `read_structural`** (call-graph mapeado e cruzado com
+§338; corpo dos blocos e o helper local `sub_19d500` não lidos
+instrução a instrução).
+
+## 595. `AccountEmploy()` — estado "pagar e nomear" da sequência de recrutamento `MainEmploy→SttsEmploy→BuyEmploy→AccountEmploy→SuccessEmploy` (2026-10-25, Fase 3, octogésimo terceiro lote, revisão semântica sobre checkpoint do CI)
+
+`AccountEmploy()` (`0x19df84`, 432 B) — checkpoint do pipeline
+automatizado (`docs/re-results/0019df84.json`): 99 de ~108 instruções
+possíveis (92%), 0 tabelas de salto, 9 branches/5 de retrocesso. 8
+`bl` distintos: `Wsend_taskparamater(long,long,long,long)` (×3),
+`sub_19d500` (local, mesmo helper citado em `BuyEmploy` §594),
+`DrawPrice()` (×2), `DrawFunds()` (×2), `ChgMoney(int)` (×1),
+`ChrNameSet(short, unsigned char*)` (×1),
+`DrawMessage(int, COMRECORD*)` (×1), `iOS_getTouchTap()` (×1).
+
+É o 4º estado da família: pelo nome e pelo catálogo, é o passo de
+**"acertar a conta e nomear o recruta"** — chama `ChgMoney(int)` uma
+única vez (debita o preço, o efetivo pagamento), `ChrNameSet(short,
+unsigned char*)` (atribui o nome à nova unidade recém-criada,
+presumivelmente já instanciada por `MakeChr` no estado anterior
+`BuyEmploy`), continua desenhando `DrawPrice`/`DrawFunds` (displays
+pós-débito), espera confirmação de toque, mostra uma mensagem de
+confirmação, e usa `Wsend_taskparamater` (×3) pra avançar a task —
+pra `SuccessEmploy` em caso de sucesso, ou possivelmente de volta a
+um estado anterior em caso de cancelamento (não resolvido sem leitura
+de blocos).
+
+**Conexão**: fecha, junto com §338/§593/§594, mais um elo da cadeia
+de recrutamento do Soldier Office.
+
+**Status CSV: `read_structural`** (call-graph mapeado e cruzado com
+a família já confirmada na §338; corpo dos blocos e a lógica exata de
+transição de estado não lidos instrução a instrução).
+
+## 596. `DressSellStock()` — entry point de UI pra vender itens de categoria "Dress" na loja, delega pra `Sell()`/`SellValue()` genéricos (2026-10-25, Fase 3, octogésimo terceiro lote, revisão semântica sobre checkpoint do CI)
+
+`DressSellStock()` (`0x19d304`, 444 B) — checkpoint do pipeline
+automatizado (`docs/re-results/0019d304.json`): 101 de ~111
+instruções possíveis (91%), 0 tabelas de salto, 10 branches/6 de
+retrocesso. 10 `bl` distintos: `Wtask_create(long, char*)`,
+`Wtask_status(long)`, `iOSUnitListWinOnOff(int)`, **`Sell()`**,
+**`SellValue()`**, `SetFrameRate(int)`, `iOSWldUnitListWinSet(int)`,
+`unitans_init()`, `AllSttsDelete()`, `WindowPositionInitSingle(int)`
+(×5).
+
+Os dois `bl` centrais já estão completamente documentados: `Sell()`
+(`0x1a3f1c`, §296) é o controlador de UI genérico de venda; `SellValue()`
+(`0x1a4338`, §286) é a lógica real de transação (`GetItemSellPrice`/
+`ChgMoney`/`ItemChg`), irmã genérica de `PoachBuyValue` (§274) e de
+`DressSellEquip()` (§233, sibling direto — tela de **vender
+equipamento** da mesma categoria "Dress"). `DressSellStock()` é a
+contraparte de `DressSellEquip()` especificamente para o **estoque**
+(itens/consumíveis, não o equipamento vestido) da categoria "Dress",
+ambas reusando a máquina genérica `Sell`/`SellValue` em vez de
+reimplementar a transação. Os demais `bl` são plumbing já visto em
+outros lugares: toggle/posicionamento da lista de unidades, helper de
+janela de resposta/notificação, limpeza de status, reposicionamento
+de janelas.
+
+**Conexão**: fecha, junto com `DressSellEquip()` (§233) e
+`Sell()`/`SellValue()` (§286/§296), o par estoque/equipamento da
+categoria "Dress" dentro do sistema de loja.
+
+**Status CSV: `read_structural`.**
+
+## 597. `db_init(int, int, int, unsigned char, unsigned char, unsigned char)` — bootstrap real da GPU do PS1 (`ResetGraph`/geometria/ambiente duplo), distinto da família já fechada `DB_init`/`bDB_init` apesar do nome parecido (2026-10-25, Fase 3, octogésimo terceiro lote, revisão semântica sobre checkpoint do CI)
+
+`db_init(int,int,int,uchar,uchar,uchar)` (`0x20c264`, 436 B) —
+checkpoint do CI (`docs/re-results/0020c264.json`): 94,5% de
+cobertura (103/109 slots), 0 tabelas de salto, **1 branch, 0 de
+retrocesso** — código totalmente linear, sem laço, consistente com
+uma rotina de bootstrap chamada uma única vez. 12 `bl` distintos:
+`initializeDebugFont()`, `SetDispMask`, `ResetGraph`, `DrawSync`,
+`PutDrawEnv`, `PutDispEnv`, `ClearImage`, `SetDefDispEnv` (×2),
+`SetDefDrawEnv` (×2), `SetGeomOffset`, `SetGeomScreen`, mais um local
+sem símbolo (`sub_714b8`).
+
+**Não confundir com a família já fechada** `DB_init`/`bDB_init`/
+`eDB_init`/`jDB_init` ("regra 6" do boilerplate PSYQ) — aquela
+família recebe um ponteiro `DB*` e instala ~26 ponteiros de função de
+primitiva na struct; esta função tem assinatura totalmente diferente
+(3 `int` + 3 `unsigned char`, sem struct de saída) e chama a **API
+real do PS1 `libgpu` diretamente**, não instala callbacks. O nome
+igual é coincidência de abreviação, não parentesco.
+
+O catálogo é literalmente a sequência de boot da GPU do PS1:
+`ResetGraph` (reinicializa o chip GPU), `SetDispMask` (habilita a
+saída de vídeo), `SetGeomOffset`/`SetGeomScreen` (calibra a projeção
+geométrica do GTE pra tela), `SetDefDispEnv`/`SetDefDrawEnv`
+chamados **2× cada** (configurar os dois buffers do esquema de
+double-buffer), `PutDrawEnv`/`PutDispEnv` (ativa o ambiente corrente),
+`ClearImage` (limpa a tela — os 3 `unsigned char` são quase
+certamente a cor de fundo RGB), `DrawSync` (espera o GPU terminar) e
+`initializeDebugFont()` (prepara a fonte de debug, confirma que este
+bootstrap roda bem no início, antes de qualquer overlay de debug
+poder ser usado). Os 3 `int` do parâmetro provavelmente são
+largura/altura/modo de tela.
+
+**Conexão**: fecha, como achado novo e distinto, mais um ponto de
+entrada do bootstrap gráfico do motor, ao lado de `Main_FrameRender`
+(§34) e da inicialização de `CGX_SCREEN_CORRECT` (§34.2) — este é
+provavelmente chamado antes de ambos, no arranque do programa.
+
+**Status CSV: `read_structural`** (call-graph sequencial completo e
+identificado via API real do PS1 `libgpu`; único branch não lido
+instrução a instrução).
+
+## 598. `valnumwin_set(int, unsigned long, int, _POINT*)` — widget genérico de "janela de valor numérico" via a mesma pipeline localiza/mede-texto + task cooperativa de toda a UI de texto `W*` (2026-10-25, Fase 3, octogésimo terceiro lote, revisão semântica sobre checkpoint do CI)
+
+`valnumwin_set(int, unsigned long, int, _POINT*)` (`0x270520`, 424 B)
+— checkpoint do pipeline automatizado (`docs/re-results/00270520.json`):
+99 de ~106 instruções possíveis (93%), 0 tabelas de salto, 2
+branches/1 de retrocesso. 4 `bl` distintos: `Wserchmessagepointer(int)`,
+`Wcount_words2(short*, short*, char*)`, `Wtask_create(long, char*)`,
+`Wsend_taskparamater(long, long, long, long)`.
+
+Já era citada — sem nunca ter sido lida por dentro — na seção 382
+(`ctlhaken_init()`, cluster "haken"/despacho de unidade), que a
+glosa textualmente como "janela de valor numérico". O catálogo de
+`bl` agora resolvido confirma e generaliza essa leitura: é a mesma
+pipeline padrão já estabelecida para qualquer janela de texto `W*`
+do framework — `Wserchmessagepointer`/`Wcount_words2` localizam e
+medem uma string (quase certamente o número já formatado como texto
+antes da chamada), e `Wtask_create`/`Wsend_taskparamater` fazem o
+bootstrap de uma task cooperativa que desenha/anima a janela por
+quadro. Assinatura consistente com: ID/handle de janela, o valor
+numérico, uma flag de formato/dígitos, e a posição de tela.
+
+**Conexão**: generaliza a nota da §382 e liga-se à família de widgets
+`W*`/`pagewin_*` (§580) como o caso especializado "mostrar número
+formatado" — candidato a reuso pelo cluster de loja `*Employ`
+(§593-595).
+
+**Status CSV: `read_structural`.**

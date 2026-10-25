@@ -789,7 +789,7 @@ address,size,mangled,demangled,status,section_ref
 001d68d8,472,_Z9change_mdiiiii,"change_md(int, int, int, int, int)",read_full,NOTES §563
 00181ac4,472,_Z11bValueFunc2Ph,bValueFunc2(unsigned char*),read_full,NOTES §550
 00193c2c,472,_Z8jDrawTexP6RECT16PsP5COLORii,"jDrawTex(RECT16*, short*, COLOR*, int, int)",unread,
-0019dc10,472,_Z10SttsEmployv,SttsEmploy(),unread,
+0019dc10,472,_Z10SttsEmployv,SttsEmploy(),read_structural,NOTES §593
 0027a974,472,_Z17BattleRoutineInitv,BattleRoutineInit(),mentioned_unverified,
 0025df88,472,_Z12wldfade_procv,wldfade_proc(),read_full,NOTES §12.8
 0029c340,472,GsSortFastSprite,GsSortFastSprite,mentioned_unverified,
@@ -833,7 +833,7 @@ address,size,mangled,demangled,status,section_ref
 00078390,444,gzread,gzread,unread,
 0009cd08,444,vorbis_synthesis,vorbis_synthesis,read_structural,NOTES §336
 0017c0c0,444,_Z10UnitBakOnei,UnitBakOne(int),unread,
-0019d304,444,_Z14DressSellStockv,DressSellStock(),unread,
+0019d304,444,_Z14DressSellStockv,DressSellStock(),read_structural,NOTES §596
 001bd72c,444,_Z10UnitBakTwoii,"UnitBakTwo(int, int)",unread,
 002529ac,444,_Z15ctlworkend_initv,ctlworkend_init(),read_structural,NOTES §486
 0026d7ec,444,_Z18wld_tutomenu_resetP7CTLINFO,wld_tutomenu_reset(CTLINFO*),mentioned_unverified,
@@ -844,11 +844,11 @@ address,size,mangled,demangled,status,section_ref
 00280c44,440,_Z25iOS_setStatusLVEXP_STATUSP11IOS_STTSNUMiiiiiPvi,"iOS_setStatusLVEXP_STATUS(IOS_STTSNUM*, int, int, int, int, int, void*, int)",read_full,NOTES §560
 0015047c,436,_Z13setjoinus_netv,setjoinus_net(),unread,
 001eb124,436,_Z20loadAbilityAnimationP13tag_animationPv,"loadAbilityAnimation(tag_animation*, void*)",read_structural,NOTES §591
-0020c264,436,_Z7db_initiiihhh,"db_init(int, int, int, unsigned char, unsigned char, unsigned char)",unread,
+0020c264,436,_Z7db_initiiihhh,"db_init(int, int, int, unsigned char, unsigned char, unsigned char)",read_structural,NOTES §597
 0026c860,436,_Z12picsand_drawP7GsIMAGEi,"picsand_draw(GsIMAGE*, int)",unread,
 00077c18,432,gzseek64,gzseek64,unread,
 000b63d0,432,_ZN11CCOMP_Z_ENC6EncodeEPhS0_ii,"CCOMP_Z_ENC::Encode(unsigned char*, unsigned char*, int, int)",read_full,NOTES §18.1
-0019df84,432,_Z13AccountEmployv,AccountEmploy(),unread,
+0019df84,432,_Z13AccountEmployv,AccountEmploy(),read_structural,NOTES §595
 00212a04,432,_Z27requestDestinationGradationiP7CVECTOR,"requestDestinationGradation(int, CVECTOR*)",read_full,NOTES §564
 0026abac,432,_Z11timeevt_chkv,timeevt_chk(),read_structural,NOTES §592
 0027f680,432,_Z11iOS_Suspend15IOS_RESUME_MODE,iOS_Suspend(IOS_RESUME_MODE),unread,
@@ -861,7 +861,7 @@ address,size,mangled,demangled,status,section_ref
 000b79d8,424,_ZN10CFILE_UTIL8FileCopyEPcS0_,"CFILE_UTIL::FileCopy(char*, char*)",read_full,NOTES §29
 0010da78,424,_Z19Wrequest_makeattackv,Wrequest_makeattack(),read_structural,NOTES §563
 00286140,424,_Z18pspMapArrayOperatejhhjPsS_S_S_S_S_S_S_S_S_S_S_,"pspMapArrayOperate(unsigned int, unsigned char, unsigned char, unsigned int, short*, short*, short*, short*, short*, short*, short*, short*, short*, short*, short*, short*)",unread,
-00270520,424,_Z13valnumwin_setimiP6_POINT,"valnumwin_set(int, unsigned long, int, _POINT*)",unread,
+00270520,424,_Z13valnumwin_setimiP6_POINT,"valnumwin_set(int, unsigned long, int, _POINT*)",read_structural,NOTES §598
 00276788,424,_Z17CheckUnitActionOKPh,CheckUnitActionOK(unsigned char*),mentioned_unverified,
 000ab4b0,420,_ZN9CEGL2_FBO7ErrorGLEPKcS1_j,"CEGL2_FBO::ErrorGL(char const*, char const*, unsigned int)",mentioned_unverified,
 000aecb8,420,_ZN12CEGL2_SPRITE7ErrorGLEPKcS1_j,"CEGL2_SPRITE::ErrorGL(char const*, char const*, unsigned int)",mentioned_unverified,
@@ -888,7 +888,7 @@ address,size,mangled,demangled,status,section_ref
 0018f0c8,412,_Z19eMakeTextureMessagePhPsP6RECT16i,"eMakeTextureMessage(unsigned char*, short*, RECT16*, int)",read_full,NOTES §552
 00196348,412,_Z19jMakeTextureMessagePhPsP6RECT16i,"jMakeTextureMessage(unsigned char*, short*, RECT16*, int)",read_full,NOTES §552
 00195f6c,412,_Z12jFontToImageiPhP6RECT16i,"jFontToImage(int, unsigned char*, RECT16*, int)",read_full,NOTES §549
-0019dde8,412,_Z9BuyEmployv,BuyEmploy(),unread,
+0019dde8,412,_Z9BuyEmployv,BuyEmploy(),read_structural,NOTES §594
 001b6590,412,_Z11FontToImageiPhP6RECT16i,"FontToImage(int, unsigned char*, RECT16*, int)",read_full,NOTES §549
 0021d04c,412,_Z10DisposeTCBs,DisposeTCB(short),read_structural,NOTES §566
 0024e734,412,_Z14ctlperson_initv,ctlperson_init(),read_structural,NOTES §580
