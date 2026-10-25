@@ -51,3 +51,11 @@ python3 docs/re-tools/parallel_loop.py --workers 5 --limit 50
 - Status automáticos **não alteram o CSV nem equivalem a revisão semântica**. A aceitação é uma triagem estrutural; verifique chamadas indiretas, saltos computados não reconhecidos e lacunas relevantes antes de considerar uma função inteiramente compreendida.
 - O script depende das ferramentas existentes e dos binutils `readelf` e `c++filt`. Há opção `--timeout` por função e erros ficam registrados individualmente no JSON. Para refazer uma análise, apague o JSON do respectivo endereço.
 - Não rode dois coordenadores com a mesma pasta de resultados. Use pastas diferentes via `--output` para execuções independentes e consolide após a conclusão.
+
+## Validação contínua
+
+O workflow `.github/workflows/re-pipeline.yml` executa os testes de regressão nos pull requests que alteram as ferramentas de engenharia reversa. Para executar a análise real sob demanda, abra **Actions → Reverse engineering pipeline → Run workflow**, selecione a branch `feat/parallel-re-loop` e defina `limit`. O resultado da execução é enviado como artefato `reverse-engineering-report` (sem commit automático).
+
+Os arquivos JSON em `docs/re-results` são intermediários descartáveis; acompanhe-os usando o SHA-256 do binário. O campo `pipeline_version` invalida checkpoints antigos após mudanças relevantes no processo. Resultados `error` são repetidos automaticamente; `--retry-review` repete também os `needs_review`.
+
+**Importante:** o teste unitário não prova que a resolução ARM está correta para todas as funções. Rodar um lote pequeno e comparar amostras com as notas históricas permanece necessário antes de aprovar uma mesclagem.
