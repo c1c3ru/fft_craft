@@ -19417,3 +19417,174 @@ formatado" — candidato a reuso pelo cluster de loja `*Employ`
 (§593-595).
 
 **Status CSV: `read_structural`.**
+
+## 599. `SuccessEmploy()` — estado final "recrutamento concluído", fecha por completo a família `*Employ` do Soldier Office (2026-10-25, Fase 3, octogésimo quarto lote, revisão semântica sobre checkpoint do CI)
+
+`SuccessEmploy()` (`0x19e134`, **84 B**, a menor da família) —
+checkpoint do CI (`docs/re-results/0019e134.json`): 90% de cobertura
+(19/21 slots), 0 tabela de salto, 1 branch/1 de retrocesso (um laço
+mínimo). 3 `bl` distintos, 1 chamada cada:
+`Wsend_taskparamater(long,long,long,long)`, `DrawPrice()`,
+`DrawFunds()`.
+
+É o 5º e último estado da família `MainEmploy → SttsEmploy (§593) →
+BuyEmploy (§594) → AccountEmploy (§595) → SuccessEmploy`: por tamanho
+(a menor de todas) e catálogo (sem `ChgMoney`/`ChrNameSet`, que já
+rodaram em `AccountEmploy`), é um estado puramente de **exibição de
+confirmação** — continua desenhando `DrawPrice`/`DrawFunds` (consistência
+visual com os estados anteriores) enquanto notifica a conclusão via
+`Wsend_taskparamater`, sem nenhuma lógica de transação própria. Não
+há mais nenhum estado da família sem leitura.
+
+**Status CSV: `read_structural`** (call-graph mapeado e cruzado com
+toda a família já fechada; corpo do laço mínimo não lido instrução a
+instrução).
+
+## 600. `UnitTableInit(short)` — inicializa a grade genérica `UnitTable`/`UnitList` pra um contexto de tela específico (2026-10-25, Fase 3, octogésimo quarto lote, revisão semântica sobre checkpoint do CI)
+
+`UnitTableInit(short)` (`0x1bc87c`, 496 B) — checkpoint do pipeline
+automatizado (`docs/re-results/001bc87c.json`, não reexecutado nesta
+sessão): 107 de ~124 instruções possíveis (86%), 0 tabelas de salto,
+1 branch/1 de retrocesso (laço simples). 5 `bl` distintos:
+`CurChrChg()` (×1), `GetSttsApos(short)` (×1), `UnitScroll(short*,
+short*)` (×1), `WindowInit(short*, int, unsigned char*)` (×1),
+`GetTPage` (×2).
+
+Já era citada por nome — sem nunca ter sido lida — na seção 9 e como
+`UnitTableInitFirst` em `BuyUnit()` (§185). O catálogo agora resolvido
+confirma e refina esse papel: `UnitTableInit` é o **setup de
+instância** da máquina genérica já documentada em `UnitTable` (§55,
+rotina parametrizada por 2 callbacks) e `UnitList` (§56) —
+`GetSttsApos`/`UnitScroll` inicializam o estado de scroll; `WindowInit`
+(mesma API de janela/menu genérica de `ItemMenu`, §39) cria a
+janela-contêiner; `CurChrChg()` (§402) seleciona o personagem atual
+exibido inicialmente na grade; `GetTPage` (×2, API real do PS1
+`libgpu`) resolve a página de textura do grid gráfico. O parâmetro
+`short` é quase certamente o seletor de contexto/tela (qual roster
+está sendo inicializado), consistente com `UnitTable` já ser genérica
+por design.
+
+**Conexão**: fecha, junto com §39/§55/§56/§185/§402, mais um elo do
+subsistema genérico de grade de unidades.
+
+**Status CSV: `read_structural`** (call-graph mapeado e cruzado com
+quatro seções já documentadas; corpo do laço não lido instrução a
+instrução).
+
+## 601. `check_learning(int, unsigned short*)` — resolução da checagem de aprendizado de habilidade por uso em batalha (rolagem de probabilidade sobre a habilidade de comando do job atual) (2026-10-25, Fase 3, octogésimo quarto lote, revisão semântica sobre checkpoint do CI)
+
+`check_learning(int, unsigned short*)` (`0x1cd308`, 392 B) —
+checkpoint do pipeline automatizado (`docs/re-results/001cd308.json`):
+93 de ~98 instruções possíveis (95%), 0 tabelas de salto, 16
+branches/8 de retrocesso. 5 `bl` distintos: `GetLocalJobNumber(short)`,
+`get_command_ability(int, int)`, `check_prob(int, int)`,
+`check_status_data2(BWORK*, int)`, `pspNetGetBattleModeFlag()`.
+
+Todos os cinco alvos já documentados. `get_command_ability` é a
+representação unificada de habilidade-comando (§142). `check_prob`
+é o primitivo de rolagem de probabilidade/RNG (§257). `check_status_data2`
+é o verificador de status de unidade (§159). `pspNetGetBattleModeFlag`
+é o gate de modo de rede mais citado do projeto.
+
+O nome e o catálogo batem com o mecanismo clássico de "aprender
+habilidade por uso em batalha" do FFT original: resolve o job da
+unidade, busca os dados da habilidade de comando usada, verifica
+elegibilidade via `check_status_data2`, e rola a chance de
+aprendizado via `check_prob` (provavelmente usando a taxa de
+aprendizado % embutida no registro da habilidade, não um RNG de rede
+— `check_prob` não é seguido aqui por `_pspNetRand` como em §257).
+O 2º parâmetro (`unsigned short*`) é quase certamente um out-param
+que recebe o código da habilidade recém-aprendida de volta para o
+chamador.
+
+**Conexão**: fecha, junto com §142/§159/§257, mais um consumidor do
+cluster de probabilidade/status de combate.
+
+**Status CSV: `read_structural`** (call-graph totalmente resolvido e
+cruzado contra quatro seções já documentadas; corpo dos blocos não
+lido instrução a instrução).
+
+## 602. `ctlfsetnum_main(CTLINFO*)` — tela de ajuste de flag de evento numérica, confirma `ctlflag_winset` como o widget real compartilhado com `ctlflagset_init` (2026-10-25, Fase 3, octogésimo quarto lote, revisão semântica sobre checkpoint do CI)
+
+`ctlfsetnum_main(CTLINFO*)` (`0x256174`, 392 B) — checkpoint do
+pipeline automatizado (`docs/re-results/00256174.json`): 89 de ~98
+instruções possíveis (91%), 0 tabelas de salto, 8 branches/4 de
+retrocesso. 4 `bl` distintos: `Wwrite_eventflag(int, int)`,
+`Wtask_status(long)`, `ctlflag_winset(CTLINFO*)`, `sound_request(int)`.
+
+Diferente do esqueleto padrão já fechado em `ctlperson_main` (§582) —
+sem `wldctl_active`, sem `curhis_get`/`curhis_clr`, sem chamada a um
+`_deactive` próprio. `ctlflag_winset(CTLINFO*)` é a mesma função já
+citada em `ctlflagset_init()` (§580) como "delega a maior parte do
+setup pra uma função irmã... ainda `unread`" — esta seção confirma
+que `ctlflag_winset` é um widget de janela **real e compartilhado**,
+usado tanto pelo setup (`ctlflagset_init`) quanto pelo loop por-frame
+desta tela relacionada mas distinta (`ctlfsetnum`, "flag-set number").
+O catálogo sugere que esta tela deixa o jogador ajustar o **valor
+numérico** de uma flag de evento (não só ativar/desativar como
+`ctlflagset`): grava o valor final via `Wwrite_eventflag(int, int)`,
+toca som de confirmação, e consulta `Wtask_status` pra saber quando a
+interação terminou.
+
+**Conexão**: fecha, junto com `ctlflagset_init` (§580), a família
+`ctlflag*`/`ctlfsetnum*` de telas de ajuste de flag de evento —
+`ctlflag_winset` (o widget em si) e `ctlfsetnum_init` ficam como as
+duas pontas ainda não lidas.
+
+**Status CSV: `read_structural`.**
+
+## 603. `birthday_change(CTLINFO*)` — helper de validação/redesenho compartilhado pela tela de entrada de data de nascimento (`ctlbirthday_main`, §347) (2026-10-25, Fase 3, octogésimo quarto lote, revisão semântica sobre checkpoint do CI)
+
+`birthday_change(CTLINFO*)` (`0x247884`, 428 B) — checkpoint do CI
+(`docs/re-results/00247884.json`): 101 de ~107 instruções possíveis
+(94%), 0 tabelas de salto, **0 branches** — código totalmente
+linear, sem laço nem desvio. 3 `bl` distintos:
+`vOpn_sun2ivaday(int*, int*)` (×1), `vOpn_add_winpac(ulong*, int*)`
+(×2), `vOpnwin_noropen(int, RECT16, int, int, ulong*)` (×2).
+
+Já era citada por nome na seção 347 (`ctlbirthday_main`), que a
+descreve como o helper "chamado tanto por `init` quanto por `main`"
+pra "recalcular e validar a data a cada mudança de dígito", mas só
+documentava a chamada a `vOpn_sun2ivaday` (matemática de tabela
+dia-por-mês, rejeitando datas inválidas como 30 de fevereiro) — as
+outras duas chamadas nunca tinham sido resolvidas. Isso completa o
+papel real da função: ela não só valida a data, como **redesenha a
+janela de exibição** do mês/dia editado — `vOpn_add_winpac` registra
+o pacote de janela e `vOpnwin_noropen` (janela modal sem corda/moldura,
+com transição) redesenha com o texto atualizado. Ambas são a variante
+`vOpn_` dos primitivos genéricos `add_winpac`/`wldwin_noropen` —
+mais um caso do padrão de duplicação paralela por contexto já
+estabelecido (par `vOpn_*`/sem-prefixo, mesmo espírito de
+`mesputmain`/`Wmesputmain` §37 e `asm_function`/`wasm_function`
+§585/586).
+
+**Status CSV: `read_structural`** (call-graph totalmente resolvido e
+cruzado com §347 e com a família `add_winpac`/`wldwin_noropen`; os
+argumentos exatos de cada chamada não confirmados por disassembly
+manual).
+
+## 604. `InitPermanentEffect()` — reset do pool de objetos "permanentes" (3D persistentes), loop sobre slots chamando `InitPermanentShape()` por elemento (2026-10-25, Fase 3, octogésimo quarto lote, revisão semântica sobre checkpoint do CI)
+
+`InitPermanentEffect()` (`0x21ef4c`, 408 B) — checkpoint do pipeline
+automatizado (`docs/re-results/0021ef4c.json`): 92% de cobertura
+(94/102 slots), 0 tabelas de salto, 5 branches/5 de retrocesso
+(indício forte de um laço único, sem desvio condicional externo). 1
+`bl` distinto: `InitPermanentShape()` (`0x228d40`, 136 B, também
+ainda não lida).
+
+Já era citada por nome, sem nunca ter sido lida, em conexão com
+`requestParmanentEffect`/`DoEffect` (catalogados dentro de `battle()`
+§32). O subsistema "PermanentObject/PermanentEffect" já está
+substancialmente mapeado: `createPermanentObject` (§158),
+`DrawPermanentShape` (§378), `DisposePermanentObject` (§566),
+`StartPermanentEffect` (§420) e seu uso real confirmado em
+`p22_shoukanFunc` (§244, efeito de invocação). `InitPermanentEffect()`
+é, pelo nome, call-graph (função folha só chamando um helper de "init
+shape") e padrão de laço único sem `bl` externo, a rotina que
+**zera/reseta o array de slots de objeto permanente no início de uma
+fase** — o par de reset do pool que `GetPermanentObject`/
+`DisposePermanentObject` gerenciam depois em runtime.
+
+**Status CSV: `read_structural`** (call-graph mapeado e cruzado com
+cinco seções já documentadas; corpo do laço e do único `bl` não
+lidos instrução a instrução).

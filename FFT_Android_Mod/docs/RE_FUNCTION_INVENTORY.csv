@@ -756,7 +756,7 @@ address,size,mangled,demangled,status,section_ref
 0015813c,496,_Z10unittofacei,unittoface(int),read_structural,NOTES §583
 001896e4,496,_Z12eGetItemListssaPsth,"eGetItemList(short, short, signed char, short*, unsigned short, unsigned char)",read_full,NOTES §549
 00194048,496,_Z11jDrawFT4RGBP6RECT16iiP5COLORitti,"jDrawFT4RGB(RECT16*, int, int, COLOR*, int, unsigned short, unsigned short, int)",read_full,NOTES §514
-001bc87c,496,_Z13UnitTableInits,UnitTableInit(short),unread,
+001bc87c,496,_Z13UnitTableInits,UnitTableInit(short),read_structural,NOTES §600
 001ccc3c,496,_Z19getTrapResultDamageP5BWORKi,"getTrapResultDamage(BWORK*, int)",read_structural,NOTES §584
 0025f44c,496,_Z10frmbuf_getv,frmbuf_get(),unread,
 0027070c,496,_Z14pagewinmes_putP11PAGEWININFOi,"pagewinmes_put(PAGEWININFO*, int)",unread,
@@ -857,7 +857,7 @@ address,size,mangled,demangled,status,section_ref
 001106f8,428,_Z25WiOS_statusfigprint16_FT4P11tagPOLY_FT4itiiPviiP9COPYFIELDi,"WiOS_statusfigprint16_FT4(tagPOLY_FT4*, int, unsigned short, int, int, void*, int, int, COPYFIELD*, int)",read_structural,NOTES §391
 001eb8d8,428,_Z19setPanelPrioritySubP7SVECTORS0_i,"setPanelPrioritySub(SVECTOR*, SVECTOR*, int)",read_full,NOTES §565
 0020fb18,428,_Z11db_init_alliiihhh,"db_init_all(int, int, int, unsigned char, unsigned char, unsigned char)",unread,
-00247884,428,_Z15birthday_changeP7CTLINFO,birthday_change(CTLINFO*),unread,
+00247884,428,_Z15birthday_changeP7CTLINFO,birthday_change(CTLINFO*),read_structural,NOTES §603
 000b79d8,424,_ZN10CFILE_UTIL8FileCopyEPcS0_,"CFILE_UTIL::FileCopy(char*, char*)",read_full,NOTES §29
 0010da78,424,_Z19Wrequest_makeattackv,Wrequest_makeattack(),read_structural,NOTES §563
 00286140,424,_Z18pspMapArrayOperatejhhjPsS_S_S_S_S_S_S_S_S_S_S_,"pspMapArrayOperate(unsigned int, unsigned char, unsigned char, unsigned int, short*, short*, short*, short*, short*, short*, short*, short*, short*, short*, short*, short*)",unread,
@@ -905,7 +905,7 @@ address,size,mangled,demangled,status,section_ref
 0018a6e4,408,_Z12eDrawTexFreePsP5COLORii,"eDrawTexFree(short*, COLOR*, int, int)",read_full,NOTES §552
 00194554,408,_Z12jDrawTexFreePsP5COLORii,"jDrawTexFree(short*, COLOR*, int, int)",read_full,NOTES §552
 001ab918,408,_Z15AbilityLearningsss,"AbilityLearning(short, short, short)",unread,
-0021ef4c,408,_Z19InitPermanentEffectv,InitPermanentEffect(),unread,
+0021ef4c,408,_Z19InitPermanentEffectv,InitPermanentEffect(),read_structural,NOTES §604
 00269034,408,_Z14wldencount_chkii,"wldencount_chk(int, int)",read_full,NOTES §12.2
 002cb538,408,__mulsf3,__mulsf3,mentioned_unverified,
 002cb2f0,404,__aeabi_fsub,__aeabi_fsub,unread,
@@ -954,9 +954,9 @@ address,size,mangled,demangled,status,section_ref
 00192cc8,392,_Z17eSelectWindowCluti,eSelectWindowClut(int),read_full,NOTES §550
 00199484,392,_Z17jSelectWindowCluti,jSelectWindowClut(int),read_full,NOTES §550
 001ac4ec,392,_Z6DrawG4P6RECT16P5COLORii,"DrawG4(RECT16*, COLOR*, int, int)",read_full,NOTES §548
-001cd308,392,_Z14check_learningiPt,"check_learning(int, unsigned short*)",unread,
+001cd308,392,_Z14check_learningiPt,"check_learning(int, unsigned short*)",read_structural,NOTES §601
 001ef76c,392,_Z22requestAttackAnimationP13tag_animationS0_,"requestAttackAnimation(tag_animation*, tag_animation*)",read_full,NOTES §564
-00256174,392,_Z15ctlfsetnum_mainP7CTLINFO,ctlfsetnum_main(CTLINFO*),unread,
+00256174,392,_Z15ctlfsetnum_mainP7CTLINFO,ctlfsetnum_main(CTLINFO*),read_structural,NOTES §602
 000b9bc4,388,_ZN9CSTR_UTIL17DecodeEscSequenceEPcS0_,"CSTR_UTIL::DecodeEscSequence(char*, char*)",read_full,NOTES §541
 0015daf4,388,_Z8iOSQSortPsS_S_S_iii,"iOSQSort(short*, short*, short*, short*, int, int, int)",unread,
 00176b80,388,_Z8bChrSorti,bChrSort(int),unread,
@@ -2721,7 +2721,7 @@ address,size,mangled,demangled,status,section_ref
 00289fac,84,_Z17pspLoadSystemFilev,pspLoadSystemFile(),unread,
 00191d30,84,_Z11eDrawWindowPhm,"eDrawWindow(unsigned char*, unsigned long)",read_full,NOTES §550
 0019d7e8,84,_Z9DrawUnitsv,DrawUnits(),unread,
-0019e134,84,_Z13SuccessEmployv,SuccessEmploy(),unread,
+0019e134,84,_Z13SuccessEmployv,SuccessEmploy(),read_structural,NOTES §599
 0029a5c4,84,xpLibgpuClearImage,xpLibgpuClearImage,read_full,NOTES §554
 001c51b4,84,_Z10DrawWindowPhm,"DrawWindow(unsigned char*, unsigned long)",read_full,NOTES §550
 00285c30,84,pspItemIsDataType,pspItemIsDataType,read_full,NOTES §556
