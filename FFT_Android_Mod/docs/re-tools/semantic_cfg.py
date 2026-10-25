@@ -122,3 +122,83 @@ def effect_routes(effects, guards, successors):
             "modeled_guard_routes": relevant,
         })
     return results
+
+
+def entry_reachable(successors, entry):
+    """Nodes reachable from a selected function entry in the modeled graph."""
+    if entry not in successors:
+        return set()
+    reachable = {entry}
+    pending = deque([entry])
+    while pending:
+        address = pending.popleft()
+        for target, _ in successors[address]:
+            if target not in reachable:
+                reachable.add(target)
+                pending.append(target)
+    return reachable
+
+
+def modeled_dominators(successors, entry):
+    """Iterative dominators in the ENTRY-REACHABLE, bounded graph only.
+
+    Unknown incoming edges, indirect jumps, nested entry points, exceptions
+    and interprocedural flows are *not* modeled, so dominance here is a
+    candidate relation for review, not a proven program-wide invariant.
+    """
+    reachable = entry_reachable(successors, entry)
+    if not reachable:
+        return {}
+    incoming = predecessors(successors)
+    dominators = {address: ({entry} if address == entry else set(reachable))
+                  for address in reachable}
+    changed = True
+    while changed:
+        changed = False
+        for node in sorted(reachable - {entry}):
+            parents = [parent for parent, _ in incoming[node]
+                       if parent in reachable]
+            common = set.intersection(*(dominators[p] for p in parents)) if parents else set()
+            candidate = common | {node}
+            if candidate != dominators[node]:
+                dominators[node] = candidate
+                changed = True
+    return dominators
+
+
+def modeled_guard_dominance(effects, guards, successors, entry):
+    """Attach *modeled* dominance and successor reachability to each write.
+
+    A branch that dominates a local effect and has only one modeled
+    successor reaching it is merely a candidate conditional gate.
+    """
+    dominators = modeled_dominators(successors, entry)
+    results = []
+    for effect in effects:
+        write_entry = effect["addresses"][0]
+        proposed = []
+        for guard in guards:
+            branch = guard["branch"]
+            if write_entry not in dominators or branch not in dominators[write_entry]:
+                continue
+            taken = shortest_path(successors, guard["taken_target"], write_entry)
+            alternative = shortest_path(
+                successors, guard["fallthrough_target"], write_entry)
+            if taken is None and alternative is None:
+                continue
+            proposed.append({
+                "branch": branch,
+                "compare": guard["compare"],
+                "taken_predicate": guard["taken_predicate"],
+                "other_predicate": guard["fallthrough_predicate"],
+                "taken_path": taken,
+                "other_path": alternative,
+                "modeled_one_sided": (taken is None) != (alternative is None),
+            })
+        results.append({
+            **effect,
+            "reachable_from_entry": write_entry in dominators,
+            "modeled_dominator_count": len(dominators.get(write_entry, set())),
+            "modeled_dominating_guards": proposed,
+        })
+    return results
