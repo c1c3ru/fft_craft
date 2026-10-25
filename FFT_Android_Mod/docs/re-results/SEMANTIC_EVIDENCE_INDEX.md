@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1080/1258** pending functions.
+Evidence collected: **1088/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1091,3 +1091,11 @@ These reports do not constitute semantic verification.
 | `002a1370` | ReadGeomScreen | [Evidence](semantic-evidence/002a1370.md) |
 | `002a13b4` | InitClip | [Evidence](semantic-evidence/002a13b4.md) |
 | `002a2da4` | PCclose | [Evidence](semantic-evidence/002a2da4.md) |
+| `002a2fd0` | xpInitSPAD | [Evidence](semantic-evidence/002a2fd0.md) |
+| `002a3138` | xpSetResume | [Evidence](semantic-evidence/002a3138.md) |
+| `002ab6fc` | GPUCmd_GetGPUCmd_IP() | [Evidence](semantic-evidence/002ab6fc.md) |
+| `002ab8ec` | sceGuColor | [Evidence](semantic-evidence/002ab8ec.md) |
+| `002ab9cc` | sceGuFinishId | [Evidence](semantic-evidence/002ab9cc.md) |
+| `002abd20` | sceGuClutMode | [Evidence](semantic-evidence/002abd20.md) |
+| `002ac000` | sceGuTexMode | [Evidence](semantic-evidence/002ac000.md) |
+| `002b14d0` | Project_Archive_GetFile(int) | [Evidence](semantic-evidence/002b14d0.md) |
