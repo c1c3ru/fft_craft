@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1040/1258** pending functions.
+Evidence collected: **1048/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1051,3 +1051,11 @@ These reports do not constitute semantic verification.
 | `00282274` | iOS_v2menuGetYline() | [Evidence](semantic-evidence/00282274.md) |
 | `002843a0` | new_VectorDataBase(unsigned int) | [Evidence](semantic-evidence/002843a0.md) |
 | `00285f38` | pspMsgLzwBaseGet(FFTPSP_MSG_LZW) | [Evidence](semantic-evidence/00285f38.md) |
+| `002862e8` | IsMapTexAsideLoad(unsigned int) | [Evidence](semantic-evidence/002862e8.md) |
+| `00286794` | setEventStatus(int) | [Evidence](semantic-evidence/00286794.md) |
+| `00286880` | getEventStatus() | [Evidence](semantic-evidence/00286880.md) |
+| `00286894` | get_gEventMovieNo() | [Evidence](semantic-evidence/00286894.md) |
+| `002868a8` | set_gEventMovieNo(int) | [Evidence](semantic-evidence/002868a8.md) |
+| `00286aa0` | get_netdatamode() | [Evidence](semantic-evidence/00286aa0.md) |
+| `00286ab4` | set_netdatamode(int) | [Evidence](semantic-evidence/00286ab4.md) |
+| `00286b0c` | set_limit_turn_flg(int) | [Evidence](semantic-evidence/00286b0c.md) |
