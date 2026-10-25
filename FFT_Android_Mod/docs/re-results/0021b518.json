@@ -1,0 +1,18 @@
+{
+  "address": "0021b518",
+  "name": "LoadOverlayBin(long)",
+  "size": 88,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 86.36,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "27b39c"
+  ],
+  "log": "=== jtable.py: 0x21b518..0x21b570 (88 bytes) ===\ncoverage: 19 of ~22 instruction slots (86%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x27b39c x1   numa_fileReadCD(unsigned long, unsigned long, void*) \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 1,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

@@ -13,7 +13,7 @@
     "2b8888"
   ],
   "log": "=== jtable.py: 0x2423f4..0x242450 (92 bytes) ===\ncoverage: 20 of ~23 instruction slots (87%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x2868a8 x1   set_gEventMovieNo(int) \n  0x2b8888 x1   iOS_InitMovie(int) \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
-  "review_attempts": 1,
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

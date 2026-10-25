@@ -1,0 +1,31 @@
+{
+  "address": "0025d53c",
+  "name": "world_init()",
+  "size": 84,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 15,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "24c070",
+    "254100",
+    "25cc10",
+    "25cd24",
+    "25d26c",
+    "25d33c",
+    "25d618",
+    "25da0c",
+    "25efe4",
+    "265fd8",
+    "267f38",
+    "26b904",
+    "26baec",
+    "28179c",
+    "290b40"
+  ],
+  "log": "=== jtable.py: 0x25d53c..0x25d590 (84 bytes) ===\ncoverage: 21 of ~21 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 15 distinct --\n  0x24c070 x1   wldbg_init() \n  0x254100 x1   wldctl_init() \n  0x25cc10 x1   wldscr_init() \n  0x25cd24 x1   wldpara_init() \n  0x25d26c x1   wlddraw_init() \n  0x25d33c x1   wldstart_check() \n  0x25d618 x1   wldiwasaki_init() \n  0x25da0c x1   wldkey_repinit() \n  0x25efe4 x1   wlddata_load() \n  0x265fd8 x1   wldpac_init() \n  0x267f38 x1   wldrute_init() \n  0x26b904 x1   wldsymbol_init() \n  0x26baec x1   wldtown_init() \n  0x28179c x1   iOS_v2menuSetType(V2MENU_TYPE) \n  0x290b40 x1   SetDispMask \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

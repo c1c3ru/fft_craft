@@ -13,7 +13,7 @@
     "21669c"
   ],
   "log": "=== jtable.py: 0x269e04..0x269e6c (104 bytes) ===\ncoverage: 24 of ~26 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x216530 x1   activateMusic(int, int, int) \n  0x21669c x1   fadeMusic(int, int) \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
-  "review_attempts": 1,
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

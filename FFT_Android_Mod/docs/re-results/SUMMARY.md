@@ -2,8 +2,8 @@
 
 Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Analyzed in current binary: 933
-Automatically triaged: 128,308 bytes / 1,837,392 inventory bytes (6.98%); **this is newly triaged coverage, not total project coverage**.
+Analyzed in current binary: 1033
+Automatically triaged: 133,404 bytes / 1,837,392 inventory bytes (7.26%); **this is newly triaged coverage, not total project coverage**.
 
 | Address | Function | Size (B) | Coverage | Status |
 |---|---|---:|---:|---|
@@ -792,7 +792,7 @@ Automatically triaged: 128,308 bytes / 1,837,392 inventory bytes (6.98%); **this
 | `0025d590` | directedit_chk() | 116 | 96.55% | auto_structural |
 | `002816bc` | iOS_v2menuSetEnable(V2_MENU_ITEM, int) | 116 | 93.1% | needs_review |
 | `002cabdc` | __aeabi_ul2d | 116 | 75.86% | needs_review |
-| `002cb830` | __gtsf2 | 116 | 89.66% | needs_review |
+| `002cb830` | __gesf2 | 116 | 89.66% | needs_review |
 | `00080a4c` | unzGoToFirstFile | 112 | 100.0% | auto_structural |
 | `00097a48` | res1_forward | 112 | 100.0% | auto_structural |
 | `000d7880` | allocatememoryinit() | 112 | 92.86% | needs_review |
@@ -936,7 +936,107 @@ Automatically triaged: 128,308 bytes / 1,837,392 inventory bytes (6.98%); **this
 | `0010fb14` | Winitdrmode2(DR_MODE*, RECT16*) | 88 | 95.45% | auto_structural |
 | `00123be8` | Eitemmenu_uvclut(short*, int) | 88 | 100.0% | auto_structural |
 | `0012cd74` | itemmenu_uvclut(short*, int) | 88 | 100.0% | auto_structural |
+| `001351c0` | Witemmenu_uvclut(short*, int) | 88 | 100.0% | auto_structural |
+| `0014be6c` | Citemmenu_uvclut(short*, int) | 88 | 100.0% | auto_structural |
+| `00187658` | pspWindowCommonIsType(WINOBJ_TYPE, unsigned char, unsigned char, unsigned char, unsigned char) | 88 | 95.45% | auto_structural |
+| `001ab3b4` | UnitDismiss(short) | 88 | 95.45% | auto_structural |
+| `001ca9b8` | reset_toumei_afterskill(BWORK*) | 88 | 90.91% | needs_review |
+| `001d62ec` | set_move_end(int) | 88 | 95.45% | auto_structural |
+| `001d6344` | set_act_end(int) | 88 | 95.45% | auto_structural |
+| `001d8f78` | get_pmaxlevel() | 88 | 95.45% | auto_structural |
+| `001dc8b0` | levelup_check(BWORK*) | 88 | 100.0% | auto_structural |
 | `0020eadc` | inactivateAnimation(int) | 88 | 100.0% | auto_structural |
 | `0020ed84` | activateEventAnimation(int) | 88 | 95.45% | auto_structural |
 | `002163bc` | checkReadMusic() | 88 | 95.45% | auto_structural |
+| `00218008` | ChangeEffectAnimation(effectAnimation*, unsigned char, short) | 88 | 95.45% | auto_structural |
+| `0021b518` | LoadOverlayBin(long) | 88 | 86.36% | needs_review |
+| `0021d3b0` | s2_startTask(_EffectTCB*) | 88 | 95.45% | auto_structural |
+| `0022a210` | getRandom(short, short) | 88 | 100.0% | auto_structural |
+| `0024328c` | fRoll_waitdot(short*) | 88 | 95.45% | auto_structural |
+| `00243508` | fRoll_bkfadeout(short*) | 88 | 95.45% | auto_structural |
+| `00245c78` | o_Wait_GetCardState(int) | 88 | 100.0% | auto_structural |
+| `0024aaac` | vOpnmess_frm(int, _POINT*) | 88 | 100.0% | auto_structural |
+| `00253a10` | wldctl_active() | 88 | 81.82% | needs_review |
+| `00253ec8` | wldctl_deactive() | 88 | 81.82% | needs_review |
+| `0026b31c` | snplread_parcalc() | 88 | 90.91% | needs_review |
+| `00270b04` | pagenext_cursor(PAGEWININFO*) | 88 | 90.91% | needs_review |
+| `0028b844` | uninitTaskEmu() | 88 | 90.91% | needs_review |
 | `002916b8` | SetDrawArea | 88 | 100.0% | auto_structural |
+| `0029b678` | GsSetDrawBuffClip | 88 | 95.45% | auto_structural |
+| `002a126c` | TransRotPers3 | 88 | 100.0% | auto_structural |
+| `002ab908` | sceGuStart | 88 | 90.91% | needs_review |
+| `002b2290` | GX_ApplyVertexScaling(int) | 88 | 90.91% | needs_review |
+| `002b2e48` | Jingle_Stop(int) | 88 | 86.36% | needs_review |
+| `000e0568` | export_localpad(long*) | 84 | 90.48% | needs_review |
+| `000e0f14` | iOS_assist_addlocalprim2(iOS_CMenuTouch*, int) | 84 | 100.0% | auto_structural |
+| `000e2fbc` | statuskanjiprintadv(int, char*, COPYFIELD*) | 84 | 90.48% | needs_review |
+| `0010dea4` | Wexport_localpad(long*) | 84 | 90.48% | needs_review |
+| `0010f8f4` | WiOS_assist_addlocalprim2(iOS_CMenuTouch*, int) | 84 | 100.0% | auto_structural |
+| `0010f948` | iOS_assist_addlocalprim3(iOS_CMenuTouch*, int, int) | 84 | 100.0% | auto_structural |
+| `001531f8` | edit_smallpacket() | 84 | 90.48% | needs_review |
+| `0019d7e8` | DrawUnits() | 84 | 85.71% | needs_review |
+| `0019e134` | SuccessEmploy() | 84 | 90.48% | needs_review |
+| `001eed30` | getShapeAddress(unsigned short) | 84 | 85.71% | needs_review |
+| `0021c274` | s7_setEditorProc(_EffectTCB*) | 84 | 100.0% | auto_structural |
+| `0021c2c8` | s8_mapScrollXYZ(_EffectTCB*) | 84 | 100.0% | auto_structural |
+| `0021d1e8` | s3_killChildTask(_EffectTCB*) | 84 | 100.0% | auto_structural |
+| `0022531c` | NewHeap(void*, long) | 84 | 95.24% | auto_structural |
+| `0022a480` | getVariationAppearPosition(_ParticleParameter*, int, VECTOR*) | 84 | 100.0% | auto_structural |
+| `0022a4d4` | getVariationAppearRange(_ParticleParameter*, int, VECTOR*) | 84 | 100.0% | auto_structural |
+| `0022a528` | getVariationAppearVec(_ParticleParameter*, int, VECTOR*) | 84 | 100.0% | auto_structural |
+| `0022a57c` | getVariationAppearVecRange(_ParticleParameter*, int, VECTOR*) | 84 | 100.0% | auto_structural |
+| `002434b4` | fRoll_bkfadein(short*) | 84 | 95.24% | auto_structural |
+| `00243bf4` | drawMessage(int) | 84 | 95.24% | auto_structural |
+| `00243c48` | DeleteData(tagLIST_STAFFROLL*, tagSTAFFROLL*, tagSTAFFROLL*) | 84 | 100.0% | auto_structural |
+| `002459ec` | strSync(DECENV*, int) | 84 | 100.0% | auto_structural |
+| `00245cd0` | o_CardCheck() | 84 | 100.0% | auto_structural |
+| `00245de4` | vOpn_ctlprog() | 84 | 80.95% | needs_review |
+| `00255758` | iOSHelpCheck() | 84 | 90.48% | needs_review |
+| `0025d53c` | world_init() | 84 | 100.0% | auto_structural |
+| `00265f84` | iOSSDNovelBackLogCheck() | 84 | 90.48% | needs_review |
+| `00269db0` | snpl_mfadeout() | 84 | 90.48% | needs_review |
+| `0026a45c` | snpl_jparane() | 84 | 95.24% | auto_structural |
+| `0026a4b0` | snpl_jparabig() | 84 | 95.24% | auto_structural |
+| `0026a7d0` | snSound_play(int) | 84 | 95.24% | auto_structural |
+| `00288e18` | pspPushScreenRect(RECT16*, RECT16*) | 84 | 95.24% | auto_structural |
+| `00289fac` | pspLoadSystemFile() | 84 | 90.48% | needs_review |
+| `002a0c88` | TransposeMatrix | 84 | 100.0% | auto_structural |
+| `002b5e58` | Logo_Uninit() | 84 | 90.48% | needs_review |
+| `000788b0` | gzdirect | 80 | 100.0% | auto_structural |
+| `000d8830` | makemessagepacket(char*) | 80 | 90.0% | needs_review |
+| `000db7ec` | tutorial_syscall(int) | 80 | 95.0% | auto_structural |
+| `000e2b78` | statuskanjiprint(int, char*, COPYFIELD*) | 80 | 90.0% | needs_review |
+| `00100500` | Wmakemessagepacket(char*) | 80 | 90.0% | needs_review |
+| `001033b0` | Wtutorial_syscall(int) | 80 | 95.0% | auto_structural |
+| `0015a60c` | siOS_TCurPosGet(unsigned int, int) | 80 | 90.0% | needs_review |
+| `001d6430` | eacape_battlefield(int) | 80 | 95.0% | auto_structural |
+| `001eee60` | getPositionFromPanel(tag_animation*) | 80 | 100.0% | auto_structural |
+| `001f639c` | setLongPositionToPosition(tag_animation*) | 80 | 100.0% | auto_structural |
+| `001fce04` | setActivePanelFromAnimation(tag_animation*) | 80 | 85.0% | needs_review |
+| `0020c14c` | iOS_isIrobakeEffect() | 80 | 100.0% | auto_structural |
+| `0020eb34` | checkJumpReset() | 80 | 95.0% | auto_structural |
+| `0021584c` | loadClutDataCalc(unsigned short*, unsigned int, unsigned int, int, short, short, short, int) | 80 | 100.0% | auto_structural |
+| `0021c35c` | sb_mapAngle(_EffectTCB*) | 80 | 100.0% | auto_structural |
+| `00221f14` | RequestReboundEffect() | 80 | 90.0% | needs_review |
+| `00228e98` | GetShapePrim(int) | 80 | 85.0% | needs_review |
+| `00243464` | fRoll_bkput(short*) | 80 | 90.0% | needs_review |
+| `0024599c` | strNext(DECENV*) | 80 | 100.0% | auto_structural |
+| `00249ec4` | vEnd_dataload() | 80 | 90.0% | needs_review |
+| `0025396c` | ctlmap_deactive(CTLINFO*) | 80 | 85.0% | needs_review |
+| `002591d4` | evt_get_flgdt(int*, int*) | 80 | 95.0% | auto_structural |
+| `00269820` | snpl_picclr() | 80 | 90.0% | needs_review |
+| `00269f34` | snpl_mesput2() | 80 | 90.0% | needs_review |
+| `0026a40c` | snpl_volchg() | 80 | 95.0% | auto_structural |
+| `0026a5fc` | snplinf_clr(SNPLINFO*) | 80 | 100.0% | auto_structural |
+| `0026ae2c` | snpl_jstatflg_sub(int) | 80 | 90.0% | needs_review |
+| `0026ae8c` | snpl_jlocalflg_sub(int) | 80 | 90.0% | needs_review |
+| `00282478` | iOS_ClippedInit() | 80 | 95.0% | auto_structural |
+| `00288e6c` | pspPopScreenRect(RECT16*, RECT16*) | 80 | 95.0% | auto_structural |
+| `002912f8` | LoadClut | 80 | 100.0% | auto_structural |
+| `0029b4f4` | GsDefDispBuff | 80 | 95.0% | auto_structural |
+| `002a30b0` | xpMallocAlign | 80 | 95.0% | auto_structural |
+| `002bb53c` | Main_Suspend() | 80 | 95.0% | auto_structural |
+| `00077400` | gzbuffer | 76 | 100.0% | auto_structural |
+| `000d87e4` | export_localstatus(char*, char*, char*) | 76 | 94.74% | needs_review |
+| `000e3010` | statuskanjiprintwithptr(char*, COPYFIELD*, char*) | 76 | 89.47% | needs_review |
+| `001d4cf4` | set_itemitem(int, unsigned char, unsigned char*) | 76 | 100.0% | auto_structural |
