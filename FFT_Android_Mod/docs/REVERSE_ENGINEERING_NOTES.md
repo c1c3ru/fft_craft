@@ -18999,3 +18999,225 @@ identificado (candidatos citados em §578: `sub_71b0c`/`sub_71b18`/
 aridades + guarda de inicialização — lidas instrução a instrução via
 disassembly direto; só a identidade dos slots de função, dados e não
 código, permanece em aberto).
+
+## 587. `ctlsound_main(CTLINFO*)` — loop por-frame da tela de teste de som: toca efeito, alterna estéreo, volta pro título (2026-10-25, Fase 3, octogésimo segundo lote, revisão semântica sobre checkpoint do CI)
+
+`ctlsound_main(CTLINFO*)` (`0x2472a8`, 484 B) — checkpoint do
+pipeline automatizado (`docs/re-results/002472a8.json`, não
+reexecutado nesta sessão): 113 de ~121 instruções possíveis (93%), 0
+tabelas de salto, 9 branches/2 de retrocesso. 6 `bl` distintos, 9
+chamadas: `callSystemSound(int)` (×3), `ctlopentitle_active(CTLINFO*)`
+(×1), `vOpn_key_rep(unsigned long)` (×2), `Ssd_SetStereo(int)` (×1),
+`iOS_SetRectHit(int,RECT16*,int)` (×1), `iOS_GetRectHitNoTap()` (×1).
+
+Fecha o par com `ctlsound_init()` (`0x24717c`, §580 — "tela de teste
+de som", confirmada via `ctlopentitle_main`, §87, que lista
+`ctlsound_init` entre os destinos possíveis após o filme de abertura).
+`ctlsound_main` é a lógica por quadro dessa tela: usa
+`iOS_SetRectHit`/`iOS_GetRectHitNoTap` (mesmo par de detecção de
+toque em retângulo já visto em várias outras telas) para capturar o
+toque do jogador num botão de teste, chama `callSystemSound(int)`
+(×3 — provável efeito sonoro diferente por botão testado), e usa
+`Ssd_SetStereo(int)` pra alternar o modo estéreo/mono (par exato do
+getter `Ssd_GetStereo()` já usado em `ctlsound_init`, §580).
+`vOpn_key_rep(unsigned long)` (×2) faz polling de repetição de
+tecla/botão (família `vOpn_*` de `ctlopentitle_main`, §87). A chamada
+a `ctlopentitle_active(CTLINFO*)` confirma que esta tela é um
+sub-modo acessado direto do controlador de título, que devolve o
+controle ativando-o de volta ao terminar.
+
+Sem tabela de salto, nenhum bloco lido instrução a instrução.
+
+**Status CSV: `read_structural`.**
+
+## 588. `ctltresure_main(CTLINFO*)` — mesmo esqueleto padrão de `ctl*_main`, mas com uma anomalia real: desativa via `ctlunreg_deactive`, não via uma `ctltresure_deactive` própria (2026-10-25, Fase 3, octogésimo segundo lote, revisão semântica sobre checkpoint do CI)
+
+`ctltresure_main(CTLINFO*)` (`0x26c680`, 480 B) — checkpoint do
+pipeline automatizado (`docs/re-results/0026c680.json`): 111 de ~120
+instruções possíveis (92%), **0 tabelas de salto**, 14 branches/4 de
+retrocesso. 7 `bl` distintos: `Wtask_status(long)`,
+`Wsend_taskparamater(long,long,long,long)` (×2), `wldctl_active()`,
+`sound_request(int)` (×2), `curhis_get(int)`, `curhis_clr(int)` e
+**`ctlunreg_deactive(CTLINFO*)`**.
+
+O catálogo bate quase exatamente com o esqueleto padrão já fechado em
+`ctlperson_main` (§582) e na família `ctlunreg_main`/`ctlmouke_main`/
+`ctlsentuto_main` (§371): `wldctl_active` + `sound_request` ×2 +
+`curhis_get`/`curhis_clr` + uma chamada de saída pra `_deactive`. A
+diferença que importa: **a chamada de saída não vai para uma
+`ctltresure_deactive` própria — vai direto para
+`ctlunreg_deactive(CTLINFO*)`**, a mesma função de desativação já
+confirmada na seção 371 como o encerramento específico de
+`ctlunreg_main`. Isso não bate com o padrão de outras telas do hub
+que lista `ctltresure_init`/`ctlunreg_init` como sub-controladores
+irmãos, cada um presumivelmente com seu próprio ciclo
+`init/active/main/deactive` — aqui a tela de tesouro parece
+transicionar direto para o fluxo "unreg" em vez de ter sua própria
+rotina de saída. Sem tabela de salto nem leitura byte a byte, não é
+possível confirmar se é (a) uma transição de gameplay real (achar
+tesouro alimenta o catálogo "unreg" de itens não registrados) ou (b)
+simplesmente não existe `ctltresure_deactive` própria e o binário
+reusa `ctlunreg_deactive` como encerramento genérico compartilhado —
+nenhuma das duas hipóteses está demonstrada aqui.
+
+**Conexão**: fecha, junto com `ctltresure_init` (§580), mais um par
+`_init`/`_main` da família — mas deixa pista aberta real (a ligação
+`ctltresure`→`ctlunreg_deactive`) pra quem processar `ctlunreg_main`/
+`ctlunreg_deactive` por dentro com mais profundidade.
+
+**Status CSV: `read_structural`** (call-graph mapeado e cruzado com
+§371/§580/§582; a anomalia da chamada de saída fica anotada como
+aberta — corpo dos blocos não lido byte a byte).
+
+## 589. `ctlhistory_main(CTLINFO*)` — loop por-frame da tela de histórico, mesmo esqueleto padrão de `ctlperson_main` (§582), sem `wldctl_active` (2026-10-25, Fase 3, octogésimo segundo lote, revisão semântica sobre checkpoint do CI)
+
+`ctlhistory_main(CTLINFO*)` (`0x25990c`, 456 B) — checkpoint do
+pipeline automatizado (`docs/re-results/0025990c.json`): 105 de ~114
+instruções possíveis (92%), 0 tabelas de salto, 13 branches/5 de
+retrocesso. 6 `bl` distintos: `Wtask_status(long)`,
+`Wsend_taskparamater(long,long,long,long)` (×2),
+`ctlhistory_deactive(CTLINFO*)` (chamada a si-mesma),
+`sound_request(int)` (×2), `curhis_get(int)`, `curhis_clr(int)`.
+
+Catálogo quase idêntico ao de `ctlperson_main` (§582) — com uma única
+diferença: **não chama `wldctl_active()`**, ou seja, a tela de
+histórico não precisa saber se está no contexto do mapa mundi (o
+popup funciona igual em qualquer tela-pai), enquanto `ctlperson_main`
+precisa (provavelmente porque o roster de personagens é acessível
+tanto no mapa mundi quanto de dentro de menus de batalha/base).
+
+**Sobre o nome "history"**: `curhis_get`/`curhis_clr`/`curhis_put`
+são confirmados em seções anteriores (ex. §310) como o mecanismo
+**genérico** de bookkeeping de posição de cursor compartilhado por
+praticamente todo controlador `ctl*_main/_init` do framework — não é
+específico de nenhuma tela de "histórico" em particular, é só a
+palavra usada no nome interno da API pra "última posição de cursor
+salva". `ctlhistory_main` ser uma tela cujo próprio conteúdo é
+"histórico" (de quê exatamente — log de eventos, registro de
+batalhas — não resolvido por este catálogo) é coincidência de
+nomenclatura com o mecanismo `curhis_*`, não a mesma coisa. Par
+direto com `ctlhistory_init()` (§580).
+
+Sem tabela de salto, nenhum bloco lido instrução a instrução.
+
+**Status CSV: `read_structural`.**
+
+## 590. `get_ability_address(int, ABILITY_COMMON_DATA**, void**)` — resolve um ID de habilidade em (1) ponteiro direto pro registro `ABILITY_COMMON_DATA` e (2) ponteiro numa de 9 sub-tabelas por faixa de ID (2026-10-25, Fase 3, octogésimo segundo lote, revisão semântica sobre checkpoint do CI)
+
+`get_ability_address(int, ABILITY_COMMON_DATA**, void**)`
+(`0x1d8b58`, 452 B) — checkpoint do CI (`docs/re-results/001d8b58.json`):
+92% de cobertura (104/113 slots), **0 `bl`** (função folha), sem
+tabela de salto no sentido do `jtable.py` (é uma cascata de
+`cmp`/`ble`/`bgt` aninhada, não um `add pc,pc,...`), 10 branches/5 de
+retrocesso. Sem catálogo de chamadas pra cruzar, a leitura foi via
+disassembly Capstone completo e manual, instrução a instrução, do
+início ao fim.
+
+Lógica real: `r3 = id & 0x1FF` (máscara de 9 bits). Primeiro,
+**incondicionalmente**, grava em `*out1` (`ABILITY_COMMON_DATA**`) o
+endereço `&tabelaBase[r3]` (`r4 + r3*8` — confirma que
+`ABILITY_COMMON_DATA` é uma struct de 8 bytes e `out1` recebe um
+ponteiro direto pro elemento). Depois, uma cascata de 9 faixas sobre
+o mesmo `r3` (limiares em 368, 381, 393, 405, 413, 421, 453, 485)
+decide: (a) o valor de retorno (`r0 = 0..8`, uma categoria/faixa), e
+(b) o conteúdo gravado em `*out2` (`void**`), calculado como
+`(r3 − deslocamento_da_faixa) + constante_da_faixa` (faixas 3/4
+multiplicam `r3` por 2 antes — stride de 2 bytes; as demais somam
+direto — stride de 1). Cada constante de base vem de um global
+distinto (GOT-indireto, 8 ponteiros diferentes, um por faixa — dados,
+não identificados por nome). Notável: as faixas 7 e 8 usam a **mesma
+fórmula** e só diferem no valor de retorno, sugerindo duas categorias
+que compartilham a mesma sub-tabela mas são distinguidas por outro
+critério no chamador.
+
+Interpretação: o espaço de ~512 IDs de habilidade é particionado em 9
+categorias (provavelmente normal/reação/suporte/movimento/monstro/
+item etc., não confirmado por nenhuma string), cada uma com sua
+própria sub-tabela de descrição (via `*out2`), além do registro
+`ABILITY_COMMON_DATA` comum a todas (via `*out1`). Achado novo — não
+há seção anterior citando `get_ability_address` nem
+`ABILITY_COMMON_DATA`; sem `bl` para ligá-lo diretamente a
+`GetAbilityList`/`GetTotalAbilityList` (§390/§574), mas a assinatura
+e o papel sugerem que é o nível abaixo delas na mesma família (não
+confirmado por chamada direta).
+
+**Status CSV: `read_full`** (todas as 9 faixas + a escrita
+incondicional de `*out1` lidas instrução a instrução via disassembly
+manual completo; só a identidade nominal dos 8 ponteiros globais de
+base — dados, não código — permanece em aberto, mesma lacuna aceita
+em `read_full` anteriores como §585/§586).
+
+## 591. `loadAbilityAnimation(tag_animation*, void*)` — resolve 2 IDs de sprite via `CFFT_STATE::UnitIDToFID_SP2`, decide variante 1x/2x por `IS_TEX_2X()` e dispara 2 leituras assíncronas de arquivo (2026-10-25, Fase 3, octogésimo segundo lote, revisão semântica sobre checkpoint do CI)
+
+`loadAbilityAnimation(tag_animation*, void*)` (`0x1eb124`, 436 B) —
+checkpoint do pipeline automatizado (`docs/re-results/001eb124.json`):
+103 de ~109 instruções possíveis (94,5%), 0 tabelas de salto, 10
+branches/5 de retrocesso. 5 `bl` distintos (10 chamadas):
+`fileReadRequest(unsigned long, unsigned long, void*)` (×2),
+`CFFT_STATE::GetParam(int)` (×1), `CFFT_STATE::SetParam(int, int)`
+(×4), `CFFT_STATE::UnitIDToFID_SP2(int, int)` (×2), `IS_TEX_2X()`
+(×2).
+
+Todos os cinco alvos já estão documentados. `CFFT_STATE` (§22) é o
+hub de estado global do jogo (`GetParam`/`SetParam` reduzidos à
+fórmula `*(int*)((char*)this + 0x38 + id*4)`). `UnitIDToFID_SP2(int
+unitID, int variant)` (§22) já tem pseudocódigo completo: resolve o
+ID de sprite de uma unidade por tabela indexada, com caso especial
+pra unidade `0x9a` indexada por `variant` (0-3). `fileReadRequest` é
+I/O assíncrono de arquivo (família de `mallocForFile`/
+`fileReadCheck`/`fileDispose`). `IS_TEX_2X()` é o gate de modo de
+textura 2x usado em dezenas de rotinas de desenho/carregamento.
+
+**Lógica inferida pelo catálogo de chamadas** (sem rastrear os blocos
+byte a byte): lê um parâmetro de estado via `GetParam` (provável
+modo/flag de contexto), resolve dois IDs de sprite via
+`UnitIDToFID_SP2` — possivelmente um par caster/efeito ou duas
+variantes da mesma unidade —, testa `IS_TEX_2X()` duas vezes (uma por
+ID resolvido) pra decidir qual arquivo de textura pedir, dispara as
+duas leituras assíncronas via `fileReadRequest`, e grava 4 campos de
+volta em `SetParam` — provavelmente os identificadores/estado de
+carregamento dos dois buffers de animação recém-solicitados.
+
+**Conexão**: liga o sistema de habilidades (`AbilityMenu` §57,
+`GetAbilityList`/`GetTotalAbilityList` §390/§574) ao pipeline de
+animação/efeito visual via `CFFT_STATE`, usando a resolução de sprite
+por unidade num contexto novo (carregamento de animação de
+habilidade, não exibição de rosto).
+
+**Status CSV: `read_structural`** (call-graph totalmente resolvido e
+cruzado contra `CFFT_STATE` §22; a lógica de blocos — em particular o
+papel exato dos 4 `SetParam` — não foi traçada instrução a
+instrução).
+
+## 592. `timeevt_chk()` — watchdog de tempo que força o encerramento de uma mensagem "adventure"/novel em andamento (2026-10-25, Fase 3, octogésimo segundo lote, revisão semântica sobre checkpoint do CI)
+
+`timeevt_chk()` (`0x26abac`, 432 B) — checkpoint do pipeline
+automatizado (`docs/re-results/0026abac.json`): 95 de ~108 instruções
+possíveis (88%), 0 tabelas de salto, 8 branches/4 de retrocesso (laço
+candidato). 2 `bl` distintos: `Wtask_status(long)` e
+`stop_adventuremessage(int)`.
+
+`stop_adventuremessage(int)` já está documentada como parte do
+sistema "Novel"/SSD — citada em `ctlnobel_main` (§96, controlador
+real de cenas de diálogo estilo visual novel, terminologia
+"adventure" confirmada ali) e em `ctlnobelstop_main` (§269, estágio
+de encerramento/limpeza do modo novel, que chama a mesma função ao
+transicionar pra fora da cena). `Wtask_status(long)` é o primitivo de
+consulta de status de task do framework "wasm" já visto em várias
+seções.
+
+O nome (`timeevt_chk` = "time event check") combinado com os dois
+`bl` sugere um watchdog chamado periodicamente que consulta o status
+de uma task via `Wtask_status` e, dependendo do resultado (um limite
+de tempo/timeout atingido, a julgar pelo laço de 4 branches de
+retrocesso antes da chamada), força o encerramento de uma mensagem
+"adventure" ainda ativa via `stop_adventuremessage(int)` — mecanismo
+de segurança pra não deixar uma cena de novel presa indefinidamente.
+
+**Conexão**: liga-se a §96/§269 (sistema Novel/adventure) como um
+terceiro ponto de encerramento (watchdog), ao lado do encerramento
+normal via `ctlnobelstop_main`.
+
+**Status CSV: `read_structural`** (call-graph mapeado e cruzado com
+dois sistemas já documentados; corpo do laço e a condição de timeout
+não lidos instrução a instrução).

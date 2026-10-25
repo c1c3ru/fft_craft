@@ -59,12 +59,12 @@ address,size,mangled,demangled,status,section_ref
 001569ac,484,_Z10editdirectv,editdirect(),unread,
 001d6514,484,_Z6set_mdPh,set_md(unsigned char*),unread,
 001c4eb0,484,_Z10ValueFunc2Ph,ValueFunc2(unsigned char*),read_full,
-002472a8,484,_Z13ctlsound_mainP7CTLINFO,ctlsound_main(CTLINFO*),unread,
+002472a8,484,_Z13ctlsound_mainP7CTLINFO,ctlsound_main(CTLINFO*),read_structural,NOTES §587
 0029f730,484,_Z8_gte_ncsv,_gte_ncs(),read_full,
 00072b0c,480,_Z16Android_FileEnumiPcP5CLIST,"Android_FileEnum(int, char*, CLIST*)",read_structural,
 0015667c,480,_Z24world_extend_systemframeiiPc,"world_extend_systemframe(int, int, char*)",unread,
 00253f20,480,_Z11ctlmap_initv,ctlmap_init(),read_structural,NOTES §580
-0026c680,480,_Z15ctltresure_mainP7CTLINFO,ctltresure_main(CTLINFO*),unread,
+0026c680,480,_Z15ctltresure_mainP7CTLINFO,ctltresure_main(CTLINFO*),read_structural,NOTES §588
 001e3324,476,_Z13setexperienceiP6REWARD,"setexperience(int, REWARD*)",unread,
 002553a8,476,_Z13ctlhelp2_initii,"ctlhelp2_init(int, int)",read_structural,NOTES §580
 0025c4fc,476,_Z16tokuseijob_checkv,tokuseijob_check(),unread,
@@ -81,10 +81,10 @@ address,size,mangled,demangled,status,section_ref
 001022ec,464,_Z18Wtutorial_hookfuncv,Wtutorial_hookfunc(),unread,
 002608c0,460,_Z12ctlokng_init6_POINT,ctlokng_init(_POINT),read_structural,NOTES §580
 0024cda0,456,_Z14ctlbrst_activeP7CTLINFO,ctlbrst_active(CTLINFO*),unread,
-0025990c,456,_Z15ctlhistory_mainP7CTLINFO,ctlhistory_main(CTLINFO*),unread,
+0025990c,456,_Z15ctlhistory_mainP7CTLINFO,ctlhistory_main(CTLINFO*),read_structural,NOTES §589
 0018a1e4,456,_Z12eDrawFT4RGB2iiiiiiiiP5COLORitti,"eDrawFT4RGB2(int, int, int, int, int, int, int, int, COLOR*, int, unsigned short, unsigned short, int)",read_full,
 000d8a34,456,_Z10faceuvclutP11tagPOLY_FT4iPi,"faceuvclut(tagPOLY_FT4*, int, int*)",unread,
-001d8b58,452,_Z19get_ability_addressiPP19ABILITY_COMMON_DATAPPv,"get_ability_address(int, ABILITY_COMMON_DATA**, void**)",unread,
+001d8b58,452,_Z19get_ability_addressiPP19ABILITY_COMMON_DATAPPv,"get_ability_address(int, ABILITY_COMMON_DATA**, void**)",read_full,NOTES §590
 001a7884,452,_Z13SetChrListOnei,SetChrListOne(int),unread,
 001b8c38,452,_Z9sort_initv,sort_init(),unread,
 0029dd18,452,_Z9_gte_rtpsv,_gte_rtps(),read_full,
@@ -102,10 +102,10 @@ address,size,mangled,demangled,status,section_ref
 00188c6c,440,_Z11eSetChrListv,eSetChrList(),read_full,
 00280c44,440,_Z25iOS_setStatusLVEXP_STATUSP11IOS_STTSNUMiiiiiPvi,"iOS_setStatusLVEXP_STATUS(IOS_STTSNUM*, int, int, int, int, int, void*, int)",read_full,
 0015047c,436,_Z13setjoinus_netv,setjoinus_net(),unread,
-001eb124,436,_Z20loadAbilityAnimationP13tag_animationPv,"loadAbilityAnimation(tag_animation*, void*)",unread,
+001eb124,436,_Z20loadAbilityAnimationP13tag_animationPv,"loadAbilityAnimation(tag_animation*, void*)",read_structural,NOTES §591
 0020c264,436,_Z7db_initiiihhh,"db_init(int, int, int, unsigned char, unsigned char, unsigned char)",unread,
 0026c860,436,_Z12picsand_drawP7GsIMAGEi,"picsand_draw(GsIMAGE*, int)",unread,
-0026abac,432,_Z11timeevt_chkv,timeevt_chk(),unread,
+0026abac,432,_Z11timeevt_chkv,timeevt_chk(),read_structural,NOTES §592
 0027f680,432,_Z11iOS_Suspend15IOS_RESUME_MODE,iOS_Suspend(IOS_RESUME_MODE),unread,
 0019df84,432,_Z13AccountEmployv,AccountEmploy(),unread,
 00212a04,432,_Z27requestDestinationGradationiP7CVECTOR,"requestDestinationGradation(int, CVECTOR*)",read_full,
