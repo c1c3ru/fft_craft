@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **160/1258** pending functions.
+Evidence collected: **168/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -171,3 +171,11 @@ These reports do not constitute semantic verification.
 | `00101650` | Whook_jobmenu() | [Evidence](semantic-evidence/00101650.md) |
 | `0015ce74` | iOSMapIconModeSet(int) | [Evidence](semantic-evidence/0015ce74.md) |
 | `001f35dc` | EndAnimation(tag_animation*) | [Evidence](semantic-evidence/001f35dc.md) |
+| `0025b78c` | houkoku_talkunit(int) | [Evidence](semantic-evidence/0025b78c.md) |
+| `00285e50` | pspMsgGet(unsigned int) | [Evidence](semantic-evidence/00285e50.md) |
+| `001eb67c` | myInitShape() | [Evidence](semantic-evidence/001eb67c.md) |
+| `0028d6ec` | tlCheckHeap() | [Evidence](semantic-evidence/0028d6ec.md) |
+| `000d115c` | Ddisp_eventwaitwindow() | [Evidence](semantic-evidence/000d115c.md) |
+| `00123994` | Edisp_eventwaitwindow() | [Evidence](semantic-evidence/00123994.md) |
+| `001252d0` | Wdisp_eventwindow() | [Evidence](semantic-evidence/001252d0.md) |
+| `0012cb3c` | disp_eventwaitwindow() | [Evidence](semantic-evidence/0012cb3c.md) |
