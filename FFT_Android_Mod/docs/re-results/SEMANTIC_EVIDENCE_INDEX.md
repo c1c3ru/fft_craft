@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **424/1258** pending functions.
+Evidence collected: **432/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -435,3 +435,11 @@ These reports do not constitute semantic verification.
 | `000d8830` | makemessagepacket(char*) | [Evidence](semantic-evidence/000d8830.md) |
 | `000e2b78` | statuskanjiprint(int, char*, COPYFIELD*) | [Evidence](semantic-evidence/000e2b78.md) |
 | `00100500` | Wmakemessagepacket(char*) | [Evidence](semantic-evidence/00100500.md) |
+| `0015a60c` | siOS_TCurPosGet(unsigned int, int) | [Evidence](semantic-evidence/0015a60c.md) |
+| `001fce04` | setActivePanelFromAnimation(tag_animation*) | [Evidence](semantic-evidence/001fce04.md) |
+| `00221f14` | RequestReboundEffect() | [Evidence](semantic-evidence/00221f14.md) |
+| `00228e98` | GetShapePrim(int) | [Evidence](semantic-evidence/00228e98.md) |
+| `00243464` | fRoll_bkput(short*) | [Evidence](semantic-evidence/00243464.md) |
+| `00249ec4` | vEnd_dataload() | [Evidence](semantic-evidence/00249ec4.md) |
+| `0025396c` | ctlmap_deactive(CTLINFO*) | [Evidence](semantic-evidence/0025396c.md) |
+| `00269820` | snpl_picclr() | [Evidence](semantic-evidence/00269820.md) |
