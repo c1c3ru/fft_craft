@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **224/1258** pending functions.
+Evidence collected: **232/1258** pending functions.
 These reports do not constitute semantic verification.
 
 | Address | Function | Evidence |
@@ -233,3 +233,11 @@ These reports do not constitute semantic verification.
 | `000da4ac` | event_init_light() | [Evidence](semantic-evidence/000da4ac.md) |
 | `001bd320` | UnitTableInitFirst(short) | [Evidence](semantic-evidence/001bd320.md) |
 | `001cc950` | status_handle_main(BWORK*) | [Evidence](semantic-evidence/001cc950.md) |
+| `001cce2c` | get_trap_result(BWORK*) | [Evidence](semantic-evidence/001cce2c.md) |
+| `0024998c` | vOpn_iwaprog() | [Evidence](semantic-evidence/0024998c.md) |
+| `002699bc` | snpl_putpara() | [Evidence](semantic-evidence/002699bc.md) |
+| `002aca7c` | GuEmu_FrameMove() | [Evidence](semantic-evidence/002aca7c.md) |
+| `002b1f3c` | Offscreen_ReadPixels(int, int, int, int) | [Evidence](semantic-evidence/002b1f3c.md) |
+| `002116f0` | padReadGenerate() | [Evidence](semantic-evidence/002116f0.md) |
+| `00217e14` | InitEffectAnimation() | [Evidence](semantic-evidence/00217e14.md) |
+| `00248b70` | ctlpremov_init(int, int, int, int, int, char*) | [Evidence](semantic-evidence/00248b70.md) |
