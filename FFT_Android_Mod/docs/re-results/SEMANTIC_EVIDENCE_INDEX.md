@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **472/1258** pending functions.
+Evidence collected: **480/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -483,3 +483,11 @@ These reports do not constitute semantic verification.
 | `00259578` | evt_faith_low() | [Evidence](semantic-evidence/00259578.md) |
 | `0025e840` | month_to_day(int, int) | [Evidence](semantic-evidence/0025e840.md) |
 | `0026a234` | snpl_fadeout() | [Evidence](semantic-evidence/0026a234.md) |
+| `0027d420` | setCancelDisableArea(int, int, int, int, int) | [Evidence](semantic-evidence/0027d420.md) |
+| `0028674c` | get_movie_filename(int) | [Evidence](semantic-evidence/0028674c.md) |
+| `0028baf4` | TE_task_get_no() | [Evidence](semantic-evidence/0028baf4.md) |
+| `0028dd2c` | CloseEvent | [Evidence](semantic-evidence/0028dd2c.md) |
+| `002a2678` | set_trans_matrix(long, long, long) | [Evidence](semantic-evidence/002a2678.md) |
+| `002a3068` | xpMalloc | [Evidence](semantic-evidence/002a3068.md) |
+| `002b3258` | musicPlayer_Pause() | [Evidence](semantic-evidence/002b3258.md) |
+| `002b32a0` | musicPlayer_Replay() | [Evidence](semantic-evidence/002b32a0.md) |
