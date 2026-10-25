@@ -8,6 +8,10 @@ These are locally observed CMP/TST -> conditional branch edges; they are not dom
 
 Observed direct compare/branch pairs: **2**; local bitmask sequences: **0**.
 
+Modeled ARM CFG nodes: **128**; unmodeled outgoing edges/transfers: **0**.
+
+A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
+
 | Compare / branch | Taken edge | Fallthrough edge |
 |---|---|---|
 | `0x281830` cmp r3, r4; `0x281834` bne #0x281810 | r3 != r4 → `0x281810` | r3 == r4 → `0x281838` |
@@ -22,6 +26,10 @@ No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
 
 Observed direct compare/branch pairs: **3**; local bitmask sequences: **2**.
 
+Modeled ARM CFG nodes: **121**; unmodeled outgoing edges/transfers: **0**.
+
+A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
+
 | Compare / branch | Taken edge | Fallthrough edge |
 |---|---|---|
 | `0x2442c8` cmp r2, #0x2b; `0x2442cc` bgt #0x2443c8 | r2 > (signed) 0x2b → `0x2443c8` | r2 <= (signed) 0x2b → `0x2442d0` |
@@ -32,12 +40,20 @@ Observed direct compare/branch pairs: **3**; local bitmask sequences: **2**.
 
 - Candidate clears `0x40` at `[r4]`; sequence: `0x244254`, `0x244258`, `0x24425c`.
   - No direct CMP/TST-branch incoming edge demonstrated; entry condition remains unknown.
+  - Modeled direct predecessors: `0x244250` (fallthrough).
+  - Branch `0x244310` after compare `0x24430c`: [r3 == 0x100] → no route found in modeled graph; [r3 != 0x100] → 0x244314 → 0x244318 → 0x24431c → 0x244320 → 0x244324 → 0x244328 → 0x24432c → .... Only one modeled successor reaches the write; NOT a dominance or impossibility proof.
 - Candidate clears `0x40` at `[r4]`; sequence: `0x2443b8`, `0x2443bc`, `0x2443c0`.
   - No direct CMP/TST-branch incoming edge demonstrated; entry condition remains unknown.
+  - Modeled direct predecessors: `0x2443b4` (fallthrough).
+  - Branch `0x244310` after compare `0x24430c`: [r3 == 0x100] → 0x24438c → 0x244390 → 0x244394 → 0x244398 → 0x24439c → 0x2443a0 → 0x2443a4 → ...; [r3 != 0x100] → no route found in modeled graph. Only one modeled successor reaches the write; NOT a dominance or impossibility proof.
 
 ## `000df864` — event_status_set(unsigned short, unsigned short)
 
 Observed direct compare/branch pairs: **11**; local bitmask sequences: **0**.
+
+Modeled ARM CFG nodes: **122**; unmodeled outgoing edges/transfers: **0**.
+
+A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
 
 | Compare / branch | Taken edge | Fallthrough edge |
 |---|---|---|
@@ -62,6 +78,10 @@ No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
 
 Observed direct compare/branch pairs: **6**; local bitmask sequences: **1**.
 
+Modeled ARM CFG nodes: **119**; unmodeled outgoing edges/transfers: **2**.
+
+A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
+
 | Compare / branch | Taken edge | Fallthrough edge |
 |---|---|---|
 | `0x25a25c` cmp r2, #0; `0x25a260` ble #0x25a27c | r2 <= (signed) 0x0 → `0x25a27c` | r2 > (signed) 0x0 → `0x25a264` |
@@ -75,10 +95,16 @@ Observed direct compare/branch pairs: **6**; local bitmask sequences: **1**.
 
 - Candidate sets `0x40` at `[r3]`; sequence: `0x25a270`, `0x25a274`, `0x25a278`.
   - No direct CMP/TST-branch incoming edge demonstrated; entry condition remains unknown.
+  - Modeled direct predecessors: `0x25a26c` (fallthrough).
+  - Branch `0x25a260` after compare `0x25a25c`: [r2 <= (signed) 0x0] → no route found in modeled graph; [r2 > (signed) 0x0] → 0x25a264 → 0x25a268 → 0x25a26c → 0x25a270. Only one modeled successor reaches the write; NOT a dominance or impossibility proof.
 
 ## `002b2448` — EnvSE_Play(int)
 
 Observed direct compare/branch pairs: **1**; local bitmask sequences: **0**.
+
+Modeled ARM CFG nodes: **98**; unmodeled outgoing edges/transfers: **1**.
+
+A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
 
 | Compare / branch | Taken edge | Fallthrough edge |
 |---|---|---|
@@ -92,6 +118,10 @@ No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
 ## `0028bb88` — TE_asmTaskEntry(int)
 
 Observed direct compare/branch pairs: **10**; local bitmask sequences: **0**.
+
+Modeled ARM CFG nodes: **115**; unmodeled outgoing edges/transfers: **0**.
+
+A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
 
 | Compare / branch | Taken edge | Fallthrough edge |
 |---|---|---|
@@ -115,6 +145,10 @@ No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
 
 Observed direct compare/branch pairs: **7**; local bitmask sequences: **1**.
 
+Modeled ARM CFG nodes: **115**; unmodeled outgoing edges/transfers: **4**.
+
+A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
+
 | Compare / branch | Taken edge | Fallthrough edge |
 |---|---|---|
 | `0x24eaf8` tst r3, #4; `0x24eafc` bne #0x24eb34 | (r3 & 0x4) != 0 → `0x24eb34` | (r3 & 0x4) == 0 → `0x24eb00` |
@@ -129,10 +163,21 @@ Observed direct compare/branch pairs: **7**; local bitmask sequences: **1**.
 
 - Candidate sets `0x4` at `[r5]`; sequence: `0x24ec08`, `0x24ec0c`, `0x24ec10`.
   - No direct CMP/TST-branch incoming edge demonstrated; entry condition remains unknown.
+  - Modeled direct predecessors: `0x24ec04` (call_returns).
+  - Branch `0x24eb10` after compare `0x24eb0c`: [(r3 & 0x40) != 0] → no route found in modeled graph; [(r3 & 0x40) == 0] → 0x24eb14 → 0x24eb18 → 0x24eb1c → 0x24eb20 → 0x24eb24 → 0x24eb28 → 0x24eb2c → .... Only one modeled successor reaches the write; NOT a dominance or impossibility proof.
+  - Branch `0x24eb20` after compare `0x24eb1c`: [(r3 & 0x20) == 0] → no route found in modeled graph; [(r3 & 0x20) != 0] → 0x24eb24 → 0x24eb28 → 0x24eb2c → 0x24ebe8 → 0x24ebec → 0x24ebf0 → 0x24ebf4 → .... Only one modeled successor reaches the write; NOT a dominance or impossibility proof.
+  - Branch `0x24eb2c` after compare `0x24eb28`: [r3 != 0x0] → 0x24ebe8 → 0x24ebec → 0x24ebf0 → 0x24ebf4 → 0x24ebf8 → 0x24ebfc → 0x24ec00 → ...; [r3 == 0x0] → no route found in modeled graph. Only one modeled successor reaches the write; NOT a dominance or impossibility proof.
+  - Branch `0x24eb40` after compare `0x24eb3c`: [r0 != 0x0] → 0x24eb00 → 0x24eb04 → 0x24eb08 → 0x24eb0c → 0x24eb10 → 0x24eb14 → 0x24eb18 → ...; [r0 == 0x0] → no route found in modeled graph. Only one modeled successor reaches the write; NOT a dominance or impossibility proof.
+  - Branch `0x24ebc8` after compare `0x24ebc4`: [r2 == 0x0] → 0x24eb1c → 0x24eb20 → 0x24eb24 → 0x24eb28 → 0x24eb2c → 0x24ebe8 → 0x24ebec → ...; [r2 != 0x0] → no route found in modeled graph. Only one modeled successor reaches the write; NOT a dominance or impossibility proof.
+  - Branch `0x24eafc` after compare `0x24eaf8`: [(r3 & 0x4) != 0] → 0x24eb34 → 0x24eb38 → 0x24eb3c → 0x24eb40 → 0x24eb00 → 0x24eb04 → 0x24eb08 → ...; [(r3 & 0x4) == 0] → 0x24eb00 → 0x24eb04 → 0x24eb08 → 0x24eb0c → 0x24eb10 → 0x24eb14 → 0x24eb18 → .... Both modeled successors can reach the write.
 
 ## `002576e0` — ctlevtinfo_init(int)
 
 Observed direct compare/branch pairs: **0**; local bitmask sequences: **0**.
+
+Modeled ARM CFG nodes: **115**; unmodeled outgoing edges/transfers: **0**.
+
+A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
 
 | Compare / branch | Taken edge | Fallthrough edge |
 |---|---|---|
@@ -146,6 +191,10 @@ No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
 ## `0015813c` — unittoface(int)
 
 Observed direct compare/branch pairs: **7**; local bitmask sequences: **0**.
+
+Modeled ARM CFG nodes: **86**; unmodeled outgoing edges/transfers: **1**.
+
+A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
 
 | Compare / branch | Taken edge | Fallthrough edge |
 |---|---|---|
@@ -166,6 +215,10 @@ No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
 
 Observed direct compare/branch pairs: **2**; local bitmask sequences: **0**.
 
+Modeled ARM CFG nodes: **107**; unmodeled outgoing edges/transfers: **0**.
+
+A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
+
 | Compare / branch | Taken edge | Fallthrough edge |
 |---|---|---|
 | `0x1bc93c` cmp r4, #9; `0x1bc940` ble #0x1bc924 | r4 <= (signed) 0x9 → `0x1bc924` | r4 > (signed) 0x9 → `0x1bc944` |
@@ -180,6 +233,10 @@ No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
 
 Observed direct compare/branch pairs: **1**; local bitmask sequences: **0**.
 
+Modeled ARM CFG nodes: **110**; unmodeled outgoing edges/transfers: **1**.
+
+A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
+
 | Compare / branch | Taken edge | Fallthrough edge |
 |---|---|---|
 | `0x1ccdd0` cmp r0, #0; `0x1ccdd4` beq #0x1cccbc | r0 == 0x0 → `0x1cccbc` | r0 != 0x0 → `0x1ccdd8` |
@@ -193,6 +250,10 @@ No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
 
 Observed direct compare/branch pairs: **0**; local bitmask sequences: **0**.
 
+Modeled ARM CFG nodes: **113**; unmodeled outgoing edges/transfers: **0**.
+
+A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
+
 | Compare / branch | Taken edge | Fallthrough edge |
 |---|---|---|
 | No directly adjacent CMP/TST-branch pair | — | — |
@@ -204,4 +265,4 @@ No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
 
 ## Verification still required
 
-Inspect complete CFG predecessor sets, aliasing, effects of callees and compare behavior with execution traces before any semantic approval.
+Inspect incomplete/unmodeled CFG predecessor sets, aliasing, effects of callees and compare behavior with execution traces before any semantic approval.
