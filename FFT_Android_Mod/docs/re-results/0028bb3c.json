@@ -1,0 +1,18 @@
+{
+  "address": "0028bb3c",
+  "name": "TE_task_killmyself()",
+  "size": 76,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "28baf4",
+    "71b3c"
+  ],
+  "log": "=== jtable.py: 0x28bb3c..0x28bb88 (76 bytes) ===\ncoverage: 19 of ~19 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x71b3c x1   sub_71b3c LOCAL(no-dynsym)\n  0x28baf4 x1   TE_task_get_no() \n\n-- branches: 2 total, 0 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

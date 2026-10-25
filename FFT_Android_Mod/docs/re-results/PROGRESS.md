@@ -6,22 +6,22 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 |---|---:|
 | Inventory total | 6,455 functions / 1,837,392 bytes |
 | Previously analyzed in CSV | 3,373 functions / 1,513,492 bytes |
-| JSON checkpoints (all statuses) | 1,033 |
-| Newly accepted structurally | 576 functions / 133,404 bytes |
-| Needs review | 457 functions |
+| JSON checkpoints (all statuses) | 1,133 |
+| Newly accepted structurally | 612 functions / 136,008 bytes |
+| Needs review | 521 functions |
 | Core targets in inventory | 4,642 functions |
-| Core targets checkpointed | 930 functions |
-| Core accepted structurally | 493 functions |
-| Core needs review | 437 functions |
-| Core not yet checkpointed | 1,425 functions |
-| Not yet checkpointed | 2,029 functions / 81,444 bytes |
+| Core targets checkpointed | 1,030 functions |
+| Core accepted structurally | 529 functions |
+| Core needs review | 501 functions |
+| Core not yet checkpointed | 1,325 functions |
+| Not yet checkpointed | 1,929 functions / 74,236 bytes |
 
 ## Checkpoint status
 
 | Status | Functions |
 |---|---:|
-| auto_structural | 576 |
-| needs_review | 457 |
+| auto_structural | 612 |
+| needs_review | 521 |
 
 ## Review queue (largest first)
 
@@ -482,8 +482,72 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | `00100500` | Wmakemessagepacket(char*) (needs_review) | 80 | 90.0 | 0 | 0 |
 | `000e2b78` | statuskanjiprint(int, char*, COPYFIELD*) (needs_review) | 80 | 90.0 | 0 | 0 |
 | `000d8830` | makemessagepacket(char*) (needs_review) | 80 | 90.0 | 0 | 0 |
+| `002a257c` | RotNclip3_nom (needs_review) | 76 | 94.74 | 0 | 0 |
+| `0028d6a0` | tlSetMallocUserPointer(void**) (needs_review) | 76 | 94.74 | 0 | 0 |
+| `00270414` | defscrwin_set(int, int, _POINT*, _POINT*) (needs_review) | 76 | 89.47 | 0 | 0 |
+| `00263abc` | iOSNovelBrightOn() (needs_review) | 76 | 94.74 | 0 | 0 |
+| `0025e888` | day_to_month(int, int*, int*) (needs_review) | 76 | 94.74 | 0 | 0 |
+| `00258f68` | evt_gil_low() (needs_review) | 76 | 94.74 | 0 | 0 |
+| `0024aa60` | vOpnmess_put(int, int, _POINT, unsigned long*) (needs_review) | 76 | 94.74 | 0 | 0 |
+| `002496d0` | vOpn_key_repinit() (needs_review) | 76 | 84.21 | 0 | 0 |
+| `00243a14` | deleteMessage() (needs_review) | 76 | 89.47 | 0 | 0 |
+| `0021b570` | SeekEffect() (needs_review) | 76 | 89.47 | 0 | 0 |
+| `0020da7c` | popBackColor() (needs_review) | 76 | 89.47 | 0 | 0 |
+| `00200b34` | startRightTurnSub(int) (needs_review) | 76 | 78.95 | 0 | 0 |
+| `00200ae8` | startLeftTurnSub(int) (needs_review) | 76 | 78.95 | 0 | 0 |
+| `001baa78` | sys_warning(int, int) (needs_review) | 76 | 89.47 | 0 | 0 |
+| `0015ddf8` | iOSGT4_MapXYZ(unsigned long, long, long, long) (needs_review) | 76 | 84.21 | 0 | 0 |
+| `0015a2c8` | iOSTapArea() (needs_review) | 76 | 89.47 | 0 | 0 |
+| `0015a27c` | iOSPressArea() (needs_review) | 76 | 89.47 | 0 | 0 |
+| `00155d88` | active_worldwindow() (needs_review) | 76 | 94.74 | 0 | 0 |
+| `001004b4` | Wexport_localstatus(char*, char*, char*) (needs_review) | 76 | 94.74 | 0 | 0 |
 | `000e3010` | statuskanjiprintwithptr(char*, COPYFIELD*, char*) (needs_review) | 76 | 89.47 | 0 | 0 |
 | `000d87e4` | export_localstatus(char*, char*, char*) (needs_review) | 76 | 94.74 | 0 | 0 |
+| `002b8750` | iOS_isMovedDist() (needs_review) | 72 | 94.44 | 0 | 0 |
+| `002b32a0` | musicPlayer_Replay() (needs_review) | 72 | 88.89 | 0 | 0 |
+| `002b3258` | musicPlayer_Pause() (needs_review) | 72 | 88.89 | 0 | 0 |
+| `002a3068` | xpMalloc (needs_review) | 72 | 94.44 | 0 | 0 |
+| `002a2678` | set_trans_matrix(long, long, long) (needs_review) | 72 | 88.89 | 0 | 0 |
+| `0028dd2c` | CloseEvent (needs_review) | 72 | 94.44 | 0 | 0 |
+| `0028baf4` | TE_task_get_no() (needs_review) | 72 | 94.44 | 0 | 0 |
+| `0028674c` | get_movie_filename(int) (needs_review) | 72 | 77.78 | 0 | 0 |
+| `0027d420` | setCancelDisableArea(int, int, int, int, int) (needs_review) | 72 | 88.89 | 0 | 0 |
+| `0026a234` | snpl_fadeout() (needs_review) | 72 | 88.89 | 0 | 0 |
+| `0025e840` | month_to_day(int, int) (needs_review) | 72 | 94.44 | 0 | 0 |
+| `00259578` | evt_faith_low() (needs_review) | 72 | 94.44 | 0 | 0 |
+| `002594e8` | evt_brave_low() (needs_review) | 72 | 94.44 | 0 | 0 |
+| `00249a38` | vOpn_month2day(int, int) (needs_review) | 72 | 94.44 | 0 | 0 |
+| `00242450` | vEnd_ctlinit() (needs_review) | 72 | 88.89 | 0 | 0 |
+| `0021c22c` | s6_setPersonalProc(_EffectTCB*) (needs_review) | 72 | 94.44 | 0 | 0 |
+| `00216984` | stopEffect(int) (needs_review) | 72 | 94.44 | 0 | 0 |
+| `001eed84` | getSequenceAddress(unsigned short) (needs_review) | 72 | 83.33 | 0 | 0 |
+| `001d189c` | Resume_MK_BSTR_Init() (needs_review) | 72 | 88.89 | 0 | 0 |
+| `001cb7fc` | check_reaction_deny2(BWORK*) (needs_review) | 72 | 94.44 | 0 | 0 |
+| `001a93dc` | ChgShopStockItem(short, int) (needs_review) | 72 | 94.44 | 0 | 0 |
+| `0019f750` | DrawFunds() (needs_review) | 72 | 83.33 | 0 | 0 |
+| `0015de44` | iOSGT4_MapXYZClear(unsigned long) (needs_review) | 72 | 83.33 | 0 | 0 |
+| `0015369c` | Wtask_init() (needs_review) | 72 | 88.89 | 0 | 0 |
+| `001533d8` | task_init() (needs_review) | 72 | 88.89 | 0 | 0 |
+| `002a08bc` | PopMatrix (needs_review) | 68 | 88.24 | 0 | 0 |
+| `002a0878` | PushMatrix (needs_review) | 68 | 88.24 | 0 | 0 |
+| `0029fef0` | ratan2 (needs_review) | 68 | 94.12 | 0 | 0 |
+| `00216784` | pitchMusic(int, int) (needs_review) | 68 | 94.12 | 0 | 0 |
+| `00216740` | tempoMusic(int, int) (needs_review) | 68 | 94.12 | 0 | 0 |
+| `00216618` | effectFadeoutMusic(int, int) (needs_review) | 68 | 94.12 | 0 | 0 |
+| `00216414` | readMusicBlock(int) (needs_review) | 68 | 94.12 | 0 | 0 |
+| `00210960` | MenuTest() (needs_review) | 68 | 88.24 | 0 | 0 |
+| `00204210` | iOS_isCursorOnUnit() (needs_review) | 68 | 82.35 | 0 | 0 |
+| `001f37e4` | ExecuteAnimations() (needs_review) | 68 | 94.12 | 0 | 0 |
+| `001e207c` | getskilldata(int) (needs_review) | 68 | 94.12 | 0 | 0 |
+| `001cec5c` | setCasterDirection(int, unsigned char) (needs_review) | 68 | 82.35 | 0 | 0 |
+| `001cd16c` | get_weatherdata() (needs_review) | 68 | 94.12 | 0 | 0 |
+| `001cab08` | clear_addeffect() (needs_review) | 68 | 88.24 | 0 | 0 |
+| `001ab7e0` | IsUntauchableAbility(int) (needs_review) | 68 | 94.12 | 0 | 0 |
+| `0019d7a4` | DrawPrice() (needs_review) | 68 | 82.35 | 0 | 0 |
+| `0010f9c0` | Wloadcsrc(int, int, int, int) (needs_review) | 68 | 94.12 | 0 | 0 |
+| `00100550` | Wpushmessagepacket() (needs_review) | 68 | 88.24 | 0 | 0 |
+| `000da558` | event_start() (needs_review) | 68 | 88.24 | 0 | 0 |
+| `000d8880` | pushmessagepacket() (needs_review) | 68 | 88.24 | 0 | 0 |
 
 > Structural acceptance does not establish semantic equivalence.
 > Counts distinguish historical CSV statuses, new accepted checkpoints, and review cases.

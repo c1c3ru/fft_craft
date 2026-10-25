@@ -14,7 +14,7 @@
     "19f750"
   ],
   "log": "=== jtable.py: 0x19e134..0x19e188 (84 bytes) ===\ncoverage: 19 of ~21 instruction slots (90%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x153734 x1   Wsend_taskparamater(long, long, long, long) \n  0x19d7a4 x1   DrawPrice() \n  0x19f750 x1   DrawFunds() \n\n-- branches: 1 total, 1 backward (loop candidates) --\n",
-  "review_attempts": 1,
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

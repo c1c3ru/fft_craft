@@ -14,7 +14,7 @@
     "acab0"
   ],
   "log": "=== jtable.py: 0x2b2290..0x2b22e8 (88 bytes) ===\ncoverage: 20 of ~22 instruction slots (91%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0xa6f00 x1   CGX_SCREEN_CORRECT::GetCorrect(float*, float*, float*) \n  0xacaa4 x1   CEGL2_SPRITE::SetVertexOffset(float, float) \n  0xacab0 x1   CEGL2_SPRITE::SetVertexScale(float) \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
-  "review_attempts": 1,
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

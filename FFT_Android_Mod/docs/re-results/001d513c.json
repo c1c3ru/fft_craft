@@ -1,0 +1,17 @@
+{
+  "address": "001d513c",
+  "name": "set_sanjutsuability1(int, unsigned char, short*)",
+  "size": 76,
+  "previous_status": "unread",
+  "status": "auto_structural",
+  "coverage_pct": 100.0,
+  "distinct_bl": 1,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "1d3d24"
+  ],
+  "log": "=== jtable.py: 0x1d513c..0x1d5188 (76 bytes) ===\ncoverage: 19 of ~19 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x1d3d24 x1   gc_bwp(int) \n\n-- branches: 3 total, 1 backward (loop candidates) --\n",
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
