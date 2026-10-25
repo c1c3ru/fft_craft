@@ -7,12 +7,12 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | Inventory total | 6,455 functions / 1,837,392 bytes |
 | Previously analyzed in CSV | 3,451 functions / 1,551,512 bytes |
 | JSON checkpoints (all statuses) | 3,002 |
-| Newly accepted structurally | 1,829 functions / 203,736 bytes |
-| Needs review | 1,173 functions |
+| Newly accepted structurally | 1,923 functions / 222,804 bytes |
+| Needs review | 1,079 functions |
 | Core targets in inventory | 4,642 functions |
 | Core targets checkpointed | 2,345 functions |
-| Core accepted structurally | 1,314 functions |
-| Core needs review | 1,031 functions |
+| Core accepted structurally | 1,408 functions |
+| Core needs review | 937 functions |
 | Core not yet checkpointed | 0 functions |
 | Not yet checkpointed | 0 functions / 0 bytes |
 
@@ -20,8 +20,8 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 
 | Status | Functions |
 |---|---:|
-| auto_structural | 1,829 |
-| needs_review | 1,173 |
+| auto_structural | 1,923 |
+| needs_review | 1,079 |
 
 ## Review queue (largest first)
 
@@ -104,122 +104,28 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | `001dc944` | set_casting_status(BWORK*, unsigned char) (needs_review) | 272 | 85.29 | 1 | 0 |
 | `002ca215` | __cxa_call_unexpected (needs_review) | 268 | 0.0 | 0 | 0 |
 | `0026a2cc` | snpl_scrdisp() (needs_review) | 260 | 93.85 | 0 | 0 |
-| `002b1ff8` | Debug_DrawFPS() (needs_review) | 252 | 90.48 | 0 | 0 |
-| `00225790` | InitObjectManager() (needs_review) | 252 | 87.3 | 0 | 0 |
-| `001bc334` | GetSttsApos(short) (needs_review) | 252 | 88.89 | 0 | 0 |
-| `000e0fb8` | initdrmode(DR_MODE*, int) (needs_review) | 252 | 92.06 | 0 | 0 |
-| `00253a68` | ctlcenter_main(CTLINFO*) (needs_review) | 248 | 87.1 | 0 | 0 |
 | `001caa10` | set_ct_weapon(ACT*) (needs_review) | 248 | 67.74 | 1 | 0 |
-| `00188348` | allitem_count() (needs_review) | 248 | 91.94 | 0 | 0 |
-| `0010fa1c` | Winitdrmode(DR_MODE*, int) (needs_review) | 248 | 91.94 | 0 | 0 |
-| `001b799c` | SystemWarningTime(int, int) (needs_review) | 244 | 90.16 | 0 | 0 |
-| `0025c838` | ctlshogou_init() (needs_review) | 240 | 90.0 | 0 | 0 |
-| `0025c3ac` | mkdaypt_calc() (needs_review) | 240 | 93.33 | 0 | 0 |
-| `00211b98` | ExecuteChangePalette() (needs_review) | 240 | 90.0 | 0 | 0 |
-| `00100844` | Wcheckkeyok() (needs_review) | 240 | 90.0 | 0 | 0 |
 | `0025b78c` | houkoku_talkunit(int) (needs_review) | 236 | 86.44 | 1 | 0 |
 | `002590e8` | wld_event(int, int) (needs_review) | 236 | 94.92 | 0 | 0 |
-| `001f35dc` | EndAnimation(tag_animation*) (needs_review) | 236 | 94.92 | 0 | 0 |
-| `0015ce74` | iOSMapIconModeSet(int) (needs_review) | 236 | 89.83 | 0 | 0 |
-| `00101650` | Whook_jobmenu() (needs_review) | 236 | 89.83 | 0 | 0 |
-| `000ef4f4` | hook_jobmenu() (needs_review) | 236 | 89.83 | 0 | 0 |
 | `00285e50` | pspMsgGet(unsigned int) (needs_review) | 232 | 63.79 | 1 | 0 |
-| `0028d6ec` | tlCheckHeap() (needs_review) | 228 | 92.98 | 0 | 0 |
-| `001eb67c` | myInitShape() (needs_review) | 228 | 78.95 | 0 | 0 |
 | `00265fd8` | wldpac_init() (needs_review) | 224 | 87.5 | 0 | 0 |
-| `00264378` | ctlnblwldinfo_init() (needs_review) | 224 | 78.57 | 0 | 0 |
-| `002541c4` | ctlcenter_init(int) (needs_review) | 224 | 85.71 | 0 | 0 |
-| `001cea0c` | set_walker_result(BWORK*, REWARD*) (needs_review) | 224 | 94.64 | 0 | 0 |
-| `0015a33c` | iOSsTchBtlEnd() (needs_review) | 224 | 76.79 | 0 | 0 |
-| `0015588c` | title_menuinit() (needs_review) | 224 | 91.07 | 0 | 0 |
-| `0014bd8c` | Cdisp_eventwaitwindow() (needs_review) | 224 | 92.86 | 0 | 0 |
-| `00138234` | disp_eventwindow() (needs_review) | 224 | 92.86 | 0 | 0 |
-| `00134fa0` | Wdisp_eventwaitwindow() (needs_review) | 224 | 92.86 | 0 | 0 |
-| `0012cb3c` | disp_eventwaitwindow() (needs_review) | 224 | 92.86 | 0 | 0 |
-| `001252d0` | Wdisp_eventwindow() (needs_review) | 224 | 92.86 | 0 | 0 |
-| `00123994` | Edisp_eventwaitwindow() (needs_review) | 224 | 92.86 | 0 | 0 |
-| `000d115c` | Ddisp_eventwaitwindow() (needs_review) | 224 | 92.86 | 0 | 0 |
-| `002b54b4` | Link_Uninit() (needs_review) | 220 | 92.73 | 0 | 0 |
-| `002b2ea0` | Jingle_FrameMove() (needs_review) | 220 | 92.73 | 0 | 0 |
-| `002ab620` | GuEmu_ClearTexCache() (needs_review) | 220 | 94.55 | 0 | 0 |
 | `0021d544` | getNextSENo(int) (needs_review) | 220 | 80.0 | 1 | 0 |
-| `00187514` | TimeConvert(int) (needs_review) | 220 | 89.09 | 0 | 0 |
 | `002867a8` | getMovieEventNum(int) (needs_review) | 216 | 68.52 | 1 | 0 |
-| `000fef24` | Wdisposewindow(MESSAGEPACKET*) (needs_review) | 216 | 94.44 | 0 | 0 |
 | `0026ba18` | wldtown_draw() (needs_review) | 212 | 94.34 | 0 | 0 |
-| `0025f280` | snpl_load(int) (needs_review) | 212 | 86.79 | 0 | 0 |
 | `0025efe4` | wlddata_load() (needs_review) | 212 | 92.45 | 0 | 0 |
-| `002531e4` | ctltuto_zodiac() (needs_review) | 212 | 90.57 | 0 | 0 |
-| `0024b6bc` | ctlbar_active(CTLINFO*) (needs_review) | 212 | 94.34 | 0 | 0 |
-| `00249f94` | vOpn_pacinit() (needs_review) | 212 | 86.79 | 0 | 0 |
 | `00216530` | activateMusic(int, int, int) (needs_review) | 212 | 94.34 | 0 | 0 |
 | `001e2124` | afterskillhandle(BWORK*) (needs_review) | 212 | 86.79 | 0 | 0 |
-| `001c02d4` | JobToAbiChg() (needs_review) | 212 | 92.45 | 0 | 0 |
-| `002b2644` | EnvSE_Stop(int) (needs_review) | 208 | 94.23 | 0 | 0 |
-| `00290cf0` | ResetGraph (needs_review) | 208 | 90.38 | 0 | 0 |
-| `00255584` | ctlhelp2_main(CTLINFO*) (needs_review) | 208 | 86.54 | 0 | 0 |
-| `001bab78` | GetIwaPadData() (needs_review) | 208 | 88.46 | 0 | 0 |
-| `001a9158` | IsItem(int) (needs_review) | 208 | 94.23 | 0 | 0 |
 | `0015a65c` | siOS_TCurSucCheck(unsigned int) (needs_review) | 208 | 78.85 | 1 | 0 |
-| `00255e14` | ctlfsetnum_init(int, int) (needs_review) | 204 | 86.27 | 0 | 0 |
-| `00228c74` | InitShape() (needs_review) | 204 | 82.35 | 0 | 0 |
-| `002b1e70` | NowLoading_FrameMove() (needs_review) | 200 | 90.0 | 0 | 0 |
-| `00257a2c` | ctlparty_init() (needs_review) | 200 | 86.0 | 0 | 0 |
-| `0015a7d8` | iOSScrollButtonMove() (needs_review) | 200 | 90.0 | 0 | 0 |
-| `00100df8` | Wget_cursoroffset(int) (needs_review) | 200 | 92.0 | 0 | 0 |
-| `000d8fe0` | get_cursoroffset(int) (needs_review) | 200 | 92.0 | 0 | 0 |
-| `0025e508` | person_year_up() (needs_review) | 196 | 93.88 | 0 | 0 |
-| `00242268` | vOpn_arzpic_init(int) (needs_review) | 196 | 89.8 | 0 | 0 |
-| `00211e50` | setPresentClutDataAsDefault(unsigned int, unsigned int, int) (needs_review) | 196 | 93.88 | 0 | 0 |
-| `0021025c` | InitializePartyItem() (needs_review) | 196 | 93.88 | 0 | 0 |
-| `00200f44` | startFukanChange() (needs_review) | 196 | 91.84 | 0 | 0 |
-| `001383a4` | maptest() (needs_review) | 196 | 85.71 | 0 | 0 |
-| `000da720` | tutorial_hookfunc() (needs_review) | 196 | 85.71 | 0 | 0 |
 | `002a37b0` | pspSaveBase::pspSaveBase() (needs_review) | 192 | 93.75 | 0 | 0 |
-| `00269870` | snpl_syscur() (needs_review) | 192 | 89.58 | 0 | 0 |
-| `00291098` | StoreImage2 (needs_review) | 188 | 93.62 | 0 | 0 |
-| `00261b0c` | mouke_eventday_chg() (needs_review) | 188 | 93.62 | 0 | 0 |
-| `0020f43c` | debugEffectWait() (needs_review) | 188 | 80.85 | 0 | 0 |
-| `0020c19c` | fftVSyncCallback() (needs_review) | 188 | 87.23 | 0 | 0 |
 | `001ce950` | setskillresult_caster(int) (needs_review) | 188 | 87.23 | 0 | 0 |
-| `000dfa94` | makemessagestructure() (needs_review) | 188 | 91.49 | 0 | 0 |
-| `00254f9c` | ctltownset_init(int, int) (needs_review) | 184 | 86.96 | 0 | 0 |
 | `002856fc` | pspItemGetWeaponData (needs_review) | 180 | 93.33 | 0 | 0 |
-| `00248c18` | ctlpremov_main(CTLINFO*) (needs_review) | 180 | 88.89 | 0 | 0 |
-| `0021cf30` | InitEffect() (needs_review) | 180 | 86.67 | 0 | 0 |
-| `00216308` | readMusic(int) (needs_review) | 180 | 93.33 | 0 | 0 |
-| `002101a8` | loadPlayerPartyData(int) (needs_review) | 180 | 93.33 | 0 | 0 |
-| `001cc89c` | check_hide_reset(BWORK*) (needs_review) | 180 | 93.33 | 0 | 0 |
-| `001568fc` | worldmap_restart() (needs_review) | 176 | 81.82 | 0 | 0 |
-| `002b1f3c` | Offscreen_ReadPixels(int, int, int, int) (needs_review) | 172 | 93.02 | 0 | 0 |
-| `002aca7c` | GuEmu_FrameMove() (needs_review) | 172 | 93.02 | 0 | 0 |
 | `00290dc0` | DrawSync (needs_review) | 172 | 86.05 | 0 | 0 |
-| `002699bc` | snpl_putpara() (needs_review) | 172 | 83.72 | 0 | 0 |
 | `00258e70` | evt_town_cent() (needs_review) | 172 | 86.05 | 0 | 0 |
-| `0024998c` | vOpn_iwaprog() (needs_review) | 172 | 83.72 | 0 | 0 |
-| `001cce2c` | get_trap_result(BWORK*) (needs_review) | 172 | 88.37 | 0 | 0 |
-| `001cc950` | status_handle_main(BWORK*) (needs_review) | 172 | 93.02 | 0 | 0 |
-| `001bd320` | UnitTableInitFirst(short) (needs_review) | 172 | 83.72 | 0 | 0 |
-| `000da4ac` | event_init_light() (needs_review) | 172 | 88.37 | 0 | 0 |
-| `002b3610` | Boot_FrameRender() (needs_review) | 168 | 88.1 | 0 | 0 |
-| `00248b70` | ctlpremov_init(int, int, int, int, int, char*) (needs_review) | 168 | 88.1 | 0 | 0 |
-| `00217e14` | InitEffectAnimation() (needs_review) | 168 | 92.86 | 0 | 0 |
-| `002116f0` | padReadGenerate() (needs_review) | 168 | 88.1 | 0 | 0 |
 | `002b2a94` | SE_SetVol(int, int) (needs_review) | 164 | 92.68 | 0 | 0 |
-| `0029a3ec` | DrawPrim (needs_review) | 164 | 90.24 | 0 | 0 |
-| `00289ac0` | pspFftLoad(int, FFT_SAVE_DATA*, int*, int) (needs_review) | 164 | 92.68 | 0 | 0 |
-| `001f4a88` | initEntryPlayerAnimations() (needs_review) | 164 | 87.8 | 0 | 0 |
-| `001bb460` | SetSttsAbi(int) (needs_review) | 164 | 92.68 | 0 | 0 |
-| `00261bc8` | endevent_count(int) (needs_review) | 160 | 92.5 | 0 | 0 |
-| `00217ebc` | NewEffectAnimation(short) (needs_review) | 160 | 92.5 | 0 | 0 |
-| `00211c88` | DisplayChangePalette() (needs_review) | 160 | 87.5 | 0 | 0 |
-| `0020f728` | checkScrolling() (needs_review) | 160 | 87.5 | 0 | 0 |
 | `00273d20` | IsNullUnit(int) (needs_review) | 156 | 94.87 | 0 | 0 |
 | `00221028` | RequestBowEffect(long, EffectOrder*) (needs_review) | 156 | 94.87 | 0 | 0 |
 | `00216458` | disposeMusic(int) (needs_review) | 156 | 94.87 | 0 | 0 |
 | `001cd9b0` | inc_party_item(BWORK*, unsigned short, BWORK*) (needs_review) | 156 | 94.87 | 0 | 0 |
-| `001bb224` | SetSttsEqu2(int) (needs_review) | 156 | 87.18 | 0 | 0 |
-| `000da280` | recieve_statusinfo() (needs_review) | 156 | 92.31 | 0 | 0 |
 | `002cb0c0` | __gedf2 (needs_review) | 152 | 92.11 | 0 | 0 |
 | `00263254` | ctlmouketeam_deactive(CTLINFO*) (needs_review) | 152 | 94.74 | 0 | 0 |
 | `0025f1e8` | wldmes_load(int) (needs_review) | 152 | 84.21 | 0 | 0 |

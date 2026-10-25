@@ -3,7 +3,7 @@
   "name": "Offscreen_ReadPixels(int, int, int, int)",
   "size": 172,
   "previous_status": "unread",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 93.02,
   "distinct_bl": 2,
   "tables_resolved": 0,
@@ -13,7 +13,31 @@
     "ab440"
   ],
   "log": "=== jtable.py: 0x2b1f3c..0x2b1fe8 (172 bytes) ===\ncoverage: 40 of ~43 instruction slots (93%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0xab440 x1   CEGL2_FBO::ReadPixels(unsigned int*, int, int, int, int) \n  0x2cdf8c x1   sub_2cdf8c LOCAL(no-dynsym)\n\n-- branches: 3 total, 2 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x2b1f3c",
+    "total_slots": 43,
+    "code_slots": 40,
+    "instruction_slots": 40,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x2b1fdc",
+      "0x2b1fe0",
+      "0x2b1fe4"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/002b1f3c.json"
 }

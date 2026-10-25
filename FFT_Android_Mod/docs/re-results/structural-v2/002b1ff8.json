@@ -1,0 +1,23 @@
+{
+  "address": "002b1ff8",
+  "name": "Debug_DrawFPS()",
+  "size": 252,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 90.48,
+  "distinct_bl": 6,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2cb6d0",
+    "2cb92c",
+    "2cdfac",
+    "2cdfbc",
+    "b9fe0",
+    "bdae0"
+  ],
+  "log": "=== jtable.py: 0x2b1ff8..0x2b20f4 (252 bytes) ===\ncoverage: 57 of ~63 instruction slots (90%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0xb9fe0 x2   timeGetTime() \n  0xbdae0 x1   CFRAMERATE::GetRate() \n  0x2cb6d0 x1   __divsf3 \n  0x2cb92c x1   __fixsfsi \n  0x2cdfac x1   sub_2cdfac LOCAL(no-dynsym)\n  0x2cdfbc x1   sub_2cdfbc LOCAL(no-dynsym)\n\n-- branches: 7 total, 5 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

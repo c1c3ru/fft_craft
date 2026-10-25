@@ -1,0 +1,21 @@
+{
+  "address": "002b54b4",
+  "name": "Link_Uninit()",
+  "size": 220,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 92.73,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "2cdf9c",
+    "ad938",
+    "b5ac8",
+    "b6f6c"
+  ],
+  "log": "=== jtable.py: 0x2b54b4..0x2b5590 (220 bytes) ===\ncoverage: 51 of ~55 instruction slots (93%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0xad938 x6   CEGL2_SPRITE::Unload(int) \n  0xb5ac8 x1   CUI_SCROLLBAR::Delete() \n  0xb6f6c x1   CFILE_TXT::~CFILE_TXT() \n  0x2cdf9c x1   sub_2cdf9c LOCAL(no-dynsym)\n\n-- branches: 3 total, 2 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

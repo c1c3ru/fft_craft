@@ -10,7 +10,49 @@
   "tables_unresolved": 0,
   "bl_targets": [],
   "log": "=== jtable.py: 0x21d544..0x21d620 (220 bytes) ===\ncoverage: 44 of ~55 instruction slots (80%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0x21d574, dispatch @0x21d578: 5 cases, 5 distinct handlers\n    targets: ['0x21d594', '0x21d5c4', '0x21d5dc', '0x21d5f0', '0x21d5a0']\n\n-- bl targets: 0 distinct --\n\n-- branches: 4 total, 4 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "needs_review",
+    "reason": "unverified_jump_table",
+    "function_start": "0x21d544",
+    "total_slots": 55,
+    "code_slots": 44,
+    "instruction_slots": 44,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x21d614",
+      "0x21d618",
+      "0x21d61c"
+    ],
+    "unexplained_slots": [
+      "0x21d57c",
+      "0x21d580",
+      "0x21d584",
+      "0x21d588",
+      "0x21d58c",
+      "0x21d590",
+      "0x21d60c",
+      "0x21d610"
+    ],
+    "unexplained_count": 8,
+    "unresolved_dispatches": [],
+    "tables_safe": false,
+    "tables": [
+      {
+        "guard": "0x21d574",
+        "dispatch": "0x21d578",
+        "cases": 5,
+        "safe": false,
+        "reason": "missing or unbounded CMP/ADD dispatch"
+      }
+    ],
+    "code_coverage_pct": 84.62,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
+  "review_attempts": 1,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/0021d544.json"
 }

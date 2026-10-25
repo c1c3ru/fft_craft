@@ -3,7 +3,7 @@
   "name": "vOpn_iwaprog()",
   "size": 172,
   "previous_status": "unread",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 83.72,
   "distinct_bl": 2,
   "tables_resolved": 0,
@@ -13,7 +13,35 @@
     "156bec"
   ],
   "log": "=== jtable.py: 0x24998c..0x249a38 (172 bytes) ===\ncoverage: 36 of ~43 instruction slots (84%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x156550 x1   send_worldkeymask(unsigned long) \n  0x156bec x1   worldmap_call(unsigned long*, unsigned long) \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x24998c",
+    "total_slots": 43,
+    "code_slots": 36,
+    "instruction_slots": 36,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x249a1c",
+      "0x249a20",
+      "0x249a24",
+      "0x249a28",
+      "0x249a2c",
+      "0x249a30",
+      "0x249a34"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/0024998c.json"
 }

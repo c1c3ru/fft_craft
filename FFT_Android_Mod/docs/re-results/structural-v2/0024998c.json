@@ -1,0 +1,19 @@
+{
+  "address": "0024998c",
+  "name": "vOpn_iwaprog()",
+  "size": 172,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 83.72,
+  "distinct_bl": 2,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "156550",
+    "156bec"
+  ],
+  "log": "=== jtable.py: 0x24998c..0x249a38 (172 bytes) ===\ncoverage: 36 of ~43 instruction slots (84%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x156550 x1   send_worldkeymask(unsigned long) \n  0x156bec x1   worldmap_call(unsigned long*, unsigned long) \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

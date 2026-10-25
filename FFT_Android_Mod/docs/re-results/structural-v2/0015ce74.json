@@ -1,0 +1,20 @@
+{
+  "address": "0015ce74",
+  "name": "iOSMapIconModeSet(int)",
+  "size": 236,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 89.83,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "15c03c",
+    "2b7ccc",
+    "2b9cac"
+  ],
+  "log": "=== jtable.py: 0x15ce74..0x15cf60 (236 bytes) ===\ncoverage: 53 of ~59 instruction slots (90%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x15c03c x2   iOSRotSlidCls() \n  0x2b7ccc x1   iOS_getV2Icon(V2ICON_DATA) \n  0x2b9cac x1   iOS_setV2Icon(V2ICON_DATA, int) \n\n-- branches: 6 total, 3 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

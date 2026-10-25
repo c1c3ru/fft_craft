@@ -3,7 +3,7 @@
   "name": "readMusic(int)",
   "size": 180,
   "previous_status": "unread",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 93.33,
   "distinct_bl": 4,
   "tables_resolved": 0,
@@ -15,7 +15,31 @@
     "28c2e8"
   ],
   "log": "=== jtable.py: 0x216308..0x2163bc (180 bytes) ===\ncoverage: 42 of ~45 instruction slots (93%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x20c5d8 x1   errorHandler(int) \n  0x20c628 x1   mallocForSound(unsigned int) \n  0x20cbb8 x1   fileReadRequest(unsigned long, unsigned long, void*) \n  0x28c2e8 x1   CFFT_STATE::SetMusicBuffer(int, int) \n\n-- branches: 6 total, 2 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x216308",
+    "total_slots": 45,
+    "code_slots": 42,
+    "instruction_slots": 42,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x2163b0",
+      "0x2163b4",
+      "0x2163b8"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/00216308.json"
 }

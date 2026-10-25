@@ -3,7 +3,7 @@
   "name": "Wdisp_eventwaitwindow()",
   "size": 224,
   "previous_status": "unread",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 92.86,
   "distinct_bl": 6,
   "tables_resolved": 0,
@@ -17,7 +17,32 @@
     "2bf0a8"
   ],
   "log": "=== jtable.py: 0x134fa0..0x135080 (224 bytes) ===\ncoverage: 52 of ~56 instruction slots (93%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x10558c x1   Wmultiwindow_keyright(COMRECORD*, int) \n  0x10de7c x1   Wimport_localpad(int) \n  0x153584 x1   Wtask_create(long, char*) \n  0x1536e4 x2   Wwait_taskend(long) \n  0x153768 x1   Wsend_taskparamater4(long, long, long, long, long) \n  0x2bf0a8 x2   iOS_setFaceDataID(int, int) \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x134fa0",
+    "total_slots": 56,
+    "code_slots": 52,
+    "instruction_slots": 52,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x135070",
+      "0x135074",
+      "0x135078",
+      "0x13507c"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/00134fa0.json"
 }
