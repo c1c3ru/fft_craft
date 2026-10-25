@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1112/1258** pending functions.
+Evidence collected: **1120/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1123,3 +1123,11 @@ These reports do not constitute semantic verification.
 | `002a2be8` | PCinit | [Evidence](semantic-evidence/002a2be8.md) |
 | `002a2fe4` | xpGetSPADAddress | [Evidence](semantic-evidence/002a2fe4.md) |
 | `002a39b8` | sceGeEdramGetAddr | [Evidence](semantic-evidence/002a39b8.md) |
+| `002b1fe8` | Offscreen_Get() | [Evidence](semantic-evidence/002b1fe8.md) |
+| `002b375c` | Error_GetErrorCode() | [Evidence](semantic-evidence/002b375c.md) |
+| `002bef64` | ResumeData_GetHeapOffset() | [Evidence](semantic-evidence/002bef64.md) |
+| `002c9121` | operator delete[](void*) | [Evidence](semantic-evidence/002c9121.md) |
+| `002cd594` | _Unwind_VRS_Pop | [Evidence](semantic-evidence/002cd594.md) |
+| `002ca8a0` | __subdf3 | [Evidence](semantic-evidence/002ca8a0.md) |
+| `002ca8a4` | __adddf3 | [Evidence](semantic-evidence/002ca8a4.md) |
+| `002cac50` | __muldf3 | [Evidence](semantic-evidence/002cac50.md) |
