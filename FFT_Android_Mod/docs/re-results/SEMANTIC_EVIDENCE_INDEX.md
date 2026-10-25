@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **272/1258** pending functions.
+Evidence collected: **280/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -283,3 +283,11 @@ These reports do not constitute semantic verification.
 | `00153584` | Wtask_create(long, char*) | [Evidence](semantic-evidence/00153584.md) |
 | `001d6718` | get_mapstp(int, int, int) | [Evidence](semantic-evidence/001d6718.md) |
 | `00207d6c` | iOS_mapVectorLimit() | [Evidence](semantic-evidence/00207d6c.md) |
+| `0020e228` | get2DPosition(SVECTOR*, SVECTOR*) | [Evidence](semantic-evidence/0020e228.md) |
+| `00221e84` | RequestLandingEffect(EffectOrder*, VECTOR*) | [Evidence](semantic-evidence/00221e84.md) |
+| `0026dc2c` | ctltuto_active(CTLINFO*) | [Evidence](semantic-evidence/0026dc2c.md) |
+| `00292678` | __xpLibgpuDrawCallBack(int) | [Evidence](semantic-evidence/00292678.md) |
+| `002abc8c` | sceGuTexFilter | [Evidence](semantic-evidence/002abc8c.md) |
+| `000ff718` | Wsttsback_normal(STTSWINDOWBACK*) | [Evidence](semantic-evidence/000ff718.md) |
+| `001bb504` | SetSttsBoth(int) | [Evidence](semantic-evidence/001bb504.md) |
+| `0021627c` | readMusicBuffer(int, int) | [Evidence](semantic-evidence/0021627c.md) |
