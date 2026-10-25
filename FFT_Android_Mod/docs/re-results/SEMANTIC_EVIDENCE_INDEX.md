@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **944/1258** pending functions.
+Evidence collected: **952/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -955,3 +955,11 @@ These reports do not constitute semantic verification.
 | `002a1aec` | read_sxsy1(long*) | [Evidence](semantic-evidence/002a1aec.md) |
 | `002a1b04` | read_sxsy2(long*) | [Evidence](semantic-evidence/002a1b04.md) |
 | `002a1b44` | read_rgb0(long*) | [Evidence](semantic-evidence/002a1b44.md) |
+| `002a1b5c` | read_rgb1(long*) | [Evidence](semantic-evidence/002a1b5c.md) |
+| `002a1b74` | read_rgb2(long*) | [Evidence](semantic-evidence/002a1b74.md) |
+| `002a1b8c` | read_flag(long*) | [Evidence](semantic-evidence/002a1b8c.md) |
+| `002a1ba4` | read_p(long*) | [Evidence](semantic-evidence/002a1ba4.md) |
+| `002a25c8` | read_otz(long*) | [Evidence](semantic-evidence/002a25c8.md) |
+| `002a25e0` | read_opz(long*) | [Evidence](semantic-evidence/002a25e0.md) |
+| `002a2728` | xpPadAnalogAssign | [Evidence](semantic-evidence/002a2728.md) |
+| `002a2a34` | xpPadUpdateData | [Evidence](semantic-evidence/002a2a34.md) |
