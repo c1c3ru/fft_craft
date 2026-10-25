@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **520/1258** pending functions.
+Evidence collected: **528/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -531,3 +531,11 @@ These reports do not constitute semantic verification.
 | `00153398` | task_killmyself() | [Evidence](semantic-evidence/00153398.md) |
 | `0015365c` | Wtask_killmyself() | [Evidence](semantic-evidence/0015365c.md) |
 | `00155cac` | world_stopnoend(int) | [Evidence](semantic-evidence/00155cac.md) |
+| `0015d9e0` | iOSTchCurLimit(int) | [Evidence](semantic-evidence/0015d9e0.md) |
+| `001adea0` | GetItemPos(int) | [Evidence](semantic-evidence/001adea0.md) |
+| `001cd12c` | reset_calcmode_think() | [Evidence](semantic-evidence/001cd12c.md) |
+| `001e7420` | iOS_AddClearItem() | [Evidence](semantic-evidence/001e7420.md) |
+| `001eb074` | countCrystalAnimation() | [Evidence](semantic-evidence/001eb074.md) |
+| `001eb794` | iOSmyGetShapePrim() | [Evidence](semantic-evidence/001eb794.md) |
+| `0020dad8` | setBackColor(unsigned char, unsigned char, unsigned char) | [Evidence](semantic-evidence/0020dad8.md) |
+| `0020e880` | getFontIDFormBattleWork(int) | [Evidence](semantic-evidence/0020e880.md) |
