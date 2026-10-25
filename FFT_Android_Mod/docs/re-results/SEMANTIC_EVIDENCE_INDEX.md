@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **88/1258** pending functions.
+Evidence collected: **96/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -99,3 +99,11 @@ These reports do not constitute semantic verification.
 | `001612d0` | iOSsTchBtlInit() | [Evidence](semantic-evidence/001612d0.md) |
 | `002169d0` | InitSound() | [Evidence](semantic-evidence/002169d0.md) |
 | `00253d84` | ctltownset_main(CTLINFO*) | [Evidence](semantic-evidence/00253d84.md) |
+| `002b20f4` | onGotoNextMode(int) | [Evidence](semantic-evidence/002b20f4.md) |
+| `00289c1c` | pspFftDelete(int*) | [Evidence](semantic-evidence/00289c1c.md) |
+| `00162d5c` | iOS_IsInYellowMesh(int, int) | [Evidence](semantic-evidence/00162d5c.md) |
+| `001d2c10` | get_battlebonus(B_BONUS*) | [Evidence](semantic-evidence/001d2c10.md) |
+| `0020c418` | db_swap(unsigned long*, unsigned long*) | [Evidence](semantic-evidence/0020c418.md) |
+| `0025a0f0` | ctlhoukmes_init(int) | [Evidence](semantic-evidence/0025a0f0.md) |
+| `002b2d10` | Jingle_Play(int) | [Evidence](semantic-evidence/002b2d10.md) |
+| `00203070` | setCursorByTouch(int, int, int) | [Evidence](semantic-evidence/00203070.md) |
