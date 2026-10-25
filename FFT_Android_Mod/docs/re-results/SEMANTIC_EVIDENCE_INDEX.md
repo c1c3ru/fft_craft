@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **192/1258** pending functions.
+Evidence collected: **200/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -203,3 +203,11 @@ These reports do not constitute semantic verification.
 | `001a9158` | IsItem(int) | [Evidence](semantic-evidence/001a9158.md) |
 | `001bab78` | GetIwaPadData() | [Evidence](semantic-evidence/001bab78.md) |
 | `00255584` | ctlhelp2_main(CTLINFO*) | [Evidence](semantic-evidence/00255584.md) |
+| `00290cf0` | ResetGraph | [Evidence](semantic-evidence/00290cf0.md) |
+| `002b2644` | EnvSE_Stop(int) | [Evidence](semantic-evidence/002b2644.md) |
+| `00228c74` | InitShape() | [Evidence](semantic-evidence/00228c74.md) |
+| `00255e14` | ctlfsetnum_init(int, int) | [Evidence](semantic-evidence/00255e14.md) |
+| `000d8fe0` | get_cursoroffset(int) | [Evidence](semantic-evidence/000d8fe0.md) |
+| `00100df8` | Wget_cursoroffset(int) | [Evidence](semantic-evidence/00100df8.md) |
+| `0015a7d8` | iOSScrollButtonMove() | [Evidence](semantic-evidence/0015a7d8.md) |
+| `00257a2c` | ctlparty_init() | [Evidence](semantic-evidence/00257a2c.md) |
