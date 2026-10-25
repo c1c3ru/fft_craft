@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1224/1258** pending functions.
+Evidence collected: **1232/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1235,3 +1235,11 @@ These reports do not constitute semantic verification.
 | `001d6404` | set_guard_status(int) | [Evidence](semantic-evidence/001d6404.md) |
 | `00269930` | snpl_setpara() | [Evidence](semantic-evidence/00269930.md) |
 | `0027334c` | SetDestUnit(int) | [Evidence](semantic-evidence/0027334c.md) |
+| `000829c4` | oggpack_writecopy | [Evidence](semantic-evidence/000829c4.md) |
+| `000829ec` | oggpackB_writecopy | [Evidence](semantic-evidence/000829ec.md) |
+| `000bceac` | CSOUND_LOADER_PCM::CSOUND_LOADER_PCM() | [Evidence](semantic-evidence/000bceac.md) |
+| `0026a1a4` | snpl_sndreq() | [Evidence](semantic-evidence/0026a1a4.md) |
+| `0026b0b8` | snpl_musicreq() | [Evidence](semantic-evidence/0026b0b8.md) |
+| `0027fbc8` | iOS_WorldMapResumeGetData(unsigned char**, unsigned int*) | [Evidence](semantic-evidence/0027fbc8.md) |
+| `0028c668` | CFFT_STATE::UnitIDToFID_SPR(int) | [Evidence](semantic-evidence/0028c668.md) |
+| `00269774` | snpl_jp() | [Evidence](semantic-evidence/00269774.md) |
