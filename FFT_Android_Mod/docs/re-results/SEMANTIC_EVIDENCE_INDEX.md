@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **80/1258** pending functions.
+Evidence collected: **88/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -91,3 +91,11 @@ These reports do not constitute semantic verification.
 | `000d78f0` | allocatememorywait(int) | [Evidence](semantic-evidence/000d78f0.md) |
 | `0020fe94` | InitializeHot() | [Evidence](semantic-evidence/0020fe94.md) |
 | `002578d4` | ctlevtinfo_main(CTLINFO*) | [Evidence](semantic-evidence/002578d4.md) |
+| `00248cd0` | ctlcard_main(CTLINFO*) | [Evidence](semantic-evidence/00248cd0.md) |
+| `00255a38` | ctlflagset_init() | [Evidence](semantic-evidence/00255a38.md) |
+| `0026c27c` | ctltresure_init() | [Evidence](semantic-evidence/0026c27c.md) |
+| `001d21d8` | get_stop_event(BWORK*) | [Evidence](semantic-evidence/001d21d8.md) |
+| `0026b724` | worldmap_new() | [Evidence](semantic-evidence/0026b724.md) |
+| `001612d0` | iOSsTchBtlInit() | [Evidence](semantic-evidence/001612d0.md) |
+| `002169d0` | InitSound() | [Evidence](semantic-evidence/002169d0.md) |
+| `00253d84` | ctltownset_main(CTLINFO*) | [Evidence](semantic-evidence/00253d84.md) |
