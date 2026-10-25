@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **584/1258** pending functions.
+Evidence collected: **592/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -595,3 +595,11 @@ These reports do not constitute semantic verification.
 | `00269d08` | snpl_clrstat() | [Evidence](semantic-evidence/00269d08.md) |
 | `00269d40` | snpl_setlocal() | [Evidence](semantic-evidence/00269d40.md) |
 | `00269d78` | snpl_clrlocal() | [Evidence](semantic-evidence/00269d78.md) |
+| `0026a824` | snpl_snsndreq() | [Evidence](semantic-evidence/0026a824.md) |
+| `0027b4a4` | initCmdKind() | [Evidence](semantic-evidence/0027b4a4.md) |
+| `00280558` | iOS_fftLoad(int) | [Evidence](semantic-evidence/00280558.md) |
+| `0028da58` | tlDumpHeap() | [Evidence](semantic-evidence/0028da58.md) |
+| `0028daac` | tlGetHeapSize() | [Evidence](semantic-evidence/0028daac.md) |
+| `0029aa84` | OpenTIM | [Evidence](semantic-evidence/0029aa84.md) |
+| `002a2f60` | PCopen | [Evidence](semantic-evidence/002a2f60.md) |
+| `002b88c8` | iOS_StartMovie() | [Evidence](semantic-evidence/002b88c8.md) |
