@@ -7,12 +7,12 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | Inventory total | 6,455 functions / 1,837,392 bytes |
 | Previously analyzed in CSV | 3,451 functions / 1,551,512 bytes |
 | JSON checkpoints (all statuses) | 3,002 |
-| Newly accepted structurally | 2,612 functions / 266,860 bytes |
-| Needs review | 390 functions |
+| Newly accepted structurally | 2,712 functions / 268,984 bytes |
+| Needs review | 290 functions |
 | Core targets in inventory | 4,642 functions |
 | Core targets checkpointed | 2,345 functions |
-| Core accepted structurally | 2,097 functions |
-| Core needs review | 248 functions |
+| Core accepted structurally | 2,197 functions |
+| Core needs review | 148 functions |
 | Core not yet checkpointed | 0 functions |
 | Not yet checkpointed | 0 functions / 0 bytes |
 
@@ -20,8 +20,8 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 
 | Status | Functions |
 |---|---:|
-| auto_structural | 2,612 |
-| needs_review | 390 |
+| auto_structural | 2,712 |
+| needs_review | 290 |
 
 ## Review queue (largest first)
 
@@ -234,45 +234,12 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | `00258ac8` | evt_skip1() (needs_review) | 28 | 85.71 | 0 | 0 |
 | `0024b080` | wldbinEntry() (needs_review) | 28 | 85.71 | 0 | 0 |
 | `000726e0` | JNI_OnLoad (needs_review) | 28 | 85.71 | 0 | 0 |
-| `002c53e8` | Movie_Init() (needs_review) | 24 | 83.33 | 0 | 0 |
-| `002bef4c` | iOS_isExistResumeData() (needs_review) | 24 | 83.33 | 0 | 0 |
-| `002b376c` | Error_SetError(int, char*) (needs_review) | 24 | 83.33 | 0 | 0 |
-| `002b36bc` | Error_Init() (needs_review) | 24 | 83.33 | 0 | 0 |
-| `002a2fb8` | PCcreat (needs_review) | 24 | 83.33 | 0 | 0 |
-| `002a2b44` | xpPadKeyTblGet (needs_review) | 24 | 83.33 | 0 | 0 |
-| `002a2b2c` | xpPadKeyTblSet (needs_review) | 24 | 83.33 | 0 | 0 |
-| `002a2af8` | xpPadRepeatGet (needs_review) | 24 | 83.33 | 0 | 0 |
-| `002a2ae0` | xpPadPspPadDataGet (needs_review) | 24 | 83.33 | 0 | 0 |
-| `002a2ac8` | xpPadAnalogYGet (needs_review) | 24 | 83.33 | 0 | 0 |
-| `002a2ab0` | xpPadAnalogXGet (needs_review) | 24 | 83.33 | 0 | 0 |
-| `002a2a98` | xpPadGet (needs_review) | 24 | 83.33 | 0 | 0 |
-| `002a2a80` | xpPadTriggerGet (needs_review) | 24 | 83.33 | 0 | 0 |
-| `002a2a68` | xpPadWorkBufGet (needs_review) | 24 | 83.33 | 0 | 0 |
-| `002a2a34` | xpPadUpdateData (needs_review) | 24 | 83.33 | 0 | 0 |
-| `002a2728` | xpPadAnalogAssign (needs_review) | 24 | 83.33 | 0 | 0 |
-| `002a25e0` | read_opz(long*) (needs_review) | 24 | 83.33 | 0 | 0 |
-| `002a25c8` | read_otz(long*) (needs_review) | 24 | 83.33 | 0 | 0 |
-| `002a1ba4` | read_p(long*) (needs_review) | 24 | 83.33 | 0 | 0 |
-| `002a1b8c` | read_flag(long*) (needs_review) | 24 | 83.33 | 0 | 0 |
-| `002a1b74` | read_rgb2(long*) (needs_review) | 24 | 83.33 | 0 | 0 |
-| `002a1b5c` | read_rgb1(long*) (needs_review) | 24 | 83.33 | 0 | 0 |
-| `002a1b44` | read_rgb0(long*) (needs_review) | 24 | 83.33 | 0 | 0 |
-| `002a1b04` | read_sxsy2(long*) (needs_review) | 24 | 83.33 | 0 | 0 |
-| `002a1aec` | read_sxsy1(long*) (needs_review) | 24 | 83.33 | 0 | 0 |
-| `002a1ad4` | read_sxsy0(long*) (needs_review) | 24 | 83.33 | 0 | 0 |
-| `002a13f0` | SetFogNearFar (needs_review) | 24 | 83.33 | 0 | 0 |
 | `002a1324` | SetGeomOffset (needs_review) | 24 | 83.33 | 0 | 0 |
-| `0029febc` | PSX_csin (needs_review) | 24 | 83.33 | 0 | 0 |
 | `0029fe88` | rsin (needs_review) | 24 | 83.33 | 0 | 0 |
-| `0029fdbc` | GteSetDataReg(long, long) (needs_review) | 24 | 83.33 | 0 | 0 |
-| `0029fd90` | GteGetDataReg(int) (needs_review) | 24 | 83.33 | 0 | 0 |
-| `0028d688` | tlFreeAll() (needs_review) | 24 | 83.33 | 0 | 0 |
 | `0028b050` | pspWorldCheckFlg(PSP_WORLD_FLG) (needs_review) | 24 | 83.33 | 0 | 0 |
 | `00279ed4` | ClearForBattleRoutine() (needs_review) | 24 | 83.33 | 0 | 0 |
 | `002c53d4` | Main_SetPauseFlag(int) (needs_review) | 20 | 80.0 | 0 | 0 |
 | `002c53c0` | Main_GetPauseFlag() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `002b87e8` | iOS_isInGameArea() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `002b8708` | iOS_PressTime() (needs_review) | 20 | 80.0 | 0 | 0 |
 | `002b14d0` | Project_Archive_GetFile(int) (needs_review) | 20 | 80.0 | 0 | 0 |
 | `002ac000` | sceGuTexMode (needs_review) | 20 | 80.0 | 0 | 0 |
 | `002abd20` | sceGuClutMode (needs_review) | 20 | 80.0 | 0 | 0 |
@@ -282,15 +249,12 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | `002a3138` | xpSetResume (needs_review) | 20 | 80.0 | 0 | 0 |
 | `002a3120` | xpGetHeapSize (needs_review) | 20 | 80.0 | 0 | 0 |
 | `002a2fd0` | xpInitSPAD (needs_review) | 20 | 80.0 | 0 | 0 |
-| `002a2da4` | PCclose (needs_review) | 20 | 80.0 | 0 | 0 |
 | `002a13b4` | InitClip (needs_review) | 20 | 80.0 | 0 | 0 |
 | `002a1370` | ReadGeomScreen (needs_review) | 20 | 80.0 | 0 | 0 |
-| `002a133c` | SetGeomScreen (needs_review) | 20 | 80.0 | 0 | 0 |
 | `0029fda8` | GteSetCtrlReg(long, long) (needs_review) | 20 | 80.0 | 0 | 0 |
 | `0029fd7c` | GteGetCtrlReg(int) (needs_review) | 20 | 80.0 | 0 | 0 |
 | `0029b6e8` | GsGetWorkBase (needs_review) | 20 | 80.0 | 0 | 0 |
 | `0028df7c` | _card_info (needs_review) | 20 | 80.0 | 0 | 0 |
-| `0028dea8` | InitCARD (needs_review) | 20 | 80.0 | 0 | 0 |
 | `0028dcf0` | StartRCnt (needs_review) | 20 | 80.0 | 0 | 0 |
 | `0028d1b0` | tlGetHeap() (needs_review) | 20 | 80.0 | 0 | 0 |
 | `0028ba40` | TE_setTaskType(int) (needs_review) | 20 | 80.0 | 0 | 0 |
@@ -305,28 +269,11 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | `00288544` | setTurnCount_CalcMissionPayPoint(int) (needs_review) | 20 | 80.0 | 0 | 0 |
 | `00288530` | getMissionNo_CalcMissionPayPoint() (needs_review) | 20 | 80.0 | 0 | 0 |
 | `0028851c` | setMissionNo_CalcMissionPayPoint(int) (needs_review) | 20 | 80.0 | 0 | 0 |
-| `002884e8` | getBattlePoint() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `002884d4` | setBattlePoint(int) (needs_review) | 20 | 80.0 | 0 | 0 |
 | `002884b4` | Get_NonDrawTaikiIconFlg() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `002884a0` | Set_NonDrawTaikiIconFlg(int) (needs_review) | 20 | 80.0 | 0 | 0 |
-| `00287a2c` | get_g_Soldier_Draw_flg() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `00287a18` | set_g_Soldier_Draw_flg(int) (needs_review) | 20 | 80.0 | 0 | 0 |
-| `00287070` | get_rival() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `00287030` | get_timing_flag() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `00286dec` | GetNetmissionNo() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `00286b20` | get_limit_turn_flg() (needs_review) | 20 | 80.0 | 0 | 0 |
 | `00286b0c` | set_limit_turn_flg(int) (needs_review) | 20 | 80.0 | 0 | 0 |
 | `00286ab4` | set_netdatamode(int) (needs_review) | 20 | 80.0 | 0 | 0 |
-| `00286aa0` | get_netdatamode() (needs_review) | 20 | 80.0 | 0 | 0 |
 | `002868a8` | set_gEventMovieNo(int) (needs_review) | 20 | 80.0 | 0 | 0 |
-| `00286894` | get_gEventMovieNo() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `00286880` | getEventStatus() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `00286794` | setEventStatus(int) (needs_review) | 20 | 80.0 | 0 | 0 |
-| `002862e8` | IsMapTexAsideLoad(unsigned int) (needs_review) | 20 | 80.0 | 0 | 0 |
-| `00285f38` | pspMsgLzwBaseGet(FFTPSP_MSG_LZW) (needs_review) | 20 | 80.0 | 0 | 0 |
-| `002843a0` | new_VectorDataBase(unsigned int) (needs_review) | 20 | 80.0 | 0 | 0 |
 | `00282274` | iOS_v2menuGetYline() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `002819b8` | iOS_v2menuGetType() (needs_review) | 20 | 80.0 | 0 | 0 |
 | `002816a8` | iOS_v2menuGetDecide() (needs_review) | 20 | 80.0 | 0 | 0 |
 | `00281694` | iOS_v2menuSetDecide(int) (needs_review) | 20 | 80.0 | 0 | 0 |
 | `00281664` | iOS_v2menuGetAddr() (needs_review) | 20 | 80.0 | 0 | 0 |
@@ -335,63 +282,16 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | `0027b528` | getCmdKind(unsigned int) (needs_review) | 20 | 80.0 | 0 | 0 |
 | `0027b514` | getCmdKindNum() (needs_review) | 20 | 80.0 | 0 | 0 |
 | `0027b480` | setDrawPrimNum(int) (needs_review) | 20 | 80.0 | 0 | 0 |
-| `0025f424` | iOSSDNovelHelpTrgGet() (needs_review) | 20 | 80.0 | 0 | 0 |
 | `0025f410` | iOSSDNovelHelpTrgSet(long) (needs_review) | 20 | 80.0 | 0 | 0 |
 | `0025f3fc` | iOSSnapshotSet(int) (needs_review) | 20 | 80.0 | 0 | 0 |
 | `0025f3d8` | iOS_wld_pad_trg(unsigned long) (needs_review) | 20 | 80.0 | 0 | 0 |
 | `0025691c` | IOSsTownModeSet(int) (needs_review) | 20 | 80.0 | 0 | 0 |
 | `00245a60` | o_SelectCard(int) (needs_review) | 20 | 80.0 | 0 | 0 |
 | `002450b0` | TEST_getClearOt() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `0024509c` | TEST_setClearOt(int) (needs_review) | 20 | 80.0 | 0 | 0 |
 | `00228dd0` | GetShapePrimPtNow() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `0021cf1c` | GetEffectStatus() (needs_review) | 20 | 80.0 | 0 | 0 |
 | `0021b890` | SetAirDensity(long) (needs_review) | 20 | 80.0 | 0 | 0 |
 | `0021b4e0` | GetPlugInFuncAdr(short) (needs_review) | 20 | 80.0 | 0 | 0 |
-| `002168e8` | callEnvEffect(int) (needs_review) | 20 | 80.0 | 0 | 0 |
 | `00216604` | checkActiveMusic() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `0020f8b8` | getFrameTicks() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `0020f428` | eventEffectExecute() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `00204254` | setTurning(int) (needs_review) | 20 | 80.0 | 0 | 0 |
-| `002041fc` | getStartBattleFlg() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `002041e8` | setStartBattleFlg(int) (needs_review) | 20 | 80.0 | 0 | 0 |
-| `002010b8` | iOSmapVectorScrollCheck() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `001fcdf0` | iOSgetCursorVisible() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `001eee34` | getEffSequenceAddress() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `001d15b0` | get_originalability() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `001bab64` | GetSttsAMovingTime() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `001b8e50` | get_tutrial_pad() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `001b4c20` | IsDark(int) (needs_review) | 20 | 80.0 | 0 | 0 |
-| `001aec78` | iOSItemTypeGet() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `001aec64` | iOSItemTypeSet(int) (needs_review) | 20 | 80.0 | 0 | 0 |
-| `001adc68` | FadeMask(int) (needs_review) | 20 | 80.0 | 0 | 0 |
-| `001ac8b4` | dispFT4num() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `001a4858` | iOSLearnTypeSet(int) (needs_review) | 20 | 80.0 | 0 | 0 |
-| `0018f994` | eStopGetPad(int) (needs_review) | 20 | 80.0 | 0 | 0 |
-| `00161958` | iOSHelpInputWaitSet(int) (needs_review) | 20 | 80.0 | 0 | 0 |
-| `00161944` | iOSHelpInputWaitGet() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `0015fff4` | iOSGetTchRotDY() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `0015da20` | iOSGetTchCurLimit() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `0015a8a0` | iOSScrollgStatusModeGet() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `0015a328` | iOSsTchBtlFlagSet(int) (needs_review) | 20 | 80.0 | 0 | 0 |
-| `0015a314` | iOSsTchBtlFlagGet() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `0015a16c` | iOSTapTimeAreaGet() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `001579c0` | regist_zodiacot(unsigned int*) (needs_review) | 20 | 80.0 | 0 | 0 |
-| `001579ac` | worldcursormove(int) (needs_review) | 20 | 80.0 | 0 | 0 |
-| `00156550` | send_worldkeymask(unsigned long) (needs_review) | 20 | 80.0 | 0 | 0 |
-| `00155c78` | ret_adventurestatus() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `001531e4` | GetgMission_Successflg() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `001506a8` | getNetErrorCutFlg() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `00142f4c` | WiOS_getOptionAddOfsMode() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `00142840` | WiOS_getOptionAddOfsX() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `0012f2dc` | iOSPersonalWinPosSet(int) (needs_review) | 20 | 80.0 | 0 | 0 |
-| `0012f214` | iOSpersonalWinPosClear(int) (needs_review) | 20 | 80.0 | 0 | 0 |
-| `001021c8` | Wreturn_actionstructure() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `00101fd0` | iOStorideflagGet() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `00101590` | WiOS_getStatusAllgrayf() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `00101420` | Wget_padframe() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `000d9608` | get_padframe() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `000cbb1c` | getYLine() (needs_review) | 20 | 80.0 | 0 | 0 |
-| `000c81b0` | tool_setarrowmode(int) (needs_review) | 20 | 80.0 | 0 | 0 |
 | `002bef64` | ResumeData_GetHeapOffset() (needs_review) | 16 | 75.0 | 0 | 0 |
 | `002b375c` | Error_GetErrorCode() (needs_review) | 16 | 75.0 | 0 | 0 |
 | `002b1fe8` | Offscreen_Get() (needs_review) | 16 | 75.0 | 0 | 0 |
