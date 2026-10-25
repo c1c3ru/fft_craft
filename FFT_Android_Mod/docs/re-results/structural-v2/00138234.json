@@ -1,0 +1,24 @@
+{
+  "address": "00138234",
+  "name": "disp_eventwindow()",
+  "size": 224,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 92.86,
+  "distinct_bl": 7,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "153254",
+    "1532c0",
+    "153420",
+    "153470",
+    "d8ddc",
+    "e0538",
+    "ec644"
+  ],
+  "log": "=== jtable.py: 0x138234..0x138314 (224 bytes) ===\ncoverage: 52 of ~56 instruction slots (93%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 7 distinct --\n  0xd8ddc x1   multiwindow_break(unsigned long*) \n  0xe0538 x1   import_localpad(int) \n  0xec644 x1   multiwindow_keyright(COMRECORD*, int) \n  0x153254 x1   task_wait(long) \n  0x1532c0 x1   task_create(long, char*) \n  0x153420 x1   wait_taskend(long) \n  0x153470 x1   send_taskparamater(long, long, long, long) \n\n-- branches: 4 total, 1 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

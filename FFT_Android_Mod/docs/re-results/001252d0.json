@@ -3,7 +3,7 @@
   "name": "Wdisp_eventwindow()",
   "size": 224,
   "previous_status": "unread",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 92.86,
   "distinct_bl": 7,
   "tables_resolved": 0,
@@ -18,7 +18,32 @@
     "153734"
   ],
   "log": "=== jtable.py: 0x1252d0..0x1253b0 (224 bytes) ===\ncoverage: 52 of ~56 instruction slots (93%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 7 distinct --\n  0x100b2c x1   Wmultiwindow_break(unsigned long*) \n  0x10558c x1   Wmultiwindow_keyright(COMRECORD*, int) \n  0x10de7c x1   Wimport_localpad(int) \n  0x153518 x1   Wtask_wait(long) \n  0x153584 x1   Wtask_create(long, char*) \n  0x1536e4 x1   Wwait_taskend(long) \n  0x153734 x1   Wsend_taskparamater(long, long, long, long) \n\n-- branches: 4 total, 1 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x1252d0",
+    "total_slots": 56,
+    "code_slots": 52,
+    "instruction_slots": 52,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x1253a0",
+      "0x1253a4",
+      "0x1253a8",
+      "0x1253ac"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/001252d0.json"
 }

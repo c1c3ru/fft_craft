@@ -3,7 +3,7 @@
   "name": "worldmap_restart()",
   "size": 176,
   "previous_status": "unread",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 81.82,
   "distinct_bl": 5,
   "tables_resolved": 0,
@@ -16,7 +16,36 @@
     "290dc0"
   ],
   "log": "=== jtable.py: 0x1568fc..0x1569ac (176 bytes) ===\ncoverage: 36 of ~44 instruction slots (82%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 5 distinct --\n  0x100500 x1   Wmakemessagepacket(char*) \n  0x101fe4 x1   Wevent_init_memory() \n  0x1020f8 x1   Wevent_init_system() \n  0x15685c x1   load_worldname() \n  0x290dc0 x2   DrawSync \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x1568fc",
+    "total_slots": 44,
+    "code_slots": 36,
+    "instruction_slots": 36,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x15698c",
+      "0x156990",
+      "0x156994",
+      "0x156998",
+      "0x15699c",
+      "0x1569a0",
+      "0x1569a4",
+      "0x1569a8"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/001568fc.json"
 }

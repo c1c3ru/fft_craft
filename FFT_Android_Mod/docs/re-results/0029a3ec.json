@@ -3,7 +3,7 @@
   "name": "DrawPrim",
   "size": 164,
   "previous_status": "unread",
-  "status": "needs_review",
+  "status": "auto_structural",
   "coverage_pct": 90.24,
   "distinct_bl": 7,
   "tables_resolved": 0,
@@ -18,7 +18,32 @@
     "2abd1c"
   ],
   "log": "=== jtable.py: 0x29a3ec..0x29a490 (164 bytes) ===\ncoverage: 37 of ~41 instruction slots (90%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 7 distinct --\n  0x290b54 x1   ClearOTag \n  0x290c6c x1   AddPrim \n  0x291ae4 x1   xpLibgpuStartRender \n  0x291f08 x1   sub_291f08 LOCAL(no-dynsym)\n  0x2956a0 x1   sub_2956a0 LOCAL(no-dynsym)\n  0x2ab718 x1   sceGuEnable \n  0x2abd1c x1   sceGuTexFunc \n\n-- branches: 3 total, 2 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x29a3ec",
+    "total_slots": 41,
+    "code_slots": 37,
+    "instruction_slots": 37,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x29a480",
+      "0x29a484",
+      "0x29a488",
+      "0x29a48c"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/0029a3ec.json"
 }

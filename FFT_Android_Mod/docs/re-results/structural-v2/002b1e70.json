@@ -1,0 +1,21 @@
+{
+  "address": "002b1e70",
+  "name": "NowLoading_FrameMove()",
+  "size": 200,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 90.0,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "b9fe0",
+    "bdae0",
+    "bdbf4",
+    "bdc6c"
+  ],
+  "log": "=== jtable.py: 0x2b1e70..0x2b1f38 (200 bytes) ===\ncoverage: 45 of ~50 instruction slots (90%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0xb9fe0 x1   timeGetTime() \n  0xbdae0 x1   CFRAMERATE::GetRate() \n  0xbdbf4 x1   CSTEP::Init(int, int, int, int, unsigned int) \n  0xbdc6c x1   CSTEP::FrameMove(float, unsigned int) \n\n-- branches: 2 total, 1 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

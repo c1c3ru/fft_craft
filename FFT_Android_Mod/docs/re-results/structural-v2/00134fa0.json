@@ -1,0 +1,23 @@
+{
+  "address": "00134fa0",
+  "name": "Wdisp_eventwaitwindow()",
+  "size": 224,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 92.86,
+  "distinct_bl": 6,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "10558c",
+    "10de7c",
+    "153584",
+    "1536e4",
+    "153768",
+    "2bf0a8"
+  ],
+  "log": "=== jtable.py: 0x134fa0..0x135080 (224 bytes) ===\ncoverage: 52 of ~56 instruction slots (93%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x10558c x1   Wmultiwindow_keyright(COMRECORD*, int) \n  0x10de7c x1   Wimport_localpad(int) \n  0x153584 x1   Wtask_create(long, char*) \n  0x1536e4 x2   Wwait_taskend(long) \n  0x153768 x1   Wsend_taskparamater4(long, long, long, long, long) \n  0x2bf0a8 x2   iOS_setFaceDataID(int, int) \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}
