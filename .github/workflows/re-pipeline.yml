@@ -111,6 +111,16 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_return_call.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_callee_v2icon.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_v2icon_execute.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_v2icon_call_flow.py
+          python3 - <<'PY'
+          from pathlib import Path
+          report = Path("FFT_Android_Mod/docs/re-results/SEMANTIC_V2ICON_CALL_FLOW.md").read_text()
+          assert "Caller-and-callee micro-executions: 48/48 PASS" in report
+          assert all(mark in report for mark in (
+              "0x25a2c8", "0x25a2ac", "0x25a2f8", "0x25a298",
+              "0x2b7ccc", "synthetic", "NOT complete-function"))
+          print("PASS: actual ELF external BL, V2Icon getter, and caller return branches")
+          PY
           python3 - <<'PY'
           from pathlib import Path
           report = (Path("FFT_Android_Mod/docs/re-results") /
