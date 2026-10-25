@@ -25,7 +25,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install test dependencies
-        run: python3 -m pip install capstone pyelftools
+        run: python3 -m pip install capstone pyelftools unicorn
       - run: python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_*.py' -v
 
   structural-smoke:
@@ -39,7 +39,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install analysis dependencies
-        run: python3 -m pip install capstone pyelftools
+        run: python3 -m pip install capstone pyelftools unicorn
       - name: Structural batch
         env:
           REQUESTED_LIMIT: ${{ inputs.limit }}
@@ -71,6 +71,16 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/export_review_queue.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_evidence.py --limit 8
           python3 FFT_Android_Mod/docs/re-tools/semantic_path_report.py --limit 12
+          python3 FFT_Android_Mod/docs/re-tools/semantic_microexec.py
+          python3 - <<'PY'
+          from pathlib import Path
+          f = Path("FFT_Android_Mod/docs/re-results/SEMANTIC_MICROEXEC.md")
+          r = f.read_text(encoding="utf-8")
+          assert "Total verified machine micro-executions:** 64" in r
+          assert "0x244254" in r and "0x2443b8" in r
+          assert "not** semantic equivalence" in r
+          print("PASS: isolated actual ARM ELF machine microexecution")
+          PY
           python3 - <<'PY'
           from pathlib import Path
           report = (Path("FFT_Android_Mod/docs/re-results") /
