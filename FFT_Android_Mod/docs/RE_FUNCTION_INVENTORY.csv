@@ -2459,8 +2459,8 @@ address,size,mangled,demangled,status,section_ref
 0029db80,104,_Z19_gte_FlipRotMatrixXv,_gte_FlipRotMatrixX(),read_full,NOTES §553
 0029fbb8,104,_Z7_gte_ccv,_gte_cc(),read_full,NOTES §553
 002a1c78,104,RotNclip4,RotNclip4,read_structural,NOTES §611
-002cba30,104,__aeabi_d2ulz,__aeabi_d2ulz,unread,
-002cba30,104,__fixunsdfdi,__fixunsdfdi,unread,
+002cba30,104,__aeabi_d2ulz,__aeabi_d2ulz,read_structural,NOTES §617
+002cba30,104,__fixunsdfdi,__fixunsdfdi,read_structural,NOTES §617
 00077498,100,gzoffset64,gzoffset64,read_structural,NOTES §611
 0007d0f4,100,inflateMark,inflateMark,read_structural,NOTES §613
 0007d8b0,100,call_zseek64,call_zseek64,read_structural,NOTES §611
@@ -2945,8 +2945,8 @@ address,size,mangled,demangled,status,section_ref
 000ba7f0,72,_ZN9CSOUND_IF15GetMasterVolumeEPiS0_S0_,"CSOUND_IF::GetMasterVolume(int*, int*, int*)",read_full,NOTES §544
 000bb010,72,_ZN9CSOUND_IF7GetLoopEi,CSOUND_IF::GetLoop(int),read_full,NOTES §544
 000bd474,72,_ZN17CSOUND_LOADER_OGG5CloseEv,CSOUND_LOADER_OGG::Close(),mentioned_unverified,
-000bd4bc,72,_ZN17CSOUND_LOADER_OGGD2Ev,CSOUND_LOADER_OGG::~CSOUND_LOADER_OGG(),unread,
-000bd4bc,72,_ZN17CSOUND_LOADER_OGGD1Ev,CSOUND_LOADER_OGG::~CSOUND_LOADER_OGG(),unread,
+000bd4bc,72,_ZN17CSOUND_LOADER_OGGD2Ev,CSOUND_LOADER_OGG::~CSOUND_LOADER_OGG(),read_structural,NOTES §617
+000bd4bc,72,_ZN17CSOUND_LOADER_OGGD1Ev,CSOUND_LOADER_OGG::~CSOUND_LOADER_OGG(),read_structural,NOTES §617
 00284f88,72,_Z22pspBattleEntryAreaInitv,pspBattleEntryAreaInit(),read_full,NOTES §563
 000d9ac4,72,_Z15request_maptestv,request_maptest(),read_full,NOTES §557
 001533d8,72,_Z9task_initv,task_init(),read_structural,NOTES §615
@@ -3211,7 +3211,7 @@ address,size,mangled,demangled,status,section_ref
 0007cd9c,60,inflateGetHeader,inflateGetHeader,read_structural,NOTES §613
 0007d914,60,call_ztell64,call_ztell64,read_structural,NOTES §611
 00083df8,60,ogg_sync_wrote,ogg_sync_wrote,read_structural,NOTES §336
-0009403c,60,_vp_global_look,_vp_global_look,unread,
+0009403c,60,_vp_global_look,_vp_global_look,read_structural,NOTES §617
 000a1d00,60,_ZN11CG2D_LOADERC2Ei,CG2D_LOADER::CG2D_LOADER(int),read_structural,NOTES §316
 000a1d00,60,_ZN11CG2D_LOADERC1Ei,CG2D_LOADER::CG2D_LOADER(int),read_structural,NOTES §316
 000a2828,60,_ZN11CG2D_LOADER20GetImageFormatFormatEi,CG2D_LOADER::GetImageFormatFormat(int),read_structural,NOTES §316
@@ -3803,8 +3803,8 @@ address,size,mangled,demangled,status,section_ref
 00081a94,40,unztell64,unztell64,read_structural,NOTES §612
 00082450,40,oggpack_writecheck,oggpack_writecheck,read_structural,NOTES §613
 00082520,40,oggpack_reset,oggpack_reset,read_structural,NOTES §613
-000829c4,40,oggpack_writecopy,oggpack_writecopy,unread,
-000829ec,40,oggpackB_writecopy,oggpackB_writecopy,unread,
+000829c4,40,oggpack_writecopy,oggpack_writecopy,read_structural,NOTES §617
+000829ec,40,oggpackB_writecopy,oggpackB_writecopy,read_structural,NOTES §617
 00082be4,40,oggpack_look1,oggpack_look1,read_structural,NOTES §613
 00083234,40,ogg_page_serialno,ogg_page_serialno,read_structural,NOTES §336
 0008325c,40,ogg_page_pageno,ogg_page_pageno,read_structural,NOTES §336
@@ -4937,10 +4937,10 @@ address,size,mangled,demangled,status,section_ref
 000cc25c,20,_Z16Cregist_zodiacotPj,Cregist_zodiacot(unsigned int*),read_structural,NOTES §318
 00280980,20,_Z28iOS_setTransFaceForChrRemovei,iOS_setTransFaceForChrRemove(int),read_full,NOTES §560
 000da820,20,_Z18iOS_getLastEventNov,iOS_getLastEventNo(),read_full,NOTES §559
-002884a0,20,_Z23Set_NonDrawTaikiIconFlgi,Set_NonDrawTaikiIconFlg(int),unread,
+002884a0,20,_Z23Set_NonDrawTaikiIconFlgi,Set_NonDrawTaikiIconFlg(int),read_structural,NOTES §617
 00286928,20,_Z20pspNetGetControlCharv,pspNetGetControlChar(),read_full,NOTES §557
 0015a314,20,_Z17iOSsTchBtlFlagGetv,iOSsTchBtlFlagGet(),read_structural,NOTES §616
-0020f428,20,_Z18eventEffectExecutev,eventEffectExecute(),unread,
+0020f428,20,_Z18eventEffectExecutev,eventEffectExecute(),read_structural,NOTES §617
 0029ff98,20,SquareRoot0,SquareRoot0,read_structural,NOTES §612
 000d6d84,20,_Z17iOS_GetFontBufferv,iOS_GetFontBuffer(),read_full,NOTES §565
 002868ec,20,_Z32pspNetGetGenearteAttackErrorFlagv,pspNetGetGenearteAttackErrorFlag(),read_full,NOTES §557
@@ -4980,14 +4980,14 @@ address,size,mangled,demangled,status,section_ref
 0020f410,20,_Z15eventEffectWaitv,eventEffectWait(),read_structural,NOTES §612
 00215bc0,20,_Z26restertMapPaletteAnimationv,restertMapPaletteAnimation(),read_structural,NOTES §612
 00215bac,20,_Z23stopMapPaletteAnimationv,stopMapPaletteAnimation(),read_structural,NOTES §612
-0021cf1c,20,_Z15GetEffectStatusv,GetEffectStatus(),unread,
+0021cf1c,20,_Z15GetEffectStatusv,GetEffectStatus(),read_structural,NOTES §617
 001b90f0,20,_Z18iOSTutoBtlInputSeti,iOSTutoBtlInputSet(int),read_full,NOTES §556
 000fb4a8,20,_Z16iOS_getLastBlkNov,iOS_getLastBlkNo(),read_full,NOTES §559
 00101420,20,_Z13Wget_padframev,Wget_padframe(),read_structural,NOTES §616
 00101590,20,_Z22WiOS_getStatusAllgrayfv,WiOS_getStatusAllgrayf(),read_structural,NOTES §616
 00101fd0,20,_Z16iOStorideflagGetv,iOStorideflagGet(),read_structural,NOTES §616
 001021c8,20,_Z23Wreturn_actionstructurev,Wreturn_actionstructure(),read_structural,NOTES §616
-001b8e50,20,_Z15get_tutrial_padv,get_tutrial_pad(),unread,
+001b8e50,20,_Z15get_tutrial_padv,get_tutrial_pad(),read_structural,NOTES §617
 0010f110,20,_Z16Wattackteam_callPmm,"Wattackteam_call(unsigned long*, unsigned long)",read_structural,NOTES §612
 00285f38,20,_Z16pspMsgLzwBaseGet14FFTPSP_MSG_LZW,pspMsgLzwBaseGet(FFTPSP_MSG_LZW),read_structural,NOTES §616
 0012f1d8,20,_Z27iOSdisp_personalWinPhaseSeti,iOSdisp_personalWinPhaseSet(int),read_full,NOTES §565
@@ -5002,17 +5002,17 @@ address,size,mangled,demangled,status,section_ref
 00280634,20,_Z16iOS_getLockInputv,iOS_getLockInput(),read_full,NOTES §559
 0013c724,20,_Z20iOS_getOptionAddOfsXv,iOS_getOptionAddOfsX(),read_full,NOTES §559
 0013cfd0,20,_Z23iOS_getOptionAddOfsModev,iOS_getOptionAddOfsMode(),read_full,NOTES §559
-00142840,20,_Z21WiOS_getOptionAddOfsXv,WiOS_getOptionAddOfsX(),unread,
+00142840,20,_Z21WiOS_getOptionAddOfsXv,WiOS_getOptionAddOfsX(),read_structural,NOTES §617
 00142f4c,20,_Z24WiOS_getOptionAddOfsModev,WiOS_getOptionAddOfsMode(),read_structural,NOTES §616
 00287a2c,20,_Z22get_g_Soldier_Draw_flgv,get_g_Soldier_Draw_flg(),read_structural,NOTES §616
 00287254,20,_Z29AddrgTrapCommandTable_forDrawv,AddrgTrapCommandTable_forDraw(),read_full,NOTES §567
 0014bec8,20,_Z16disp_requirementv,disp_requirement(),read_structural,NOTES §612
 00287a18,20,_Z22set_g_Soldier_Draw_flgi,set_g_Soldier_Draw_flg(int),read_structural,NOTES §616
-00286dec,20,_Z15GetNetmissionNov,GetNetmissionNo(),unread,
+00286dec,20,_Z15GetNetmissionNov,GetNetmissionNo(),read_structural,NOTES §617
 002884d4,20,_Z14setBattlePointi,setBattlePoint(int),read_structural,NOTES §616
-002884e8,20,_Z14getBattlePointv,getBattlePoint(),unread,
+002884e8,20,_Z14getBattlePointv,getBattlePoint(),read_structural,NOTES §617
 0028612c,20,_Z7ps_randv,ps_rand(),mentioned_unverified,
-001506a8,20,_Z17getNetErrorCutFlgv,getNetErrorCutFlg(),unread,
+001506a8,20,_Z17getNetErrorCutFlgv,getNetErrorCutFlg(),read_structural,NOTES §617
 001531e4,20,_Z22GetgMission_Successflgv,GetgMission_Successflg(),read_structural,NOTES §616
 002568f8,20,_Z17iOS_getIwaPadMaskv,iOS_getIwaPadMask(),read_full,NOTES §559
 00155c78,20,_Z19ret_adventurestatusv,ret_adventurestatus(),read_structural,NOTES §616
@@ -5023,14 +5023,14 @@ address,size,mangled,demangled,status,section_ref
 002b7ab4,20,_Z19iOS_getTouchFreeTapv,iOS_getTouchFreeTap(),read_full,NOTES §559
 0015a328,20,_Z17iOSsTchBtlFlagSeti,iOSsTchBtlFlagSet(int),read_structural,NOTES §616
 0015a484,20,_Z18iOSUnitStatusLRGetv,iOSUnitStatusLRGet(),read_full,NOTES §555
-001fcdf0,20,_Z19iOSgetCursorVisiblev,iOSgetCursorVisible(),unread,
+001fcdf0,20,_Z19iOSgetCursorVisiblev,iOSgetCursorVisible(),read_structural,NOTES §617
 0015a8a0,20,_Z23iOSScrollgStatusModeGetv,iOSScrollgStatusModeGet(),read_structural,NOTES §616
 002b8708,20,_Z13iOS_PressTimev,iOS_PressTime(),read_structural,NOTES §616
 002b8838,20,_Z18iOS_getStatusTimerv,iOS_getStatusTimer(),read_full,NOTES §559
 0015d294,20,_Z13iOSRotAutoGetv,iOSRotAutoGet(),read_full,NOTES §562
 0015d8c4,20,_Z22iOSStatusLRPosiFlagGetv,iOSStatusLRPosiFlagGet(),read_full,NOTES §565
 0015d99c,20,_Z13iOSUnitTapSeti,iOSUnitTapSet(int),read_full,NOTES §555
-0015da20,20,_Z17iOSGetTchCurLimitv,iOSGetTchCurLimit(),unread,
+0015da20,20,_Z17iOSGetTchCurLimitv,iOSGetTchCurLimit(),read_structural,NOTES §617
 002b7bb8,20,_Z21iOS_getTouchSlideflagv,iOS_getTouchSlideflag(),read_full,NOTES §559
 0015ef3c,20,_Z22iOSUnitListMoveFlagGetv,iOSUnitListMoveFlagGet(),read_full,NOTES §555
 002b884c,20,_Z18iOS_getCarrierTypev,iOS_getCarrierType(),read_full,NOTES §559
@@ -5041,7 +5041,7 @@ address,size,mangled,demangled,status,section_ref
 00160dc0,20,_Z37iOSYajiEffectGetMultiRezCorrectEnablev,iOSYajiEffectGetMultiRezCorrectEnable(),read_full,NOTES §563
 00160dd4,20,_Z37iOSYajiEffectSetMultiRezCorrectEnablei,iOSYajiEffectSetMultiRezCorrectEnable(int),read_full,NOTES §563
 00161944,20,_Z19iOSHelpInputWaitGetv,iOSHelpInputWaitGet(),read_structural,NOTES §616
-00161958,20,_Z19iOSHelpInputWaitSeti,iOSHelpInputWaitSet(int),unread,
+00161958,20,_Z19iOSHelpInputWaitSeti,iOSHelpInputWaitSet(int),read_structural,NOTES §617
 00161cdc,20,_Z17iOSWldUnitTypeGetv,iOSWldUnitTypeGet(),read_full,NOTES §563
 00161cf0,20,_Z17iOSWldUnitTypeSeti,iOSWldUnitTypeSet(int),read_full,NOTES §563
 00161e78,20,_Z16iOS_getChkRotatev,iOS_getChkRotate(),read_full,NOTES §559
@@ -5118,7 +5118,7 @@ address,size,mangled,demangled,status,section_ref
 001d6480,20,_Z16clear_actendflagP5BWORK,clear_actendflag(BWORK*),read_structural,NOTES §612
 0028693c,20,_Z21pspNetGetMoruboruFlagv,pspNetGetMoruboruFlag(),read_full,NOTES §557
 00286ef0,20,_Z26pspNetSetTimingThroughFlagi,pspNetSetTimingThroughFlag(int),read_full,NOTES §557
-001eee34,20,_Z21getEffSequenceAddressv,getEffSequenceAddress(),unread,
+001eee34,20,_Z21getEffSequenceAddressv,getEffSequenceAddress(),read_structural,NOTES §617
 002856d4,20,pspItemGetWeaponVariationClut,pspItemGetWeaponVariationClut,read_full,NOTES §556
 002856e8,20,pspItemGetWeaponVariationBlock,pspItemGetWeaponVariationBlock,read_full,NOTES §556
 002a133c,20,SetGeomScreen,SetGeomScreen,read_structural,NOTES §616
@@ -5131,7 +5131,7 @@ address,size,mangled,demangled,status,section_ref
 002010b8,20,_Z23iOSmapVectorScrollCheckv,iOSmapVectorScrollCheck(),read_structural,NOTES §616
 00285a98,20,pspItemIsMagicalGun,pspItemIsMagicalGun,read_full,NOTES §556
 002041e8,20,_Z17setStartBattleFlgi,setStartBattleFlg(int),read_structural,NOTES §616
-002041fc,20,_Z17getStartBattleFlgv,getStartBattleFlg(),unread,
+002041fc,20,_Z17getStartBattleFlgv,getStartBattleFlg(),read_structural,NOTES §617
 00204254,20,_Z10setTurningi,setTurning(int),read_structural,NOTES §616
 002b873c,20,_Z17iOS_getTouchCountv,iOS_getTouchCount(),read_full,NOTES §559
 00286a3c,20,_Z26pspNetSetCharacterWaitFlagc,pspNetSetCharacterWaitFlag(char),read_full,NOTES §557
@@ -5146,17 +5146,17 @@ address,size,mangled,demangled,status,section_ref
 0020cc7c,20,_Z16fileOpenCDOffsetmmmPv,"fileOpenCDOffset(unsigned long, unsigned long, unsigned long, void*)",read_full,NOTES §567
 002a2da4,20,PCclose,PCclose,read_structural,NOTES §616
 0020f8b8,20,_Z13getFrameTicksv,getFrameTicks(),read_structural,NOTES §616
-0028dea8,20,InitCARD,InitCARD,unread,
+0028dea8,20,InitCARD,InitCARD,read_structural,NOTES §617
 002b87fc,20,_Z16iOS_setInterFlagi,iOS_setInterFlag(int),read_full,NOTES §560
 002b7bcc,20,_Z22iOS_setEnterBattleFlagi,iOS_setEnterBattleFlag(int),read_full,NOTES §560
 00216140,20,_Z19iOS_getTexCacheLinev,iOS_getTexCacheLine(),read_full,NOTES §559
 00216604,20,_Z16checkActiveMusicv,checkActiveMusic(),read_structural,NOTES §616
 0021ef38,20,_Z18iOS_getSkipAddPrimv,iOS_getSkipAddPrim(),read_full,NOTES §559
 0021b4e0,20,_Z16GetPlugInFuncAdrs,GetPlugInFuncAdr(short),read_structural,NOTES §616
-0021b890,20,_Z13SetAirDensityl,SetAirDensity(long),unread,
+0021b890,20,_Z13SetAirDensityl,SetAirDensity(long),read_structural,NOTES §617
 00228dd0,20,_Z17GetShapePrimPtNowv,GetShapePrimPtNow(),read_structural,NOTES §616
 00241a4c,20,_Z16iOS_SetMojiBlendi,iOS_SetMojiBlend(int),read_full,NOTES §565
-00288578,20,_Z21pspOpenDataBackBufGeti,pspOpenDataBackBufGet(int),unread,
+00288578,20,_Z21pspOpenDataBackBufGeti,pspOpenDataBackBufGet(int),read_structural,NOTES §617
 002868a8,20,_Z17set_gEventMovieNoi,set_gEventMovieNo(int),read_structural,NOTES §616
 00249c44,20,_Z16numa_vOpn_CdReadP5CDRECmmmPm,"numa_vOpn_CdRead(CDREC*, unsigned long, unsigned long, unsigned long, unsigned long*)",read_structural,NOTES §612
 00245074,20,_Z20iOS_setDispMenuTouchc,iOS_setDispMenuTouch(char),read_full,NOTES §560
@@ -5193,7 +5193,7 @@ address,size,mangled,demangled,status,section_ref
 00281694,20,_Z19iOS_v2menuSetDecidei,iOS_v2menuSetDecide(int),read_structural,NOTES §616
 002816a8,20,_Z19iOS_v2menuGetDecidev,iOS_v2menuGetDecide(),read_structural,NOTES §616
 002b6b24,20,_Z21iOS_getv2menuSprIdTblv,iOS_getv2menuSprIdTbl(),read_full,NOTES §559
-00282274,20,_Z18iOS_v2menuGetYlinev,iOS_v2menuGetYline(),unread,
+00282274,20,_Z18iOS_v2menuGetYlinev,iOS_v2menuGetYline(),read_structural,NOTES §617
 002826b4,20,_Z16iOS_PalleteHoseihi,"iOS_PalleteHosei(unsigned char, int)",read_structural,NOTES §612
 0029fd7c,20,_Z13GteGetCtrlRegi,GteGetCtrlReg(int),read_structural,NOTES §616
 00284bb4,20,_Z15pspBattleGetFlgv,pspBattleGetFlg(),read_full,NOTES §563
@@ -5203,7 +5203,7 @@ address,size,mangled,demangled,status,section_ref
 002869a8,20,_Z23pspNetSetBattleModeFlagc,pspNetSetBattleModeFlag(char),read_full,NOTES §557
 00286a08,20,_Z12pspNetGetPadv,pspNetGetPad(),read_full,NOTES §557
 00286a1c,20,_Z22pspNetGetPadPushTimingv,pspNetGetPadPushTiming(),read_full,NOTES §557
-00286ab4,20,_Z15set_netdatamodei,set_netdatamode(int),unread,
+00286ab4,20,_Z15set_netdatamodei,set_netdatamode(int),read_structural,NOTES §617
 00286b0c,20,_Z18set_limit_turn_flgi,set_limit_turn_flg(int),read_structural,NOTES §616
 00286e00,20,_Z35pspNetEntranceDataMissionSceneNoGeti,pspNetEntranceDataMissionSceneNoGet(int),read_full,NOTES §557
 00286edc,20,_Z26pspNetGetTimingThroughFlagv,pspNetGetTimingThroughFlag(),read_full,NOTES §557
@@ -5260,7 +5260,7 @@ address,size,mangled,demangled,status,section_ref
 002a376c,20,_ZN11pspSaveBase14errorMsgStrGetENS_19PspSaveErrorMsgTypeE,pspSaveBase::errorMsgStrGet(pspSaveBase::PspSaveErrorMsgType),read_full,NOTES §543
 002ab6fc,20,_Z19GPUCmd_GetGPUCmd_IPv,GPUCmd_GetGPUCmd_IP(),read_structural,NOTES §616
 002b1430,20,_Z18SettingsBundle_Getv,SettingsBundle_Get(),read_full,NOTES §563
-002b14d0,20,_Z23Project_Archive_GetFilei,Project_Archive_GetFile(int),unread,
+002b14d0,20,_Z23Project_Archive_GetFilei,Project_Archive_GetFile(int),read_structural,NOTES §617
 002b7aa0,20,_Z15iOS_setTouchTapi,iOS_setTouchTap(int),read_full,NOTES §560
 002b7adc,20,_Z19iOS_setTouchReleasei,iOS_setTouchRelease(int),read_full,NOTES §560
 002b7b04,20,_Z17iOS_setTouchPressi,iOS_setTouchPress(int),read_full,NOTES §560
@@ -5276,7 +5276,7 @@ address,size,mangled,demangled,status,section_ref
 002bb664,20,_Z18iOS_getTutoFreeTapv,iOS_getTutoFreeTap(),read_full,NOTES §559
 002beff4,20,_Z20iOS_getGlobalCounterv,iOS_getGlobalCounter(),read_full,NOTES §559
 002c53c0,20,_Z17Main_GetPauseFlagv,Main_GetPauseFlag(),read_structural,NOTES §616
-002c53d4,20,_Z17Main_SetPauseFlagi,Main_SetPauseFlag(int),unread,
+002c53d4,20,_Z17Main_SetPauseFlagi,Main_SetPauseFlag(int),read_structural,NOTES §617
 002cb174,20,__aeabi_cdcmpeq,__aeabi_cdcmpeq,read_structural,NOTES §613
 002cb174,20,__aeabi_cdcmple,__aeabi_cdcmple,read_structural,NOTES §613
 002cb1b0,20,__aeabi_dcmple,__aeabi_dcmple,read_structural,NOTES §613
@@ -5285,9 +5285,9 @@ address,size,mangled,demangled,status,section_ref
 002cd8ec,20,restore_core_regs,restore_core_regs,read_structural,NOTES §612
 002cd8ec,20,__restore_core_regs,__restore_core_regs,read_structural,NOTES §612
 000b45c0,16,_ZN15CINPUT_IF_TOUCH17OnEventDispatchedEi,CINPUT_IF_TOUCH::OnEventDispatched(int),read_full,NOTES §26
-00073c64,16,get_crc_table,get_crc_table,unread,
+00073c64,16,get_crc_table,get_crc_table,read_structural,NOTES §617
 0007b180,16,inflateInit_,inflateInit_,mentioned_unverified,
-000823d4,16,zlibVersion,zlibVersion,unread,
+000823d4,16,zlibVersion,zlibVersion,read_structural,NOTES §617
 00082ff4,16,oggpack_bits,oggpack_bits,read_structural,NOTES §613
 00083130,16,ogg_page_continued,ogg_page_continued,read_structural,NOTES §336
 00083140,16,ogg_page_bos,ogg_page_bos,read_structural,NOTES §336
@@ -5329,16 +5329,16 @@ address,size,mangled,demangled,status,section_ref
 002a3100,16,xpMallocIO,xpMallocIO,read_structural,NOTES §612
 000d0dcc,16,_Z17Ddisp_equipwindowv,Ddisp_equipwindow(),read_full,NOTES §131
 000d0ddc,16,_Z19Ddisp_abilitywindowv,Ddisp_abilitywindow(),read_structural,NOTES §612
-000d6d98,16,_Z12getStatusPadv,getStatusPad(),unread,
+000d6d98,16,_Z12getStatusPadv,getStatusPad(),read_structural,NOTES §617
 00284b8c,16,_Z23pspBattleDataBackBufGetv,pspBattleDataBackBufGet(),read_full,NOTES §563
-0020d83c,16,_Z11getMapAnglev,getMapAngle(),unread,
-0020d5c8,16,_Z11getMapScalev,getMapScale(),unread,
-0020d050,16,_Z15getMapScrollXYZv,getMapScrollXYZ(),unread,
+0020d83c,16,_Z11getMapAnglev,getMapAngle(),read_structural,NOTES §617
+0020d5c8,16,_Z11getMapScalev,getMapScale(),read_structural,NOTES §617
+0020d050,16,_Z15getMapScrollXYZv,getMapScrollXYZ(),read_structural,NOTES §617
 001d4f00,16,_Z13set_throwitemihPh,"set_throwitem(int, unsigned char, unsigned char*)",read_structural,NOTES §612
 0026d798,16,_Z12iOSTutoCheckv,iOSTutoCheck(),read_full,NOTES §556
-00263aac,16,_Z18iOSNovelBrightStopv,iOSNovelBrightStop(),unread,
-0025690c,16,_Z15IOSsTownModeGetv,IOSsTownModeGet(),unread,
-00101fc0,16,_Z13WgetStatusPadv,WgetStatusPad(),unread,
+00263aac,16,_Z18iOSNovelBrightStopv,iOSNovelBrightStop(),read_structural,NOTES §617
+0025690c,16,_Z15IOSsTownModeGetv,IOSsTownModeGet(),read_structural,NOTES §617
+00101fc0,16,_Z13WgetStatusPadv,WgetStatusPad(),read_structural,NOTES §617
 0012b10c,16,_Z16disp_equipwindowv,disp_equipwindow(),read_full,NOTES §131
 0012b11c,16,_Z18disp_abilitywindowv,disp_abilitywindow(),read_structural,NOTES §612
 002b1444,16,_Z25SettingsBundle_IsLeftHandv,SettingsBundle_IsLeftHand(),read_full,NOTES §563
@@ -5351,20 +5351,20 @@ address,size,mangled,demangled,status,section_ref
 00173a64,16,_Z10cWindowDeli,cWindowDel(int),read_full,NOTES §550
 00177078,16,_Z17bGetCommandNumberi,bGetCommandNumber(int),read_full,NOTES §552
 0017a144,16,_Z10bWindowDeli,bWindowDel(int),read_full,NOTES §550
-0018377c,16,_Z8fileopenPhj,"fileopen(unsigned char*, unsigned int)",unread,
+0018377c,16,_Z8fileopenPhj,"fileopen(unsigned char*, unsigned int)",read_structural,NOTES §617
 0018f0b8,16,_Z10eWindowDeli,eWindowDel(int),read_full,NOTES §550
 001b6b00,16,_Z9WindowDeli,WindowDel(int),read_full,NOTES §550
-001a6368,16,_Z15iOSLearnTypeGetv,iOSLearnTypeGet(),unread,
+001a6368,16,_Z15iOSLearnTypeGetv,iOSLearnTypeGet(),read_structural,NOTES §617
 001a84f8,16,_Z16GetCommandNumberi,GetCommandNumber(int),read_full,NOTES §552
 00286a64,16,_Z15pspNetCheckDutyv,pspNetCheckDuty(),read_full,NOTES §557
 00285e40,16,_Z18pspJobGetIndex2Jobi,pspJobGetIndex2Job(int),read_structural,NOTES §612
 002855d8,16,pspItemIsRandom,pspItemIsRandom,read_full,NOTES §556
 001eec78,16,_Z15changeAnimationiiP13tag_animation,"changeAnimation(int, int, tag_animation*)",read_full,NOTES §563
-001eee24,16,_Z18getEffShapeAddressv,getEffShapeAddress(),unread,
-0020d2a8,16,_Z12getMapScrollv,getMapScroll(),unread,
-0020dac8,16,_Z12getBackColorv,getBackColor(),unread,
-0028decc,16,StartCARD,StartCARD,unread,
-002bef64,16,_Z24ResumeData_GetHeapOffsetv,ResumeData_GetHeapOffset(),unread,
+001eee24,16,_Z18getEffShapeAddressv,getEffShapeAddress(),read_structural,NOTES §617
+0020d2a8,16,_Z12getMapScrollv,getMapScroll(),read_structural,NOTES §617
+0020dac8,16,_Z12getBackColorv,getBackColor(),read_structural,NOTES §617
+0028decc,16,StartCARD,StartCARD,read_structural,NOTES §617
+002bef64,16,_Z24ResumeData_GetHeapOffsetv,ResumeData_GetHeapOffset(),read_structural,NOTES §617
 0022a470,16,_Z16getVariationDataiii,"getVariationData(int, int, int)",read_structural,NOTES §612
 0022ad0c,16,_Z11Add2ToShortPs,Add2ToShort(short*),read_full,NOTES §567
 0022ad1c,16,_Z11Add4ToShortPs,Add4ToShort(short*),read_full,NOTES §567
@@ -5372,9 +5372,9 @@ address,size,mangled,demangled,status,section_ref
 0022ad3c,16,_Z11Add8ToShortPs,Add8ToShort(short*),read_full,NOTES §567
 00243a6c,16,_Z3AddP17tagLIST_STAFFROLLP12tagSTAFFROLL,"Add(tagLIST_STAFFROLL*, tagSTAFFROLL*)",read_full,NOTES §567
 00245b68,16,_Z10o_CardInitv,o_CardInit(),read_structural,NOTES §612
-0025f3ec,16,_Z14iOSSnapshotGetv,iOSSnapshotGet(),unread,
+0025f3ec,16,_Z14iOSSnapshotGetv,iOSSnapshotGet(),read_structural,NOTES §617
 00285a88,16,pspItemGetItemDataByAbility,pspItemGetItemDataByAbility,read_full,NOTES §556
-0027b494,16,_Z14getDrawPrimNumv,getDrawPrimNum(),unread,
+0027b494,16,_Z14getDrawPrimNumv,getDrawPrimNum(),read_structural,NOTES §617
 0027c26c,16,_ZN14iOS_CMenuTouch10drawDebug2Ev,iOS_CMenuTouch::drawDebug2(),read_structural,NOTES §536
 0027e794,16,_ZN22iOS_CMenuTouchSaveLoad10drawDebug2Ev,iOS_CMenuTouchSaveLoad::drawDebug2(),read_structural,NOTES §359
 00284d08,16,_Z16pspBattleDataGetv,pspBattleDataGet(),read_full,NOTES §563
@@ -5391,11 +5391,11 @@ address,size,mangled,demangled,status,section_ref
 0028c7d8,16,_ZN9CAUTOSAVEC1Ev,CAUTOSAVE::CAUTOSAVE(),mentioned_unverified,
 0028debc,16,_ZN8xpApiEnv9startCARDEv,xpApiEnv::startCARD(),read_full,NOTES §566
 0028dedc,16,_ZN8xpApiEnv8stopCARDEv,xpApiEnv::stopCARD(),read_full,NOTES §566
-0028deec,16,StopCARD,StopCARD,unread,
+0028deec,16,StopCARD,StopCARD,read_structural,NOTES §617
 002a34e4,16,_ZN11pspSaveBase12Icon0DataSetEPvjj,"pspSaveBase::Icon0DataSet(void*, unsigned int, unsigned int)",read_full,NOTES §543
 002a3504,16,_ZN11pspSaveBase20BackGoundPic1DataSetEPvjj,"pspSaveBase::BackGoundPic1DataSet(void*, unsigned int, unsigned int)",read_full,NOTES §543
 0028e694,16,_Z15xpSetVblankFuncPFviPvES_,"xpSetVblankFunc(void (*)(int, void*), void*)",read_structural,NOTES §612
-002a39b8,16,sceGeEdramGetAddr,sceGeEdramGetAddr,unread,
+002a39b8,16,sceGeEdramGetAddr,sceGeEdramGetAddr,read_structural,NOTES §617
 002a1028,16,CompMatrix,CompMatrix,read_structural,NOTES §612
 002a1808,16,RotTrans_nom,RotTrans_nom,read_full,NOTES §567
 002a1818,16,RotTransPers_nom,RotTransPers_nom,read_full,NOTES §567
@@ -5403,15 +5403,15 @@ address,size,mangled,demangled,status,section_ref
 002a1874,16,NormalColor_nom,NormalColor_nom,read_full,NOTES §568
 002a189c,16,NormalColor3_nom,NormalColor3_nom,read_full,NOTES §568
 002a26d4,16,_ZN8xpLibpad8AssignLREi,xpLibpad::AssignLR(int),read_full,NOTES §554
-002a2be8,16,PCinit,PCinit,unread,
+002a2be8,16,PCinit,PCinit,read_structural,NOTES §617
 002a2c60,16,_ZN7xpLibSN6PCreadEiPci,"xpLibSN::PCread(int, char*, int)",read_full,NOTES §554
-002a2fe4,16,xpGetSPADAddress,xpGetSPADAddress,unread,
+002a2fe4,16,xpGetSPADAddress,xpGetSPADAddress,read_structural,NOTES §617
 002a33d0,16,_ZN11pspSaveBase15SecureFileIdSetEPKh,pspSaveBase::SecureFileIdSet(unsigned char const*),read_full,NOTES §543
 002a34f4,16,_ZN11pspSaveBase15PmfIcon1DataSetEPvjj,"pspSaveBase::PmfIcon1DataSet(void*, unsigned int, unsigned int)",read_full,NOTES §543
 002a3514,16,_ZN11pspSaveBase7Snd0SetEPvjj,"pspSaveBase::Snd0Set(void*, unsigned int, unsigned int)",read_full,NOTES §543
 002a39a8,16,_ZN11pspSaveList6UpdateEv,pspSaveList::Update(),mentioned_unverified,
-002b1fe8,16,_Z13Offscreen_Getv,Offscreen_Get(),unread,
-002b375c,16,_Z18Error_GetErrorCodev,Error_GetErrorCode(),unread,
+002b1fe8,16,_Z13Offscreen_Getv,Offscreen_Get(),read_structural,NOTES §617
+002b375c,16,_Z18Error_GetErrorCodev,Error_GetErrorCode(),read_structural,NOTES §617
 002cdedc,16,_Unwind_GetRegionStart,_Unwind_GetRegionStart,read_structural,NOTES §613
 002cb9dc,16,__aeabi_idiv0,__aeabi_idiv0,read_structural,NOTES §613
 002cb9dc,16,__aeabi_ldiv0,__aeabi_ldiv0,read_structural,NOTES §613

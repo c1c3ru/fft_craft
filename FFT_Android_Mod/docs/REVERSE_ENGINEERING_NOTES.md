@@ -22889,3 +22889,75 @@ efetivamente raspando o fundo do que resta no inventário.
 | `0x002bef4c` | `iOS_isExistResumeData()` | 24 | 83.33% | `CAUTOSAVE::IsExist()` |
 
 **Status CSV**: `read_structural` para as 500 (identidade e call-graph confirmados via checkpoint; nenhuma teve blocos lidos instrução a instrução). Com este lote, o pool `auto_structural` 80-95% abre em §615 também se esgota por completo.
+
+## 617. Último lote do pool 80-95% — 49 funções finais, maioria funções-folha triviais de 16-20 bytes (2026-10-25, Fase 3, nonagésimo sétimo lote)
+
+Fecha por completo o pool aberto em §615/616 (checkpoints
+`auto_structural` com 0 tabela não resolvida, independente de
+cobertura) — depois deste lote restam **0 candidatos** sob esse
+critério em todo o inventário. Quase todas são getters/setters de
+uma única instrução de carga/retorno (16-20 B, 75-80% de cobertura —
+a "falta" de cobertura nessas é o padrão de alinhamento/prólogo
+trivial já visto, não lógica perdida). Duas exceções com conteúdo
+real: `__aeabi_d2ulz` (conversão double→unsigned long long,
+cadeia completa de 4 chamadas de soft-float já conhecidas) e
+`CSOUND_LOADER_OGG::~CSOUND_LOADER_OGG()` (destrutor real,
+delegando pro `Close()` já citado).
+
+| Endereço | Função | Bytes | Cobertura | Chama |
+|---|---|---:|---:|---|
+| `0x002cba30` | `__aeabi_d2ulz` | 104 | 92.31% | `__subdf3`, `__aeabi_ui2d`, `__muldf3`, `__fixunsdfsi` |
+| `0x000bd4bc` | `CSOUND_LOADER_OGG::~CSOUND_LOADER_OGG()` | 72 | 88.89% | `COggMemMapFile::~COggMemMapFile()`, `CSOUND_LOADER_OGG::Close()` |
+| `0x0009403c` | `_vp_global_look` | 60 | 93.33% | `sub_71608` |
+| `0x000829ec` | `oggpackB_writecopy` | 40 | 90.0% | `sub_82898` |
+| `0x000829c4` | `oggpack_writecopy` | 40 | 90.0% | `sub_82898` |
+| `0x001fcdf0` | `iOSgetCursorVisible()` | 20 | 80.0% | (folha) |
+| `0x002c53d4` | `Main_SetPauseFlag(int)` | 20 | 80.0% | (folha) |
+| `0x00142840` | `WiOS_getOptionAddOfsX()` | 20 | 80.0% | (folha) |
+| `0x002884e8` | `getBattlePoint()` | 20 | 80.0% | (folha) |
+| `0x0020f428` | `eventEffectExecute()` | 20 | 80.0% | (folha) |
+| `0x00286dec` | `GetNetmissionNo()` | 20 | 80.0% | (folha) |
+| `0x002b14d0` | `Project_Archive_GetFile(int)` | 20 | 80.0% | (folha) |
+| `0x00288578` | `pspOpenDataBackBufGet(int)` | 20 | 80.0% | (folha) |
+| `0x002041fc` | `getStartBattleFlg()` | 20 | 80.0% | (folha) |
+| `0x0028dea8` | `InitCARD` | 20 | 80.0% | (folha) |
+| `0x001eee34` | `getEffSequenceAddress()` | 20 | 80.0% | (folha) |
+| `0x00282274` | `iOS_v2menuGetYline()` | 20 | 80.0% | (folha) |
+| `0x001506a8` | `getNetErrorCutFlg()` | 20 | 80.0% | (folha) |
+| `0x001b8e50` | `get_tutrial_pad()` | 20 | 80.0% | (folha) |
+| `0x00161958` | `iOSHelpInputWaitSet(int)` | 20 | 80.0% | (folha) |
+| `0x0015da20` | `iOSGetTchCurLimit()` | 20 | 80.0% | (folha) |
+| `0x0021cf1c` | `GetEffectStatus()` | 20 | 80.0% | (folha) |
+| `0x002884a0` | `Set_NonDrawTaikiIconFlg(int)` | 20 | 80.0% | (folha) |
+| `0x00286ab4` | `set_netdatamode(int)` | 20 | 80.0% | (folha) |
+| `0x0021b890` | `SetAirDensity(long)` | 20 | 80.0% | (folha) |
+| `0x0028deec` | `StopCARD` | 16 | 75.0% | (folha) |
+| `0x002a2be8` | `PCinit` | 16 | 75.0% | (folha) |
+| `0x0020d2a8` | `getMapScroll()` | 16 | 75.0% | (folha) |
+| `0x002b375c` | `Error_GetErrorCode()` | 16 | 75.0% | (folha) |
+| `0x0025f3ec` | `iOSSnapshotGet()` | 16 | 75.0% | (folha) |
+| `0x000823d4` | `zlibVersion` | 16 | 75.0% | (folha) |
+| `0x0018377c` | `fileopen(unsigned char*, unsigned int)` | 16 | 75.0% | (folha) |
+| `0x0020d83c` | `getMapAngle()` | 16 | 75.0% | (folha) |
+| `0x0028decc` | `StartCARD` | 16 | 75.0% | (folha) |
+| `0x00101fc0` | `WgetStatusPad()` | 16 | 75.0% | (folha) |
+| `0x00073c64` | `get_crc_table` | 16 | 75.0% | (folha) |
+| `0x002bef64` | `ResumeData_GetHeapOffset()` | 16 | 75.0% | (folha) |
+| `0x0020dac8` | `getBackColor()` | 16 | 75.0% | (folha) |
+| `0x0020d5c8` | `getMapScale()` | 16 | 75.0% | (folha) |
+| `0x001eee24` | `getEffShapeAddress()` | 16 | 75.0% | (folha) |
+| `0x0027b494` | `getDrawPrimNum()` | 16 | 75.0% | (folha) |
+| `0x001a6368` | `iOSLearnTypeGet()` | 16 | 75.0% | (folha) |
+| `0x002a39b8` | `sceGeEdramGetAddr` | 16 | 75.0% | (folha) |
+| `0x002a2fe4` | `xpGetSPADAddress` | 16 | 75.0% | (folha) |
+| `0x000d6d98` | `getStatusPad()` | 16 | 75.0% | (folha) |
+| `0x002b1fe8` | `Offscreen_Get()` | 16 | 75.0% | (folha) |
+| `0x0020d050` | `getMapScrollXYZ()` | 16 | 75.0% | (folha) |
+| `0x00263aac` | `iOSNovelBrightStop()` | 16 | 75.0% | (folha) |
+| `0x0025690c` | `IOSsTownModeGet()` | 16 | 75.0% | (folha) |
+
+**Status CSV**: `read_structural` para as 49 (identidade confirmada
+via checkpoint; nenhuma teve blocos lidos instrução a instrução).
+**Esgota por completo** qualquer checkpoint do CI com tabela de salto
+resolvida (ou sem tabela) ainda não reconciliado no
+`RE_FUNCTION_INVENTORY.csv`.
