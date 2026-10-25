@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **1064/1258** pending functions.
+Evidence collected: **1072/1258** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -1075,3 +1075,11 @@ These reports do not constitute semantic verification.
 | `00288558` | getTurnCount_CalcMissionPayPoint() | [Evidence](semantic-evidence/00288558.md) |
 | `00288578` | pspOpenDataBackBufGet(int) | [Evidence](semantic-evidence/00288578.md) |
 | `0028858c` | pspOpenDataIconBufGet() | [Evidence](semantic-evidence/0028858c.md) |
+| `00289818` | pspPrimGetWorkBuf_current() | [Evidence](semantic-evidence/00289818.md) |
+| `0028a12c` | FFT_GetSavedata() | [Evidence](semantic-evidence/0028a12c.md) |
+| `0028b3dc` | pspWorldDataRectGet() | [Evidence](semantic-evidence/0028b3dc.md) |
+| `0028ba2c` | getVSyncBlockCountTaskEmu() | [Evidence](semantic-evidence/0028ba2c.md) |
+| `0028ba40` | TE_setTaskType(int) | [Evidence](semantic-evidence/0028ba40.md) |
+| `0028d1b0` | tlGetHeap() | [Evidence](semantic-evidence/0028d1b0.md) |
+| `0028dcf0` | StartRCnt | [Evidence](semantic-evidence/0028dcf0.md) |
+| `0028dea8` | InitCARD | [Evidence](semantic-evidence/0028dea8.md) |
