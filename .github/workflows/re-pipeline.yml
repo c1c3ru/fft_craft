@@ -116,6 +116,16 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_three_callees_audit.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_three_callees_exec.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_sound_chain.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_sound_dispatch_audit.py
+          python3 - <<'PY'
+          from pathlib import Path
+          report = Path("FFT_Android_Mod/docs/re-results/SEMANTIC_SOUND_DISPATCH_AUDIT.md").read_text()
+          assert all(t in report for t in (
+              "0x2b2cf8", "0x2b8900", "0x271314",
+              "SysSE_PlayDef(int)", "iOS_SetIconPosition()",
+              "static audit", "not a behavioral"))
+          print("PASS: original ARM sound dispatch and icon-position entry decoded")
+          PY
           python3 - <<'PY'
           from pathlib import Path
           r=Path("FFT_Android_Mod/docs/re-results/SEMANTIC_SOUND_CHAIN.md").read_text()
