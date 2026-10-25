@@ -2,8 +2,8 @@
 
 Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Analyzed in current binary: 1929
-Automatically triaged: 146,252 bytes / 1,837,392 inventory bytes (7.96%); **this is newly triaged coverage, not total project coverage**.
+Analyzed in current binary: 2028
+Automatically triaged: 146,752 bytes / 1,837,392 inventory bytes (7.99%); **this is newly triaged coverage, not total project coverage**.
 
 | Address | Function | Size (B) | Coverage | Status |
 |---|---|---:|---:|---|
@@ -1905,10 +1905,21 @@ Automatically triaged: 146,252 bytes / 1,837,392 inventory bytes (7.96%); **this
 | `00245bf0` | o_WaitCardEvent_X() | 20 | 100.0% | auto_structural |
 | `00249c44` | numa_vOpn_CdRead(CDREC*, unsigned long, unsigned long, unsigned long, unsigned long*) | 20 | 100.0% | auto_structural |
 | `0025691c` | IOSsTownModeSet(int) | 20 | 80.0% | needs_review |
+| `0025f3d8` | iOS_wld_pad_trg(unsigned long) | 20 | 80.0% | needs_review |
 | `0025f3fc` | iOSSnapshotSet(int) | 20 | 80.0% | needs_review |
 | `0025f410` | iOSSDNovelHelpTrgSet(long) | 20 | 80.0% | needs_review |
 | `0025f424` | iOSSDNovelHelpTrgGet() | 20 | 80.0% | needs_review |
+| `0027b480` | setDrawPrimNum(int) | 20 | 80.0% | needs_review |
+| `0027b514` | getCmdKindNum() | 20 | 80.0% | needs_review |
+| `0027b528` | getCmdKind(unsigned int) | 20 | 80.0% | needs_review |
+| `0027fc14` | chk_ucResumeDataSetAddr(unsigned char*) | 20 | 80.0% | needs_review |
+| `0028051c` | iOS_fftDelete() | 20 | 80.0% | needs_review |
+| `00281664` | iOS_v2menuGetAddr() | 20 | 80.0% | needs_review |
+| `00281694` | iOS_v2menuSetDecide(int) | 20 | 80.0% | needs_review |
+| `002816a8` | iOS_v2menuGetDecide() | 20 | 80.0% | needs_review |
 | `002819b8` | iOS_v2menuGetType() | 20 | 80.0% | needs_review |
+| `00282274` | iOS_v2menuGetYline() | 20 | 80.0% | needs_review |
+| `002826b4` | iOS_PalleteHosei(unsigned char, int) | 20 | 100.0% | auto_structural |
 | `002843a0` | new_VectorDataBase(unsigned int) | 20 | 80.0% | needs_review |
 | `00285f38` | pspMsgLzwBaseGet(FFTPSP_MSG_LZW) | 20 | 80.0% | needs_review |
 | `002862e8` | IsMapTexAsideLoad(unsigned int) | 20 | 80.0% | needs_review |
@@ -1917,6 +1928,8 @@ Automatically triaged: 146,252 bytes / 1,837,392 inventory bytes (7.96%); **this
 | `00286894` | get_gEventMovieNo() | 20 | 80.0% | needs_review |
 | `002868a8` | set_gEventMovieNo(int) | 20 | 80.0% | needs_review |
 | `00286aa0` | get_netdatamode() | 20 | 80.0% | needs_review |
+| `00286ab4` | set_netdatamode(int) | 20 | 80.0% | needs_review |
+| `00286b0c` | set_limit_turn_flg(int) | 20 | 80.0% | needs_review |
 | `00286b20` | get_limit_turn_flg() | 20 | 80.0% | needs_review |
 | `00286dec` | GetNetmissionNo() | 20 | 80.0% | needs_review |
 | `00287030` | get_timing_flag() | 20 | 80.0% | needs_review |
@@ -1924,15 +1937,101 @@ Automatically triaged: 146,252 bytes / 1,837,392 inventory bytes (7.96%); **this
 | `00287a18` | set_g_Soldier_Draw_flg(int) | 20 | 80.0% | needs_review |
 | `00287a2c` | get_g_Soldier_Draw_flg() | 20 | 80.0% | needs_review |
 | `002884a0` | Set_NonDrawTaikiIconFlg(int) | 20 | 80.0% | needs_review |
+| `002884b4` | Get_NonDrawTaikiIconFlg() | 20 | 80.0% | needs_review |
 | `002884d4` | setBattlePoint(int) | 20 | 80.0% | needs_review |
 | `002884e8` | getBattlePoint() | 20 | 80.0% | needs_review |
+| `0028851c` | setMissionNo_CalcMissionPayPoint(int) | 20 | 80.0% | needs_review |
+| `00288530` | getMissionNo_CalcMissionPayPoint() | 20 | 80.0% | needs_review |
+| `00288544` | setTurnCount_CalcMissionPayPoint(int) | 20 | 80.0% | needs_review |
+| `00288558` | getTurnCount_CalcMissionPayPoint() | 20 | 80.0% | needs_review |
 | `00288578` | pspOpenDataBackBufGet(int) | 20 | 80.0% | needs_review |
 | `0028858c` | pspOpenDataIconBufGet() | 20 | 80.0% | needs_review |
+| `00289818` | pspPrimGetWorkBuf_current() | 20 | 80.0% | needs_review |
+| `0028a12c` | FFT_GetSavedata() | 20 | 80.0% | needs_review |
+| `0028b3dc` | pspWorldDataRectGet() | 20 | 80.0% | needs_review |
+| `0028ba2c` | getVSyncBlockCountTaskEmu() | 20 | 80.0% | needs_review |
+| `0028ba40` | TE_setTaskType(int) | 20 | 80.0% | needs_review |
+| `0028d1b0` | tlGetHeap() | 20 | 80.0% | needs_review |
+| `0028dcf0` | StartRCnt | 20 | 80.0% | needs_review |
 | `0028dea8` | InitCARD | 20 | 80.0% | needs_review |
+| `0028df7c` | _card_info | 20 | 80.0% | needs_review |
 | `00290b40` | SetDispMask | 20 | 100.0% | auto_structural |
+| `0029b6e8` | GsGetWorkBase | 20 | 80.0% | needs_review |
+| `0029fd7c` | GteGetCtrlReg(int) | 20 | 80.0% | needs_review |
+| `0029fda8` | GteSetCtrlReg(long, long) | 20 | 80.0% | needs_review |
 | `0029ff98` | SquareRoot0 | 20 | 100.0% | auto_structural |
 | `002a133c` | SetGeomScreen | 20 | 80.0% | needs_review |
+| `002a1370` | ReadGeomScreen | 20 | 80.0% | needs_review |
+| `002a13b4` | InitClip | 20 | 80.0% | needs_review |
 | `002a2da4` | PCclose | 20 | 80.0% | needs_review |
+| `002a2fd0` | xpInitSPAD | 20 | 80.0% | needs_review |
+| `002a3138` | xpSetResume | 20 | 80.0% | needs_review |
+| `002ab6fc` | GPUCmd_GetGPUCmd_IP() | 20 | 80.0% | needs_review |
+| `002ab8ec` | sceGuColor | 20 | 80.0% | needs_review |
+| `002ab9cc` | sceGuFinishId | 20 | 80.0% | needs_review |
+| `002abd20` | sceGuClutMode | 20 | 80.0% | needs_review |
+| `002ac000` | sceGuTexMode | 20 | 80.0% | needs_review |
+| `002b14d0` | Project_Archive_GetFile(int) | 20 | 80.0% | needs_review |
 | `002b8708` | iOS_PressTime() | 20 | 80.0% | needs_review |
 | `002b87e8` | iOS_isInGameArea() | 20 | 80.0% | needs_review |
+| `002c53c0` | Main_GetPauseFlag() | 20 | 80.0% | needs_review |
+| `002c53d4` | Main_SetPauseFlag(int) | 20 | 80.0% | needs_review |
 | `002c9a25` | operator new[](unsigned int) | 20 | 100.0% | auto_structural |
+| `002cd8ec` | __restore_core_regs | 20 | 100.0% | auto_structural |
+| `00073c64` | get_crc_table | 16 | 75.0% | needs_review |
+| `000c442c` | Adisp_abilitywindow() | 16 | 100.0% | auto_structural |
+| `000d0ddc` | Ddisp_abilitywindow() | 16 | 100.0% | auto_structural |
+| `000d6d98` | getStatusPad() | 16 | 75.0% | needs_review |
+| `00101fc0` | WgetStatusPad() | 16 | 75.0% | needs_review |
+| `0012b11c` | disp_abilitywindow() | 16 | 100.0% | auto_structural |
+| `0014ba0c` | Cdisp_abilitywindow() | 16 | 100.0% | auto_structural |
+| `0018377c` | fileopen(unsigned char*, unsigned int) | 16 | 75.0% | needs_review |
+| `001a6368` | iOSLearnTypeGet() | 16 | 75.0% | needs_review |
+| `001d4f00` | set_throwitem(int, unsigned char, unsigned char*) | 16 | 100.0% | auto_structural |
+| `001eee24` | getEffShapeAddress() | 16 | 75.0% | needs_review |
+| `0020d050` | getMapScrollXYZ() | 16 | 75.0% | needs_review |
+| `0020d2a8` | getMapScroll() | 16 | 75.0% | needs_review |
+| `0020d5c8` | getMapScale() | 16 | 75.0% | needs_review |
+| `0020d83c` | getMapAngle() | 16 | 75.0% | needs_review |
+| `0020dac8` | getBackColor() | 16 | 75.0% | needs_review |
+| `0021036c` | setShortVector(SVECTOR*, int, int, int) | 16 | 100.0% | auto_structural |
+| `0022a470` | getVariationData(int, int, int) | 16 | 100.0% | auto_structural |
+| `00245b68` | o_CardInit() | 16 | 100.0% | auto_structural |
+| `0025690c` | IOSsTownModeGet() | 16 | 75.0% | needs_review |
+| `0025f3ec` | iOSSnapshotGet() | 16 | 75.0% | needs_review |
+| `00263aac` | iOSNovelBrightStop() | 16 | 75.0% | needs_review |
+| `0027b494` | getDrawPrimNum() | 16 | 75.0% | needs_review |
+| `00285e40` | pspJobGetIndex2Job(int) | 16 | 100.0% | auto_structural |
+| `0028bf3c` | TE_dummy() | 16 | 100.0% | auto_structural |
+| `0028decc` | StartCARD | 16 | 75.0% | needs_review |
+| `0028deec` | StopCARD | 16 | 75.0% | needs_review |
+| `0028e694` | xpSetVblankFunc(void (*)(int, void*), void*) | 16 | 100.0% | auto_structural |
+| `002a1028` | CompMatrix | 16 | 100.0% | auto_structural |
+| `002a2be8` | PCinit | 16 | 75.0% | needs_review |
+| `002a2fe4` | xpGetSPADAddress | 16 | 75.0% | needs_review |
+| `002a3100` | xpMallocIO | 16 | 100.0% | auto_structural |
+| `002a39b8` | sceGeEdramGetAddr | 16 | 75.0% | needs_review |
+| `002b1fe8` | Offscreen_Get() | 16 | 75.0% | needs_review |
+| `002b375c` | Error_GetErrorCode() | 16 | 75.0% | needs_review |
+| `002bef64` | ResumeData_GetHeapOffset() | 16 | 75.0% | needs_review |
+| `00077ab8` | gzopen | 12 | 100.0% | auto_structural |
+| `00077ac4` | gzopen64 | 12 | 100.0% | auto_structural |
+| `000823c8` | unzSetOffset | 12 | 100.0% | auto_structural |
+| `000b9f7c` | CTHREAD::RequestExit() | 12 | 100.0% | auto_structural |
+| `000b9fac` | CTHREAD::RequestSuspend() | 12 | 100.0% | auto_structural |
+| `000b9fb8` | CTHREAD::RequestResume() | 12 | 100.0% | auto_structural |
+| `000b9fd4` | TRACE_Empty(char const*, ...) | 12 | 100.0% | auto_structural |
+| `000ba084` | Sleep(unsigned int) | 12 | 100.0% | auto_structural |
+| `000d8734` | getanimpanel(int, SVECTOR*) | 12 | 100.0% | auto_structural |
+| `00100408` | Wgetanimpanel(int, SVECTOR*) | 12 | 100.0% | auto_structural |
+| `001d8d1c` | get_itemcommon(unsigned short) | 12 | 100.0% | auto_structural |
+| `001e692c` | setskilldata_to_ACT(ACT*) | 12 | 100.0% | auto_structural |
+| `0020ebb8` | eventTerminateAnimation(int, int, short, short, short) | 12 | 100.0% | auto_structural |
+| `0021680c` | callZingle(int) | 12 | 100.0% | auto_structural |
+| `0021b50c` | loadData(char*, char**) | 12 | 100.0% | auto_structural |
+| `00282268` | iOS_clearOkNg() | 12 | 100.0% | auto_structural |
+| `0028aec4` | __bpGetFileNum | 12 | 100.0% | auto_structural |
+| `0028afd0` | __bpGetBinaryData | 12 | 100.0% | auto_structural |
+| `0028ce48` | asmClearBuffer(void*, unsigned int) | 12 | 100.0% | auto_structural |
+| `002b2d04` | SysSE_PlayUI(int) | 12 | 100.0% | auto_structural |
+| `002c9115` | operator delete(void*) | 12 | 100.0% | auto_structural |
