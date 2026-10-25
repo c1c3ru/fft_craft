@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **120/1258** pending functions.
+Evidence collected: **128/1258** pending functions.
 These reports do not constitute semantic verification.
 
 | Address | Function | Evidence |
@@ -129,3 +129,11 @@ These reports do not constitute semantic verification.
 | `000cbc3c` | TrapWindowTaskManager(int, int, short, int) | [Evidence](semantic-evidence/000cbc3c.md) |
 | `00101fe4` | Wevent_init_memory() | [Evidence](semantic-evidence/00101fe4.md) |
 | `001aec8c` | DrawEquipCategory(int, int, int) | [Evidence](semantic-evidence/001aec8c.md) |
+| `00291178` | MoveImage2 | [Evidence](semantic-evidence/00291178.md) |
+| `0029a2d8` | DrawOTag | [Evidence](semantic-evidence/0029a2d8.md) |
+| `002b7378` | RENDER_TO_SCREEN(int, int, int*, int*) | [Evidence](semantic-evidence/002b7378.md) |
+| `00155b4c` | worldmap_menuinit() | [Evidence](semantic-evidence/00155b4c.md) |
+| `0015d748` | iOSCurSameOK() | [Evidence](semantic-evidence/0015d748.md) |
+| `001dc944` | set_casting_status(BWORK*, unsigned char) | [Evidence](semantic-evidence/001dc944.md) |
+| `0022588c` | NewObject(short, short) | [Evidence](semantic-evidence/0022588c.md) |
+| `002b7268` | SCREEN_TO_RENDER(int, int, int*, int*) | [Evidence](semantic-evidence/002b7268.md) |
