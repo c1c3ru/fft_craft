@@ -24649,3 +24649,445 @@ anteriores.
 validador estrito `structural_v3` (100% code_coverage_pct,
 `unexplained_count: 0`, `tables_safe: true` onde aplicável), sem
 necessidade de releitura manual adicional.
+
+## 637. `houkoku_talkunit(int)` — leitura completa: escolhe o "orador" da tela de relatório comparando um stat de prioridade (`byte_0x1e`/`0x1f`) entre participantes, modo de comparação vem de um campo global `+0x26` (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614)
+
+`houkoku_talkunit(int id)` (`0x25b78c`, 236 B) — disassembly linear
+completo via Capstone. 56 de 56 instruções reais lidas e atribuídas
+(código termina em `0x25b86c`); os 3 words finais (12 B) são literal
+pool — total exato de 236 B. Tabela de salto confirmada e validada
+manualmente: `cmp r3,#3; addls pc,pc,r3,lsl#2` em `0x25b7ec`, 4 casos
++ default, todos os alvos dentro da função (o mesmo idiom `ADDLS`
+que o validador `structural_v3` rejeita automaticamente, mas que é
+seguro — a checagem de limite é o próprio `addls`).
+
+```c
+int houkoku_talkunit(int id) {
+    UnitWork* u = &g_unitWorkBase[id * 9];      // stride 9
+    uint8_t count = u->byte5;                    // número de participantes
+    if (count == 1) return u->byte6;             // caso trivial: 1 participante
+
+    uint16_t flagField = (*g_cfgPtr)->half_0x26;  // global via GOT, campo +0x26
+    int sel = flagField & ~2;
+    int best = (sel == 1) ? -1 : LITERAL_R7;      // constante do literal pool
+
+    if (count == 0) return best;
+
+    uint8_t bestId = 0;
+    uint8_t* idList = (uint8_t*)u + 6;
+    for (int i = 0; i < count; i++) {
+        uint8_t pid = *idList++;
+        void* rec = get_unitwork_add_wld(pid);     // bl, §565
+        switch (flagField - 1) {                    // bounded, 4 casos + default
+            case 0: /* entra sem comparar stat */          goto join;
+            case 1: val = rec->byte_0x1e; cmp = val > best;  break;
+            case 2: val = rec->byte_0x1e; cmp = val < best;  break;
+            case 3: val = rec->byte_0x1f; cmp = val > best;  break;
+            default: val = rec->byte_0x1f; cmp = val >= best; break;
+        }
+        if (cmp) { bestId = pid; best = val; }
+    join: ;
+    }
+    return bestId;
+}
+```
+
+Confirma e refina a nota em bloco do §614 ("fecha mais um elo do
+cluster houkoku"): escolhe a unidade "oradora" da tela de relatório
+comparando um stat de prioridade (`byte_0x1e` ou `byte_0x1f` do
+registro de trabalho de cada participante, via `get_unitwork_add_wld`
+§565) entre todos os participantes, com o modo de comparação (qual
+stat, qual direção) selecionado por um campo global de config `+0x26`
+— provável seletor de dificuldade/time/modo de ordenação.
+
+**Lacunas aceitas**: constante exata do literal pool usada como
+sentinela alternativa (`LITERAL_R7`); identidade simbólica do struct
+global em `g_cfgPtr`/`+0x26` e dos dois stats `byte_0x1e`/`byte_0x1f`
+(provavelmente dois eixos de "peso de fala" distintos).
+
+**Status CSV: `read_full`** — 56/56 instruções reais, 1 `bl` já
+documentado, tabela de salto verificada manualmente (4 casos +
+default, todos dentro dos limites).
+
+## 638. `pspMsgGet(unsigned int)` — leitura completa: getter puro de ponteiro por categoria (9 casos, 0 `bl`), confirma exatamente 9 categorias de mensagem, 2 delas via indireção dupla (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614)
+
+`pspMsgGet(unsigned int id)` (`0x285e50`, 232 B) — disassembly
+linear completo via Capstone. 49 de 49 instruções reais lidas e
+atribuídas (código termina em `0x285f14`); os 9 words finais (36 B)
+são literal pool — total exato de 232 B. Função-folha pura (0 `bl`).
+Tabela de salto confirmada manualmente: `cmp r0,#8; addls pc,pc,r0,
+lsl#2`, 9 casos + default, todos os alvos dentro da função.
+
+```c
+char* pspMsgGet(unsigned int id) {
+    switch (id) {                 // limitado 0..8 via addls; id>8 -> default
+        case 0: return GOT_PTR_0;
+        case 1: return GOT_PTR_1 + 0x4c4;
+        case 2: return GOT_PTR_2 + 0xad0;
+        case 3: return GOT_PTR_3 - 0x144;
+        case 4: return *GOT_PTR_4;            // indireção dupla
+        case 5: return GOT_PTR_5 + 0x414;
+        case 6: return GOT_PTR_6 + 0x14;
+        case 7: return *GOT_PTR_7;            // indireção dupla
+        case 8: return GOT_PTR_8 + 0x78;
+        default: return 0;
+    }
+}
+```
+
+Cada caso resolve uma base distinta via GOT (`ldr r0,[pc,#N]; add
+r0,pc,r0`) mais um offset fixo pequeno — getter clássico "id de
+categoria → ponteiro pra tabela de dados/string fixa", confirmando
+exatamente a hipótese já registrada no §614 ("getter de texto de
+mensagem por categoria") com o número exato de categorias (9, não um
+número aberto). **Achado novo**: os casos 4 e 7 usam indireção dupla
+(ponteiro-pra-ponteiro) enquanto os outros 7 são base+offset direto —
+sugere que essas duas categorias apontam pra uma tabela de
+ponteiros, não dado inline.
+
+**Lacuna aceita**: identidade simbólica das 9 bases GOT (precisaria
+resolver contra a seção de dados pra nomear cada categoria).
+
+**Status CSV: `read_full`** — 49/49 instruções reais, função-folha
+sem `bl`, tabela de salto verificada manualmente (9 casos + default).
+
+## 639. `getNextSENo(int)` — leitura completa: sequenciador de efeito sonoro por-id com contador de chamadas e modo de seleção (flat/cíclico/alternado/"1ª chamada diferente") (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614)
+
+`getNextSENo(int id)` (`0x21d544`, 220 B) — disassembly linear
+completo via Capstone. 52 de 52 instruções reais lidas e atribuídas
+(código termina em `0x21d614`); os 3 words finais (12 B) são literal
+pool — total exato de 220 B. Função-folha pura (0 `bl`). Tabela de
+salto confirmada manualmente: `cmp r2,#4; addls pc,pc,r2,lsl#2`, 5
+casos + default, todos dentro da função.
+
+```c
+int getNextSENo(int id) {
+    uint8_t* table = *g_senoTableBase;
+    uint8_t callCount = table[id];                 // contador de chamadas por id
+    SeEntry* e = &table_base2[id];                  // stride 4, struct paralela
+    uint8_t mode = e->byte8;                          // seletor de modo 0..4/default
+    table[id] = callCount + 1;
+
+    switch (mode) {                                   // bounded, 5 casos + default
+        case 0: case 1: return e->byte9;                // flat: sempre o mesmo SE
+        case 2: {                                        // cíclico por período
+            int phase = callCount % PERIOD;              // smull-based
+            return table_base[id + phase].byte9;
+        }
+        case 3: {                                        // alterna a cada chamada
+            int phase = callCount & 1;
+            return table_base[id + phase].byte9;
+        }
+        case 4:                                           // 1ª chamada diferente
+            if (callCount == 0) return e->byte9;
+            return table_base[id].byteA;                   // campo SE secundário
+        default:
+            if (callCount == 0) return e->byte9;
+            phase = callCount & 1;
+            return table_base[id + phase].byteA;
+    }
+}
+```
+
+Confirma a menção pontual já existente ("`getNextSENo`,
+`Ssd_PlayEffect`" — sequência sonora de cinemática/transição) e a
+nota em bloco do §614 ("próximo efeito sonoro"): não é um lookup
+plano — cada id tem um contador de chamadas incrementado a cada
+chamada e um "modo" por-id que escolhe entre estratégias de seleção
+(flat/cíclico-por-período/alternado/"1ª chamada diferente"), lendo o
+número de efeito sonoro real de um campo byte (`+9` ou `+0xA`) de
+uma tabela paralela de stride 4, opcionalmente deslocado por
+`±phase` entradas. Explica por que chamadas repetidas com o mesmo
+`id` podem retornar efeitos sonoros diferentes (ex. variações de som
+de passo).
+
+**Lacunas aceitas**: constante divisora exata do `smull` do caso 2
+(período não decodificado numericamente); nomes simbólicos de
+`g_senoTableBase`/da struct paralela de stride 4 além de `byte8`
+(modo)/`byte9`/`byteA` (números de SE).
+
+**Status CSV: `read_full`** — 52/52 instruções reais, função-folha
+sem `bl`, tabela de salto verificada manualmente (5 casos + default).
+
+## 640. `onGotoNextMode(int)` — leitura completa: confirma o enum de 8 módulos de tela de topo (1=Boot...7=Link) por simetria posicional + 2 endereços cruzados (`Boot_Init`/`Logo_Init`) (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614.1)
+
+`onGotoNextMode(int newMode)` (`0x2b20f4`, 324 B) — disassembly
+linear completo via Capstone. 78 de 78 instruções reais lidas e
+atribuídas (código termina em `0x2b2238`); os 3 words finais (12 B)
+são literal pool — total exato de 324 B. 2 tabelas de salto
+confirmadas manualmente (9 casos cada, idiom `ADDLS` seguro), já
+citadas em §614.1 pelo lado "Uninit"; esta leitura confirma também o
+lado "Init" (tail-calls).
+
+```c
+int onGotoNextMode(int newMode) {
+    int oldMode = *g_currentMode;
+    switch (oldMode) {                              // 1ª tabela: desliga a tela atual
+        case 1: Boot_Uninit();        break;
+        case 2: Main_Uninit();        break;
+        case 3: Movie_Uninit();       break;
+        case 4: Logo_Uninit();        break;
+        case 5: Settings_Uninit();    break;
+        case 6: SettingsWnd_Uninit(); break;
+        case 7: Link_Uninit();        break;
+        case 0: case 8: break;                        // nenhum uninit necessário
+        default: Error_Uninit();      break;
+    }
+    int reloaded = *g_currentMode;
+    *g_currentMode = newMode;
+    *g_currentModeShadow = newMode;                   // global espelhada
+    *g_previousMode = reloaded;
+
+    switch (newMode) {                                // 2ª tabela: liga a nova tela (tail-call)
+        case 1: return Boot_Init();            // 0x2b3464 — confirma endereço já fechado nesta sessão
+        case 2: return Main_Init_0x2bf3e8();     // inferido, sem bl/símbolo direto aqui
+        case 3: return Movie_Init_0x2c53e8();    // inferido
+        case 4: return Logo_Init();             // 0x2b582c — confirma §619, fechada nesta sessão
+        case 5: return Settings_Init_0x2c562c(); // inferido
+        case 6: return SettingsWnd_Init_0x2c718c(); // inferido
+        case 7: return Link_Init_0x2b3f34();     // inferido
+        case 0: case 8: return;                    // sem init
+        default: return unresolved_0x2b36bc();     // alvo não resolvido, provavelmente inalcançável
+    }
+}
+```
+
+**Achado de alta confiança**: o enum dos 8 módulos de tela de topo
+(1=Boot, 2=Main, 3=Movie, 4=Logo, 5=Settings, 6=SettingsWnd, 7=Link)
+é confirmado por simetria posicional entre as duas tabelas **mais
+dois endereços cruzados independentes** — `Boot_Init`=`0x2b3464` e
+`Logo_Init`=`0x2b582c`, ambos já fechados em outro lugar (`Boot_Init`
+já citado no §614.2, `Logo_Init` fechado nesta sessão como §619). Os
+outros 4 alvos de tail-call (`0x2bf3e8`/`0x2c53e8`/`0x2c562c`/
+`0x2c718c`) são portanto muito provavelmente `Main_Init`/
+`Movie_Init`/`Settings_Init`/`SettingsWnd_Init`, mas sem evidência de
+`bl`/símbolo direto dentro desta função — marcado como inferido, não
+confirmado. O alvo `default` (`0x2b36bc`, próximo mas distinto de
+`Boot_Uninit`=`0x2b36b8`) não foi resolvido e é provavelmente
+inalcançável na prática.
+
+**bl targets (1ª tabela, todos já documentados)**: `Boot_Uninit`
+(0x2b36b8), `Main_Uninit` (0x2b6b38), `Movie_Uninit` (0x2c54ac),
+`Logo_Uninit` (0x2b5e58), `Settings_Uninit` (0x2c6ebc),
+`SettingsWnd_Uninit` (0x2c8a88), `Link_Uninit` (0x2b54b4),
+`Error_Uninit` (0x2b3758).
+
+**Status CSV: `read_full`** — 78/78 instruções reais, 2 tabelas de
+salto verificadas manualmente (9 casos + default cada); 4 alvos de
+tail-call da 2ª tabela ficam como inferência de alta confiança, não
+confirmação direta.
+
+## 641. `pspFftDelete(int*)` — leitura completa: máquina de estados de 3 fases assíncronas sobre `xpLibapiSave{Start,Check,End}`, mesmo primitivo compartilhado com `pspFftSave` (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614.2)
+
+`pspFftDelete(int* outParam)` (`0x289c1c`, 320 B) — disassembly
+linear completo via Capstone. 72 de 72 instruções reais lidas e
+atribuídas (código termina em `0x289d3c`); os 8 words finais (32 B)
+são literal pool — total exato de 320 B. Tabela de salto confirmada
+manualmente: 16 casos, `ADDLS` seguro, 3 handlers distintos.
+
+```c
+int pspFftDelete(int* outParam) {
+    int state = g_fftSaveState;
+    if (state == 0) {
+        xpLibapiSaveStart(2);        // op=2 = "delete"
+        g_fftSaveState = 1;
+        g_saveStatusWord = 0;
+        return;
+    }
+    if (state == 1) {
+        int status = xpLibapiSaveCheck();
+        if (status == 0)      return 1;
+        else if (status == 1) { g_saveStatusWord = 2; return 1; }
+        else { g_saveStatusWord = status; g_otherFlag = 2; return 1; }  // "ainda pendente"
+    }
+    // state == 2: finaliza
+    xpLibapiSaveEnd();
+    g_fftSaveState = 0;
+    int status = g_saveStatusWord;
+    *outParam = status;
+    return status >> 31;    // bit de sinal como 0/-1
+}
+```
+
+**bl targets (todos já documentados)**: `xpLibapiSaveStart`
+(0x28e010), `xpLibapiSaveEnd` (0x28e0a4), `xpLibapiSaveCheck`
+(0x28e0c8). **Elo de cluster**: compartilha exatamente este mesmo
+primitivo assíncrono de 3 fases `xpLibapiSave{Start,Check,End}` com
+`pspFftSave` (`0x2899a0`, lida num fork irmão deste mesmo lote) —
+mesma máquina de estados, só muda o valor do op inicial.
+
+**Status CSV: `read_full`** — 72/72 instruções reais, 3 `bl` já
+documentados, tabela de salto verificada manualmente (16 casos, 3
+handlers distintos).
+
+## 642. `setCursorByTouch(int, int, int)` — leitura completa: edge-detect de posição + dispatch condicional por modo pra 2 helpers locais sem símbolo, função vizinha imediata de `iOSsetCursorByTouch` na memória (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614.2)
+
+`setCursorByTouch(int p0, int p1, int p2)` (`0x203070`, 308 B) —
+disassembly linear completo via Capstone. 72 de 72 instruções reais
+lidas e atribuídas (código termina em `0x203184`); os 5 words finais
+(20 B) são literal pool — total exato de 308 B. Termina exatamente
+em `0x2031a4` — **vizinha imediata, sem gap, de `iOSsetCursorByTouch`**
+(lida num fork irmão deste mesmo lote). Tabela de salto confirmada
+manualmente: 33 casos, `ADDLS` seguro, 3 handlers distintos.
+
+```c
+int setCursorByTouch(int p0, int p1, int p2) {
+    int oldA = *g_posA, oldB = *g_posB, oldC = *g_posC;
+    *g_posA = p1;
+    int changed = !(oldB == p2 && oldA == p1);
+    if (oldC != p0) changed |= 1;
+    *g_posB = p2;
+    *g_posC = p0;
+    if (!changed) return 0;        // posição não mudou: saída antecipada
+
+    int mode = *g_modePtr;          // faixa 0..32
+    switch (mode) {                  // cmp #0x20; addls pc,pc,mode,lsl#2
+        case 23:                      sub_1fba1c(); return 1;
+        case 1: case 13: case 32:     sub_202ff0(); return 1;
+        default:                       return 1;
+    }
+}
+```
+
+Edge-detect de mudança de posição de toque (compara contra 3
+globais, nota a ordem não trivial dos parâmetros: `p1→g_posA`,
+`p2→g_posB`, `p0→g_posC`), seguido de um dispatch condicional por
+modo que só dispara callback em 3 dos 32 modos possíveis — os outros
+30 só retornam sem ação.
+
+**Lacunas aceitas**: `sub_1fba1c`/`sub_202ff0` são locais sem símbolo
+dinâmico, ambos posicionados antes desta função na memória —
+provavelmente callbacks de movimento de cursor específicos de certos
+modos de UI. Identidade exata dos eixos de `g_posA/B/C` não
+confirmada independentemente. Relação com `iOSsetCursorByTouch`
+(mesmo formato de dispatch de 33 casos, posicionada logo depois na
+memória) não confirmada por evidência de chamada direta dentro desta
+função — ver §643/644 pra a leitura da irmã.
+
+**Status CSV: `read_full`** — 72/72 instruções reais, tabela de
+salto verificada manualmente (33 casos, 3 handlers); 2 `bl` locais
+sem símbolo ficam como lacuna aceita.
+
+## 643. `getMovieEventNum(int)` — leitura completa: lookup linear numa tabela de 17 ids + switch de categoria pra `setEventStatus`, mecânica completa resolvida (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614)
+
+`getMovieEventNum(int id)` (`0x2867a8`, 216 B) — disassembly linear
+completo via Capstone. 52 de 52 instruções reais lidas e atribuídas;
+os 2 words finais (8 B) são literal pool — total exato de 216 B. 1
+`bl`: `setEventStatus(int)` (já documentada).
+
+```c
+int getMovieEventNum(int id) {
+    static const int g_movieEventTable[17] = {...};
+    int idx;
+    for (idx = 0; idx < 17; idx++)
+        if (g_movieEventTable[idx] == id) goto found;
+    setEventStatus(0);
+    return -1;
+found: {
+    int sel = idx - 2;                      // switch limitado, faixa [0,13]
+    int category;
+    if (sel < 0 || sel > 13) category = 1;              // idx==0,1,16
+    else switch (sel) {
+        case 0:                         category = 3; break;  // idx==2
+        case 1: case 4: case 5: case 7: category = 1; break;  // idx==3,6,7,9
+        case 2:                         category = 5; break;  // idx==4
+        case 3: case 6: case 8: case 9: category = 2; break;  // idx==5,8,10,11
+        case 10: case 11: case 12: case 13: category = 4; break; // idx==12..15
+    }
+    setEventStatus(category);
+    g_someGlobal->field_0x68 = idx;
+    return idx;
+}}
+```
+
+Tabela de salto confirmada manualmente: guarda `cmp r3,#0xd`,
+`addls pc,pc,r3,lsl#2`, 14 casos indexados + 1 default. Mecânica
+completa: varredura linear numa tabela fixa de 17 ids de evento de
+filme, categoriza o resultado (1-5, significado exato da categoria
+não identificado além do código passado a `setEventStatus`) e
+retorna o índice encontrado.
+
+**Status CSV: `read_full`** — 52/52 instruções reais, 1 `bl` já
+documentado, tabela de salto verificada manualmente.
+
+## 644. `siOS_TCurSucCheck(unsigned int)` — leitura completa: checa se a posição atual do cursor de toque bate com a posição esperada por slot (mapeamento 1↔4/2↔3/4↔2/5↔8/6↔7/8↔1/9↔6/10↔5, não simétrico) (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614)
+
+`siOS_TCurSucCheck(unsigned int slotId)` (`0x15a65c`, 208 B) —
+disassembly linear completo via Capstone. 52 de 52 instruções reais
+lidas e atribuídas, 0 literal pool (sem `ldr` PC-relative) — total
+exato de 208 B. 1 `bl`: `siOS_TCurPosGet(unsigned int, int)` (já
+documentada), chamada como `siOS_TCurPosGet(slotId, 0)`.
+
+```c
+unsigned int siOS_TCurSucCheck(unsigned int slotId) {
+    int pos = siOS_TCurPosGet(slotId, 0);
+    int sel = slotId - 1;                    // switch limitado, slotId em [1,10]
+    if (sel > 9) return 0;
+    switch (slotId) {
+        case 1:  return pos == 4;
+        case 2:  return pos == 3;
+        case 3:  return 0;
+        case 4:  return pos == 2;
+        case 5:  return pos == 8;
+        case 6:  return pos == 7;
+        case 7:  return 0;
+        case 8:  return pos == 1;
+        case 9:  return pos == 6;
+        case 10: return pos == 5;
+    }
+}
+```
+
+Cada ramo de caso usa o idiom clássico de igualdade sem branch
+(`subs; rsbs; adcs` → 1 se igual, 0 se não), confirmado
+numericamente caso a caso. Tabela de salto confirmada manualmente:
+10 casos + default, todos os alvos válidos e sem sobreposição.
+
+**Lacuna aceita**: o mapeamento slotId→posição esperada (1↔4, 2↔3,
+4↔2, 5↔8, 6↔7, 8↔1, 9↔6, 10↔5) não é um pareamento simétrico simples
+(1↔4 mas 4↔2, não 4↔1) — provavelmente codifica adjacência num
+layout de grade/anel do cursor de toque, não confirmado
+independentemente.
+
+**Status CSV: `read_full`** — 52/52 instruções reais, 1 `bl` já
+documentado, tabela de salto verificada manualmente.
+
+## 645. `Wload_replaceitems(int, int)` — leitura completa: tabela de remapeamento de banco de item legado (códigos 224-235 → offsets 0x3800/0x4000/0x7000/0x9000 sobre `newBase`), confirma ser migração de save, não randomizador (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614)
+
+`Wload_replaceitems(int oldId, int newBase)` (`0xff9ec`, 120 B) —
+disassembly linear completo via Capstone. 30 words (120 B) exatos:
+3 instruções de prólogo + 13 words de tabela/dispatch (1 default +
+12 indexados) + 14 instruções de corpo de caso. 0 `bl` (função-folha,
+confirma o "0 distinct" do checkpoint).
+
+```c
+int Wload_replaceitems(int oldId, int newBase) {
+    int sel = oldId - 0xE0;                  // 224; switch limitado, oldId em [224,235]
+    if (sel > 11) return -1;
+    switch (sel) {
+        case 0:  return 0x4000;                           // oldId==224
+        case 1:  return newBase + 0x4000;                  // oldId==225
+        case 2: case 3: case 4: return -1;                 // oldId==226,227,228
+        case 5:  return newBase + 0x9000;                   // oldId==229
+        case 6: case 7: case 8: return -1;                  // oldId==230,231,232
+        case 9:  return newBase + 0x3800;                    // oldId==233
+        case 10: return newBase + 0x7000;                    // oldId==234
+        case 11: return newBase;                              // oldId==235, passa sem alterar
+    }
+}
+```
+
+Tabela de salto confirmada manualmente: guarda `cmp r0,#0xb`, 12
+casos indexados + default, todos os alvos verificados dentro dos
+limites e sem sobreposição (ordem da tabela de índice confere com a
+convenção dispatch+8, cruzada contra o próprio endereçamento de
+tabela do `structural_v3`). **Refina a hipótese anterior** ("provável
+randomizador") pra um mecanismo preciso: uma faixa fixa de códigos
+de item legados (224–235) é remapeada pra bancos específicos de novo
+ID de item (offsets 0x3800/0x4000/0x7000/0x9000 somados a `newBase`),
+com a maioria dos códigos da faixa sendo inválidos (-1) e um (235)
+passado sem alteração — é uma tabela de migração/remapeamento de
+save de uma vez, não um randomizador.
+
+**Status CSV: `read_full`** — 30/30 words contabilizados, 0 `bl` a
+verificar, tabela de salto verificada manualmente.

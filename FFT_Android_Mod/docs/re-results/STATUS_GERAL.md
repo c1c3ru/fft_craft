@@ -46,7 +46,7 @@ Os relatórios abaixo apresentam **efeitos locais testados sob estados sintétic
 
 Os números certificados representam **registros formais válidos para este ELF**, não aprovação estrutural. Evidências parciais não certificam equivalência.
 
-Evidências geradas e verificadas nesta execução do pipeline.
+Evidências do **último CI verificado** para este ELF, [execução 40410637043](https://github.com/c1c3ru/fft_craft/actions/runs/40410637043); os testes não foram reexecutados nesta geração do painel.
 
 | Indicador | Resultado |
 |---|---:|
@@ -114,11 +114,7 @@ Estas duas prioridades são **curadas no gerador**; quando um limite for resolvi
 
 ## Pull requests recentes
 
-- [PR #330 — feat(re): preparar cinco contratos BX LR para revisão humana e ledger parcial](https://github.com/c1c3ru/fft_craft/pull/330)
-- [PR #329 — chore(re): automated structural batch 40408581057](https://github.com/c1c3ru/fft_craft/pull/329)
-- [PR #328 — fix(ci): separar snapshots semânticos dos checkpoints ARM nos lotes automáticos](https://github.com/c1c3ru/fft_craft/pull/328)
-- [PR #327 — feat(re): exigir prova ELF e revisão humana autêntica para certificações semânticas](https://github.com/c1c3ru/fft_craft/pull/327)
-- [PR #326 — chore(re): automated structural batch 40405241371](https://github.com/c1c3ru/fft_craft/pull/326)
+Metadados dos PRs indisponíveis nesta execução local; [consultar merges](https://github.com/c1c3ru/fft_craft/pulls?q=is%3Apr+is%3Amerged).
 
 ## Atualização automática e fontes
 
