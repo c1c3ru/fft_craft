@@ -144,7 +144,7 @@ def render(data, results, prs=None, semantic=None):
         f"{v3['auto_structural']:,} / {v3['needs_review']:,} | "
         "Subconjunto já analisado pelas regras v3 |",
         "| Equivalência semântica integral registrada | "
-        f"**{semantic[\u0027certified\u0027]:,}** | Certificados revisáveis vinculados ao ELF; "
+        f"**{semantic['certified']:,}** | Certificados revisáveis vinculados ao ELF; "
         "microexecuções não são certificados |" if semantic is not None
         else "| Equivalência semântica integral registrada | **não mensurada** | "
              "Dados de certificados não disponíveis nesta geração |",
