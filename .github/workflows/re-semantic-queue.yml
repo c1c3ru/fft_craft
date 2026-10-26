@@ -34,6 +34,8 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/test_arm_bx_reference.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_run_snapshot.py'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_run_snapshot.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_certificate_gate.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_certificate_gate.py'
 
 permissions:
   contents: read
@@ -53,6 +55,10 @@ jobs:
           python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_work_queue.py' -v
       - name: Install ARM analysis dependencies
         run: python3 -m pip install capstone pyelftools unicorn
+      - name: Validate formal semantic certificate gate
+        run: |
+          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_certificate_gate.py' -v
+          python3 FFT_Android_Mod/docs/re-tools/semantic_certificate_gate.py
       - name: Test dynamic evidence accounting
         run: python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_dynamic_evidence.py' -v
       - name: Test centralized dashboard
