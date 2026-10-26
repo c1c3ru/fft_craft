@@ -1,0 +1,20 @@
+{
+  "address": "0024e91c",
+  "name": "ctlpersmes_init(int)",
+  "size": 448,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 91.96,
+  "distinct_bl": 3,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "153734",
+    "25f1e8",
+    "266654"
+  ],
+  "log": "=== jtable.py: 0x24e91c..0x24eadc (448 bytes) ===\ncoverage: 103 of ~112 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x153734 x2   Wsend_taskparamater(long, long, long, long) \n  0x25f1e8 x1   wldmes_load(int) \n  0x266654 x1   add_winpac(unsigned long*, int*) \n\n-- branches: 2 total, 1 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

@@ -2,8 +2,8 @@
   "address": "002472a8",
   "name": "ctlsound_main(CTLINFO*)",
   "size": 484,
-  "previous_status": "unread",
-  "status": "needs_review",
+  "previous_status": "read_full",
+  "status": "auto_structural",
   "coverage_pct": 93.39,
   "distinct_bl": 6,
   "tables_resolved": 0,
@@ -17,7 +17,36 @@
     "27f4f4"
   ],
   "log": "=== jtable.py: 0x2472a8..0x24748c (484 bytes) ===\ncoverage: 113 of ~121 instruction slots (93%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x2168e0 x3   callSystemSound(int) \n  0x246388 x1   ctlopentitle_active(CTLINFO*) \n  0x24971c x2   vOpn_key_rep(unsigned long) \n  0x2712cc x1   Ssd_SetStereo(int) \n  0x27f204 x1   iOS_SetRectHit(int, RECT16*, int) \n  0x27f4f4 x1   iOS_GetRectHitNoTap() \n\n-- branches: 9 total, 2 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x2472a8",
+    "total_slots": 121,
+    "code_slots": 113,
+    "instruction_slots": 113,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x24746c",
+      "0x247470",
+      "0x247474",
+      "0x247478",
+      "0x24747c",
+      "0x247480",
+      "0x247484",
+      "0x247488"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/002472a8.json"
 }

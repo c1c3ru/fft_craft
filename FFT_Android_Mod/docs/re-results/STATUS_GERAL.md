@@ -10,19 +10,19 @@
 |---|---:|---|
 | Funções no inventário | 6,455 | Inventário ARM |
 | Checkpoints JSON válidos para este ELF | 3,002 | Status acompanhados |
-| Aprovados estruturalmente | 2,913 | Aprovação automática de estrutura, não de comportamento |
-| Precisam de revisão | 89 | Status `needs_review` |
-| Aprovação estrutural entre checkpoints | **97.0%** | 2,913/3,002, **não** percentual de engenharia reversa completa |
+| Aprovados estruturalmente | 2,952 | Aprovação automática de estrutura, não de comportamento |
+| Precisam de revisão | 50 | Status `needs_review` |
+| Aprovação estrutural entre checkpoints | **98.3%** | 2,952/3,002, **não** percentual de engenharia reversa completa |
 | Checkpoints pendentes de criação | 0 | Não incluem funções cobertas apenas pelo histórico CSV |
-| Metas de núcleo em revisão | 73 | De 2,345 checkpoints do núcleo |
-| v3: checkpoints / aprovados / revisão | 1,213 / 1,169 / 44 | Subconjunto já analisado pelas regras v3 |
+| Metas de núcleo em revisão | 34 | De 2,345 checkpoints do núcleo |
+| v3: checkpoints / aprovados / revisão | 1,258 / 1,208 / 50 | Subconjunto já analisado pelas regras v3 |
 | Equivalência semântica integral registrada | **0** | Certificados revisáveis vinculados ao ELF; microexecuções não são certificados |
 
 O histórico CSV contém **5,932** registros de análise anterior, que podem se sobrepor aos checkpoints. **Não somamos esses conjuntos para criar um percentual global fictício.**
 
 ## Evidência e testes semânticos
 
-89/89 relatórios estáticos de evidências. **Relatórios não são equivalência semântica certificada.**
+89/89 relatórios estáticos de evidências — desatualizado perante 50 checkpoints pendentes. **Relatórios não são equivalência semântica certificada.**
 
 Os relatórios abaixo apresentam **efeitos locais testados sob estados sintéticos** e seus limites. Testes passando não significam que a função inteira foi reconstruída:
 
@@ -44,7 +44,7 @@ Os relatórios abaixo apresentam **efeitos locais testados sob estados sintétic
 
 Os números certificados representam **registros formais válidos para este ELF**, não aprovação estrutural. Evidências parciais não certificam equivalência.
 
-Evidências geradas e verificadas nesta execução do pipeline.
+Evidências do **último CI verificado** para este ELF, [execução 40405241371](https://github.com/c1c3ru/fft_craft/actions/runs/40405241371); os testes não foram reexecutados nesta geração do painel.
 
 | Indicador | Resultado |
 |---|---:|
@@ -102,20 +102,16 @@ Estas duas prioridades são **curadas no gerador**; quando um limite for resolvi
 
 | Endereço | Função | Cobertura | Motivo |
 |---|---|---:|---|
-| `0028179c` | iOS_v2menuSetType(V2MENU_TYPE) | 94.81% | coverage_below_95 |
-| `00244200` | vEnd_rollproc() | 91.67% | coverage_below_95 |
-| `000df864` | event_status_set(unsigned short, unsigned short) | 93.13% | coverage_below_95 |
-| `0025a228` | houkoku_okng(CTLINFO*) | 93.7% | coverage_below_95 |
 | `002b2448` | EnvSE_Play(int) | 77.17% | resolved_jump_table_check |
-| `0028bb88` | TE_asmTaskEntry(int) | 91.27% | coverage_below_95 |
+| `0015813c` | unittoface(int) | 69.35% | resolved_jump_table_check |
+| `001ccc3c` | getTrapResultDamage(BWORK*, int) | 88.71% | resolved_jump_table_check |
+| `00159aac` | asm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long) | 80.2% | resolved_jump_table_check |
+| `00162080` | wasm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long) | 80.2% | resolved_jump_table_check |
+| `002031a4` | iOSsetCursorByTouch(int, int, int, int, int) | 57.14% | resolved_jump_table_check |
 
 ## Pull requests recentes
 
-- [PR #325 — fix(re): preservar evidências semânticas verificadas no STATUS_GERAL](https://github.com/c1c3ru/fft_craft/pull/325)
-- [PR #324 — chore(re): automated structural batch 40390774344](https://github.com/c1c3ru/fft_craft/pull/324)
-- [PR #323 — feat(re): validar todas as 303 funções BX LR contra modelo independente ARM/Thumb](https://github.com/c1c3ru/fft_craft/pull/323)
-- [PR #322 — chore(re): automated structural batch 40389908108](https://github.com/c1c3ru/fft_craft/pull/322)
-- [PR #321 — feat(re): iniciar contratos semânticos locais completos com retornos ARM/Thumb](https://github.com/c1c3ru/fft_craft/pull/321)
+Metadados dos PRs indisponíveis nesta execução local; [consultar merges](https://github.com/c1c3ru/fft_craft/pulls?q=is%3Apr+is%3Amerged).
 
 ## Atualização automática e fontes
 

@@ -2,7 +2,7 @@
   "address": "001ccc3c",
   "name": "getTrapResultDamage(BWORK*, int)",
   "size": 496,
-  "previous_status": "unread",
+  "previous_status": "read_full",
   "status": "needs_review",
   "coverage_pct": 88.71,
   "distinct_bl": 2,
@@ -13,7 +13,52 @@
     "2869f0"
   ],
   "log": "=== jtable.py: 0x1ccc3c..0x1cce2c (496 bytes) ===\ncoverage: 110 of ~124 instruction slots (89%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0x1ccc64, dispatch @0x1ccc68: 7 cases, 7 distinct handlers\n    targets: ['0x1cccc0', '0x1cccd8', '0x1ccd00', '0x1ccd08', '0x1ccd2c', '0x1ccdec', '0x1ccc8c']\n\n-- bl targets: 2 distinct --\n  0x1ca5a4 x4   change_status_adjust(int) \n  0x2869f0 x1   _pspNetRand(char const*, int) \n\n-- branches: 6 total, 5 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "needs_review",
+    "reason": "unverified_jump_table",
+    "function_start": "0x1ccc3c",
+    "total_slots": 124,
+    "code_slots": 110,
+    "instruction_slots": 110,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x1cce14",
+      "0x1cce18",
+      "0x1cce1c",
+      "0x1cce20",
+      "0x1cce24",
+      "0x1cce28"
+    ],
+    "unexplained_slots": [
+      "0x1ccc6c",
+      "0x1ccc70",
+      "0x1ccc74",
+      "0x1ccc78",
+      "0x1ccc7c",
+      "0x1ccc80",
+      "0x1ccc84",
+      "0x1ccc88"
+    ],
+    "unexplained_count": 8,
+    "unresolved_dispatches": [],
+    "tables_safe": false,
+    "tables": [
+      {
+        "guard": "0x1ccc64",
+        "dispatch": "0x1ccc68",
+        "cases": 7,
+        "safe": false,
+        "reason": "missing or unbounded CMP/ADD dispatch"
+      }
+    ],
+    "code_coverage_pct": 93.22,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
+  "review_attempts": 1,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/001ccc3c.json"
 }

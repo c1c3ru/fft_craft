@@ -2,8 +2,8 @@
   "address": "0025a228",
   "name": "houkoku_okng(CTLINFO*)",
   "size": 508,
-  "previous_status": "unread",
-  "status": "needs_review",
+  "previous_status": "read_full",
+  "status": "auto_structural",
   "coverage_pct": 93.7,
   "distinct_bl": 9,
   "tables_resolved": 0,
@@ -20,7 +20,36 @@
     "2b9cac"
   ],
   "log": "=== jtable.py: 0x25a228..0x25a424 (508 bytes) ===\ncoverage: 119 of ~127 instruction slots (94%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 9 distinct --\n  0x153734 x1   Wsend_taskparamater(long, long, long, long) \n  0x253a10 x1   wldctl_active() \n  0x267340 x2   iOS_add_anmpac_max(int) \n  0x26b374 x2   sound_request(int) \n  0x27d404 x1   iOS_CMenuTouch::setDispAssist(int) \n  0x280620 x1   iOS_setLockInput(unsigned char) \n  0x282268 x2   iOS_clearOkNg() \n  0x2b7ccc x1   iOS_getV2Icon(V2ICON_DATA) \n  0x2b9cac x1   iOS_setV2Icon(V2ICON_DATA, int) \n\n-- branches: 10 total, 2 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x25a228",
+    "total_slots": 127,
+    "code_slots": 119,
+    "instruction_slots": 119,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x25a404",
+      "0x25a408",
+      "0x25a40c",
+      "0x25a410",
+      "0x25a414",
+      "0x25a418",
+      "0x25a41c",
+      "0x25a420"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/0025a228.json"
 }

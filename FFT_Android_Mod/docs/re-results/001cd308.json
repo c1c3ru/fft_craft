@@ -2,8 +2,8 @@
   "address": "001cd308",
   "name": "check_learning(int, unsigned short*)",
   "size": 392,
-  "previous_status": "unread",
-  "status": "needs_review",
+  "previous_status": "read_full",
+  "status": "auto_structural",
   "coverage_pct": 94.9,
   "distinct_bl": 5,
   "tables_resolved": 0,
@@ -16,7 +16,33 @@
     "286994"
   ],
   "log": "=== jtable.py: 0x1cd308..0x1cd490 (392 bytes) ===\ncoverage: 93 of ~98 instruction slots (95%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 5 distinct --\n  0x187618 x1   GetLocalJobNumber(short) \n  0x1d7538 x1   get_command_ability(int, int) \n  0x1d9548 x1   check_prob(int, int) \n  0x1d98c8 x1   check_status_data2(BWORK*, int) \n  0x286994 x1   pspNetGetBattleModeFlag() \n\n-- branches: 16 total, 8 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x1cd308",
+    "total_slots": 98,
+    "code_slots": 93,
+    "instruction_slots": 93,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x1cd47c",
+      "0x1cd480",
+      "0x1cd484",
+      "0x1cd488",
+      "0x1cd48c"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/001cd308.json"
 }

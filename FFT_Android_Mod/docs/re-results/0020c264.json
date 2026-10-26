@@ -2,8 +2,8 @@
   "address": "0020c264",
   "name": "db_init(int, int, int, unsigned char, unsigned char, unsigned char)",
   "size": 436,
-  "previous_status": "unread",
-  "status": "needs_review",
+  "previous_status": "read_full",
+  "status": "auto_structural",
   "coverage_pct": 94.5,
   "distinct_bl": 12,
   "tables_resolved": 0,
@@ -23,7 +23,34 @@
     "714b8"
   ],
   "log": "=== jtable.py: 0x20c264..0x20c418 (436 bytes) ===\ncoverage: 103 of ~109 instruction slots (94%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 12 distinct --\n  0x714b8 x1   sub_714b8 LOCAL(no-dynsym)\n  0x20fb14 x1   initializeDebugFont() \n  0x290b40 x1   SetDispMask \n  0x290cf0 x1   ResetGraph \n  0x290dc0 x1   DrawSync \n  0x291bc0 x1   PutDrawEnv \n  0x294af8 x1   PutDispEnv \n  0x29a834 x1   ClearImage \n  0x29a858 x2   SetDefDispEnv \n  0x29a89c x2   SetDefDrawEnv \n  0x2a1324 x1   SetGeomOffset \n  0x2a133c x1   SetGeomScreen \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x20c264",
+    "total_slots": 109,
+    "code_slots": 103,
+    "instruction_slots": 103,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x20c400",
+      "0x20c404",
+      "0x20c408",
+      "0x20c40c",
+      "0x20c410",
+      "0x20c414"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/0020c264.json"
 }

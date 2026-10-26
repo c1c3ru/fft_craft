@@ -1,0 +1,21 @@
+{
+  "address": "0027207c",
+  "name": "GetNearestUnit(int)",
+  "size": 472,
+  "previous_status": "mentioned_unverified",
+  "status": "needs_review",
+  "coverage_pct": 92.37,
+  "distinct_bl": 4,
+  "tables_resolved": 1,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "271e1c",
+    "273d20",
+    "2766f4",
+    "27afdc"
+  ],
+  "log": "=== jtable.py: 0x27207c..0x272254 (472 bytes) ===\ncoverage: 109 of ~118 instruction slots (92%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0x272164, dispatch @0x272168: 6 cases, 5 distinct handlers\n    targets: ['0x2721b8', '0x2721f0', '0x2721e0', '0x2720f0', '0x2720f0', '0x2721c4']\n\n-- bl targets: 4 distinct --\n  0x271e1c x2   GetDistance(BWORK*, BWORK*) \n  0x273d20 x1   IsNullUnit(int) \n  0x2766f4 x1   GetHightDistance(unsigned char*, BWORK*) \n  0x27afdc x1   IsNeedlessToFear(int) \n\n-- branches: 23 total, 19 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

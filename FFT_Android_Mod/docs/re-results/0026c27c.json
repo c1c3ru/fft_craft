@@ -2,8 +2,8 @@
   "address": "0026c27c",
   "name": "ctltresure_init()",
   "size": 336,
-  "previous_status": "unread",
-  "status": "needs_review",
+  "previous_status": "read_structural",
+  "status": "auto_structural",
   "coverage_pct": 91.67,
   "distinct_bl": 5,
   "tables_resolved": 0,
@@ -16,7 +16,35 @@
     "2b9cac"
   ],
   "log": "=== jtable.py: 0x26c27c..0x26c3cc (336 bytes) ===\ncoverage: 77 of ~84 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 5 distinct --\n  0x103400 x1   Wread_eventflag(int) \n  0x153734 x1   Wsend_taskparamater(long, long, long, long) \n  0x270414 x1   defscrwin_set(int, int, _POINT*, _POINT*) \n  0x270490 x1   curhis_put(int, int, int) \n  0x2b9cac x2   iOS_setV2Icon(V2ICON_DATA, int) \n\n-- branches: 2 total, 1 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x26c27c",
+    "total_slots": 84,
+    "code_slots": 77,
+    "instruction_slots": 77,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x26c3b0",
+      "0x26c3b4",
+      "0x26c3b8",
+      "0x26c3bc",
+      "0x26c3c0",
+      "0x26c3c4",
+      "0x26c3c8"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/0026c27c.json"
 }

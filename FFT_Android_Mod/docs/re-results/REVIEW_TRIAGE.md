@@ -1,47 +1,47 @@
 # ARM semantic review triage
 
-Unverified checkpoints: **89**; core targets: **73**.
+Unverified checkpoints: **50**; core targets: **34**.
 
 These are structural observations, not semantic equivalence proofs.
 
 | Review reason | Total | Core |
 |---|---:|---:|
-| coverage_below_95 | 55 | 48 |
+| coverage_below_95 | 16 | 9 |
 | resolved_jump_table_check | 34 | 25 |
 
 ## Highest priority evidence collection
 
 | Address | Function | Coverage | Reason | Next check |
 |---|---|---:|---|---|
-| `0028179c` | iOS_v2menuSetType(V2MENU_TYPE) | 94.81% | coverage_below_95 | Disassemble uncovered blocks and side effects |
-| `00244200` | vEnd_rollproc() | 91.67% | coverage_below_95 | Disassemble uncovered blocks and side effects |
-| `000df864` | event_status_set(unsigned short, unsigned short) | 93.13% | coverage_below_95 | Disassemble uncovered blocks and side effects |
-| `0025a228` | houkoku_okng(CTLINFO*) | 93.7% | coverage_below_95 | Disassemble uncovered blocks and side effects |
 | `002b2448` | EnvSE_Play(int) | 77.17% | resolved_jump_table_check | Verify guard, all cases and default path |
-| `0028bb88` | TE_asmTaskEntry(int) | 91.27% | coverage_below_95 | Disassemble uncovered blocks and side effects |
-| `0024eadc` | ctlperson_main(CTLINFO*) | 92.0% | coverage_below_95 | Disassemble uncovered blocks and side effects |
-| `002576e0` | ctlevtinfo_init(int) | 92.0% | coverage_below_95 | Disassemble uncovered blocks and side effects |
 | `0015813c` | unittoface(int) | 69.35% | resolved_jump_table_check | Verify guard, all cases and default path |
-| `001bc87c` | UnitTableInit(short) | 86.29% | coverage_below_95 | Disassemble uncovered blocks and side effects |
 | `001ccc3c` | getTrapResultDamage(BWORK*, int) | 88.71% | resolved_jump_table_check | Verify guard, all cases and default path |
-| `002472a8` | ctlsound_main(CTLINFO*) | 93.39% | coverage_below_95 | Disassemble uncovered blocks and side effects |
-| `00253f20` | ctlmap_init() | 90.0% | coverage_below_95 | Disassemble uncovered blocks and side effects |
-| `0026c680` | ctltresure_main(CTLINFO*) | 92.5% | coverage_below_95 | Disassemble uncovered blocks and side effects |
-| `002553a8` | ctlhelp2_init(int, int) | 91.6% | coverage_below_95 | Disassemble uncovered blocks and side effects |
-| `0019dc10` | SttsEmploy() | 89.83% | coverage_below_95 | Disassemble uncovered blocks and side effects |
-| `0026dd40` | ctlhentuto_init() | 92.24% | coverage_below_95 | Disassemble uncovered blocks and side effects |
-| `002608c0` | ctlokng_init(_POINT) | 92.17% | coverage_below_95 | Disassemble uncovered blocks and side effects |
-| `0025990c` | ctlhistory_main(CTLINFO*) | 92.11% | coverage_below_95 | Disassemble uncovered blocks and side effects |
-| `001d8b58` | get_ability_address(int, ABILITY_COMMON_DATA**, void**) | 92.04% | coverage_below_95 | Disassemble uncovered blocks and side effects |
-| `0024e91c` | ctlpersmes_init(int) | 91.96% | coverage_below_95 | Disassemble uncovered blocks and side effects |
-| `0019d304` | DressSellStock() | 90.99% | coverage_below_95 | Disassemble uncovered blocks and side effects |
-| `001eb124` | loadAbilityAnimation(tag_animation*, void*) | 94.5% | coverage_below_95 | Disassemble uncovered blocks and side effects |
-| `0020c264` | db_init(int, int, int, unsigned char, unsigned char, unsigned char) | 94.5% | coverage_below_95 | Disassemble uncovered blocks and side effects |
-| `0019df84` | AccountEmploy() | 91.67% | coverage_below_95 | Disassemble uncovered blocks and side effects |
-| `0026abac` | timeevt_chk() | 87.96% | coverage_below_95 | Disassemble uncovered blocks and side effects |
-| `00247884` | birthday_change(CTLINFO*) | 94.39% | coverage_below_95 | Disassemble uncovered blocks and side effects |
-| `00270520` | valnumwin_set(int, unsigned long, int, _POINT*) | 93.4% | coverage_below_95 | Disassemble uncovered blocks and side effects |
-| `0024f4e8` | ctltipsmes_init(int) | 93.27% | coverage_below_95 | Disassemble uncovered blocks and side effects |
-| `0019dde8` | BuyEmploy() | 92.23% | coverage_below_95 | Disassemble uncovered blocks and side effects |
+| `00159aac` | asm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long) | 80.2% | resolved_jump_table_check | Verify guard, all cases and default path |
+| `00162080` | wasm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long) | 80.2% | resolved_jump_table_check | Verify guard, all cases and default path |
+| `002031a4` | iOSsetCursorByTouch(int, int, int, int, int) | 57.14% | resolved_jump_table_check | Verify guard, all cases and default path |
+| `002c9b11` | __gxx_personality_v0 | 7.22% | coverage_below_95 | Disassemble uncovered blocks and side effects |
+| `0027fe84` | Savedata_Load(unsigned char*, int*) | 94.79% | coverage_below_95 | Disassemble uncovered blocks and side effects |
+| `0028e2e4` | CdControl | 68.75% | resolved_jump_table_check | Verify guard, all cases and default path |
+| `001d972c` | get_shape2(BWORK*, unsigned char*) | 54.74% | resolved_jump_table_check | Verify guard, all cases and default path |
+| `0022a6a4` | _ReadTMD(TMD_PRIM*) | 84.21% | resolved_jump_table_check | Verify guard, all cases and default path |
+| `00210eac` | initMap(int, int) | 81.52% | resolved_jump_table_check | Verify guard, all cases and default path |
+| `002b20f4` | onGotoNextMode(int) | 71.6% | resolved_jump_table_check | Verify guard, all cases and default path |
+| `00289c1c` | pspFftDelete(int*) | 57.5% | resolved_jump_table_check | Verify guard, all cases and default path |
+| `00203070` | setCursorByTouch(int, int, int) | 49.35% | resolved_jump_table_check | Verify guard, all cases and default path |
+| `001d67a8` | get_mapid(int, int, int, int) | 75.0% | resolved_jump_table_check | Verify guard, all cases and default path |
+| `002b3464` | Boot_Init() | 92.0% | coverage_below_95 | Disassemble uncovered blocks and side effects |
+| `002899a0` | pspFftSave(int, FFT_SAVE_DATA*, int*) | 63.89% | resolved_jump_table_check | Verify guard, all cases and default path |
+| `001a6410` | MessageDataSet(int) | 83.1% | resolved_jump_table_check | Verify guard, all cases and default path |
+| `001dc944` | set_casting_status(BWORK*, unsigned char) | 85.29% | resolved_jump_table_check | Verify guard, all cases and default path |
+| `001caa10` | set_ct_weapon(ACT*) | 67.74% | resolved_jump_table_check | Verify guard, all cases and default path |
+| `0025b78c` | houkoku_talkunit(int) | 86.44% | resolved_jump_table_check | Verify guard, all cases and default path |
+| `00285e50` | pspMsgGet(unsigned int) | 63.79% | resolved_jump_table_check | Verify guard, all cases and default path |
+| `0021d544` | getNextSENo(int) | 80.0% | resolved_jump_table_check | Verify guard, all cases and default path |
+| `002867a8` | getMovieEventNum(int) | 68.52% | resolved_jump_table_check | Verify guard, all cases and default path |
+| `0015a65c` | siOS_TCurSucCheck(unsigned int) | 78.85% | resolved_jump_table_check | Verify guard, all cases and default path |
+| `002cb0c0` | __gedf2 | 92.11% | coverage_below_95 | Disassemble uncovered blocks and side effects |
+| `002cb4ac` | __aeabi_ul2f | 82.86% | coverage_below_95 | Disassemble uncovered blocks and side effects |
+| `000d7e00` | load_replaceitems(int, int) | 56.67% | resolved_jump_table_check | Verify guard, all cases and default path |
+| `000ff9ec` | Wload_replaceitems(int, int) | 56.67% | resolved_jump_table_check | Verify guard, all cases and default path |
 
 Approval requires instruction-level control-flow evidence, input/output invariants, and ideally differential tests or execution traces. Do not change needs_review solely from these summaries.

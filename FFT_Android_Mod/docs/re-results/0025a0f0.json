@@ -2,8 +2,8 @@
   "address": "0025a0f0",
   "name": "ctlhoukmes_init(int)",
   "size": 312,
-  "previous_status": "unread",
-  "status": "needs_review",
+  "previous_status": "read_structural",
+  "status": "auto_structural",
   "coverage_pct": 89.74,
   "distinct_bl": 2,
   "tables_resolved": 0,
@@ -13,7 +13,36 @@
     "26b64c"
   ],
   "log": "=== jtable.py: 0x25a0f0..0x25a228 (312 bytes) ===\ncoverage: 70 of ~78 instruction slots (90%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x153734 x1   Wsend_taskparamater(long, long, long, long) \n  0x26b64c x1   wldmusic_change(int) \n\n-- branches: 1 total, 0 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x25a0f0",
+    "total_slots": 78,
+    "code_slots": 70,
+    "instruction_slots": 70,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x25a208",
+      "0x25a20c",
+      "0x25a210",
+      "0x25a214",
+      "0x25a218",
+      "0x25a21c",
+      "0x25a220",
+      "0x25a224"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/0025a0f0.json"
 }

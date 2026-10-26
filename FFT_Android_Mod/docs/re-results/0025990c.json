@@ -2,8 +2,8 @@
   "address": "0025990c",
   "name": "ctlhistory_main(CTLINFO*)",
   "size": 456,
-  "previous_status": "unread",
-  "status": "needs_review",
+  "previous_status": "read_full",
+  "status": "auto_structural",
   "coverage_pct": 92.11,
   "distinct_bl": 6,
   "tables_resolved": 0,
@@ -17,7 +17,37 @@
     "270500"
   ],
   "log": "=== jtable.py: 0x25990c..0x259ad4 (456 bytes) ===\ncoverage: 105 of ~114 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x153714 x1   Wtask_status(long) \n  0x153734 x2   Wsend_taskparamater(long, long, long, long) \n  0x259768 x1   ctlhistory_deactive(CTLINFO*) \n  0x26b374 x2   sound_request(int) \n  0x270460 x1   curhis_get(int) \n  0x270500 x1   curhis_clr(int) \n\n-- branches: 13 total, 5 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x25990c",
+    "total_slots": 114,
+    "code_slots": 105,
+    "instruction_slots": 105,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x259ab0",
+      "0x259ab4",
+      "0x259ab8",
+      "0x259abc",
+      "0x259ac0",
+      "0x259ac4",
+      "0x259ac8",
+      "0x259acc",
+      "0x259ad0"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/0025990c.json"
 }

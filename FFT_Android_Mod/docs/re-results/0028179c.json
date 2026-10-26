@@ -2,8 +2,8 @@
   "address": "0028179c",
   "name": "iOS_v2menuSetType(V2MENU_TYPE)",
   "size": 540,
-  "previous_status": "unread",
-  "status": "needs_review",
+  "previous_status": "read_full",
+  "status": "auto_structural",
   "coverage_pct": 94.81,
   "distinct_bl": 2,
   "tables_resolved": 0,
@@ -13,7 +13,35 @@
     "2b6b24"
   ],
   "log": "=== jtable.py: 0x28179c..0x2819b8 (540 bytes) ===\ncoverage: 128 of ~135 instruction slots (95%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 2 distinct --\n  0x2b2260 x11  RETINA_SCALE(int) \n  0x2b6b24 x1   iOS_getv2menuSprIdTbl() \n\n-- branches: 5 total, 4 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x28179c",
+    "total_slots": 135,
+    "code_slots": 128,
+    "instruction_slots": 128,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x28199c",
+      "0x2819a0",
+      "0x2819a4",
+      "0x2819a8",
+      "0x2819ac",
+      "0x2819b0",
+      "0x2819b4"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/0028179c.json"
 }

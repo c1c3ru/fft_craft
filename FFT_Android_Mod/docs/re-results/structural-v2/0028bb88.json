@@ -1,0 +1,25 @@
+{
+  "address": "0028bb88",
+  "name": "TE_asmTaskEntry(int)",
+  "size": 504,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 91.27,
+  "distinct_bl": 8,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "153450",
+    "153714",
+    "28baf4",
+    "292678",
+    "71b0c",
+    "71b18",
+    "71b3c",
+    "ba084"
+  ],
+  "log": "=== jtable.py: 0x28bb88..0x28bd80 (504 bytes) ===\ncoverage: 115 of ~126 instruction slots (91%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 8 distinct --\n  0x71b0c x2   sub_71b0c LOCAL(no-dynsym)\n  0x71b18 x3   sub_71b18 LOCAL(no-dynsym)\n  0x71b3c x2   sub_71b3c LOCAL(no-dynsym)\n  0xba084 x3   Sleep(unsigned int) \n  0x153450 x1   task_status(long) \n  0x153714 x1   Wtask_status(long) \n  0x28baf4 x1   TE_task_get_no() \n  0x292678 x1   __xpLibgpuDrawCallBack(int) \n\n-- branches: 17 total, 11 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

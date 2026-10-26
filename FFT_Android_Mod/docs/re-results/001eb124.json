@@ -2,8 +2,8 @@
   "address": "001eb124",
   "name": "loadAbilityAnimation(tag_animation*, void*)",
   "size": 436,
-  "previous_status": "unread",
-  "status": "needs_review",
+  "previous_status": "read_full",
+  "status": "auto_structural",
   "coverage_pct": 94.5,
   "distinct_bl": 5,
   "tables_resolved": 0,
@@ -16,7 +16,34 @@
     "2b2238"
   ],
   "log": "=== jtable.py: 0x1eb124..0x1eb2d8 (436 bytes) ===\ncoverage: 103 of ~109 instruction slots (94%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 5 distinct --\n  0x20cbb8 x2   fileReadRequest(unsigned long, unsigned long, void*) \n  0x28c320 x1   CFFT_STATE::GetParam(int) \n  0x28c590 x4   CFFT_STATE::SetParam(int, int) \n  0x28c690 x2   CFFT_STATE::UnitIDToFID_SP2(int, int) \n  0x2b2238 x2   IS_TEX_2X() \n\n-- branches: 10 total, 5 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x1eb124",
+    "total_slots": 109,
+    "code_slots": 103,
+    "instruction_slots": 103,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x1eb2c0",
+      "0x1eb2c4",
+      "0x1eb2c8",
+      "0x1eb2cc",
+      "0x1eb2d0",
+      "0x1eb2d4"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/001eb124.json"
 }

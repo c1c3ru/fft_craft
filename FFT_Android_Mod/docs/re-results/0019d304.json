@@ -2,8 +2,8 @@
   "address": "0019d304",
   "name": "DressSellStock()",
   "size": 444,
-  "previous_status": "unread",
-  "status": "needs_review",
+  "previous_status": "read_full",
+  "status": "auto_structural",
   "coverage_pct": 90.99,
   "distinct_bl": 10,
   "tables_resolved": 0,
@@ -21,7 +21,38 @@
     "1c03fc"
   ],
   "log": "=== jtable.py: 0x19d304..0x19d4c0 (444 bytes) ===\ncoverage: 101 of ~111 instruction slots (91%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 10 distinct --\n  0x153584 x1   Wtask_create(long, char*) \n  0x153714 x1   Wtask_status(long) \n  0x15ef7c x1   iOSUnitListWinOnOff(int) \n  0x1a3f1c x1   Sell() \n  0x1a4338 x1   SellValue() \n  0x1a6c94 x1   SetFrameRate(int) \n  0x1bac48 x1   iOSWldUnitListWinSet(int) \n  0x1baea0 x1   unitans_init() \n  0x1bc2ac x1   AllSttsDelete() \n  0x1c03fc x5   WindowPositionInitSingle(int) \n\n-- branches: 10 total, 6 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x19d304",
+    "total_slots": 111,
+    "code_slots": 101,
+    "instruction_slots": 101,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x19d498",
+      "0x19d49c",
+      "0x19d4a0",
+      "0x19d4a4",
+      "0x19d4a8",
+      "0x19d4ac",
+      "0x19d4b0",
+      "0x19d4b4",
+      "0x19d4b8",
+      "0x19d4bc"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/0019d304.json"
 }

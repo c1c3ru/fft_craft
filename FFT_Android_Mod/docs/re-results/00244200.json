@@ -2,8 +2,8 @@
   "address": "00244200",
   "name": "vEnd_rollproc()",
   "size": 528,
-  "previous_status": "unread",
-  "status": "needs_review",
+  "previous_status": "read_full",
+  "status": "auto_structural",
   "coverage_pct": 91.67,
   "distinct_bl": 6,
   "tables_resolved": 0,
@@ -17,7 +17,39 @@
     "2b7ab4"
   ],
   "log": "=== jtable.py: 0x244200..0x244410 (528 bytes) ===\ncoverage: 121 of ~132 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x243a14 x1   deleteMessage() \n  0x243bf4 x1   drawMessage(int) \n  0x243c9c x1   drawListStaffroll(int) \n  0x280610 x1   iOS_soundDirect(int) \n  0x28b518 x2   setMoviePlayFlg__Fi(int) \n  0x2b7ab4 x1   iOS_getTouchFreeTap() \n\n-- branches: 10 total, 5 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x244200",
+    "total_slots": 132,
+    "code_slots": 121,
+    "instruction_slots": 121,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x2443e4",
+      "0x2443e8",
+      "0x2443ec",
+      "0x2443f0",
+      "0x2443f4",
+      "0x2443f8",
+      "0x2443fc",
+      "0x244400",
+      "0x244404",
+      "0x244408",
+      "0x24440c"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/00244200.json"
 }

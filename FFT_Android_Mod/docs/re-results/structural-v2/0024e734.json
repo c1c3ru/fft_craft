@@ -1,0 +1,21 @@
+{
+  "address": "0024e734",
+  "name": "ctlperson_init()",
+  "size": 412,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 90.29,
+  "distinct_bl": 4,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "103400",
+    "153734",
+    "270414",
+    "270490"
+  ],
+  "log": "=== jtable.py: 0x24e734..0x24e8d0 (412 bytes) ===\ncoverage: 93 of ~103 instruction slots (90%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0x103400 x1   Wread_eventflag(int) \n  0x153734 x1   Wsend_taskparamater(long, long, long, long) \n  0x270414 x1   defscrwin_set(int, int, _POINT*, _POINT*) \n  0x270490 x1   curhis_put(int, int, int) \n\n-- branches: 2 total, 1 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

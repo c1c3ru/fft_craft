@@ -2,7 +2,7 @@
   "address": "0027207c",
   "name": "GetNearestUnit(int)",
   "size": 472,
-  "previous_status": "mentioned_unverified",
+  "previous_status": "read_structural",
   "status": "needs_review",
   "coverage_pct": 92.37,
   "distinct_bl": 4,
@@ -15,7 +15,47 @@
     "27afdc"
   ],
   "log": "=== jtable.py: 0x27207c..0x272254 (472 bytes) ===\ncoverage: 109 of ~118 instruction slots (92%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0x272164, dispatch @0x272168: 6 cases, 5 distinct handlers\n    targets: ['0x2721b8', '0x2721f0', '0x2721e0', '0x2720f0', '0x2720f0', '0x2721c4']\n\n-- bl targets: 4 distinct --\n  0x271e1c x2   GetDistance(BWORK*, BWORK*) \n  0x273d20 x1   IsNullUnit(int) \n  0x2766f4 x1   GetHightDistance(unsigned char*, BWORK*) \n  0x27afdc x1   IsNeedlessToFear(int) \n\n-- branches: 23 total, 19 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "needs_review",
+    "reason": "unverified_jump_table",
+    "function_start": "0x27207c",
+    "total_slots": 118,
+    "code_slots": 109,
+    "instruction_slots": 109,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x27224c",
+      "0x272250"
+    ],
+    "unexplained_slots": [
+      "0x27216c",
+      "0x272170",
+      "0x272174",
+      "0x272178",
+      "0x27217c",
+      "0x272180",
+      "0x272184"
+    ],
+    "unexplained_count": 7,
+    "unresolved_dispatches": [],
+    "tables_safe": false,
+    "tables": [
+      {
+        "guard": "0x272164",
+        "dispatch": "0x272168",
+        "cases": 6,
+        "safe": false,
+        "reason": "missing or unbounded CMP/ADD dispatch"
+      }
+    ],
+    "code_coverage_pct": 93.97,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
+  "review_attempts": 1,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/0027207c.json"
 }

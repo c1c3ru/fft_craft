@@ -2,7 +2,7 @@
   "address": "00162080",
   "name": "wasm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)",
   "size": 404,
-  "previous_status": "unread",
+  "previous_status": "read_full",
   "status": "needs_review",
   "coverage_pct": 80.2,
   "distinct_bl": 0,
@@ -10,7 +10,65 @@
   "tables_unresolved": 0,
   "bl_targets": [],
   "log": "=== jtable.py: 0x162080..0x162214 (404 bytes) ===\ncoverage: 81 of ~101 instruction slots (80%)\n\n-- jump tables resolved: 2 --\n  guard cmp @0x1620a4, dispatch @0x1620a8: 6 cases, 6 distinct handlers\n    targets: ['0x16212c', '0x162144', '0x162160', '0x162180', '0x162104', '0x1621a4']\n  guard cmp @0x1620e0, dispatch @0x1620e4: 6 cases, 6 distinct handlers\n    targets: ['0x16212c', '0x162144', '0x162160', '0x162180', '0x162104', '0x1621d0']\n\n-- bl targets: 0 distinct --\n\n-- branches: 3 total, 2 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "needs_review",
+    "reason": "unverified_jump_table",
+    "function_start": "0x162080",
+    "total_slots": 101,
+    "code_slots": 81,
+    "instruction_slots": 81,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x162204",
+      "0x162208",
+      "0x16220c",
+      "0x162210"
+    ],
+    "unexplained_slots": [
+      "0x1620ac",
+      "0x1620b0",
+      "0x1620b4",
+      "0x1620b8",
+      "0x1620bc",
+      "0x1620c0",
+      "0x1620c4",
+      "0x1620e8",
+      "0x1620ec",
+      "0x1620f0",
+      "0x1620f4",
+      "0x1620f8",
+      "0x1620fc",
+      "0x162100",
+      "0x1621fc",
+      "0x162200"
+    ],
+    "unexplained_count": 16,
+    "unresolved_dispatches": [],
+    "tables_safe": false,
+    "tables": [
+      {
+        "guard": "0x1620a4",
+        "dispatch": "0x1620a8",
+        "cases": 6,
+        "safe": false,
+        "reason": "missing or unbounded CMP/ADD dispatch"
+      },
+      {
+        "guard": "0x1620e0",
+        "dispatch": "0x1620e4",
+        "cases": 6,
+        "safe": false,
+        "reason": "missing or unbounded CMP/ADD dispatch"
+      }
+    ],
+    "code_coverage_pct": 83.51,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
+  "review_attempts": 1,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/00162080.json"
 }

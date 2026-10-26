@@ -1,0 +1,23 @@
+{
+  "address": "00244200",
+  "name": "vEnd_rollproc()",
+  "size": 528,
+  "previous_status": "unread",
+  "status": "needs_review",
+  "coverage_pct": 91.67,
+  "distinct_bl": 6,
+  "tables_resolved": 0,
+  "tables_unresolved": 0,
+  "bl_targets": [
+    "243a14",
+    "243bf4",
+    "243c9c",
+    "280610",
+    "28b518",
+    "2b7ab4"
+  ],
+  "log": "=== jtable.py: 0x244200..0x244410 (528 bytes) ===\ncoverage: 121 of ~132 instruction slots (92%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 6 distinct --\n  0x243a14 x1   deleteMessage() \n  0x243bf4 x1   drawMessage(int) \n  0x243c9c x1   drawListStaffroll(int) \n  0x280610 x1   iOS_soundDirect(int) \n  0x28b518 x2   setMoviePlayFlg__Fi(int) \n  0x2b7ab4 x1   iOS_getTouchFreeTap() \n\n-- branches: 10 total, 5 backward (loop candidates) --\n",
+  "review_attempts": 2,
+  "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "pipeline_version": 2
+}

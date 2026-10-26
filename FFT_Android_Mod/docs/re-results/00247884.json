@@ -2,8 +2,8 @@
   "address": "00247884",
   "name": "birthday_change(CTLINFO*)",
   "size": 428,
-  "previous_status": "unread",
-  "status": "needs_review",
+  "previous_status": "read_structural",
+  "status": "auto_structural",
   "coverage_pct": 94.39,
   "distinct_bl": 3,
   "tables_resolved": 0,
@@ -14,7 +14,34 @@
     "24ab04"
   ],
   "log": "=== jtable.py: 0x247884..0x247a30 (428 bytes) ===\ncoverage: 101 of ~107 instruction slots (94%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 3 distinct --\n  0x24988c x1   vOpn_sun2ivaday(int*, int*) \n  0x24a544 x2   vOpn_add_winpac(unsigned long*, int*) \n  0x24ab04 x2   vOpnwin_noropen(int, RECT16, int, int, unsigned long*) \n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x247884",
+    "total_slots": 107,
+    "code_slots": 101,
+    "instruction_slots": 101,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x247a18",
+      "0x247a1c",
+      "0x247a20",
+      "0x247a24",
+      "0x247a28",
+      "0x247a2c"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/00247884.json"
 }

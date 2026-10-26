@@ -2,8 +2,8 @@
   "address": "00270520",
   "name": "valnumwin_set(int, unsigned long, int, _POINT*)",
   "size": 424,
-  "previous_status": "unread",
-  "status": "needs_review",
+  "previous_status": "read_structural",
+  "status": "auto_structural",
   "coverage_pct": 93.4,
   "distinct_bl": 4,
   "tables_resolved": 0,
@@ -15,7 +15,35 @@
     "ffe58"
   ],
   "log": "=== jtable.py: 0x270520..0x2706c8 (424 bytes) ===\ncoverage: 99 of ~106 instruction slots (93%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 4 distinct --\n  0xffa64 x1   Wserchmessagepointer(int) \n  0xffe58 x1   Wcount_words2(short*, short*, char*) \n  0x153584 x1   Wtask_create(long, char*) \n  0x153734 x1   Wsend_taskparamater(long, long, long, long) \n\n-- branches: 2 total, 1 backward (loop candidates) --\n",
-  "review_attempts": 2,
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "auto_structural",
+    "reason": "all_slots_accounted",
+    "function_start": "0x270520",
+    "total_slots": 106,
+    "code_slots": 99,
+    "instruction_slots": 99,
+    "table_entry_slots": 0,
+    "literal_slots": [
+      "0x2706ac",
+      "0x2706b0",
+      "0x2706b4",
+      "0x2706b8",
+      "0x2706bc",
+      "0x2706c0",
+      "0x2706c4"
+    ],
+    "unexplained_slots": [],
+    "unexplained_count": 0,
+    "unresolved_dispatches": [],
+    "tables_safe": true,
+    "tables": [],
+    "code_coverage_pct": 100.0,
+    "candidate_literal_data_not_proven": true
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "f5c979fa06fbd650af1c",
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2
+  "pipeline_version": 2,
+  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/00270520.json"
 }
