@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'FFT_Android_Mod/docs/re-tools/**'
+      - 'FFT_Android_Mod/docs/re-results/semantic-certificates.json'
       - '.github/workflows/re-pipeline.yml'
       - '.github/workflows/re-batches.yml'
   workflow_dispatch:
