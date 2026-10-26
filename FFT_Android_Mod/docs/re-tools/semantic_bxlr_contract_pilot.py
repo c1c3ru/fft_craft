@@ -157,7 +157,7 @@ def run(binary, inventory, output, report, limit=303):
              "|---|---|---|---|"]
     for row in chosen:
         lines.append(f"| `{row['address']}` | {row['name'].replace('|','/')} "
-                     "| `BX LR` | 4 + 4 testes |")
+                     f"| `BX LR` | {len(FLAGS)} + {len(FLAGS)} testes |")
     lines += ["", "Arquivos individuais JSON no artifact do workflow. "
               "Eles não são inseridos automaticamente em `semantic-certificates.json`.", ""]
     report.write_text("\n".join(lines), encoding="utf-8")
