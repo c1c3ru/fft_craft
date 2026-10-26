@@ -13,7 +13,8 @@ import semantic_history
 
 def summarize(inventory, digest, certificates_path, pilot_dir=None,
               dynamic_dir=None, manifests_dir=None, history_dir=None,
-              contracts_dir=None, snapshot_path=None, binary=None):
+              contracts_dir=None, snapshot_path=None, binary=None,
+              review_batch_path=None):
     certificates_path = Path(certificates_path)
     certificates = (json.loads(certificates_path.read_text(encoding="utf-8"))
                     if certificates_path.is_file() else {})
@@ -113,12 +114,41 @@ def summarize(inventory, digest, certificates_path, pilot_dir=None,
     pending = [r for r in rows if r["semantic_status"] != "certified"]
     history, stale_history = (semantic_history.discover(history_dir, digest)
                               if history_dir is not None else ([], 0))
+    review_batch = 0
+    if review_batch_path is not None and Path(review_batch_path).is_file():
+        packet = json.loads(Path(review_batch_path).read_text(encoding="utf-8"))
+        candidates = packet.get("candidates")
+        if (packet.get("schema") != 1 or packet.get("elf_sha256") != digest
+                or packet.get("status") != "review_pending"
+                or packet.get("certified_functions") != 0
+                or not isinstance(candidates, list)
+                or not 1 <= len(candidates) <= 20):
+            raise ValueError("invalid or stale BX LR review batch")
+        batch_addresses = set()
+        for candidate in candidates:
+            address = str(candidate.get("address", "")).lower()
+            if (address in batch_addresses or address not in mapped
+                    or mapped[address]["size"] != 4
+                    or candidate.get("binary_sha256") != digest
+                    or candidate.get("size") != 4
+                    or candidate.get("instruction_encoding") != "1eff2fe1"
+                    or candidate.get("status") != "partial"
+                    or candidate.get("certified") is not False
+                    or candidate.get("reviewer") is not None
+                    or candidate.get("review_stage") !=
+                       "independent_human_review_pending"
+                    or candidate.get("same_run_machine_samples") != 32
+                    or candidate.get("new_machine_samples_in_this_step") != 0):
+                raise ValueError("invalid review candidate " + address)
+            batch_addresses.add(address)
+        review_batch = len(batch_addresses)
     result = {
         "historic_reports": len(history),
         "historic_machine_report_documents": sum(
             item["kind"] == "microexecution_report" for item in history),
         "historic_stale_reports": stale_history,
         "leaf_candidates": leaf_candidates,
+        "review_batch_candidates": review_batch,
         "checked_local_contracts": len(checked_contracts),
         "contract_samples": contract_samples,
         "symbols": sum(len(r["symbols"]) for r in rows),
@@ -181,6 +211,7 @@ def render(summary):
         f"| Documentos semânticos históricos do mesmo ELF | {s.get('historic_reports', 0):,} |",
         f"| Documentos históricos com testes declarados | {s.get('historic_machine_report_documents', 0):,} |",
         f"| Candidatas BX LR verificadas, pendentes de revisão | {s.get('leaf_candidates', 0):,} |",
+        f"| Contratos BX LR preparados para revisão humana (não certificados) | {s.get('review_batch_candidates', 0):,} |",
         f"| Contratos locais BX LR com retorno ARM/Thumb verificado (revisão pendente) | {s.get('checked_local_contracts', 0):,} |",
         f"| Execuções ARM/Thumb adicionais dos contratos locais | {s.get('contract_samples', 0):,} |",
         f"| Relatórios estáticos deste lote | {s['static_reports']:,} |",

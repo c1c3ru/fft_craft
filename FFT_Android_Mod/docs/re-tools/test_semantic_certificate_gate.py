@@ -82,9 +82,14 @@ class CertificateGateTests(unittest.TestCase):
                          "submitted_at": "2026-10-26T15:00:00Z"}]
             return [{"filename": "FFT_Android_Mod/docs/re-results/"
                                   "semantic-certificates.json",
-                     "patch": '+  "00002010": {"status": "certified"},'}]
+                     "patch": ('@@ -1,9 +1,9 @@\n'
+                               ' {\n'
+                               '   "00002010": {\n'
+                               '-    "status": "partial",\n'
+                               '+    "status": "certified",\n'
+                               '     "size": 4,')}]
         self.assertTrue(gate.verify_remote_review(cert, ADDRESS, provider))
-        with self.assertRaisesRegex(ValueError, "certificate entry"):
+        with self.assertRaisesRegex(ValueError, "specific certificate"):
             gate.verify_remote_review(cert, "00002014", provider)
         def wrong_commit(path):
             value = provider(path)
@@ -93,6 +98,29 @@ class CertificateGateTests(unittest.TestCase):
             return value
         with self.assertRaisesRegex(ValueError, "valid human approval"):
             gate.verify_remote_review(cert, ADDRESS, wrong_commit)
+
+    def test_unified_diff_partial_promotion_scoped_per_address(self):
+        patch = (
+            "@@ -1,11 +1,11 @@\n"
+            " {\n"
+            '   "00002010": {\n'
+            '-    "status": "partial",\n'
+            '+    "status": "certified",\n'
+            '   "00002014": {\n'
+            '     "status": "partial",\n'
+        )
+        self.assertTrue(gate.patch_promotes_address(patch, "00002010"))
+        self.assertFalse(gate.patch_promotes_address(patch, "00002014"))
+        self.assertFalse(gate.patch_promotes_address(patch, "00002018"))
+        forged = (
+            "@@ -1,9 +1,9 @@\n"
+            '   "00002010": {\n'
+            '+    "status": "partial",\n'
+            '   "00002014": {\n'
+            '+    "status": "certified",\n'
+        )
+        self.assertFalse(gate.patch_promotes_address(forged, "00002010"))
+        self.assertTrue(gate.patch_promotes_address(forged, "00002014"))
 
     def test_reject_wrong_binary_opcode_or_unverified_tests(self):
         for change in (

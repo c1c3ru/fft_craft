@@ -101,6 +101,26 @@ def github_json(path):
     return json.loads(proc.stdout)
 
 
+def patch_promotes_address(patch, address):
+    """Recognize a reviewable promotion of this precise ledger key in a PR diff."""
+    if not isinstance(patch, str):
+        return False
+    current = None
+    for line in patch.splitlines():
+        if line.startswith("@@"):
+            current = None
+            continue
+        if not line or line[0] not in "+- " or line.startswith(("+++", "---")):
+            continue
+        body = line[1:]
+        key = re.match(r'^\s*"([0-9a-f]{8})"\s*:\s*\{', body)
+        if key:
+            current = key.group(1)
+        if (line.startswith("+") and current == address
+                and re.fullmatch(r'\s*"status"\s*:\s*"certified"\s*,?\s*', body)):
+            return True
+    return False
+
 def verify_remote_review(record, address, provider=github_json):
     """Tie approval to the exact PR head and an added certificate entry."""
     review = record["reviewer"]
@@ -118,11 +138,9 @@ def verify_remote_review(record, address, provider=github_json):
         "FFT_Android_Mod/docs/re-results/semantic-certificates.json"
         and isinstance(file.get("patch"), str)]
     if not certificate_diffs or not any(
-            any(line.startswith("+") and not line.startswith("+++")
-                and f'"{address}"' in line
-                for line in entry["patch"].splitlines())
+            patch_promotes_address(entry["patch"], address)
             for entry in certificate_diffs):
-        raise ValueError("approval PR does not introduce this certificate entry")
+        raise ValueError("approval PR does not promote this specific certificate")
     reviewer_login = review["github_login"].lower()
     effective = sorted(
         (item for item in reviews if

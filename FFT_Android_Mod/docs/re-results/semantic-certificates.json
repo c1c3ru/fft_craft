@@ -1,0 +1,222 @@
+{
+  "000a6d5c": {
+    "status": "partial",
+    "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+    "size": 4,
+    "name": "CGX_SCREEN_CORRECT::~CGX_SCREEN_CORRECT()",
+    "proof_class": "original_a32_bxlr_normal_return_v1",
+    "scope": "normal_a32_valid_abi_return",
+    "instruction_encoding": "1eff2fe1",
+    "instruction_sha256": "379bec29dccd0a93c94826144d7ef6e42fab64ef195a3b8313a16926f66f388f",
+    "contract": "BX LR: target=R14[31:1]:0; CPSR.T=R14[0]; R0-R14 and data memory preserved",
+    "preconditions": [
+      "ARM state at entry",
+      "executable mapped 4-byte instruction",
+      "valid mapped LR destination",
+      "normal execution context"
+    ],
+    "postconditions": [
+      "PC=LR & ~1",
+      "CPSR.T=LR & 1",
+      "other CPSR bits preserved",
+      "R0-R14 preserved"
+    ],
+    "memory_effects": [
+      "none in the decoded function body"
+    ],
+    "control_flow": [
+      "only unconditional BX LR; no internal callees"
+    ],
+    "test_evidence": [
+      "original ELF instruction",
+      "Capstone exact opcode",
+      "independent pure A32 BX LR transition model",
+      "Unicorn PC/CPSR/general-register/memory differential"
+    ],
+    "machine_samples_passed": 32,
+    "evidence_ci_run": "40408581057",
+    "review_stage": "independent_human_review_pending",
+    "reviewer": null,
+    "unverified": [
+      "human technical review of complete scoped normal ARM behavior",
+      "approved GitHub PR documenting review",
+      "unmodeled exceptional behavior"
+    ]
+  },
+  "000a7e78": {
+    "status": "partial",
+    "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+    "size": 4,
+    "name": "CEGL2_IF::Setup3D()",
+    "proof_class": "original_a32_bxlr_normal_return_v1",
+    "scope": "normal_a32_valid_abi_return",
+    "instruction_encoding": "1eff2fe1",
+    "instruction_sha256": "379bec29dccd0a93c94826144d7ef6e42fab64ef195a3b8313a16926f66f388f",
+    "contract": "BX LR: target=R14[31:1]:0; CPSR.T=R14[0]; R0-R14 and data memory preserved",
+    "preconditions": [
+      "ARM state at entry",
+      "executable mapped 4-byte instruction",
+      "valid mapped LR destination",
+      "normal execution context"
+    ],
+    "postconditions": [
+      "PC=LR & ~1",
+      "CPSR.T=LR & 1",
+      "other CPSR bits preserved",
+      "R0-R14 preserved"
+    ],
+    "memory_effects": [
+      "none in the decoded function body"
+    ],
+    "control_flow": [
+      "only unconditional BX LR; no internal callees"
+    ],
+    "test_evidence": [
+      "original ELF instruction",
+      "Capstone exact opcode",
+      "independent pure A32 BX LR transition model",
+      "Unicorn PC/CPSR/general-register/memory differential"
+    ],
+    "machine_samples_passed": 32,
+    "evidence_ci_run": "40408581057",
+    "review_stage": "independent_human_review_pending",
+    "reviewer": null,
+    "unverified": [
+      "human technical review of complete scoped normal ARM behavior",
+      "approved GitHub PR documenting review",
+      "unmodeled exceptional behavior"
+    ]
+  },
+  "000a8560": {
+    "status": "partial",
+    "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+    "size": 4,
+    "name": "CEGL2_IF::DrawGrid()",
+    "proof_class": "original_a32_bxlr_normal_return_v1",
+    "scope": "normal_a32_valid_abi_return",
+    "instruction_encoding": "1eff2fe1",
+    "instruction_sha256": "379bec29dccd0a93c94826144d7ef6e42fab64ef195a3b8313a16926f66f388f",
+    "contract": "BX LR: target=R14[31:1]:0; CPSR.T=R14[0]; R0-R14 and data memory preserved",
+    "preconditions": [
+      "ARM state at entry",
+      "executable mapped 4-byte instruction",
+      "valid mapped LR destination",
+      "normal execution context"
+    ],
+    "postconditions": [
+      "PC=LR & ~1",
+      "CPSR.T=LR & 1",
+      "other CPSR bits preserved",
+      "R0-R14 preserved"
+    ],
+    "memory_effects": [
+      "none in the decoded function body"
+    ],
+    "control_flow": [
+      "only unconditional BX LR; no internal callees"
+    ],
+    "test_evidence": [
+      "original ELF instruction",
+      "Capstone exact opcode",
+      "independent pure A32 BX LR transition model",
+      "Unicorn PC/CPSR/general-register/memory differential"
+    ],
+    "machine_samples_passed": 32,
+    "evidence_ci_run": "40408581057",
+    "review_stage": "independent_human_review_pending",
+    "reviewer": null,
+    "unverified": [
+      "human technical review of complete scoped normal ARM behavior",
+      "approved GitHub PR documenting review",
+      "unmodeled exceptional behavior"
+    ]
+  },
+  "000a8564": {
+    "status": "partial",
+    "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+    "size": 4,
+    "name": "CEGL2_IF::DrawAxis()",
+    "proof_class": "original_a32_bxlr_normal_return_v1",
+    "scope": "normal_a32_valid_abi_return",
+    "instruction_encoding": "1eff2fe1",
+    "instruction_sha256": "379bec29dccd0a93c94826144d7ef6e42fab64ef195a3b8313a16926f66f388f",
+    "contract": "BX LR: target=R14[31:1]:0; CPSR.T=R14[0]; R0-R14 and data memory preserved",
+    "preconditions": [
+      "ARM state at entry",
+      "executable mapped 4-byte instruction",
+      "valid mapped LR destination",
+      "normal execution context"
+    ],
+    "postconditions": [
+      "PC=LR & ~1",
+      "CPSR.T=LR & 1",
+      "other CPSR bits preserved",
+      "R0-R14 preserved"
+    ],
+    "memory_effects": [
+      "none in the decoded function body"
+    ],
+    "control_flow": [
+      "only unconditional BX LR; no internal callees"
+    ],
+    "test_evidence": [
+      "original ELF instruction",
+      "Capstone exact opcode",
+      "independent pure A32 BX LR transition model",
+      "Unicorn PC/CPSR/general-register/memory differential"
+    ],
+    "machine_samples_passed": 32,
+    "evidence_ci_run": "40408581057",
+    "review_stage": "independent_human_review_pending",
+    "reviewer": null,
+    "unverified": [
+      "human technical review of complete scoped normal ARM behavior",
+      "approved GitHub PR documenting review",
+      "unmodeled exceptional behavior"
+    ]
+  },
+  "000a8568": {
+    "status": "partial",
+    "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+    "size": 4,
+    "name": "CEGL2_IF::DrawCross(math::VECTOR3<float>, float)",
+    "proof_class": "original_a32_bxlr_normal_return_v1",
+    "scope": "normal_a32_valid_abi_return",
+    "instruction_encoding": "1eff2fe1",
+    "instruction_sha256": "379bec29dccd0a93c94826144d7ef6e42fab64ef195a3b8313a16926f66f388f",
+    "contract": "BX LR: target=R14[31:1]:0; CPSR.T=R14[0]; R0-R14 and data memory preserved",
+    "preconditions": [
+      "ARM state at entry",
+      "executable mapped 4-byte instruction",
+      "valid mapped LR destination",
+      "normal execution context"
+    ],
+    "postconditions": [
+      "PC=LR & ~1",
+      "CPSR.T=LR & 1",
+      "other CPSR bits preserved",
+      "R0-R14 preserved"
+    ],
+    "memory_effects": [
+      "none in the decoded function body"
+    ],
+    "control_flow": [
+      "only unconditional BX LR; no internal callees"
+    ],
+    "test_evidence": [
+      "original ELF instruction",
+      "Capstone exact opcode",
+      "independent pure A32 BX LR transition model",
+      "Unicorn PC/CPSR/general-register/memory differential"
+    ],
+    "machine_samples_passed": 32,
+    "evidence_ci_run": "40408581057",
+    "review_stage": "independent_human_review_pending",
+    "reviewer": null,
+    "unverified": [
+      "human technical review of complete scoped normal ARM behavior",
+      "approved GitHub PR documenting review",
+      "unmodeled exceptional behavior"
+    ]
+  }
+}
