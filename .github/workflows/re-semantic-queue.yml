@@ -35,6 +35,7 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/semantic_run_snapshot.py'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_run_snapshot.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_certificate_gate.py'
+      - 'FFT_Android_Mod/docs/re-results/semantic-certificates.json'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_certificate_gate.py'
 
 permissions:
