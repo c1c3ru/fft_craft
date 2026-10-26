@@ -101,6 +101,115 @@ def github_json(path):
     return json.loads(proc.stdout)
 
 
+
+def patch_promotes_address(patch, address):
+    """Accept an added certificate or a partial->certified edit to this address.
+
+    GitHub's unified diff carries a small amount of context. The address key
+    must appear in the same hunk *before* a newly-added certified status. Never
+    let an approval for another adjacent address satisfy this condition.
+    """
+    if not isinstance(patch, str):
+        return False
+    current = None
+    for line in patch.splitlines():
+        if line.startswith("@@"):
+            current = None
+            continue
+        if not line or line[0] not in "+- " or line.startswith(("+++", "---")):
+            continue
+        body = line[1:]
+        key = re.match(r'^\s*"([0-9a-f]{8})"\s*:\s*\{', body)
+        if key:
+            current = key.group(1)
+        if (line.startswith("+") and current == address
+                and re.match(r'^\s*"status"\s*:\s*"certified"\s*,?\s*
+    """Tie approval to the exact PR head and an added certificate entry."""
+    review = record["reviewer"]
+    number = int(review["approval_pr"].rsplit("/", 1)[-1])
+    prefix = f"repos/c1c3ru/fft_craft/pulls/{number}"
+    pr = provider(prefix)
+    reviews = provider(prefix + "/reviews?per_page=100")
+    files = provider(prefix + "/files?per_page=100")
+    if (not isinstance(pr, dict) or not isinstance(reviews, list)
+            or not isinstance(files, list) or not pr.get("head", {}).get("sha")):
+        raise ValueError("malformed external PR review evidence")
+    certificate_diffs = [
+        file for file in files if
+        file.get("filename") ==
+        "FFT_Android_Mod/docs/re-results/semantic-certificates.json"
+        and isinstance(file.get("patch"), str)]
+    if not certificate_diffs or not any(
+            patch_promotes_address(entry["patch"], address)
+            for entry in certificate_diffs):
+        raise ValueError("approval PR does not promote this specific certificate")
+    reviewer_login = review["github_login"].lower()
+    effective = sorted(
+        (item for item in reviews if
+         item.get("user", {}).get("login", "").lower() == reviewer_login
+         and item.get("submitted_at")), key=lambda item: item["submitted_at"])
+    if not effective:
+        raise ValueError("no GitHub review by declared reviewer")
+    approved = effective[-1]
+    if (approved.get("state") != "APPROVED"
+            or approved.get("commit_id") != pr["head"]["sha"]
+            or approved.get("user", {}).get("type") == "Bot"):
+        raise ValueError("last review is not a valid human approval of PR head")
+    try:
+        declared_date = datetime.date.fromisoformat(review["approved_at"])
+        actual_date = datetime.datetime.fromisoformat(
+            approved["submitted_at"].replace("Z", "+00:00")).date()
+    except (ValueError, TypeError) as exc:
+        raise ValueError("invalid approval date") from exc
+    if declared_date != actual_date:
+        raise ValueError("declared approval date differs from GitHub")
+    return True
+
+def gate(binary, inventory, certificates_path):
+    binary, inventory = Path(binary), Path(inventory)
+    digest = hashlib.sha256(binary.read_bytes()).hexdigest()
+    certificates = (json.loads(Path(certificates_path).read_text(encoding="utf-8"))
+                    if Path(certificates_path).is_file() else {})
+    rows = semantic_coverage.ledger(inventory, digest, certificates)
+    by_addr = {r["address"]: r for r in rows}
+    certified = []
+    review_cache = {}
+
+    def cached_github(path):
+        if path not in review_cache:
+            review_cache[path] = github_json(path)
+        return review_cache[path]
+
+    for address in sorted(certificates):
+        record = certificates[address]
+        if record.get("status") != "certified":
+            continue
+        verify_one(record, by_addr[address], binary, digest)
+        # A string in reviewer metadata is never treated as proof of consent:
+        # GitHub must show an APPROVED review for the affected PR and head.
+        verify_remote_review(record, address, provider=cached_github)
+        certified.append(address)
+    print(f"SEMANTIC_APPROVED_CERTIFICATES_VERIFIED={len(certified)}")
+    print(f"SEMANTIC_APPROVED_CERTIFICATE_BYTES={sum(by_addr[a]['size'] for a in certified)}")
+    return certified
+
+
+def main():
+    p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument("--binary", type=Path, default=semantic_coverage.BINARY)
+    p.add_argument("--inventory", type=Path, default=semantic_coverage.INVENTORY)
+    p.add_argument("--certificates", type=Path,
+                   default=semantic_coverage.RESULTS / "semantic-certificates.json")
+    a = p.parse_args()
+    gate(a.binary, a.inventory, a.certificates)
+
+
+if __name__ == "__main__":
+    main()
+, body)):
+            return True
+    return False
+
 def verify_remote_review(record, address, provider=github_json):
     """Tie approval to the exact PR head and an added certificate entry."""
     review = record["reviewer"]
