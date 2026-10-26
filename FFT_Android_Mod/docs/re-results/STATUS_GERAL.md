@@ -48,9 +48,9 @@ Os números certificados representam **registros formais válidos para este ELF*
 | Cobertura semântica por endereço | 0.00% |
 | Cobertura semântica por bytes únicos | 0.00% |
 | Registros parciais no ledger | 0 |
-| Endereços com evidência parcial registrada ou gerada nesta execução | 7 |
+| Endereços com evidência parcial registrada ou gerada nesta execução | 11 |
 | Relatórios estáticos deste lote | 5 |
-| Relatórios Unicorn deste lote | 2 |
+| Relatórios Unicorn deste lote | 6 |
 | Endereços distribuídos aos workers neste lote | 5 |
 | Endereços aguardando certificação | 6,329 |
 
@@ -99,11 +99,11 @@ Estas duas prioridades são **curadas no gerador**; quando um limite for resolvi
 
 ## Pull requests recentes
 
+- [PR #312 — Feat/re three callees dynamic evidence 20261026](https://github.com/c1c3ru/fft_craft/pull/312)
+- [PR #311 — chore(re): automated structural batch 40375878660](https://github.com/c1c3ru/fft_craft/pull/311)
 - [PR #310 — fix(re): corrigir divergência semântica no STATUS_GERAL e testar métricas](https://github.com/c1c3ru/fft_craft/pull/310)
 - [PR #309 — chore(re): automated structural batch 40374976447](https://github.com/c1c3ru/fft_craft/pull/309)
 - [PR #307 — feat(re): centralizar cobertura semântica, workers e Unicorn no STATUS_GERAL](https://github.com/c1c3ru/fft_craft/pull/307)
-- [PR #308 — Feat/re review shards 20261026](https://github.com/c1c3ru/fft_craft/pull/308)
-- [PR #306 — feat(re): publicar evidências Unicorn por função sem certificar semântica integral](https://github.com/c1c3ru/fft_craft/pull/306)
 
 ## Atualização automática e fontes
 
