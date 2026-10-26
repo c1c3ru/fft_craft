@@ -68,6 +68,7 @@ class CentralSemanticSummaryTests(unittest.TestCase):
         self.assertIn("Microexecuções Unicorn verificadas", mod.render(result))
 
     def test_local_contracts_are_counted_without_certification(self):
+        self.inventory.write_text("address,size,demangled\n00000010,4,foo\n00000010,4,foo_alias\n00000020,80,bar\n", encoding="utf-8")
         contracts = self.root / "contracts"
         contracts.mkdir()
         self.write(contracts, "00000010.json", {
