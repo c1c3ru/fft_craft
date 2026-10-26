@@ -62,8 +62,9 @@ def verify_one(record, row, binary, digest, reader=None, executor=None):
             for k in REVIEW_REQUIRED):
         raise ValueError("independent reviewer metadata is missing")
     import semantic_review_protocol as protocol
-    if (review["review_protocol"] != protocol.PROTOCOL
-            or review["type"] != "human" or review["decision"] != "approved"
+    if review["review_protocol"] != protocol.PROTOCOL:
+        raise ValueError("unsupported independent human review protocol")
+    if (review["type"] != "human" or review["decision"] != "approved"
             or not PR_RE.fullmatch(review["approval_pr"])
             or review["github_login"].strip().lower().endswith("[bot]")
             or review["github_login"].strip().lower() in
