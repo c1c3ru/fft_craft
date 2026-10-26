@@ -19,6 +19,10 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "docs/re-results"
 REPO = "c1c3ru/fft_craft"
 MILESTONES = (
+    ("SEMANTIC_HISTORY_INDEX.md",
+     "Índice do acervo semântico acumulado e vinculado ao mesmo ELF"),
+    ("SEMANTIC_LEAF_BXLR.md",
+     "Candidatas ARM de retorno simples microexecutadas para contratos revisáveis"),
     ("SEMANTIC_HOUKOKU_NEXT_BOUNDARIES.md",
      "Destinos ARM seguintes de houkoku_okng auditados sem executar ramos desconhecidos"),
     ("SEMANTIC_POST_GETTER_PATHS.md",
@@ -226,7 +230,7 @@ def generate(inventory, results, priority, binary, pulls_json=None,
         prs = json.loads(pulls_json.read_text(encoding="utf-8"))
     semantic = central_semantic_summary.summarize(
         inventory, data["digest"], results / "semantic-certificates.json",
-        pilot_dir, dynamic_dir, manifests_dir)
+        pilot_dir, dynamic_dir, manifests_dir, history_dir=results)
     return render(data, results, prs, semantic)
 
 

@@ -8,10 +8,11 @@ from collections import Counter
 from pathlib import Path
 
 import semantic_coverage
+import semantic_history
 
 
 def summarize(inventory, digest, certificates_path, pilot_dir=None,
-              dynamic_dir=None, manifests_dir=None):
+              dynamic_dir=None, manifests_dir=None, history_dir=None):
     certificates_path = Path(certificates_path)
     certificates = (json.loads(certificates_path.read_text(encoding="utf-8"))
                     if certificates_path.is_file() else {})
@@ -25,6 +26,7 @@ def summarize(inventory, digest, certificates_path, pilot_dir=None,
     sources = {}
     dynamic_samples = 0
     shared_samples = {}
+    leaf_candidates = 0
     for source, folder, glob in (
         ("static", pilot_dir, "*.json"),
         ("unicorn", dynamic_dir, "*.json"),
@@ -42,6 +44,10 @@ def summarize(inventory, digest, certificates_path, pilot_dir=None,
                     raise ValueError(f"duplicate evidence: {path}")
                 observed.add(address)
                 if source == "unicorn":
+                    if record.get("contract_candidate"):
+                        if record.get("size") != 4 or record.get("instruction_encoding") != "1eff2fe1":
+                            raise ValueError(f"invalid BX LR candidate: {path}")
+                        leaf_candidates += 1
                     if record.get("certified") is not False:
                         raise ValueError(f"dynamic evidence cannot certify: {path}")
                     if "machine_samples_passed" in record:
@@ -77,7 +83,14 @@ def summarize(inventory, digest, certificates_path, pilot_dir=None,
                     raise ValueError(f"invalid or duplicate worker address: {address}")
                 assigned.add(address)
     pending = [r for r in rows if r["semantic_status"] != "certified"]
+    history, stale_history = (semantic_history.discover(history_dir, digest)
+                              if history_dir is not None else ([], 0))
     return {
+        "historic_reports": len(history),
+        "historic_machine_report_documents": sum(
+            item["kind"] == "microexecution_report" for item in history),
+        "historic_stale_reports": stale_history,
+        "leaf_candidates": leaf_candidates,
         "symbols": sum(len(r["symbols"]) for r in rows),
         "unique": len(rows), "certified": counts["certified"],
         "certified_bytes": certified_bytes, "total_bytes": total_bytes,
@@ -103,6 +116,9 @@ def render(summary):
         f"| Cobertura semântica por bytes únicos | {100*s['certified_bytes']/max(1,s['total_bytes']):.2f}% |",
         f"| Registros parciais no ledger | {s['partial_certificate_records']:,} |",
         f"| Endereços com evidência parcial registrada ou gerada nesta execução | {s['partial_evidence_unique']:,} |",
+        f"| Documentos semânticos históricos do mesmo ELF | {s.get('historic_reports', 0):,} |",
+        f"| Documentos históricos com testes declarados | {s.get('historic_machine_report_documents', 0):,} |",
+        f"| Candidatas BX LR verificadas, pendentes de revisão | {s.get('leaf_candidates', 0):,} |",
         f"| Relatórios estáticos deste lote | {s['static_reports']:,} |",
         f"| Relatórios Unicorn deste lote | {s['unicorn_reports']:,} |",
         f"| Microexecuções Unicorn verificadas neste lote (sem duplicar suítes) | {s['dynamic_samples']:,} |",

@@ -30,6 +30,16 @@ class SemanticWorkQueueTests(unittest.TestCase):
         self.assertTrue(all("unresolved_paths" in t["required_evidence"] for t in tasks))
         self.assertEqual(shards, module.partition(self.rows, "a" * 64, 3, 10))
 
+    def test_prioritize_existing_leaf_proof_candidates(self):
+        shards = module.partition(self.rows, "a"*64, 2, 2,
+                                  priority_addresses={"00000005", "00000004"})
+        tasks = [task["address"] for shard in shards for task in shard]
+        self.assertEqual(set(tasks), {"00000005", "00000004"})
+        # Without a candidate, re-use partial evidence before unknown entries.
+        plain = module.partition(self.rows, "a"*64, 2, 1)
+        self.assertEqual(
+            [t["address"] for group in plain for t in group], ["00000003"])
+
     def test_limit_and_bad_workers(self):
         self.assertEqual(sum(map(len, module.partition(self.rows, "a"*64, 2, 2))), 2)
         for workers, limit in ((0, 2), (33, 2), (3, 0)):
