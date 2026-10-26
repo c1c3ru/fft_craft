@@ -18,6 +18,8 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_work_queue.py'
       - '.github/workflows/re-semantic-queue.yml'
       - 'FFT_Android_Mod/docs/re-tools/semantic_pilot.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_dynamic_evidence.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_dynamic_evidence.py'
 
 permissions:
   contents: read
@@ -37,6 +39,8 @@ jobs:
           python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_work_queue.py' -v
       - name: Install ARM analysis dependencies
         run: python3 -m pip install capstone pyelftools unicorn
+      - name: Test dynamic evidence accounting
+        run: python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_dynamic_evidence.py' -v
       - name: Generate exact-binary semantic dashboard and worker manifests
         env:
           LIMIT: ${{ github.event_name == 'pull_request' && '5' || inputs.limit || '5' }}
@@ -48,6 +52,8 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_work_queue.py \
             --workers "$WORKERS" --limit "$LIMIT" --output /tmp/fft-semantic/manifests
           if [ "${{ github.event_name }}" = 'pull_request' ]; then
+            python3 FFT_Android_Mod/docs/re-tools/semantic_dynamic_evidence.py \
+              --output /tmp/fft-semantic/dynamic-evidence
             python3 FFT_Android_Mod/docs/re-tools/semantic_pilot.py \
               --workers "$WORKERS" --manifests /tmp/fft-semantic/manifests \
               --output /tmp/fft-semantic/pilot
