@@ -188,6 +188,8 @@ jobs:
         run: |
           python3 FFT_Android_Mod/docs/re-tools/structural_v3_report.py
       - name: Collect same-run semantic worker and Unicorn evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           mkdir -p /tmp/fft-semantic
