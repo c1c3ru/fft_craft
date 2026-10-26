@@ -26,6 +26,7 @@ O histórico CSV contém **5,932** registros de análise anterior, que podem se 
 
 Os relatórios abaixo apresentam **efeitos locais testados sob estados sintéticos** e seus limites. Testes passando não significam que a função inteira foi reconstruída:
 
+- [Três destinos de SysSE_Play e argumentos pós-GetScale verificados por máquina](SEMANTIC_POST_GETTER_PATHS.md)
 - [GetParam/GetScale ARM: 96 microexecuções individuais e via BL original](SEMANTIC_GETPARAM_GETSCALE_MICROEXEC.md)
 - [Instruções e destinos de chamada GetParam/GetScale auditados](SEMANTIC_GETPARAM_GETSCALE_AUDIT.md)
 - [Próximas leituras globais de som e ícones verificadas até as primeiras chamadas BL](SEMANTIC_NEXT_POINTER_MICROEXEC.md)
@@ -39,8 +40,8 @@ Os relatórios abaixo apresentam **efeitos locais testados sob estados sintétic
 
 ### Lacunas semânticas conhecidas
 
-- `0x2b2b9c`: Validar os desvios condicionais de SysSE_Play após GetParam retornar.
-- `0x2b893c`: Validar a continuação de iOS_SetIconPosition após GetScale retornar.
+- `0x2bf008`: Investigar o próximo BL de SysSE_Play depois do desvio condicionado.
+- `0x0a7034`: Investigar o próximo BL de iOS_SetIconPosition com os argumentos já observados.
 
 Estas duas prioridades são **curadas no gerador**; quando um limite for resolvido, a descrição deve ser atualizada no mesmo PR de análise.
 
@@ -57,11 +58,11 @@ Estas duas prioridades são **curadas no gerador**; quando um limite for resolvi
 
 ## Pull requests recentes
 
+- [PR #301 — feat(re): seguir desvios ARM após GetParam e argumentos pós-GetScale](https://github.com/c1c3ru/fft_craft/pull/301)
+- [PR #300 — chore(re): automated structural batch 40353693947](https://github.com/c1c3ru/fft_craft/pull/300)
 - [PR #299 — feat(re): mapear os callees ARM GetParam e GetScale antes de ampliar semântica](https://github.com/c1c3ru/fft_craft/pull/299)
 - [PR #298 — chore(re): automated structural batch 40351595820](https://github.com/c1c3ru/fft_craft/pull/298)
 - [PR #297 — feat(re): auditar instruções reais nos próximos limites de som e ícones](https://github.com/c1c3ru/fft_craft/pull/297)
-- [PR #296 — chore(re): automated structural batch 40295799498](https://github.com/c1c3ru/fft_craft/pull/296)
-- [PR #295 — chore(re): automated structural batch 40246019946](https://github.com/c1c3ru/fft_craft/pull/295)
 
 ## Atualização automática e fontes
 
