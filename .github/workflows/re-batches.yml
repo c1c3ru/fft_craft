@@ -182,6 +182,8 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_getparam_getscale.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_getparam_getscale_exec.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_post_getter_paths.py
+      - name: Audit unresolved houkoku ARM destinations
+        run: python3 FFT_Android_Mod/docs/re-tools/semantic_houkoku_next_boundaries.py
       - name: Publish v3 coverage diagnostics and migration counts
         run: |
           python3 FFT_Android_Mod/docs/re-tools/structural_v3_report.py
