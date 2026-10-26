@@ -12,7 +12,8 @@ import semantic_history
 
 
 def summarize(inventory, digest, certificates_path, pilot_dir=None,
-              dynamic_dir=None, manifests_dir=None, history_dir=None):
+              dynamic_dir=None, manifests_dir=None, history_dir=None,
+              contracts_dir=None):
     certificates_path = Path(certificates_path)
     certificates = (json.loads(certificates_path.read_text(encoding="utf-8"))
                     if certificates_path.is_file() else {})
@@ -69,6 +70,26 @@ def summarize(inventory, digest, certificates_path, pilot_dir=None,
                     partial.add(address)
         sources[source] = len(observed)
     dynamic_samples += sum(shared_samples.values())
+    checked_contracts = set()
+    contract_samples = 0
+    if contracts_dir is not None:
+        for path in sorted(Path(contracts_dir).glob("*.json")):
+            record = json.loads(path.read_text(encoding="utf-8"))
+            address = str(record.get("address", "")).lower().removeprefix("0x")
+            if (address not in mapped or address in checked_contracts
+                    or path.stem.lower() != address
+                    or record.get("binary_sha256") != digest
+                    or mapped[address]["size"] != 4
+                    or record.get("instruction_word") != "1eff2fe1"
+                    or record.get("contract_stage") != "local_isa_contract_checked_review_pending"
+                    or record.get("certified") is not False
+                    or record.get("semantic_status") != "partial"
+                    or record.get("machine_samples_failed") != 0
+                    or record.get("machine_samples_passed") != 8
+                    or record.get("reviewer") is not None):
+                raise ValueError(f"invalid or stale local contract: {path}")
+            checked_contracts.add(address)
+            contract_samples += 8
     assigned = set()
     if manifests_dir is not None:
         for path in sorted(Path(manifests_dir).glob("semantic-worker-*.json")):
@@ -91,6 +112,8 @@ def summarize(inventory, digest, certificates_path, pilot_dir=None,
             item["kind"] == "microexecution_report" for item in history),
         "historic_stale_reports": stale_history,
         "leaf_candidates": leaf_candidates,
+        "checked_local_contracts": len(checked_contracts),
+        "contract_samples": contract_samples,
         "symbols": sum(len(r["symbols"]) for r in rows),
         "unique": len(rows), "certified": counts["certified"],
         "certified_bytes": certified_bytes, "total_bytes": total_bytes,
@@ -119,6 +142,8 @@ def render(summary):
         f"| Documentos semânticos históricos do mesmo ELF | {s.get('historic_reports', 0):,} |",
         f"| Documentos históricos com testes declarados | {s.get('historic_machine_report_documents', 0):,} |",
         f"| Candidatas BX LR verificadas, pendentes de revisão | {s.get('leaf_candidates', 0):,} |",
+        f"| Contratos locais BX LR com retorno ARM/Thumb verificado (revisão pendente) | {s.get('checked_local_contracts', 0):,} |",
+        f"| Execuções ARM/Thumb adicionais dos contratos locais | {s.get('contract_samples', 0):,} |",
         f"| Relatórios estáticos deste lote | {s['static_reports']:,} |",
         f"| Relatórios Unicorn deste lote | {s['unicorn_reports']:,} |",
         f"| Microexecuções Unicorn verificadas neste lote (sem duplicar suítes) | {s['dynamic_samples']:,} |",

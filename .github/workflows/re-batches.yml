@@ -198,6 +198,9 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_leaf_bxlr.py \
             --output /tmp/fft-semantic/dynamic-evidence \
             --report FFT_Android_Mod/docs/re-results/SEMANTIC_LEAF_BXLR.md
+          python3 FFT_Android_Mod/docs/re-tools/semantic_bxlr_contract_pilot.py \
+            --limit 5 --output /tmp/fft-semantic/contract-pilot \
+            --report FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_CONTRACT_PILOT.md
           python3 FFT_Android_Mod/docs/re-tools/semantic_work_queue.py \
             --workers 5 --limit 5 \
             --candidate-evidence-dir /tmp/fft-semantic/dynamic-evidence \
@@ -217,13 +220,15 @@ jobs:
               --pulls-json /tmp/recent-merged-prs.json \
               --pilot-dir /tmp/fft-semantic/pilot \
               --dynamic-dir /tmp/fft-semantic/dynamic-evidence \
-              --manifests-dir /tmp/fft-semantic/manifests
+              --manifests-dir /tmp/fft-semantic/manifests \
+              --contracts-dir /tmp/fft-semantic/contract-pilot
           else
             echo "GitHub PR metadata unavailable; preserving the dashboard without recent PR metadata"
             python3 FFT_Android_Mod/docs/re-tools/status_geral.py \
               --pilot-dir /tmp/fft-semantic/pilot \
               --dynamic-dir /tmp/fft-semantic/dynamic-evidence \
-              --manifests-dir /tmp/fft-semantic/manifests
+              --manifests-dir /tmp/fft-semantic/manifests \
+              --contracts-dir /tmp/fft-semantic/contract-pilot
           fi
           grep -q 'Aprovação estrutural entre checkpoints' \
             FFT_Android_Mod/docs/re-results/STATUS_GERAL.md

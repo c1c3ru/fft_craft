@@ -28,6 +28,8 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/semantic_leaf_bxlr.py'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_history.py'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_leaf_bxlr.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_bxlr_contract_pilot.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_bxlr_contract_pilot.py'
 
 permissions:
   contents: read
@@ -55,6 +57,7 @@ jobs:
         run: |
           python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_history.py' -v
           python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_leaf_bxlr.py' -v
+          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_bxlr_contract_pilot.py' -v
       - name: Generate exact-binary semantic dashboard and worker manifests
         env:
           LIMIT: ${{ github.event_name == 'pull_request' && '5' || inputs.limit || '5' }}
@@ -68,6 +71,9 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_leaf_bxlr.py \
             --output /tmp/fft-semantic/dynamic-evidence \
             --report FFT_Android_Mod/docs/re-results/SEMANTIC_LEAF_BXLR.md
+          python3 FFT_Android_Mod/docs/re-tools/semantic_bxlr_contract_pilot.py \
+            --limit 5 --output /tmp/fft-semantic/contract-pilot \
+            --report FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_CONTRACT_PILOT.md
           python3 FFT_Android_Mod/docs/re-tools/semantic_work_queue.py \
             --workers "$WORKERS" --limit "$LIMIT" \
             --candidate-evidence-dir /tmp/fft-semantic/dynamic-evidence \
@@ -82,13 +88,16 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/status_geral.py \
             --pilot-dir /tmp/fft-semantic/pilot \
             --dynamic-dir /tmp/fft-semantic/dynamic-evidence \
-            --manifests-dir /tmp/fft-semantic/manifests
+            --manifests-dir /tmp/fft-semantic/manifests \
+            --contracts-dir /tmp/fft-semantic/contract-pilot
           cp FFT_Android_Mod/docs/re-results/STATUS_GERAL.md \
             /tmp/fft-semantic/STATUS_GERAL.md
           cp FFT_Android_Mod/docs/re-results/SEMANTIC_HISTORY_INDEX.md \
             /tmp/fft-semantic/SEMANTIC_HISTORY_INDEX.md
           cp FFT_Android_Mod/docs/re-results/SEMANTIC_LEAF_BXLR.md \
             /tmp/fft-semantic/SEMANTIC_LEAF_BXLR.md
+          cp FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_CONTRACT_PILOT.md \
+            /tmp/fft-semantic/SEMANTIC_BXLR_CONTRACT_PILOT.md
       - uses: actions/upload-artifact@v4
         with:
           name: fft-semantic-manifests
