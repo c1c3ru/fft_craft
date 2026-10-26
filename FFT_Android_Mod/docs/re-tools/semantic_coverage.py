@@ -108,7 +108,7 @@ def main():
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(report(rows, digest), encoding="utf-8")
     print(f"SEMANTIC_CERTIFIED={sum(r['semantic_status']=='certified' for r in rows)}")
-    print(f"INVENTORY_COUNT={sum(len(r[\u0027symbols\u0027]) for r in rows)}")
+    print("INVENTORY_COUNT=" + str(sum(len(record["symbols"]) for record in rows)))
     print(f"UNIQUE_ENTRYPOINTS={len(rows)}")
 
 
