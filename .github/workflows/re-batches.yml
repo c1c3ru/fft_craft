@@ -194,6 +194,10 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_bxlr_contract_pilot.py \
             --limit 303 --output /tmp/fft-semantic/contract-pilot \
             --report FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_CONTRACT_PILOT.md
+          python3 FFT_Android_Mod/docs/re-tools/semantic_bxlr_review_batch.py \
+            --limit 5 --contracts-dir /tmp/fft-semantic/contract-pilot \
+            --manifest FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_REVIEW_BATCH.json \
+            --report FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_REVIEW_BATCH.md
           python3 FFT_Android_Mod/docs/re-tools/semantic_work_queue.py \
             --workers 5 --limit 5 \
             --candidate-evidence-dir /tmp/fft-semantic/dynamic-evidence \
