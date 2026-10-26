@@ -235,7 +235,7 @@ def generate(inventory, results, priority, binary, pulls_json=None,
         inventory, data["digest"], results / "semantic-certificates.json",
         pilot_dir, dynamic_dir, manifests_dir, history_dir=results,
         contracts_dir=contracts_dir,
-        snapshot_path=results / "SEMANTIC_RUN_SNAPSHOT.json")
+        snapshot_path=results / "SEMANTIC_RUN_SNAPSHOT.json", binary=binary)
     return render(data, results, prs, semantic)
 
 
