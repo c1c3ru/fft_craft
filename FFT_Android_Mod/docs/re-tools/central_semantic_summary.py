@@ -13,7 +13,7 @@ import semantic_history
 
 def summarize(inventory, digest, certificates_path, pilot_dir=None,
               dynamic_dir=None, manifests_dir=None, history_dir=None,
-              contracts_dir=None):
+              contracts_dir=None, snapshot_path=None):
     certificates_path = Path(certificates_path)
     certificates = (json.loads(certificates_path.read_text(encoding="utf-8"))
                     if certificates_path.is_file() else {})
@@ -106,7 +106,7 @@ def summarize(inventory, digest, certificates_path, pilot_dir=None,
     pending = [r for r in rows if r["semantic_status"] != "certified"]
     history, stale_history = (semantic_history.discover(history_dir, digest)
                               if history_dir is not None else ([], 0))
-    return {
+    result = {
         "historic_reports": len(history),
         "historic_machine_report_documents": sum(
             item["kind"] == "microexecution_report" for item in history),
@@ -123,6 +123,21 @@ def summarize(inventory, digest, certificates_path, pilot_dir=None,
         "assigned": len(assigned), "pending": pending,
         "dynamic_samples": dynamic_samples,
     }
+    # When the dashboard is regenerated without any same-run folders, retain
+    # the last CI-validated observation set instead of displaying false zeros.
+    if all(folder is None for folder in
+           (pilot_dir, dynamic_dir, manifests_dir, contracts_dir)):
+        if snapshot_path is not None:
+            import semantic_run_snapshot
+            snapshot = semantic_run_snapshot.load(
+                snapshot_path, digest, certificates, len(rows))
+            if snapshot is not None:
+                result.update(snapshot["metrics"])
+                result["evidence_origin"] = "snapshot"
+                result["evidence_run_id"] = snapshot["run_id"]
+    else:
+        result["evidence_origin"] = "current_run"
+    return result
 
 
 def render(summary):
@@ -131,6 +146,14 @@ def render(summary):
         "## Cobertura semântica e execução paralela", "",
         "Os números certificados representam **registros formais válidos para este ELF**, "
         "não aprovação estrutural. Evidências parciais não certificam equivalência.", "",
+        ("Evidências do **último CI verificado** para este ELF, "
+         f"[execução {s.get('evidence_run_id')}]"
+         "(https://github.com/c1c3ru/fft_craft/actions/runs/"
+         f"{s.get('evidence_run_id')}); os testes não foram reexecutados "
+         "nesta geração do painel." if s.get("evidence_origin") == "snapshot"
+         else "Evidências geradas e verificadas nesta execução do pipeline."
+         if s.get("evidence_origin") == "current_run"
+         else "Nenhum lote dinâmico carregado nesta geração."), "",
         "| Indicador | Resultado |", "|---|---:|",
         f"| Entradas do inventário | {s['symbols']:,} |",
         f"| Endereços únicos | {s['unique']:,} |",
@@ -138,7 +161,7 @@ def render(summary):
         f"| Cobertura semântica por endereço | {100*s['certified']/max(1,s['unique']):.2f}% |",
         f"| Cobertura semântica por bytes únicos | {100*s['certified_bytes']/max(1,s['total_bytes']):.2f}% |",
         f"| Registros parciais no ledger | {s['partial_certificate_records']:,} |",
-        f"| Endereços com evidência parcial registrada ou gerada nesta execução | {s['partial_evidence_unique']:,} |",
+        f"| Endereços com evidência parcial no lote de referência | {s['partial_evidence_unique']:,} |",
         f"| Documentos semânticos históricos do mesmo ELF | {s.get('historic_reports', 0):,} |",
         f"| Documentos históricos com testes declarados | {s.get('historic_machine_report_documents', 0):,} |",
         f"| Candidatas BX LR verificadas, pendentes de revisão | {s.get('leaf_candidates', 0):,} |",
