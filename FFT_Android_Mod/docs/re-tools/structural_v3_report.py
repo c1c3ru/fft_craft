@@ -5,11 +5,13 @@ from collections import Counter
 import json
 from pathlib import Path
 
+import checkpoint_files
+
 
 def render(results):
     counts = Counter()
     findings = []
-    for file in sorted(results.glob("*.json")):
+    for file in checkpoint_files.checkpoint_paths(results):
         try:
             row = json.loads(file.read_text(encoding="utf-8"))
         except (ValueError, OSError):
