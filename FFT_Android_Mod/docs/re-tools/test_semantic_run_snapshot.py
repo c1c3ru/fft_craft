@@ -78,6 +78,20 @@ class SnapshotTests(unittest.TestCase):
             snapshot.load(path, self.elf,
                           {"00000010": {"status": "partial"}}, 2)
 
+    def test_revised_partial_ledger_ignores_old_snapshot(self):
+        state = self.build()
+        path = self.dir / "snapshot.json"
+        path.write_text(json.dumps(state))
+        self.certfile.write_text(json.dumps({
+            "00000010": {"status": "partial", "binary_sha256": self.elf,
+                         "size": 4}
+        }))
+        summary = central.summarize(self.inventory, self.elf,
+                                    self.certfile, snapshot_path=path)
+        self.assertEqual(summary["evidence_origin"], "stale_snapshot")
+        self.assertEqual(summary["certified"], 0)
+        self.assertIn("desatualizado", central.render(summary))
+
     def test_reject_tampered_counts_and_forged_certificate(self):
         state = self.build()
         state["metrics"]["checked_local_contracts"] = 9

@@ -36,6 +36,7 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/structural_v3_report.py'
       - 'FFT_Android_Mod/docs/re-tools/parallel_loop.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_coverage.py'
+      - 'FFT_Android_Mod/docs/re-results/semantic-certificates.json'
       - 'FFT_Android_Mod/docs/re-tools/semantic_work_queue.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_pilot.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_dynamic_evidence.py'
@@ -188,9 +189,12 @@ jobs:
         run: |
           python3 FFT_Android_Mod/docs/re-tools/structural_v3_report.py
       - name: Collect same-run semantic worker and Unicorn evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           mkdir -p /tmp/fft-semantic
+          python3 FFT_Android_Mod/docs/re-tools/semantic_certificate_gate.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_coverage.py \
             --output FFT_Android_Mod/docs/re-results/SEMANTIC_COVERAGE.md
           python3 FFT_Android_Mod/docs/re-tools/semantic_dynamic_evidence.py \

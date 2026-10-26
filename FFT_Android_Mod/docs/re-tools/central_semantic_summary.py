@@ -13,13 +13,20 @@ import semantic_history
 
 def summarize(inventory, digest, certificates_path, pilot_dir=None,
               dynamic_dir=None, manifests_dir=None, history_dir=None,
-              contracts_dir=None, snapshot_path=None):
+              contracts_dir=None, snapshot_path=None, binary=None):
     certificates_path = Path(certificates_path)
     certificates = (json.loads(certificates_path.read_text(encoding="utf-8"))
                     if certificates_path.is_file() else {})
     rows = semantic_coverage.ledger(Path(inventory), digest, certificates)
     mapped = {r["address"]: r for r in rows}
     counts = Counter(r["semantic_status"] for r in rows)
+    if counts["certified"]:
+        if binary is None:
+            raise ValueError("certified semantic records require original ELF proof validation")
+        import semantic_certificate_gate
+        checked = semantic_certificate_gate.gate(binary, inventory, certificates_path)
+        if len(checked) != counts["certified"]:
+            raise ValueError("semantic certification gate did not validate all entries")
     total_bytes = sum(r["size"] for r in rows)
     certified_bytes = sum(r["size"] for r in rows
                           if r["semantic_status"] == "certified")
@@ -129,8 +136,15 @@ def summarize(inventory, digest, certificates_path, pilot_dir=None,
            (pilot_dir, dynamic_dir, manifests_dir, contracts_dir)):
         if snapshot_path is not None:
             import semantic_run_snapshot
-            snapshot = semantic_run_snapshot.load(
-                snapshot_path, digest, certificates, len(rows))
+            try:
+                snapshot = semantic_run_snapshot.load(
+                    snapshot_path, digest, certificates, len(rows))
+            except ValueError:
+                # A new certificate ledger invalidates cached partial totals.
+                # Ignore old evidence rather than blocking a legitimate
+                # certificate PR; CI will regenerate the snapshot after merge.
+                snapshot = None
+                result["evidence_origin"] = "stale_snapshot"
             if snapshot is not None:
                 result.update(snapshot["metrics"])
                 result["evidence_origin"] = "snapshot"
@@ -153,6 +167,8 @@ def render(summary):
          "nesta geração do painel." if s.get("evidence_origin") == "snapshot"
          else "Evidências geradas e verificadas nesta execução do pipeline."
          if s.get("evidence_origin") == "current_run"
+         else "Snapshot de evidências desatualizado; não foi utilizado nesta geração."
+         if s.get("evidence_origin") == "stale_snapshot"
          else "Nenhum lote dinâmico carregado nesta geração."), "",
         "| Indicador | Resultado |", "|---|---:|",
         f"| Entradas do inventário | {s['symbols']:,} |",
