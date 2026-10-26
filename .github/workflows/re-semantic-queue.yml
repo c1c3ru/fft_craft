@@ -5,7 +5,7 @@ on:
       limit:
         description: 'Maximum uncertified functions to schedule'
         required: false
-        default: '100'
+        default: '5'
       workers:
         description: 'Number of independent manifests'
         required: false
@@ -17,6 +17,7 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_coverage.py'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_work_queue.py'
       - '.github/workflows/re-semantic-queue.yml'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_pilot.py'
 
 permissions:
   contents: read
@@ -34,9 +35,11 @@ jobs:
         run: |
           python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_coverage.py' -v
           python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_work_queue.py' -v
+      - name: Install ARM analysis dependencies
+        run: python3 -m pip install capstone pyelftools unicorn
       - name: Generate exact-binary semantic dashboard and worker manifests
         env:
-          LIMIT: ${{ inputs.limit || '100' }}
+          LIMIT: ${{ github.event_name == 'pull_request' && '5' || inputs.limit || '5' }}
           WORKERS: ${{ inputs.workers || '5' }}
         run: |
           set -euo pipefail
@@ -44,6 +47,11 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_coverage.py --output /tmp/fft-semantic/SEMANTIC_COVERAGE.md
           python3 FFT_Android_Mod/docs/re-tools/semantic_work_queue.py \
             --workers "$WORKERS" --limit "$LIMIT" --output /tmp/fft-semantic/manifests
+          if [ "${{ github.event_name }}" = 'pull_request' ]; then
+            python3 FFT_Android_Mod/docs/re-tools/semantic_pilot.py \
+              --workers "$WORKERS" --manifests /tmp/fft-semantic/manifests \
+              --output /tmp/fft-semantic/pilot
+          fi
       - uses: actions/upload-artifact@v4
         with:
           name: fft-semantic-manifests
