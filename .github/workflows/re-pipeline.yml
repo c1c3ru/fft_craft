@@ -362,14 +362,17 @@ jobs:
           report = Path("FFT_Android_Mod/docs/re-results/STATUS_GERAL.md").read_text(encoding="utf-8")
           assert all(marker in report for marker in (
               "Aprovação estrutural entre checkpoints",
-              "equivalência semântica integral",
+              "Equivalência semântica integral registrada",
+              "Certificados semânticos registrados",
               "Não somamos esses conjuntos",
               "Próximas prioridades",
               "0x2b2b7c",
               "0x2b8928",
               "SEMANTIC_EVIDENCE_INDEX.md",
               "GitHub Actions"))
-          assert "não mensurado" in report
+          assert "Cobertura semântica por endereço" in report
+          assert "Cobertura semântica por bytes únicos" in report
+          assert "Endereços com evidência parcial registrada ou gerada nesta execução" in report
           print("PASS: same-ELF dashboard retains structural/semantic distinction")
           PY
       - uses: actions/upload-artifact@v4
