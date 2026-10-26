@@ -128,6 +128,44 @@ class CertificateGateTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "differs from proposed"):
             gate.verify_remote_review(cert, ADDRESS, forgery)
 
+    def test_second_round_review_requires_new_file_and_exact_head(self):
+        cert = approved()
+        fingerprint = protocol.fingerprint(ADDRESS, cert)
+        approved_request = {
+            "schema": 1, "review_protocol": protocol.PROTOCOL,
+            "elf_sha256": DIGEST, "status": "human_review_requested",
+            "certified": False,
+            "certificate_fingerprints": {ADDRESS: fingerprint},
+        }
+        prefix = "repos/c1c3ru/fft_craft/pulls/325"
+        def provider(path):
+            if path == prefix:
+                return {"head": {"sha": "second-round-head"},
+                        "user": {"login": "review-request-author"}}
+            if path.endswith("/reviews?per_page=100"):
+                return [{"user": {"login": "independent-reviewer", "type": "User"},
+                         "state": "APPROVED", "commit_id": "second-round-head",
+                         "submitted_at": "2026-10-26T15:00:00Z"}]
+            if path.endswith("/files?per_page=100"):
+                return [{"filename": protocol.REVIEW_RETRY_PATH,
+                         "patch": f'@@ -0,0 +1,1 @@\n+    "{ADDRESS}": "{fingerprint}",\n'}]
+            if path.startswith("repos/c1c3ru/fft_craft/contents/"):
+                self.assertIn(protocol.REVIEW_RETRY_PATH, path)
+                return {"encoding": "base64", "content": base64.b64encode(
+                    json.dumps(approved_request).encode()).decode()}
+            raise AssertionError(path)
+        self.assertTrue(gate.verify_remote_review(cert, ADDRESS, provider))
+        self.assertEqual(len(protocol.REVIEW_PATHS), 2)
+        self.assertNotEqual(protocol.REVIEW_PATH, protocol.REVIEW_RETRY_PATH)
+        def no_new_fingerprint(path):
+            value = provider(path)
+            if path.endswith("/files?per_page=100"):
+                return [{"filename": protocol.REVIEW_RETRY_PATH,
+                         "patch": '@@ -0,0 +1,1 @@\n+  "status": "approved"\n'}]
+            return value
+        with self.assertRaisesRegex(ValueError, "exact scoped fingerprint"):
+            gate.verify_remote_review(cert, ADDRESS, no_new_fingerprint)
+
     def test_scoped_review_does_not_accept_legacy_patch_or_missing_protocol(self):
         cert = approved()
         cert["reviewer"]["review_protocol"] = "legacy_self_declaration"

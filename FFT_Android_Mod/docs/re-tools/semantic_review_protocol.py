@@ -16,6 +16,10 @@ import semantic_bxlr_contract_pilot as bxlr
 
 PROTOCOL = "independent_github_review_request_v1"
 REVIEW_PATH = "FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_REVIEW_REQUEST.json"
+# A prior request was merged without an APPROVED review. Every new review round
+# adds a fresh, immutable request file; do not rewrite the already merged one.
+REVIEW_RETRY_PATH = "FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_REVIEW_REQUEST_R2.json"
+REVIEW_PATHS = (REVIEW_PATH, REVIEW_RETRY_PATH)
 FIELDS = (
     "binary_sha256", "size", "proof_class", "scope",
     "instruction_encoding", "instruction_sha256", "contract",

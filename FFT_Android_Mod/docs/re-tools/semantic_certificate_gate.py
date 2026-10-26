@@ -173,7 +173,7 @@ def verify_remote_review(record, address, provider=github_json):
         raise ValueError("declared approval date differs from GitHub")
     fingerprint = protocol.fingerprint(address, record)
     changed = [file for file in files if
-               file.get("filename") == protocol.REVIEW_PATH and
+               file.get("filename") in protocol.REVIEW_PATHS and
                isinstance(file.get("patch"), str)]
     def includes_approved_fingerprint(patch):
         for line in patch.splitlines():
@@ -185,9 +185,12 @@ def verify_remote_review(record, address, provider=github_json):
             if matched and matched.group(1) == address and matched.group(2) == fingerprint:
                 return True
         return False
-    if not any(includes_approved_fingerprint(item["patch"]) for item in changed):
-        raise ValueError("review PR did not add this exact scoped fingerprint")
-    ref = f"repos/c1c3ru/fft_craft/contents/{protocol.REVIEW_PATH}?ref={head_sha}"
+    approved_sources = [item for item in changed
+                        if includes_approved_fingerprint(item["patch"])]
+    if len(approved_sources) != 1:
+        raise ValueError("review PR must add the exact scoped fingerprint in one review request")
+    approved_path = approved_sources[0]["filename"]
+    ref = f"repos/c1c3ru/fft_craft/contents/{approved_path}?ref={head_sha}"
     document = provider(ref)
     if (not isinstance(document, dict)
             or document.get("encoding") != "base64"
