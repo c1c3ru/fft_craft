@@ -56,10 +56,27 @@ class StatusGeralTests(unittest.TestCase):
         self.assertIn("2,913", report)
         self.assertIn("**97.0%**", report)
         self.assertIn("89", report)
-        self.assertIn("não mensurado", report)
+        self.assertIn("não mensurada", report)
         self.assertIn("Não somamos esses conjuntos", report)
         self.assertIn("89/89 relatórios estáticos", report)
         self.assertIn("0025a228", report)
+
+    def test_semantic_headline_matches_detailed_dashboard(self):
+        semantic = {
+            "symbols": 6455, "unique": 6329, "certified": 2,
+            "certified_bytes": 120, "total_bytes": 1500000,
+            "partial_certificate_records": 3, "partial_evidence_unique": 7,
+            "static_reports": 5, "unicorn_reports": 2,
+            "assigned": 5, "pending": [],
+        }
+        report = status.render(metrics(), self.results, semantic=semantic)
+        self.assertIn("Equivalência semântica integral registrada | **2**", report)
+        self.assertIn("Certificados semânticos registrados | 2", report)
+        self.assertEqual(report.count("## Cobertura semântica e execução paralela"), 1)
+        self.assertLess(report.index("## Evidência e testes semânticos"),
+                        report.index("## Cobertura semântica e execução paralela"))
+        self.assertLess(report.index("## Cobertura semântica e execução paralela"),
+                        report.index("## Próximas prioridades"))
 
     def test_v3_only_accepts_same_binary_records(self):
         counts = status.current_v3(self.results, SHA)
