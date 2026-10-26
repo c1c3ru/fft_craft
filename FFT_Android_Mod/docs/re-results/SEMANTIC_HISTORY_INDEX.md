@@ -2,9 +2,9 @@
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-- Relatórios históricos vinculados a este ELF: **23**
+- Relatórios históricos vinculados a este ELF: **24**
 - Documentos com contagens de microexecuções declaradas: **13**
-- Documentos de auditoria estática / limites: **10**
+- Documentos de auditoria estática / limites: **11**
 - Documentos com outro SHA-256 excluídos: **0**
 
 **Importante:** os relatórios abaixo foram gerados em etapas anteriores. Suas contagens podem se sobrepor e não são somadas às microexecuções deste lote. A presença de um relatório e um texto PASS não é certificação integral nem reexecução do teste.
@@ -12,6 +12,7 @@ ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 | Documento histórico | Tipo | PASS declarados completos |
 |---|---|---:|
 | [Isolated ARM conditional branch microexecution](SEMANTIC_BRANCH_MICROEXEC.md) | static_or_boundary_audit | 0 |
+| [Primeiro piloto de contratos locais completos — BX LR](SEMANTIC_BXLR_CONTRACT_PILOT.md) | static_or_boundary_audit | 0 |
 | [ARM function entry and state-transition microexecution](SEMANTIC_ENTRY_PREFIX.md) | microexecution_report | 1 |
 | [First-level ARM call contracts: GetParam / GetScale](SEMANTIC_GETPARAM_GETSCALE_AUDIT.md) | static_or_boundary_audit | 0 |
 | [Original ARM GetParam / GetScale — microexecuted contracts](SEMANTIC_GETPARAM_GETSCALE_MICROEXEC.md) | microexecution_report | 3 |

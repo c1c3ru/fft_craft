@@ -26,6 +26,7 @@ O histórico CSV contém **5,932** registros de análise anterior, que podem se 
 
 Os relatórios abaixo apresentam **efeitos locais testados sob estados sintéticos** e seus limites. Testes passando não significam que a função inteira foi reconstruída:
 
+- [Primeiros contratos locais BX LR com retornos ARM/Thumb verificados](SEMANTIC_BXLR_CONTRACT_PILOT.md)
 - [Índice do acervo semântico acumulado e vinculado ao mesmo ELF](SEMANTIC_HISTORY_INDEX.md)
 - [Candidatas ARM de retorno simples microexecutadas para contratos revisáveis](SEMANTIC_LEAF_BXLR.md)
 - [Destinos ARM seguintes de houkoku_okng auditados sem executar ramos desconhecidos](SEMANTIC_HOUKOKU_NEXT_BOUNDARIES.md)
@@ -52,9 +53,11 @@ Os números certificados representam **registros formais válidos para este ELF*
 | Cobertura semântica por bytes únicos | 0.00% |
 | Registros parciais no ledger | 0 |
 | Endereços com evidência parcial registrada ou gerada nesta execução | 309 |
-| Documentos semânticos históricos do mesmo ELF | 23 |
+| Documentos semânticos históricos do mesmo ELF | 24 |
 | Documentos históricos com testes declarados | 13 |
 | Candidatas BX LR verificadas, pendentes de revisão | 303 |
+| Contratos locais BX LR com retorno ARM/Thumb verificado (revisão pendente) | 5 |
+| Execuções ARM/Thumb adicionais dos contratos locais | 40 |
 | Relatórios estáticos deste lote | 5 |
 | Relatórios Unicorn deste lote | 309 |
 | Microexecuções Unicorn verificadas neste lote (sem duplicar suítes) | 1,380 |
@@ -106,11 +109,11 @@ Estas duas prioridades são **curadas no gerador**; quando um limite for resolvi
 
 ## Pull requests recentes
 
+- [PR #321 — feat(re): iniciar contratos semânticos locais completos com retornos ARM/Thumb](https://github.com/c1c3ru/fft_craft/pull/321)
+- [PR #320 — chore(re): automated structural batch 40388256641](https://github.com/c1c3ru/fft_craft/pull/320)
 - [PR #319 — feat(re): reaproveitar evidências históricas e validar folhas ARM rumo aos contratos integrais](https://github.com/c1c3ru/fft_craft/pull/319)
 - [PR #318 — chore(re): automated structural batch 40385077935](https://github.com/c1c3ru/fft_craft/pull/318)
 - [PR #317 — feat(re): auditar destinos ARM pendentes de houkoku_okng e atualizar painel](https://github.com/c1c3ru/fft_craft/pull/317)
-- [PR #316 — fix(ci): validate current centralized semantic fields instead of obso…](https://github.com/c1c3ru/fft_craft/pull/316)
-- [PR #315 — chore(re): automated structural batch 40384616728](https://github.com/c1c3ru/fft_craft/pull/315)
 
 ## Atualização automática e fontes
 
