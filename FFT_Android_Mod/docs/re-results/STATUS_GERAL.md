@@ -114,11 +114,11 @@ Estas duas prioridades são **curadas no gerador**; quando um limite for resolvi
 
 ## Pull requests recentes
 
+- [PR #334 — fix(re): destravar certificações com revisão humana em duas fases e fingerprint do ELF](https://github.com/c1c3ru/fft_craft/pull/334)
+- [PR #333 — chore(re): automated structural batch 40411546042](https://github.com/c1c3ru/fft_craft/pull/333)
 - [PR #332 — fix(ci): endurecer gatilhos e preflight de todos os workflows de engenharia reversa](https://github.com/c1c3ru/fft_craft/pull/332)
 - [PR #331 — chore(re): automated structural batch 40410637043](https://github.com/c1c3ru/fft_craft/pull/331)
 - [PR #330 — feat(re): preparar cinco contratos BX LR para revisão humana e ledger parcial](https://github.com/c1c3ru/fft_craft/pull/330)
-- [PR #329 — chore(re): automated structural batch 40408581057](https://github.com/c1c3ru/fft_craft/pull/329)
-- [PR #328 — fix(ci): separar snapshots semânticos dos checkpoints ARM nos lotes automáticos](https://github.com/c1c3ru/fft_craft/pull/328)
 
 ## Atualização automática e fontes
 
