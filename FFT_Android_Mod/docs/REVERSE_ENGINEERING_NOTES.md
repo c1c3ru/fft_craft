@@ -20119,71 +20119,133 @@ cruzado contra `CFFT_STATE` §22; a lógica de blocos — em particular o
 papel exato dos 4 `SetParam` — não foi traçada instrução a
 instrução).
 
-## 592. `timeevt_chk()` — watchdog de tempo que força o encerramento de uma mensagem "adventure"/novel em andamento (2026-10-25, Fase 3, octogésimo segundo lote, revisão semântica sobre checkpoint do CI)
+## 592. `timeevt_chk()` — leitura completa: watchdog de tempo task-14, divide-por-constante de 3 saídas (ticks→unidade de tempo) antes de forçar o encerramento de uma mensagem "adventure" (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento checkpoint-only)
 
-`timeevt_chk()` (`0x26abac`, 432 B) — checkpoint do pipeline
-automatizado (`docs/re-results/0026abac.json`): 95 de ~108 instruções
-possíveis (88%), 0 tabelas de salto, 8 branches/4 de retrocesso (laço
-candidato). 2 `bl` distintos: `Wtask_status(long)` e
-`stop_adventuremessage(int)`.
+`timeevt_chk()` (`0x26abac`, 432 B) — disassembly linear completo
+via Capstone. 95 de 95 instruções reais lidas e atribuídas (código
+termina em `0x26ad28`); os 13 words finais (52 B) são literal pool —
+total exato de 432 B, confirma e refina os "95 de ~108 slots" do
+checkpoint (88%), sem lacuna de código.
 
-`stop_adventuremessage(int)` já está documentada como parte do
-sistema "Novel"/SSD — citada em `ctlnobel_main` (§96, controlador
-real de cenas de diálogo estilo visual novel, terminologia
-"adventure" confirmada ali) e em `ctlnobelstop_main` (§269, estágio
-de encerramento/limpeza do modo novel, que chama a mesma função ao
-transicionar pra fora da cena). `Wtask_status(long)` é o primitivo de
-consulta de status de task do framework "wasm" já visto em várias
-seções.
+Ambos os `bl` (`Wtask_status`, `stop_adventuremessage`) são chamados
+com o **mesmo task id `14` (0xe)**, confirmando que o watchdog é
+específico da task 14 (não resolvido no checkpoint-only).
 
-O nome (`timeevt_chk` = "time event check") combinado com os dois
-`bl` sugere um watchdog chamado periodicamente que consulta o status
-de uma task via `Wtask_status` e, dependendo do resultado (um limite
-de tempo/timeout atingido, a julgar pelo laço de 4 branches de
-retrocesso antes da chamada), força o encerramento de uma mensagem
-"adventure" ainda ativa via `stop_adventuremessage(int)` — mecanismo
-de segurança pra não deixar uma cena de novel presa indefinidamente.
+```c
+int timeevt_chk(void) {
+    if (g_state == -1) {
+        if (Wtask_status(14) != 0) return 1;  // task ainda rodando
+        *g_cacheA = ...; *g_cacheB = ...;      // grava 2 halfwords em cache
+        goto epilogue;
+    }
+    if (g_state == 0) return 0;
+
+    g_counter += 2;                             // incrementa 2 por chamada
+    if (g_mode == 2) {
+        // cadeia de multiplicação/shift de ponto fixo — idiom clássico
+        // de divide-by-constant, 3 saídas (quebra ticks decorridos em
+        // unidade de tempo: provavelmente h/m/s ou similar)
+        int a = (g_counter * K1) >> S1;
+        int b = (g_counter * K2) >> S2;
+        int c = (g_counter * K3) >> S3;
+        ...
+    }
+    if (/* alvo de tempo não atingido */) return 1;
+
+    stop_adventuremessage(14);
+    g_state = -1;
+epilogue:
+    return 0;
+}
+```
+
+O nome (`timeevt_chk` = "time event check") combinado com os `bl`
+confirma um watchdog periódico específico da task 14: consulta
+`Wtask_status(14)`, acumula um contador de ticks, decompõe esse
+contador em até 3 unidades de tempo via multiplicação/shift de ponto
+fixo (idiom de divisão por constante), e ao atingir o alvo força o
+encerramento de uma mensagem "adventure" ainda ativa via
+`stop_adventuremessage(14)` — mecanismo de segurança pra não deixar
+uma cena de novel presa indefinidamente.
 
 **Conexão**: liga-se a §96/§269 (sistema Novel/adventure) como um
 terceiro ponto de encerramento (watchdog), ao lado do encerramento
 normal via `ctlnobelstop_main`.
 
-**Status CSV: `read_structural`** (call-graph mapeado e cruzado com
-dois sistemas já documentados; corpo do laço e a condição de timeout
-não lidos instrução a instrução).
+**Lacuna aceita**: constantes exatas `K1-3`/`S1-3` da cadeia de
+divisão de ponto fixo e a unidade de tempo real resultante (h/m/s ou
+outra) não confirmadas numericamente nesta passada.
 
-## 593. `SttsEmploy()` — estágio "exibir status do recruta" do pipeline Soldier Office, confirma a família `*Employ` da seção 338 por dentro pela primeira vez (2026-10-25, Fase 3, octogésimo terceiro lote, revisão semântica sobre checkpoint do CI)
+**Status CSV: `read_full`** — 95/95 instruções reais, ambos os `bl`
+já documentados e refinados (task id 14 confirmado).
 
-`SttsEmploy()` (`0x19dc10`, 472 B) — checkpoint do pipeline
-automatizado (`docs/re-results/0019dc10.json`, não reexecutado nesta
-sessão): 106 de ~118 instruções possíveis (90%), 0 tabelas de salto,
-7 branches/3 de retrocesso. 11 `bl` distintos: `Wtask_create(long,char*)`,
-`Wtask_status(long)`, `Wsend_taskparamater(long,long,long,long)` (×2),
-`iOSUnitListWinOnOff(int)` (×2), `DrawPrice()` (×2), `DrawFunds()`
-(×2), `WindowDel(int)`, `iOSWldUnitListWinSet(int)` (×2),
-`SetSttsPara(int)`, `iOS_getTouchTap()`, `iOS_setV2Icon(V2ICON_DATA,int)`.
+## 593. `SttsEmploy()` — leitura completa: ambos os caminhos de saída são tail-calls reais (`b`) pra `DrawUnits()`, resolve a sub-task `Wsend_taskparamater(2,0x19,...)` que controla o ícone de preview (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento checkpoint-only)
 
-A seção 338 (`MainEmploy`) já havia confirmado a família `*Employ`
-inteira pelo nome e posição contígua no binário (`MainEmploy →
-SttsEmploy → BuyEmploy → AccountEmploy → SuccessEmploy`, dispatcher
-do **Soldier Office** — recrutamento de unidades genéricas pagando
-ouro), mas sem ler nenhum dos 4 estados-irmãos por dentro. Este é o
-primeiro. O catálogo confirma exatamente o papel sugerido pelo nome:
-`SttsEmploy` ("Status Employ") é o estado que **exibe o status/preço
-do recruta antes da confirmação de compra** — repete
-`DrawPrice`/`DrawFunds` e adiciona `SetSttsPara(int)`, que grava o
-parâmetro de status (atributo/classe) da unidade sendo pré-visualizada
-na janela de lista (`iOSUnitListWinOnOff`/`iOSWldUnitListWinSet`).
-`Wtask_create` (chamada nova) sugere que este estado dispara uma
-sub-task própria (talvez a animação/preview do ícone via
-`iOS_setV2Icon`), encerrada por `WindowDel` ao sair do estado.
+`SttsEmploy()` (`0x19dc10`, 472 B) — disassembly linear completo via
+Capstone. 106 de 106 instruções reais lidas e atribuídas (código
+termina em `0x19dde8`, que é literalmente o endereço de início de
+`BuyEmploy`); os 12 words finais (48 B) são literal pool — total
+exato de 472 B, confirma exatamente os "106 de ~118 slots" do
+checkpoint (90% era subestimativa de slots esperados, não lacuna
+real).
 
-Sem tabela de salto, nenhum bloco lido instrução a instrução.
+```c
+void SttsEmploy(void) {
+    if (g_sttsWork->byte_0x12 != 0) {            // flag "confirmação pendente"
+        if (!(*g_wldctlFlags & 0xf0)) return;     // guarda: nada a finalizar ainda
+        *g_winTypeField = 0x16;
+        *g_someByteA = 0; *g_someByteB = 0;
+        iOSUnitListWinOnOff(0);
+        iOSWldUnitListWinSet(*g_someByteB);
+        SetSttsPara(0);
+        WindowDel(9);
+        Wtask_create(2, g_taskParamBuf);
+        Wsend_taskparamater(2, 0x19, 0xf826, 0);
+        g_sttsWork->byte_0x12 = 0;
+        *g_doneFlag = 1;
+        return;
+    }
+    if (iOS_getTouchTap()) *g_wldctlFlags |= 0xf0;
+    if (*g_wldctlFlags & 0xf0) {                  // caminho de confirmação/ícone
+        iOS_setV2Icon(3, 1);
+        Wsend_taskparamater(2, 0x19, -1, 0);
+        goto status_check;
+    }
+status_check:
+    if (Wtask_status(2) != 0) {                    // task ocupada
+        DrawFunds(); DrawPrice();
+        return DrawUnits();                         // *** tail-call real via `b` ***
+    }
+    *g_someField_plus4 = 0;
+    g_sttsWork->byte_0x12 = 1;                      // re-arma "confirmação pendente"
+    *g_someOtherField = 0x20003;
+    DrawFunds(); DrawPrice();
+    return DrawUnits();                              // tail-call de novo
+}
+```
+
+Confirma exatamente o papel sugerido pelo nome: `SttsEmploy` ("Status
+Employ") é o estado que exibe o status/preço do recruta antes da
+confirmação. **Achado novo não previsto**: ambos os caminhos de
+saída terminam num tail-call ARM genuíno (`pop {...,lr}` seguido de
+`b`) direto pra `DrawUnits()` (`0x19d7e8`, a função imediatamente
+anterior na memória) — o retorno de `SttsEmploy` *é* o retorno de
+`DrawUnits`, mesmo idiom de sibling-call já visto em
+`vOpn_defscrwin_set` (§620). Resolve também o par `Wtask_create`/
+`Wsend_taskparamater(2,0x19,...)` como uma sub-task dedicada que
+controla o ícone de preview de status, cancelada com parâmetro `-1`
+no toque.
+
+**Lacuna aceita**: identidade exata do struct `g_sttsWork` e das 3
+globais de flag (bytes/words em offsets resolvidos via GOT) — sem
+nome mais forte disponível pelo contexto além de "bloco de trabalho
+do Soldier Office".
 
 **Conexão**: fecha, junto com §338, mais um elo da cadeia Soldier
-Office.
+Office; identifica `DrawUnits` como sibling direto na memória.
 
-**Status CSV: `read_structural`.**
+**Status CSV: `read_full`** — 106/106 instruções reais, todos os 11
+`bl` já documentados, alvo do tail-call (`DrawUnits`) identificado.
 
 ## 594. `BuyEmploy()` — estado "confirmar compra" do recrutamento de unidade no Soldier Office, 2º da família `*Employ` já mapeada no §338 (2026-10-25, Fase 3, octogésimo terceiro lote, revisão semântica sobre checkpoint do CI)
 
@@ -20217,35 +20279,62 @@ família `*Employ`, não específico de `BuyEmploy`.
 §338; corpo dos blocos e o helper local `sub_19d500` não lidos
 instrução a instrução).
 
-## 595. `AccountEmploy()` — estado "pagar e nomear" da sequência de recrutamento `MainEmploy→SttsEmploy→BuyEmploy→AccountEmploy→SuccessEmploy` (2026-10-25, Fase 3, octogésimo terceiro lote, revisão semântica sobre checkpoint do CI)
+## 595. `AccountEmploy()` — leitura completa: **correção** — `ChgMoney`/`ChrNameSet` ficam no ramo de "aceitar nome padrão" (field_8==0, `ChgMoney(0)` é no-op), não num caminho de pagamento/sucesso (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento checkpoint-only)
 
-`AccountEmploy()` (`0x19df84`, 432 B) — checkpoint do pipeline
-automatizado (`docs/re-results/0019df84.json`): 99 de ~108 instruções
-possíveis (92%), 0 tabelas de salto, 9 branches/5 de retrocesso. 8
-`bl` distintos: `Wsend_taskparamater(long,long,long,long)` (×3),
-`sub_19d500` (local, mesmo helper citado em `BuyEmploy` §594),
-`DrawPrice()` (×2), `DrawFunds()` (×2), `ChgMoney(int)` (×1),
-`ChrNameSet(short, unsigned char*)` (×1),
-`DrawMessage(int, COMRECORD*)` (×1), `iOS_getTouchTap()` (×1).
+`AccountEmploy()` (`0x19df84`, 432 B) — disassembly linear completo
+via Capstone. 99 de 99 instruções reais lidas e atribuídas (código
+termina em `0x19e144`); os 9 words finais (36 B) são literal pool —
+total exato de 432 B, confirma exatamente os "99 de ~108 slots" do
+checkpoint (92%).
 
-É o 4º estado da família: pelo nome e pelo catálogo, é o passo de
-**"acertar a conta e nomear o recruta"** — chama `ChgMoney(int)` uma
-única vez (debita o preço, o efetivo pagamento), `ChrNameSet(short,
-unsigned char*)` (atribui o nome à nova unidade recém-criada,
-presumivelmente já instanciada por `MakeChr` no estado anterior
-`BuyEmploy`), continua desenhando `DrawPrice`/`DrawFunds` (displays
-pós-débito), espera confirmação de toque, mostra uma mensagem de
-confirmação, e usa `Wsend_taskparamater` (×3) pra avançar a task —
-pra `SuccessEmploy` em caso de sucesso, ou possivelmente de volta a
-um estado anterior em caso de cancelamento (não resolvido sem leitura
-de blocos).
+**Correção importante em relação à leitura anterior**: a leitura
+checkpoint-only (§594/§595 originais) sugeria que `ChgMoney`/
+`ChrNameSet` disparavam no caminho de sucesso ("pagar e nomear"). O
+rastreio completo mostra que ambos ficam no ramo **`g_structA->field_8
+== 0`**, e como esse ramo calcula `ChgMoney(-field_8)` com
+`field_8==0`, é na prática **`ChgMoney(0)`** — um valor nulo, não um
+reembolso/pagamento real. `ChrNameSet(*shortPtr, g_structA->field_4)`
+logo depois sugere fortemente que este é o **ramo "aceitar nome
+padrão"** (entrada de nome vazia → aplica um nome padrão), não um
+caminho de cancelamento/reembolso como enquadrado antes. O caminho
+real de **confirmação** (`field_8` com os 16 bits baixos == 1) só
+envia `Wsend_taskparamater(2, 25, 0xf827, r7)` e chama
+`sub_19d500(r0)` — **sem** `ChgMoney`/`ChrNameSet` ali.
+
+```c
+void AccountEmploy(void) {
+    DrawFunds(); DrawPrice();
+    if (!iOS_getTouchTap()) return;
+    uint32_t field8 = g_structA->field_8;
+    if ((field8 & 0xffff) == 1) {                 // *** confirmação real ***
+        Wsend_taskparamater(2, 25, 0xf827, r7);
+        sub_19d500(r0);                            // helper local sem símbolo
+        return;
+    }
+    if (field8 == 0) {                              // *** aceitar nome padrão ***
+        ChgMoney(-field8);                          // == ChgMoney(0), no-op
+        ChrNameSet(*shortPtr, g_structA->field_4);
+        DrawMessage(msgId, buf);
+        Wsend_taskparamater(2, x, x, x);
+        return;
+    }
+    // outros valores de field_8: outro(s) ramo(s), ex. cancelamento
+}
+```
+
+**Lacuna aceita**: semântica exata de `field_8` (código de resultado
+de mensagem vs contador) e identidade de `sub_19d500` (mesmo helper
+local sem símbolo citado em `BuyEmploy`, §594 — por endereço, fica
+imediatamente antes de `SttsEmploy` na memória, compartilhado por
+toda a família `*Employ`).
 
 **Conexão**: fecha, junto com §338/§593/§594, mais um elo da cadeia
-de recrutamento do Soldier Office.
+de recrutamento do Soldier Office — corrige a direção da transação
+(nome padrão, não pagamento) no ramo `field_8==0`.
 
-**Status CSV: `read_structural`** (call-graph mapeado e cruzado com
-a família já confirmada na §338; corpo dos blocos e a lógica exata de
-transição de estado não lidos instrução a instrução).
+**Status CSV: `read_full`** — 99/99 instruções reais, todos os `bl`
+resolvidos (exceto `sub_19d500`, helper local sem símbolo dinâmico,
+mesmo gap aberto em §594).
 
 ## 596. `DressSellStock()` — entry point de UI pra vender itens de categoria "Dress" na loja, delega pra `Sell()`/`SellValue()` genéricos (2026-10-25, Fase 3, octogésimo terceiro lote, revisão semântica sobre checkpoint do CI)
 
@@ -20278,47 +20367,50 @@ categoria "Dress" dentro do sistema de loja.
 
 **Status CSV: `read_structural`.**
 
-## 597. `db_init(int, int, int, unsigned char, unsigned char, unsigned char)` — bootstrap real da GPU do PS1 (`ResetGraph`/geometria/ambiente duplo), distinto da família já fechada `DB_init`/`bDB_init` apesar do nome parecido (2026-10-25, Fase 3, octogésimo terceiro lote, revisão semântica sobre checkpoint do CI)
+## 597. `db_init(int, int, int, unsigned char, unsigned char, unsigned char)` — leitura completa: confirma `sub_714b8`=`memcpy`, os 3 `uchar` NÃO vão pra `ClearImage` (que é sempre preto) e sim pra um struct persistente com 2ª cópia espelhada, `initializeDebugFont` é condicional (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento checkpoint-only)
 
 `db_init(int,int,int,uchar,uchar,uchar)` (`0x20c264`, 436 B) —
-checkpoint do CI (`docs/re-results/0020c264.json`): 94,5% de
-cobertura (103/109 slots), 0 tabelas de salto, **1 branch, 0 de
-retrocesso** — código totalmente linear, sem laço, consistente com
-uma rotina de bootstrap chamada uma única vez. 12 `bl` distintos:
-`initializeDebugFont()`, `SetDispMask`, `ResetGraph`, `DrawSync`,
-`PutDrawEnv`, `PutDispEnv`, `ClearImage`, `SetDefDispEnv` (×2),
-`SetDefDrawEnv` (×2), `SetGeomOffset`, `SetGeomScreen`, mais um local
-sem símbolo (`sub_714b8`).
+disassembly linear completo via Capstone. 103 de 103 instruções
+reais lidas e atribuídas (código termina em `0x20c3e4`); os 6 words
+finais (24 B) são literal pool — total exato de 436 B, confirma
+exatamente os "103/109 slots" do checkpoint (94,5%). Todos os 12
+`bl` já nomeados: `ResetGraph`, `SetDispMask`, `SetGeomOffset`,
+`SetGeomScreen`, `SetDefDispEnv`(×2), `SetDefDrawEnv`(×2),
+`PutDrawEnv`, `PutDispEnv`, `ClearImage`, `initializeDebugFont`, mais
+`sub_714b8` = **`memcpy`** (confirmado cruzando com a linha 2690 das
+NOTES).
 
-**Não confundir com a família já fechada** `DB_init`/`bDB_init`/
-`eDB_init`/`jDB_init` ("regra 6" do boilerplate PSYQ) — aquela
-família recebe um ponteiro `DB*` e instala ~26 ponteiros de função de
-primitiva na struct; esta função tem assinatura totalmente diferente
-(3 `int` + 3 `unsigned char`, sem struct de saída) e chama a **API
-real do PS1 `libgpu` diretamente**, não instala callbacks. O nome
-igual é coincidência de abreviação, não parentesco.
+**Correções sobre a leitura anterior**:
+- Os 3 parâmetros `unsigned char` **não** vão pra `ClearImage` —
+  essa chamada é hardcoded `ClearImage(rect, 0, 0, 0)` (sempre
+  preto). Em vez disso, os 3 bytes são gravados num struct
+  persistente em `r4+0x19/0x1a/0x1b` **e espelhados** em
+  `r4+0x75/0x76/0x77` (2ª cópia do double-buffer) — confirma a
+  hipótese "cor de fundo RGB" com offsets exatos, mas usados em
+  outro lugar por-frame, não no clear de init.
+- `initializeDebugFont()` é **condicional** (`beq` pula a chamada)
+  sobre uma flag global não-zero, não incondicional como assumido
+  antes.
+- `PutDrawEnv`/`PutDispEnv` indexam arrays de env-struct via
+  `idx*20+base`/`idx*92+r4` (`mla`) — esta é a lógica real de
+  seleção de slot do double-buffer, antes não identificada.
 
-O catálogo é literalmente a sequência de boot da GPU do PS1:
-`ResetGraph` (reinicializa o chip GPU), `SetDispMask` (habilita a
-saída de vídeo), `SetGeomOffset`/`SetGeomScreen` (calibra a projeção
-geométrica do GTE pra tela), `SetDefDispEnv`/`SetDefDrawEnv`
-chamados **2× cada** (configurar os dois buffers do esquema de
-double-buffer), `PutDrawEnv`/`PutDispEnv` (ativa o ambiente corrente),
-`ClearImage` (limpa a tela — os 3 `unsigned char` são quase
-certamente a cor de fundo RGB), `DrawSync` (espera o GPU terminar) e
-`initializeDebugFont()` (prepara a fonte de debug, confirma que este
-bootstrap roda bem no início, antes de qualquer overlay de debug
-poder ser usado). Os 3 `int` do parâmetro provavelmente são
-largura/altura/modo de tela.
+O catálogo confirma a sequência de boot da GPU do PS1: `ResetGraph`,
+`SetDispMask`, `SetGeomOffset`/`SetGeomScreen`, `SetDefDispEnv`/
+`SetDefDrawEnv` 2× cada (os dois buffers), `PutDrawEnv`/`PutDispEnv`
+indexados por slot, `ClearImage` (preto fixo), `DrawSync`, e
+`initializeDebugFont()` condicional. **Não confundir** com a família
+já fechada `DB_init`/`bDB_init`/`eDB_init`/`jDB_init` ("regra 6" do
+boilerplate PSYQ) — assinatura e comportamento totalmente distintos,
+nome igual é coincidência.
 
-**Conexão**: fecha, como achado novo e distinto, mais um ponto de
-entrada do bootstrap gráfico do motor, ao lado de `Main_FrameRender`
-(§34) e da inicialização de `CGX_SCREEN_CORRECT` (§34.2) — este é
-provavelmente chamado antes de ambos, no arranque do programa.
+**Conexão**: fecha, como achado distinto, mais um ponto de entrada do
+bootstrap gráfico do motor, ao lado de `Main_FrameRender` (§34) e de
+`CGX_SCREEN_CORRECT::Init` (visto também em `Logo_Init`, §619).
 
-**Status CSV: `read_structural`** (call-graph sequencial completo e
-identificado via API real do PS1 `libgpu`; único branch não lido
-instrução a instrução).
+**Status CSV: `read_full`** — 103/103 instruções reais, todos os
+`bl` já documentados (incluindo `sub_714b8`=`memcpy`, antes sem
+nome).
 
 ## 598. `valnumwin_set(int, unsigned long, int, _POINT*)` — widget genérico de "janela de valor numérico" via a mesma pipeline localiza/mede-texto + task cooperativa de toda a UI de texto `W*` (2026-10-25, Fase 3, octogésimo terceiro lote, revisão semântica sobre checkpoint do CI)
 
@@ -23870,3 +23962,655 @@ confirmação direta nesta passada).
 
 **Status CSV: `read_full`** — 90/90 instruções reais, função-folha
 sem `bl` a verificar.
+
+## 622. `ctlokng_init(_POINT)` — leitura completa: confirma `iOS_dispOkNg(0xdc,0)` como o diálogo real de confirmação, posiciona 2 botões simétricos ao redor do ponto via `add_anmpac`/`add_winpac` (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em §580)
+
+`ctlokng_init(_POINT pt)` (`0x2608c0`, 460 B) — disassembly linear
+completo via Capstone. 106 de 106 instruções reais lidas e
+atribuídas (código termina em `0x260a68`); os 9 words finais (36 B)
+são literal pool — total exato de 460 B, sem lacuna de código.
+
+Resolve duas bases de array via GOT (stride 92/0x5c e stride 36/0x24,
+mesma convenção de layout por-campo já vista em outros `ctl*_init`)
+mais um contador global compartilhado.
+
+- `add_anmpac(unsigned long*, int*)` (§615) chamado duas vezes, aloca
+  um slot "anim pac" em cada array, gravando campos fixos de
+  estado/tipo (0x12, 2, etc.) com flags zeradas.
+- `add_winpac(unsigned long*, int*)` (§615) aloca o slot "win pac"
+  correspondente.
+- Monta um descritor fixo de RECT/cor (`0xb805`, halfwords de
+  alpha/tamanho 0x80/0x30/0x30) e chama `wldwin_noropen(int, RECT16,
+  int, int, unsigned long*)` — confirma esse alvo (até então
+  `mentioned_unverified`) como um primitivo real de "abrir janela sem
+  borda".
+- Resolve um terceiro array paralelo (stride 0x38/56) e posiciona dois
+  registros de UI irmãos em offsets derivados de `pt.x`±3/±6 e
+  `pt.y`±2/+0xe — ou seja, posiciona dois botões simetricamente ao
+  redor de `pt`.
+- `iOS_dispOkNg(int, int)` (§563, já `read_full`) chamado como
+  `iOS_dispOkNg(0xdc, 0)` — confirma que esta é a inicialização do
+  diálogo de confirmação Ok/Não-bom, batendo com o nome
+  `ctlokng_init` e com a irmã `houkoku_okng` (§577).
+- Zera um flag global via GOT antes de retornar (flag de
+  pronto/teardown).
+
+**Status CSV: `read_full`** — 106/106 instruções reais, nenhuma
+lacuna aberta em alvo de `bl` (só ambiguidade menor sobre a
+identidade exata do array de stride 0x38).
+
+## 623. `ctlhistory_main(CTLINFO*)` — leitura completa: máquina de estados por-frame com 2 tail-calls de handoff (`ctlhismes_init`/`wldctl_active`), confirma `ctlhistory_deactive`→`ctlhelp_init(0x108f,1)` (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em §589)
+
+`ctlhistory_main(CTLINFO* this)` (`0x25990c`, 456 B) — disassembly
+linear completo via Capstone. 105 de 105 instruções reais lidas e
+atribuídas (código termina em `0x259ab0`); os 9 words finais (36 B)
+são literal pool — total exato de 456 B, sem lacuna de código.
+
+Máquina de estados por-frame sobre `this->flags`:
+
+```c
+void ctlhistory_main(CTLINFO* this) {
+    if (this->flags & 4) {                        // fechando
+        if (Wtask_status(0xc) != 0) return;        // ainda rodando, poll
+        this->flags &= ~4;
+        write_shared_taskid_ready_pair(...);
+        if (--(*g_refcount) == 0) {
+            int id = curhis_get(0x14) & 0x7ff;     // §616, tabela stride 2 B
+            return ctlhismes_init(id);              // tail-call §580
+        } else {
+            curhis_clr(0x14);                       // §616
+            return wldctl_active();                 // tail-call §615
+        }
+    }
+    uint32_t st = *g_sharedStatusWord;
+    if (st & 0x40) {
+        // re-teste; eventualmente, se (st&0x20 || st&0x100) && this->field_0x30 != 0:
+        sound_request(1 ou 2);                      // ainda mentioned_unverified
+        this->flags = 1;
+        Wsend_taskparamater(0xc, x, x, 1);          // §616
+        this->flags |= 4;                            // adia o fechamento
+    } else if (st & 0x100) {
+        ctlhistory_deactive(this);                   // §616
+        return ctlhelp_init(0x108f, 1);              // tail-call §615
+    }
+    // nenhum bit bate: idle, sem op
+}
+```
+
+**Lacuna aceita**: nome simbólico exato dos bits (0x4/0x20/0x40/0x100)
+da palavra de status global compartilhada — o mesmo word é testado
+com bits diferentes por telas `ctl*` irmãs, sem nome confirmado ainda.
+
+**Status CSV: `read_full`** — 105/105 instruções reais, todos os
+`bl`/tail-calls (`b`) já documentados.
+
+## 624. `sort_init()` — leitura completa: inicializa 8 tabelas fixas de ordem de bytes seletores, confirma que são exatamente as tabelas que `bChrSort` consome via `g_keyByteTable` (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §615)
+
+`sort_init()` (`0x1b8c38`, 452 B) — disassembly linear completo via
+Capstone. 99 de 99 instruções reais lidas e atribuídas (código
+termina em `0x1b8dc4`); os 14 words finais (56 B) são literal pool —
+total exato de 452 B, sem lacuna de código. Função-folha pura (0
+`bl`).
+
+Grava 8 tabelas fixas de sequência de bytes (majoritariamente ordens
+`0,1,2,3,4,5,6,7,8,9,0xa`, uma tabela permutada como `0,1,3,2,4`) em
+8 arrays globais resolvidos via GOT (5-11 bytes cada), com duas das
+tabelas mais curtas terminadas por sentinela halfword `0xff` e a
+última por sentinela byte `0xff`.
+
+**Confirma o elo de família** com `bChrSort(int)` (§621, fechada
+nesta sessão): estas são exatamente o tipo de tabela de bytes
+seletores que `bChrSort` consome via sua tabela indireta
+`g_keyByteTable` — `sort_init` é o inicializador único que popula 8
+ordenações de critério de ordenação nomeadas, entre as quais
+`bChrSort` escolhe via seu argumento seletor.
+
+**Lacuna aceita**: identidade simbólica de cada uma das 8
+tabelas/arrays (a qual lista ordenável específica da UI — plantel,
+itens, etc. — cada uma pertence) e se são globais independentes ou
+slots de um único struct `g_sortTables[8][]`.
+
+**Status CSV: `read_full`** — 99/99 instruções reais, função-folha
+sem `bl` a verificar.
+
+## 625. `ctlmap_init()` — leitura completa: aloca 2 slots via `add_anmpac`, confirma uso real de `Wread_eventflag(0x2c)`, compartilha o par de arrays stride 92/36 B com `ctlhelp2_init` (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em §580)
+
+`ctlmap_init()` (`0x253f20`, 480 B) — disassembly linear completo
+via Capstone. 108 de 108 instruções reais lidas e atribuídas (código
+termina em `0x254100`); os 12 words finais (48 B) são literal pool —
+total exato de 480 B, sem lacuna de código. Sem branches reais além
+do `b` final — inicialização puramente linear.
+
+Aloca dois slots via `add_anmpac(ptrA, ptrB)` (§615, chamado duas
+vezes com os mesmos argumentos — confirma comportamento de alocador,
+cada chamada retorna um id novo), grava os dois ids cruzados num par
+de arrays paralelos (`g_arrD` stride 92 B / `g_arrE` stride 36 B — o
+mesmo par consumido por `ctlhelp2_init`, ver §627), com o segundo slot
+marcando um bit de flag (`|=0x10`) que o primeiro não tem. Confirma
+`Wread_eventflag(0x2c)` (`0x103400`, até então `mentioned_unverified`)
+como um alvo de chamada real e concreto. Termina com uma cadeia de 5
+`iOS_setV2Icon` (§560), a última sendo tail-call (`b`, não `bl`).
+
+**Elo de família confirmado**: `ctlmap_init` e `ctlhelp2_init`
+compartilham exatamente o mesmo par de arrays de bookkeeping (stride
+92 B/36 B) e o mesmo alocador `add_anmpac`, diferindo só na tag de
+tipo gravada (0xd vs 0xe) — forte evidência de um mecanismo genérico
+de "registrar novo slot de controlador ativo" reusado em toda a
+família `ctl*_init`.
+
+**Lacuna aceita**: identidade exata de 8 globais distintos (A-K) além
+dos dois arrays compartilhados.
+
+**Status CSV: `read_full`** — 108/108 instruções reais, todos os
+`bl`/tail-calls (`b`) já documentados ou confirmados nesta passada.
+
+## 626. `ctltresure_main(CTLINFO*)` — leitura completa: máquina de estados confirmar/cancelar com saída extra "já ocupado" via `ctlhelp_init(0x101f,1)`, um tail-jump interno não resolvido (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em §588)
+
+`ctltresure_main(CTLINFO* this)` (`0x26c680`, 480 B) — disassembly
+linear completo via Capstone. 111 de 111 instruções reais lidas e
+atribuídas (código termina em `0x26c824`); os 9 words finais (36 B)
+são literal pool — total exato de 480 B, sem lacuna de código.
+Mesmo esqueleto de máquina de estados `ctl*_main` já visto em
+`ctlfsetnum_main`/`ctlperson_main`.
+
+Três ramos principais: (1) confirmar — `sound_request(1)`,
+`this->field_0=1`, `Wsend_taskparamater(0xc,0,0,1)`; (2) cancelar —
+`sound_request(2)`, `this->field_0=0`, mesmo
+`Wsend_taskparamater`, seguido de tail-call pra `iOS_setV2Icon(0x8b,0)`;
+(3) teardown — se `field_0==1` (confirmado sem pickup real), consulta
+`curhis_get(8)`, extrai um índice de 11 bits e faz um **tail-jump
+interno não resolvido** pra `0x26c418` (mesma unidade de tradução,
+provavelmente um helper local de seleção de item do tesouro); se
+`field_0==0` (cancelado), `curhis_clr(8)` + `wldctl_active()` (§615)
++ tail-call `iOS_setV2Icon(3,1)`. Um quarto caminho de saída,
+`DISPATCH_EXIT`, dispara quando a tela já está ocupada: faz
+`ctlunreg_deactive(this)` (§371) e tail-call pra
+`ctlhelp_init(0x101f,1)` (§615) — mais um exemplo do padrão "entrega
+pro help screen com mensagem id X" já visto em `ctlhistory_main`
+(§623, mesma família, id diferente).
+
+**Lacunas aceitas**: alvo `0x26c418` do tail-jump interno não
+resolvido nesta passada; identidade exata dos 8 globais A-H.
+
+**Status CSV: `read_full`** — 111/111 instruções reais; lacuna aceita
+documentada acima (tail-jump interno local, não um `bl` externo).
+
+## 627. `ctlhelp2_init(int, int)` — leitura completa: confirma `pagewin_init` como o produtor real do layout que `pagewinmes_put` consome, calcula largura/altura de caixa de mensagem a partir de `Wcount_words2` (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em §580)
+
+`ctlhelp2_init(int msgId, int mode)` (`0x2553a8`, 476 B) —
+disassembly linear completo via Capstone. 109 de 109 instruções
+reais lidas e atribuídas (código termina em `0x2555a4`); os 10 words
+finais (40 B) são literal pool — total exato de 476 B, sem lacuna de
+código.
+
+Compartilha o par de arrays `g_arrB`(stride 92 B)/`g_arrE`(stride
+36 B) e o alocador `add_anmpac` com `ctlmap_init` (§625) — mesmo
+mecanismo genérico de registro de slot de controlador, aqui com
+type-tag `0xe`. Resolve a mensagem via `Wserchmessagepointer(msgId)`
+(§611), calcula métricas de quebra de linha via `Wcount_words2`
+(§335), e usa essas métricas pra montar um `PAGEWININFO` (largura,
+altura fixa 192, offset vertical clamped a 3 linhas) que passa pra
+`pagewin_init` (`0x2708fc`, §381) — **confirma que `ctlhelp2_init` é
+o produtor real do layout que `pagewinmes_put` (§381) consome como
+widget de caixa de mensagem**. Quando `mode!=0`, desvia primeiro por
+`Wpushmessagepacket`/`Wmakemessagepacket(ptrI)` (ambos §615) antes de
+reentrar no mesmo bloco de init.
+
+**Lacunas aceitas**: identidade exata dos globais A/C/D/F/G/H/I; os
+valores exatos dos dois pares de constante condicional pra
+`vOff`/`yPad` (`-0x21`/`-0x1f`) foram transcritos com confiança na
+estrutura do branch, menos certeza no sinal/intenção final das
+constantes mágicas.
+
+**Status CSV: `read_full`** — 109/109 instruções reais, todos os
+`bl` já documentados ou confirmados nesta passada.
+
+## 628. `frmbuf_get()` — leitura completa: o orquestrador real de render por-frame do mapa-mundo, 2 passes completos de `GsDrawOt` (terreno/rota/cidade/pac, depois símbolo/iwasaki/info/dia/nome/pac overlay) (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §615)
+
+`frmbuf_get()` (`0x25f44c`, 496 B) — disassembly linear completo via
+Capstone. 113 de 113 instruções reais lidas e atribuídas (código
+termina em `0x25f60c`); os 11 words finais (44 B) são literal pool —
+total exato de 496 B (91.13%, batendo com o checkpoint), sem lacuna
+de código nem tabela de salto.
+
+```c
+void frmbuf_get(void) {
+    if (pspWorldCheckFlg(1) != 0) return;         // gate de pular-render
+
+    GsSwapDispBuff(); VSync(0);
+    int activeBuf = GsGetActiveBuff();
+    g_curBufIdx = activeBuf;
+
+    GsClearOt(g_otBufBase + activeBuf*0xe800);
+    GsClearOt(&g_gsOtArray[activeBuf]);             // struct GsOT, stride 0x14
+
+    GsOT* ot = &g_gsOtArray[g_curBufIdx];
+    ctleeff_draw(ot);                                // §199
+    SetSpadStack(0x1f8003fc);                         // base do scratchpad PS1
+    wldbg_draw(ot); wldrute_draw(ot); wldtown_draw();  // §12.2/12.6
+    wldpac_draw(ot, &g_globalY, *g_globalX);
+    ResetSpadStack();
+    GsSortClear(0, 0, ot, 0);
+    GsDrawOt(ot); DrawSync(0);                        // *** submit pass 1 ***
+
+    wldfrm_rect(g_curBufIdx, &localBuf8);
+    StoreImage(&localBuf8, *g_someGlobalPtr);
+    DrawSync(0);
+
+    *g_redrawFlag = -1;
+    GsClearOt(0, 0, &g_gsOtArray[g_curBufIdx]);
+    wldsymbol_draw();
+    wldiwasaki_put(ot); wldinfo_put(ot); wldday_put(ot); wldtname_put(ot);  // §12.2/12.4/12.10/12.13
+    wldpac_draw(ot, &g_globalY, *g_globalX);
+    GsDrawOt(ot); DrawSync(0);                        // *** submit pass 2 ***
+}
+```
+
+Dois passes completos de submissão de OT por frame: fundo/terreno/
+rota/cidade/pac na primeira, depois símbolo/iwasaki/info/dia/nome/pac
+overlay na segunda — confirma que esta é a função real de "produzir
+um frame renderizado do mapa-mundo" (nome "frame-buffer get").
+
+**Lacuna aceita**: layout exato de campos de `g_gsOtArray`/
+`g_otBufBase` e semântica precisa dos 4 argumentos de `GsSortClear`
+(inferidos pela forma da chamada, não confirmados independentemente).
+
+**Status CSV: `read_full`** — 113/113 instruções reais, todos os
+`bl` já documentados em seções `wld*`/`Gs*`/PS1-SDK anteriores.
+
+## 629. `iOSexecuteCurSlide()` — leitura completa: máquina de estados de arrasto tátil do seletor giratório (dial), `atan2` ao redor do pivô (170,120), avança/recua segmento 0-10 via `iOS_setV2Icon(110,...)` (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §615)
+
+`iOSexecuteCurSlide()` (`0x15ad38`, 492 B) — disassembly linear
+completo via Capstone. 115 de 115 instruções reais lidas e
+atribuídas (código termina em `0x15af00`); os 8 words finais (32 B)
+são literal pool — total exato de 492 B (93.5%, batendo com o
+checkpoint). Sem tabela de salto de código; há uma tabela de dados
+PC-relative de ponteiros de descritor por-segmento, usada como
+indexação de dado, não dispatch.
+
+```c
+void iOSexecuteCurSlide(void) {
+    if (iOS_getTouchRelease()) {
+        g_slideActive = 0; g_otherFlag = 0; g_slideState = 1;
+        if (iOS_getV2Icon(0) == 0) return;
+        g_thirdFlag = 0;
+        return;
+    }
+    if (!iOS_getTouchPress()) return;
+
+    int dx = iOS_getTouchNowX() - iOS_getV2Icon(106);
+    int dy = iOS_getTouchNowY() - iOS_getV2Icon(107);
+    bool inGame = iOSCurIsInGame(dx, dy);             // §612
+
+    int dragX = abs(curX - iOS_getTouchBeginX());
+    if (dragX <= 8) {
+        int dragY = abs(curY - iOS_getTouchBeginY());
+        if (dragY <= 8) return;                        // toque, não arrasto — sai
+    }
+
+    int angle = ratan2(120 - curY, curX - 170);         // atan2 ao redor do pivô (170,120)
+    angle = (angle + g_angleStepTable.count) & 0xFFF;    // normaliza pra círculo de 4096 unidades
+    int c = rcos(angle), s = rsin(angle);
+
+    int seg = iOS_getV2Icon(110);                        // segmento atual do dial, 0..10
+    int radius = g_segDescTable[seg].field_0x28;
+
+    if (inGame) {
+        if (seg > 0) { iOS_setV2Icon(110, seg - 1); goto UPDATE; }
+    } else if (seg <= 10) {
+        iOS_setV2Icon(110, seg + 1);
+        goto RECOMPUTE;   // re-busca icon110 + entrada da tabela, repete
+    }
+UPDATE:
+    g_dialPos.x = g_dialBase.x + c * radius;
+    g_dialPos.y = g_dialBase.y + s * radius;
+    iOS_mapVectorLimit();                                 // clamp aos limites do mapa
+    g_dirtyFlag = 1;
+}
+```
+
+Seletor rotativo por toque: calcula o ângulo de arrasto via `atan2`
+ao redor de um pivô fixo, converte pra cos/sin, e avança/recua um
+dial de 11 posições (icon 110) dependendo de uma flag de modo
+"em-jogo", atualizando uma posição global (x,y) a cada tick.
+
+**Lacunas aceitas**: identidade exata de `g_segDescTable` (array de
+11 entradas, campo `+0x28` usado como "raio"/escala por segmento) e
+das duas globais escritas diretamente via endereço PC-relative (não
+GOT) no topo do ramo de soltar-toque.
+
+**Status CSV: `read_full`** — 115/115 instruções reais, todos os
+`bl` já documentados.
+
+## 630. `editdirect()` — leitura completa: handler de entrada/saída do modo "edição direta" do mapa-mundo, copia bloco de paleta de 6 bytes selecionado por modo, propaga/zera flags de evento one-shot (85→39, depois 100) (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §615)
+
+`editdirect()` (`0x1569ac`, 484 B) — disassembly linear completo via
+Capstone. 111 de 111 instruções reais lidas e atribuídas (código
+termina no tail-call `b Wwrite_eventflag` em `0x156b64`); os 10 words
+finais (40 B) são literal pool — total exato de 484 B (91.74%,
+batendo com o checkpoint).
+
+```c
+void editdirect(void) {
+    void* buf = &g_musicBuf;
+    initializeMusicBuffer();                  // §568
+    iOS_setV2Icon(6, 2);
+    buf += 0x540;
+    iOS_setV2Icon(128, 0);
+    buf += 0xc;
+    ClearImage(buf, 0, 0, 0);
+
+    DrawSync(0); VSync(0); worldmap_startinit();
+    DrawSync(0); VSync(0); worldmap_restart();
+
+    int mode = (*g_modeHeader >> 6) & 7;       // campo de 3 bits, bits [8:6]
+    byte* entry = &g_paletteTable[mode];       // tabela stride-6, 8 entradas
+    // copia entry[0x8c..0x91] (6 bytes) pra 6 globais byte separadas
+    changewindowamb(128, 128, 128);             // ambiente cinza neutro após a cópia
+
+    iOS_setV2Icon(48, 0);
+    iOS_setV2Icon(247, 1);
+    UnitList(0, 0);                             // §56
+    iOS_setV2Icon(247, 0);                      // pulso de um frame
+
+    if (iOS_getV2Icon(55) != 0) return;         // gate ocupado/trancado
+
+    worldmap_restart();                         // chamada de novo
+    ClearImage(buf, 0, 0, 0);
+    DrawSync(0);
+
+    Wwrite_eventflag(39, Wread_eventflag(85));  // copia flag 85 -> flag 39
+    Wwrite_eventflag(85, 0);                     // zera flag 85 (padrão one-shot)
+
+    if (Wread_eventflag(100) == 0) return;
+    return Wwrite_eventflag(100, 0);             // tail-call real (b, não bl)
+}
+```
+
+Handler de transição de modo de UI pra uma tela "edição direta" do
+mapa-mundo: reseta ícones, limpa região do framebuffer, copia um
+bloco de paleta/config de 6 bytes selecionado por modo, reseta a cor
+ambiente, atualiza a lista de unidades, depois propaga/zera flags de
+evento one-shot (85→39, depois condicionalmente 100) como
+sinalização de saída.
+
+**Lacuna aceita**: semântica exata da cópia de paleta de 6 bytes
+(`g_paletteTable[mode][0x8c..0x91]`) e identidade de `g_modeHeader`/
+do ponteiro derivado de `g_musicBuf`.
+
+**Status CSV: `read_full`** — 111/111 instruções reais, todos os
+`bl`/tail-call (`b`) já documentados.
+
+## 631. `ctlpersmes_init(int)` — leitura completa: push de mensagem empilhada (stride 92 B) com toggle de foco em 2 tabelas paralelas de flags, 2 variantes de CLUT/som por modo popup (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em §580)
+
+`ctlpersmes_init(int msgId)` (`0x24e91c`, 448 B) — disassembly
+linear completo via Capstone. 103 de 103 instruções reais lidas e
+atribuídas (código termina em `0x24eab8`); os 9 words finais (36 B)
+são literal pool — total exato de 448 B.
+
+```c
+void ctlpersmes_init(int msgId) {
+    int lines = msgId >> 4;
+    int div8 = (lines >= 0 ? lines : lines + 7) >> 3;   // /8 com sinal, truncado p/ 0
+    wldmes_load(div8 + 9);                               // §333, pré-carrega texto da mensagem
+
+    int idx = *g_stackCounter;
+    MsgEntry* entries = g_msgEntryTable;                  // stride 92 (0x5c)
+    entries[idx].field0 = msgId;                          // empilha nova entrada
+
+    int handle = add_winpac(g_winpacArgA, g_winpacArgB);
+    entries[idx].field4 = handle;
+
+    // percorre de volta até a entrada empilhada anterior, alterna
+    // flags "ativa"/"foco" em duas tabelas de flags paralelas por
+    // janela (stride 56 e stride 36), ligadas ao msgId/handle de idx-1
+    FlagTableB[handle].flags = (FlagTableB[handle].flags & ~4) | 0x10;
+    MsgEntry* prev = &entries[idx - 1];
+    FlagTableA[36 * prev->field0].flags |= 0x10;   // (+3 slots irmãos em +4/+8/+0x20/+0x24)
+
+    if (*g_popupModeFlag == 0) {
+        *g_someWinHandlePtr = (msgId & 0xfff) + 0xf000;   // par CLUT/som variante A
+        Wsend_taskparamater(0xe, 0x19, 0, 0);
+        entries[idx].field0xc = 1;
+        entries[idx].field0x10 = 0;
+        g_someFlagArray[idx] = 0x20;
+        entries[idx+1].counter = idx + 1;  // *g_stackCounter++
+    } else {
+        *g_someWinHandlePtr = (msgId & 0xfff) + 0xb869;   // par CLUT/som variante B
+        Wsend_taskparamater(0xe, 0x19, 0, 0);
+        goto normal_tail;  // (b 0x24ea54, reconverge com o ramo acima)
+    }
+}
+```
+
+Mecanismo de push/link de popup empilhado, consistente com as irmãs
+`ctl*mes_init` já fechadas.
+
+**Lacuna aceita**: semântica exata de campo da tabela `MsgEntry`
+(stride 92 B) e das duas tabelas de flags paralelas (stride 56/36) —
+confiante no mecanismo de push/link, nomes de campo além de
+"flags"/"handle" são inferidos, não confirmados.
+
+**Status CSV: `read_full`** — 103/103 instruções reais, todos os
+`bl` já documentados.
+
+## 632. `DressSellStock()` — leitura completa: dispatcher por-frame padrão `ctl*_main`, estados 4/5 chamam `Sell()`/`SellValue()`, saída via `Wsend_taskparamater(2,6,0x19,-1)` (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em §596)
+
+`DressSellStock()` (`0x19d304`, 444 B) — disassembly linear completo
+via Capstone. 101 de 101 instruções reais lidas e atribuídas (código
+termina em `0x19d498`); os 10 words finais (40 B) são literal pool —
+total exato de 444 B.
+
+```c
+void DressSellStock(void) {   // dispatcher por-frame, forma padrão ctl*_main
+    if (!g_dressSellInited) {
+        if (Wtask_status(2) != 0) return;
+        Wtask_create(2, g_taskName);
+        g_prevUnitByte = 0;
+        iOSUnitListWinOnOff(0);
+        iOSWldUnitListWinSet(g_prevUnitByte);
+        AllSttsDelete();
+        g_dressState = 5;
+        WindowPositionInitSingle(5); WindowPositionInitSingle(6);
+        WindowPositionInitSingle(7); WindowPositionInitSingle(8);
+        WindowPositionInitSingle(9);
+        g_dressSellInited = 1;
+    }
+    int mode = g_dressState;
+    if (mode == 4) {
+        Sell();
+        if (g_someCounter != g_local.mode_cached) unitans_init();
+    } else if (mode == 5) {
+        SellValue();
+    }
+    if (mode == 0) {
+        g_dressState = 6;
+        g_someFlag = 2;
+        SetFrameRate(2);
+        return Wsend_taskparamater(2, 6, 0x19, -1);  // tail-call, sai da tela
+    }
+    g_dressState = mode;
+    g_local.done = 0xb;
+}
+```
+
+Todos os alvos de `bl` já documentados; "Dress" = categoria de
+equipamento/traje, consistente com os primitivos de loja `Sell`/
+`SellValue`. Nenhuma lacuna significativa — controle de fluxo
+inequívoco.
+
+**Status CSV: `read_full`** — 101/101 instruções reais, todos os
+`bl` já documentados.
+
+## 633. `loadAbilityAnimation(tag_animation*, void*)` — leitura completa: dispatch de tabela dupla (A/B) por código de habilidade, caminho retina/2x resolve variante SP2 via `CFFT_STATE::UnitIDToFID_SP2` (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em §591)
+
+`loadAbilityAnimation(tag_animation* unit, void* animCtx)`
+(`0x1eb124`, 436 B) — disassembly linear completo via Capstone. 103
+de 103 instruções reais lidas e atribuídas (código termina em
+`0x1eb2c0`); os 6 words finais (24 B) são literal pool — total exato
+de 436 B.
+
+```c
+int loadAbilityAnimation(Unit* unit, void* animCtx) {
+    uint8_t job = unit->byte_5;
+    AbilityEntry* e = g_abilityTable + job * 0x32d6;   // stride 13014 B
+    uint8_t code = e->byte_1;
+    int idx = unit->field_0x174;
+    uint8_t type = g_typeTable[idx * 3].byte_1;
+
+    int* table; int slot;
+    if (code == 0x9a) { table = g_tableB; slot = type - 0x73; }
+    else               { table = g_tableA; slot = code; }
+
+    Entry* te = (Entry*)table + slot;      // stride 8 B
+    if (te->word0 == 0) return -1;
+    if (type < unit->field_0x200->field_4 >> 1) return -1;  // ainda não carregou o suficiente
+
+    void* handle = fileReadRequest(te->word0, te[slot].field_4, NULL);
+    if (!IS_TEX_2X()) return handle != NULL;
+
+    // caminho retina/2x: resolve e registra a variante de sprite SP2 (2x)
+    CFFT_STATE* st = g_cfftState;
+    if (CFFT_STATE::GetParam(st, 0x70) == 0) return handle != NULL;
+    int fid2x = CFFT_STATE::UnitIDToFID_SP2(st, code, -1);
+    if (fid2x == -1) return handle != NULL;
+    CFFT_STATE::SetParam(st, 0xef, 0);
+    CFFT_STATE::SetParam(st, 0xf4, fid2x);
+    return handle != NULL;
+}
+```
+
+Dispatch de tabela dupla (A vs B) por código de habilidade,
+confirmado mecanicamente; a distinção semântica entre as duas
+tabelas (ex. "animação normal" vs "especial/única") não está
+confirmada contra nenhuma seção anterior.
+
+**Lacuna aceita**: layout exato de campo do primeiro parâmetro
+(`byte_5`=job, `field_0x174`=índice de tabela, `field_0x200->field_4`
+=contagem-carregada×2) inferido pelo padrão de acesso; distinção
+semântica tabela A/B não confirmada.
+
+**Status CSV: `read_full`** — 103/103 instruções reais, todos os
+`bl` já documentados.
+
+## 634. `ctlhentuto_init()` — leitura completa: init de lista de 7 tópicos de tutorial/ajuda via `snplflg_read`, 8 ícones consecutivos (0x47-0x4e), levanta dúvida sobre a assinatura real de `curhis_put` (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §580)
+
+`ctlhentuto_init()` (`0x26dd40`, 464 B) — disassembly linear
+completo via Capstone. 107 de 107 instruções reais lidas e
+atribuídas (código termina em `0x26df1c`); os 9 words finais (36 B)
+são literal pool — total exato de 464 B.
+
+```c
+void ctlhentuto_init(void) {
+    uint16_t* arrA = *g_flagArrayA_ptr;
+    uint16_t* arrB = *g_flagArrayB_ptr;
+    uint16_t* arrC = *g_flagArrayC_ptr;
+    int idx = 0;
+    for (int i = 0; i < 7; i++) {
+        arrA[i] = idx - 0x4000;
+        int r = snplflg_read(arrB, idx);
+        arrC[i] = r ? 8 : r;
+        idx++;                              // idx == 7 ao final
+    }
+    CtlEntry* e = &g_ctlTable[*g_ctlIndex];        // stride 0x5c (92 B)
+    e->field_0x30 = idx;
+
+    curhis_put(0x12, idx, idx, 0x8c, idx, 0x54, 0x50);   // *** 7 args, não 3 ***
+    defscrwin_set(0xc, e->field_0x30, &localA, &localB);
+
+    g_ctlTable2[*g_ctlIndex2] = 0;
+    *g_winTypeGlobal = 0x160;
+    *g_flagGlobal9   = 9;
+    g_ctlTable3[idx] = 0x2c;
+    *g_ctlIndex = idx + 1;
+
+    iOS_setV2Icon(4, 1); iOS_setV2Icon(3, 1); iOS_setV2Icon(8, 2);
+    for (int id = 0x47; id <= 0x4e; id++) iOS_setV2Icon(id, 0);  // 8 slots consecutivos
+    iOSTutoFlagSet(0, 0);
+}
+```
+
+É o init da "lista de tópicos de ajuda/tutorial" (nome = "help" +
+"tutorial"): monta 7 flags de disponibilidade de tópico via
+`snplflg_read`, depois 8 IDs de ícone consecutivos (`0x47`-`0x4e` =
+71-78) — confirma uma fileira de 8 slots de ícone de tópico de
+tutorial, consistente com a companheira `ctlhentuto_main` (§434).
+
+**Achado que merece revisão**: `curhis_put` é chamado aqui com **7
+argumentos registrador/pilha**, mas as NOTES documentam sua
+assinatura como `curhis_put(int,int,int)` — a assinatura de 3
+argumentos é estreita demais; esta chamada passa `0x8c`, `idx`,
+`0x54`, `0x50` como argumentos extras de pilha além dos 3 de
+registrador. Vale revisitar a assinatura real de `curhis_put` numa
+passada futura.
+
+**Status CSV: `read_full`** — 107/107 instruções reais, todos os 5
+`bl` já documentados.
+
+## 635. `Wtutorial_hookfunc()` — leitura completa: timer de repetição de tecla em 3 níveis (cascata) pro pad de modo tutorial, 3 bytes de config divididos por uma unidade compartilhada via `__divsi3`, modificador turbo via bit 0x80 (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §615)
+
+`Wtutorial_hookfunc()` (`0x1022ec`, 464 B) — disassembly linear
+completo via Capstone. 103 de 103 instruções reais lidas e
+atribuídas (código termina em `0x1024c0`); os 13 words finais (52 B)
+são literal pool — total exato de 464 B.
+
+Achado novo: um timer de repetição de tecla em 3 níveis em cascata
+pro input do pad em modo tutorial, ativo só sob uma flag de modo
+global:
+
+```c
+void Wtutorial_hookfunc(void) {
+    if (*g_modeFlag != 0x10) return;             // só ativo em modo de exibição de tutorial
+
+    int pad = get_tutrial_pad();
+    if (pad == 0) { g_repeat->t1 = g_repeat->t2 = g_repeat->t3 = 0; }
+
+    int prevPad = g_repeat->lastPad;
+    g_lastPadGlobal = pad;
+    g_repeat->lastPad = pad;
+    g_repeat->lastPad2 = prevPad;                 // histórico de 2 quadros
+    *g_outMask = 0;
+
+    if (prevPad == pad) {                          // mantido pressionado
+        if ((pad & 0xf00c) == 0) goto reset_edge;
+        int t1 = ++g_repeat->t1;
+        int thresh1 = __divsi3(*g_cfgByte1, g_repeatUnit);
+        if (t1 == thresh1) *g_outMask = pad & 0xf00c;        // tier-1 (repetição inicial)
+        else if (t1 < thresh1) { g_repeat->t2 = g_repeat->t3 = 0; return; }
+
+        int t2 = ++g_repeat->t2, t3 = ++g_repeat->t3;
+        int thresh2 = __divsi3(*g_cfgByte2, g_repeatUnit);
+        if (t2 >= thresh2) {
+            g_repeat->t2 = 0;
+            *g_outMask = (prevPad & 0x80) ? (prevPad & 0xa000) : (prevPad & 0xf000);
+        }
+        int thresh3 = __divsi3(*g_cfgByte3, g_repeatUnit);
+        if (t3 < thresh3) return;
+        g_repeat->t3 = 0;
+        if (prevPad & 0x80) *g_outMask = (prevPad & 0x5000) | *g_outMask;
+        else                 *g_outMask = (prevPad & 0xc)    | *g_outMask;
+        return;
+    }
+reset_edge:                                        // pad mudou desde o quadro anterior
+    *g_outMask = pad & ~prevPad;                     // edge-detect "recém pressionado"
+    g_repeat->t1 = 0;
+}
+```
+
+Três bytes de config de taxa de repetição (`g_cfgByte1/2/3`), cada
+um dividido por uma constante `g_repeatUnit` compartilhada via
+`__divsi3` pra obter limiares de quadro — curva clássica de
+auto-repeat "delay inicial, depois repetição rápida, depois
+repetição mais grossa", com um bit modificador (`pad & 0x80`, testado
+sobre o valor *anterior* do pad) alternando qual máscara de bits
+(`0xa000`/`0xf000` ou `0x5000`/`0xc`) é aplicada à máscara de saída
+final — provavelmente um modificador shift/turbo que muda quais
+botões recebem tratamento de repetição.
+
+**Lacunas aceitas**: identidade exata do valor `0x10` de
+`g_modeFlag` (sem nome de enum existente nas NOTES) e dos 3 globais
+de byte de config / `g_repeatUnit`. `__divsi3` é o runtime padrão de
+divisão com sinal do libgcc, já documentado em outro lugar.
+
+**Status CSV: `read_full`** — 103/103 instruções reais, ambos os
+`bl` resolvidos (`get_tutrial_pad`, `__divsi3`).
