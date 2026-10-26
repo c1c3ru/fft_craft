@@ -8,6 +8,7 @@ For every approved record, CI checks ELF bytes and reruns differential
 Unicorn against an independent normal-instruction-state model.
 """
 import argparse
+import base64
 import datetime
 import hashlib
 import os
@@ -40,6 +41,7 @@ REQUIRED_EVIDENCE = (
 
 REVIEW_REQUIRED = (
     "type", "name", "github_login", "decision", "approval_pr",
+    "review_protocol",
     "approved_at", "notes",
 )
 
@@ -59,6 +61,9 @@ def verify_one(record, row, binary, digest, reader=None, executor=None):
             not isinstance(review.get(k), str) or not review[k].strip()
             for k in REVIEW_REQUIRED):
         raise ValueError("independent reviewer metadata is missing")
+    import semantic_review_protocol as protocol
+    if review["review_protocol"] != protocol.PROTOCOL:
+        raise ValueError("unsupported independent human review protocol")
     if (review["type"] != "human" or review["decision"] != "approved"
             or not PR_RE.fullmatch(review["approval_pr"])
             or review["github_login"].strip().lower().endswith("[bot]")
@@ -122,26 +127,31 @@ def patch_promotes_address(patch, address):
     return False
 
 def verify_remote_review(record, address, provider=github_json):
-    """Tie approval to the exact PR head and an added certificate entry."""
+    """Verify prior independent approval of an immutable scoped proof request.
+
+    The approved PR must contain an exact contract fingerprint, not the later
+    partial->certified promotion. This avoids the unsatisfiable CI cycle where
+    the reviewer identity/date would be needed before the PR could be approved.
+    """
+    import semantic_review_protocol as protocol
     review = record["reviewer"]
+    if review.get("review_protocol") != protocol.PROTOCOL:
+        raise ValueError("unsupported independent human review protocol")
     number = int(review["approval_pr"].rsplit("/", 1)[-1])
     prefix = f"repos/c1c3ru/fft_craft/pulls/{number}"
     pr = provider(prefix)
     reviews = provider(prefix + "/reviews?per_page=100")
     files = provider(prefix + "/files?per_page=100")
     if (not isinstance(pr, dict) or not isinstance(reviews, list)
-            or not isinstance(files, list) or not pr.get("head", {}).get("sha")):
-        raise ValueError("malformed external PR review evidence")
-    certificate_diffs = [
-        file for file in files if
-        file.get("filename") ==
-        "FFT_Android_Mod/docs/re-results/semantic-certificates.json"
-        and isinstance(file.get("patch"), str)]
-    if not certificate_diffs or not any(
-            patch_promotes_address(entry["patch"], address)
-            for entry in certificate_diffs):
-        raise ValueError("approval PR does not promote this specific certificate")
-    reviewer_login = review["github_login"].lower()
+            or not isinstance(files, list)
+            or not isinstance(pr.get("head"), dict)
+            or not isinstance(pr["head"].get("sha"), str)
+            or not isinstance(pr.get("user"), dict)):
+        raise ValueError("malformed external review PR evidence")
+    head_sha = pr["head"]["sha"]
+    reviewer_login = review["github_login"].strip().lower()
+    if reviewer_login == pr["user"].get("login", "").strip().lower():
+        raise ValueError("review author cannot independently approve their own request")
     effective = sorted(
         (item for item in reviews if
          item.get("user", {}).get("login", "").lower() == reviewer_login
@@ -150,9 +160,9 @@ def verify_remote_review(record, address, provider=github_json):
         raise ValueError("no GitHub review by declared reviewer")
     approved = effective[-1]
     if (approved.get("state") != "APPROVED"
-            or approved.get("commit_id") != pr["head"]["sha"]
-            or approved.get("user", {}).get("type") == "Bot"):
-        raise ValueError("last review is not a valid human approval of PR head")
+            or approved.get("commit_id") != head_sha
+            or approved.get("user", {}).get("type") != "User"):
+        raise ValueError("last review is not human APPROVED on exact request head")
     try:
         declared_date = datetime.date.fromisoformat(review["approved_at"])
         actual_date = datetime.datetime.fromisoformat(
@@ -161,6 +171,40 @@ def verify_remote_review(record, address, provider=github_json):
         raise ValueError("invalid approval date") from exc
     if declared_date != actual_date:
         raise ValueError("declared approval date differs from GitHub")
+    fingerprint = protocol.fingerprint(address, record)
+    changed = [file for file in files if
+               file.get("filename") == protocol.REVIEW_PATH and
+               isinstance(file.get("patch"), str)]
+    def includes_approved_fingerprint(patch):
+        for line in patch.splitlines():
+            if not line.startswith("+") or line.startswith("+++"):
+                continue
+            matched = re.fullmatch(
+                r'\s*"([0-9a-f]{8})"\s*:\s*"([0-9a-f]{64})"\s*,?\s*',
+                line[1:])
+            if matched and matched.group(1) == address and matched.group(2) == fingerprint:
+                return True
+        return False
+    if not any(includes_approved_fingerprint(item["patch"]) for item in changed):
+        raise ValueError("review PR did not add this exact scoped fingerprint")
+    ref = f"repos/c1c3ru/fft_craft/contents/{protocol.REVIEW_PATH}?ref={head_sha}"
+    document = provider(ref)
+    if (not isinstance(document, dict)
+            or document.get("encoding") != "base64"
+            or not isinstance(document.get("content"), str)):
+        raise ValueError("review request content unavailable at approved commit")
+    try:
+        payload = json.loads(base64.b64decode(
+            document["content"], validate=False).decode("utf-8"))
+    except (ValueError, TypeError, UnicodeError) as exc:
+        raise ValueError("invalid reviewed request payload") from exc
+    if (payload.get("schema") != 1
+            or payload.get("review_protocol") != protocol.PROTOCOL
+            or payload.get("elf_sha256") != record["binary_sha256"]
+            or payload.get("status") != "human_review_requested"
+            or payload.get("certified") is not False
+            or payload.get("certificate_fingerprints", {}).get(address) != fingerprint):
+        raise ValueError("approved request differs from proposed certificate")
     return True
 
 def gate(binary, inventory, certificates_path):
