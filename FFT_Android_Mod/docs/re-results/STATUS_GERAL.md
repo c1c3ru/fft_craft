@@ -53,11 +53,11 @@ Estas duas prioridades são **curadas no gerador**; quando um limite for resolvi
 
 ## Pull requests recentes
 
+- [PR #295 — chore(re): automated structural batch 40246019946](https://github.com/c1c3ru/fft_craft/pull/295)
 - [PR #294 — feat(re): gerar STATUS_GERAL.md automaticamente e destacá-lo no README](https://github.com/c1c3ru/fft_craft/pull/294)
 - [PR #293 — chore(re): automated structural batch 40245079093](https://github.com/c1c3ru/fft_craft/pull/293)
 - [PR #291 — feat(re): mapear SysSE_PlayDef e prólogo real de iOS_SetIconPosition](https://github.com/c1c3ru/fft_craft/pull/291)
 - [PR #290 — chore(re): automated structural batch 40243952613](https://github.com/c1c3ru/fft_craft/pull/290)
-- [PR #289 — feat(re): rastrear saltos ARM de sound_request até o primeiro código não modelado](https://github.com/c1c3ru/fft_craft/pull/289)
 
 ## Atualização automática e fontes
 
