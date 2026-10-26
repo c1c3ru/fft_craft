@@ -23,6 +23,7 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/central_semantic_summary.py'
       - 'FFT_Android_Mod/docs/re-tools/test_central_semantic_summary.py'
       - 'FFT_Android_Mod/docs/re-tools/status_geral.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_houkoku_next_boundaries.py'
 
 permissions:
   contents: read
@@ -63,6 +64,8 @@ jobs:
               --workers "$WORKERS" --manifests /tmp/fft-semantic/manifests \
               --output /tmp/fft-semantic/pilot
           fi
+          python3 FFT_Android_Mod/docs/re-tools/semantic_houkoku_next_boundaries.py \
+            --output FFT_Android_Mod/docs/re-results/SEMANTIC_HOUKOKU_NEXT_BOUNDARIES.md
           python3 FFT_Android_Mod/docs/re-tools/status_geral.py \
             --pilot-dir /tmp/fft-semantic/pilot \
             --dynamic-dir /tmp/fft-semantic/dynamic-evidence \
