@@ -103,6 +103,7 @@ class SemanticReviewProtocolTests(unittest.TestCase):
 
     def test_reject_any_already_approved_record_as_unreviewed(self):
         self.records["00002010"]["status"] = "certified"
+        self.records["00002010"]["reviewer"] = {"type": "human"}
         self.save()
         with self.assertRaisesRegex(ValueError, "not enough"):
             self.build(limit=2)
