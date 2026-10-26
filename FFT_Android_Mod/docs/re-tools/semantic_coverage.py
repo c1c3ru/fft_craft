@@ -26,13 +26,18 @@ def ledger(inventory, digest, certificates):
     with inventory.open(newline="", encoding="utf-8") as file:
         inventory_rows = list(csv.DictReader(file))
     rows = []
-    seen = set()
+    by_address = {}
+    symbol_count = 0
     for item in inventory_rows:
         address = item["address"].strip().lower().removeprefix("0x")
-        if address in seen:
-            raise ValueError(f"duplicate inventory address: {address}")
-        seen.add(address)
+        symbol_count += 1
         size = int(item["size"])
+        if address in by_address:
+            prior = by_address[address]
+            if prior["size"] != size:
+                raise ValueError(f"conflicting sizes for aliased address: {address}")
+            prior["symbols"].append(item["demangled"])
+            continue
         cert = certificates.get(address)
         status = "unknown"
         if cert is not None:
@@ -45,10 +50,13 @@ def ledger(inventory, digest, certificates):
                 raise ValueError(f"stale certificate for {address}")
             if status == "certified" and any(not cert.get(key) for key in REQUIRED_CERT):
                 raise ValueError(f"incomplete certification for {address}")
-        rows.append({"address": address, "name": item["demangled"],
-                     "size": size, "semantic_status": status,
-                     "evidence": cert.get("test_evidence", []) if cert else []})
-    extra = set(certificates) - seen
+        record = {"address": address, "name": item["demangled"],
+                  "symbols": [item["demangled"]], "size": size,
+                  "semantic_status": status,
+                  "evidence": cert.get("test_evidence", []) if cert else []}
+        rows.append(record)
+        by_address[address] = record
+    extra = set(certificates) - set(by_address)
     if extra:
         raise ValueError(f"certificates outside inventory: {sorted(extra)[:5]}")
     rows.sort(key=lambda x: (-x["size"], x["address"]))
@@ -58,6 +66,7 @@ def ledger(inventory, digest, certificates):
 def report(rows, digest):
     counts = Counter(r["semantic_status"] for r in rows)
     total_bytes = sum(r["size"] for r in rows)
+    symbol_count = sum(len(r["symbols"]) for r in rows)
     certified_bytes = sum(r["size"] for r in rows if r["semantic_status"] == "certified")
     certified = counts["certified"]
     lines = ["# Cobertura semântica verificável — FFT Craft", "",
@@ -65,11 +74,12 @@ def report(rows, digest):
              "> **Regra:** aprovação estrutural, análise estática e microexecuções "
              "parciais não significam equivalência semântica integral.", "",
              "| Métrica | Quantidade |", "|---|---:|",
-             f"| Funções inventariadas | {len(rows):,} |",
+             f"| Entradas/símbolos no inventário | {symbol_count:,} |",
+             f"| Endereços de execução únicos | {len(rows):,} |",
              f"| Semântica integral certificada por registro | {certified:,} |",
              f"| Evidência parcial registrada | {counts['partial']:,} |",
              f"| Sem certificação registrada | {counts['unknown']:,} |",
-             f"| Progresso certificado por função | {certified / max(len(rows),1):.2%} |",
+             f"| Progresso certificado por endereço | {certified / max(len(rows),1):.2%} |",
              f"| Progresso certificado por bytes | {certified_bytes / max(total_bytes,1):.2%} |",
              "", "Contagens medem **certificados registrados no ledger**, "
              "não a ausência de conhecimento em relatórios anteriores.",
@@ -98,7 +108,8 @@ def main():
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(report(rows, digest), encoding="utf-8")
     print(f"SEMANTIC_CERTIFIED={sum(r['semantic_status']=='certified' for r in rows)}")
-    print(f"INVENTORY_COUNT={len(rows)}")
+    print(f"INVENTORY_COUNT={sum(len(r[\u0027symbols\u0027]) for r in rows)}")
+    print(f"UNIQUE_ENTRYPOINTS={len(rows)}")
 
 
 if __name__ == "__main__":
