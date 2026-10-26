@@ -1,9 +1,12 @@
 """Regression: certification requires human approval plus fresh exact ELF execution."""
+import base64
 import hashlib
+import json
 import unittest
 
 import semantic_bxlr_contract_pilot as pilot
 import semantic_certificate_gate as gate
+import semantic_review_protocol as protocol
 
 WORD = bytes.fromhex("1eff2fe1")
 DIGEST = "a" * 64
@@ -31,6 +34,7 @@ def approved():
             "decision": "approved", "approval_pr":
                 "https://github.com/c1c3ru/fft_craft/pull/325",
             "approved_at": "2026-10-26", "notes": "Signed human-scoped review",
+            "review_protocol": protocol.PROTOCOL,
         },
     }
 
@@ -66,61 +70,70 @@ class CertificateGateTests(unittest.TestCase):
                     gate.verify_one(cert, {"address": ADDRESS, "size": 4},
                                     None, DIGEST)
 
-    def test_remote_approval_tied_to_entry_and_head_commit(self):
+    def test_remote_approval_of_immutable_request(self):
         cert = approved()
-        # The local fixture never claims that this PR is *actually* approved;
-        # the mocked GitHub data only exercises the gate contract.
         expected_prefix = "repos/c1c3ru/fft_craft/pulls/325"
+        fingerprint = protocol.fingerprint(ADDRESS, cert)
+        payload = {
+            "schema": 1, "review_protocol": protocol.PROTOCOL,
+            "elf_sha256": DIGEST,
+            "status": "human_review_requested", "certified": False,
+            "certificate_fingerprints": {ADDRESS: fingerprint}
+        }
         def provider(path):
-            self.assertTrue(path.startswith(expected_prefix))
+            self.assertTrue(path.startswith("repos/c1c3ru/fft_craft/"))
             if path == expected_prefix:
-                return {"head": {"sha": "commit-abc"}}
+                return {"head": {"sha": "commit-abc"},
+                        "user": {"login": "review-request-author"}}
             if path.endswith("/reviews?per_page=100"):
                 return [{"user": {"login": "independent-reviewer",
                                   "type": "User"},
                          "state": "APPROVED", "commit_id": "commit-abc",
                          "submitted_at": "2026-10-26T15:00:00Z"}]
-            return [{"filename": "FFT_Android_Mod/docs/re-results/"
-                                  "semantic-certificates.json",
-                     "patch": ('@@ -1,9 +1,9 @@\n'
-                               ' {\n'
-                               '   "00002010": {\n'
-                               '-    "status": "partial",\n'
-                               '+    "status": "certified",\n'
-                               '     "size": 4,')}]
+            if path.endswith("/files?per_page=100"):
+                return [{"filename": protocol.REVIEW_PATH,
+                         "patch": '@@ -0,0 +1,1 @@\n'
+                                  f'+    "{ADDRESS}": "{fingerprint}",\n'}]
+            if "/contents/" in path:
+                return {"encoding": "base64", "content": base64.b64encode(
+                    json.dumps(payload).encode()).decode()}
+            raise AssertionError(path)
         self.assertTrue(gate.verify_remote_review(cert, ADDRESS, provider))
-        with self.assertRaisesRegex(ValueError, "specific certificate"):
+        with self.assertRaisesRegex(ValueError, "scoped fingerprint"):
             gate.verify_remote_review(cert, "00002014", provider)
         def wrong_commit(path):
             value = provider(path)
             if path == expected_prefix:
-                return {"head": {"sha": "different-head"}}
+                return {"head": {"sha": "different-head"},
+                        "user": {"login": "review-request-author"}}
             return value
-        with self.assertRaisesRegex(ValueError, "valid human approval"):
+        with self.assertRaisesRegex(ValueError, "human APPROVED"):
             gate.verify_remote_review(cert, ADDRESS, wrong_commit)
+        def author_self_approval(path):
+            value = provider(path)
+            if path == expected_prefix:
+                return {"head": {"sha": "commit-abc"},
+                        "user": {"login": "independent-reviewer"}}
+            return value
+        with self.assertRaisesRegex(ValueError, "cannot independently approve"):
+            gate.verify_remote_review(cert, ADDRESS, author_self_approval)
+        def forgery(path):
+            value = provider(path)
+            if "/contents/" in path:
+                copied = dict(payload)
+                copied["certificate_fingerprints"] = {ADDRESS: "b" * 64}
+                return {"encoding": "base64", "content": base64.b64encode(
+                    json.dumps(copied).encode()).decode()}
+            return value
+        with self.assertRaisesRegex(ValueError, "differs from proposed"):
+            gate.verify_remote_review(cert, ADDRESS, forgery)
 
-    def test_unified_diff_partial_promotion_scoped_per_address(self):
-        patch = (
-            "@@ -1,11 +1,11 @@\n"
-            " {\n"
-            '   "00002010": {\n'
-            '-    "status": "partial",\n'
-            '+    "status": "certified",\n'
-            '   "00002014": {\n'
-            '     "status": "partial",\n'
-        )
-        self.assertTrue(gate.patch_promotes_address(patch, "00002010"))
-        self.assertFalse(gate.patch_promotes_address(patch, "00002014"))
-        self.assertFalse(gate.patch_promotes_address(patch, "00002018"))
-        forged = (
-            "@@ -1,9 +1,9 @@\n"
-            '   "00002010": {\n'
-            '+    "status": "partial",\n'
-            '   "00002014": {\n'
-            '+    "status": "certified",\n'
-        )
-        self.assertFalse(gate.patch_promotes_address(forged, "00002010"))
-        self.assertTrue(gate.patch_promotes_address(forged, "00002014"))
+    def test_scoped_review_does_not_accept_legacy_patch_or_missing_protocol(self):
+        cert = approved()
+        cert["reviewer"]["review_protocol"] = "legacy_self_declaration"
+        with self.assertRaisesRegex(ValueError, "protocol"):
+            gate.verify_one(cert, {"address": ADDRESS, "size": 4},
+                            None, DIGEST)
 
     def test_reject_wrong_binary_opcode_or_unverified_tests(self):
         for change in (
