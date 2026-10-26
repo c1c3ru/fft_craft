@@ -113,6 +113,37 @@ class CentralSemanticSummaryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "original ELF proof validation"):
             mod.summarize(self.inventory, self.digest, certpath)
 
+    def test_review_batch_is_not_counted_as_certification(self):
+        self.inventory.write_text(
+            "address,size,demangled\n00000010,4,return_leaf\n"
+            "00000020,80,other\n", encoding="utf-8")
+        review_file = self.root / "review.json"
+        review_file.write_text(json.dumps({
+            "schema": 1, "elf_sha256": self.digest,
+            "status": "review_pending", "certified_functions": 0,
+            "candidates": [{
+                "address": "00000010", "binary_sha256": self.digest,
+                "size": 4, "status": "partial", "certified": False,
+                "instruction_encoding": "1eff2fe1", "reviewer": None,
+                "review_stage": "independent_human_review_pending",
+                "same_run_machine_samples": 32,
+                "new_machine_samples_in_this_step": 0
+            }]
+        }), encoding="utf-8")
+        summary = mod.summarize(
+            self.inventory, self.digest, self.root / "none.json",
+            review_batch_path=review_file)
+        self.assertEqual(summary["review_batch_candidates"], 1)
+        self.assertEqual(summary["certified"], 0)
+        self.assertEqual(summary["contract_samples"], 0)
+        self.assertIn("preparados para revisão humana", mod.render(summary))
+        document = json.loads(review_file.read_text(encoding="utf-8"))
+        document["candidates"][0]["certified"] = True
+        review_file.write_text(json.dumps(document), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "invalid review candidate"):
+            mod.summarize(self.inventory, self.digest, self.root / "none.json",
+                          review_batch_path=review_file)
+
     def test_stale_evidence_rejected(self):
         self.write(self.dynamic, "00000010.json",
                    {"address": "00000010", "binary_sha256": "b"*64,
