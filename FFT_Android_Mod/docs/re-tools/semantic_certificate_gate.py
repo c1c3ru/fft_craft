@@ -8,7 +8,10 @@ For every approved record, CI checks ELF bytes and reruns differential
 Unicorn against an independent normal-instruction-state model.
 """
 import argparse
+import datetime
 import hashlib
+import os
+import subprocess
 import json
 import re
 from pathlib import Path
@@ -20,7 +23,7 @@ import semantic_bxlr_contract_pilot as bxlr
 SCOPE = "original_a32_bxlr_normal_return_v1"
 PR_RE = re.compile(r"^https://github\.com/c1c3ru/fft_craft/pull/[1-9][0-9]*$")
 REVIEW_REQUIRED = (
-    "type", "name", "decision", "approval_pr",
+    "type", "name", "github_login", "decision", "approval_pr",
     "approved_at", "notes",
 )
 
@@ -42,7 +45,8 @@ def verify_one(record, row, binary, digest, reader=None, executor=None):
         raise ValueError("independent reviewer metadata is missing")
     if (review["type"] != "human" or review["decision"] != "approved"
             or not PR_RE.fullmatch(review["approval_pr"])
-            or review["name"].strip().lower() in
+            or review["github_login"].strip().lower().endswith("[bot]")
+            or review["github_login"].strip().lower() in
             {"bot", "ci", "automated", "pending", "unknown"}):
         raise ValueError("not an explicit recorded human review")
     if not isinstance(record.get("test_evidence"), list) or not record["test_evidence"]:
@@ -69,6 +73,62 @@ def verify_one(record, row, binary, digest, reader=None, executor=None):
     return True
 
 
+
+def github_json(path):
+    """Fetch authenticated GitHub PR evidence; reject unavailable API."""
+    if not os.environ.get("GH_TOKEN"):
+        raise ValueError("GH_TOKEN required to authenticate human PR approval")
+    proc = subprocess.run(["gh", "api", path], capture_output=True,
+                          text=True, check=False)
+    if proc.returncode:
+        raise ValueError("GitHub reviewer evidence unavailable: " + proc.stderr[:300])
+    return json.loads(proc.stdout)
+
+
+def verify_remote_review(record, address, provider=github_json):
+    """Tie approval to the exact PR head and an added certificate entry."""
+    review = record["reviewer"]
+    number = int(review["approval_pr"].rsplit("/", 1)[-1])
+    prefix = f"repos/c1c3ru/fft_craft/pulls/{number}"
+    pr = provider(prefix)
+    reviews = provider(prefix + "/reviews?per_page=100")
+    files = provider(prefix + "/files?per_page=100")
+    if (not isinstance(pr, dict) or not isinstance(reviews, list)
+            or not isinstance(files, list) or not pr.get("head", {}).get("sha")):
+        raise ValueError("malformed external PR review evidence")
+    certificate_diffs = [
+        file for file in files if
+        file.get("filename") ==
+        "FFT_Android_Mod/docs/re-results/semantic-certificates.json"
+        and isinstance(file.get("patch"), str)]
+    if not certificate_diffs or not any(
+            any(line.startswith("+") and not line.startswith("+++")
+                and f'"{address}"' in line
+                for line in entry["patch"].splitlines())
+            for entry in certificate_diffs):
+        raise ValueError("approval PR does not introduce this certificate entry")
+    reviewer_login = review["github_login"].lower()
+    effective = sorted(
+        (item for item in reviews if
+         item.get("user", {}).get("login", "").lower() == reviewer_login
+         and item.get("submitted_at")), key=lambda item: item["submitted_at"])
+    if not effective:
+        raise ValueError("no GitHub review by declared reviewer")
+    approved = effective[-1]
+    if (approved.get("state") != "APPROVED"
+            or approved.get("commit_id") != pr["head"]["sha"]
+            or approved.get("user", {}).get("type") == "Bot"):
+        raise ValueError("last review is not a valid human approval of PR head")
+    try:
+        declared_date = datetime.date.fromisoformat(review["approved_at"])
+        actual_date = datetime.datetime.fromisoformat(
+            approved["submitted_at"].replace("Z", "+00:00")).date()
+    except (ValueError, TypeError) as exc:
+        raise ValueError("invalid approval date") from exc
+    if declared_date != actual_date:
+        raise ValueError("declared approval date differs from GitHub")
+    return True
+
 def gate(binary, inventory, certificates_path):
     binary, inventory = Path(binary), Path(inventory)
     digest = hashlib.sha256(binary.read_bytes()).hexdigest()
@@ -82,6 +142,9 @@ def gate(binary, inventory, certificates_path):
         if record.get("status") != "certified":
             continue
         verify_one(record, by_addr[address], binary, digest)
+        # A string in reviewer metadata is never treated as proof of consent:
+        # GitHub must show an APPROVED review for the affected PR and head.
+        verify_remote_review(record, address)
         certified.append(address)
     print(f"SEMANTIC_APPROVED_CERTIFICATES_VERIFIED={len(certified)}")
     print(f"SEMANTIC_APPROVED_CERTIFICATE_BYTES={sum(by_addr[a]['size'] for a in certified)}")
