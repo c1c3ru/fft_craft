@@ -76,6 +76,29 @@ class ReviewBatchTests(unittest.TestCase):
         self.assertEqual(json.loads(output.read_text())["certified_functions"], 0)
         self.assertIn("Nenhuma função está certificada", report.read_text())
 
+    def test_seeded_partial_ledger_must_match_proven_contract(self):
+        import semantic_coverage
+        certfile = self.root / "certificates.json"
+        proof = self.prepare(limit=1)["candidates"][0]
+        record = {k: v for k, v in proof.items() if
+                  k in ("status", "binary_sha256", "size", "proof_class",
+                        "scope", "instruction_encoding", "instruction_sha256",
+                        "contract", "preconditions", "postconditions",
+                        "control_flow", "memory_effects", "test_evidence",
+                        "reviewer")}
+        certfile.write_text(json.dumps({"00002010": record}))
+        approved = batch.build(
+            self.binary, self.inventory, self.contracts, limit=2,
+            reader=lambda binary, address, size: CODE,
+            certificates_path=certfile)
+        self.assertEqual(len(approved["candidates"]), 2)
+        record["contract"] = "forged"
+        certfile.write_text(json.dumps({"00002010": record}))
+        with self.assertRaisesRegex(ValueError, "ledger and same-run"):
+            batch.build(self.binary, self.inventory, self.contracts,
+                        reader=lambda binary, address, size: CODE,
+                        certificates_path=certfile)
+
     def test_stale_opcode_or_digest_is_blocking(self):
         with self.assertRaisesRegex(ValueError, "ELF bytes changed"):
             self.prepare(reader=lambda binary, address, size: b"\x00" * 4)
