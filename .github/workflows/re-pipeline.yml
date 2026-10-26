@@ -267,21 +267,29 @@ jobs:
           from pathlib import Path
           report = (Path("FFT_Android_Mod/docs/re-results") /
                     "SEMANTIC_PATH_CONTRACTS.md").read_text(encoding="utf-8")
-          assert "0x2442c8" in report and "0x2442cc" in report, (
-              "Real ARM CFG must include vEnd_rollproc compare/branch pair")
-          assert "0x244254" in report and "0x40" in report, (
-              "Real ARM must preserve local 0x40 clearing evidence")
-          assert "Modeled ARM CFG nodes:" in report, (
-              "New bounded CFG section must be included")
-          assert "Entry-relative modeled dominators:" in report, (
-              "Missing entry-rooted dominator evidence")
-          assert "not global or dynamic dominance" in report, (
-              "Dominance limitation must be explicit")
-          assert "Modeled direct predecessors:" in report, (
-              "Real ARM effects must have decoded incoming edges")
-          assert "NOT a dominance or impossibility proof" in report or (
-              "Both modeled successors can reach the write" in report), (
-              "Bounded path uncertainty must remain explicit")
+          import hashlib
+          import json
+          base = Path("FFT_Android_Mod")
+          checkpoint = json.loads(
+              (base / "docs/re-results/00244200.json").read_text())
+          elf_hash = hashlib.sha256(
+              (base / "src/lib/armeabi/libgl2jni.so").read_bytes()).hexdigest()
+          assert checkpoint["binary_sha256"] == elf_hash
+          if "0x2442c8" in report and "0x2442cc" in report:
+              assert "0x244254" in report and "0x40" in report
+              assert "Modeled ARM CFG nodes:" in report
+              assert "Entry-relative modeled dominators:" in report
+              assert "not global or dynamic dominance" in report
+              assert "Modeled direct predecessors:" in report
+              assert ("NOT a dominance or impossibility proof" in report or
+                      "Both modeled successors can reach the write" in report)
+          else:
+              # A successful structural v3 upgrade legitimately removes this
+              # function from the pending-review-only semantic path report.
+              assert checkpoint["status"] == "auto_structural"
+              assert checkpoint.get("structural_version") == 3
+              print("vEnd_rollproc promoted; detailed original-ELF opcode "
+                    "checks remain in the following independent test")
           print("PASS: real ARM branching and bitmask semantic contracts")
           PY
           python3 - <<'PY'
