@@ -9,8 +9,8 @@ ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 | Entradas/símbolos no inventário | 6,455 |
 | Endereços de execução únicos | 6,329 |
 | Semântica integral certificada por registro | 0 |
-| Evidência parcial registrada | 0 |
-| Sem certificação registrada | 6,329 |
+| Evidência parcial registrada | 5 |
+| Sem certificação registrada | 6,324 |
 | Progresso certificado por endereço | 0.00% |
 | Progresso certificado por bytes | 0.00% |
 
@@ -5895,11 +5895,11 @@ Um certificado revisado e testes diferenciais são necessários antes de afirmar
 | `00083004` | oggpackB_bytes | 4 | unknown |
 | `00083008` | oggpackB_bits | 4 | unknown |
 | `00083014` | oggpackB_get_buffer | 4 | unknown |
-| `000a6d5c` | CGX_SCREEN_CORRECT::~CGX_SCREEN_CORRECT() | 4 | unknown |
-| `000a7e78` | CEGL2_IF::Setup3D() | 4 | unknown |
-| `000a8560` | CEGL2_IF::DrawGrid() | 4 | unknown |
-| `000a8564` | CEGL2_IF::DrawAxis() | 4 | unknown |
-| `000a8568` | CEGL2_IF::DrawCross(math::VECTOR3<float>, float) | 4 | unknown |
+| `000a6d5c` | CGX_SCREEN_CORRECT::~CGX_SCREEN_CORRECT() | 4 | partial |
+| `000a7e78` | CEGL2_IF::Setup3D() | 4 | partial |
+| `000a8560` | CEGL2_IF::DrawGrid() | 4 | partial |
+| `000a8564` | CEGL2_IF::DrawAxis() | 4 | partial |
+| `000a8568` | CEGL2_IF::DrawCross(math::VECTOR3<float>, float) | 4 | partial |
 | `000af9bc` | CCAMERA::Uninit() | 4 | unknown |
 | `000b3524` | CINPUT_DATA::~CINPUT_DATA() | 4 | unknown |
 | `000b4f70` | CRECT::CRECT() | 4 | unknown |

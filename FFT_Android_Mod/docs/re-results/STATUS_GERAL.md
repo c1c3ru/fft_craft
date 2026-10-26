@@ -26,6 +26,7 @@ O histórico CSV contém **5,932** registros de análise anterior, que podem se 
 
 Os relatórios abaixo apresentam **efeitos locais testados sob estados sintéticos** e seus limites. Testes passando não significam que a função inteira foi reconstruída:
 
+- [Primeiro lote de cinco contratos BX LR preparados para revisão humana](SEMANTIC_BXLR_REVIEW_BATCH.md)
 - [Política de certificação: contrato integral, ELF, revisão independente e CI](SEMANTIC_CERTIFICATION_POLICY.md)
 - [Primeiros contratos locais BX LR com retornos ARM/Thumb verificados](SEMANTIC_BXLR_CONTRACT_PILOT.md)
 - [Índice do acervo semântico acumulado e vinculado ao mesmo ELF](SEMANTIC_HISTORY_INDEX.md)
@@ -45,7 +46,7 @@ Os relatórios abaixo apresentam **efeitos locais testados sob estados sintétic
 
 Os números certificados representam **registros formais válidos para este ELF**, não aprovação estrutural. Evidências parciais não certificam equivalência.
 
-Evidências do **último CI verificado** para este ELF, [execução 40408581057](https://github.com/c1c3ru/fft_craft/actions/runs/40408581057); os testes não foram reexecutados nesta geração do painel.
+Evidências geradas e verificadas nesta execução do pipeline.
 
 | Indicador | Resultado |
 |---|---:|
@@ -54,11 +55,12 @@ Evidências do **último CI verificado** para este ELF, [execução 40408581057]
 | Certificados semânticos registrados | 0 |
 | Cobertura semântica por endereço | 0.00% |
 | Cobertura semântica por bytes únicos | 0.00% |
-| Registros parciais no ledger | 0 |
+| Registros parciais no ledger | 5 |
 | Endereços com evidência parcial no lote de referência | 309 |
-| Documentos semânticos históricos do mesmo ELF | 24 |
+| Documentos semânticos históricos do mesmo ELF | 25 |
 | Documentos históricos com testes declarados | 13 |
 | Candidatas BX LR verificadas, pendentes de revisão | 303 |
+| Contratos BX LR preparados para revisão humana (não certificados) | 5 |
 | Contratos locais BX LR com retorno ARM/Thumb verificado (revisão pendente) | 303 |
 | Execuções ARM/Thumb adicionais dos contratos locais | 9,696 |
 | Relatórios estáticos deste lote | 5 |
@@ -112,7 +114,11 @@ Estas duas prioridades são **curadas no gerador**; quando um limite for resolvi
 
 ## Pull requests recentes
 
-Metadados dos PRs indisponíveis nesta execução local; [consultar merges](https://github.com/c1c3ru/fft_craft/pulls?q=is%3Apr+is%3Amerged).
+- [PR #330 — feat(re): preparar cinco contratos BX LR para revisão humana e ledger parcial](https://github.com/c1c3ru/fft_craft/pull/330)
+- [PR #329 — chore(re): automated structural batch 40408581057](https://github.com/c1c3ru/fft_craft/pull/329)
+- [PR #328 — fix(ci): separar snapshots semânticos dos checkpoints ARM nos lotes automáticos](https://github.com/c1c3ru/fft_craft/pull/328)
+- [PR #327 — feat(re): exigir prova ELF e revisão humana autêntica para certificações semânticas](https://github.com/c1c3ru/fft_craft/pull/327)
+- [PR #326 — chore(re): automated structural batch 40405241371](https://github.com/c1c3ru/fft_craft/pull/326)
 
 ## Atualização automática e fontes
 
