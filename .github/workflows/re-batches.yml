@@ -35,6 +35,11 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/structural_v3.py'
       - 'FFT_Android_Mod/docs/re-tools/structural_v3_report.py'
       - 'FFT_Android_Mod/docs/re-tools/parallel_loop.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_coverage.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_work_queue.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_pilot.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_dynamic_evidence.py'
+      - 'FFT_Android_Mod/docs/re-tools/central_semantic_summary.py'
   workflow_dispatch:
     inputs:
       limit:
@@ -180,6 +185,19 @@ jobs:
       - name: Publish v3 coverage diagnostics and migration counts
         run: |
           python3 FFT_Android_Mod/docs/re-tools/structural_v3_report.py
+      - name: Collect same-run semantic worker and Unicorn evidence
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/fft-semantic
+          python3 FFT_Android_Mod/docs/re-tools/semantic_coverage.py \
+            --output FFT_Android_Mod/docs/re-results/SEMANTIC_COVERAGE.md
+          python3 FFT_Android_Mod/docs/re-tools/semantic_work_queue.py \
+            --workers 5 --limit 5 --output /tmp/fft-semantic/manifests
+          python3 FFT_Android_Mod/docs/re-tools/semantic_dynamic_evidence.py \
+            --output /tmp/fft-semantic/dynamic-evidence
+          python3 FFT_Android_Mod/docs/re-tools/semantic_pilot.py \
+            --workers 5 --manifests /tmp/fft-semantic/manifests \
+            --output /tmp/fft-semantic/pilot
       - name: Update central FFT Craft dashboard
         env:
           GH_TOKEN: ${{ github.token }}
@@ -187,10 +205,16 @@ jobs:
           set -euo pipefail
           if gh api "repos/${GITHUB_REPOSITORY}/pulls?state=closed&per_page=30" > /tmp/recent-merged-prs.json; then
             python3 FFT_Android_Mod/docs/re-tools/status_geral.py \
-              --pulls-json /tmp/recent-merged-prs.json
+              --pulls-json /tmp/recent-merged-prs.json \
+              --pilot-dir /tmp/fft-semantic/pilot \
+              --dynamic-dir /tmp/fft-semantic/dynamic-evidence \
+              --manifests-dir /tmp/fft-semantic/manifests
           else
             echo "GitHub PR metadata unavailable; preserving the dashboard without recent PR metadata"
-            python3 FFT_Android_Mod/docs/re-tools/status_geral.py
+            python3 FFT_Android_Mod/docs/re-tools/status_geral.py \
+              --pilot-dir /tmp/fft-semantic/pilot \
+              --dynamic-dir /tmp/fft-semantic/dynamic-evidence \
+              --manifests-dir /tmp/fft-semantic/manifests
           fi
           grep -q 'Aprovação estrutural entre checkpoints' \
             FFT_Android_Mod/docs/re-results/STATUS_GERAL.md
