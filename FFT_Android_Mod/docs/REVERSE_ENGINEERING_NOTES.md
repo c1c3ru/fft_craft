@@ -18888,48 +18888,67 @@ diferentes (ex.: regiões/paletas distintas) ou são idênticos.
 
 **Status CSV: `read_structural`.**
 
-## 571. `vEnd_rollproc()` — callback por-quadro dos créditos finais, confirma o "skip" por toque (2026-10-25, Fase 3, septuagésimo oitavo lote)
+## 571. `vEnd_rollproc()` — callback por-quadro dos créditos finais: máquina de 2 contadores (áudio/linha) + fast-forward por toque, leitura completa confirma 100% do código real (2026-10-25 + revisão byte a byte 2026-10-26, sobre o painel v3)
 
-`vEnd_rollproc()` (`0x244200`, 528 B) — `jtable.py`: 121 de ~132
-instruções (92%), 0 tabela de salto, 10 branches/5 de retrocesso;
-disassembly linear completo conferido a mão (capstone) para confirmar
-a lógica dos blocos, não só o catálogo de `bl`.
+`vEnd_rollproc()` (`0x244200`, 528 B) — disassembly linear completo
+via Capstone, instrução a instrução, do início ao fim. **Os 11
+"slots não cobertos" do passe automático (92%) são integralmente
+literal pool**: 484 B de código real (121 instruções) + 44 B de
+constantes PC-relative (11 words, confirmadas em `0x2443e4`-`0x24440c`,
+nenhuma delas é código alcançável) = 528 B exatos. Nenhuma instrução
+real ficou sem explicação.
 
-6 `bl` distintos: `iOS_getTouchFreeTap()`, `drawListStaffroll(int)`
-(seção 271), `drawMessage(int)`, `deleteMessage()`,
-`setMoviePlayFlg__Fi(int)`, `iOS_soundDirect(int)`. Confirma por
-completo a hipótese já registrada na seção 124 (`ctlendroll_main`) de
-que esta é a função "end roll proc" — o callback por quadro chamado
-pelo state machine dos créditos finais:
+Estrutura de estado real (campos de um struct global, base em
+`r5`/`sl`, acessado por múltiplos registradores PIC ao longo da
+função):
+- `+0x00`: `modeFlag` — sentinela `0x100` = "em fast-forward pro final".
+- `+0x18`: acumulador de quadros de áudio.
+- `+0x1c`: contador comparado contra o limiar `0x335` (821).
+- `+0x20`: índice de linha da lista de créditos, comparado contra
+  `0x604` (1540) e depois contra `0x2b` (43) num segundo campo.
 
-- Sem toque: segue o caminho normal — resolve um índice de array e
-  grava num global de controle, limpa o bit `0x40` de uma flags word,
-  incrementa dois contadores de frame contra duas constantes grandes
-  (`0x335`/`0x604` — prováveis durações fixas de scroll de créditos e
-  de faixa de áudio), chamando `drawListStaffroll(int)` a cada quadro
-  dentro do limite.
-- Com toque (`iOS_getTouchFreeTap()` verdadeiro): se o estado global
-  ainda não é `0x100`, seta a flag de "movie play" via
-  `setMoviePlayFlg__Fi(4)`, avança os mesmos contadores direto pro
-  valor de "fim" e dispara `iOS_soundDirect(1)` — ou seja, **o toque
-  pula direto pro final** da sequência em vez de interrompê-la
-  abruptamente.
-- Quando o contador excede o segundo limiar (`cmp r2,#0x2b`): chama
-  `drawListStaffroll(0)` uma última vez, segue pro bloco de término
-  (`drawMessage(0)`/`deleteMessage()`) e seta o bit `0x1000` de uma
-  flags word compartilhada — provavelmente o sinal de "créditos
-  terminados" lido de volta pelo switch de 5 casos do
-  `ctlendroll_main` (seção 124).
+Um segundo struct (base `r2`, campos `+0x00`/`+0x14`) implementa uma
+divisão por 8 com resto explícito (idioma clássico de distribuição de
+tempo em ponto fixo): o resto acumulado em `+0x14` é somado a
+`0x1e`(30), o sinal do resultado decide se soma `0x25`(37) ao
+quociente, e o quociente final (`>>3`) é usado como "delta" somado ao
+acumulador de áudio — mas **só quando `modeFlag != 0x100`**; em
+fast-forward, o delta anterior (constante `0x100`) é reaproveitado
+sem recalcular.
 
-Os globais PC-relative tocados não foram nomeados individualmente
-(contadores/flags do próprio `vEnd_rollproc`/`ctlendroll_main`, não
-ponteiros de função de outro subsistema). Falta processar
+Fluxo completo confirmado (corrige um detalhe da versão anterior: o
+argumento de `drawListStaffroll` no caminho normal é sempre o literal
+`0`, não variável):
+
+1. **Sem toque, dentro do limiar de áudio (`+0x1c` ≤ 821)**: soma o
+   delta no acumulador de linha (`+0x20`), chama
+   `drawListStaffroll(0)`, limpa o bit `0x40` de uma flags word e
+   seta o bit `0x1000` antes de retornar `1`.
+2. **Sem toque, limiar de áudio excedido**: incrementa `+0x20` por
+   `1` (não pelo delta) até `0x604`(1540); ao passar, zera um campo,
+   chama `setMoviePlayFlg__Fi(4)` + `deleteMessage()` e retorna `0`
+   (fim real da sequência).
+3. **Com toque**: se `modeFlag` ainda não é `0x100`, grava
+   `+0x1c = 0x336` (um além do limiar — força a branch 2 na próxima
+   iteração), `modeFlag = 0x100`, chama `iOS_soundDirect(1)` e salta
+   direto pro início do bloco comum; se `modeFlag` já era `0x100`
+   (segundo toque durante o fast-forward), só repete a resolução de
+   índice/flag e cai no bloco comum normalmente.
+4. **Linha de créditos esgotada (campo `+0x2b`, 43)**: chama
+   `drawMessage(0)` antes de voltar pro bloco de incremento do
+   limiar de áudio.
+
+Os 4 locais sem símbolo citados na versão anterior desta seção **não
+existem nesta função** — era uma confusão com `event_status_set`
+(§575, corrigida na mesma revisão); `vEnd_rollproc` não chama nenhuma
+função local sem símbolo. Falta ainda processar
 `vOpn_fadeproc(unsigned long*)` (`0x2494c8`) para fechar o par
 "Opn"/"End" do mesmo `v*_*proc`.
 
-**Status CSV: `read_structural`** (lógica de blocos rastreada e
-confirmada; os globais PC-relative individuais não foram
-nomeados/resolvidos — não atinge o padrão de `read_full`).
+**Status CSV: `read_full`** — controle de fluxo completo, todo campo
+de estado identificado pelo uso real, todos os 6 `bl` resolvidos, e
+os 11 slots "faltantes" do checkpoint automático confirmados como
+literal pool, não lacuna de código.
 
 ## 572. `SetCameraWorkWithSchedule(short)` — camada "schedule" plana, irmã direta de `SetCameraWorkWithMetaschedule` (seção 307) (2026-10-25, Fase 3, septuagésimo oitavo lote)
 
@@ -19053,41 +19072,62 @@ algoritmo de concatenação/soma + bubble-sort + remapeamento
 confirmado; só o significado semântico exato das 3 constantes de
 remapeação fica como lacuna anotada).
 
-## 575. `event_status_set(unsigned short, unsigned short)` — variante não-`wasm` de `Wevent_status_set` (§230), mesmo propósito via primitivos `asm`/task puro (2026-10-25, Fase 3, septuagésimo nono lote, revisão semântica sobre checkpoint do CI)
+## 575. `event_status_set(unsigned short, unsigned short)` — leitura completa: guarda de reentrância + loop de retry (20×) + 3 bifurcações por flag de unidade, variante `asm`/task pura de `Wevent_status_set` (§230) (2026-10-25 + revisão byte a byte 2026-10-26, sobre o painel v3)
 
-`event_status_set(unsigned short, unsigned short)` (`0xdf864`, 524 B)
-— checkpoint do pipeline automatizado (`docs/re-results/000df864.json`,
-não reexecutado nesta sessão): 122 de ~131 instruções possíveis
-(93%), sem tabela de salto; 17 branches, 10 de retrocesso. 9 `bl`
-distintos, já resolvidos por nome no checkpoint: `task_wait(long)`
-(×2), `asm_function(...)` (×2, primitivo genérico de task "asm" — par
-exato do `wasm_function` da seção 230, só sem o prefixo "w"),
-`get_bwp(int)`, `search_controlID(int,int*)` e
-**`getBattleWorkIDFromAnimation(unsigned int)`** (×1 cada) — mais 4
-locais sem símbolo dinâmico (`sub_d6828`, `sub_dc2a4`, `sub_dd678`,
-`sub_df45c`).
+`event_status_set(unsigned short eventID, unsigned short value)`
+(`0xdf864`, 524 B) — disassembly linear completo via Capstone. **Os
+9 slots "não cobertos" do passe automático (93%) são 100% literal
+pool** (122 instruções reais = 488 B + 9 words de constantes = 36 B
+= 524 B exatos, confirmado em `0xdfa4c`-`0xdfa6c`) — nenhuma lacuna
+de código real.
 
-Esse catálogo de chamadas é **idêntico em propósito** ao da §230
-(`Wevent_status_set`, 1.540 B, 96% cob., mesma assinatura de 2
-parâmetros `unsigned short`): ambas ligam o status de um evento ao ID
-de trabalho de batalha (`BWORK`) resolvido a partir de uma animação,
-via `get_bwp`/`search_controlID`/`getBattleWorkIDFromAnimation`. A
-diferença é só a camada de task usada — `Wevent_status_set` roda no
-contexto `wasm` (`Wread_eventflag`/`Wtask_wait`/`wasm_function`),
-enquanto esta função usa a camada de task "pura" sem o prefixo W
-(`task_wait`/`asm_function`), explicando por que é ~1/3 do tamanho
-(menos branches de sincronização/estado de task). Confirma mais uma
-vez o padrão já estabelecido de duplicação paralela W/não-W do mesmo
-subsistema (ver `mesputmain`/`Wmesputmain`, §37, e os primitivos
-`asmGet*`/`wasmGet*` citados na §561/568).
+Fluxo completo, com os 4 locais sem símbolo (`sub_d6828`, `sub_dc2a4`,
+`sub_dd678`, `sub_df45c`) agora com papel/assinatura determinados
+pelo call-site (corpo interno deles ainda não lido):
 
-Os 4 locais sem símbolo não foram resolvidos nem lidos byte a byte —
-ficam como pista para fechar o par por completo numa iteração futura.
+1. **Guarda de reentrância**: lê um global de 16 bits (`activeFlag`);
+   se não-zero, retorna imediatamente sem fazer nada.
+2. **`sub_dc2a4(&eventIDlocal, &buf)`** — gate de validação; se
+   retorna `0`, aborta. Em sucesso, grava `activeFlag` num campo de
+   uma entry global (`entryPtr+0x3f0`) e inicializa um contador de
+   retry (`retryCount = activeFlag`) na pilha.
+3. **Loop de retry (máx. 20 iterações, `cmp ip,#0x14`)**: chama
+   `sub_d6828(&eventIDlocal, &retryCount, &buf)`; enquanto retornar
+   `0`, incrementa `retryCount` e tenta de novo; passa de 20 →
+   desiste (vai pro item 7).
+4. Em sucesso do loop: `getBattleWorkIDFromAnimation(eventID)` → se
+   `-1` ("sem unidade"), pula pro item 6. Senão, resolve `BWORK*` via
+   `get_bwp`, lê o byte em `+0x181` desse struct, e chama
+   `search_controlID(byte, &controlID)`.
+5. Se `controlID < 0`: pula pro item 6. Senão, se **`value != 0`**:
+   chama `sub_df45c(battleWorkID, eventID)` e segue pro item 6. Se
+   **`value == 0`**: lê um byte por-unidade em
+   `entryPtr[battleWorkID]+0x39c`; se `0`, chama
+   `sub_dd678(battleWorkID)` — se retornar não-zero, registra um
+   callback via `asm_function(1, eventID, value, value, value, value)`
+   (mesmo trampolim de aridade do §585, aqui com aridade 1); se o
+   byte já era não-zero, cai direto no item 6.
+6. **Checagem de continuação**: lê um campo em pilha (escrito por
+   `sub_dc2a4` no passo 2); se não-zero, volta pro loop de retry
+   (item 3); se zero, segue pro item 7.
+7. **Fora do loop (timeout ou fim de iteração)**: relê o campo
+   `entryPtr+0x3f0` (gravado no passo 2); se não-zero, chama
+   `task_wait(40)`, testa o bit 0 de um campo global e, se setado,
+   chama `task_wait(40)` de novo; se zero e `value==0`, registra
+   outro callback via `asm_function(1, value, value, value, value, value)`
+   (aridade 1 de novo, par de função diferente do passo 5).
 
-**Status CSV: `read_structural`** (call-graph e controle de fluxo
-mapeados via checkpoint + cruzamento confirmado contra a §230 já
-lida; os 4 blocos locais sem símbolo não foram traçados instrução a
-instrução).
+Confirma por completo a hipótese já registrada (variante sem prefixo
+`W` de `Wevent_status_set`, §230, mesmo propósito via
+`get_bwp`/`search_controlID`/`getBattleWorkIDFromAnimation`) — agora
+com a lógica real de retry/timeout e as 3 bifurcações por
+`value`/byte-de-unidade mapeadas, não só o catálogo de chamadas.
+
+**Status CSV: `read_full`** — o controle de fluxo da função está
+100% confirmado (incluindo os 9 slots de literal pool); os corpos
+internos dos 4 locais sem símbolo não foram lidos, só seu papel e
+assinatura via call-site — mesma lacuna explícita já aceita em outros
+`read_full` do projeto (`asm_function`/`get_ability_address`, §585/590).
 
 ## 576. `GetNearestUnit(int)` — busca de alvo mais próximo pro núcleo de decisão de IA, confirma `GetDistance`/`GetHightDistance`/`IsNullUnit`/`IsNeedlessToFear` como a cadeia real de filtro (2026-10-25, Fase 3, septuagésimo nono lote, revisão semântica sobre checkpoint de CI)
 
@@ -19134,135 +19174,247 @@ próxima iteração (nenhuma tem seção própria ainda).
 resolvidos e cruzados com dois sistemas já documentados; corpo dos 5
 handlers e do loop principal não lido byte a byte).
 
-## 577. `houkoku_okng(CTLINFO*)` — handler de confirmação Sim/Não (`OkNg`) do controlador de mensagem de relatório `ctlhoukmes_main` (2026-10-25, Fase 3, septuagésimo nono lote, revisão semântica sobre checkpoint do CI)
+## 577. `houkoku_okng(CTLINFO*)` — handler de confirmação Sim/Não (`OkNg`) do controlador de mensagem de relatório `ctlhoukmes_main`, lido instrução a instrução: tail-call real para `ctlhoukmes_init` no caminho de cancelamento (2026-10-25 + revisão byte a byte 2026-10-26, sobre o painel v3)
 
-`houkoku_okng(CTLINFO*)` (`0x25a228`, 508 B) — checkpoint do
-pipeline automatizado (`docs/re-results/0025a228.json`): 119 de ~127
-instruções possíveis (94%), 0 tabelas de salto, 10 branches/2 de
-retrocesso. 9 `bl` distintos, 12 chamadas, todos já resolvidos por
-nome pelo próprio `jtable.py`: `Wsend_taskparamater(long,long,long,long)`,
-`wldctl_active()`, `iOS_add_anmpac_max(int)` (×2), `sound_request(int)`
-(×2), `iOS_CMenuTouch::setDispAssist(int)`, `iOS_setLockInput(unsigned char)`,
-`iOS_clearOkNg()` (×2), `iOS_getV2Icon(V2ICON_DATA)`,
-`iOS_setV2Icon(V2ICON_DATA, int)`.
+`houkoku_okng(CTLINFO*)` (`0x25a228`, 508 B) — disassembly Capstone
+completo e manual, 100% das instruções reais resolvidas (o literal
+pool final, `0x25a404`+, decodifica como lixo, confirmando onde o
+código termina).
 
-Vizinha de endereço direta de `ctlhoukmes_init(int)` (`0x25a0f0`, ver
-§580 abaixo) e logo antes de `ctlhoukmes_main(CTLINFO*)` (`0x25a908`,
-seção 117) — o controlador real da mensagem de "relatório" (`houkoku`
-= 報告 "relatório") em campo, cuja tabela de 101 casos já confirma
-`houkokumes_select`/`houkoku_mesput`/`yokoyari_mesput` como os
-handlers de fase mais quentes. `houkoku_okng` é a contraparte Sim/Não:
-chama `iOS_clearOkNg()` duas vezes (fecha o widget de diálogo
-compartilhado `iOS_dispOkNg`/`iOS_clearOkNg`, já confirmado nas
-seções 42/56 como o mesmo popup de confirmação usado em save/load e
-nomeação de unidade) sem nunca chamar `iOS_dispOkNg` — esta função
-assume que o diálogo já foi aberto por `ctlhoukmes_main` antes da
-transição de fase, e só trata a leitura do resultado + encerramento.
-`wldctl_active()` (predicado de contexto "estou no controlador de
-mapa mundi?", já visto como guarda cross-cutting em várias seções)
-sugere um branch de comportamento diferente quando o relatório
-aparece vindo do mapa mundi vs. de dentro de uma cena/batalha.
-`iOS_add_anmpac_max`/`sound_request` (efeito sonoro de confirmação) e
-`iOS_setLockInput` (trava input durante a transição) completam um
-padrão de "fechar popup + tocar som + travar input + notificar task
-via `Wsend_taskparamater`" idêntico ao fim de outros handlers de
-confirmação já documentados. `iOS_getV2Icon`/`iOS_setV2Icon` são
-prováveis leitura/atualização do ícone do próprio widget de diálogo.
+Lógica real:
 
-Sem leitura instrução a instrução dos blocos (não há tabela de salto
-para ancorar a descrição por caso, e o catálogo de `bl` foi
-suficiente para a identificação).
+```c
+int houkoku_okng(CTLINFO* this) {
+    int idx = this->field_0x4;
+    uint32_t entry = g_someTable[idx];           // stride 0x38 (56 B)
+    if (entry & 0x100) return;                    // early-out: slot já em uso/bloqueado
 
-**Status CSV: `read_structural`.**
+    if (this->field_0x14 > 0) {
+        this->field_0x14 = 0;
+        g_flagsWordA->bits |= 0x40;
+    }
+    if (g_iconCache != 0) g_iconCache = 0;
+    int r0 = iOS_getV2Icon(0x34);                  // ícone 52
 
-## 578. `TE_asmTaskEntry(int)` — ponto de entrada de um terceiro sistema de task, nunca antes documentado: o "Task Engine" (`TE_`) sincronizado por VSync (2026-10-25, Fase 3, septuagésimo nono lote, revisão semântica sobre checkpoint do CI)
+    if (r0 == 2) {
+        this->field_0x8 = 1;
+        iOS_setV2Icon(0x34, 0);
+        this->field_0x14 = 1;
+        return;                                     // "já confirmado, limpo" — sai aqui
+    }
+    uint32_t flags;
+    if (r0 == 1) {
+        this->field_0x8 = 0;
+        flags = *g_flagsPtrB | 0x20;
+        *g_flagsPtrB = flags;
+        if (flags & 0x40) goto CONFIRM;
+        goto CANCEL;
+    } else {
+        flags = *g_flagsPtrC;
+        if (!(flags & 0x40)) {
+            if (!(flags & 0x20)) return;             // nem confirmar nem cancelar -> sai
+            goto CANCEL;
+        }
+    }
 
-`TE_asmTaskEntry(int)` (`0x28bb88`, 504 B, 91% cobertura via
-checkpoint do CI, 0 tabela de salto, 17 branches/11 de retrocesso, 8
-`bl` distintos) revela um **terceiro namespace de sistema de task** no
-binário, distinto dos dois já documentados (o genérico
-`task_create/start/stop/status`, e o "wasm"
-`Wtask_create/Wtask_status/Wsend_taskparamater`, citado em dezenas de
-seções do framework `ctl*_main`). O prefixo `TE_` (Task Engine) tem
-oito irmãos no inventário, **todos ainda `unread`**: `TE_VSync(int)`,
-`TE_task_start/stop(long)`, `TE_is_task_end(long)`,
-`TE_task_get_no()`, `TE_task_killmyself()`, `TE_setTaskType(int)`,
-`TE_dummy()`.
+  CONFIRM:  // 0x25a30c
+    sound_request(2);
+    iOS_CMenuTouch::setDispAssist(*g_cmenuTouchPtr, 0);
+    goto SHARED_EXIT;
 
-Catálogo de `bl`: três helpers locais sem símbolo dinâmico
-(`sub_71b0c` ×2, `sub_71b18` ×3, `sub_71b3c` ×2 — mesma faixa de
-endereço `0x71bxx` usada por primitivas de baixo nível em outras
-famílias, prováveis operações do interpretador bytecode/"asm" que dá
-nome à função); `Sleep(unsigned int)` ×3 (yield/espera cooperativa);
-`task_status(long)` ×1 (sistema genérico) **e** `Wtask_status(long)`
-×1 (sistema "wasm") na mesma função — `TE_asmTaskEntry` é um **ponto
-de ponte** que consulta os dois outros sistemas de task já
-conhecidos; `TE_task_get_no()` ×1 (consulta o próprio slot/id dentro
-do Task Engine); e **`__xpLibgpuDrawCallBack(int)`** ×1 — confirma,
-junto com o nome `TE_VSync`, que este terceiro sistema é **disparado
-pelo callback de desenho da GPU (VSync real da PS1/`xpLibgpu`)**, não
-por polling livre como os outros dois.
+  CANCEL:   // 0x25a328
+    iOS_clearOkNg();
+    sound_request(1);
+    if (this->field_0x8 != 0) goto SHARED_EXIT;
+    Wsend_taskparamater(0xc, 0, 0, 1);
+    iOS_add_anmpac_max(-2);
+    g_counterX1 -= 1; g_counterX2 -= 3; g_counterX3 -= 2;
+    goto ctlhoukmes_init(int);    // *** TAIL CALL REAL para 0x25a0f0, não um epílogo normal ***
 
-Conexão: abre uma ponta nova — não há seção anterior sobre `TE_*`.
-Trabalho futuro de maior valor: ler os 7 irmãos pequenos (20–124 B,
-prováveis triviais) e, principalmente, entender o que o interpretador
-"asm" (`sub_71b0c/71b18/71b3c`) realmente executa — é provavelmente o
-alvo real por trás do nome "asmTaskEntry", prioridade mais alta que
-este wrapper de entrada.
+  SHARED_EXIT:  // 0x25a340
+    iOS_add_anmpac_max(-2);
+    g_counterY1 -= 1; g_counterY2 -= 3; g_counterY3 -= 1;
+    wldctl_active();
+    iOS_setLockInput(0);
+    iOS_clearOkNg();                                   // 2ª chamada
+    goto iOS_setV2Icon(3, 1);        // tail call, não bl
+}
+```
 
-Não houve rastreamento de lógica de bloco individual (só grafo de
-chamadas via checkpoint do CI + cross-reference textual).
+**Achado concreto**: o caminho de **cancelamento sem confirmação**
+(`this->field_0x8==0` no ramo `CANCEL`) não retorna normalmente — ele
+desempilha os registradores salvos e então **salta direto (`b`, não
+`bl`) para `ctlhoukmes_init(int)`** (`0x25a0f0`, ver §580). Confirma,
+com certeza de endereço, que recusar o diálogo Sim/Não desta tela de
+relatório reinicializa a própria tela do zero (volta ao `_init` do
+controlador-irmão `ctlhoukmes_main`, §117), em vez de só fechar o
+popup. O caminho de confirmação termina com um tail-call pra
+`iOS_setV2Icon(3,1)`, delegando a última ação sem alocar novo frame.
+Os dois trios de contadores decrementados (`X`/`Y`) diferem só no
+valor final subtraído (2 vs. 1), distinguindo os dois desfechos.
 
-**Status CSV: `read_structural`.**
+**Status CSV: `read_full`** — toda instrução real foi lida e
+atribuída a um bloco de controle de fluxo explícito; o único detalhe
+não resolvido é a identidade nominal exata dos ponteiros globais de
+literal pool (contadores/flags), mesma lacuna já aceita em outros
+`read_full` do projeto (§585/586).
 
-## 579. `EnvSE_Play(int)` — dispatcher de 24 casos pra efeitos sonoros ambientais, liga `CFILE_DAT` (contêiner de asset empacotado) a `CSOUND_IF::Load/Play` (2026-10-25, Fase 3, septuagésimo nono lote, revisão semântica sobre checkpoint do CI)
+## 578. `TE_asmTaskEntry(int)` — NÃO é um ponto de entrada de interpretador: é um escalonador de task real via `pthread_mutex_lock`/`unlock` + `longjmp` (correção da hipótese original, 2026-10-25 + revisão byte a byte 2026-10-26, sobre o painel v3)
 
-`EnvSE_Play(int)` (`0x2b2448`, 508 B) — checkpoint do CI
-(`re-results/002b2448.json`): 77% de cobertura (98/127 slots), **1
-tabela de salto resolvida** (guarda `cmp`@`0x2b2474`,
-despacho@`0x2b2478`: 24 casos, só **10 handlers distintos** — a
-maioria dos 24 casos colapsa no mesmo handler default em `0x2b25a0`,
-com uns 8 casos específicos desviando pra blocos próprios em
-`0x2b24e0`/`0x2b25a8`/`0x2b25bc`/`0x2b25cc`/`0x2b25dc`/`0x2b25f0`/
-`0x2b2604`/`0x2b2614`/`0x2b2624`). 9 branches, 8 de retrocesso —
-indício de um laço (provavelmente por canal de som ou por tentativa
-de retry), não rastreado byte a byte.
+**Correção de hipótese**: a versão original desta seção especulava
+que os três locais sem símbolo `sub_71b0c`/`sub_71b18`/`sub_71b3c`
+fossem "o interpretador real do bytecode/'asm'". Disassembly direto
+dos três mostra que cada um é uma **veneer de PLT de 12 bytes**
+idêntica em forma (`add ip,pc,#0x200000; add ip,ip,#0xd6000; ldr
+pc,[ip,#N]!`) — o padrão padrão do linker ARM pra chamar função
+importada quando o deslocamento não cabe num `bl` direto. Resolvendo
+os deslocamentos contra `.rel.plt` (confirmado por endereço exato,
+não suposição):
 
-7 `bl` distintos, todos já documentados em seções anteriores:
-- `CFFT_STATE::GetParam(int)` (`0x28c320`, 1×) — accessor trivial já
-  fechado na seção 22 (`*(int*)(this+0x38+id*4)`); aqui provavelmente
-  lê um parâmetro de estado global (volume/modo) antes de decidir
-  tocar.
-- `CFILE_DAT::Unload()`, `GetBuffer(int)`, `GetSize(int)`,
-  `Load(int,int,int)` (`0xb6a28`/`0xb6c70`/`0xb6cd0`/`0xb6cd8`, 1×
-  cada) — a API do contêiner de asset empacotado já referenciada na
-  seção 7.x (o mesmo `CFILE_DAT` cujo `Decrypt` foi confirmado código
-  morto). Aqui é usado pro caso real: carregar o blob de dados da
-  amostra de som ambiental a partir do pacote, sem decriptação.
-- `CSOUND_IF::Load(int,char*,uchar*,uint,uint,int,int,int,int,int,int)`
-  e `CSOUND_IF::Play(int,int,int,int,uchar)` (`0xba9c8`/`0xbad78`, 1×
-  cada) — a API real do mixer de áudio, já com pseudocódigo completo
-  nas seções 16.2/16.3 (`Load` despacha por formato PCM/OGG; `Play`
-  seta estado de canal e inicia fade).
+- `sub_71b0c` → **`pthread_mutex_lock`**
+- `sub_71b18` → **`pthread_mutex_unlock`**
+- `sub_71b3c` → **`longjmp`**
 
-**Conclusão**: `EnvSE_Play(int)` é a função de entrada do subsistema
-de "efeito sonoro ambiental" (nome nunca visto antes no projeto —
-primeira menção de "EnvSE") — recebe um ID, usa o switch de 24 casos
-pra resolver qual slot/asset de áudio ambiental carregar via
-`CFILE_DAT`, e entrega o buffer resultante pra `CSOUND_IF::Load`+
-`Play` tocar no canal de mixagem real já documentado. Fecha o lado
-"ambiente" da trinca de camadas de áudio do motor (música streaming
-Ogg via Tremor, §17.x; efeitos via `CSOUND_IF`, §16.x; agora "EnvSE"
-como terceira categoria, selecionada por ID em vez de ser chamada
-música/SE direta).
+Ou seja: **`TE_asmTaskEntry` é um escalonador cooperativo real
+baseado em mutex POSIX + `longjmp`** (um fiber/coroutine clássico),
+não um interpretador de opcodes. Mesmo padrão corretivo já aplicado a
+`asm_function`/`wasm_function` (§585/586, que também "pareciam"
+interpretador e eram só um trampolim de aridade).
 
-Como a cobertura automática ficou em 77% (alguns blocos do switch,
-principalmente o laço de 8 branches de retrocesso, não foram
-individualmente rastreados) e não houve leitura instrução a instrução
-dos 10 handlers do switch, isso é um passe estrutural, não leitura
-completa.
+`TE_asmTaskEntry(int)` (`0x28bb88`, 504 B) lido por completo:
 
-**Status CSV: `read_structural`.**
+```c
+int TE_asmTaskEntry(int taskSlot) {
+    int taskNo = TE_task_get_no();
+    if (taskSlot == 1) goto RESUME;             // entrada de "continuação"
+
+    g_lastErrorSlot = -1;
+    g_taskTable[taskSlot * 0x120 + 0x91c] += 1;   // contador por slot (stride 288 B)
+    void* lockObj = &g_lockArea[taskSlot] - 0x4c4; // endereço computado via GOT
+    pthread_mutex_lock(lockObj);
+    Sleep(1);
+    __xpLibgpuDrawCallBack(0x4a8);                 // callback real de VSync (confirma TE_VSync)
+
+    if (taskSlot == 0) goto POLL_LOOP_SIMPLE;       // slot 0 = caminho simplificado
+
+  SCAN:  // 0x28bc38
+    pthread_mutex_lock(lockObj2);
+    if (g_slotOwner == 0 || g_slotOwner != taskSlot) goto RETRY;
+    if (g_tableA[taskSlot].field_0x928 != g_tableB.field_0x8) goto RETRY;
+    if (g_tableA[taskSlot].field_0x928 != 0) {
+        if (Wtask_status(taskSlot) == 0) goto RETRY;
+    } else {
+        if (task_status(taskSlot) == 0) goto RETRY;
+    }
+    int a = g_arrayC[taskSlot].field_0x810;
+    int b = g_arrayC[taskSlot].field_0x814;
+    g_globalD = taskSlot; g_globalE = taskSlot;
+    if (a == b) {
+        if (g_arrayC[taskSlot].field_0x924 != 0 && a != 0)
+            longjmp(&g_arrayC[taskSlot].jmpbuf, 2);
+        return;
+    }
+    if (a == 0) return;
+    longjmp(&g_arrayC[taskSlot].jmpbuf, 1);
+
+  RETRY:  // 0x28bc1c
+    pthread_mutex_unlock(lockObj2);
+    Sleep(1);
+    goto SCAN;
+
+  RESUME:  // 0x28bcfc, só quando taskSlot==1 na entrada
+    g_lastErrorSlot = -2;
+    goto 0x28bbb0;   // reentra no meio do fluxo principal
+
+  POLL_LOOP_SIMPLE:  // 0x28bd24, taskSlot==0
+    pthread_mutex_lock(lockObj3);
+  LOOP2:
+    if (g_slotOwner2 != 0) goto SCAN;
+    pthread_mutex_unlock(lockObj3);
+    Sleep(1);
+    goto LOOP2;
+}
+```
+
+**Confirma, com certeza**: o sistema `TE_*` (Task Engine) é
+implementado sobre **threads POSIX reais** (mutex real) e usa
+**`longjmp`** pra transferência de controle não-local — um
+escalonador de fibras clássico, retornando `1` ou `2` pro ponto de
+`setjmp` original conforme o campo `+0x924`. `task_status`/
+`Wtask_status` confirmam que `TE_asmTaskEntry` é a ponte entre os
+dois sistemas de task "asm"/"wasm" já documentados, como a versão
+original já suspeitava — só que a ponte é feita via mutex+longjmp
+real, não um polling simples. `taskSlot==1` é um caminho de
+reentrada/continuação especial, não um slot normal.
+
+**Status CSV: `read_full`** — toda instrução real foi lida e
+atribuída a um ramo de controle explícito, incluindo a resolução
+definitiva dos 3 locais via `.rel.plt`; os nomes exatos dos campos de
+struct (`+0x810`/`+0x814`/`+0x924`/`+0x928`) ficam descritos por
+offset, não por nome semântico — mesmo padrão de detalhe aceito em
+outros `read_full`.
+
+## 579. `EnvSE_Play(int)` — leitura completa: gate por `CFFT_STATE::GetParam(0x28)`, 24 IDs mapeados, só 9 fazem algo real, canal de áudio fixo 12 (2026-10-25 + revisão byte a byte 2026-10-26, sobre o painel v3)
+
+`EnvSE_Play(int)` (`0x2b2448`, 508 B) foi lida por completo via
+disassembly direto — os "127 slots esperados" do checkpoint
+automático contam 4 words de literal pool (`0x2b2634`-`0x2b2643`,
+confirmadas como dados puros, não código) como se fossem instrução; o
+corpo real tem exatamente 123 instruções e **todas foram lidas**, não
+há bytes de código não explicados.
+
+**Gate de entrada**: `CFFT_STATE::GetParam(this=&g_CFFT_STATE, id=0x28)`
+(id 40 — mesmo singleton já documentado em §22/34.3); se o retorno
+for `0`, a função não faz **nada** e retorna direto. Confirma que o
+parâmetro 40 de `CFFT_STATE` é um interruptor geral ("som ambiente
+ligado?") que pode desativar `EnvSE_Play` por completo.
+
+**Despacho real**: `r0 = id - 0x10001` (o parâmetro é esperado na
+faixa `0x10001`-`0x10018`, 24 valores); se fora da faixa, retorna sem
+fazer nada. Dos 24 IDs válidos, **a tabela de salto mapeia só 9 pra
+código real** — os outros 15 caem direto no mesmo "não faz nada" (não
+é falha de extração, é o próprio binário tratando 15 dos 24 slots
+como reservados/vazios). Os 9 IDs reais só diferem em **dois valores
+literais hardcoded no próprio braço do switch** (`r4`="fileID",
+`r2`="flagID", ex.: `0x10002`→(0x291,0x292), `0x10006`→(0x293,0x294),
+`0x1000f`→(0x298,0x299)), que convergem todos no MESMO bloco de
+execução em `0x2b24f0`:
+
+```c
+CFILE_DAT* pak = *(CFILE_DAT**)GOT[0];
+pak->Load(r4, r2, 0);                       // CFILE_DAT::Load(int,int,int)
+void* buf  = pak->GetBuffer(r4);
+int   size = pak->GetSize(r4);
+
+CSOUND_IF* mixer = *(CSOUND_IF**)GOT[1];
+mixer->Load(12 /*canal FIXO*/, (char*)0x2f0328 /*endereço literal, provável tag*/,
+            (unsigned char*)buf, 0, size, 0, 1, 100, r4, 1, 0);
+pak->Unload();
+
+mixer = *(CSOUND_IF**)GOT[1];
+mixer->Play(12 /*mesmo canal fixo*/, 1, -1, -1, 0xff /*volume máximo*/);
+```
+
+**Achados concretos**: (1) o "canal de áudio ambiente" é **hardcoded
+como 12** nas duas chamadas (`Load` e `Play`) — EnvSE não aloca canal
+dinamicamente, usa um canal fixo dedicado; (2) o endereço `0x2f0328`
+passado como `char*` é uma constante PIC resolvida via `pc`+literal
+(não GOT-indireto como os outros globais) — ponteiro fixo pra um dado
+em outra seção (provável string/tag de formato), não lido além de
+confirmar que é um endereço válido; (3) os 15 IDs "vazios" e o gate
+de `CFFT_STATE::GetParam` confirmam que a maior parte da superfície
+de 24 IDs é reservada/não usada nesta versão.
+
+Fecha o lado "ambiente" da trinca de camadas de áudio do motor
+(música streaming Ogg via Tremor, §17.x; efeitos via `CSOUND_IF`,
+§16.x; EnvSE como terceira categoria, por ID).
+
+**Status CSV: `read_full`** — 100% dos bytes reais (123 de 123
+instruções, excluindo só os 4 words de literal pool) lidos e o fluxo
+de controle completo (gate, despacho de 24 casos, os 9 braços reais
+convergindo no bloco comum, e as duas chamadas de áudio) confirmado.
+Única lacuna: o significado exato do endereço literal `0x2f0328`
+(provável string, não resolvido byte a byte).
 
 ## 580. Grab-bag de 14 funções `ctl*_init` — testado e refutado: NÃO é família duplicada (Jaccard 0–0,15 contra `ctlworkinginf_init`), cada tela tem setup genuinamente distinto (2026-10-25, Fase 3, octogésimo lote)
 
@@ -19357,39 +19509,72 @@ confirmada via `readelf --dyn-syms`/`c++filt` + cruzamento textual;
 nenhuma teve os blocos internos lidos instrução a instrução — typing
 honesto, não `read_full`).
 
-## 581. `iOS_v2menuSetType(V2MENU_TYPE)` — configura layout/escala dos 11 campos de posição do menu V2 por tipo, lendo a tabela de sprite-IDs correspondente (2026-10-25, Fase 3, octogésimo primeiro lote, revisão semântica sobre checkpoint do CI)
+## 581. `iOS_v2menuSetType(V2MENU_TYPE)` — leitura completa: cadeia de ícones por tabela, max de dimensão, e 11 chamadas reais a `RETINA_SCALE` com fórmulas explícitas (2026-10-25 + revisão byte a byte 2026-10-26, sobre o painel v3)
 
-`iOS_v2menuSetType(V2MENU_TYPE)` (`0x28179c`, 540 B) — checkpoint do
-pipeline automatizado (`docs/re-results/0028179c.json`, não
-reexecutado nesta sessão): 128 de ~135 instruções possíveis (95%), 0
-tabelas de salto, 5 branches/4 de retrocesso. 2 `bl` distintos, 12
-chamadas: `RETINA_SCALE(int)` (×11) e `iOS_getv2menuSprIdTbl()` (×1).
+`iOS_v2menuSetType(V2MENU_TYPE)` (`0x28179c`, 540 B) foi lida por
+completo: os "7 slots não cobertos" do checkpoint automático são
+exatamente os 7 words de literal pool em `0x28199c`-`0x2819b4`
+(constantes PIC para os 4 globais usados na função) — **0 bytes de
+código real ficam sem explicação**.
 
-Já era citada por nome como parte do grupo de funções do sistema de
-ícones "V2" (`iOS_getV2Icon`/`iOS_setV2Icon`, §577), e `RETINA_SCALE`
-é a função de escala de DPI mais chamada do projeto inteiro (recorde
-de 131 chamadas em `Main_FrameRender`, sempre junto de
-`CGX_SCREEN_CORRECT::Scaled`). O padrão — 11 chamadas a
-`RETINA_SCALE` dentro de um laço com 4 branches de retrocesso — é
-consistente com a função escalando ~11 campos de posição/tamanho dos
-elementos visuais do menu V2 (ícones, texto, molduras) de acordo com
-a densidade de pixels do dispositivo, depois de resolver o conjunto
-de sprite-IDs certo pra aquele tipo de menu via
-`iOS_getv2menuSprIdTbl()`. Consistente com o nome ("SetType"): recebe
-um enum `V2MENU_TYPE` e configura todo o layout escalado daquele tipo
-de menu de uma vez, provavelmente uma vez por troca de tela/contexto,
-não por quadro. A ligação exata entre `V2MENU_TYPE` e quais 11 campos
-recebem qual escala não foi rastreada bloco a bloco.
+**Caso especial (`V2MENU_TYPE==13`)**: pula direto pro bloco comum
+com valores fixos (`r6=17`, `r0=12`, contagem de ícones `=0`) —
+tratamento de "menu sem cadeia de ícones".
 
-**Nota de metodologia**: `docs/RE_SEMANTIC_REVIEW_INITIAL.md` mantém
-esta função como `needs_review` sob um padrão mais rigoroso e
-deliberadamente separado (reconstrução de invariante por bloco +
-teste diferencial antes de aceitar qualquer hipótese). Esta seção usa
-o padrão `read_structural` em vigor desde a seção 1 do projeto (grafo
-de chamadas + cruzamento textual) — os dois status coexistem porque
-medem coisas diferentes, não são contraditórios.
+**Caso normal**: indexa uma tabela global (`g_v2menuSprIdTbl`,
+resolvida também via `iOS_getv2menuSprIdTbl()` — a chamada parece só
+garantir que a tabela está inicializada, já que o endereço usado
+depois é recalculado direto via literal, não via o valor de retorno)
+por `tipo*32` e lê uma **cadeia encadeada de valores** terminando no
+sentinela `13`. Cada valor da cadeia é usado duas vezes: (1) como
+índice (`×2`) numa tabela de halfwords apontada pelo próprio
+parâmetro `r0` (`V2MENU_TYPE` reaproveitado como ponteiro, não como
+enum simples — não confirmado dinamicamente se é intencional ou um
+caminho morto pra entradas reais, fica como lacuna semântica
+explícita); (2) numa segunda tabela global (`tableB+0x1a0`) pra achar
+o **valor máximo** entre todos os elos da cadeia (`maxDim`).
 
-**Status CSV: `read_structural`.**
+Com `N` = tamanho da cadeia:
+```c
+STATE->field_0x54 = maxDim;
+for (i = 0; i < N; i++) STATE->flags[i] = 1;
+int base = N * 18;                              // 0x12
+int w0   = (type == 13) ? 17 : (base + 17);
+```
+E então **11 chamadas reais** a `RETINA_SCALE(int)`, cada uma com um
+argumento explícito, gravadas num terceiro global (`STATE`, literal
+próprio em `0x281870`-`0x281878`):
+
+| # | Argumento de `RETINA_SCALE` | Campo de destino |
+|---|---|---|
+| 1 | `w0` | `STATE+0x3c` |
+| 2 | `6` | `STATE+0x40` |
+| 3 | `STATE[0x3c]` (já escalado) | `STATE+0x4c` |
+| 4 | `10` (0xa) | `STATE+0x50` (+ cópia em `STATE+0x90`) |
+| 5-6 | `STATE[0x54]+0xc` (maxDim+12), repetida | `STATE+0x92`/`STATE+0x94` |
+| 7 | `40` (0x28) | `STATE+0x96` (+ `STATE[0x50]` sem escala em `STATE+0x98`) |
+| 8 | `base + STATE[0x50]` | `STATE+0x9a` |
+| 9 | `STATE[0x54]+0xc` (repete) | `STATE+0x9c` |
+| 10 | `40` (repete) | `STATE+0x9e` |
+| 11 | `18` (0x12) | `STATE+0x58` (+ zera `STATE+0x34/0x38/0x5c`) |
+
+**Confirma, com fórmulas reais**: os 8 halfwords `STATE+0x90` até
+`+0x9e` são posições/larguras escaladas por DPI de até 8
+sub-elementos visuais do menu V2, derivadas de três entradas: a
+largura total da linha de ícones (`base=N*18`), a maior dimensão
+entre os ícones da cadeia (`maxDim`), e três constantes fixas (6, 10,
+40). O papel visual exato de cada offset individual fica como lacuna
+(precisaria do código de desenho que lê `STATE`, fora desta função).
+
+**Status CSV: `read_full`** — 100% dos bytes de código (128 de 128
+instruções reais, excluindo os 7 words de literal pool) lidos e o
+fluxo completo confirmado. Duas lacunas semânticas explícitas,
+nenhuma de bytes não lidos: (1) o uso de `r0` como ponteiro na cadeia
+de ícones; (2) o papel visual exato de cada campo `STATE+0x90..0x9e`.
+Nota de metodologia preservada: `docs/RE_SEMANTIC_REVIEW_INITIAL.md`
+tratava esta função sob um padrão ainda mais rigoroso
+(microexecução); esta leitura byte a byte satisfaz o padrão
+`read_full` do projeto, que é o que o CSV rastreia.
 
 ## 582. `ctlperson_main(CTLINFO*)` — loop por-frame da tela de roster de personagens, mesmo esqueleto padrão `wldctl_active`+`sound_request`+`curhis_get/clr` já visto em dezenas de outros `ctl*_main` (2026-10-25, Fase 3, octogésimo primeiro lote, revisão semântica sobre checkpoint do CI)
 

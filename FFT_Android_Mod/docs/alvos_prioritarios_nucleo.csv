@@ -9,14 +9,14 @@ address,size,mangled,demangled,status,section_ref
 00153cb8,544,_Z22iOS_RESUME_SET_WORK_IWP23IOS_RESUME_DATA_WORK_IW24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_WORK_IW(IOS_RESUME_DATA_WORK_IW*, IOS_RESUME_DATACOPY_MODE)",read_structural,
 001bdc0c,544,_Z18DrawUnitWithShadowsP7DVECTORP5COLORii,"DrawUnitWithShadow(short, DVECTOR*, COLOR*, int, int)",read_full,
 0029a618,540,ClearImage2,ClearImage2,read_structural,NOTES §570
-0028179c,540,_Z17iOS_v2menuSetType11V2MENU_TYPE,iOS_v2menuSetType(V2MENU_TYPE),read_structural,NOTES §581
+0028179c,540,_Z17iOS_v2menuSetType11V2MENU_TYPE,iOS_v2menuSetType(V2MENU_TYPE),read_full,NOTES §581
 002b75d0,536,_Z17RayPick_GT4_inputP11tagPOLY_GT4iiii,"RayPick_GT4_input(tagPOLY_GT4*, int, int, int, int)",read_full,
 002b1124,536,_Z19SettingsBundle_Initv,SettingsBundle_Init(),read_structural,
 0015b388,528,_Z17iOSMapCursorCheckv,iOSMapCursorCheck(),read_structural,
 001a9e04,528,_Z11GetItemListssaPsth,"GetItemList(short, short, signed char, short*, unsigned short, unsigned char)",read_full,
 001b8a28,528,_Z22iOS_RESUME_SET_RESERVEP23IOS_RESUME_DATA_RESERVE24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_RESERVE(IOS_RESUME_DATA_RESERVE*, IOS_RESUME_DATACOPY_MODE)",read_full,
-00244200,528,_Z13vEnd_rollprocv,vEnd_rollproc(),read_structural,NOTES §571
-000df864,524,_Z16event_status_settt,"event_status_set(unsigned short, unsigned short)",read_structural,NOTES §575
+00244200,528,_Z13vEnd_rollprocv,vEnd_rollproc(),read_full,NOTES §571
+000df864,524,_Z16event_status_settt,"event_status_set(unsigned short, unsigned short)",read_full,NOTES §575
 00159e5c,520,_Z13iosAsmBoxCopyPcS_P10tCOPYFIELDS1_,"iosAsmBoxCopy(char*, char*, tCOPYFIELD*, tCOPYFIELD*)",read_structural,NOTES §605
 002494c8,520,_Z13vOpn_fadeprocPm,vOpn_fadeproc(unsigned long*),read_structural,NOTES §605
 001639ac,520,_Z14ASHURA_CVECTORlP7CVECTOR,"ASHURA_CVECTOR(long, CVECTOR*)",read_full,
@@ -26,12 +26,12 @@ address,size,mangled,demangled,status,section_ref
 001ad634,512,_Z10DrawGT4RGBPsP5COLORii,"DrawGT4RGB(short*, COLOR*, int, int)",read_full,
 0021a9ec,512,_Z25SetCameraWorkWithSchedules,SetCameraWorkWithSchedule(short),read_structural,NOTES §572
 00273910,512,_Z12SetSafePanelii,"SetSafePanel(int, int)",read_full,NOTES §573
-002b2448,508,_Z10EnvSE_Playi,EnvSE_Play(int),read_structural,NOTES §579
-0025a228,508,_Z12houkoku_okngP7CTLINFO,houkoku_okng(CTLINFO*),read_structural,NOTES §577
+002b2448,508,_Z10EnvSE_Playi,EnvSE_Play(int),read_full,NOTES §579
+0025a228,508,_Z12houkoku_okngP7CTLINFO,houkoku_okng(CTLINFO*),read_full,NOTES §577
 001a8914,508,_Z19GetTotalAbilityListsiPs,"GetTotalAbilityList(short, int, short*)",read_full,NOTES §574
 00177ad4,508,_Z12bDrawFT4RGB2iiiiiiiiP5COLORitti,"bDrawFT4RGB2(int, int, int, int, int, int, int, int, COLOR*, int, unsigned short, unsigned short, int)",read_full,
 00072cec,504,_Z19Android_Dialog_OpeniiiiPKcS0_i,"Android_Dialog_Open(int, int, int, int, char const*, char const*, int)",read_structural,
-0028bb88,504,_Z15TE_asmTaskEntryi,TE_asmTaskEntry(int),read_structural,NOTES §578
+0028bb88,504,_Z15TE_asmTaskEntryi,TE_asmTaskEntry(int),read_full,NOTES §578
 00191a10,504,_Z11eValueFunc2Ph,eValueFunc2(unsigned char*),read_full,
 00196bbc,504,_Z13jGetMaskedPadv,jGetMaskedPad(),read_structural,
 0024eadc,500,_Z14ctlperson_mainP7CTLINFO,ctlperson_main(CTLINFO*),read_structural,NOTES §582

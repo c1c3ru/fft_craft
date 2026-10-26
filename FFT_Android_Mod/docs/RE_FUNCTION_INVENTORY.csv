@@ -691,7 +691,7 @@ address,size,mangled,demangled,status,section_ref
 00153cb8,544,_Z22iOS_RESUME_SET_WORK_IWP23IOS_RESUME_DATA_WORK_IW24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_WORK_IW(IOS_RESUME_DATA_WORK_IW*, IOS_RESUME_DATACOPY_MODE)",read_structural,NOTES §555
 001bdc0c,544,_Z18DrawUnitWithShadowsP7DVECTORP5COLORii,"DrawUnitWithShadow(short, DVECTOR*, COLOR*, int, int)",read_full,NOTES §558
 000bd740,540,_ZN17CSOUND_LOADER_OGG6DecodeEPaixxPi,"CSOUND_LOADER_OGG::Decode(signed char*, int, long long, long long, int*)",read_full,NOTES §17.7
-0028179c,540,_Z17iOS_v2menuSetType11V2MENU_TYPE,iOS_v2menuSetType(V2MENU_TYPE),read_structural,NOTES §581
+0028179c,540,_Z17iOS_v2menuSetType11V2MENU_TYPE,iOS_v2menuSetType(V2MENU_TYPE),read_full,NOTES §581
 00193a10,540,_Z15jGetAbilityListssiPsi,"jGetAbilityList(short, short, int, short*, int)",read_structural,NOTES §390
 0029a618,540,ClearImage2,ClearImage2,read_structural,NOTES §570
 000dca14,536,_Z6direc2Pci,"direc2(char*, int)",read_full,NOTES §525
@@ -703,10 +703,10 @@ address,size,mangled,demangled,status,section_ref
 0015b388,528,_Z17iOSMapCursorCheckv,iOSMapCursorCheck(),read_structural,NOTES §565
 001a9e04,528,_Z11GetItemListssaPsth,"GetItemList(short, short, signed char, short*, unsigned short, unsigned char)",read_full,NOTES §549
 001b8a28,528,_Z22iOS_RESUME_SET_RESERVEP23IOS_RESUME_DATA_RESERVE24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_RESERVE(IOS_RESUME_DATA_RESERVE*, IOS_RESUME_DATACOPY_MODE)",read_full,NOTES §555
-00244200,528,_Z13vEnd_rollprocv,vEnd_rollproc(),read_structural,NOTES §571
+00244200,528,_Z13vEnd_rollprocv,vEnd_rollproc(),read_full,NOTES §571
 0027e470,528,_ZN22iOS_CMenuTouchSaveLoad21setMenuAssistPositionEi,iOS_CMenuTouchSaveLoad::setMenuAssistPosition(int),read_structural,NOTES §364
 000ef5e0,524,_Z17make_statusscrollv,make_statusscroll(),read_structural,NOTES §524
-000df864,524,_Z16event_status_settt,"event_status_set(unsigned short, unsigned short)",read_structural,NOTES §575
+000df864,524,_Z16event_status_settt,"event_status_set(unsigned short, unsigned short)",read_full,NOTES §575
 0024c070,524,_Z10wldbg_initv,wldbg_init(),read_full,NOTES §12.2
 00088718,520,_ve_envelope_init,_ve_envelope_init,read_structural,NOTES §569
 001639ac,520,_Z14ASHURA_CVECTORlP7CVECTOR,"ASHURA_CVECTOR(long, CVECTOR*)",read_full,NOTES §562
@@ -732,11 +732,11 @@ address,size,mangled,demangled,status,section_ref
 00182380,508,_Z11bCursolFuncP7DVECTORPti,"bCursolFunc(DVECTOR*, unsigned short*, int)",read_structural,NOTES §451
 00192f08,508,_Z7jSwapDBii,"jSwapDB(int, int)",read_structural,NOTES §421
 001a8914,508,_Z19GetTotalAbilityListsiPs,"GetTotalAbilityList(short, int, short*)",read_full,NOTES §574
-0025a228,508,_Z12houkoku_okngP7CTLINFO,houkoku_okng(CTLINFO*),read_structural,NOTES §577
-002b2448,508,_Z10EnvSE_Playi,EnvSE_Play(int),read_structural,NOTES §579
+0025a228,508,_Z12houkoku_okngP7CTLINFO,houkoku_okng(CTLINFO*),read_full,NOTES §577
+002b2448,508,_Z10EnvSE_Playi,EnvSE_Play(int),read_full,NOTES §579
 00271ba4,508,_Z18SetBaseTargetGroupii,"SetBaseTargetGroup(int, int)",mentioned_unverified,
 00072cec,504,_Z19Android_Dialog_OpeniiiiPKcS0_i,"Android_Dialog_Open(int, int, int, int, char const*, char const*, int)",read_structural,NOTES §566
-0028bb88,504,_Z15TE_asmTaskEntryi,TE_asmTaskEntry(int),read_structural,NOTES §578
+0028bb88,504,_Z15TE_asmTaskEntryi,TE_asmTaskEntry(int),read_full,NOTES §578
 00191a10,504,_Z11eValueFunc2Ph,eValueFunc2(unsigned char*),read_full,NOTES §550
 00196bbc,504,_Z13jGetMaskedPadv,jGetMaskedPad(),read_structural,NOTES §551
 0026037c,504,_Z14ctlmoumes_initi,ctlmoumes_init(int),read_structural,NOTES §487
