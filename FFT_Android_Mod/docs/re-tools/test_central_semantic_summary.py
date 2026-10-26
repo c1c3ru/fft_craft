@@ -67,6 +67,37 @@ class CentralSemanticSummaryTests(unittest.TestCase):
         self.assertEqual(result["unicorn_reports"], 2)
         self.assertIn("Microexecuções Unicorn verificadas", mod.render(result))
 
+    def test_local_contracts_are_counted_without_certification(self):
+        contracts = self.root / "contracts"
+        contracts.mkdir()
+        self.write(contracts, "00000010.json", {
+            "address": "00000010", "binary_sha256": self.digest,
+            "instruction_word": "1eff2fe1", "contract_stage":
+                "local_isa_contract_checked_review_pending",
+            "semantic_status": "partial", "certified": False,
+            "machine_samples_passed": 8, "machine_samples_failed": 0,
+            "reviewer": None
+        })
+        report = mod.summarize(self.inventory, self.digest,
+                               self.root / "missing.json",
+                               contracts_dir=contracts)
+        self.assertEqual(report["checked_local_contracts"], 1)
+        self.assertEqual(report["contract_samples"], 8)
+        self.assertEqual(report["certified"], 0)
+        self.assertIn("Contratos locais BX LR", mod.render(report))
+        self.write(contracts, "00000010.json", {
+            "address": "00000010", "binary_sha256": self.digest,
+            "instruction_word": "1eff2fe1", "contract_stage":
+                "local_isa_contract_checked_review_pending",
+            "semantic_status": "partial", "certified": True,
+            "machine_samples_passed": 8, "machine_samples_failed": 0,
+            "reviewer": None
+        })
+        with self.assertRaises(ValueError):
+            mod.summarize(self.inventory, self.digest,
+                          self.root / "missing.json",
+                          contracts_dir=contracts)
+
     def test_stale_evidence_rejected(self):
         self.write(self.dynamic, "00000010.json",
                    {"address": "00000010", "binary_sha256": "b"*64,
