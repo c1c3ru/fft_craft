@@ -143,9 +143,11 @@ def render(data, results, prs=None, semantic=None):
         f"| v3: checkpoints / aprovados / revisão | {v3['v3']:,} / "
         f"{v3['auto_structural']:,} / {v3['needs_review']:,} | "
         "Subconjunto já analisado pelas regras v3 |",
-        "| Funções com **equivalência semântica integral certificada** "
-        "| **não mensurado** | O pipeline atual não mantém certificações "
-        "formais por função; microexecuções não substituem esse certificado |",
+        "| Equivalência semântica integral registrada | "
+        f"**{semantic['certified']:,}** | Certificados revisáveis vinculados ao ELF; "
+        "microexecuções não são certificados |" if semantic is not None
+        else "| Equivalência semântica integral registrada | **não mensurada** | "
+             "Dados de certificados não disponíveis nesta geração |",
         "", "O histórico CSV contém "
         f"**{data['historical_count']:,}** registros de análise anterior, "
         "que podem se sobrepor aos checkpoints. "
@@ -156,11 +158,11 @@ def render(data, results, prs=None, semantic=None):
         "sintéticos** e seus limites. Testes passando não significam que "
         "a função inteira foi reconstruída:", "",
     ]
-    if semantic is not None:
-        lines += [central_semantic_summary.render(semantic), ""]
     for filename, description in MILESTONES:
         if (results / filename).is_file():
             lines.append(f"- [{description}]({filename})")
+    if semantic is not None:
+        lines.extend(["", central_semantic_summary.render(semantic)])
     lines.extend(["", "## Próximas prioridades", "",
                   "### Lacunas semânticas conhecidas", ""])
     for address, description in CURRENT_SEMANTIC_BOUNDARIES:
@@ -209,7 +211,7 @@ def render(data, results, prs=None, semantic=None):
                   "", "**Limitação:** o painel não é um contador de "
                   "reconstrução semântica completa. Uma certificação "
                   "desse tipo exigiria contratos e testes integrais "
-                  "por função que ainda não são registrados pelo pipeline.",
+                  "por função; os registros parciais não constituem tais certificações.",
                   ""])
     return "\n".join(lines)
 
