@@ -26,7 +26,7 @@ class SemanticCoverageTests(unittest.TestCase):
         rows = mod.ledger(self.path, "a" * 64, {})
         self.assertEqual([x["semantic_status"] for x in rows], ["unknown", "unknown"])
         report = mod.report(rows, "a" * 64)
-        self.assertIn("Funções inventariadas | 2", report)
+        self.assertIn("Entradas/símbolos no inventário | 2", report)
         self.assertIn("Semântica integral certificada por registro | 0", report)
 
     def test_partial_is_not_certified(self):
@@ -44,6 +44,22 @@ class SemanticCoverageTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             mod.ledger(self.path, "a" * 64, {"00000010": {
                 "status": "partial", "binary_sha256": "b" * 64, "size": 120}})
+
+    def test_duplicate_symbols_share_single_execution_address(self):
+        with self.path.open("a", newline="") as stream:
+            csv.writer(stream).writerow(["00000010", 120, "alias_a"])
+        rows = mod.ledger(self.path, "a" * 64, {})
+        self.assertEqual(len(rows), 2)
+        self.assertEqual(rows[0]["symbols"], ["a", "alias_a"])
+        report = mod.report(rows, "a" * 64)
+        self.assertIn("Entradas/símbolos no inventário | 3", report)
+        self.assertIn("Endereços de execução únicos | 2", report)
+
+    def test_conflicting_alias_sizes_fail_closed(self):
+        with self.path.open("a", newline="") as stream:
+            csv.writer(stream).writerow(["00000010", 121, "wrong_alias"])
+        with self.assertRaises(ValueError):
+            mod.ledger(self.path, "a" * 64, {})
 
     def test_rejects_outside_inventory(self):
         with self.assertRaises(ValueError):
