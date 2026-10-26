@@ -22,6 +22,22 @@ import semantic_bxlr_contract_pilot as bxlr
 
 SCOPE = "original_a32_bxlr_normal_return_v1"
 PR_RE = re.compile(r"^https://github\.com/c1c3ru/fft_craft/pull/[1-9][0-9]*$")
+PRECONDITIONS = (
+    "ARM state at entry", "executable mapped 4-byte instruction",
+    "valid mapped LR destination", "normal execution context",
+)
+POSTCONDITIONS = (
+    "PC=LR & ~1", "CPSR.T=LR & 1",
+    "other CPSR bits preserved", "R0-R14 preserved",
+)
+MEMORY_EFFECTS = ("none in the decoded function body",)
+CONTROL_FLOW = ("only unconditional BX LR; no internal callees",)
+REQUIRED_EVIDENCE = (
+    "original ELF instruction", "Capstone exact opcode",
+    "independent pure A32 BX LR transition model",
+    "Unicorn PC/CPSR/general-register/memory differential",
+)
+
 REVIEW_REQUIRED = (
     "type", "name", "github_login", "decision", "approval_pr",
     "approved_at", "notes",
@@ -49,12 +65,12 @@ def verify_one(record, row, binary, digest, reader=None, executor=None):
             or review["github_login"].strip().lower() in
             {"bot", "ci", "automated", "pending", "unknown"}):
         raise ValueError("not an explicit recorded human review")
-    if not isinstance(record.get("test_evidence"), list) or not record["test_evidence"]:
-        raise ValueError("missing referenced differential evidence")
-    if not all(record.get(k) for k in
-               ("contract", "preconditions", "postconditions",
-                "memory_effects", "control_flow")):
-        raise ValueError("missing contractual state or effect")
+    if (record.get("preconditions") != list(PRECONDITIONS)
+            or record.get("postconditions") != list(POSTCONDITIONS)
+            or record.get("memory_effects") != list(MEMORY_EFFECTS)
+            or record.get("control_flow") != list(CONTROL_FLOW)
+            or record.get("test_evidence") != list(REQUIRED_EVIDENCE)):
+        raise ValueError("approved BX LR proof must match full scoped contract")
     reader = reader or semantic_evidence.read_function
     executor = executor or bxlr.verify_interworking
     address = int(row["address"], 16)
