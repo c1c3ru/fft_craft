@@ -112,8 +112,8 @@ def build(binary, inventory, contracts_dir, limit=5,
 def render(batch):
     lines = [
         "# Primeira fila de revisão formal: contratos BX LR", "",
-        f"ELF SHA-256: \`{batch['elf_sha256']}\`", "",
-        f"Execução de origem do CI: \`{batch['source_ci_run_id']}\`", "",
+        f"ELF SHA-256: `{batch['elf_sha256']}`", "",
+        f"Execução de origem do CI: `{batch['source_ci_run_id']}`", "",
         f"- Contratos locais preparados para revisão: **{len(batch['candidates'])}**",
         "- Microexecuções **novas neste passo**: **0** "
         "(reutiliza as 32 observações ARM/Thumb por candidato).",
@@ -127,14 +127,14 @@ def render(batch):
     ]
     for r in batch["candidates"]:
         lines.append(
-            f"| \`{r['address']}\` | {r['name'].replace('|','/')} | "
-            f"\`{r['instruction_encoding']}\` | "
+            f"| `{r['address']}` | {r['name'].replace('|','/')} | "
+            f"`{r['instruction_encoding']}` | "
             f"{r['same_run_machine_samples']} | revisão pendente |"
         )
     lines += [
         "", "## Como concluir a revisão", "",
         "1. Conferir os registros individuais em "
-        "\`SEMANTIC_BXLR_REVIEW_BATCH.json\` com o ELF original.",
+        "`SEMANTIC_BXLR_REVIEW_BATCH.json` com o ELF original.",
         "2. Verificar as pré/pós-condições e documentar ressalvas; "
         "o escopo **não** cobre o programa completo.",
         "3. Submeter proposta explícita de certificados ao ledger em PR "
