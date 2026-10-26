@@ -121,6 +121,7 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_next_boundaries.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_next_pointer_microexec.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_getparam_getscale.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_getparam_getscale_exec.py
           python3 - <<'PY'
           from pathlib import Path
           report = Path("FFT_Android_Mod/docs/re-results/SEMANTIC_SOUND_ICON_MICROEXEC.md").read_text()
@@ -328,6 +329,18 @@ jobs:
               "CFFT_STATE::GetParam", "CGX_SCREEN_CORRECT::GetScale",
               "linearly decoded", "Not proven"))
           print("PASS: original ELF ARM GetParam/GetScale callsite and opcode audit")
+          PY
+      - name: Verify original GetParam/GetScale machine contracts
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          report=Path("FFT_Android_Mod/docs/re-results/SEMANTIC_GETPARAM_GETSCALE_MICROEXEC.md").read_text()
+          assert all(x in report for x in (
+              "GetParam microexecutions: 64/64 PASS",
+              "GetScale microexecutions: 32/32 PASS",
+              "Combined GetParam/GetScale microexecutions: 96/96 PASS",
+              "synthetic inputs", "NOT a complete semantic-equivalence"))
+          print("PASS: 96 original ELF ARM getter and linked-call microexecutions")
           PY
       - name: Validate central project dashboard on real ELF
         run: |
