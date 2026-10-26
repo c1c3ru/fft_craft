@@ -954,12 +954,12 @@ address,size,mangled,demangled,status,section_ref
 00192cc8,392,_Z17eSelectWindowCluti,eSelectWindowClut(int),read_full,NOTES §550
 00199484,392,_Z17jSelectWindowCluti,jSelectWindowClut(int),read_full,NOTES §550
 001ac4ec,392,_Z6DrawG4P6RECT16P5COLORii,"DrawG4(RECT16*, COLOR*, int, int)",read_full,NOTES §548
-001cd308,392,_Z14check_learningiPt,"check_learning(int, unsigned short*)",read_structural,NOTES §601
+001cd308,392,_Z14check_learningiPt,"check_learning(int, unsigned short*)",read_full,NOTES §601
 001ef76c,392,_Z22requestAttackAnimationP13tag_animationS0_,"requestAttackAnimation(tag_animation*, tag_animation*)",read_full,NOTES §564
-00256174,392,_Z15ctlfsetnum_mainP7CTLINFO,ctlfsetnum_main(CTLINFO*),read_structural,NOTES §602
+00256174,392,_Z15ctlfsetnum_mainP7CTLINFO,ctlfsetnum_main(CTLINFO*),read_full,NOTES §602
 000b9bc4,388,_ZN9CSTR_UTIL17DecodeEscSequenceEPcS0_,"CSTR_UTIL::DecodeEscSequence(char*, char*)",read_full,NOTES §541
 0015daf4,388,_Z8iOSQSortPsS_S_S_iii,"iOSQSort(short*, short*, short*, short*, int, int, int)",read_structural,NOTES §608
-00176b80,388,_Z8bChrSorti,bChrSort(int),read_structural,NOTES §615
+00176b80,388,_Z8bChrSorti,bChrSort(int),read_full,NOTES §621
 001b6c00,388,_Z19MakeTextureMessage2PhPsP6RECT16i,"MakeTextureMessage2(unsigned char*, short*, RECT16*, int)",read_structural,NOTES §608
 00201798,388,_Z18setActionDirectionP13tag_animationS0_,"setActionDirection(tag_animation*, tag_animation*)",read_structural,NOTES §608
 0025c928,388,_Z14ctlshogou_mainP7CTLINFO,ctlshogou_main(CTLINFO*),read_structural,NOTES §608
@@ -1054,11 +1054,11 @@ address,size,mangled,demangled,status,section_ref
 0021ff74,348,_Z16p09_chakusuiFuncv,p09_chakusuiFunc(),read_structural,NOTES §410
 00244f18,348,_Z15roll_autochangev,roll_autochange(),read_structural,NOTES §609
 0024748c,348,_Z15ctlchrmake_initv,ctlchrmake_init(),read_structural,NOTES §442
-0024ac38,348,_Z18vOpn_defscrwin_setiiP6_POINTS0_,"vOpn_defscrwin_set(int, int, _POINT*, _POINT*)",read_structural,NOTES §615
+0024ac38,348,_Z18vOpn_defscrwin_setiiP6_POINTS0_,"vOpn_defscrwin_set(int, int, _POINT*, _POINT*)",read_full,NOTES §620
 002615cc,348,_Z13ctlhaken_mainP7CTLINFO,ctlhaken_main(CTLINFO*),read_structural,NOTES §382
 0027e7a4,348,_ZN22iOS_CMenuTouchSaveLoad7execTapEP30IOS_MENU_TOUCH_SAVELOAD_RESULTPiS2_,"iOS_CMenuTouchSaveLoad::execTap(IOS_MENU_TOUCH_SAVELOAD_RESULT*, int*, int*)",read_structural,NOTES §364
 0029aabc,348,ReadTIM,ReadTIM,read_structural,NOTES §609
-002b582c,348,_Z9Logo_Initv,Logo_Init(),read_structural,NOTES §615
+002b582c,348,_Z9Logo_Initv,Logo_Init(),read_full,NOTES §619
 000b4d30,344,_ZN15CINPUT_IF_TOUCH13GetTouchStateEP19_INPUT_DEVICE_TOUCHP11_INPUT_DATA,"CINPUT_IF_TOUCH::GetTouchState(_INPUT_DEVICE_TOUCH*, _INPUT_DATA*)",read_full,NOTES §538
 000d78f0,344,_Z18allocatememorywaiti,allocatememorywait(int),read_structural,NOTES §615
 001d5188,344,_Z20set_sanjutsuability3ihPs,"set_sanjutsuability3(int, unsigned char, short*)",read_structural,NOTES §609

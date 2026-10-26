@@ -170,9 +170,9 @@ address,size,mangled,demangled,status,section_ref
 0024e5a8,396,_Z21iOS_chkBraveEventFlagj,iOS_chkBraveEventFlag(unsigned int),read_full,
 00259780,396,_Z14ctlhismes_initi,ctlhismes_init(int),read_structural,NOTES §580
 001c6fb4,392,_Z16SelectWindowCluti,SelectWindowClut(int),read_full,
-00256174,392,_Z15ctlfsetnum_mainP7CTLINFO,ctlfsetnum_main(CTLINFO*),read_structural,NOTES §602
+00256174,392,_Z15ctlfsetnum_mainP7CTLINFO,ctlfsetnum_main(CTLINFO*),read_full,NOTES §602
 001ef76c,392,_Z22requestAttackAnimationP13tag_animationS0_,"requestAttackAnimation(tag_animation*, tag_animation*)",read_full,
-001cd308,392,_Z14check_learningiPt,"check_learning(int, unsigned short*)",read_structural,NOTES §601
+001cd308,392,_Z14check_learningiPt,"check_learning(int, unsigned short*)",read_full,NOTES §601
 001ac4ec,392,_Z6DrawG4P6RECT16P5COLORii,"DrawG4(RECT16*, COLOR*, int, int)",read_full,
 00199484,392,_Z17jSelectWindowCluti,jSelectWindowClut(int),read_full,
 00192cc8,392,_Z17eSelectWindowCluti,eSelectWindowClut(int),read_full,
@@ -186,7 +186,7 @@ address,size,mangled,demangled,status,section_ref
 00201798,388,_Z18setActionDirectionP13tag_animationS0_,"setActionDirection(tag_animation*, tag_animation*)",read_structural,NOTES §608
 002c9b11,388,__gxx_personality_v0,__gxx_personality_v0,mentioned_unverified,NOTES §614
 0025c928,388,_Z14ctlshogou_mainP7CTLINFO,ctlshogou_main(CTLINFO*),read_structural,NOTES §608
-00176b80,388,_Z8bChrSorti,bChrSort(int),read_structural,NOTES §615
+00176b80,388,_Z8bChrSorti,bChrSort(int),read_full,NOTES §621
 001b6c00,388,_Z19MakeTextureMessage2PhPsP6RECT16i,"MakeTextureMessage2(unsigned char*, short*, RECT16*, int)",read_structural,NOTES §608
 0015daf4,388,_Z8iOSQSortPsS_S_S_iii,"iOSQSort(short*, short*, short*, short*, int, int, int)",read_structural,NOTES §608
 000b9bc4,388,_ZN9CSTR_UTIL17DecodeEscSequenceEPcS0_,"CSTR_UTIL::DecodeEscSequence(char*, char*)",read_full,
@@ -247,9 +247,9 @@ address,size,mangled,demangled,status,section_ref
 0015af24,352,_Z16iOSexecuteScrollv,iOSexecuteScroll(),read_structural,NOTES §615
 002878b4,352,_Z9Draw_Drawi,Draw_Draw(int),read_structural,NOTES §615
 0029aabc,348,ReadTIM,ReadTIM,read_structural,NOTES §609
-0024ac38,348,_Z18vOpn_defscrwin_setiiP6_POINTS0_,"vOpn_defscrwin_set(int, int, _POINT*, _POINT*)",read_structural,NOTES §615
+0024ac38,348,_Z18vOpn_defscrwin_setiiP6_POINTS0_,"vOpn_defscrwin_set(int, int, _POINT*, _POINT*)",read_full,NOTES §620
 0021f190,348,_Z17DisposePEffectTCBh,DisposePEffectTCB(unsigned char),read_structural,
-002b582c,348,_Z9Logo_Initv,Logo_Init(),read_structural,NOTES §615
+002b582c,348,_Z9Logo_Initv,Logo_Init(),read_full,NOTES §619
 00244f18,348,_Z15roll_autochangev,roll_autochange(),read_structural,NOTES §609
 001597c0,348,_Z19disp_worlddhelpmenuv,disp_worlddhelpmenu(),read_structural,NOTES §615
 0020ce1c,348,_Z10fileOpenPCPcPvii,"fileOpenPC(char*, void*, int, int)",read_full,

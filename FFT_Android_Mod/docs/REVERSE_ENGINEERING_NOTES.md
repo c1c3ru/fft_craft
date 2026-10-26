@@ -20447,67 +20447,136 @@ confirmados como dado. Lacunas remanescentes são de identidade
 nominal (callbacks/estruturas), mesmo padrão aceito em outros
 `read_full`.
 
-## 601. `check_learning(int, unsigned short*)` — resolução da checagem de aprendizado de habilidade por uso em batalha (rolagem de probabilidade sobre a habilidade de comando do job atual) (2026-10-25, Fase 3, octogésimo quarto lote, revisão semântica sobre checkpoint do CI)
+## 601. `check_learning(int, unsigned short*)` — leitura completa: scan de até 20 entradas (stride 486 B) excluindo o próprio slot, bitmask de 24 habilidades por job, `check_prob` com taxa vinda do registro da habilidade ativa (2026-10-25 + revisão byte a byte 2026-10-26, sobre o painel v3)
 
-`check_learning(int, unsigned short*)` (`0x1cd308`, 392 B) —
-checkpoint do pipeline automatizado (`docs/re-results/001cd308.json`):
-93 de ~98 instruções possíveis (95%), 0 tabelas de salto, 16
-branches/8 de retrocesso. 5 `bl` distintos: `GetLocalJobNumber(short)`,
-`get_command_ability(int, int)`, `check_prob(int, int)`,
-`check_status_data2(BWORK*, int)`, `pspNetGetBattleModeFlag()`.
+`check_learning(int id, unsigned short* outParam)` (`0x1cd308`, 392
+B) — disassembly linear completo via Capstone. Código real termina
+em `0x1cd478` (95 instruções = 380 B); os 12 B restantes (3 words)
+são literal pool — confirma os "93 de ~98 slots" do checkpoint (95%),
+sem lacuna de código.
 
-Todos os cinco alvos já documentados. `get_command_ability` é a
-representação unificada de habilidade-comando (§142). `check_prob`
-é o primitivo de rolagem de probabilidade/RNG (§257). `check_status_data2`
-é o verificador de status de unidade (§159). `pspNetGetBattleModeFlag`
-é o gate de modo de rede mais citado do projeto.
+```c
+int check_learning(int id, unsigned short* outParam) {
+    if (*g_reentryGuard != 0) return -1;
+    uint16_t activeCmd = *g_activeCmdPtr;             // ID da habilidade de comando em uso
+    if (activeCmd == 0) return -1;
+    void* cmdEntry = g_cmdTableBase + activeCmd * 8;   // entrada de 8 B por comando
+    if (!(cmdEntry->byte3 & 0x20)) return -1;
+    if (pspNetGetBattleModeFlag() == 1) return -1;
 
-O nome e o catálogo batem com o mecanismo clássico de "aprender
-habilidade por uso em batalha" do FFT original: resolve o job da
-unidade, busca os dados da habilidade de comando usada, verifica
-elegibilidade via `check_status_data2`, e rola a chance de
-aprendizado via `check_prob` (provavelmente usando a taxa de
-aprendizado % embutida no registro da habilidade, não um RNG de rede
-— `check_prob` não é seguido aqui por `_pspNetRand` como em §257).
-O 2º parâmetro (`unsigned short*`) é quase certamente um out-param
-que recebe o código da habilidade recém-aprendida de volta para o
-chamador.
+    for (int slot = 0; slot < 21; slot++) {
+        if (slot == id) continue;                       // pula o próprio slot
+        void* unit = g_unitTableBase + slot * 0x1e6;     // stride 486 B
+
+        if (!(unit->byte_0x1ab & 2)) continue;           // unidade precisa estar "válida/ativa"
+        unit->byte_0x1ab = 4;
+        if (unit->byte_0x6 & 0x20) continue;              // já processada neste ciclo
+        if (check_status_data2(unit, 4) != 0) continue;
+
+        int job = GetLocalJobNumber(unit->byte_0x3);
+        uint8_t* bits = (uint8_t*)unit + job*3;
+        uint8_t mask[3] = { bits[0xa2], bits[0xa3], bits[0xa4] };  // 24 bits de habilidades aprendíveis
+
+        for (int bit = 0; bit < 24; bit++) {
+            if (!(mask[bit/8] & (0x80 >> (bit%8)))) continue;
+            if (get_command_ability(unit->byte_0x12, bit) != activeCmd) continue;
+            if (check_prob(100, cmdEntry->byte2) != 0) continue;  // taxa do PRÓPRIO comando
+            *outParam = activeCmd;
+            return slot;
+        }
+    }
+    return -1;
+}
+```
+
+**Confirma e refina por completo** a hipótese já registrada:
+`check_prob(100, r1)` usa literalmente uma taxa (0-100) lida do
+**registro do comando ativo** (`cmdEntry->byte2`), não um valor fixo
+— "taxa de aprendizado embutida na habilidade" confirmado com offset
+exato. O 2º parâmetro é out-param, gravado só no sucesso com o ID da
+habilidade ativa. **Achado não previsto**: a função varre até 20
+outras entradas de uma tabela de stride 486 B, explicitamente
+pulando o slot `id` do próprio parâmetro — não confirmado com
+certeza se são "unidades no campo" ou outro tipo de registro
+distinto de `BWORK`; a semântica exata da tabela fica como lacuna
+aberta, mas o mecanismo de bitmask-por-job e a rolagem de
+probabilidade estão confirmados byte a byte.
 
 **Conexão**: fecha, junto com §142/§159/§257, mais um consumidor do
 cluster de probabilidade/status de combate.
 
-**Status CSV: `read_structural`** (call-graph totalmente resolvido e
-cruzado contra quatro seções já documentadas; corpo dos blocos não
-lido instrução a instrução).
+**Status CSV: `read_full`** — 95 de 95 instruções reais lidas e
+atribuídas, todos os 5 `bl` já documentados (sem locais sem símbolo).
+Lacuna semântica aceita: identidade exata da tabela de 21×486 B.
 
-## 602. `ctlfsetnum_main(CTLINFO*)` — tela de ajuste de flag de evento numérica, confirma `ctlflag_winset` como o widget real compartilhado com `ctlflagset_init` (2026-10-25, Fase 3, octogésimo quarto lote, revisão semântica sobre checkpoint do CI)
+## 602. `ctlfsetnum_main(CTLINFO*)` — leitura completa: máquina de 3 estados (idle/confirmar/cancelar) com `ctlflag_winset` chamado só no quadro de confirmação, teardown de 2 structs paralelas (36/56 bytes) (2026-10-25 + revisão byte a byte 2026-10-26, sobre o painel v3)
 
-`ctlfsetnum_main(CTLINFO*)` (`0x256174`, 392 B) — checkpoint do
-pipeline automatizado (`docs/re-results/00256174.json`): 89 de ~98
-instruções possíveis (91%), 0 tabelas de salto, 8 branches/4 de
-retrocesso. 4 `bl` distintos: `Wwrite_eventflag(int, int)`,
-`Wtask_status(long)`, `ctlflag_winset(CTLINFO*)`, `sound_request(int)`.
+`ctlfsetnum_main(CTLINFO*)` (`0x256174`, 392 B) — disassembly linear
+completo via Capstone. Código real termina em `0x2562d4` (89
+instruções = 356 B); os 36 B restantes (9 words) são literal pool —
+confirma exatamente os "89 de ~98 slots" do checkpoint (91%), sem
+lacuna de código.
 
-Diferente do esqueleto padrão já fechado em `ctlperson_main` (§582) —
-sem `wldctl_active`, sem `curhis_get`/`curhis_clr`, sem chamada a um
-`_deactive` próprio. `ctlflag_winset(CTLINFO*)` é a mesma função já
-citada em `ctlflagset_init()` (§580) como "delega a maior parte do
-setup pra uma função irmã... ainda `unread`" — esta seção confirma
-que `ctlflag_winset` é um widget de janela **real e compartilhado**,
-usado tanto pelo setup (`ctlflagset_init`) quanto pelo loop por-frame
-desta tela relacionada mas distinta (`ctlfsetnum`, "flag-set number").
-O catálogo sugere que esta tela deixa o jogador ajustar o **valor
-numérico** de uma flag de evento (não só ativar/desativar como
-`ctlflagset`): grava o valor final via `Wwrite_eventflag(int, int)`,
-toca som de confirmação, e consulta `Wtask_status` pra saber quando a
-interação terminou.
+```c
+void ctlfsetnum_main(CTLINFO* this) {
+    if (this->field_0 == 0) {
+        uint32_t flags = *g_flagsPtr;
+        if (flags & 0x40) goto CANCEL;      // 0x256298
+        if (flags & 0x20) goto CONFIRM;      // 0x25625c
+        return;
+    }
+    if (Wtask_status(0xc) != 0)
+        goto <reteste de flags, 0x256190>;
+    *g_globalA = 0;  *g_globalB = 1;
+    int counter = --(*g_counterPtr);
+    if (this->field_0 == 1) goto JUST_CONFIRMED;   // 0x2562b8
+    goto TEARDOWN;                                   // 0x2561fc
+}
+
+CONFIRM:  // 0x25625c
+    sound_request(1);
+    this->field_0 = 1;
+    Wwrite_eventflag(this->field_4, *g_someShort);
+    return Wsend_taskparamater(0xc, 0, 0, 1);    // tail-call
+
+CANCEL:  // 0x256298
+    this->field_0 = 2;
+    return Wsend_taskparamater(0xc, 0, 0, 1);   // tail-call, sem som nem Wwrite_eventflag
+
+JUST_CONFIRMED:  // 0x2562b8
+    void* entry = &g_arrayD[(counter-2) * 92];
+    ctlflag_winset(entry);              // *** só chamado no quadro de confirmação ***
+    counter = *g_counterPtr;
+    goto TEARDOWN;
+
+TEARDOWN:  // 0x256204
+    int idxD = counter - 2;
+    void* entryD = &g_arrayD[idxD * 92];
+    void* entryE = (void*)(36 * entryD->field_0 + g_arrayE_base);
+    void* entryF = (void*)(56 * entryD->field_4 + g_arrayF_base);
+    entryE->field_4 = 2;
+    entryE->field_0x14 = 0;  entryF->field_0x14 = 0;
+    entryE->field_0xc  = 0;  entryE->field_0x10 = 0;
+}
+```
+
+**Achados concretos**: (1) `ctlflag_winset` **só é chamado no quadro
+exato em que a confirmação acontece**, não em todo teardown —
+confirma que é a rotina de "desenhar o widget com o valor final
+confirmado", não um setup genérico; (2) cancelar e confirmar
+divergem só em 2 chamadas antes de convergirem no mesmo tail-call
+`Wsend_taskparamater(0xc,0,0,1)`; (3) o teardown resolve dois structs
+paralelos de stride diferente (36 B/56 B) e zera 4 campos de flag
+entre os dois.
 
 **Conexão**: fecha, junto com `ctlflagset_init` (§580), a família
-`ctlflag*`/`ctlfsetnum*` de telas de ajuste de flag de evento —
-`ctlflag_winset` (o widget em si) e `ctlfsetnum_init` ficam como as
-duas pontas ainda não lidas.
+`ctlflag*`/`ctlfsetnum*` — `ctlflag_winset` (o widget em si) e
+`ctlfsetnum_init` ficam como as duas pontas ainda não lidas.
 
-**Status CSV: `read_structural`.**
+**Status CSV: `read_full`** — 89 de 89 instruções reais lidas e
+atribuídas a um ramo explícito; os 9 words de literal pool
+confirmados como dado. Lacuna aceita: identidade nominal exata dos
+globais de array (`g_arrayD/E/F`).
 
 ## 603. `birthday_change(CTLINFO*)` — helper de validação/redesenho compartilhado pela tela de entrada de data de nascimento (`ctlbirthday_main`, §347) (2026-10-25, Fase 3, octogésimo quarto lote, revisão semântica sobre checkpoint do CI)
 
@@ -23717,3 +23786,87 @@ junto, mesma identidade/cobertura). **Zero funções `unread`
 restam no `RE_FUNCTION_INVENTORY.csv`** — todo o inventário de 6.455
 funções tem agora status `read_full`, `read_structural` ou
 `mentioned_unverified`.
+
+## 619. `Logo_Init()` — leitura completa: seleção de tier retina via `GetDeviceScale()`, primeira ocorrência da resolução de referência 960×640 em `CGX_SCREEN_CORRECT::Init` (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §615)
+
+`Logo_Init()` (`0x2b582c`, 348 B) — disassembly linear completo via
+Capstone. 74 de 74 instruções reais lidas e atribuídas (código
+termina em `0x2b5938`); os 13 words finais (52 B) são literal pool —
+total exato de 348 B, sem lacuna de código. Esta função fazia parte
+do lote de 500 (§615, tratada só por reconhecimento de padrão); a
+releitura completa abaixo substitui aquele tratamento superficial.
+
+```c
+void Logo_Init(void) {
+    float scale = CAPP_INFO::GetDeviceScale();
+    int a, b, c;
+    if (scale >= 2.0f) { a = 3; b = 5; c = -3; }   // tier retina
+    else                { a = 0; b = 2; c = 0; }    // tier padrão
+
+    CRECT::Register(a, b, c, ...);
+    CGX_SCREEN_CORRECT::Init(960, 640, ...);   // resolução de referência de design
+    CINPUT_IF_TOUCH::ClearAll();
+    NowLoading_Init();
+    CTHREAD::Register(&logo_thread_func, ...);  // ponteiro PC-relative real
+}
+```
+
+**Achado não previsto**: primeira seção do projeto a expor a
+resolução de referência de design `960×640` sendo passada
+literalmente pra `CGX_SCREEN_CORRECT::Init` — confirma que todo o
+sistema de escala de tela (`RETINA_SCALE`, já visto em
+`iOS_v2menuSetType`, §581) deriva dessa constante de design fixa, não
+de uma detecção dinâmica de resolução do dispositivo. O branch por
+`GetDeviceScale()>=2.0f` é o mesmo padrão binário de 2 tiers já visto
+em outras inicializações sensíveis a retina.
+
+**Status CSV: `read_full`** — 74/74 instruções reais, todos os `bl`
+já documentados em seções anteriores.
+
+## 620. `vOpn_defscrwin_set(int, int, _POINT*, _POINT*)` — leitura completa: monta descritor de janela de 18 campos, valores fixos 512/256, termina em tail-call real (`b`, não `bl`) pra `Wsend_taskparamater` (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §615)
+
+`vOpn_defscrwin_set(int, int, _POINT*, _POINT*)` (`0x24ac38`, 348 B)
+— disassembly linear completo via Capstone. 79 de 79 instruções
+reais lidas e atribuídas (código termina em `0x24ad24`); os 8 words
+finais (32 B) são literal pool — total exato de 348 B, sem lacuna de
+código. Também fazia parte do lote de 500 (§615); a releitura
+completa abaixo substitui aquele tratamento superficial.
+
+A função monta um descritor de janela de 18 campos a partir dos 2
+parâmetros `_POINT*` mais 6 globais resolvidos via GOT, com dois
+valores fixos `0x200`/`0x100` (512/256) gravados nos offsets
+`0x00`/`0x02` do descritor. Termina chamando `Wtask_create` e então
+faz um **tail-call real** (instrução `b`, não `bl`) pra
+`Wsend_taskparamater` — ou seja, o retorno de `vOpn_defscrwin_set`
+*é* o retorno de `Wsend_taskparamater`, sem instrução de retorno
+própria.
+
+**Status CSV: `read_full`** — 79/79 instruções reais, todos os `bl`
+(e o tail-call `b` final) já documentados.
+
+## 621. `bChrSort(int)` — leitura completa: ordenação bubble multi-critério com inversão de direção por seletor, reconstrói array de saída com ponteiros resolvidos via tabela paralela de stride 324 B (2026-10-26, revisão byte a byte sobre o painel v3, seção nova — não havia entrada dedicada antes do §615)
+
+`bChrSort(int)` (`0x176b80`, 388 B) — disassembly linear completo
+via Capstone. 90 de 90 instruções reais lidas e atribuídas (código
+termina em `0x176cd4`); os 7 words finais (28 B) são literal pool —
+total exato de 388 B, sem lacuna de código. Função-folha pura (0
+`bl`) — fazia parte do lote de 500 (§615, só reconhecimento de
+padrão); esta é a primeira leitura dedicada.
+
+Implementa um bubble sort multi-chave com tie-break: itera uma
+sequência de bytes seletores via uma tabela indireta `g_keyByteTable`
+pra encontrar, por critério, o offset do campo correspondente em
+registros de personagem de stride 324 B. A direção da comparação
+inverte dependendo do valor do seletor (`<=3` vs `>3`). Depois de
+ordenar os índices, reconstrói um array de saída com **ponteiros
+resolvidos** (não só índices) a partir de uma segunda tabela paralela
+de stride 324 B (`g_recordTable2`).
+
+**Lacunas semânticas aceitas**: identidade exata de `g_recordTable`,
+`g_keyByteTable` e `g_recordTable2`, e o significado concreto de cada
+valor de seletor (provavelmente corresponde a critérios de
+ordenação de lista de personagens: nome, job, nível, etc., mas sem
+confirmação direta nesta passada).
+
+**Status CSV: `read_full`** — 90/90 instruções reais, função-folha
+sem `bl` a verificar.
