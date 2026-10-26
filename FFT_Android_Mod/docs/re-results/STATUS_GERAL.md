@@ -26,6 +26,8 @@ O histórico CSV contém **5,932** registros de análise anterior, que podem se 
 
 Os relatórios abaixo apresentam **efeitos locais testados sob estados sintéticos** e seus limites. Testes passando não significam que a função inteira foi reconstruída:
 
+- [Próximas leituras globais de som e ícones verificadas até as primeiras chamadas BL](SEMANTIC_NEXT_POINTER_MICROEXEC.md)
+- [Inventário dos opcodes ARM reais nos limites de som e ícones](SEMANTIC_NEXT_BOUNDARIES.md)
 - [Som até 0x2b2b7c e prólogo de iOS_SetIconPosition até 0x2b8928](SEMANTIC_SOUND_ICON_MICROEXEC.md)
 - [Três callees ARM e duas continuações controladas do chamador](SEMANTIC_THREE_CALLEES_EXECUTION.md)
 - [BL/BX LR de V2Icon e seleção de três caminhos](SEMANTIC_V2ICON_CALL_FLOW.md)
@@ -35,8 +37,8 @@ Os relatórios abaixo apresentam **efeitos locais testados sob estados sintétic
 
 ### Lacunas semânticas conhecidas
 
-- `0x2b2b7c`: Analisar o próximo código de som e seus efeitos verificáveis.
-- `0x2b8928`: Modelar a primeira leitura global de iOS_SetIconPosition.
+- `0x28c320`: Investigar a chamada seguinte de SysSE_Play após validar seus argumentos.
+- `0x0a6f28`: Investigar a primeira chamada de iOS_SetIconPosition com ponteiro controlado.
 
 Estas duas prioridades são **curadas no gerador**; quando um limite for resolvido, a descrição deve ser atualizada no mesmo PR de análise.
 
@@ -53,11 +55,11 @@ Estas duas prioridades são **curadas no gerador**; quando um limite for resolvi
 
 ## Pull requests recentes
 
+- [PR #297 — feat(re): auditar instruções reais nos próximos limites de som e ícones](https://github.com/c1c3ru/fft_craft/pull/297)
+- [PR #296 — chore(re): automated structural batch 40295799498](https://github.com/c1c3ru/fft_craft/pull/296)
 - [PR #295 — chore(re): automated structural batch 40246019946](https://github.com/c1c3ru/fft_craft/pull/295)
 - [PR #294 — feat(re): gerar STATUS_GERAL.md automaticamente e destacá-lo no README](https://github.com/c1c3ru/fft_craft/pull/294)
 - [PR #293 — chore(re): automated structural batch 40245079093](https://github.com/c1c3ru/fft_craft/pull/293)
-- [PR #291 — feat(re): mapear SysSE_PlayDef e prólogo real de iOS_SetIconPosition](https://github.com/c1c3ru/fft_craft/pull/291)
-- [PR #290 — chore(re): automated structural batch 40243952613](https://github.com/c1c3ru/fft_craft/pull/290)
 
 ## Atualização automática e fontes
 
