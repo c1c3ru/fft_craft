@@ -37,6 +37,8 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/semantic_certificate_gate.py'
       - 'FFT_Android_Mod/docs/re-results/semantic-certificates.json'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_certificate_gate.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_bxlr_review_batch.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_bxlr_review_batch.py'
 
 permissions:
   contents: read
@@ -72,6 +74,7 @@ jobs:
           python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_history.py' -v
           python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_leaf_bxlr.py' -v
           python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_bxlr_contract_pilot.py' -v
+          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_bxlr_review_batch.py' -v
           python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_arm_bx_reference.py' -v
       - name: Generate exact-binary semantic dashboard and worker manifests
         env:
@@ -90,6 +93,10 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_bxlr_contract_pilot.py \
             --limit 303 --output /tmp/fft-semantic/contract-pilot \
             --report FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_CONTRACT_PILOT.md
+          python3 FFT_Android_Mod/docs/re-tools/semantic_bxlr_review_batch.py \
+            --limit 5 --contracts-dir /tmp/fft-semantic/contract-pilot \
+            --manifest FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_REVIEW_BATCH.json \
+            --report FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_REVIEW_BATCH.md
           python3 FFT_Android_Mod/docs/re-tools/semantic_work_queue.py \
             --workers "$WORKERS" --limit "$LIMIT" \
             --candidate-evidence-dir /tmp/fft-semantic/dynamic-evidence \
@@ -120,6 +127,10 @@ jobs:
             /tmp/fft-semantic/SEMANTIC_LEAF_BXLR.md
           cp FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_CONTRACT_PILOT.md \
             /tmp/fft-semantic/SEMANTIC_BXLR_CONTRACT_PILOT.md
+          cp FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_REVIEW_BATCH.md \
+            /tmp/fft-semantic/SEMANTIC_BXLR_REVIEW_BATCH.md
+          cp FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_REVIEW_BATCH.json \
+            /tmp/fft-semantic/SEMANTIC_BXLR_REVIEW_BATCH.json
           cp FFT_Android_Mod/docs/re-results/SEMANTIC_RUN_SNAPSHOT.json \
             /tmp/fft-semantic/SEMANTIC_RUN_SNAPSHOT.json
       - uses: actions/upload-artifact@v4
