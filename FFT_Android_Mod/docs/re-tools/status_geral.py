@@ -19,6 +19,8 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "docs/re-results"
 REPO = "c1c3ru/fft_craft"
 MILESTONES = (
+    ("SEMANTIC_HOUKOKU_NEXT_BOUNDARIES.md",
+     "Destinos ARM seguintes de houkoku_okng auditados sem executar ramos desconhecidos"),
     ("SEMANTIC_POST_GETTER_PATHS.md",
      "Três destinos de SysSE_Play e argumentos pós-GetScale verificados por máquina"),
     ("SEMANTIC_GETPARAM_GETSCALE_MICROEXEC.md",
