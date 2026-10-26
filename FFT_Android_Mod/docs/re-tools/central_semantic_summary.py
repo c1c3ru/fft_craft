@@ -136,8 +136,15 @@ def summarize(inventory, digest, certificates_path, pilot_dir=None,
            (pilot_dir, dynamic_dir, manifests_dir, contracts_dir)):
         if snapshot_path is not None:
             import semantic_run_snapshot
-            snapshot = semantic_run_snapshot.load(
-                snapshot_path, digest, certificates, len(rows))
+            try:
+                snapshot = semantic_run_snapshot.load(
+                    snapshot_path, digest, certificates, len(rows))
+            except ValueError:
+                # A new certificate ledger invalidates cached partial totals.
+                # Ignore old evidence rather than blocking a legitimate
+                # certificate PR; CI will regenerate the snapshot after merge.
+                snapshot = None
+                result["evidence_origin"] = "stale_snapshot"
             if snapshot is not None:
                 result.update(snapshot["metrics"])
                 result["evidence_origin"] = "snapshot"
@@ -160,6 +167,8 @@ def render(summary):
          "nesta geração do painel." if s.get("evidence_origin") == "snapshot"
          else "Evidências geradas e verificadas nesta execução do pipeline."
          if s.get("evidence_origin") == "current_run"
+         else "Snapshot de evidências desatualizado; não foi utilizado nesta geração."
+         if s.get("evidence_origin") == "stale_snapshot"
          else "Nenhum lote dinâmico carregado nesta geração."), "",
         "| Indicador | Resultado |", "|---|---:|",
         f"| Entradas do inventário | {s['symbols']:,} |",
