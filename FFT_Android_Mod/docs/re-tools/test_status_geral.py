@@ -67,6 +67,7 @@ class StatusGeralTests(unittest.TestCase):
             "certified_bytes": 120, "total_bytes": 1500000,
             "partial_certificate_records": 3, "partial_evidence_unique": 7,
             "static_reports": 5, "unicorn_reports": 2,
+            "dynamic_samples": 168,
             "assigned": 5, "pending": [],
         }
         report = status.render(metrics(), self.results, semantic=semantic)

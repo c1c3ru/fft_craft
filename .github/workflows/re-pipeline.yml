@@ -370,9 +370,9 @@ jobs:
               "0x2b8928",
               "SEMANTIC_EVIDENCE_INDEX.md",
               "GitHub Actions"))
-          assert "Endereços com evidência parcial registrada ou gerada nesta execução" in report
           assert "Cobertura semântica por endereço" in report
           assert "Cobertura semântica por bytes únicos" in report
+          assert "Endereços com evidência parcial registrada ou gerada nesta execução" in report
           print("PASS: same-ELF dashboard retains structural/semantic distinction")
           PY
       - uses: actions/upload-artifact@v4

@@ -23,6 +23,8 @@ def summarize(inventory, digest, certificates_path, pilot_dir=None,
                           if r["semantic_status"] == "certified")
     partial = set(r["address"] for r in rows if r["semantic_status"] == "partial")
     sources = {}
+    dynamic_samples = 0
+    shared_samples = {}
     for source, folder, glob in (
         ("static", pilot_dir, "*.json"),
         ("unicorn", dynamic_dir, "*.json"),
@@ -39,9 +41,28 @@ def summarize(inventory, digest, certificates_path, pilot_dir=None,
                 if address in observed:
                     raise ValueError(f"duplicate evidence: {path}")
                 observed.add(address)
+                if source == "unicorn":
+                    if record.get("certified") is not False:
+                        raise ValueError(f"dynamic evidence cannot certify: {path}")
+                    if "machine_samples_passed" in record:
+                        n = record["machine_samples_passed"]
+                        if type(n) is not int or n <= 0:
+                            raise ValueError(f"invalid machine sample count: {path}")
+                        dynamic_samples += n
+                    elif "suite_samples_passed" in record:
+                        n = record["suite_samples_passed"]
+                        scope = record.get("suite_sample_count_scope")
+                        if type(n) is not int or n <= 0 or not scope:
+                            raise ValueError(f"invalid shared sample count: {path}")
+                        if scope in shared_samples and shared_samples[scope] != n:
+                            raise ValueError(f"inconsistent shared machine suite: {path}")
+                        shared_samples[scope] = n
+                    else:
+                        raise ValueError(f"missing machine sample count: {path}")
                 if mapped[address]["semantic_status"] != "certified":
                     partial.add(address)
         sources[source] = len(observed)
+    dynamic_samples += sum(shared_samples.values())
     assigned = set()
     if manifests_dir is not None:
         for path in sorted(Path(manifests_dir).glob("semantic-worker-*.json")):
@@ -64,6 +85,7 @@ def summarize(inventory, digest, certificates_path, pilot_dir=None,
         "partial_evidence_unique": len(partial),
         "static_reports": sources["static"], "unicorn_reports": sources["unicorn"],
         "assigned": len(assigned), "pending": pending,
+        "dynamic_samples": dynamic_samples,
     }
 
 
@@ -83,6 +105,7 @@ def render(summary):
         f"| Endereços com evidência parcial registrada ou gerada nesta execução | {s['partial_evidence_unique']:,} |",
         f"| Relatórios estáticos deste lote | {s['static_reports']:,} |",
         f"| Relatórios Unicorn deste lote | {s['unicorn_reports']:,} |",
+        f"| Microexecuções Unicorn verificadas neste lote (sem duplicar suítes) | {s['dynamic_samples']:,} |",
         f"| Endereços distribuídos aos workers neste lote | {s['assigned']:,} |",
         f"| Endereços aguardando certificação | {len(s['pending']):,} |",
         "", "### Próximos contratos ainda não certificados (maiores primeiro)", "",

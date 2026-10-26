@@ -26,6 +26,23 @@ class DynamicEvidenceTests(unittest.TestCase):
                             and r["certified"] is False
                             and r["unverified"] for r in rows))
 
+    def test_callee_evidence_is_partial_and_not_double_counted(self):
+        digest = "a" * 64
+        report = f"ELF SHA-256: `{digest}`\\n{mod.CALLEE_MARKER}"
+        rows = mod.verified_callee_records(report, digest)
+        self.assertEqual(len(rows), 4)
+        self.assertEqual(len({r["address"] for r in rows}), 4)
+        self.assertTrue(all(r["certified"] is False and
+                            r["semantic_status"] == "partial" for r in rows))
+        self.assertTrue(all(r["suite_samples_passed"] == 72 for r in rows))
+        self.assertTrue(all("do not sum" in r["suite_sample_count_scope"]
+                            for r in rows))
+
+    def test_callee_wrong_binary_rejected(self):
+        with self.assertRaises(ValueError):
+            mod.verified_callee_records(
+                f"ELF SHA-256: `{'b'*64}`\\n{mod.CALLEE_MARKER}", "a"*64)
+
     def test_missing_machine_test_count_fails_closed(self):
         digest = "a" * 64
         with self.assertRaises(ValueError):

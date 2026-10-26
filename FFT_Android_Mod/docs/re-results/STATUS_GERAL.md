@@ -16,7 +16,7 @@
 | Checkpoints pendentes de criação | 0 | Não incluem funções cobertas apenas pelo histórico CSV |
 | Metas de núcleo em revisão | 73 | De 2,345 checkpoints do núcleo |
 | v3: checkpoints / aprovados / revisão | 1,213 / 1,169 / 44 | Subconjunto já analisado pelas regras v3 |
-| Funções com **equivalência semântica integral certificada** | **não mensurado** | O pipeline atual não mantém certificações formais por função; microexecuções não substituem esse certificado |
+| Equivalência semântica integral registrada | **0** | Certificados revisáveis vinculados ao ELF; microexecuções não são certificados |
 
 O histórico CSV contém **5,932** registros de análise anterior, que podem se sobrepor aos checkpoints. **Não somamos esses conjuntos para criar um percentual global fictício.**
 
@@ -25,6 +25,16 @@ O histórico CSV contém **5,932** registros de análise anterior, que podem se 
 89/89 relatórios estáticos de evidências. **Relatórios não são equivalência semântica certificada.**
 
 Os relatórios abaixo apresentam **efeitos locais testados sob estados sintéticos** e seus limites. Testes passando não significam que a função inteira foi reconstruída:
+
+- [Três destinos de SysSE_Play e argumentos pós-GetScale verificados por máquina](SEMANTIC_POST_GETTER_PATHS.md)
+- [GetParam/GetScale ARM: 96 microexecuções individuais e via BL original](SEMANTIC_GETPARAM_GETSCALE_MICROEXEC.md)
+- [Instruções e destinos de chamada GetParam/GetScale auditados](SEMANTIC_GETPARAM_GETSCALE_AUDIT.md)
+- [Próximas leituras globais de som e ícones verificadas até as primeiras chamadas BL](SEMANTIC_NEXT_POINTER_MICROEXEC.md)
+- [Inventário dos opcodes ARM reais nos limites de som e ícones](SEMANTIC_NEXT_BOUNDARIES.md)
+- [Som até 0x2b2b7c e prólogo de iOS_SetIconPosition até 0x2b8928](SEMANTIC_SOUND_ICON_MICROEXEC.md)
+- [Três callees ARM e duas continuações controladas do chamador](SEMANTIC_THREE_CALLEES_EXECUTION.md)
+- [BL/BX LR de V2Icon e seleção de três caminhos](SEMANTIC_V2ICON_CALL_FLOW.md)
+- [Retorno ARM real e alterações de memória antes da primeira chamada](SEMANTIC_RETURN_CALL_BOUNDARY.md)
 
 ## Cobertura semântica e execução paralela
 
@@ -38,9 +48,10 @@ Os números certificados representam **registros formais válidos para este ELF*
 | Cobertura semântica por endereço | 0.00% |
 | Cobertura semântica por bytes únicos | 0.00% |
 | Registros parciais no ledger | 0 |
-| Endereços com evidência parcial registrada ou gerada nesta execução | 7 |
+| Endereços com evidência parcial registrada ou gerada nesta execução | 11 |
 | Relatórios estáticos deste lote | 5 |
-| Relatórios Unicorn deste lote | 2 |
+| Relatórios Unicorn deste lote | 6 |
+| Microexecuções Unicorn verificadas neste lote (sem duplicar suítes) | 168 |
 | Endereços distribuídos aos workers neste lote | 5 |
 | Endereços aguardando certificação | 6,329 |
 
@@ -67,16 +78,6 @@ Os números certificados representam **registros formais válidos para este ELF*
 O restante da fila permanece nos manifestos e no `SEMANTIC_COVERAGE.md`. Observações Unicorn limitadas e verificações estáticas não alteram automaticamente certificados.
 
 
-- [Três destinos de SysSE_Play e argumentos pós-GetScale verificados por máquina](SEMANTIC_POST_GETTER_PATHS.md)
-- [GetParam/GetScale ARM: 96 microexecuções individuais e via BL original](SEMANTIC_GETPARAM_GETSCALE_MICROEXEC.md)
-- [Instruções e destinos de chamada GetParam/GetScale auditados](SEMANTIC_GETPARAM_GETSCALE_AUDIT.md)
-- [Próximas leituras globais de som e ícones verificadas até as primeiras chamadas BL](SEMANTIC_NEXT_POINTER_MICROEXEC.md)
-- [Inventário dos opcodes ARM reais nos limites de som e ícones](SEMANTIC_NEXT_BOUNDARIES.md)
-- [Som até 0x2b2b7c e prólogo de iOS_SetIconPosition até 0x2b8928](SEMANTIC_SOUND_ICON_MICROEXEC.md)
-- [Três callees ARM e duas continuações controladas do chamador](SEMANTIC_THREE_CALLEES_EXECUTION.md)
-- [BL/BX LR de V2Icon e seleção de três caminhos](SEMANTIC_V2ICON_CALL_FLOW.md)
-- [Retorno ARM real e alterações de memória antes da primeira chamada](SEMANTIC_RETURN_CALL_BOUNDARY.md)
-
 ## Próximas prioridades
 
 ### Lacunas semânticas conhecidas
@@ -99,11 +100,11 @@ Estas duas prioridades são **curadas no gerador**; quando um limite for resolvi
 
 ## Pull requests recentes
 
-- [PR #307 — feat(re): centralizar cobertura semântica, workers e Unicorn no STATUS_GERAL](https://github.com/c1c3ru/fft_craft/pull/307)
-- [PR #308 — Feat/re review shards 20261026](https://github.com/c1c3ru/fft_craft/pull/308)
-- [PR #306 — feat(re): publicar evidências Unicorn por função sem certificar semântica integral](https://github.com/c1c3ru/fft_craft/pull/306)
-- [PR #305 — fix(re): correct semantic CI and run first five-address ARM evidence pilot](https://github.com/c1c3ru/fft_craft/pull/305)
-- [PR #304 — feat(re): fila semântica para todas as 6.455 funções e manifests em CI](https://github.com/c1c3ru/fft_craft/pull/304)
+- [PR #314 — feat(re): expandir evidência Unicorn e corrigir teste do STATUS_GERAL](https://github.com/c1c3ru/fft_craft/pull/314)
+- [PR #313 — chore(re): automated structural batch 40383654586](https://github.com/c1c3ru/fft_craft/pull/313)
+- [PR #312 — Feat/re three callees dynamic evidence 20261026](https://github.com/c1c3ru/fft_craft/pull/312)
+- [PR #311 — chore(re): automated structural batch 40375878660](https://github.com/c1c3ru/fft_craft/pull/311)
+- [PR #310 — fix(re): corrigir divergência semântica no STATUS_GERAL e testar métricas](https://github.com/c1c3ru/fft_craft/pull/310)
 
 ## Atualização automática e fontes
 
@@ -115,4 +116,4 @@ O workflow `re-pipeline.yml` testa a geração em PRs sem publicar as alteraçõ
 - [REVIEW_TRIAGE.md](REVIEW_TRIAGE.md) — critérios de priorização.
 - [GitHub Actions](https://github.com/c1c3ru/fft_craft/actions) — execução e eventuais falhas de CI.
 
-**Limitação:** o painel não é um contador de reconstrução semântica completa. Uma certificação desse tipo exigiria contratos e testes integrais por função que ainda não são registrados pelo pipeline.
+**Limitação:** o painel não é um contador de reconstrução semântica completa. Uma certificação desse tipo exigiria contratos e testes integrais por função; os registros parciais não constituem tais certificações.
