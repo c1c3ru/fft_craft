@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "review_protocol": "independent_github_review_request_v1",
+  "elf_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "status": "human_review_requested",
+  "certified": false,
+  "certificate_fingerprints": {
+    "000a6d5c": "3076c55ba2b97e4d6b4bfd9e4ed2c9dff93509c7425eba51d98e83387ee7e28d",
+    "000a7e78": "a6631d12959322f5e9dc6e5e67e46dbc03bceac1249048b7954014c66e863392",
+    "000a8560": "73e618038ddd59ade2e8dc5b5066d949ae8e0596c76d841fce324f07cbd28890",
+    "000a8564": "ff0cb2ffa408080560eddb773205d52bc107f9a6444d60f52221dbfab97ca50d",
+    "000a8568": "46921e82567cf2a57b4af0ec1d90a2c0f59ead27e6c293ef09cab2786bcbd260"
+  },
+  "instructions_to_reviewer": "Review exact original ELF, ARM/Thumb return normal-state scope, exceptions excluded, address and each contract fingerprint. Approve this PR only if all requested contracts are independently accepted."
+}
