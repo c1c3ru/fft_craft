@@ -118,6 +118,8 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_sound_chain.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_sound_dispatch_audit.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_sound_icon_microexec.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_next_boundaries.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_next_pointer_microexec.py
           python3 - <<'PY'
           from pathlib import Path
           report = Path("FFT_Android_Mod/docs/re-results/SEMANTIC_SOUND_ICON_MICROEXEC.md").read_text()
@@ -293,6 +295,27 @@ jobs:
           assert 0x244204 in true_calls, "Expected BL missing"
           assert 0x244358 not in true_calls, "BLE misclassified as function call"
           print("PASS: real ELF local bitmask effect and BL/BLE distinction")
+          PY
+      - name: Audit sound and icon next boundaries from real ELF
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          report = Path("FFT_Android_Mod/docs/re-results/SEMANTIC_NEXT_BOUNDARIES.md").read_text()
+          assert all(x in report for x in (
+              "0x2b2b7c", "0x2b8928", "linear", "not a demonstrated",
+              "semantic equivalence"))
+          print(report)
+          PY
+      - name: Verify next sound and icon pointer contracts
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          report=Path("FFT_Android_Mod/docs/re-results/SEMANTIC_NEXT_POINTER_MICROEXEC.md").read_text()
+          assert all(value in report for value in (
+              "Sound next-boundary microexecutions: **30/30 PASS**",
+              "Icon first-global-read microexecutions: **30/30 PASS**",
+              "0x2b2b98", "0x2b8938", "not executed"))
+          print("PASS: 60 machine executions through sound/icon pointer loads on original ELF")
           PY
       - name: Validate central project dashboard on real ELF
         run: |
