@@ -2,7 +2,7 @@
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Execução de origem do CI: `40417516285`
+Execução de origem do CI: `40419767759`
 
 - Contratos locais preparados para revisão: **5**
 - Microexecuções **novas neste passo**: **0** (reutiliza as 32 observações ARM/Thumb por candidato).
@@ -12,11 +12,11 @@ Execução de origem do CI: `40417516285`
 
 | Endereço | Função | Opcode original | Testes anteriores | Estado |
 |---|---|---|---:|---|
-| `000a6d5c` | CGX_SCREEN_CORRECT::~CGX_SCREEN_CORRECT() | `1eff2fe1` | 32 | revisão pendente |
-| `000a7e78` | CEGL2_IF::Setup3D() | `1eff2fe1` | 32 | revisão pendente |
-| `000a8560` | CEGL2_IF::DrawGrid() | `1eff2fe1` | 32 | revisão pendente |
-| `000a8564` | CEGL2_IF::DrawAxis() | `1eff2fe1` | 32 | revisão pendente |
-| `000a8568` | CEGL2_IF::DrawCross(math::VECTOR3<float>, float) | `1eff2fe1` | 32 | revisão pendente |
+| `000af9bc` | CCAMERA::Uninit() | `1eff2fe1` | 32 | revisão pendente |
+| `000b3524` | CINPUT_DATA::~CINPUT_DATA() | `1eff2fe1` | 32 | revisão pendente |
+| `000b4f70` | CRECT::CRECT() | `1eff2fe1` | 32 | revisão pendente |
+| `000b4f74` | CRECT::~CRECT() | `1eff2fe1` | 32 | revisão pendente |
+| `000b5524` | CRECT::MoveCursor(int) | `1eff2fe1` | 32 | revisão pendente |
 
 ## Como concluir a revisão
 

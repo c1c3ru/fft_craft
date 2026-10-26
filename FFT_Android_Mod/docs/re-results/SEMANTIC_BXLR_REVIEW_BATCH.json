@@ -1,14 +1,14 @@
 {
   "schema": 1,
   "elf_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "source_ci_run_id": "40417516285",
+  "source_ci_run_id": "40419767759",
   "status": "review_pending",
   "sample_accounting": "reuses previous 32 samples per function; adds zero",
   "certified_functions": 0,
   "candidates": [
     {
-      "address": "000a6d5c",
-      "name": "CGX_SCREEN_CORRECT::~CGX_SCREEN_CORRECT()",
+      "address": "000af9bc",
+      "name": "CCAMERA::Uninit()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -49,7 +49,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000a6d5c.json",
+      "source_artifact": "contract-pilot/000af9bc.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -58,8 +58,8 @@
       ]
     },
     {
-      "address": "000a7e78",
-      "name": "CEGL2_IF::Setup3D()",
+      "address": "000b3524",
+      "name": "CINPUT_DATA::~CINPUT_DATA()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -100,7 +100,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000a7e78.json",
+      "source_artifact": "contract-pilot/000b3524.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -109,8 +109,8 @@
       ]
     },
     {
-      "address": "000a8560",
-      "name": "CEGL2_IF::DrawGrid()",
+      "address": "000b4f70",
+      "name": "CRECT::CRECT()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -151,7 +151,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000a8560.json",
+      "source_artifact": "contract-pilot/000b4f70.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -160,8 +160,8 @@
       ]
     },
     {
-      "address": "000a8564",
-      "name": "CEGL2_IF::DrawAxis()",
+      "address": "000b4f74",
+      "name": "CRECT::~CRECT()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -202,7 +202,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000a8564.json",
+      "source_artifact": "contract-pilot/000b4f74.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -211,8 +211,8 @@
       ]
     },
     {
-      "address": "000a8568",
-      "name": "CEGL2_IF::DrawCross(math::VECTOR3<float>, float)",
+      "address": "000b5524",
+      "name": "CRECT::MoveCursor(int)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -253,7 +253,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000a8568.json",
+      "source_artifact": "contract-pilot/000b5524.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",

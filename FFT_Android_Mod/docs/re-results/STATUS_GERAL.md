@@ -16,7 +16,7 @@
 | Checkpoints pendentes de criação | 0 | Não incluem funções cobertas apenas pelo histórico CSV |
 | Metas de núcleo em revisão | 34 | De 2,345 checkpoints do núcleo |
 | v3: checkpoints / aprovados / revisão | 1,258 / 1,208 / 50 | Subconjunto já analisado pelas regras v3 |
-| Equivalência semântica integral registrada | **0** | Certificados revisáveis vinculados ao ELF; microexecuções não são certificados |
+| Equivalência semântica integral registrada | **5** | Certificados revisáveis vinculados ao ELF; microexecuções não são certificados |
 
 O histórico CSV contém **5,932** registros de análise anterior, que podem se sobrepor aos checkpoints. **Não somamos esses conjuntos para criar um percentual global fictício.**
 
@@ -52,11 +52,11 @@ Evidências geradas e verificadas nesta execução do pipeline.
 |---|---:|
 | Entradas do inventário | 6,455 |
 | Endereços únicos | 6,329 |
-| Certificados semânticos registrados | 0 |
-| Cobertura semântica por endereço | 0.00% |
+| Certificados semânticos registrados | 5 |
+| Cobertura semântica por endereço | 0.08% |
 | Cobertura semântica por bytes únicos | 0.00% |
-| Registros parciais no ledger | 5 |
-| Endereços com evidência parcial no lote de referência | 309 |
+| Registros parciais no ledger | 0 |
+| Endereços com evidência parcial no lote de referência | 304 |
 | Documentos semânticos históricos do mesmo ELF | 25 |
 | Documentos históricos com testes declarados | 13 |
 | Candidatas BX LR verificadas, pendentes de revisão | 303 |
@@ -67,7 +67,7 @@ Evidências geradas e verificadas nesta execução do pipeline.
 | Relatórios Unicorn deste lote | 309 |
 | Microexecuções Unicorn verificadas neste lote (sem duplicar suítes) | 1,380 |
 | Endereços distribuídos aos workers neste lote | 5 |
-| Endereços aguardando certificação | 6,329 |
+| Endereços aguardando certificação | 6,324 |
 
 ### Próximos contratos ainda não certificados (maiores primeiro)
 
@@ -114,11 +114,11 @@ Estas duas prioridades são **curadas no gerador**; quando um limite for resolvi
 
 ## Pull requests recentes
 
+- [PR #340 — feat(re): certificar os cinco primeiros contratos ARM BX LR após aprovação independente #338](https://github.com/c1c3ru/fft_craft/pull/340)
+- [PR #338 — review(re): solicitação de APPROVED independente — cinco contratos BX LR (rodada 2)](https://github.com/c1c3ru/fft_craft/pull/338)
+- [PR #339 — chore(re): automated structural batch 40417516285](https://github.com/c1c3ru/fft_craft/pull/339)
 - [PR #337 — Fix/re review second round 20261026](https://github.com/c1c3ru/fft_craft/pull/337)
 - [PR #335 — review(re): aprovação humana independente dos primeiros cinco contratos ARM BX LR](https://github.com/c1c3ru/fft_craft/pull/335)
-- [PR #336 — chore(re): automated structural batch 40413584877](https://github.com/c1c3ru/fft_craft/pull/336)
-- [PR #334 — fix(re): destravar certificações com revisão humana em duas fases e fingerprint do ELF](https://github.com/c1c3ru/fft_craft/pull/334)
-- [PR #333 — chore(re): automated structural batch 40411546042](https://github.com/c1c3ru/fft_craft/pull/333)
 
 ## Atualização automática e fontes
 
