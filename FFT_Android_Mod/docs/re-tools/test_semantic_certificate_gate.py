@@ -107,7 +107,7 @@ class CertificateGateTests(unittest.TestCase):
                     gate.verify_one(cert, {"address": ADDRESS, "size": 4},
                                     None, DIGEST, reader=lambda *_: WORD,
                                     executor=lambda *_: 32)
-        with self.assertRaisesRegex(ValueError, "original ELF"):
+        with self.assertRaisesRegex(ValueError, "ELF no longer"):
             gate.verify_one(approved(), {"address": ADDRESS, "size": 4},
                             None, DIGEST, reader=lambda *_: b"\x00" * 4,
                             executor=lambda *_: 32)
