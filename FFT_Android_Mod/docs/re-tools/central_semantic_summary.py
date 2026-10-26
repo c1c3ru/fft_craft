@@ -13,13 +13,20 @@ import semantic_history
 
 def summarize(inventory, digest, certificates_path, pilot_dir=None,
               dynamic_dir=None, manifests_dir=None, history_dir=None,
-              contracts_dir=None, snapshot_path=None):
+              contracts_dir=None, snapshot_path=None, binary=None):
     certificates_path = Path(certificates_path)
     certificates = (json.loads(certificates_path.read_text(encoding="utf-8"))
                     if certificates_path.is_file() else {})
     rows = semantic_coverage.ledger(Path(inventory), digest, certificates)
     mapped = {r["address"]: r for r in rows}
     counts = Counter(r["semantic_status"] for r in rows)
+    if counts["certified"]:
+        if binary is None:
+            raise ValueError("certified semantic records require original ELF proof validation")
+        import semantic_certificate_gate
+        checked = semantic_certificate_gate.gate(binary, inventory, certificates_path)
+        if len(checked) != counts["certified"]:
+            raise ValueError("semantic certification gate did not validate all entries")
     total_bytes = sum(r["size"] for r in rows)
     certified_bytes = sum(r["size"] for r in rows
                           if r["semantic_status"] == "certified")
