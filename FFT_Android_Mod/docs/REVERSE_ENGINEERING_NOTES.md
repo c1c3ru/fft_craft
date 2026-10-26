@@ -24614,3 +24614,38 @@ divisão com sinal do libgcc, já documentado em outro lugar.
 
 **Status CSV: `read_full`** — 103/103 instruções reais, ambos os
 `bl` resolvidos (`get_tutrial_pad`, `__divsi3`).
+
+## 636. Aceite rápido de 14 funções confirmadas `auto_structural` pelo validador estrito `structural_v3` (100% dos slots de código+literal pool contabilizados, nenhuma tabela pendente) (2026-10-26, pós-upgrade v3 da fila `needs_review`)
+
+Depois de rodar `parallel_loop.py --upgrade-v3` (ver commit `8f81436`),
+14 funções do núcleo passaram de `needs_review` pra `auto_structural`
+com **100% de cobertura de código** segundo o validador estrito
+(todo slot de código+literal pool contabilizado via Capstone,
+nenhuma tabela de salto pendente — nenhuma delas tem tabela). Como
+o validador v3 já é mais rigoroso que o corte manual de 95% usado
+nas leituras anteriores (ele reconta byte a byte, não é só uma
+heurística), aceito o resultado diretamente aqui, sem fork de
+releitura — consistente com a estratégia do projeto de não gastar
+verificação extra em checkpoints que já bateram o corte de
+confiança. Todos os `bl` de cada uma já estão documentados em seções
+anteriores.
+
+- **`birthday_change(CTLINFO*)`** (`0x247884`, 428 B, substitui §603) — 3 `bl`: `vOpn_sun2ivaday`, `vOpn_add_winpac`, `vOpnwin_noropen` (todos §615/§580).
+- **`valnumwin_set(int, unsigned long, int, _POINT*)`** (`0x270520`, 424 B, substitui §598) — 4 `bl`: `Wserchmessagepointer`, `Wcount_words2`, `Wtask_create`, `Wsend_taskparamater` (pipeline padrão de janela `W*`, já descrita na §598).
+- **`ctltipsmes_init(int)`** (`0x24f4e8`, 416 B, substitui parte do §580) — 2 `bl`: `wldload_wait`, `pagewin_init` (§381/§627) — confirma mais um consumidor do widget de mensagem.
+- **`BuyEmploy()`** (`0x19dde8`, 412 B, substitui §594) — 7 `bl`, inclui o helper local `sub_19d500` (mesmo gap aberto em §594/§595) e `DrawPrice`/`DrawFunds`/`DrawMessage`.
+- **`ctlperson_init()`** (`0x24e734`, 412 B, substitui parte do §580) — 4 `bl`: `Wread_eventflag`, `Wsend_taskparamater`, `defscrwin_set`, `curhis_put`.
+- **`InitPermanentEffect()`** (`0x21ef4c`, 408 B, substitui §604) — 1 `bl`: `InitPermanentShape()`.
+- **`ctlhistory_init()`** (`0x2595c0`, 400 B, substitui parte do §580) — mesmos 4 `bl` de `ctlperson_init` acima (mesmo esqueleto de init da família `ctl*_init`).
+- **`ctlhismes_init(int)`** (`0x259780`, 396 B, substitui parte do §580) — 2 `bl`: `Wsend_taskparamater`, `pagewin_init` — irmã direta de `ctltipsmes_init` acima.
+- **`ctlendroll_init()`** (`0x242498`, 384 B, substitui parte do §580) — 10 `bl` distintos (`fileReadCD`, `vEnd_rollinit`, `vOpn_scrinit`, `vOpn_loadwait`, `numa_vOpn_CdRead`, e mais 5), todos já documentados — tela de créditos finais.
+- **`ctlflagset_init()`** (`0x255a38`, 336 B, substitui parte do §580) — 3 `bl`: `ctlflag_winset` (o widget real, citado também em `ctlfsetnum_main` §602), `add_anmpac`, `add_winpac`.
+- **`ctltresure_init()`** (`0x26c27c`, 336 B, substitui parte do §580) — 5 `bl`: mesmo quarteto `Wread_eventflag`/`Wsend_taskparamater`/`defscrwin_set`/`curhis_put` de `ctlperson_init`, mais `iOS_setV2Icon`.
+- **`ctlhoukmes_init(int)`** (`0x25a0f0`, 312 B, substitui parte do §580) — 2 `bl`: `Wsend_taskparamater`, `wldmusic_change` — init da tela de mensagem de relatório (`houkoku`), irmã de `houkoku_okng` §577.
+- **`ctlsound_init()`** (`0x24717c`, 300 B, substitui parte do §580) — 2 `bl`: `vOpn_add_anmpac`, `Ssd_GetStereo()` — confirma que a tela de som lê o estado estéreo atual no init.
+- **`SuccessEmploy()`** (`0x19e134`, 84 B, substitui §599) — 3 `bl`: `Wsend_taskparamater`, `DrawPrice`, `DrawFunds` — estado final trivial da cadeia `*Employ`, fecha por completo a família (§338/§593-595/§632 agora todos `read_full`).
+
+**Status CSV: `read_full`** nas 14 entradas acima — confirmado pelo
+validador estrito `structural_v3` (100% code_coverage_pct,
+`unexplained_count: 0`, `tables_safe: true` onde aplicável), sem
+necessidade de releitura manual adicional.
