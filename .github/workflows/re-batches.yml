@@ -5,42 +5,10 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/re-batches.yml'
-      - 'FFT_Android_Mod/docs/re-tools/progress_report.py'
-      - 'FFT_Android_Mod/docs/re-tools/status_geral.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_evidence.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_path_report.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_cfg.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_paths.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_facts.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_microexec.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_branch_microexec.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_guarded_block.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_two_guards.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_entry_prefix.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_return_call.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_callee_v2icon.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_v2icon_execute.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_v2icon_call_flow.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_v2icon_destinations.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_three_callees_audit.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_three_callees_exec.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_sound_chain.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_sound_dispatch_audit.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_sound_icon_microexec.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_next_boundaries.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_next_pointer_microexec.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_getparam_getscale.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_getparam_getscale_exec.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_post_getter_paths.py'
-      - 'FFT_Android_Mod/docs/re-tools/structural_v3.py'
-      - 'FFT_Android_Mod/docs/re-tools/structural_v3_report.py'
-      - 'FFT_Android_Mod/docs/re-tools/parallel_loop.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_coverage.py'
+      - 'FFT_Android_Mod/docs/re-tools/**'
       - 'FFT_Android_Mod/docs/re-results/semantic-certificates.json'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_work_queue.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_pilot.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_dynamic_evidence.py'
-      - 'FFT_Android_Mod/docs/re-tools/central_semantic_summary.py'
+      - 'FFT_Android_Mod/docs/RE_FUNCTION_INVENTORY.csv'
+      - 'FFT_Android_Mod/src/lib/armeabi/libgl2jni.so'
   workflow_dispatch:
     inputs:
       limit:
@@ -70,9 +38,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install requirements and unit test
+      - name: Compile all ARM tools and run full regression suite
         run: |
           python3 -m pip install capstone pyelftools unicorn
+          python3 -m compileall -q FFT_Android_Mod/docs/re-tools
           python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_*.py' -v
       - name: Restore initial batch checkpoints
         env:
