@@ -74,6 +74,23 @@ ou criar um certificado integral apenas com base em testes amostrados. A
 certificação `original_a32_bxlr_normal_return_v1` continua estritamente
 limitada ao estado de execução normal expressamente especificado.
 
+## Segunda rodada quando um PR de revisão foi integrado sem APPROVED
+
+O PR #335 foi mesclado sem nenhum evento de revisão `APPROVED`. Merge,
+CI verde e autoria de código **não** substituem revisão técnica independente.
+
+Para retomar sem falsificar aprovações, o pedido da próxima rodada vai em
+`SEMANTIC_BXLR_REVIEW_REQUEST_R2.json`, criado como **arquivo novo** no
+segundo PR. Os fingerprints continuam exatamente os mesmos, assim como o SHA
+do ELF e as condições de execução. O gate aceita somente um pedido adicionado
+em um dos arquivos autorizados; consulta o conteúdo do arquivo **no commit
+efetivamente aprovado** e exige que o revisor não seja o autor.
+
+O PR deve permanecer aberto até uma pessoa técnica diferente do autor
+examinar o pacote e clicar `Review changes` → `Approve` →
+`Submit review`. Somente depois dessa aprovação é permitida uma
+solicitação separada de mudança `partial` → `certified`.
+
 ## Estado atual
 
 As **303 candidatas** têm o corpo de uma instrução e os contratos locais
