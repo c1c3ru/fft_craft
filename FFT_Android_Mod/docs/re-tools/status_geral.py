@@ -18,6 +18,10 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "docs/re-results"
 REPO = "c1c3ru/fft_craft"
 MILESTONES = (
+    ("SEMANTIC_NEXT_POINTER_MICROEXEC.md",
+     "Próximas leituras globais de som e ícones verificadas até as primeiras chamadas BL"),
+    ("SEMANTIC_NEXT_BOUNDARIES.md",
+     "Inventário dos opcodes ARM reais nos limites de som e ícones"),
     ("SEMANTIC_SOUND_ICON_MICROEXEC.md",
      "Som até 0x2b2b7c e prólogo de iOS_SetIconPosition até 0x2b8928"),
     ("SEMANTIC_THREE_CALLEES_EXECUTION.md",
@@ -28,8 +32,8 @@ MILESTONES = (
      "Retorno ARM real e alterações de memória antes da primeira chamada"),
 )
 CURRENT_SEMANTIC_BOUNDARIES = (
-    ("0x2b2b7c", "Analisar o próximo código de som e seus efeitos verificáveis"),
-    ("0x2b8928", "Modelar a primeira leitura global de iOS_SetIconPosition"),
+    ("0x28c320", "Investigar a chamada seguinte de SysSE_Play após validar seus argumentos"),
+    ("0x0a6f28", "Investigar a primeira chamada de iOS_SetIconPosition com ponteiro controlado"),
 )
 EVIDENCE_RE = re.compile(r"Evidence collected:\s*\*\*(\d+)/(\d+)\*\*")
 SHA_RE = re.compile(r"ELF SHA-256:\s*`([a-f0-9]{64})`")
