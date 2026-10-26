@@ -37,7 +37,8 @@ class SnapshotTests(unittest.TestCase):
             "address": "00000010", "binary_sha256": self.elf,
             "semantic_status": "partial", "certified": False,
             "instruction_encoding": "1eff2fe1",
-            "contract_candidate": "ARM BX LR", "machine_samples_passed": 4})
+            "contract_candidate": "ARM BX LR", "size": 4,
+            "machine_samples_passed": 4})
         self.save(self.contracts, "00000010", {
             "address": "00000010", "binary_sha256": self.elf,
             "instruction_word": "1eff2fe1",
