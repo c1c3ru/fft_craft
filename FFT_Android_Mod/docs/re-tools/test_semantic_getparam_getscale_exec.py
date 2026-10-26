@@ -44,7 +44,7 @@ class GetterMachineTests(unittest.TestCase):
                     machines.getparam(PARAM,PARAM_BL,0x28,0x12345678,seed,mode)
                     ["value"],0x12345678)
                 self.assertTrue(
-                    machines.getscale(SCALE,SCALE_BL,0x40,True,seed,mode)
+                    machines.getscale(SCALE,SCALE_BL,1,True,seed,mode)
                     ["written"])
 
     def test_mutation_and_unmodeled_input_rejected(self):
