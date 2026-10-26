@@ -18,6 +18,10 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "docs/re-results"
 REPO = "c1c3ru/fft_craft"
 MILESTONES = (
+    ("SEMANTIC_GETPARAM_GETSCALE_MICROEXEC.md",
+     "GetParam/GetScale ARM: 96 microexecuções individuais e via BL original"),
+    ("SEMANTIC_GETPARAM_GETSCALE_AUDIT.md",
+     "Instruções e destinos de chamada GetParam/GetScale auditados"),
     ("SEMANTIC_NEXT_POINTER_MICROEXEC.md",
      "Próximas leituras globais de som e ícones verificadas até as primeiras chamadas BL"),
     ("SEMANTIC_NEXT_BOUNDARIES.md",
@@ -32,8 +36,8 @@ MILESTONES = (
      "Retorno ARM real e alterações de memória antes da primeira chamada"),
 )
 CURRENT_SEMANTIC_BOUNDARIES = (
-    ("0x28c320", "Investigar a chamada seguinte de SysSE_Play após validar seus argumentos"),
-    ("0x0a6f28", "Investigar a primeira chamada de iOS_SetIconPosition com ponteiro controlado"),
+    ("0x2b2b9c", "Validar os desvios condicionais de SysSE_Play após GetParam retornar"),
+    ("0x2b893c", "Validar a continuação de iOS_SetIconPosition após GetScale retornar"),
 )
 EVIDENCE_RE = re.compile(r"Evidence collected:\s*\*\*(\d+)/(\d+)\*\*")
 SHA_RE = re.compile(r"ELF SHA-256:\s*`([a-f0-9]{64})`")
