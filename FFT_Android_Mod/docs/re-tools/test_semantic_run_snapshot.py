@@ -92,6 +92,22 @@ class SnapshotTests(unittest.TestCase):
         self.assertEqual(summary["certified"], 0)
         self.assertIn("desatualizado", central.render(summary))
 
+    def test_certified_records_not_counted_as_partial_evidence(self):
+        state = self.build()
+        certified_ledger = {
+            "00000010": {
+                "status": "certified", "binary_sha256": self.elf,
+                "size": 4, "reviewer": {"type": "human"},
+            }
+        }
+        state["certificates_sha256"] = snapshot.ledger_digest(certified_ledger)
+        state["metrics"]["partial_evidence_unique"] = 0
+        self.assertEqual(snapshot.validate(
+            state, self.elf, certified_ledger, 2)["partial_evidence_unique"], 0)
+        state["certificates_sha256"] = snapshot.ledger_digest({})
+        with self.assertRaisesRegex(ValueError, "snapshot stale"):
+            snapshot.validate(state, self.elf, certified_ledger, 2)
+
     def test_reject_tampered_counts_and_forged_certificate(self):
         state = self.build()
         state["metrics"]["checked_local_contracts"] = 9
