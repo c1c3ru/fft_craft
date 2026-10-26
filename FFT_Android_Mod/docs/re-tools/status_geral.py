@@ -19,6 +19,8 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "docs/re-results"
 REPO = "c1c3ru/fft_craft"
 MILESTONES = (
+    ("SEMANTIC_BXLR_CONTRACT_PILOT.md",
+     "Primeiros contratos locais BX LR com retornos ARM/Thumb verificados"),
     ("SEMANTIC_HISTORY_INDEX.md",
      "Índice do acervo semântico acumulado e vinculado ao mesmo ELF"),
     ("SEMANTIC_LEAF_BXLR.md",
@@ -223,14 +225,16 @@ def render(data, results, prs=None, semantic=None):
 
 
 def generate(inventory, results, priority, binary, pulls_json=None,
-             pilot_dir=None, dynamic_dir=None, manifests_dir=None):
+             pilot_dir=None, dynamic_dir=None, manifests_dir=None,
+             contracts_dir=None):
     data = progress_report.summarize(inventory, results, binary, priority)
     prs = None
     if pulls_json is not None and pulls_json.is_file():
         prs = json.loads(pulls_json.read_text(encoding="utf-8"))
     semantic = central_semantic_summary.summarize(
         inventory, data["digest"], results / "semantic-certificates.json",
-        pilot_dir, dynamic_dir, manifests_dir, history_dir=results)
+        pilot_dir, dynamic_dir, manifests_dir, history_dir=results,
+        contracts_dir=contracts_dir)
     return render(data, results, prs, semantic)
 
 
@@ -248,10 +252,11 @@ def main():
     parser.add_argument("--pilot-dir", type=Path)
     parser.add_argument("--dynamic-dir", type=Path)
     parser.add_argument("--manifests-dir", type=Path)
+    parser.add_argument("--contracts-dir", type=Path)
     args = parser.parse_args()
     text = generate(args.inventory, args.results, args.priority, args.binary,
                     args.pulls_json, args.pilot_dir, args.dynamic_dir,
-                    args.manifests_dir)
+                    args.manifests_dir, args.contracts_dir)
     dest = args.results / "STATUS_GERAL.md"
     temporary = dest.with_suffix(".md.tmp")
     temporary.write_text(text, encoding="utf-8")
