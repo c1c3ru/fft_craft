@@ -108,6 +108,60 @@ class SemanticReviewProtocolTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "not enough"):
             self.build(limit=2)
 
+    def test_immutable_request_remains_valid_after_five_certifications(self):
+        original = self.build()
+        request_path = self.root / "review-request.json"
+        request_path.write_text(json.dumps(original), encoding="utf-8")
+        with mock.patch.object(protocol.semantic_evidence, "read_function",
+                               return_value=WORD), mock.patch.object(
+                protocol.bxlr, "verify_interworking", return_value=32):
+            self.assertEqual(protocol.verify_request(
+                self.elf, self.inventory, self.ledger, request_path), 2)
+        for record in self.records.values():
+            record["status"] = "certified"
+            record["reviewer"] = {
+                "type": "human", "name": "Independent reviewer",
+                "github_login": "independent-reviewer", "decision": "approved",
+                "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/338",
+                "review_protocol": protocol.PROTOCOL,
+                "approved_at": "2026-10-26", "notes": "Mocked test review",
+            }
+        self.save()
+        with mock.patch.object(protocol.semantic_evidence, "read_function",
+                               return_value=WORD), mock.patch.object(
+                protocol.bxlr, "verify_interworking", return_value=32):
+            self.assertEqual(protocol.verify_request(
+                self.elf, self.inventory, self.ledger, request_path), 2)
+        self.assertIs(original["certified"], False)
+
+    def test_fails_closed_when_reviewed_fingerprint_changes(self):
+        original = self.build()
+        request_path = self.root / "review-request.json"
+        original["certificate_fingerprints"]["00002010"] = "f" * 64
+        request_path.write_text(json.dumps(original), encoding="utf-8")
+        with mock.patch.object(protocol.semantic_evidence, "read_function",
+                               return_value=WORD), mock.patch.object(
+                protocol.bxlr, "verify_interworking", return_value=32):
+            with self.assertRaisesRegex(ValueError, "reviewed fingerprint"):
+                protocol.verify_request(self.elf, self.inventory, self.ledger,
+                                        request_path)
+
+    def test_fail_closed_for_wrong_binary_or_live_reexecution(self):
+        original = self.build()
+        request_path = self.root / "review-request.json"
+        request_path.write_text(json.dumps(original), encoding="utf-8")
+        with mock.patch.object(protocol.semantic_evidence, "read_function",
+                               return_value=b"\x00" * 4):
+            with self.assertRaisesRegex(ValueError, "original ELF"):
+                protocol.verify_request(self.elf, self.inventory, self.ledger,
+                                        request_path)
+        with mock.patch.object(protocol.semantic_evidence, "read_function",
+                               return_value=WORD), mock.patch.object(
+                protocol.bxlr, "verify_interworking", return_value=31):
+            with self.assertRaisesRegex(ValueError, "differential execution"):
+                protocol.verify_request(self.elf, self.inventory, self.ledger,
+                                        request_path)
+
     def test_small_valid_limit(self):
         with self.assertRaises(ValueError):
             self.build(0)

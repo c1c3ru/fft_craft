@@ -74,6 +74,13 @@ def validate(snapshot, digest, certificates, inventory_addresses):
             raise ValueError(f"invalid snapshot {name} addresses")
     if any(type(metrics[key]) is not int or metrics[key] < 0 for key in METRICS):
         raise ValueError("invalid snapshot count")
+    certified_addresses = {
+        address for address, record in certificates.items()
+        if isinstance(record, dict) and record.get("status") == "certified"
+    }
+    uncertified_evidence = (
+        set(addresses["static"]) | set(addresses["unicorn"])
+    ) - certified_addresses
     if (metrics["static_reports"] != len(addresses["static"])
             or metrics["unicorn_reports"] != len(addresses["unicorn"])
             or metrics["checked_local_contracts"] != len(addresses["contracts"])
@@ -82,7 +89,7 @@ def validate(snapshot, digest, certificates, inventory_addresses):
             or metrics["checked_local_contracts"] > metrics["leaf_candidates"]
             or metrics["partial_evidence_unique"] > inventory_addresses
             or metrics["partial_evidence_unique"] <
-               len(set(addresses["static"]) | set(addresses["unicorn"]))
+               len(uncertified_evidence)
             or not set(addresses["contracts"]).issubset(set(addresses["unicorn"]))):
         raise ValueError("contradictory snapshot counts")
     return metrics
@@ -117,7 +124,8 @@ def main():
     summary = central_semantic_summary.summarize(
         args.inventory, binary_digest, args.certificates,
         args.pilot_dir, args.dynamic_dir, args.manifests_dir,
-        history_dir=args.results, contracts_dir=args.contracts_dir)
+        history_dir=args.results, contracts_dir=args.contracts_dir,
+        binary=args.binary)
     snapshot = make_snapshot(summary, binary_digest, certificates,
                              os.environ.get("GITHUB_RUN_ID", "local"),
                              {"static": args.pilot_dir, "unicorn": args.dynamic_dir,

@@ -96,15 +96,84 @@ def make_request(binary, inventory, ledger_path, limit=5):
     }
 
 
+
+def verify_request(binary, inventory, ledger_path, request_path):
+    """Revalidate a historical review request before AND after certification.
+
+    An approved request stays immutable while corresponding ledger statuses
+    transition from partial to certified. Its fingerprint binds the original
+    contract (but deliberately excludes the mutable approval metadata).
+    """
+    import semantic_certificate_gate as gate
+    binary, inventory, ledger_path, request_path = map(
+        Path, (binary, inventory, ledger_path, request_path))
+    digest = hashlib.sha256(binary.read_bytes()).hexdigest()
+    request = json.loads(request_path.read_text(encoding="utf-8"))
+    expected_keys = {
+        "schema", "review_protocol", "elf_sha256", "status",
+        "certified", "certificate_fingerprints", "instructions_to_reviewer",
+    }
+    if (not isinstance(request, dict) or set(request) != expected_keys
+            or request["schema"] != 1 or request["review_protocol"] != PROTOCOL
+            or request["elf_sha256"] != digest
+            or request["status"] != "human_review_requested"
+            or request["certified"] is not False
+            or not isinstance(request["instructions_to_reviewer"], str)
+            or not request["instructions_to_reviewer"].strip()):
+        raise ValueError("invalid original ELF review request")
+    fingerprints = request["certificate_fingerprints"]
+    if (not isinstance(fingerprints, dict)
+            or not 1 <= len(fingerprints) <= 20):
+        raise ValueError("invalid reviewed address set")
+    records = json.loads(ledger_path.read_text(encoding="utf-8"))
+    rows = semantic_coverage.ledger(inventory, digest, records)
+    mapped = {r["address"]: r for r in rows}
+    for address, approved_hash in sorted(fingerprints.items()):
+        record = records.get(address)
+        if (not isinstance(record, dict) or address not in mapped
+                or mapped[address]["size"] != 4
+                or record.get("status") not in ("partial", "certified")
+                or record.get("proof_class") != gate.SCOPE
+                or record.get("scope") != "normal_a32_valid_abi_return"
+                or record.get("size") != 4
+                or record.get("binary_sha256") != digest
+                or record.get("instruction_encoding") != "1eff2fe1"
+                or record.get("preconditions") != list(gate.PRECONDITIONS)
+                or record.get("postconditions") != list(gate.POSTCONDITIONS)
+                or record.get("control_flow") != list(gate.CONTROL_FLOW)
+                or record.get("memory_effects") != list(gate.MEMORY_EFFECTS)
+                or record.get("test_evidence") != list(gate.REQUIRED_EVIDENCE)):
+            raise ValueError(f"review proof mismatch at {address}")
+        code = semantic_evidence.read_function(binary, int(address, 16), 4)
+        if (code.hex() != "1eff2fe1"
+                or record.get("instruction_sha256") !=
+                   hashlib.sha256(code).hexdigest()
+                or record.get("contract") != bxlr.isa_contract(code)
+                or fingerprint(address, record) != approved_hash):
+            raise ValueError(f"reviewed fingerprint or original ELF mismatch at {address}")
+        if bxlr.verify_interworking(int(address, 16), code) != 32:
+            raise ValueError(f"reviewed differential execution failed at {address}")
+    print(f"SEMANTIC_REVIEW_REQUEST_REVERIFIED={len(fingerprints)}")
+    print("SEMANTIC_REVIEW_REQUEST_NEW_CERTIFICATIONS=0")
+    return len(fingerprints)
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--binary", type=Path, default=semantic_coverage.BINARY)
     p.add_argument("--inventory", type=Path, default=semantic_coverage.INVENTORY)
     p.add_argument("--ledger", type=Path,
                    default=semantic_coverage.RESULTS / "semantic-certificates.json")
-    p.add_argument("--output", type=Path, required=True)
+    p.add_argument("--output", type=Path)
+    p.add_argument("--verify-request", type=Path)
     p.add_argument("--limit", type=int, default=5)
     args = p.parse_args()
+    if args.verify_request is not None:
+        if args.output is not None:
+            p.error("--verify-request cannot be used with --output")
+        verify_request(args.binary, args.inventory, args.ledger, args.verify_request)
+        return
+    if args.output is None:
+        p.error("--output is required when creating a new review request")
     request = make_request(args.binary, args.inventory, args.ledger, args.limit)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(request, indent=2, ensure_ascii=False) + "\n",

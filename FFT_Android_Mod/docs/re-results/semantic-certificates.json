@@ -1,6 +1,6 @@
 {
   "000a6d5c": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CGX_SCREEN_CORRECT::~CGX_SCREEN_CORRECT()",
@@ -35,16 +35,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40408581057",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/338",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-26",
+      "notes": "GitHub review 5660382586: APPROVED no commit e84d151c1ac0f05bbe7ad909228f3eb949b45e03 em 2026-10-26T23:20:14Z; certificacao limitada ao contrato A32 BX LR em execucao normal."
+    },
     "unverified": [
-      "human technical review of complete scoped normal ARM behavior",
-      "approved GitHub PR documenting review",
-      "unmodeled exceptional behavior"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000a7e78": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CEGL2_IF::Setup3D()",
@@ -79,16 +86,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40408581057",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/338",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-26",
+      "notes": "GitHub review 5660382586: APPROVED no commit e84d151c1ac0f05bbe7ad909228f3eb949b45e03 em 2026-10-26T23:20:14Z; certificacao limitada ao contrato A32 BX LR em execucao normal."
+    },
     "unverified": [
-      "human technical review of complete scoped normal ARM behavior",
-      "approved GitHub PR documenting review",
-      "unmodeled exceptional behavior"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000a8560": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CEGL2_IF::DrawGrid()",
@@ -123,16 +137,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40408581057",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/338",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-26",
+      "notes": "GitHub review 5660382586: APPROVED no commit e84d151c1ac0f05bbe7ad909228f3eb949b45e03 em 2026-10-26T23:20:14Z; certificacao limitada ao contrato A32 BX LR em execucao normal."
+    },
     "unverified": [
-      "human technical review of complete scoped normal ARM behavior",
-      "approved GitHub PR documenting review",
-      "unmodeled exceptional behavior"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000a8564": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CEGL2_IF::DrawAxis()",
@@ -167,16 +188,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40408581057",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/338",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-26",
+      "notes": "GitHub review 5660382586: APPROVED no commit e84d151c1ac0f05bbe7ad909228f3eb949b45e03 em 2026-10-26T23:20:14Z; certificacao limitada ao contrato A32 BX LR em execucao normal."
+    },
     "unverified": [
-      "human technical review of complete scoped normal ARM behavior",
-      "approved GitHub PR documenting review",
-      "unmodeled exceptional behavior"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000a8568": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CEGL2_IF::DrawCross(math::VECTOR3<float>, float)",
@@ -211,12 +239,19 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40408581057",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/338",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-26",
+      "notes": "GitHub review 5660382586: APPROVED no commit e84d151c1ac0f05bbe7ad909228f3eb949b45e03 em 2026-10-26T23:20:14Z; certificacao limitada ao contrato A32 BX LR em execucao normal."
+    },
     "unverified": [
-      "human technical review of complete scoped normal ARM behavior",
-      "approved GitHub PR documenting review",
-      "unmodeled exceptional behavior"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   }
 }
