@@ -19,6 +19,8 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "docs/re-results"
 REPO = "c1c3ru/fft_craft"
 MILESTONES = (
+    ("SEMANTIC_BXLR_REVIEW_BATCH.md",
+     "Primeiro lote de cinco contratos BX LR preparados para revisão humana"),
     ("SEMANTIC_CERTIFICATION_POLICY.md",
      "Política de certificação: contrato integral, ELF, revisão independente e CI"),
     ("SEMANTIC_BXLR_CONTRACT_PILOT.md",
@@ -237,7 +239,8 @@ def generate(inventory, results, priority, binary, pulls_json=None,
         inventory, data["digest"], results / "semantic-certificates.json",
         pilot_dir, dynamic_dir, manifests_dir, history_dir=results,
         contracts_dir=contracts_dir,
-        snapshot_path=results / "SEMANTIC_RUN_SNAPSHOT.json", binary=binary)
+        snapshot_path=results / "SEMANTIC_RUN_SNAPSHOT.json", binary=binary,
+        review_batch_path=results / "SEMANTIC_BXLR_REVIEW_BATCH.json")
     return render(data, results, prs, semantic)
 
 
