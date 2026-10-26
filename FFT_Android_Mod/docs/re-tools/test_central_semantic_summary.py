@@ -39,7 +39,8 @@ class CentralSemanticSummaryTests(unittest.TestCase):
                     "semantic_status": "partial"})
         self.write(self.dynamic, "00000020.json",
                    {"address": "00000020", "binary_sha256": self.digest,
-                    "semantic_status": "partial"})
+                    "semantic_status": "partial", "certified": False,
+                    "machine_samples_passed": 32})
         self.write(self.manifests, "semantic-worker-01.json",
                    {"elf_sha256": self.digest, "tasks": [
                        {"address": "00000010", "size": 120,
@@ -51,6 +52,20 @@ class CentralSemanticSummaryTests(unittest.TestCase):
         self.assertEqual((s["assigned"], s["static_reports"], s["unicorn_reports"]),
                          (1, 1, 1))
         self.assertIn("0.00%", mod.render(s))
+        self.assertEqual(s["dynamic_samples"], 32)
+
+    def test_shared_unicorn_suite_counted_once(self):
+        for address in ("00000010", "00000020"):
+            self.write(self.dynamic, address + ".json",
+                       {"address": address, "binary_sha256": self.digest,
+                        "semantic_status": "partial", "certified": False,
+                        "suite_samples_passed": 72,
+                        "suite_sample_count_scope": "shared across callee routes"})
+        result = mod.summarize(self.inventory, self.digest,
+                               self.root / "none.json", dynamic_dir=self.dynamic)
+        self.assertEqual(result["dynamic_samples"], 72)
+        self.assertEqual(result["unicorn_reports"], 2)
+        self.assertIn("Microexecuções Unicorn verificadas", mod.render(result))
 
     def test_stale_evidence_rejected(self):
         self.write(self.dynamic, "00000010.json",
