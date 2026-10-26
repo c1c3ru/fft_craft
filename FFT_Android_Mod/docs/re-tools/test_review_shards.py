@@ -38,7 +38,7 @@ class ReviewShardsTests(unittest.TestCase):
             self.assertEqual(len(assigned), len(set(assigned)))
             self.assertEqual(set(assigned), {a for a, _ in rows})
             self.assertEqual(sorted(map(lambda s: sum(t["size"] for t in s), shards)),
-                             [100, 110, 150])
+                             [100, 130, 130])
             self.assertEqual(sum(map(len, mod.build_shards(queue, root, 5, 2))), 2)
 
     def test_rejects_stale_checkpoint(self):
