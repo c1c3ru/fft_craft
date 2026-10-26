@@ -44,6 +44,8 @@ Os relatórios abaixo apresentam **efeitos locais testados sob estados sintétic
 
 Os números certificados representam **registros formais válidos para este ELF**, não aprovação estrutural. Evidências parciais não certificam equivalência.
 
+Evidências geradas e verificadas nesta execução do pipeline.
+
 | Indicador | Resultado |
 |---|---:|
 | Entradas do inventário | 6,455 |
@@ -52,16 +54,16 @@ Os números certificados representam **registros formais válidos para este ELF*
 | Cobertura semântica por endereço | 0.00% |
 | Cobertura semântica por bytes únicos | 0.00% |
 | Registros parciais no ledger | 0 |
-| Endereços com evidência parcial registrada ou gerada nesta execução | 0 |
+| Endereços com evidência parcial no lote de referência | 309 |
 | Documentos semânticos históricos do mesmo ELF | 24 |
 | Documentos históricos com testes declarados | 13 |
-| Candidatas BX LR verificadas, pendentes de revisão | 0 |
-| Contratos locais BX LR com retorno ARM/Thumb verificado (revisão pendente) | 0 |
-| Execuções ARM/Thumb adicionais dos contratos locais | 0 |
-| Relatórios estáticos deste lote | 0 |
-| Relatórios Unicorn deste lote | 0 |
-| Microexecuções Unicorn verificadas neste lote (sem duplicar suítes) | 0 |
-| Endereços distribuídos aos workers neste lote | 0 |
+| Candidatas BX LR verificadas, pendentes de revisão | 303 |
+| Contratos locais BX LR com retorno ARM/Thumb verificado (revisão pendente) | 303 |
+| Execuções ARM/Thumb adicionais dos contratos locais | 9,696 |
+| Relatórios estáticos deste lote | 5 |
+| Relatórios Unicorn deste lote | 309 |
+| Microexecuções Unicorn verificadas neste lote (sem duplicar suítes) | 1,380 |
+| Endereços distribuídos aos workers neste lote | 5 |
 | Endereços aguardando certificação | 6,329 |
 
 ### Próximos contratos ainda não certificados (maiores primeiro)
@@ -109,7 +111,11 @@ Estas duas prioridades são **curadas no gerador**; quando um limite for resolvi
 
 ## Pull requests recentes
 
-Metadados dos PRs indisponíveis nesta execução local; [consultar merges](https://github.com/c1c3ru/fft_craft/pulls?q=is%3Apr+is%3Amerged).
+- [PR #325 — fix(re): preservar evidências semânticas verificadas no STATUS_GERAL](https://github.com/c1c3ru/fft_craft/pull/325)
+- [PR #324 — chore(re): automated structural batch 40390774344](https://github.com/c1c3ru/fft_craft/pull/324)
+- [PR #323 — feat(re): validar todas as 303 funções BX LR contra modelo independente ARM/Thumb](https://github.com/c1c3ru/fft_craft/pull/323)
+- [PR #322 — chore(re): automated structural batch 40389908108](https://github.com/c1c3ru/fft_craft/pull/322)
+- [PR #321 — feat(re): iniciar contratos semânticos locais completos com retornos ARM/Thumb](https://github.com/c1c3ru/fft_craft/pull/321)
 
 ## Atualização automática e fontes
 
