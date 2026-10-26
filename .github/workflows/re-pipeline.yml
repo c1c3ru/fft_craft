@@ -7,6 +7,9 @@ on:
       - 'FFT_Android_Mod/docs/re-results/semantic-certificates.json'
       - '.github/workflows/re-pipeline.yml'
       - '.github/workflows/re-batches.yml'
+      - '.github/workflows/re-semantic-queue.yml'
+      - 'FFT_Android_Mod/docs/RE_FUNCTION_INVENTORY.csv'
+      - 'FFT_Android_Mod/src/lib/armeabi/libgl2jni.so'
   workflow_dispatch:
     inputs:
       limit:
@@ -28,7 +31,10 @@ jobs:
           python-version: '3.11'
       - name: Install test dependencies
         run: python3 -m pip install capstone pyelftools unicorn
-      - run: python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_*.py' -v
+      - name: Compile tools and run full regression suite
+        run: |
+          python3 -m compileall -q FFT_Android_Mod/docs/re-tools
+          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_*.py' -v
 
   structural-smoke:
     # Bounded smoke tests run on PRs as well as manual dispatches.
