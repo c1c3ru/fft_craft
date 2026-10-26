@@ -120,6 +120,7 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_sound_icon_microexec.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_next_boundaries.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_next_pointer_microexec.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_getparam_getscale.py
           python3 - <<'PY'
           from pathlib import Path
           report = Path("FFT_Android_Mod/docs/re-results/SEMANTIC_SOUND_ICON_MICROEXEC.md").read_text()
@@ -316,6 +317,17 @@ jobs:
               "Icon first-global-read microexecutions: **30/30 PASS**",
               "0x2b2b98", "0x2b8938", "not executed"))
           print("PASS: 60 machine executions through sound/icon pointer loads on original ELF")
+          PY
+      - name: Verify original GetParam and GetScale ARM call sites
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          report=Path("FFT_Android_Mod/docs/re-results/SEMANTIC_GETPARAM_GETSCALE_AUDIT.md").read_text()
+          assert all(x in report for x in (
+              "0x28c320", "0xa6f28", "0x2b2b98", "0x2b8938",
+              "CFFT_STATE::GetParam", "CGX_SCREEN_CORRECT::GetScale",
+              "linearly decoded", "Not proven"))
+          print("PASS: original ELF ARM GetParam/GetScale callsite and opcode audit")
           PY
       - name: Validate central project dashboard on real ELF
         run: |
