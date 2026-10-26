@@ -4,116 +4,6 @@ ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
 These are locally observed CMP/TST -> conditional branch edges; they are not dominance claims, execution traces, complete path constraints or proof of semantic equivalence.
 
-## `0028179c` — iOS_v2menuSetType(V2MENU_TYPE)
-
-Observed direct compare/branch pairs: **2**; local bitmask sequences: **0**.
-
-Modeled ARM CFG nodes: **128**; entry-reachable: **128**; unmodeled outgoing edges/transfers: **0**.
-
-Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
-
-A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
-
-| Compare / branch | Taken edge | Fallthrough edge |
-|---|---|---|
-| `0x281830` cmp r3, r4; `0x281834` bne #0x281810 | r3 != r4 → `0x281810` | r3 == r4 → `0x281838` |
-| `0x281858` cmp r3, r2; `0x28185c` bne #0x281850 | r3 != r2 → `0x281850` | r3 == r2 → `0x281860` |
-
-### Local memory-bit effects and direct incoming edges
-
-No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
-
-
-## `00244200` — vEnd_rollproc()
-
-Observed direct compare/branch pairs: **3**; local bitmask sequences: **2**.
-
-Modeled ARM CFG nodes: **121**; entry-reachable: **121**; unmodeled outgoing edges/transfers: **0**.
-
-Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
-
-A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
-
-| Compare / branch | Taken edge | Fallthrough edge |
-|---|---|---|
-| `0x2442c8` cmp r2, #0x2b; `0x2442cc` bgt #0x2443c8 | r2 > (signed) 0x2b → `0x2443c8` | r2 <= (signed) 0x2b → `0x2442d0` |
-| `0x24430c` cmp r3, #0x100; `0x244310` beq #0x24438c | r3 == 0x100 → `0x24438c` | r3 != 0x100 → `0x244314` |
-| `0x244380` cmp r3, #0x100; `0x244384` bne #0x2442e0 | r3 != 0x100 → `0x2442e0` | r3 == 0x100 → `0x244388` |
-
-### Local memory-bit effects and direct incoming edges
-
-- Candidate clears `0x40` at `[r4]`; sequence: `0x244254`, `0x244258`, `0x24425c`.
-  - No direct CMP/TST-branch incoming edge demonstrated; entry condition remains unknown.
-  - Modeled direct predecessors: `0x244250` (fallthrough).
-  - Entry-relative modeled dominators: 19 decoded nodes (not global or dynamic dominance).
-  - No conditional CMP/TST branch proven to dominate this write even in the bounded model.
-  - Branch `0x244310` after compare `0x24430c`: [r3 == 0x100] → no route found in modeled graph; [r3 != 0x100] → 0x244314 → 0x244318 → 0x24431c → 0x244320 → 0x244324 → 0x244328 → 0x24432c → .... Only one modeled successor reaches the write; NOT a dominance or impossibility proof.
-- Candidate clears `0x40` at `[r4]`; sequence: `0x2443b8`, `0x2443bc`, `0x2443c0`.
-  - No direct CMP/TST-branch incoming edge demonstrated; entry condition remains unknown.
-  - Modeled direct predecessors: `0x2443b4` (fallthrough).
-  - Entry-relative modeled dominators: 23 decoded nodes (not global or dynamic dominance).
-  - Conditional branches dominating this write in the entry-rooted modeled graph:
-    - `0x244310` after `0x24430c`: Only one successor has a modeled route; taken [r3 == 0x100], other [r3 != 0x100]. Not a proof of execution-path exclusivity.
-  - Branch `0x244310` after compare `0x24430c`: [r3 == 0x100] → 0x24438c → 0x244390 → 0x244394 → 0x244398 → 0x24439c → 0x2443a0 → 0x2443a4 → ...; [r3 != 0x100] → no route found in modeled graph. Only one modeled successor reaches the write; NOT a dominance or impossibility proof.
-
-## `000df864` — event_status_set(unsigned short, unsigned short)
-
-Observed direct compare/branch pairs: **11**; local bitmask sequences: **0**.
-
-Modeled ARM CFG nodes: **122**; entry-reachable: **122**; unmodeled outgoing edges/transfers: **0**.
-
-Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
-
-A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
-
-| Compare / branch | Taken edge | Fallthrough edge |
-|---|---|---|
-| `0xdf8a8` cmp sb, #0; `0xdf8ac` beq #0xdf8b8 | sb == 0x0 → `0xdf8b8` | sb != 0x0 → `0xdf8b0` |
-| `0xdf8cc` cmp r0, #0; `0xdf8d0` beq #0xdf8b0 | r0 == 0x0 → `0xdf8b0` | r0 != 0x0 → `0xdf8d4` |
-| `0xdf91c` cmp r0, #0; `0xdf920` beq #0xdf8f8 | r0 == 0x0 → `0xdf8f8` | r0 != 0x0 → `0xdf924` |
-| `0xdf94c` cmp r3, #0; `0xdf950` blt #0xdf970 | r3 < (signed) 0x0 → `0xdf970` | r3 >= (signed) 0x0 → `0xdf954` |
-| `0xdf954` cmp r8, #0; `0xdf958` bne #0xdf9d4 | r8 != 0x0 → `0xdf9d4` | r8 == 0x0 → `0xdf95c` |
-| `0xdf968` cmp r3, #0; `0xdf96c` beq #0xdf9e4 | r3 == 0x0 → `0xdf9e4` | r3 != 0x0 → `0xdf970` |
-| `0xdf974` cmp r3, #0; `0xdf978` bne #0xdf8f8 | r3 != 0x0 → `0xdf8f8` | r3 == 0x0 → `0xdf97c` |
-| `0xdf990` cmp r3, #0; `0xdf994` bne #0xdfa28 | r3 != 0x0 → `0xdfa28` | r3 == 0x0 → `0xdf998` |
-| `0xdf998` cmp r8, #0; `0xdf99c` bne #0xdf8b0 | r8 != 0x0 → `0xdf8b0` | r8 == 0x0 → `0xdf9a0` |
-| `0xdf9ec` cmp r0, #0; `0xdf9f0` beq #0xdf970 | r0 == 0x0 → `0xdf970` | r0 != 0x0 → `0xdf9f4` |
-| `0xdfa38` tst r3, #1; `0xdfa3c` beq #0xdf998 | (r3 & 0x1) == 0 → `0xdf998` | (r3 & 0x1) != 0 → `0xdfa40` |
-
-### Local memory-bit effects and direct incoming edges
-
-No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
-
-
-## `0025a228` — houkoku_okng(CTLINFO*)
-
-Observed direct compare/branch pairs: **6**; local bitmask sequences: **1**.
-
-Modeled ARM CFG nodes: **119**; entry-reachable: **119**; unmodeled outgoing edges/transfers: **2**.
-
-Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
-
-A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
-
-| Compare / branch | Taken edge | Fallthrough edge |
-|---|---|---|
-| `0x25a25c` cmp r2, #0; `0x25a260` ble #0x25a27c | r2 <= (signed) 0x0 → `0x25a27c` | r2 > (signed) 0x0 → `0x25a264` |
-| `0x25a29c` cmp r0, #1; `0x25a2a0` beq #0x25a2c8 | r0 == 0x1 → `0x25a2c8` | r0 != 0x1 → `0x25a2a4` |
-| `0x25a2a4` cmp r0, #2; `0x25a2a8` bne #0x25a2f8 | r0 != 0x2 → `0x25a2f8` | r0 == 0x2 → `0x25a2ac` |
-| `0x25a2ec` tst r3, #0x20; `0x25a2f0` bne #0x25a328 | (r3 & 0x20) != 0 → `0x25a328` | (r3 & 0x20) == 0 → `0x25a2f4` |
-| `0x25a304` tst r3, #0x40; `0x25a308` beq #0x25a2ec | (r3 & 0x40) == 0 → `0x25a2ec` | (r3 & 0x40) != 0 → `0x25a30c` |
-| `0x25a338` cmp r1, #0; `0x25a33c` beq #0x25a3a4 | r1 == 0x0 → `0x25a3a4` | r1 != 0x0 → `0x25a340` |
-
-### Local memory-bit effects and direct incoming edges
-
-- Candidate sets `0x40` at `[r3]`; sequence: `0x25a270`, `0x25a274`, `0x25a278`.
-  - No direct CMP/TST-branch incoming edge demonstrated; entry condition remains unknown.
-  - Modeled direct predecessors: `0x25a26c` (fallthrough).
-  - Entry-relative modeled dominators: 19 decoded nodes (not global or dynamic dominance).
-  - Conditional branches dominating this write in the entry-rooted modeled graph:
-    - `0x25a260` after `0x25a25c`: Only one successor has a modeled route; taken [r2 <= (signed) 0x0], other [r2 > (signed) 0x0]. Not a proof of execution-path exclusivity.
-  - Branch `0x25a260` after compare `0x25a25c`: [r2 <= (signed) 0x0] → no route found in modeled graph; [r2 > (signed) 0x0] → 0x25a264 → 0x25a268 → 0x25a26c → 0x25a270. Only one modeled successor reaches the write; NOT a dominance or impossibility proof.
-
 ## `002b2448` — EnvSE_Play(int)
 
 Observed direct compare/branch pairs: **1**; local bitmask sequences: **0**.
@@ -127,92 +17,6 @@ A route in this graph is a candidate, not a proven executable path. An absent ro
 | Compare / branch | Taken edge | Fallthrough edge |
 |---|---|---|
 | `0x2b2464` cmp r0, #0; `0x2b2468` beq #0x2b25a0 | r0 == 0x0 → `0x2b25a0` | r0 != 0x0 → `0x2b246c` |
-
-### Local memory-bit effects and direct incoming edges
-
-No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
-
-
-## `0028bb88` — TE_asmTaskEntry(int)
-
-Observed direct compare/branch pairs: **10**; local bitmask sequences: **0**.
-
-Modeled ARM CFG nodes: **115**; entry-reachable: **115**; unmodeled outgoing edges/transfers: **0**.
-
-Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
-
-A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
-
-| Compare / branch | Taken edge | Fallthrough edge |
-|---|---|---|
-| `0x28bbfc` cmp r4, #0; `0x28bc00` beq #0x28bd24 | r4 == 0x0 → `0x28bd24` | r4 != 0x0 → `0x28bc04` |
-| `0x28bc44` cmp r3, #0; `0x28bc48` beq #0x28bc1c | r3 == 0x0 → `0x28bc1c` | r3 != 0x0 → `0x28bc4c` |
-| `0x28bc4c` cmp r4, r3; `0x28bc50` bne #0x28bc1c | r4 != r3 → `0x28bc1c` | r4 == r3 → `0x28bc54` |
-| `0x28bc5c` cmp r3, r2; `0x28bc60` bne #0x28bc1c | r3 != r2 → `0x28bc1c` | r3 == r2 → `0x28bc64` |
-| `0x28bc74` cmp r0, #0; `0x28bc78` beq #0x28bc1c | r0 == 0x0 → `0x28bc1c` | r0 != 0x0 → `0x28bc7c` |
-| `0x28bcb8` cmp r0, #0; `0x28bcbc` bne #0x28bd10 | r0 != 0x0 → `0x28bd10` | r0 == 0x0 → `0x28bcc0` |
-| `0x28bcc8` cmp r0, #0; `0x28bccc` bne #0x28bc7c | r0 != 0x0 → `0x28bc7c` | r0 == 0x0 → `0x28bcd0` |
-| `0x28bcd8` cmp r3, #0; `0x28bcdc` beq #0x28bcc0 | r3 == 0x0 → `0x28bcc0` | r3 != 0x0 → `0x28bce0` |
-| `0x28bce0` cmp r0, #0; `0x28bce4` beq #0x28bcc0 | r0 == 0x0 → `0x28bcc0` | r0 != 0x0 → `0x28bce8` |
-| `0x28bd38` cmp r3, #0; `0x28bd3c` beq #0x28bc7c | r3 == 0x0 → `0x28bc7c` | r3 != 0x0 → `0x28bd40` |
-
-### Local memory-bit effects and direct incoming edges
-
-No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
-
-
-## `0024eadc` — ctlperson_main(CTLINFO*)
-
-Observed direct compare/branch pairs: **7**; local bitmask sequences: **1**.
-
-Modeled ARM CFG nodes: **115**; entry-reachable: **115**; unmodeled outgoing edges/transfers: **4**.
-
-Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
-
-A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
-
-| Compare / branch | Taken edge | Fallthrough edge |
-|---|---|---|
-| `0x24eaf8` tst r3, #4; `0x24eafc` bne #0x24eb34 | (r3 & 0x4) != 0 → `0x24eb34` | (r3 & 0x4) == 0 → `0x24eb00` |
-| `0x24eb0c` tst r3, #0x40; `0x24eb10` bne #0x24ec68 | (r3 & 0x40) != 0 → `0x24ec68` | (r3 & 0x40) == 0 → `0x24eb14` |
-| `0x24eb14` tst r3, #0x100; `0x24eb18` bne #0x24ebc0 | (r3 & 0x100) != 0 → `0x24ebc0` | (r3 & 0x100) == 0 → `0x24eb1c` |
-| `0x24eb1c` tst r3, #0x20; `0x24eb20` beq #0x24eb30 | (r3 & 0x20) == 0 → `0x24eb30` | (r3 & 0x20) != 0 → `0x24eb24` |
-| `0x24eb28` cmp r3, #0; `0x24eb2c` bne #0x24ebe8 | r3 != 0x0 → `0x24ebe8` | r3 == 0x0 → `0x24eb30` |
-| `0x24eb3c` cmp r0, #0; `0x24eb40` bne #0x24eb00 | r0 != 0x0 → `0x24eb00` | r0 == 0x0 → `0x24eb44` |
-| `0x24ebc4` cmp r2, #0; `0x24ebc8` beq #0x24eb1c | r2 == 0x0 → `0x24eb1c` | r2 != 0x0 → `0x24ebcc` |
-
-### Local memory-bit effects and direct incoming edges
-
-- Candidate sets `0x4` at `[r5]`; sequence: `0x24ec08`, `0x24ec0c`, `0x24ec10`.
-  - No direct CMP/TST-branch incoming edge demonstrated; entry condition remains unknown.
-  - Modeled direct predecessors: `0x24ec04` (call_returns).
-  - Entry-relative modeled dominators: 30 decoded nodes (not global or dynamic dominance).
-  - Conditional branches dominating this write in the entry-rooted modeled graph:
-    - `0x24eafc` after `0x24eaf8`: Both successors have modeled routes; taken [(r3 & 0x4) != 0], other [(r3 & 0x4) == 0]. Not a proof of execution-path exclusivity.
-    - `0x24eb10` after `0x24eb0c`: Only one successor has a modeled route; taken [(r3 & 0x40) != 0], other [(r3 & 0x40) == 0]. Not a proof of execution-path exclusivity.
-    - `0x24eb18` after `0x24eb14`: Both successors have modeled routes; taken [(r3 & 0x100) != 0], other [(r3 & 0x100) == 0]. Not a proof of execution-path exclusivity.
-    - `0x24eb20` after `0x24eb1c`: Only one successor has a modeled route; taken [(r3 & 0x20) == 0], other [(r3 & 0x20) != 0]. Not a proof of execution-path exclusivity.
-    - `0x24eb2c` after `0x24eb28`: Only one successor has a modeled route; taken [r3 != 0x0], other [r3 == 0x0]. Not a proof of execution-path exclusivity.
-  - Branch `0x24eb10` after compare `0x24eb0c`: [(r3 & 0x40) != 0] → no route found in modeled graph; [(r3 & 0x40) == 0] → 0x24eb14 → 0x24eb18 → 0x24eb1c → 0x24eb20 → 0x24eb24 → 0x24eb28 → 0x24eb2c → .... Only one modeled successor reaches the write; NOT a dominance or impossibility proof.
-  - Branch `0x24eb20` after compare `0x24eb1c`: [(r3 & 0x20) == 0] → no route found in modeled graph; [(r3 & 0x20) != 0] → 0x24eb24 → 0x24eb28 → 0x24eb2c → 0x24ebe8 → 0x24ebec → 0x24ebf0 → 0x24ebf4 → .... Only one modeled successor reaches the write; NOT a dominance or impossibility proof.
-  - Branch `0x24eb2c` after compare `0x24eb28`: [r3 != 0x0] → 0x24ebe8 → 0x24ebec → 0x24ebf0 → 0x24ebf4 → 0x24ebf8 → 0x24ebfc → 0x24ec00 → ...; [r3 == 0x0] → no route found in modeled graph. Only one modeled successor reaches the write; NOT a dominance or impossibility proof.
-  - Branch `0x24eb40` after compare `0x24eb3c`: [r0 != 0x0] → 0x24eb00 → 0x24eb04 → 0x24eb08 → 0x24eb0c → 0x24eb10 → 0x24eb14 → 0x24eb18 → ...; [r0 == 0x0] → no route found in modeled graph. Only one modeled successor reaches the write; NOT a dominance or impossibility proof.
-  - Branch `0x24ebc8` after compare `0x24ebc4`: [r2 == 0x0] → 0x24eb1c → 0x24eb20 → 0x24eb24 → 0x24eb28 → 0x24eb2c → 0x24ebe8 → 0x24ebec → ...; [r2 != 0x0] → no route found in modeled graph. Only one modeled successor reaches the write; NOT a dominance or impossibility proof.
-  - Branch `0x24eafc` after compare `0x24eaf8`: [(r3 & 0x4) != 0] → 0x24eb34 → 0x24eb38 → 0x24eb3c → 0x24eb40 → 0x24eb00 → 0x24eb04 → 0x24eb08 → ...; [(r3 & 0x4) == 0] → 0x24eb00 → 0x24eb04 → 0x24eb08 → 0x24eb0c → 0x24eb10 → 0x24eb14 → 0x24eb18 → .... Both modeled successors can reach the write.
-
-## `002576e0` — ctlevtinfo_init(int)
-
-Observed direct compare/branch pairs: **0**; local bitmask sequences: **0**.
-
-Modeled ARM CFG nodes: **115**; entry-reachable: **115**; unmodeled outgoing edges/transfers: **0**.
-
-Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
-
-A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
-
-| Compare / branch | Taken edge | Fallthrough edge |
-|---|---|---|
-| No directly adjacent CMP/TST-branch pair | — | — |
 
 ### Local memory-bit effects and direct incoming edges
 
@@ -244,26 +48,6 @@ A route in this graph is a candidate, not a proven executable path. An absent ro
 No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
 
 
-## `001bc87c` — UnitTableInit(short)
-
-Observed direct compare/branch pairs: **2**; local bitmask sequences: **0**.
-
-Modeled ARM CFG nodes: **107**; entry-reachable: **107**; unmodeled outgoing edges/transfers: **0**.
-
-Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
-
-A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
-
-| Compare / branch | Taken edge | Fallthrough edge |
-|---|---|---|
-| `0x1bc93c` cmp r4, #9; `0x1bc940` ble #0x1bc924 | r4 <= (signed) 0x9 → `0x1bc924` | r4 > (signed) 0x9 → `0x1bc944` |
-| `0x1bc9d4` cmp r3, #0x20; `0x1bc9d8` bne #0x1bc9c8 | r3 != 0x20 → `0x1bc9c8` | r3 == 0x20 → `0x1bc9dc` |
-
-### Local memory-bit effects and direct incoming edges
-
-No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
-
-
 ## `001ccc3c` — getTrapResultDamage(BWORK*, int)
 
 Observed direct compare/branch pairs: **1**; local bitmask sequences: **0**.
@@ -283,11 +67,11 @@ A route in this graph is a candidate, not a proven executable path. An absent ro
 No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
 
 
-## `002472a8` — ctlsound_main(CTLINFO*)
+## `00159aac` — asm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)
 
-Observed direct compare/branch pairs: **4**; local bitmask sequences: **0**.
+Observed direct compare/branch pairs: **1**; local bitmask sequences: **0**.
 
-Modeled ARM CFG nodes: **113**; entry-reachable: **113**; unmodeled outgoing edges/transfers: **1**.
+Modeled ARM CFG nodes: **81**; entry-reachable: **81**; unmodeled outgoing edges/transfers: **2**.
 
 Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
 
@@ -295,10 +79,156 @@ A route in this graph is a candidate, not a proven executable path. An absent ro
 
 | Compare / branch | Taken edge | Fallthrough edge |
 |---|---|---|
-| `0x2472e8` tst r3, #0x820; `0x2472ec` bne #0x2473e4 | (r3 & 0x820) != 0 → `0x2473e4` | (r3 & 0x820) == 0 → `0x2472f0` |
-| `0x247300` cmp r0, #0; `0x247304` beq #0x247350 | r0 == 0x0 → `0x247350` | r0 != 0x0 → `0x247308` |
-| `0x247358` cmp r0, #0; `0x24735c` bne #0x24736c | r0 != 0x0 → `0x24736c` | r0 == 0x0 → `0x247360` |
-| `0x247364` tst r3, #0x100; `0x247368` beq #0x2473e0 | (r3 & 0x100) == 0 → `0x2473e0` | (r3 & 0x100) != 0 → `0x24736c` |
+| `0x159ac8` cmp r4, #0; `0x159acc` bne #0x159af4 | r4 != 0x0 → `0x159af4` | r4 == 0x0 → `0x159ad0` |
+
+### Local memory-bit effects and direct incoming edges
+
+No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
+
+
+## `00162080` — wasm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)
+
+Observed direct compare/branch pairs: **1**; local bitmask sequences: **0**.
+
+Modeled ARM CFG nodes: **81**; entry-reachable: **81**; unmodeled outgoing edges/transfers: **2**.
+
+Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
+
+A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
+
+| Compare / branch | Taken edge | Fallthrough edge |
+|---|---|---|
+| `0x16209c` cmp r4, #0; `0x1620a0` bne #0x1620c8 | r4 != 0x0 → `0x1620c8` | r4 == 0x0 → `0x1620a4` |
+
+### Local memory-bit effects and direct incoming edges
+
+No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
+
+
+## `002031a4` — iOSsetCursorByTouch(int, int, int, int, int)
+
+Observed direct compare/branch pairs: **3**; local bitmask sequences: **0**.
+
+Modeled ARM CFG nodes: **56**; entry-reachable: **56**; unmodeled outgoing edges/transfers: **1**.
+
+Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
+
+A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
+
+| Compare / branch | Taken edge | Fallthrough edge |
+|---|---|---|
+| `0x20321c` cmp r3, #0; `0x203220` bne #0x2032dc | r3 != 0x0 → `0x2032dc` | r3 == 0x0 → `0x203224` |
+| `0x2032d4` cmp r3, #0; `0x2032d8` bne #0x2032fc | r3 != 0x0 → `0x2032fc` | r3 == 0x0 → `0x2032dc` |
+| `0x2032f4` cmp fp, #0; `0x2032f8` beq #0x2032dc | fp == 0x0 → `0x2032dc` | fp != 0x0 → `0x2032fc` |
+
+### Local memory-bit effects and direct incoming edges
+
+No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
+
+
+## `002c9b11` — __gxx_personality_v0
+
+Thumb-tagged address: local ARM CMP/TST branch contract extraction not supported; no predicate is inferred.
+
+## `0027fe84` — Savedata_Load(unsigned char*, int*)
+
+Observed direct compare/branch pairs: **5**; local bitmask sequences: **0**.
+
+Modeled ARM CFG nodes: **91**; entry-reachable: **91**; unmodeled outgoing edges/transfers: **1**.
+
+Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
+
+A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
+
+| Compare / branch | Taken edge | Fallthrough edge |
+|---|---|---|
+| `0x27ff24` cmp r0, #1; `0x27ff28` beq #0x27ff44 | r0 == 0x1 → `0x27ff44` | r0 != 0x1 → `0x27ff2c` |
+| `0x27ff3c` cmp r5, r0; `0x27ff40` beq #0x27ff98 | r5 == r0 → `0x27ff98` | r5 != r0 → `0x27ff44` |
+| `0x27ff44` cmp r4, #0; `0x27ff48` beq #0x27ff5c | r4 == 0x0 → `0x27ff5c` | r4 != 0x0 → `0x27ff4c` |
+| `0x27ff68` cmp r2, r3; `0x27ff6c` bne #0x27ffe8 | r2 != r3 → `0x27ffe8` | r2 == r3 → `0x27ff70` |
+| `0x27ffc4` cmp r4, #0; `0x27ffc8` beq #0x27ffdc | r4 == 0x0 → `0x27ffdc` | r4 != 0x0 → `0x27ffcc` |
+
+### Local memory-bit effects and direct incoming edges
+
+No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
+
+
+## `0028e2e4` — CdControl
+
+Observed direct compare/branch pairs: **4**; local bitmask sequences: **0**.
+
+Modeled ARM CFG nodes: **66**; entry-reachable: **66**; unmodeled outgoing edges/transfers: **1**.
+
+Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
+
+A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
+
+| Compare / branch | Taken edge | Fallthrough edge |
+|---|---|---|
+| `0x28e2e4` cmp r2, #0; `0x28e2e8` beq #0x28e378 | r2 == 0x0 → `0x28e378` | r2 != 0x0 → `0x28e2ec` |
+| `0x28e378` cmp r0, #0xe; `0x28e37c` beq #0x28e398 | r0 == 0xe → `0x28e398` | r0 != 0xe → `0x28e380` |
+| `0x28e380` cmp r0, #0x1b; `0x28e384` bne #0x28e3b0 | r0 != 0x1b → `0x28e3b0` | r0 == 0x1b → `0x28e388` |
+| `0x28e3b0` cmp r0, #2; `0x28e3b4` bne #0x28e370 | r0 != 0x2 → `0x28e370` | r0 == 0x2 → `0x28e3b8` |
+
+### Local memory-bit effects and direct incoming edges
+
+No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
+
+
+## `001d972c` — get_shape2(BWORK*, unsigned char*)
+
+Observed direct compare/branch pairs: **4**; local bitmask sequences: **0**.
+
+Modeled ARM CFG nodes: **52**; entry-reachable: **52**; unmodeled outgoing edges/transfers: **1**.
+
+Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
+
+A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
+
+| Compare / branch | Taken edge | Fallthrough edge |
+|---|---|---|
+| `0x1d9834` cmp r3, #0xa1; `0x1d9838` beq #0x1d989c | r3 == 0xa1 → `0x1d989c` | r3 != 0xa1 → `0x1d983c` |
+| `0x1d983c` cmp r3, #0xa4; `0x1d9840` beq #0x1d989c | r3 == 0xa4 → `0x1d989c` | r3 != 0xa4 → `0x1d9844` |
+| `0x1d9844` cmp r3, #0xa0; `0x1d9848` beq #0x1d9890 | r3 == 0xa0 → `0x1d9890` | r3 != 0xa0 → `0x1d984c` |
+| `0x1d9874` cmp ip, #0x80; `0x1d9878` bls #0x1d9888 | ip <= (unsigned) 0x80 → `0x1d9888` | ip > (unsigned) 0x80 → `0x1d987c` |
+
+### Local memory-bit effects and direct incoming edges
+
+No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
+
+
+## `0022a6a4` — _ReadTMD(TMD_PRIM*)
+
+Observed direct compare/branch pairs: **0**; local bitmask sequences: **0**.
+
+Modeled ARM CFG nodes: **80**; entry-reachable: **80**; unmodeled outgoing edges/transfers: **1**.
+
+Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
+
+A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
+
+| Compare / branch | Taken edge | Fallthrough edge |
+|---|---|---|
+| No directly adjacent CMP/TST-branch pair | — | — |
+
+### Local memory-bit effects and direct incoming edges
+
+No conservative consecutive LDR/BIC-or-ORR/STR sequence identified.
+
+
+## `00210eac` — initMap(int, int)
+
+Observed direct compare/branch pairs: **1**; local bitmask sequences: **0**.
+
+Modeled ARM CFG nodes: **75**; entry-reachable: **75**; unmodeled outgoing edges/transfers: **1**.
+
+Modeled dominators are calculated only for nodes reachable from the function entry. They do not establish dominance across unknown incoming edges, indirect transfers, exceptions or callees.
+
+A route in this graph is a candidate, not a proven executable path. An absent route may be due to unresolved indirect jumps, callee effects, missing code or exceptional control flow.
+
+| Compare / branch | Taken edge | Fallthrough edge |
+|---|---|---|
+| `0x210ef8` cmp r0, #2; `0x210efc` beq #0x210ef4 | r0 == 0x2 → `0x210ef4` | r0 != 0x2 → `0x210f00` |
 
 ### Local memory-bit effects and direct incoming edges
 

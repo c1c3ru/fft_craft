@@ -4,15 +4,15 @@ Automatic structural acceptance checks all ARM instruction slots, candidate PC-r
 
 | Metric | Count |
 |---|---:|
-| v3 checkpoints | 1213 |
-| Legacy checkpoint records unchanged | 1789 |
-| v3 structurally accepted | 1169 |
-| v3 still under review | 44 |
-| Archived v2 originals | 1199 |
-| Referenced candidate literal words | 2805 |
-| Unexplained instruction slots | 732 |
+| v3 checkpoints | 1258 |
+| Legacy checkpoint records unchanged | 1744 |
+| v3 structurally accepted | 1208 |
+| v3 still under review | 50 |
+| Archived v2 originals | 1244 |
+| Referenced candidate literal words | 3171 |
+| Unexplained instruction slots | 841 |
 | Independently checked jump tables | 0 |
-| Unsafe / unresolved checked tables | 30 |
+| Unsafe / unresolved checked tables | 38 |
 
 ## Remaining v3 review examples
 
@@ -23,9 +23,13 @@ Automatic structural acceptance checks all ARM instruction slots, candidate PC-r
 | `000aecb8` | 7 | unverified_jump_table |
 | `000d7e00` | 13 | unverified_jump_table |
 | `000ff9ec` | 13 | unverified_jump_table |
+| `0015813c` | 37 | unverified_jump_table |
+| `00159aac` | 16 | unverified_jump_table |
 | `0015a65c` | 11 | unverified_jump_table |
+| `00162080` | 16 | unverified_jump_table |
 | `001a6410` | 10 | unverified_jump_table |
 | `001caa10` | 17 | unverified_jump_table |
+| `001ccc3c` | 8 | unverified_jump_table |
 | `001d67a8` | 17 | unverified_jump_table |
 | `001d972c` | 43 | unverified_jump_table |
 | `001dc944` | 10 | unverified_jump_table |
@@ -36,6 +40,7 @@ Automatic structural acceptance checks all ARM instruction slots, candidate PC-r
 | `0022a6a4` | 10 | unverified_jump_table |
 | `0025b78c` | 5 | unverified_jump_table |
 | `00271ba4` | 10 | unverified_jump_table |
+| `0027207c` | 7 | unverified_jump_table |
 | `0027fe84` | 0 | instruction_conflict |
 | `00285e50` | 12 | unverified_jump_table |
 | `002867a8` | 15 | unverified_jump_table |
@@ -43,11 +48,6 @@ Automatic structural acceptance checks all ARM instruction slots, candidate PC-r
 | `00289c1c` | 28 | unverified_jump_table |
 | `0028c288` | 6 | unverified_jump_table |
 | `0028e2e4` | 28 | unverified_jump_table |
-| `002b20f4` | 20 | unverified_jump_table |
-| `002b3464` | 0 | instruction_conflict |
-| `002c9121` | 0 | non_arm_aligned_or_empty |
-| `002c99b5` | 0 | non_arm_aligned_or_empty |
-| `002c9b11` | 0 | non_arm_aligned_or_empty |
 
 ## Migration contract
 

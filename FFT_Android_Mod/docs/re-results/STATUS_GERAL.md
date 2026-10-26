@@ -22,10 +22,11 @@ O histórico CSV contém **5,932** registros de análise anterior, que podem se 
 
 ## Evidência e testes semânticos
 
-89/89 relatórios estáticos de evidências — desatualizado perante 50 checkpoints pendentes. **Relatórios não são equivalência semântica certificada.**
+50/50 relatórios estáticos de evidências. **Relatórios não são equivalência semântica certificada.**
 
 Os relatórios abaixo apresentam **efeitos locais testados sob estados sintéticos** e seus limites. Testes passando não significam que a função inteira foi reconstruída:
 
+- [Política de certificação: contrato integral, ELF, revisão independente e CI](SEMANTIC_CERTIFICATION_POLICY.md)
 - [Primeiros contratos locais BX LR com retornos ARM/Thumb verificados](SEMANTIC_BXLR_CONTRACT_PILOT.md)
 - [Índice do acervo semântico acumulado e vinculado ao mesmo ELF](SEMANTIC_HISTORY_INDEX.md)
 - [Candidatas ARM de retorno simples microexecutadas para contratos revisáveis](SEMANTIC_LEAF_BXLR.md)
@@ -44,7 +45,7 @@ Os relatórios abaixo apresentam **efeitos locais testados sob estados sintétic
 
 Os números certificados representam **registros formais válidos para este ELF**, não aprovação estrutural. Evidências parciais não certificam equivalência.
 
-Evidências do **último CI verificado** para este ELF, [execução 40405241371](https://github.com/c1c3ru/fft_craft/actions/runs/40405241371); os testes não foram reexecutados nesta geração do painel.
+Evidências geradas e verificadas nesta execução do pipeline.
 
 | Indicador | Resultado |
 |---|---:|
@@ -111,7 +112,11 @@ Estas duas prioridades são **curadas no gerador**; quando um limite for resolvi
 
 ## Pull requests recentes
 
-Metadados dos PRs indisponíveis nesta execução local; [consultar merges](https://github.com/c1c3ru/fft_craft/pulls?q=is%3Apr+is%3Amerged).
+- [PR #328 — fix(ci): separar snapshots semânticos dos checkpoints ARM nos lotes automáticos](https://github.com/c1c3ru/fft_craft/pull/328)
+- [PR #327 — feat(re): exigir prova ELF e revisão humana autêntica para certificações semânticas](https://github.com/c1c3ru/fft_craft/pull/327)
+- [PR #326 — chore(re): automated structural batch 40405241371](https://github.com/c1c3ru/fft_craft/pull/326)
+- [PR #325 — fix(re): preservar evidências semânticas verificadas no STATUS_GERAL](https://github.com/c1c3ru/fft_craft/pull/325)
+- [PR #324 — chore(re): automated structural batch 40390774344](https://github.com/c1c3ru/fft_craft/pull/324)
 
 ## Atualização automática e fontes
 
