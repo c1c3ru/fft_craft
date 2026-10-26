@@ -1,5 +1,10 @@
 # fft_craft
 
+**[Acompanhar o progresso da engenharia reversa — STATUS_GERAL.md](FFT_Android_Mod/docs/re-results/STATUS_GERAL.md)**
+
+O painel é regenerado pelo GitHub Actions após cada lote validado e distingue
+aprovação estrutural de evidência semântica e de equivalência integral.
+
 Projeto de modificação do **Final Fantasy Tactics: The War of the Lions** para Android
 (pacote `com.square_enix.android_googleplay.FFT_en2`), incluindo engenharia reversa,
 rebuild do APK e os binários/assets usados no processo.

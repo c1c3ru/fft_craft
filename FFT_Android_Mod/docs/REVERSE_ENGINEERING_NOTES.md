@@ -4368,7 +4368,7 @@ build (linkagem da zlib).
 comportamento de jogo entre as duas arquiteturas — testado só 1
 função; o restante do binário x86 continua inteiramente não lido.
 
-## 32. `battle()` — passe estrutural (não linha a linha) — primeiro item da Fase 3, cobertura total (2026-10-17)
+## 32. `battle()` — passe estrutural (não linha a linha), ampliado em 2026-10-25 (95% cobertura, 201 chamadas, 3 desvios de guarda lidos por completo) — primeiro item da Fase 3 (2026-10-17 + atualização 2026-10-25)
 
 **Mudança de metodologia, documentada no `RE_BACKLOG_PLAN_PHASE3.md`**:
 `battle()` (`0x207e10`, 17.156 B) é a maior função do binário inteiro
@@ -4506,6 +4506,437 @@ tabela). Ler os 70 handlers de verdade é trabalho de várias iterações
 futuras — ver `RE_FUNCTION_INVENTORY.csv` (`battle()` marcada
 `read_structural`, não `read_full`).
 
+### Atualização (2026-10-25): `jtable.py` atual resolve a tabela automaticamente — 95% de cobertura, 201 chamadas, desce por dentro dos handlers pela 1ª vez
+
+O passe de 32.1-32.3 foi escrito quando o `jtable.py` ainda não
+resolvia tabelas de salto sozinho — a descida nunca seguia os 70
+alvos. A versão atual da ferramenta resolve a MESMA tabela (102
+entradas, 70 endereços distintos — idêntica à de 32.2, nenhum
+endereço mudou) automaticamente e semeia a descida com todos os 70
+alvos, alcançando **4.086 de ~4.289 slots de instrução (95%)** e
+**201 `bl` distintos** (contra 94 antes) — ou seja, pela primeira vez
+a ferramenta efetivamente desceu por dentro dos handlers de estado,
+não só no código de despacho.
+
+### 32.6 Os 3 desvios de guarda, antes "não seguidos", agora lidos instrução a instrução
+
+A seção 32.1 listava três desvios do código de guarda pré-switch
+(`0x20aa50`/`0x20afb0`/`0x20afbc`) como não investigados. Lidos agora
+via disassembly direto:
+
+- **`0x20aa50`** (alvo de `iOS_getV2Icon(0x13) != 0`, ícone "19"):
+  `resetTurnOrder()` → `callSystemSound(1)` → zera um campo via
+  ponteiro `fp`-relativo → `request_atlist()` → grava **`0x4b` (75)
+  diretamente no contador de estado** (`str r3,[sl]` com `r3=0x4b`) e
+  retorna `-1`. É uma transição de estado explícita e hard-coded:
+  quando o ícone 19 está ativo, a função força `*g_battleState = 75`
+  — o estado 75 (`0x2089fc`, handler próprio, 260 B) passa a ser um
+  candidato forte a "handler de reinício de turno" dado que é
+  precedido por `resetTurnOrder`.
+- **`0x20afb0`**: `iOS_setV2Icon(0xb3 /*179*/, ...)` e desvia pra
+  `0x20844c` (volta pro início do código de despacho, não pro switch).
+- **`0x20afbc`**: `iOS_getV2Icon(0xc9 /*201*/)`; se não-zero desvia
+  pra `0x20b3f8`, senão lê `*sl` e desvia pra `0x208480` (também
+  antes do switch). **Achado novo**: os ícones usados nesses dois
+  desvios (179/201) são diferentes dos três já catalogados em 32.1
+  (19/202/203) — confirma que o bloco de guarda pré-switch
+  consulta/seta pelo menos 5 ícones V2 distintos, não só 3.
+
+### 32.7 Subsistemas confirmados como usados DE DENTRO dos handlers (não só no código de despacho)
+
+Dos ~107 nomes novos no catálogo (201 vs. 94), a maioria já tem seção
+própria em outro lugar do projeto — a novidade é confirmar que
+`battle()` de fato os invoca, não só sistemas-irmãos:
+
+- **Pipeline de animação de combate** (grupo mais denso):
+  `searchActiveAnimation`/`searchCurrentAnimation`/
+  `searchAnimationByPositionBattle`/`searchAnimationByID`/
+  `searchAnimationByBattleID`, `ExecuteAnimations()` (§263),
+  `DisplayAnimations()` (switch de 74 casos, §200), `EndAllAnimation()`,
+  `resetActionAnimation`, `requestCast1Animation`,
+  `setActivePanelFromAnimation`/`setActivePanelFromAction`,
+  `getDisplayPosition()` (§425), `countCrystalAnimation()`,
+  `myInitShape`/`myStartShape`. Confirma `battle()` como chamador
+  real de todo esse pipeline a cada quadro, não só orquestrador.
+- **Fila de troca de paleta/CLUT**: `executeChangeClut()` (§70) +
+  `transferClutData`/`ExecuteChangePalette`/`DisplayChangePalette`.
+  Confirma `battle()` como chamador real da fila alimentada por
+  `requestChangeClut` (§120).
+- **Ciclo de vida de "Permanent Effect"**: `LoadEffect()` (§429),
+  `IsPermanentEffect`, `WhoUnlockEffect`/`UnlockEffect`, `DoEffect()`
+  (§348, dispara state machine de 6 fases), `InitPermanentEffect()`
+  (§604) — as seis funções do cluster todas chamadas de dentro de
+  `battle()`: pelo menos um dos 70 estados é dedicado ao ciclo
+  completo de um efeito visual persistente.
+- **Rede**: `pspNetSetCharacterWaitFlag`/`pspNetGetCharacterWaitFlag`/
+  `pspNetCheckDuty`/`get_netdatamode`/`get_netmodeadhoc`/
+  `pspNetSetAttackTimingFrame` — sincronização de turno/timing de
+  ataque entre clientes.
+- **`menu_call`** (§156) chamada **27 vezes** — maior contagem de
+  qualquer entrada de task nomeada, confirma que abrir o menu de
+  comando é operação central e repetida do loop.
+- **`generateAttackTeam()`** (§206, setup de batalha em rede) —
+  confirma que a inicialização de rede acontece dentro de um estado.
+- **`standerdExecution()`** (38 chamadas, 2ª maior do catálogo, atrás
+  só de `iOS_setV2Icon`) e **`isInputEnable()`** (7×) — ainda sem
+  seção própria; a frequência altíssima de `standerdExecution`
+  sugere polling/tick genérico chamado por muitos estados —
+  candidato de alto valor pra próxima leitura.
+
+### 32.8 Honestidade sobre o que isto é e não é
+
+**Isto não é `read_full`.** 95% de cobertura e 201 chamadas
+confirmam muito mais do call-graph (inclusive de dentro dos
+handlers), mas nenhum controle de fluxo em nível de bloco foi
+rastreado dentro dos 70 handlers individualmente — não se sabe, pra
+nenhum dos 70 estados, a sequência exata de comparações/gravações de
+memória, só que ele chama tais funções. O log do `jtable.py` só dá
+contagens agregadas pro binário inteiro da função, sem endereço de
+call-site — não há como atribuir com confiança qual chamada
+pertence a qual handler sem decodificar cada bloco individualmente
+(o trabalho de "ler os handlers" ainda pendente). A única exceção
+real são os três desvios de guarda da 32.6, lidos instrução a
+instrução via disassembly manual direto.
+
+Trabalho pendente de maior valor, em ordem: (1) os 68 handlers de
+estado reais (21 caem no default, 13 num segundo handler
+compartilhado — tabela de 32.2 permanece válida); (2) os ~40 nomes
+locais sem símbolo que a descida agora alcança mas não resolve; (3)
+`standerdExecution`/`isInputEnable`, chamados dezenas de vezes sem
+seção própria.
+
+## 32.9 Leitura instrução a instrução dos primeiros 30 handlers de estado (de 68) — 5 forks paralelos, disassembly Capstone direto (2026-10-25, Fase 3, nonagésimo nono lote)
+
+Início da conversão real de `battle()` pra `read_full`: cada handler
+abaixo foi lido por completo (toda comparação, gravação de memória e
+`bl` resolvidos), não só o catálogo agregado da atualização anterior.
+Dois achados estruturais atravessam quase todos os 30:
+
+- **Dois pontos de epílogo compartilhado**, `0x2088d0` (caminho
+  completo: recarrega o estado e segue o loop) e `0x20868c` (caminho
+  "continuar esperando" — estado não mudou desde o quadro anterior).
+  Praticamente todo handler termina caindo num dos dois, em vez de
+  ter seu próprio retorno — explica por que a cobertura automática
+  nunca batia 100%: o verdadeiro "fim" de cada handler é um salto pra
+  fora da região ingenuamente calculada por endereço.
+- **Transições de estado hard-coded por `*g_battleState = N`**: já
+  achado uma vez na 32.6 (ícone 19 → estado 75); agora confirmado
+  **três vezes mais** dentro dos próprios handlers — estado 10 grava
+  `8`, estado 26 grava `25` (condicionalmente, enquanto
+  `recieve_statusinfo()!=2`), estado 29 grava `30` (condicionalmente,
+  sob 4 flags globais). Confirma que o "switch de 102 estados" não é
+  só dirigido por eventos externos — boa parte da transição é o
+  próprio corpo de um estado decidindo pra onde ir a seguir.
+
+### Estados 1-6 — abertura/reabertura do menu de comando, highlight de seleção, gate de rede, tutorial
+
+- **Estado 1** (`0x20a5f4`): liga ícones 4/5, reset condicional por
+  `recieve_statusinfo()!=2`, termina em `ASHURA_getOTptrZ(0)` +
+  `menu_call(...)` (§156) — **abre o menu de comando real**. Hipótese:
+  "selecionar comando", entrada do turno do jogador.
+- **Estado 2** (`0x20a41c`): setup condicionado ao bit 0x80 de uma
+  flags word global (pular na 2ª+ passagem); `iOS_resetAnimationIrowake()`
+  ("irowake" = distinção por cor) só dispara quando o estado mudou
+  desde o quadro anterior — reset de highlight de seleção só na
+  entrada, não todo quadro. Hipótese: "aguardando seleção de
+  unidade/alvo".
+- **Estado 3** (`0x20a518`): gate de rede real — `pspNetCheckDuty()`
+  decide se é a vez do cliente local, `pspNetGetCharacterWaitFlag()`
+  evita reentrância, `sub_202180()` seguido de releitura do próprio
+  `*g_battleState` (polling). Hipótese: "esperar minha vez (rede)".
+- **Estado 4** (`0x20a4a8`): corpo inteiro gateado por `iOSTutoCheck()`
+  — só roda com tutorial ativo; trava input, busca ação/animação
+  atual, dispara popup (`sub_206b00`) só se **não** em rede ad-hoc.
+  Hipótese: "popup de explicação de tutorial".
+- **Estado 5** (`0x20a598`): variante simplificada do gate de rede do
+  estado 3 (mesmo `pspNetCheckDuty`, sem o polling de `CharacterWaitFlag`).
+  Hipótese: "confirmar ação antes de executar (rede)".
+- **Estado 6** (`0x209780`): quase idêntico ao estado 1, mas com
+  checagem real de `searchActiveAnimation()` — se há animação ativa
+  do tipo esperado, deixa terminar em outro lugar; se tipo
+  inesperado, cancela (`sub_1fa468`) antes de reabrir o menu.
+  Hipótese: "reabrir o menu de comando" (contraparte do estado 1 pra
+  retorno de sub-menu).
+
+### Estados 7-12 — abertura de menu (variante com efeito 3D), template de espera assíncrona, dispatch por tipo de ação
+
+- **Estado 7** (`0x20a2c8`): liga 5 ícones (incl. `0xe9`, novo);
+  desvio condicional por `*g_flagsA & 0x40` decide se
+  `ASHURA_set_Mesh(0,1)` + `callSystemSound(2)` (highlight 3D + som
+  de abertura) acontece antes do `menu_call`. Confirma **estado real
+  de abertura do menu de comando**, com efeito visual/sonoro
+  condicional.
+- **Estados 8 e 9** (`0x20a254`/`0x20a1ec`): mesmo "template" de
+  espera assíncrona — `iOS_setDisableInterrupt(1)`, dispara uma
+  operação local (`sub_2040bc`/`sub_202854`, diferente em cada), só
+  reabilita input quando um valor cacheado diverge do estado atual.
+  Estado 8 tem uma guarda extra (`iOS_getOptionAddOfsMode()`) que o 9
+  não tem — duas instâncias do mesmo template, provável par de
+  sub-passos sequenciais.
+- **Estado 10** (`0x20a14c`): **grava `8` direto em `*g_battleState`**
+  (transição hard-coded); chama `ASHURA_set_Mesh(0,3)` e
+  `request_turnwindowrestart()` (achado novo); tem uma saída
+  alternativa (`0x2088a4`, diferente do epílogo padrão) quando o
+  ícone `0x14` está ativo.
+- **Estados 11 e 12** (`0x2096c4`/`0x209648`): pollam o menu
+  (`menu_call`) e despacham pelo tipo de ação de
+  `return_actionstructure()` — tipos `7`/`8`/`0xff` tratados como
+  grupo especial (provável "sem ação"/"cancelado"), qualquer outro
+  valor = ação de combate real. Estado 12 tem guarda extra
+  (`isInputEnable()`) e trata os 3 tipos com destinos individuais em
+  vez de agrupados.
+
+### Estados 13-18 (+ bônus 28) — fase de ação do jogador, polling de status 7/8/0xff, limpeza de ícones
+
+- **Estado 13** (`0x20a3a4`): gateado por `isInputEnable()`; liga
+  ícones 4/0xa/0xc, habilita toque/scroll real de unidade via
+  `iOSUnitTapSet`/`iOSScrollButtonMove`. Hipótese: "aguardando
+  comando do jogador".
+- **Estados 14, 15, 16** (`0x2095fc`/`0x20a0f4`/`0x20a010`): mesmo
+  padrão — `menu_call` + `return_actionstructure()`, testando o
+  campo 0 (chamado de "status de ação") contra `7`/`8`/`0xff`. 14/15
+  tratam esse grupo igual; **16 bifurca o caso 7 pra um destino
+  diferente de 8/0xff** e é o único que chama `searchActiveAnimation()`.
+  15 tem checagem extra de `iOS_getTouchTap()` (saída antecipada por
+  toque).
+- **Estados 17 e 28** (`0x209d5c`/`0x209dac`): desligam ícones
+  3/4/5(/0xa/0xc) e delegam a um local não resolvido — par de
+  "encerramento de sub-fase"; 28 grava uma flag extra (`*ptr=1`) num
+  endereço vindo da pilha do chamador.
+- **Estado 18** (`0x209d10`): mesmo gate `isInputEnable()` do 13, mas
+  desliga (em vez de ligar) ícones 3/0xa e sai por destino
+  condicionado a `iOS_IsEnableMenuItemTouch()` — hipótese: par de
+  saída do estado 13.
+
+### Estados 19-24 — limpeza pós-ação, trava de cursor, reentrância, dispatch de menu (2ª variante)
+
+- **Estado 19** (`0x209fc8`): limpa 4 ícones, consulta
+  `pspNetCheckDuty()` pra decidir entre dois caminhos que convergem
+  no mesmo destino externo.
+- **Estado 20** (`0x209f80`): só avança com input habilitado; marca
+  flag local e limita cursor (`iOSTchCurLimit(1)`) condicionado a
+  `pspNetCheckDuty()`.
+- **Estado 21** (`0x20a080`): **guarda de reentrância via ícone
+  `0x88`** — se já ativo, pula o corpo inteiro; senão liga 4 ícones,
+  chama local, e só desarma o guard se `*g_battleState` ainda for
+  literalmente `21` (`0x15` hex) nesse ponto.
+- **Estados 22 e 24** (`0x209914`/`0x209b4c`): **o mecanismo real de
+  "abrir menu de comando → despachar pela ação escolhida"** —
+  `standerdExecution`→`ASHURA_getOTptrZ`→`menu_call`→
+  `return_actionstructure`, despachando por tipo (7/8/0xff = grupo
+  especial). 22 tem guarda de input/reset de ícone 3 que 24 não tem
+  — duas entradas pro mesmo mecanismo.
+- **Estado 23** (`0x209f3c`): único dos seis sem nenhum desvio
+  condicional — libera cursor, liga 0xa/0xc, desliga 3, chama
+  `iOSScrollButtonMove()`. Hipótese: "transição livre de bloqueio",
+  devolvendo controle de câmera/scroll normal.
+
+### Estados 25-30 — ícones de espera de turno, transições hard-coded 26→25 e 29→30, herança de sub-animação
+
+- **Estado 25** (`0x209ac8`): só roda com input bloqueado
+  (`isInputEnable()==0`); liga ícones 10/12/13, desliga 3 — hipótese:
+  "mostrar ícones de comando enquanto o jogador não pode agir".
+- **Estado 26** (`0x209a68`): poll de `recieve_statusinfo()`; **se
+  ainda não é `2`, grava `25` direto em `*g_battleState`** (transição
+  hard-coded 26→25, loop de espera de rede).
+- **Estado 27** (`0x209df0`): contraparte de saída do 25 — desliga
+  10/3, espelha um bit de flag da animação atual no ícone 4; só
+  chama `standerdExecution()` se `pspNetCheckDuty()` confirmar.
+- **Estado 28**: ver bloco "Estados 17 e 28" acima.
+- **Estado 29** (`0x209e40`, o mais rico dos 30): tipo de ação
+  7/8/0xff marca um flag especial; sob uma combinação de 4 flags
+  globais, **grava `30` direto em `*g_battleState`** (transição
+  hard-coded 29→30); copia 20 bytes + 1 halfword de uma
+  sub-animação referenciada (`+0x134`) pra dentro da animação atual
+  (`+0x160`/`+0x138`) — hipótese: "herdar posição/estado de uma
+  animação vinculada" (alvo/projétil ligado ao atacante).
+- **Estado 30** (`0x20972c`): mesmo trio `standerdExecution`/
+  `ASHURA_getOTptrZ`/`menu_call` que 26 e 29 — o bloco `0x20971c`
+  (16 B antes do início do 30) é provavelmente esse trio deduplicado
+  pelo compilador, com 26/29 desviando pra lá em vez de repetir
+  inline (mesmo fenômeno de handler-compartilhado da 32.2, num grão
+  menor).
+
+## 32.10 Leitura instrução a instrução dos 38 handlers restantes — os 68 handlers reais de `battle()` agora estão TODOS lidos (2026-10-25, Fase 3, centésimo lote)
+
+Continuação direta da 32.9, mesma técnica (5 forks, disassembly
+Capstone direto). Com este lote, **os 68 handlers de estado
+distintos da tabela de 32.2 têm todos leitura byte a byte completa**
+— faltam só os dois blocos "coletivos" (default `0x20a670`, usado
+por 21 estados-sentinela, e o handler compartilhado `0x2092d4`,
+usado por 13 estados) e os próprios blocos de epílogo
+(`0x2088d0`/`0x20868c`/`0x20971c`), que começaram a ser revelados de
+dentro (ver 32.10.81/32.10.72 abaixo) mas não foram abertos como
+blocos independentes.
+
+### Estados 31-38 — mais instâncias do dispatch "menu→ação" e do template "fim de sub-fase"
+
+- **Estado 31** (`0x209a1c`): variante "nua" do núcleo menu→dispatch
+  (11/22/24/39/41/46), sem setup de ícone.
+- **Estado 32** (`0x2099f4`): libera `iOSTchCurLimit(0)`, liga ícone
+  10, delega a `sub_205398`.
+- **Estados 33/34** (`0x209ca0`/`0x209984`): mesmo núcleo
+  menu→dispatch com ícones 4/10 invertidos vs. outras instâncias;
+  **34 bifurca o tipo 7** pra destino distinto de 8/0xff (mesmo
+  padrão do estado 16).
+- **Estado 35** (`0x209ba4`, o mais rico do grupo): estende a cadeia
+  de herança de sub-animação do estado 29 pra **dois elos**
+  (atacante→projétil, e o projétil tem SUA PRÓPRIA sub-animação,
+  resolvida via `searchAnimationByBattleID` + `request_status`);
+  sob 3 gates de sincronização, **grava `36` direto em
+  `*g_battleState`** — 5ª transição hard-coded encontrada.
+- **Estado 36** (`0x2098c8`): único do cluster menu→dispatch que
+  **não** chama `return_actionstructure()` — testa direto um
+  bitmask de flags (`&0x60`) pra decidir se troca o painel ativo.
+- **Estado 37** (`0x20984c`): grupo especial 7/8/0xff + checagem de
+  um byte em offset `+0x2c4` da animação corrente (achado novo).
+- **Estado 38** (`0x209814`): template "fim de sub-fase" (desliga
+  ícones 5/4, delega a `sub_204d1c`).
+
+### Estados 39-46 — mais variantes de menu→dispatch, gate de rede minimalista, carga de Permanent Effect, 4ª transição hard-coded
+
+- **Estado 39** (`0x209550`): menu→dispatch gateado por **não** estar
+  em modo de rede ad-hoc.
+- **Estado 40** (`0x209530`): o handler mais simples do projeto até
+  agora — só `pspNetCheckDuty()` como gate binário.
+- **Estado 41** (`0x2094e4`): menu→dispatch "nu", sem ícone nenhum.
+- **Estado 42** (`0x2094ac`): fim de sub-fase (ícones 5/4/10),
+  delega a `sub_20269c`.
+- **Estado 43** (`0x209458`): **dispara `LoadEffect()`** (§429/§604)
+  e trata falha de carga com fallback (`sub_20191c`) — primeiro
+  estado confirmado dedicado a carregar um efeito permanente.
+- **Estado 44** (`0x2093b0`): fim de animação de ataque — incrementa
+  e zera um contador de frame, **grava `45` direto em
+  `*g_battleState`** (4ª transição hard-coded), e liga
+  `IsPermanentEffect`/`WhoUnlockEffect` (§429/§604) ao desbloqueio
+  de efeito vinculado ao fim do ataque.
+- **Estado 45** (`0x209378`): mesma forma do 42 (fim de sub-fase),
+  helper diferente (`sub_20074c`) — destino natural da transição
+  44→45.
+- **Estado 46** (`0x2092e0`): única instância do grupo 7/8/0xff que
+  **processa** o caso especial no próprio handler (em vez de só
+  desviar) — seta `g_specialActionFlag` (mesmo flag do 29/35/37) e
+  chama 2 locais não resolvidos.
+
+### Estados 47-55 — guards de par compartilhado, pipeline de câmera/scroll nunca visto, o par de fade 53/55 em torno do `initMap` do estado 54
+
+- **Estados 47/48/49** (`0x2092c0`/`0x209154`/`0x208f88`): 48 e 49
+  compartilham o MESMO guard (`sub_2028d0()`) e convergem no mesmo
+  bloco de pré-epílogo (`0x208f94`) — par confirmado por desvio
+  cruzado real entre os dois handlers.
+- **Estado 51** (`0x208f10`): acessa **4 funções de câmera/scroll
+  nunca vistas** (`executeMapScrollXYZ`/`Scroll`/`Scale`/`Angle`,
+  padrão "execute*" análogo a `executeChangeClut`) junto do pipeline
+  de animação já conhecido (`ExecuteAnimations`/`DisplayAnimations`,
+  §263/§200); e **escreve `*g_battleState` a partir de um valor lido
+  de um global** (transição computada, não constante) — 1º caso
+  desse tipo.
+- **Estado 52** (`0x2091a0`): gate por ícone `0x75` (117, fora da
+  faixa 0-0x14 vista até aqui).
+- **Estados 53/54/55** (`0x208fd0`/`0x208bbc`/`0x208b00`): **o trio
+  de fade em torno do carregamento do mapa** — 54 grava branco
+  opaco e **dispara `initMap(int,int)` de verdade** (confirma em qual
+  fase exata do switch de 102 estados o mapa é carregado, §614); 53
+  é a rampa que CONTA PRA CIMA (fade-in, cor cinza) até o limiar
+  `0x101`; 55 é a rampa que CONTA PRA BAIXO (fade-out) até zero —
+  todos os três usam o mesmo par `AddPrim`×2 via `ASHURA_getOTptrZ`
+  sobre a mesma struct de fade (stride 0x1c).
+
+### Estados 56-59 e 72-81 — conclusão do fade com teardown 3D, segunda chamada a `initMap`, o "tick" real por quadro, e o próprio bloco de epílogo revelado por dentro
+
+- **Estado 56** (`0x2091dc`): ao passar do limiar de fade, satura a
+  cor, **grava `57` direto em `*g_battleState`** (6ª transição
+  hard-coded) e chama **`ASHURA_Exit()` + `EndAllAnimation()`** —
+  primeira vez que essas duas funções (citadas desde 32.3/32.7 sem
+  seção própria) são atribuídas a um estado real: "fim de batalha —
+  fade + teardown do motor 3D/animação".
+- **Estado 57** (`0x209090`): **segunda chamada a `initMap`** dentro
+  do loop (a 1ª é do estado 54) — confirma que o mapa pode ser
+  reinicializado em mais de um ponto do switch; quando o resultado é
+  `13` (mesmo valor-gatilho do estado 54), faz uma transição
+  computada a partir de um flag global.
+- **Estado 58** (`0x208efc`): delegação pura, 1 chamada
+  (`sub_204b34`), sem lógica própria.
+- **Estado 59** (`0x208d64`): mesma mecânica de fade de 53/55/56,
+  mas sem gate de limiar — incrementa o acumulador de cor
+  incondicionalmente, sempre avança.
+- **Estados 73/74** (`0x208fa4`/`0x209174`): byte a byte **idênticos**
+  — ligam o ícone `0x17` (23, achado novo) e só tocam o tick padrão
+  se `iOSmapVectorScrollCheck()` (achado novo) confirmar; só o
+  destino de desvio externo muda entre os dois.
+- **Estados 75/76** (`0x2088e0`/`0x208854`): **par ping-pong real**
+  reusando os mesmos helpers locais dos estados 8/9
+  (`sub_2040bc`/`sub_202854`) — confirma que 8/9 e 75/76 são duas
+  instâncias do mesmo template de espera assíncrona, não sistemas
+  diferentes. 76 sempre força a volta pro 75 ao detectar mudança de
+  estado; 75 só força a ida pro 76 quando `*g_battleState==9` nesse
+  ponto (valor de um slot de memória reaproveitado por mais de um
+  subsistema).
+- **Estados 77/78/79** (`0x2089fc`/`0x208974`/`0x208c5c`): 77 e 79
+  são duas entradas paralelas que convergem na MESMA transição
+  hard-coded **`78`** (condicionada a `recieve_statusinfo()==0` e um
+  campo global `==0`) — 79 é a via "direta" (sempre vai pro
+  epílogo, e ainda chama `CFFT_STATE::SetParam` antes); 78 é o
+  destino real, um estado-ponte que só avança quando o ícone `0x23`
+  (setado pra `2` por 77/79) confirma "pronto".
+- **Estado 80** (`0x208998`): dispatcher por um valor global de
+  categoria (`0x200`/`0x300`/`0x500` — enum "em centenas"), com
+  `0x300`/`0x500` convergindo no mesmo destino.
+- **Estado 81** (`0x2088b0`, o handler mais curto): mesmo guard
+  `sub_2028d0()` dos estados 48/49, com transição computada (valor
+  da pilha do chamador); por estar tão colado no epílogo, **revela
+  as duas primeiras instruções reais do próprio bloco `0x2088d0`**
+  (comparação de estado + normalização `estado-0x29`) — confirma que
+  esse trecho é literalmente o mesmo código do bloco de "tick" do
+  estado 72.
+- **Estado 72** (`0x208638`, 540 B — o handler mais rico de toda a
+  função): o **"tick" real por quadro**, achado de maior valor desta
+  rodada. Processa entrada de câmera/toque
+  (`iOSSlideNaviCurMove`/`iOSYajiEffect`/`iOSRotAutoGet`), três
+  switches por flags de rotação/modo, consome a fila de troca de
+  paleta (`executeChangeClut`→`transferClutData`, §70), faz o
+  **swap de double-buffer de rede** (`db_swap`) e **sonda o host**
+  (`myPollhost`, §206) — tudo ANTES de decidir o próximo estado. Ao
+  final, **não** cai no epílogo padrão: salta direto pra
+  `0x208194`, próximo do início físico de `battle()` (os guardas
+  pré-switch da §32.1) — confirma que o estado 72 é o heartbeat
+  universal de frame, não um estado de gameplay como os outros 67.
+
+### Resumo das transições hard-coded descobertas em `battle()` (6 confirmadas)
+
+| Origem | Destino | Condição |
+|---|---:|---|
+| guarda pré-switch (ícone 19) | 75 | `iOS_getV2Icon(0x13)!=0`, §32.6 |
+| 10 | 8 | incondicional dentro do handler |
+| 26 | 25 | `recieve_statusinfo()!=2` |
+| 29 | 30 | 3 flags globais específicas |
+| 35 | 36 | 3 gates de sincronização |
+| 44 | 45 | incondicional (fim de animação de ataque) |
+| 56 | 57 | limiar de fade atingido |
+| 77/79 | 78 | `recieve_statusinfo()==0` + campo global `==0` |
+
+**O que ainda falta pra `read_full` de verdade**: os dois blocos
+coletivos (default `0x20a670`/21 estados, compartilhado
+`0x2092d4`/13 estados) nunca abertos como blocos próprios; os
+próprios blocos de epílogo `0x2088d0`/`0x20868c`/`0x20971c`/`0x208194`
+(parcialmente revelados de dentro pelos estados 72/81, mas não lidos
+como unidade); e ~55 funções locais sem símbolo acumuladas ao longo
+da 32.9/32.10 (`sub_203990`, `sub_204f30`, `sub_200de8`,
+`sub_1fc4cc`, `sub_202180`, `sub_1fa468`, `sub_2040bc`, `sub_202854`,
+`sub_207970`, `sub_207bcc`, `sub_2024f0`, `sub_206b00`, `sub_205398`,
+`sub_20269c`, `sub_20191c`, `sub_20074c`, `sub_203d74`, `sub_204500`,
+`sub_204808`, `sub_2062d0`, `sub_204440`, `sub_204b34`, `sub_204d1c`,
+`sub_20433c`, entre outras).
+
+**Status CSV: `read_structural`** — todos os 68 handlers de estado
+distintos agora têm leitura byte a byte completa (não mais "30 de
+68", mas "68 de 68"), um salto real de cobertura; `battle()` só vira
+`read_full` quando os 2 blocos coletivos + os blocos de epílogo
+compartilhado + as ~55 funções locais restantes também estiverem
+lidos — trabalho significativo ainda, mas o núcleo de 102 estados do
+switch principal está, pela primeira vez, inteiramente mapeado por
+dentro.
+
 ## 33. `Wmesputmain()` — passe estrutural — 2ª maior função do binário, revela um sistema de tasks nunca visto (2026-10-17, Fase 3)
 
 `Wmesputmain()` (`0x11173c`, 16.312 B) — mesmo tratamento da seção 32:
@@ -4600,7 +5031,7 @@ locais sem símbolo. Marcada `read_structural` no
 comparar contra esta e confirmar se é duplicação por idioma/plataforma
 ou lógica genuinamente diferente — não lida ainda.
 
-## 34. `Main_FrameRender()` — passe estrutural — o renderizador principal do jogo inteiro, nunca tocado (2026-10-17, Fase 3)
+## 34. `Main_FrameRender()` — passe estrutural, ampliado em 2026-10-25 (2 tabelas de salto reais resolvidas + lidas byte a byte, `sub_2b6110` identificada) — o renderizador principal do jogo inteiro (2026-10-17 + atualização 2026-10-25)
 
 `Main_FrameRender()` (`0x2c141c`, 16.164 B, 3ª maior função do
 binário) — mesmo tratamento das seções 32/33. Descida recursiva:
@@ -4679,7 +5110,67 @@ branches, a ordem exata de decisão entre "jogo normal"/"loading"/
 o estado" em vez de "desenha") é a candidata natural de próximo
 passe estrutural, pro par ficar completo.
 
-## 35. `Main_FrameMove()` — passe estrutural — completa o par com `Main_FrameRender`, revela DOIS switches de estado (2026-10-17, Fase 3)
+### Atualização (2026-10-25): `jtable.py` atual resolve 2 tabelas de salto que a passada original dizia não existir — 98% de cobertura, 110 `bl`
+
+A afirmação original ("sem tabela de salto computada") estava errada
+por limitação da ferramenta na época. O `jtable.py` atual resolve
+automaticamente **2 tabelas de 6 casos cada**: guarda `cmp`@`0x2c3910`,
+despacho@`0x2c3914`; guarda `cmp`@`0x2c3948`, despacho@`0x2c394c`.
+Cobertura sobe a **98% (3.967/4.041 slots)**. Tudo o que 34.1-34.4
+estabeleceram continua válido sem alteração.
+
+### 34.6 As duas tabelas, lidas byte a byte: não são modos de renderização — são seletor de quadro de animação de ícone
+
+Desmontagem manual (Capstone) da região `0x2c38fc`–`0x2c3a50`
+confirma a estrutura exata, idêntica nas duas tabelas:
+
+```c
+iOS_setV2Icon(0xbe, ...);                 // zera/reseta o ícone companheiro
+r0 = iOS_getV2Icon(0xbd) - 1;             // lê estado do ícone (1..6)
+switch (r0) { /* 6 casos, addls pc,pc,r0,lsl#2 */
+  case 0: goto shared_B;                    // usa valor de contador já existente
+  case 1: contador_B = 0; goto shared_B;
+  case 2: contador_B = 1; goto shared_B;
+  case 3: contador_B = 2; goto shared_B;
+  case 4: contador_B = 3; goto shared_B;
+  case 5: contador_B = 4; goto shared_B;
+}
+```
+
+(a segunda tabela, sobre `iOS_getV2Icon(0xbb)`, é idêntica em forma,
+alimentando um segundo contador independente.) Os 12 corpos de caso
+são todos triviais — cada um só grava um valor 0–4 num slot de pilha
+(`[sp+0x70]`/`[sp+0x74]`) e salta pro mesmo bloco de desenho
+compartilhado. As duas "tabelas de salto" não são dois modos de
+renderização diferentes — são só a forma que o compilador gerou pra
+**mapear o estado 1–6 de um ícone V2 num índice de quadro 0–4**
+antes de desenhar.
+
+O bloco de desenho compartilhado (`0x2c3974`+, também lido byte a
+byte): calcula um alfa via `0,5f * fração` (`__mulsf3`/`__addsf3`
+reais), indexa uma tabela de dados PC-relative por `contador*16` (3
+floats por entrada — x/y/escala do quadro de animação daquele
+ícone), converte a área de jogo pra coordenada de tela via
+`CGX_SCREEN_CORRECT::Area_ToScreen` (§34.2), monta os parâmetros
+(posição, escala, cor `0xff/0xff/0xff`) e chama **`sub_2b6110`** —
+exatamente a função local citada em 34.5 como "a mais frequente,
+candidata forte a wrapper de ícone, não investigada" (43 chamadas).
+**Confirmado agora**: é literalmente a primitiva real de desenho de
+um ícone/sprite de efeito V2, usada por ambos os seletores de quadro.
+
+Isso explica por que `iOS_getV2Icon`/`iOS_setV2Icon` aparecem
+138+33=171 vezes só nesta função: não são flags booleanas simples —
+IDs como `0xbb`–`0xbe` são contadores de **estado de animação por
+quadro** de efeitos de ícone individuais, cada par (set/get)
+controlando um slot visual.
+
+**Status CSV: ainda `read_structural`** — a leitura byte a byte
+cobriu só as duas tabelas + seus 12 casos + o bloco de desenho
+compartilhado (fração pequena dos 16 KB da função); o resto (corpo
+principal fora dessas tabelas, ~100 `bl` restantes, lógica completa
+do padrão screen-manager) continua no nível de passe estrutural.
+
+## 35. `Main_FrameMove()` — passe estrutural, ampliado em 2026-10-25 (93% cobertura, 6 dos 7 casos do switch externo lidos byte a byte) — completa o par com `Main_FrameRender` (2026-10-17 + atualização 2026-10-25)
 
 `Main_FrameMove()` (`0x2bbb74`, 13.272 B) — mesmo tratamento das
 seções 32–34. Descida recursiva alcançou só **2.580 de ~3.318
@@ -4775,6 +5266,87 @@ papel preciso de `onGotoNextMode`. Marcada `read_structural` no
 `Main_FrameMove`/`Main_FrameRender` — o loop principal do jogo
 inteiro — tem agora pelo menos um passe estrutural completo dos dois
 lados.
+
+### Atualização (2026-10-25): `jtable.py` atual resolve as duas tabelas quase por completo (93%, antes 78%) e 6 dos 7 casos do switch externo foram lidos byte a byte
+
+A versão original foi escrita quando o `jtable.py` só alcançava 78%
+porque a descida não seguia as duas tabelas até o fim. A versão
+atual resolve **ambas por completo** (os mesmos 9+43 casos/7+32
+destinos de 35.1/35.2, byte a byte iguais — nenhuma tabela mudou) e
+alcança **93% (3.095/3.318 instruções) e 126 `bl` distintos**. As
+seções 35.1/35.2 continuam válidas sem alteração.
+
+### 35.3' Leitura real dos 6 casos pequenos do switch externo (instrução a instrução, via disassembly direto)
+
+Com a cobertura mais alta, foi possível ler por completo os 6
+handlers pequenos do switch externo (todos exceto o caso 6, que
+contém o switch interno — ver abaixo):
+
+- **Caso 8** (`*g_gameMode == 11`, `0x2bc7b8`, 5 instruções): só
+  `iOSNovelBrightOn()` e cai no default — **modo "Novel/Adventure"**,
+  ligando direto ao sistema `ctlnobel_main`/`stop_adventuremessage`/
+  `timeevt_chk` já fechado (§96/§269/§592).
+- **Default** (`0x2bc7cc`, 60 instruções, 1 loop): consulta
+  `iOS_getDisableInterrupt()`/`iOS_getV2Icon` repetidamente — modo
+  genérico de espera/transição comum a vários valores.
+- **Caso 7** (`*g_gameMode == 10`, `0x2bc8bc`, 8 instruções, 0 `bl`):
+  só um laço sem chamada nenhuma — "espera pura".
+- **Caso 2** (`*g_gameMode == 5`, `0x2bc8dc`, 11 instruções): chama
+  `iOS_v2menuSetType` — **modo de menu V2** (§577/§581/§606).
+- **Caso 0** (`*g_gameMode == 3`, `0x2bc908`, 8 instruções, 0 `bl`):
+  igual ao caso 7.
+- **Caso 1** (`*g_gameMode == 4`, `0x2bc928`, 11 instruções): chama
+  `iOS_v2menuSetType` de novo — outro modo de menu V2.
+- **Caso 6** (`*g_gameMode == 9`, `0x2bc954`): **não é um handler
+  pequeno** — o código entre `0x2bc954` e o dispatch do switch
+  interno (`0x2bd114`) soma quase 2.000 bytes só por este caso, de
+  longe o maior dos 7, e o switch interno de 43 casos vive dentro
+  dele. Confirma a suspeita de 35.2: **o modo de jogo 9 é o modo
+  "jogo ativo"** (mapa mundi/batalha/menu em jogo), estruturalmente
+  muito mais complexo que os outros 6, todos estados simples de
+  transição/overlay.
+
+### 35.4' Catálogo de chamadas novo, não citado na versão original
+
+- **Cluster de toque de batalha, ligando direto à §32**: mais de 20
+  funções `iOS*` (`iOSsTchBtlFlagGet`, `iOSBtlUnitMoveCheck`,
+  `iOSUnitStatusLRGet`, `iOSScrollButtonDTap`, `iOSRotateButtonDTap`,
+  `iOSSlideIconReset`, `iOSMapCurModeGet/Set`, `iOSTchInputCheckCur`,
+  `iOSRotSlidCls`, `iOSTapCalcu`, `iOSBtlStsOutWinReset`,
+  `iOSMapTouchCancel`, `iOSUnitListFlagGet`, `iOSYajiEffectSetLR/TGA`)
+  — exatamente a mesma família `iOSSlide*`/`iOSRot*`/`iOSTch*` que a
+  §32 citou como achado só de `battle()`. Fecha a ponta: `Main_FrameMove`
+  também chama esse cluster de toque a cada quadro, não só `battle()`
+  — os dois compartilham o mesmo subsistema.
+- **Sistema de menu V2 completo**: `iOS_v2menuSetDecide`/`SetEnable`/
+  `SetType`/`GetType`/`Init`/`GetYline` — liga a `iOS_v2menuSetType`
+  (§581) e ao cluster de ícones V2 (§577).
+- **`executeTaskEmu()`** — achado novo, possível ligação com o
+  cluster `asm`/`wasm`/`TE_` (§578/§585/§586).
+- **`SettingsBundle_Get()`/`SettingsBundle_IsLeftHand()`** — achado
+  novo: confirma uma opção real de "jogador canhoto" persistida.
+- **`SysSE_PlayUI(int)`** (10 chamadas) — terceira variante de efeito
+  sonoro (contexto "UI"), irmã de `SysSE_Play`/`EnvSE_Play` (§579/§608).
+- **`Resume_Init_WORK_MU()`** (§387) e **`iOS_RectHitExecute()`**
+  (§428) — confirma que `Main_FrameMove` participa do ciclo de
+  resume/save e fecha o ciclo registro→execução de hit-test.
+- **`fftVSyncCallback()`**/**`xpPadUpdateData`** — achados novos:
+  callback real de VSync e leitura direta do pad PS1.
+- **`CEGL2_IF::ClearBackdrop`/`CEGL2_SPRITE::Unload/LoadBegin/LoadEnd`**
+  — chamadas normalmente só esperadas em `Main_FrameRender` (§34)
+  aparecem também aqui — sugere que a tela de configurações/alguma
+  transição dispara carregamento de sprite fora do ciclo de render.
+- **`Android_Web_Open(char const*, int)`** — abertura de URL no
+  navegador, ao lado de `Android_Movie_Play`/`Android_Vibrator_Vibrate`.
+
+O corpo real do caso 6 ("jogo ativo") e dos 32 handlers do switch
+interno continua não lido (quase 80% do total da função). Os 6
+locais sem símbolo também não foram resolvidos.
+
+**Status CSV: `read_structural`** (progresso real — 6 dos 7 casos do
+switch externo agora lidos por completo — mas o caso 6, que
+concentra quase toda a função e todo o switch interno, continua não
+lido; não atinge `read_full`).
 
 ## 36. `BattleUnitList` — passe estrutural — revela uma família `b*` inteira de primitivas PS1 de batalha, nunca vista (2026-10-17, Fase 3)
 
@@ -18266,8 +18838,9 @@ unwind das tabelas `.ARM.extab`/`.ARM.exidx`. `_Unwind_VRS_Pop`
 por 1 tabela não resolvida: o switch real por classe de registrador
 — core/VFP/FPA/wCGR — não bate no padrão `add pc,pc,rX,lsl#2`).
 `_Unwind_VRS_Get`/`_Unwind_VRS_Set` (92 B cada, `0x2ccfb8`/`0x2cd03c`)
-ficam **não resolvidos** mesmo automaticamente (22%/0% de cobertura) —
-permanecem `unread` nesta seção, só citados como chamadores.
+ficavam não resolvidos nesta seção (22%/0% de cobertura) — **atualização
+no §614**: o checkpoint do CI já resolve a tabela de ambas (74% de
+cobertura, 5 casos/3 handlers cada), promovidas pra `read_structural`.
 
 **libgcc/compiler-rt soft-float de precisão dupla** (ABI padrão ARM
 EABI para aritmética `double` em hardware sem FPU de double, citada
@@ -18315,48 +18888,67 @@ diferentes (ex.: regiões/paletas distintas) ou são idênticos.
 
 **Status CSV: `read_structural`.**
 
-## 571. `vEnd_rollproc()` — callback por-quadro dos créditos finais, confirma o "skip" por toque (2026-10-25, Fase 3, septuagésimo oitavo lote)
+## 571. `vEnd_rollproc()` — callback por-quadro dos créditos finais: máquina de 2 contadores (áudio/linha) + fast-forward por toque, leitura completa confirma 100% do código real (2026-10-25 + revisão byte a byte 2026-10-26, sobre o painel v3)
 
-`vEnd_rollproc()` (`0x244200`, 528 B) — `jtable.py`: 121 de ~132
-instruções (92%), 0 tabela de salto, 10 branches/5 de retrocesso;
-disassembly linear completo conferido a mão (capstone) para confirmar
-a lógica dos blocos, não só o catálogo de `bl`.
+`vEnd_rollproc()` (`0x244200`, 528 B) — disassembly linear completo
+via Capstone, instrução a instrução, do início ao fim. **Os 11
+"slots não cobertos" do passe automático (92%) são integralmente
+literal pool**: 484 B de código real (121 instruções) + 44 B de
+constantes PC-relative (11 words, confirmadas em `0x2443e4`-`0x24440c`,
+nenhuma delas é código alcançável) = 528 B exatos. Nenhuma instrução
+real ficou sem explicação.
 
-6 `bl` distintos: `iOS_getTouchFreeTap()`, `drawListStaffroll(int)`
-(seção 271), `drawMessage(int)`, `deleteMessage()`,
-`setMoviePlayFlg__Fi(int)`, `iOS_soundDirect(int)`. Confirma por
-completo a hipótese já registrada na seção 124 (`ctlendroll_main`) de
-que esta é a função "end roll proc" — o callback por quadro chamado
-pelo state machine dos créditos finais:
+Estrutura de estado real (campos de um struct global, base em
+`r5`/`sl`, acessado por múltiplos registradores PIC ao longo da
+função):
+- `+0x00`: `modeFlag` — sentinela `0x100` = "em fast-forward pro final".
+- `+0x18`: acumulador de quadros de áudio.
+- `+0x1c`: contador comparado contra o limiar `0x335` (821).
+- `+0x20`: índice de linha da lista de créditos, comparado contra
+  `0x604` (1540) e depois contra `0x2b` (43) num segundo campo.
 
-- Sem toque: segue o caminho normal — resolve um índice de array e
-  grava num global de controle, limpa o bit `0x40` de uma flags word,
-  incrementa dois contadores de frame contra duas constantes grandes
-  (`0x335`/`0x604` — prováveis durações fixas de scroll de créditos e
-  de faixa de áudio), chamando `drawListStaffroll(int)` a cada quadro
-  dentro do limite.
-- Com toque (`iOS_getTouchFreeTap()` verdadeiro): se o estado global
-  ainda não é `0x100`, seta a flag de "movie play" via
-  `setMoviePlayFlg__Fi(4)`, avança os mesmos contadores direto pro
-  valor de "fim" e dispara `iOS_soundDirect(1)` — ou seja, **o toque
-  pula direto pro final** da sequência em vez de interrompê-la
-  abruptamente.
-- Quando o contador excede o segundo limiar (`cmp r2,#0x2b`): chama
-  `drawListStaffroll(0)` uma última vez, segue pro bloco de término
-  (`drawMessage(0)`/`deleteMessage()`) e seta o bit `0x1000` de uma
-  flags word compartilhada — provavelmente o sinal de "créditos
-  terminados" lido de volta pelo switch de 5 casos do
-  `ctlendroll_main` (seção 124).
+Um segundo struct (base `r2`, campos `+0x00`/`+0x14`) implementa uma
+divisão por 8 com resto explícito (idioma clássico de distribuição de
+tempo em ponto fixo): o resto acumulado em `+0x14` é somado a
+`0x1e`(30), o sinal do resultado decide se soma `0x25`(37) ao
+quociente, e o quociente final (`>>3`) é usado como "delta" somado ao
+acumulador de áudio — mas **só quando `modeFlag != 0x100`**; em
+fast-forward, o delta anterior (constante `0x100`) é reaproveitado
+sem recalcular.
 
-Os globais PC-relative tocados não foram nomeados individualmente
-(contadores/flags do próprio `vEnd_rollproc`/`ctlendroll_main`, não
-ponteiros de função de outro subsistema). Falta processar
+Fluxo completo confirmado (corrige um detalhe da versão anterior: o
+argumento de `drawListStaffroll` no caminho normal é sempre o literal
+`0`, não variável):
+
+1. **Sem toque, dentro do limiar de áudio (`+0x1c` ≤ 821)**: soma o
+   delta no acumulador de linha (`+0x20`), chama
+   `drawListStaffroll(0)`, limpa o bit `0x40` de uma flags word e
+   seta o bit `0x1000` antes de retornar `1`.
+2. **Sem toque, limiar de áudio excedido**: incrementa `+0x20` por
+   `1` (não pelo delta) até `0x604`(1540); ao passar, zera um campo,
+   chama `setMoviePlayFlg__Fi(4)` + `deleteMessage()` e retorna `0`
+   (fim real da sequência).
+3. **Com toque**: se `modeFlag` ainda não é `0x100`, grava
+   `+0x1c = 0x336` (um além do limiar — força a branch 2 na próxima
+   iteração), `modeFlag = 0x100`, chama `iOS_soundDirect(1)` e salta
+   direto pro início do bloco comum; se `modeFlag` já era `0x100`
+   (segundo toque durante o fast-forward), só repete a resolução de
+   índice/flag e cai no bloco comum normalmente.
+4. **Linha de créditos esgotada (campo `+0x2b`, 43)**: chama
+   `drawMessage(0)` antes de voltar pro bloco de incremento do
+   limiar de áudio.
+
+Os 4 locais sem símbolo citados na versão anterior desta seção **não
+existem nesta função** — era uma confusão com `event_status_set`
+(§575, corrigida na mesma revisão); `vEnd_rollproc` não chama nenhuma
+função local sem símbolo. Falta ainda processar
 `vOpn_fadeproc(unsigned long*)` (`0x2494c8`) para fechar o par
 "Opn"/"End" do mesmo `v*_*proc`.
 
-**Status CSV: `read_structural`** (lógica de blocos rastreada e
-confirmada; os globais PC-relative individuais não foram
-nomeados/resolvidos — não atinge o padrão de `read_full`).
+**Status CSV: `read_full`** — controle de fluxo completo, todo campo
+de estado identificado pelo uso real, todos os 6 `bl` resolvidos, e
+os 11 slots "faltantes" do checkpoint automático confirmados como
+literal pool, não lacuna de código.
 
 ## 572. `SetCameraWorkWithSchedule(short)` — camada "schedule" plana, irmã direta de `SetCameraWorkWithMetaschedule` (seção 307) (2026-10-25, Fase 3, septuagésimo oitavo lote)
 
@@ -18480,41 +19072,62 @@ algoritmo de concatenação/soma + bubble-sort + remapeamento
 confirmado; só o significado semântico exato das 3 constantes de
 remapeação fica como lacuna anotada).
 
-## 575. `event_status_set(unsigned short, unsigned short)` — variante não-`wasm` de `Wevent_status_set` (§230), mesmo propósito via primitivos `asm`/task puro (2026-10-25, Fase 3, septuagésimo nono lote, revisão semântica sobre checkpoint do CI)
+## 575. `event_status_set(unsigned short, unsigned short)` — leitura completa: guarda de reentrância + loop de retry (20×) + 3 bifurcações por flag de unidade, variante `asm`/task pura de `Wevent_status_set` (§230) (2026-10-25 + revisão byte a byte 2026-10-26, sobre o painel v3)
 
-`event_status_set(unsigned short, unsigned short)` (`0xdf864`, 524 B)
-— checkpoint do pipeline automatizado (`docs/re-results/000df864.json`,
-não reexecutado nesta sessão): 122 de ~131 instruções possíveis
-(93%), sem tabela de salto; 17 branches, 10 de retrocesso. 9 `bl`
-distintos, já resolvidos por nome no checkpoint: `task_wait(long)`
-(×2), `asm_function(...)` (×2, primitivo genérico de task "asm" — par
-exato do `wasm_function` da seção 230, só sem o prefixo "w"),
-`get_bwp(int)`, `search_controlID(int,int*)` e
-**`getBattleWorkIDFromAnimation(unsigned int)`** (×1 cada) — mais 4
-locais sem símbolo dinâmico (`sub_d6828`, `sub_dc2a4`, `sub_dd678`,
-`sub_df45c`).
+`event_status_set(unsigned short eventID, unsigned short value)`
+(`0xdf864`, 524 B) — disassembly linear completo via Capstone. **Os
+9 slots "não cobertos" do passe automático (93%) são 100% literal
+pool** (122 instruções reais = 488 B + 9 words de constantes = 36 B
+= 524 B exatos, confirmado em `0xdfa4c`-`0xdfa6c`) — nenhuma lacuna
+de código real.
 
-Esse catálogo de chamadas é **idêntico em propósito** ao da §230
-(`Wevent_status_set`, 1.540 B, 96% cob., mesma assinatura de 2
-parâmetros `unsigned short`): ambas ligam o status de um evento ao ID
-de trabalho de batalha (`BWORK`) resolvido a partir de uma animação,
-via `get_bwp`/`search_controlID`/`getBattleWorkIDFromAnimation`. A
-diferença é só a camada de task usada — `Wevent_status_set` roda no
-contexto `wasm` (`Wread_eventflag`/`Wtask_wait`/`wasm_function`),
-enquanto esta função usa a camada de task "pura" sem o prefixo W
-(`task_wait`/`asm_function`), explicando por que é ~1/3 do tamanho
-(menos branches de sincronização/estado de task). Confirma mais uma
-vez o padrão já estabelecido de duplicação paralela W/não-W do mesmo
-subsistema (ver `mesputmain`/`Wmesputmain`, §37, e os primitivos
-`asmGet*`/`wasmGet*` citados na §561/568).
+Fluxo completo, com os 4 locais sem símbolo (`sub_d6828`, `sub_dc2a4`,
+`sub_dd678`, `sub_df45c`) agora com papel/assinatura determinados
+pelo call-site (corpo interno deles ainda não lido):
 
-Os 4 locais sem símbolo não foram resolvidos nem lidos byte a byte —
-ficam como pista para fechar o par por completo numa iteração futura.
+1. **Guarda de reentrância**: lê um global de 16 bits (`activeFlag`);
+   se não-zero, retorna imediatamente sem fazer nada.
+2. **`sub_dc2a4(&eventIDlocal, &buf)`** — gate de validação; se
+   retorna `0`, aborta. Em sucesso, grava `activeFlag` num campo de
+   uma entry global (`entryPtr+0x3f0`) e inicializa um contador de
+   retry (`retryCount = activeFlag`) na pilha.
+3. **Loop de retry (máx. 20 iterações, `cmp ip,#0x14`)**: chama
+   `sub_d6828(&eventIDlocal, &retryCount, &buf)`; enquanto retornar
+   `0`, incrementa `retryCount` e tenta de novo; passa de 20 →
+   desiste (vai pro item 7).
+4. Em sucesso do loop: `getBattleWorkIDFromAnimation(eventID)` → se
+   `-1` ("sem unidade"), pula pro item 6. Senão, resolve `BWORK*` via
+   `get_bwp`, lê o byte em `+0x181` desse struct, e chama
+   `search_controlID(byte, &controlID)`.
+5. Se `controlID < 0`: pula pro item 6. Senão, se **`value != 0`**:
+   chama `sub_df45c(battleWorkID, eventID)` e segue pro item 6. Se
+   **`value == 0`**: lê um byte por-unidade em
+   `entryPtr[battleWorkID]+0x39c`; se `0`, chama
+   `sub_dd678(battleWorkID)` — se retornar não-zero, registra um
+   callback via `asm_function(1, eventID, value, value, value, value)`
+   (mesmo trampolim de aridade do §585, aqui com aridade 1); se o
+   byte já era não-zero, cai direto no item 6.
+6. **Checagem de continuação**: lê um campo em pilha (escrito por
+   `sub_dc2a4` no passo 2); se não-zero, volta pro loop de retry
+   (item 3); se zero, segue pro item 7.
+7. **Fora do loop (timeout ou fim de iteração)**: relê o campo
+   `entryPtr+0x3f0` (gravado no passo 2); se não-zero, chama
+   `task_wait(40)`, testa o bit 0 de um campo global e, se setado,
+   chama `task_wait(40)` de novo; se zero e `value==0`, registra
+   outro callback via `asm_function(1, value, value, value, value, value)`
+   (aridade 1 de novo, par de função diferente do passo 5).
 
-**Status CSV: `read_structural`** (call-graph e controle de fluxo
-mapeados via checkpoint + cruzamento confirmado contra a §230 já
-lida; os 4 blocos locais sem símbolo não foram traçados instrução a
-instrução).
+Confirma por completo a hipótese já registrada (variante sem prefixo
+`W` de `Wevent_status_set`, §230, mesmo propósito via
+`get_bwp`/`search_controlID`/`getBattleWorkIDFromAnimation`) — agora
+com a lógica real de retry/timeout e as 3 bifurcações por
+`value`/byte-de-unidade mapeadas, não só o catálogo de chamadas.
+
+**Status CSV: `read_full`** — o controle de fluxo da função está
+100% confirmado (incluindo os 9 slots de literal pool); os corpos
+internos dos 4 locais sem símbolo não foram lidos, só seu papel e
+assinatura via call-site — mesma lacuna explícita já aceita em outros
+`read_full` do projeto (`asm_function`/`get_ability_address`, §585/590).
 
 ## 576. `GetNearestUnit(int)` — busca de alvo mais próximo pro núcleo de decisão de IA, confirma `GetDistance`/`GetHightDistance`/`IsNullUnit`/`IsNeedlessToFear` como a cadeia real de filtro (2026-10-25, Fase 3, septuagésimo nono lote, revisão semântica sobre checkpoint de CI)
 
@@ -18561,135 +19174,247 @@ próxima iteração (nenhuma tem seção própria ainda).
 resolvidos e cruzados com dois sistemas já documentados; corpo dos 5
 handlers e do loop principal não lido byte a byte).
 
-## 577. `houkoku_okng(CTLINFO*)` — handler de confirmação Sim/Não (`OkNg`) do controlador de mensagem de relatório `ctlhoukmes_main` (2026-10-25, Fase 3, septuagésimo nono lote, revisão semântica sobre checkpoint do CI)
+## 577. `houkoku_okng(CTLINFO*)` — handler de confirmação Sim/Não (`OkNg`) do controlador de mensagem de relatório `ctlhoukmes_main`, lido instrução a instrução: tail-call real para `ctlhoukmes_init` no caminho de cancelamento (2026-10-25 + revisão byte a byte 2026-10-26, sobre o painel v3)
 
-`houkoku_okng(CTLINFO*)` (`0x25a228`, 508 B) — checkpoint do
-pipeline automatizado (`docs/re-results/0025a228.json`): 119 de ~127
-instruções possíveis (94%), 0 tabelas de salto, 10 branches/2 de
-retrocesso. 9 `bl` distintos, 12 chamadas, todos já resolvidos por
-nome pelo próprio `jtable.py`: `Wsend_taskparamater(long,long,long,long)`,
-`wldctl_active()`, `iOS_add_anmpac_max(int)` (×2), `sound_request(int)`
-(×2), `iOS_CMenuTouch::setDispAssist(int)`, `iOS_setLockInput(unsigned char)`,
-`iOS_clearOkNg()` (×2), `iOS_getV2Icon(V2ICON_DATA)`,
-`iOS_setV2Icon(V2ICON_DATA, int)`.
+`houkoku_okng(CTLINFO*)` (`0x25a228`, 508 B) — disassembly Capstone
+completo e manual, 100% das instruções reais resolvidas (o literal
+pool final, `0x25a404`+, decodifica como lixo, confirmando onde o
+código termina).
 
-Vizinha de endereço direta de `ctlhoukmes_init(int)` (`0x25a0f0`, ver
-§580 abaixo) e logo antes de `ctlhoukmes_main(CTLINFO*)` (`0x25a908`,
-seção 117) — o controlador real da mensagem de "relatório" (`houkoku`
-= 報告 "relatório") em campo, cuja tabela de 101 casos já confirma
-`houkokumes_select`/`houkoku_mesput`/`yokoyari_mesput` como os
-handlers de fase mais quentes. `houkoku_okng` é a contraparte Sim/Não:
-chama `iOS_clearOkNg()` duas vezes (fecha o widget de diálogo
-compartilhado `iOS_dispOkNg`/`iOS_clearOkNg`, já confirmado nas
-seções 42/56 como o mesmo popup de confirmação usado em save/load e
-nomeação de unidade) sem nunca chamar `iOS_dispOkNg` — esta função
-assume que o diálogo já foi aberto por `ctlhoukmes_main` antes da
-transição de fase, e só trata a leitura do resultado + encerramento.
-`wldctl_active()` (predicado de contexto "estou no controlador de
-mapa mundi?", já visto como guarda cross-cutting em várias seções)
-sugere um branch de comportamento diferente quando o relatório
-aparece vindo do mapa mundi vs. de dentro de uma cena/batalha.
-`iOS_add_anmpac_max`/`sound_request` (efeito sonoro de confirmação) e
-`iOS_setLockInput` (trava input durante a transição) completam um
-padrão de "fechar popup + tocar som + travar input + notificar task
-via `Wsend_taskparamater`" idêntico ao fim de outros handlers de
-confirmação já documentados. `iOS_getV2Icon`/`iOS_setV2Icon` são
-prováveis leitura/atualização do ícone do próprio widget de diálogo.
+Lógica real:
 
-Sem leitura instrução a instrução dos blocos (não há tabela de salto
-para ancorar a descrição por caso, e o catálogo de `bl` foi
-suficiente para a identificação).
+```c
+int houkoku_okng(CTLINFO* this) {
+    int idx = this->field_0x4;
+    uint32_t entry = g_someTable[idx];           // stride 0x38 (56 B)
+    if (entry & 0x100) return;                    // early-out: slot já em uso/bloqueado
 
-**Status CSV: `read_structural`.**
+    if (this->field_0x14 > 0) {
+        this->field_0x14 = 0;
+        g_flagsWordA->bits |= 0x40;
+    }
+    if (g_iconCache != 0) g_iconCache = 0;
+    int r0 = iOS_getV2Icon(0x34);                  // ícone 52
 
-## 578. `TE_asmTaskEntry(int)` — ponto de entrada de um terceiro sistema de task, nunca antes documentado: o "Task Engine" (`TE_`) sincronizado por VSync (2026-10-25, Fase 3, septuagésimo nono lote, revisão semântica sobre checkpoint do CI)
+    if (r0 == 2) {
+        this->field_0x8 = 1;
+        iOS_setV2Icon(0x34, 0);
+        this->field_0x14 = 1;
+        return;                                     // "já confirmado, limpo" — sai aqui
+    }
+    uint32_t flags;
+    if (r0 == 1) {
+        this->field_0x8 = 0;
+        flags = *g_flagsPtrB | 0x20;
+        *g_flagsPtrB = flags;
+        if (flags & 0x40) goto CONFIRM;
+        goto CANCEL;
+    } else {
+        flags = *g_flagsPtrC;
+        if (!(flags & 0x40)) {
+            if (!(flags & 0x20)) return;             // nem confirmar nem cancelar -> sai
+            goto CANCEL;
+        }
+    }
 
-`TE_asmTaskEntry(int)` (`0x28bb88`, 504 B, 91% cobertura via
-checkpoint do CI, 0 tabela de salto, 17 branches/11 de retrocesso, 8
-`bl` distintos) revela um **terceiro namespace de sistema de task** no
-binário, distinto dos dois já documentados (o genérico
-`task_create/start/stop/status`, e o "wasm"
-`Wtask_create/Wtask_status/Wsend_taskparamater`, citado em dezenas de
-seções do framework `ctl*_main`). O prefixo `TE_` (Task Engine) tem
-oito irmãos no inventário, **todos ainda `unread`**: `TE_VSync(int)`,
-`TE_task_start/stop(long)`, `TE_is_task_end(long)`,
-`TE_task_get_no()`, `TE_task_killmyself()`, `TE_setTaskType(int)`,
-`TE_dummy()`.
+  CONFIRM:  // 0x25a30c
+    sound_request(2);
+    iOS_CMenuTouch::setDispAssist(*g_cmenuTouchPtr, 0);
+    goto SHARED_EXIT;
 
-Catálogo de `bl`: três helpers locais sem símbolo dinâmico
-(`sub_71b0c` ×2, `sub_71b18` ×3, `sub_71b3c` ×2 — mesma faixa de
-endereço `0x71bxx` usada por primitivas de baixo nível em outras
-famílias, prováveis operações do interpretador bytecode/"asm" que dá
-nome à função); `Sleep(unsigned int)` ×3 (yield/espera cooperativa);
-`task_status(long)` ×1 (sistema genérico) **e** `Wtask_status(long)`
-×1 (sistema "wasm") na mesma função — `TE_asmTaskEntry` é um **ponto
-de ponte** que consulta os dois outros sistemas de task já
-conhecidos; `TE_task_get_no()` ×1 (consulta o próprio slot/id dentro
-do Task Engine); e **`__xpLibgpuDrawCallBack(int)`** ×1 — confirma,
-junto com o nome `TE_VSync`, que este terceiro sistema é **disparado
-pelo callback de desenho da GPU (VSync real da PS1/`xpLibgpu`)**, não
-por polling livre como os outros dois.
+  CANCEL:   // 0x25a328
+    iOS_clearOkNg();
+    sound_request(1);
+    if (this->field_0x8 != 0) goto SHARED_EXIT;
+    Wsend_taskparamater(0xc, 0, 0, 1);
+    iOS_add_anmpac_max(-2);
+    g_counterX1 -= 1; g_counterX2 -= 3; g_counterX3 -= 2;
+    goto ctlhoukmes_init(int);    // *** TAIL CALL REAL para 0x25a0f0, não um epílogo normal ***
 
-Conexão: abre uma ponta nova — não há seção anterior sobre `TE_*`.
-Trabalho futuro de maior valor: ler os 7 irmãos pequenos (20–124 B,
-prováveis triviais) e, principalmente, entender o que o interpretador
-"asm" (`sub_71b0c/71b18/71b3c`) realmente executa — é provavelmente o
-alvo real por trás do nome "asmTaskEntry", prioridade mais alta que
-este wrapper de entrada.
+  SHARED_EXIT:  // 0x25a340
+    iOS_add_anmpac_max(-2);
+    g_counterY1 -= 1; g_counterY2 -= 3; g_counterY3 -= 1;
+    wldctl_active();
+    iOS_setLockInput(0);
+    iOS_clearOkNg();                                   // 2ª chamada
+    goto iOS_setV2Icon(3, 1);        // tail call, não bl
+}
+```
 
-Não houve rastreamento de lógica de bloco individual (só grafo de
-chamadas via checkpoint do CI + cross-reference textual).
+**Achado concreto**: o caminho de **cancelamento sem confirmação**
+(`this->field_0x8==0` no ramo `CANCEL`) não retorna normalmente — ele
+desempilha os registradores salvos e então **salta direto (`b`, não
+`bl`) para `ctlhoukmes_init(int)`** (`0x25a0f0`, ver §580). Confirma,
+com certeza de endereço, que recusar o diálogo Sim/Não desta tela de
+relatório reinicializa a própria tela do zero (volta ao `_init` do
+controlador-irmão `ctlhoukmes_main`, §117), em vez de só fechar o
+popup. O caminho de confirmação termina com um tail-call pra
+`iOS_setV2Icon(3,1)`, delegando a última ação sem alocar novo frame.
+Os dois trios de contadores decrementados (`X`/`Y`) diferem só no
+valor final subtraído (2 vs. 1), distinguindo os dois desfechos.
 
-**Status CSV: `read_structural`.**
+**Status CSV: `read_full`** — toda instrução real foi lida e
+atribuída a um bloco de controle de fluxo explícito; o único detalhe
+não resolvido é a identidade nominal exata dos ponteiros globais de
+literal pool (contadores/flags), mesma lacuna já aceita em outros
+`read_full` do projeto (§585/586).
 
-## 579. `EnvSE_Play(int)` — dispatcher de 24 casos pra efeitos sonoros ambientais, liga `CFILE_DAT` (contêiner de asset empacotado) a `CSOUND_IF::Load/Play` (2026-10-25, Fase 3, septuagésimo nono lote, revisão semântica sobre checkpoint do CI)
+## 578. `TE_asmTaskEntry(int)` — NÃO é um ponto de entrada de interpretador: é um escalonador de task real via `pthread_mutex_lock`/`unlock` + `longjmp` (correção da hipótese original, 2026-10-25 + revisão byte a byte 2026-10-26, sobre o painel v3)
 
-`EnvSE_Play(int)` (`0x2b2448`, 508 B) — checkpoint do CI
-(`re-results/002b2448.json`): 77% de cobertura (98/127 slots), **1
-tabela de salto resolvida** (guarda `cmp`@`0x2b2474`,
-despacho@`0x2b2478`: 24 casos, só **10 handlers distintos** — a
-maioria dos 24 casos colapsa no mesmo handler default em `0x2b25a0`,
-com uns 8 casos específicos desviando pra blocos próprios em
-`0x2b24e0`/`0x2b25a8`/`0x2b25bc`/`0x2b25cc`/`0x2b25dc`/`0x2b25f0`/
-`0x2b2604`/`0x2b2614`/`0x2b2624`). 9 branches, 8 de retrocesso —
-indício de um laço (provavelmente por canal de som ou por tentativa
-de retry), não rastreado byte a byte.
+**Correção de hipótese**: a versão original desta seção especulava
+que os três locais sem símbolo `sub_71b0c`/`sub_71b18`/`sub_71b3c`
+fossem "o interpretador real do bytecode/'asm'". Disassembly direto
+dos três mostra que cada um é uma **veneer de PLT de 12 bytes**
+idêntica em forma (`add ip,pc,#0x200000; add ip,ip,#0xd6000; ldr
+pc,[ip,#N]!`) — o padrão padrão do linker ARM pra chamar função
+importada quando o deslocamento não cabe num `bl` direto. Resolvendo
+os deslocamentos contra `.rel.plt` (confirmado por endereço exato,
+não suposição):
 
-7 `bl` distintos, todos já documentados em seções anteriores:
-- `CFFT_STATE::GetParam(int)` (`0x28c320`, 1×) — accessor trivial já
-  fechado na seção 22 (`*(int*)(this+0x38+id*4)`); aqui provavelmente
-  lê um parâmetro de estado global (volume/modo) antes de decidir
-  tocar.
-- `CFILE_DAT::Unload()`, `GetBuffer(int)`, `GetSize(int)`,
-  `Load(int,int,int)` (`0xb6a28`/`0xb6c70`/`0xb6cd0`/`0xb6cd8`, 1×
-  cada) — a API do contêiner de asset empacotado já referenciada na
-  seção 7.x (o mesmo `CFILE_DAT` cujo `Decrypt` foi confirmado código
-  morto). Aqui é usado pro caso real: carregar o blob de dados da
-  amostra de som ambiental a partir do pacote, sem decriptação.
-- `CSOUND_IF::Load(int,char*,uchar*,uint,uint,int,int,int,int,int,int)`
-  e `CSOUND_IF::Play(int,int,int,int,uchar)` (`0xba9c8`/`0xbad78`, 1×
-  cada) — a API real do mixer de áudio, já com pseudocódigo completo
-  nas seções 16.2/16.3 (`Load` despacha por formato PCM/OGG; `Play`
-  seta estado de canal e inicia fade).
+- `sub_71b0c` → **`pthread_mutex_lock`**
+- `sub_71b18` → **`pthread_mutex_unlock`**
+- `sub_71b3c` → **`longjmp`**
 
-**Conclusão**: `EnvSE_Play(int)` é a função de entrada do subsistema
-de "efeito sonoro ambiental" (nome nunca visto antes no projeto —
-primeira menção de "EnvSE") — recebe um ID, usa o switch de 24 casos
-pra resolver qual slot/asset de áudio ambiental carregar via
-`CFILE_DAT`, e entrega o buffer resultante pra `CSOUND_IF::Load`+
-`Play` tocar no canal de mixagem real já documentado. Fecha o lado
-"ambiente" da trinca de camadas de áudio do motor (música streaming
-Ogg via Tremor, §17.x; efeitos via `CSOUND_IF`, §16.x; agora "EnvSE"
-como terceira categoria, selecionada por ID em vez de ser chamada
-música/SE direta).
+Ou seja: **`TE_asmTaskEntry` é um escalonador cooperativo real
+baseado em mutex POSIX + `longjmp`** (um fiber/coroutine clássico),
+não um interpretador de opcodes. Mesmo padrão corretivo já aplicado a
+`asm_function`/`wasm_function` (§585/586, que também "pareciam"
+interpretador e eram só um trampolim de aridade).
 
-Como a cobertura automática ficou em 77% (alguns blocos do switch,
-principalmente o laço de 8 branches de retrocesso, não foram
-individualmente rastreados) e não houve leitura instrução a instrução
-dos 10 handlers do switch, isso é um passe estrutural, não leitura
-completa.
+`TE_asmTaskEntry(int)` (`0x28bb88`, 504 B) lido por completo:
 
-**Status CSV: `read_structural`.**
+```c
+int TE_asmTaskEntry(int taskSlot) {
+    int taskNo = TE_task_get_no();
+    if (taskSlot == 1) goto RESUME;             // entrada de "continuação"
+
+    g_lastErrorSlot = -1;
+    g_taskTable[taskSlot * 0x120 + 0x91c] += 1;   // contador por slot (stride 288 B)
+    void* lockObj = &g_lockArea[taskSlot] - 0x4c4; // endereço computado via GOT
+    pthread_mutex_lock(lockObj);
+    Sleep(1);
+    __xpLibgpuDrawCallBack(0x4a8);                 // callback real de VSync (confirma TE_VSync)
+
+    if (taskSlot == 0) goto POLL_LOOP_SIMPLE;       // slot 0 = caminho simplificado
+
+  SCAN:  // 0x28bc38
+    pthread_mutex_lock(lockObj2);
+    if (g_slotOwner == 0 || g_slotOwner != taskSlot) goto RETRY;
+    if (g_tableA[taskSlot].field_0x928 != g_tableB.field_0x8) goto RETRY;
+    if (g_tableA[taskSlot].field_0x928 != 0) {
+        if (Wtask_status(taskSlot) == 0) goto RETRY;
+    } else {
+        if (task_status(taskSlot) == 0) goto RETRY;
+    }
+    int a = g_arrayC[taskSlot].field_0x810;
+    int b = g_arrayC[taskSlot].field_0x814;
+    g_globalD = taskSlot; g_globalE = taskSlot;
+    if (a == b) {
+        if (g_arrayC[taskSlot].field_0x924 != 0 && a != 0)
+            longjmp(&g_arrayC[taskSlot].jmpbuf, 2);
+        return;
+    }
+    if (a == 0) return;
+    longjmp(&g_arrayC[taskSlot].jmpbuf, 1);
+
+  RETRY:  // 0x28bc1c
+    pthread_mutex_unlock(lockObj2);
+    Sleep(1);
+    goto SCAN;
+
+  RESUME:  // 0x28bcfc, só quando taskSlot==1 na entrada
+    g_lastErrorSlot = -2;
+    goto 0x28bbb0;   // reentra no meio do fluxo principal
+
+  POLL_LOOP_SIMPLE:  // 0x28bd24, taskSlot==0
+    pthread_mutex_lock(lockObj3);
+  LOOP2:
+    if (g_slotOwner2 != 0) goto SCAN;
+    pthread_mutex_unlock(lockObj3);
+    Sleep(1);
+    goto LOOP2;
+}
+```
+
+**Confirma, com certeza**: o sistema `TE_*` (Task Engine) é
+implementado sobre **threads POSIX reais** (mutex real) e usa
+**`longjmp`** pra transferência de controle não-local — um
+escalonador de fibras clássico, retornando `1` ou `2` pro ponto de
+`setjmp` original conforme o campo `+0x924`. `task_status`/
+`Wtask_status` confirmam que `TE_asmTaskEntry` é a ponte entre os
+dois sistemas de task "asm"/"wasm" já documentados, como a versão
+original já suspeitava — só que a ponte é feita via mutex+longjmp
+real, não um polling simples. `taskSlot==1` é um caminho de
+reentrada/continuação especial, não um slot normal.
+
+**Status CSV: `read_full`** — toda instrução real foi lida e
+atribuída a um ramo de controle explícito, incluindo a resolução
+definitiva dos 3 locais via `.rel.plt`; os nomes exatos dos campos de
+struct (`+0x810`/`+0x814`/`+0x924`/`+0x928`) ficam descritos por
+offset, não por nome semântico — mesmo padrão de detalhe aceito em
+outros `read_full`.
+
+## 579. `EnvSE_Play(int)` — leitura completa: gate por `CFFT_STATE::GetParam(0x28)`, 24 IDs mapeados, só 9 fazem algo real, canal de áudio fixo 12 (2026-10-25 + revisão byte a byte 2026-10-26, sobre o painel v3)
+
+`EnvSE_Play(int)` (`0x2b2448`, 508 B) foi lida por completo via
+disassembly direto — os "127 slots esperados" do checkpoint
+automático contam 4 words de literal pool (`0x2b2634`-`0x2b2643`,
+confirmadas como dados puros, não código) como se fossem instrução; o
+corpo real tem exatamente 123 instruções e **todas foram lidas**, não
+há bytes de código não explicados.
+
+**Gate de entrada**: `CFFT_STATE::GetParam(this=&g_CFFT_STATE, id=0x28)`
+(id 40 — mesmo singleton já documentado em §22/34.3); se o retorno
+for `0`, a função não faz **nada** e retorna direto. Confirma que o
+parâmetro 40 de `CFFT_STATE` é um interruptor geral ("som ambiente
+ligado?") que pode desativar `EnvSE_Play` por completo.
+
+**Despacho real**: `r0 = id - 0x10001` (o parâmetro é esperado na
+faixa `0x10001`-`0x10018`, 24 valores); se fora da faixa, retorna sem
+fazer nada. Dos 24 IDs válidos, **a tabela de salto mapeia só 9 pra
+código real** — os outros 15 caem direto no mesmo "não faz nada" (não
+é falha de extração, é o próprio binário tratando 15 dos 24 slots
+como reservados/vazios). Os 9 IDs reais só diferem em **dois valores
+literais hardcoded no próprio braço do switch** (`r4`="fileID",
+`r2`="flagID", ex.: `0x10002`→(0x291,0x292), `0x10006`→(0x293,0x294),
+`0x1000f`→(0x298,0x299)), que convergem todos no MESMO bloco de
+execução em `0x2b24f0`:
+
+```c
+CFILE_DAT* pak = *(CFILE_DAT**)GOT[0];
+pak->Load(r4, r2, 0);                       // CFILE_DAT::Load(int,int,int)
+void* buf  = pak->GetBuffer(r4);
+int   size = pak->GetSize(r4);
+
+CSOUND_IF* mixer = *(CSOUND_IF**)GOT[1];
+mixer->Load(12 /*canal FIXO*/, (char*)0x2f0328 /*endereço literal, provável tag*/,
+            (unsigned char*)buf, 0, size, 0, 1, 100, r4, 1, 0);
+pak->Unload();
+
+mixer = *(CSOUND_IF**)GOT[1];
+mixer->Play(12 /*mesmo canal fixo*/, 1, -1, -1, 0xff /*volume máximo*/);
+```
+
+**Achados concretos**: (1) o "canal de áudio ambiente" é **hardcoded
+como 12** nas duas chamadas (`Load` e `Play`) — EnvSE não aloca canal
+dinamicamente, usa um canal fixo dedicado; (2) o endereço `0x2f0328`
+passado como `char*` é uma constante PIC resolvida via `pc`+literal
+(não GOT-indireto como os outros globais) — ponteiro fixo pra um dado
+em outra seção (provável string/tag de formato), não lido além de
+confirmar que é um endereço válido; (3) os 15 IDs "vazios" e o gate
+de `CFFT_STATE::GetParam` confirmam que a maior parte da superfície
+de 24 IDs é reservada/não usada nesta versão.
+
+Fecha o lado "ambiente" da trinca de camadas de áudio do motor
+(música streaming Ogg via Tremor, §17.x; efeitos via `CSOUND_IF`,
+§16.x; EnvSE como terceira categoria, por ID).
+
+**Status CSV: `read_full`** — 100% dos bytes reais (123 de 123
+instruções, excluindo só os 4 words de literal pool) lidos e o fluxo
+de controle completo (gate, despacho de 24 casos, os 9 braços reais
+convergindo no bloco comum, e as duas chamadas de áudio) confirmado.
+Única lacuna: o significado exato do endereço literal `0x2f0328`
+(provável string, não resolvido byte a byte).
 
 ## 580. Grab-bag de 14 funções `ctl*_init` — testado e refutado: NÃO é família duplicada (Jaccard 0–0,15 contra `ctlworkinginf_init`), cada tela tem setup genuinamente distinto (2026-10-25, Fase 3, octogésimo lote)
 
@@ -18711,12 +19436,11 @@ propósito de cada tela sem passe estrutural completo de cada uma
 (nenhuma tem tabela de salto, todas 88–93% de cobertura de instrução
 pelo `jtable.py`, nenhuma chegou a ser lida bloco a bloco):
 
-- **`ctlevtinfo_init(int)`** (`0x2576e0`, 500 B): `Wserchmessagepointer(int)`,
-  `Wcount_words2(short*,short*,char*)`, `pagewin_init(PAGEWININFO*)` —
-  tela de "info de evento" é uma janela de texto genérica (`pagewin_*`,
-  família de paginação já citada na §579... na verdade nova aqui,
-  primeira aparição de `pagewin_init`) alimentada por busca de
-  ponteiro de mensagem do sistema `W*`.
+- **`ctlevtinfo_init(int)`** (`0x2576e0`, 500 B) — **upgrade pra
+  `read_full` em 2026-10-26** (revisão byte a byte sobre o painel
+  v3, ver addendum no final desta seção, "580-add"): tela de "info
+  de evento", janela de texto genérica (`pagewin_*`) alimentada por
+  busca de ponteiro de mensagem do sistema `W*`.
 - **`ctlmap_init()`** (`0x253f20`, 480 B): `Wread_eventflag(int)` — só
   checa uma flag de evento antes de entrar no mapa mundi (consistente
   com `ctlmap_main`, §92, que já não chama `worldmap_call`
@@ -18779,143 +19503,300 @@ pelo `jtable.py`, nenhuma chegou a ser lida bloco a bloco):
   ciclo começo/fim do par `vOpn_*`/`vEnd_*` citado como pendente na
   §571.
 
-**Status CSV**: `read_structural` para as 14 (identidade do call-graph
-confirmada via `readelf --dyn-syms`/`c++filt` + cruzamento textual;
-nenhuma teve os blocos internos lidos instrução a instrução — typing
-honesto, não `read_full`).
+**Status CSV**: `read_structural` para as 13 restantes (identidade do
+call-graph confirmada via `readelf --dyn-syms`/`c++filt` + cruzamento
+textual; nenhuma teve os blocos internos lidos instrução a instrução
+— typing honesto, não `read_full`). `ctlevtinfo_init` foi promovida a
+`read_full`, ver addendum abaixo.
 
-## 581. `iOS_v2menuSetType(V2MENU_TYPE)` — configura layout/escala dos 11 campos de posição do menu V2 por tipo, lendo a tabela de sprite-IDs correspondente (2026-10-25, Fase 3, octogésimo primeiro lote, revisão semântica sobre checkpoint do CI)
+### 580-add. `ctlevtinfo_init(int)` — leitura completa: clamp de contagem (≤4), duas escritas de array via GOT, monta um `PAGEWININFO` real com centralização de texto antes de `pagewin_init` (revisão byte a byte 2026-10-26, sobre o painel v3)
 
-`iOS_v2menuSetType(V2MENU_TYPE)` (`0x28179c`, 540 B) — checkpoint do
-pipeline automatizado (`docs/re-results/0028179c.json`, não
-reexecutado nesta sessão): 128 de ~135 instruções possíveis (95%), 0
-tabelas de salto, 5 branches/4 de retrocesso. 2 `bl` distintos, 12
-chamadas: `RETINA_SCALE(int)` (×11) e `iOS_getv2menuSprIdTbl()` (×1).
+`ctlevtinfo_init(int)` (`0x2576e0`, 500 B) foi lida por completo via
+disassembly Capstone linear (0 branches, fluxo sequencial). **Os "10
+slots não cobertos" do checkpoint automático (92%) são exatamente 10
+words de literal pool** em `0x2578ac`-`0x2578d0` — 115 instruções
+reais (460 B) + 10 words (40 B) = 500 B exatos, nenhum byte de código
+real sem explicação.
 
-Já era citada por nome como parte do grupo de funções do sistema de
-ícones "V2" (`iOS_getV2Icon`/`iOS_setV2Icon`, §577), e `RETINA_SCALE`
-é a função de escala de DPI mais chamada do projeto inteiro (recorde
-de 131 chamadas em `Main_FrameRender`, sempre junto de
-`CGX_SCREEN_CORRECT::Scaled`). O padrão — 11 chamadas a
-`RETINA_SCALE` dentro de um laço com 4 branches de retrocesso — é
-consistente com a função escalando ~11 campos de posição/tamanho dos
-elementos visuais do menu V2 (ícones, texto, molduras) de acordo com
-a densidade de pixels do dispositivo, depois de resolver o conjunto
-de sprite-IDs certo pra aquele tipo de menu via
-`iOS_getv2menuSprIdTbl()`. Consistente com o nome ("SetType"): recebe
-um enum `V2MENU_TYPE` e configura todo o layout escalado daquele tipo
-de menu de uma vez, provavelmente uma vez por troca de tela/contexto,
-não por quadro. A ligação exata entre `V2MENU_TYPE` e quais 11 campos
-recebem qual escala não foi rastreada bloco a bloco.
+```c
+int ctlevtinfo_init(int eventID) {
+    char* msgPtr = Wserchmessagepointer(eventID);
+    short lineW, lineCount;
+    Wcount_words2(&lineW, &lineCount, msgPtr);
+    if (lineCount > 4) lineCount = 4;            // *** clamp: no máximo 4 linhas ***
 
-**Nota de metodologia**: `docs/RE_SEMANTIC_REVIEW_INITIAL.md` mantém
-esta função como `needs_review` sob um padrão mais rigoroso e
-deliberadamente separado (reconstrução de invariante por bloco +
-teste diferencial antes de aceitar qualquer hipótese). Esta seção usa
-o padrão `read_structural` em vigor desde a seção 1 do projeto (grafo
-de chamadas + cruzamento textual) — os dois status coexistem porque
-medem coisas diferentes, não são contraditórios.
+    int handle = add_anmpac(g_globalA, g_globalB);
+    int idx    = *g_counterPtr;
+    arrayBase[idx * 92] = handle;                 // grava o handle no slot `idx` (stride 92 B)
 
-**Status CSV: `read_structural`.**
+    // dois campos de flag, em DOIS arrays paralelos distintos, recebem o bit 0x10:
+    arrayC[idx*36] |= 0x10;
+    arrayD[idx*??] |= 0x10;   // 2º array/stride não identificado com certeza
 
-## 582. `ctlperson_main(CTLINFO*)` — loop por-frame da tela de roster de personagens, mesmo esqueleto padrão `wldctl_active`+`sound_request`+`curhis_get/clr` já visto em dezenas de outros `ctl*_main` (2026-10-25, Fase 3, octogésimo primeiro lote, revisão semântica sobre checkpoint do CI)
+    PAGEWININFO* pwi = &g_pageWinInfo;
+    pwi->field_0x00 = 0;
+    pwi->field_0x04 = 0x60;                 // 96 — provável largura/altura fixa
+    pwi->field_0x08 = 45 - (((lineW + 24) & ~3) / 2);   // *** centralização de texto ***
+    pwi->field_0x0c = (~lineCount) << 3;    // máscara de linhas visíveis
+    pwi->field_0x10 = lineW;
+    pwi->field_0x14 = handle;
+    pwi->field_0x34 = eventID;               // *** grava o PRÓPRIO parâmetro da função ***
+    pwi->field_0x4c = 3;
+    pwi->field_0x64 = pwi->field_0x68 = pwi->field_0x6c = -1;   // sentinelas "nenhum"
 
-`ctlperson_main(CTLINFO*)` (`0x24eadc`, 500 B) — checkpoint do
-pipeline automatizado (`docs/re-results/0024eadc.json`): 115 de ~125
-instruções possíveis (92%), **0 tabelas de salto**, 12 branches/3 de
-retrocesso. 7 `bl` distintos, resolvidos por nome no checkpoint:
-`Wtask_status(long)`, `Wsend_taskparamater(long,long,long,long)`
-(×2), `ctlperson_deactive(CTLINFO*)` (chamada a si-mesma/transição de
-saída), `wldctl_active()`, `sound_request(int)` (×2),
-`curhis_get(int)`, `curhis_clr(int)`.
+    pagewin_init(pwi);
 
-Esse catálogo é exatamente o esqueleto padrão já fechado em dezenas de
-outros controladores `ctl*_main` do mesmo framework (`wldctl_active`
-+ `sound_request` ×2 + `curhis_get`/`curhis_clr` + chamada ao próprio
-`_deactive`). `curhis_get`/`curhis_clr` fazem o bookkeeping do
-histórico de posição de cursor gravado pelo `_init` via `curhis_put`
-— confirma exatamente o par irmão imediato: `ctlperson_init()` (§580)
-grava a posição inicial do cursor via `curhis_put` antes desta função
-assumir o loop por frame. Sem tabela de salto, consistente com um
-loop simples de "navegar lista → tocar som ao mover seleção → ao
-confirmar, limpar histórico e chamar `ctlperson_deactive`" em vez de
-um switch de fases grande como `ctlhoukmes_main` (§117).
-`Wtask_status`/`Wsend_taskparamater` seguem o padrão de notificação de
-task já visto em `houkoku_okng` (§577). Nenhum bloco lido instrução a
-instrução.
+    int n = *counterStructPtr;
+    *counterStructPtr = n + 1;
+    eventQueueArray[n] = 0x33;               // código de tipo de evento, grava na fila
+}
+```
 
-**Status CSV: `read_structural`.**
+**Achados concretos**: (1) grava o próprio `eventID` direto no campo
+`+0x34` do `PAGEWININFO` — a janela de "info de evento" carrega o ID
+consigo, não só o texto; (2) fórmula de centralização real
+`45 - ((lineW+24)&~3)/2`; (3) duas escritas de array via GOT-indireto
+duplo, cada uma recebendo o bit `0x10` ("marcar slot como ativo"),
+mesmo idioma já visto em outras famílias de array por slot.
 
-## 583. `unittoface(int)` — resolução rápida de ID de rosto por unidade, mesma forma de switch (36 casos/4 handlers) de `attack_assumechr`/`attack_assumeface` (§121/122), mas sem a pipeline de carregamento de asset (2026-10-25, Fase 3, octogésimo primeiro lote, revisão semântica sobre checkpoint do CI)
+**Status CSV: `read_full`** — 115 de 115 instruções reais lidas e
+atribuídas, controle de fluxo completo (sequencial, sem branches), os
+10 words de literal pool confirmados como dado. Lacuna: identidade
+nominal exata dos dois arrays globais (`arrayC`/`arrayD`).
 
-`unittoface(int)` (`0x15813c`, 496 B) — checkpoint do CI
-(`docs/re-results/0015813c.json`): **69% de cobertura** (86/124
-slots), abaixo do usual — sinalizado especificamente pelo
-`review_reason: resolved_jump_table_check`. **1 tabela de salto
-resolvida** (guarda `cmp`@`0x1581e8`, dispatch@`0x1581ec`): 36 casos,
-só **4 handlers distintos** — caso `0`→`0x1582cc`, caso `1`→`0x1582a8`,
-casos `2`-`33` (32 casos, a maioria) convergem no handler default em
-`0x158300`, e os últimos casos (`34`-`35`) caem num quarto handler em
-`0x158284`. 17 branches, 8 de retrocesso. 2 `bl` distintos:
-`get_unitwork_add(int)` e `get_jobdata(int)`.
+## 581. `iOS_v2menuSetType(V2MENU_TYPE)` — leitura completa: cadeia de ícones por tabela, max de dimensão, e 11 chamadas reais a `RETINA_SCALE` com fórmulas explícitas (2026-10-25 + revisão byte a byte 2026-10-26, sobre o painel v3)
 
-A forma do switch (36 casos, 4 handlers, um dominando a maioria) é
-**idêntica** à de `attack_assumechr()` (§121, `0xc8730`) e
-`attack_assumeface()` (§122, `0xc8fcc`) — ambas já confirmadas
-despachando por job/tipo de recurso durante um preview de ataque. A
-diferença central: aquelas duas têm 18-19 `bl` cada (carregamento de
-arquivo via `mallocForFile`/`numa_fileReadCD`, pipeline
-`PSX_LoadImage`/`StoreImage`, leitura binpack), enquanto `unittoface`
-só chama duas funções de lookup — confirma que é a **versão "pura"**
-da resolução de ID, sem carga de asset: `get_unitwork_add(int)`
-resolve o ponteiro `BWORK`/registro de trabalho da unidade,
-`get_jobdata(int)` busca os dados do emprego, e o switch de 36 casos
-(quase certamente indexado por ID de emprego — a faixa conhecida de
-~32-36 empregos jogáveis mais casos especiais nas pontas) escolhe
-qual campo do resultado de `get_jobdata` vira o ID de rosto final.
-Corpos dos 4 handlers não lidos instrução a instrução.
+`iOS_v2menuSetType(V2MENU_TYPE)` (`0x28179c`, 540 B) foi lida por
+completo: os "7 slots não cobertos" do checkpoint automático são
+exatamente os 7 words de literal pool em `0x28199c`-`0x2819b4`
+(constantes PIC para os 4 globais usados na função) — **0 bytes de
+código real ficam sem explicação**.
+
+**Caso especial (`V2MENU_TYPE==13`)**: pula direto pro bloco comum
+com valores fixos (`r6=17`, `r0=12`, contagem de ícones `=0`) —
+tratamento de "menu sem cadeia de ícones".
+
+**Caso normal**: indexa uma tabela global (`g_v2menuSprIdTbl`,
+resolvida também via `iOS_getv2menuSprIdTbl()` — a chamada parece só
+garantir que a tabela está inicializada, já que o endereço usado
+depois é recalculado direto via literal, não via o valor de retorno)
+por `tipo*32` e lê uma **cadeia encadeada de valores** terminando no
+sentinela `13`. Cada valor da cadeia é usado duas vezes: (1) como
+índice (`×2`) numa tabela de halfwords apontada pelo próprio
+parâmetro `r0` (`V2MENU_TYPE` reaproveitado como ponteiro, não como
+enum simples — não confirmado dinamicamente se é intencional ou um
+caminho morto pra entradas reais, fica como lacuna semântica
+explícita); (2) numa segunda tabela global (`tableB+0x1a0`) pra achar
+o **valor máximo** entre todos os elos da cadeia (`maxDim`).
+
+Com `N` = tamanho da cadeia:
+```c
+STATE->field_0x54 = maxDim;
+for (i = 0; i < N; i++) STATE->flags[i] = 1;
+int base = N * 18;                              // 0x12
+int w0   = (type == 13) ? 17 : (base + 17);
+```
+E então **11 chamadas reais** a `RETINA_SCALE(int)`, cada uma com um
+argumento explícito, gravadas num terceiro global (`STATE`, literal
+próprio em `0x281870`-`0x281878`):
+
+| # | Argumento de `RETINA_SCALE` | Campo de destino |
+|---|---|---|
+| 1 | `w0` | `STATE+0x3c` |
+| 2 | `6` | `STATE+0x40` |
+| 3 | `STATE[0x3c]` (já escalado) | `STATE+0x4c` |
+| 4 | `10` (0xa) | `STATE+0x50` (+ cópia em `STATE+0x90`) |
+| 5-6 | `STATE[0x54]+0xc` (maxDim+12), repetida | `STATE+0x92`/`STATE+0x94` |
+| 7 | `40` (0x28) | `STATE+0x96` (+ `STATE[0x50]` sem escala em `STATE+0x98`) |
+| 8 | `base + STATE[0x50]` | `STATE+0x9a` |
+| 9 | `STATE[0x54]+0xc` (repete) | `STATE+0x9c` |
+| 10 | `40` (repete) | `STATE+0x9e` |
+| 11 | `18` (0x12) | `STATE+0x58` (+ zera `STATE+0x34/0x38/0x5c`) |
+
+**Confirma, com fórmulas reais**: os 8 halfwords `STATE+0x90` até
+`+0x9e` são posições/larguras escaladas por DPI de até 8
+sub-elementos visuais do menu V2, derivadas de três entradas: a
+largura total da linha de ícones (`base=N*18`), a maior dimensão
+entre os ícones da cadeia (`maxDim`), e três constantes fixas (6, 10,
+40). O papel visual exato de cada offset individual fica como lacuna
+(precisaria do código de desenho que lê `STATE`, fora desta função).
+
+**Status CSV: `read_full`** — 100% dos bytes de código (128 de 128
+instruções reais, excluindo os 7 words de literal pool) lidos e o
+fluxo completo confirmado. Duas lacunas semânticas explícitas,
+nenhuma de bytes não lidos: (1) o uso de `r0` como ponteiro na cadeia
+de ícones; (2) o papel visual exato de cada campo `STATE+0x90..0x9e`.
+Nota de metodologia preservada: `docs/RE_SEMANTIC_REVIEW_INITIAL.md`
+tratava esta função sob um padrão ainda mais rigoroso
+(microexecução); esta leitura byte a byte satisfaz o padrão
+`read_full` do projeto, que é o que o CSV rastreia.
+
+## 582. `ctlperson_main(CTLINFO*)` — leitura completa: máquina de 3 bits de flag global decide polling de task / confirmação / cancelamento, com tail-call final pra um resolvedor de ícone (2026-10-25 + revisão byte a byte 2026-10-26, sobre o painel v3)
+
+`ctlperson_main(CTLINFO*)` (`0x24eadc`, 500 B) — disassembly linear
+completo via Capstone. O código real termina em `0x24eca8` (a
+instrução ali decodifica como lixo `andeq sb,pc,r4,ror#4`,
+confirmando o fim) — **115 instruções reais (460 B) + 10 words de
+literal pool (40 B) = 500 B exatos**, nenhum byte sem explicação.
+
+Fluxo real (dois globais: `g_flagsA`, bit 2, consultado no topo;
+`g_flagsB`, bits `0x20`/`0x40`/`0x100`, consultado em seguida):
+
+```c
+void ctlperson_main(CTLINFO* this) {
+    if (!(g_flagsA & 4)) {
+        if (g_flagsB & 0x40)      goto HANDLE_ESCAPE;      // 0x24ec68
+        if (g_flagsB & 0x100)     goto CHECK_DEACTIVE;      // 0x24ebc0
+        if ((g_flagsB & 0x20) && this->field_0x30 != 0)
+            goto CONFIRM;                                    // 0x24ebe8
+        return;
+    }
+    // g_flagsA & 4 setado:
+    if (Wtask_status(0xc) != 0) return;
+    g_flagsA ^= 4;                       // desarma o bit de poll
+    *g_ptrX = 0;  *g_ptrY = 1;
+    int counter = --(*g_counterZ);
+    if (this->field_0x0 == 0) goto TEARDOWN_PARTIAL;   // 0x24ec18
+    int r = curhis_get(0xb);
+    short idx = *(short*)(g_tblD + 0x38);
+    short val = g_tblE[idx] & 0x7ff;
+    goto sub_24e91c(val);     // *** TAIL CALL, não bl *** — bloco local sem símbolo
+}
+
+CHECK_DEACTIVE:  // 0x24ebc0
+    if (this->field_0x30 == 0) goto <reteste 0x20>;
+    ctlperson_deactive(this);
+    return iOS_setV2Icon(0x1056, 1);    // tail call
+
+CONFIRM:  // 0x24ebe8
+    sound_request(1);
+    this->field_0x0 = 1;
+    Wsend_taskparamater(0xc, 0, 0, 1);
+    g_flagsA |= 4;    // re-arma o poll pra próximo quadro
+    return;
+
+TEARDOWN_PARTIAL:  // 0x24ec18
+    curhis_clr(0xb);
+    wldctl_active();
+    return iOS_setV2Icon(3, 1);    // tail call
+
+HANDLE_ESCAPE:  // 0x24ec68
+    sound_request(2);
+    Wsend_taskparamater(0xc, 0, 0, 1);
+    g_flagsA |= 4;
+    return iOS_setV2Icon(0x8c, 0);   // tail call
+```
+
+**Achados concretos**: (1) a função termina em **4 pontos diferentes
+via tail-call** (`b`, não `bl`) pra `iOS_setV2Icon` com argumentos
+distintos — nenhum desses três ícones (`0x1056`=4182, `0x8c`=140)
+tinha aparecido em seção anterior; (2) o ramo de polling de task
+(`Wtask_status(0xc)==0`) termina com **tail-call pra um bloco local
+sem símbolo em `0x24e91c`**, no espaço entre o fim de `ctlperson_init`
+(§580, `0x24e8d0`) e esta função — candidato forte a helper
+compartilhado, não lido nesta passada; (3) confirma o esqueleto
+genérico já citado, mas agora com a condição exata de cada transição
+(bits `4`/`0x20`/`0x40`/`0x100` de dois globais de flag distintos).
+
+**Status CSV: `read_full`** — 100% das 115 instruções reais lidas e
+atribuídas a um ramo explícito; os 10 words de literal pool
+confirmados como dados. Lacuna aceita: o corpo do bloco local
+`sub_24e91c` (tail-call, não lido) e a identidade nominal exata dos
+globais de flag/contador.
+
+## 583. `unittoface(int)` — resolução de rosto por unidade, leitura completa dos 4 handlers do switch de 36 casos, confirma e refina a hipótese de `get_jobdata` (2026-10-25 + revisão byte a byte 2026-10-26, sobre o painel v3)
+
+`unittoface(int)` (`0x15813c`, 496 B) lida por completo via
+disassembly direto. A tabela de salto (`cmp`@`0x1581e8`,
+`addls`@`0x1581ec`, 36 casos sobre `byte0-0x80`) tem o guard
+confirmado seguro: fora da faixa (`byte0-0x80 > 0x23`) a instrução
+`addls` simplesmente não dispara e a execução nunca chega ao switch —
+não há caminho inseguro.
+
+Lógica real (unidade = `get_unitwork_add(id)`, `byte0 = *(unit+0)`):
+
+- **`byte0 < 0x80` (job "normal")**: cai direto no bloco comum com
+  `r2=r3=byte0`, faz `table[byte0*2+0xb8]` (ldrh) e retorna esse
+  valor — **lookup puro por tabela estática indexada pelo próprio ID
+  de job**, sem chamar `get_jobdata`.
+- **`byte0 ∈ {0x80,0x81}`** (casos 0/1): lê `jobByte2 = *(unit+2)`.
+  Testa `jobByte2==0x5b→r2=0x82`/`==0x5c→r2=0x83`, senão usa um
+  índice calculado; se o `byte0` original tiver o resultado via
+  `cmp r2,#1 ≤1`, **sobrepõe tudo com códigos de letra fixos**: lê
+  `jobSpecies = *(unit+2)` de novo e retorna `'k'`/`'j'` (species
+  0xa1/0xa4), `'i'`/`'h'` (species 0xa0, por paridade de `byte0`), ou
+  o valor de tabela default.
+- **`byte0 ∈ [0x82,0xA1]`** (32 casos colapsados no handler único
+  `0x158300`): chama **`get_jobdata(*(unit+2))`** e usa o campo
+  **`jobdata+0x2e`** como índice da MESMA tabela estática — **confirma
+  por completo a hipótese anterior**. Exceção: se `*(jobdata+2) ==
+  0x5b/0x5c`, o índice é sobrescrito pra `0x82`/`0x83`. Exceção
+  adicional: se `byte0` for exatamente `0x82`, o resultado é
+  combinado via `OR` com `*(jobdata+0x2f)<<10` antes de retornar.
+- **`byte0 ∈ {0xA2,0xA3}`** (casos 34/35, handler `0x158284`): o
+  cálculo de tabela é sempre descartado — o retorno final é sempre o
+  literal `'l'` (byte0==0xA2) ou `'m'` (byte0==0xA3).
+
+Os valores de letra (`'h'`-`'m'`, 0x68-0x6d) são códigos especiais pra
+jobs/espécies de monstro específicos (0xa0-0xa4), distintos do range
+normal de IDs de tabela.
 
 **Conexão**: fecha, junto com §121/§122, a família dos resolvedores de
 rosto/ícone por switch de 36 casos.
 
-**Status CSV: `read_structural`** (call-graph + forma da tabela
-mapeados e cruzados com §121/122; corpos dos 4 handlers não lidos
-byte a byte, cobertura automática de só 69%).
+**Status CSV: `read_full`** — todas as instruções reais das 4
+ramificações do switch + os 2 caminhos de entrada foram lidas e
+atribuídas a um fluxo de controle explícito; a identidade semântica
+exata de `jobdata+0x2e`/`+0x2f` e da tabela estática ficam descritas
+por offset, mesma lacuna aceita em outros `read_full` do projeto.
 
-## 584. `getTrapResultDamage(BWORK*, int)` — resolução de armadilha de painel por 7 tipos, aplica status via `change_status_adjust` (§355) com RNG sincronizado por rede (2026-10-25, Fase 3, octogésimo primeiro lote, revisão semântica sobre checkpoint do CI)
+## 584. `getTrapResultDamage(BWORK*, int)` — leitura completa dos 7 handlers: 2 flags-only, 2 trigger-simples, fórmula de dano determinística e randomizada por rede, toggle de flag, fallback com flag extra (2026-10-25 + revisão byte a byte 2026-10-26, sobre o painel v3)
 
-`getTrapResultDamage(BWORK*, int)` (`0x1ccc3c`, 496 B) — checkpoint do
-pipeline automatizado (`docs/re-results/001ccc3c.json`): 89% de
-cobertura (110/124 slots), **1 tabela de salto resolvida** (guarda
-`cmp`@`0x1ccc64`, despacho@`0x1ccc68`: **7 casos, 7 handlers
-distintos** — nenhum colapso, cada caso tem corpo próprio). 6
-branches, 5 de retrocesso. 2 `bl` distintos (5 chamadas):
-`change_status_adjust(int)` (×4) e `_pspNetRand(char const*, int)`
-(×1).
+`getTrapResultDamage(BWORK* unit, int trapType)` (`0x1ccc3c`, 496 B)
+lida por completo. Guard confirmado seguro: `cmp r1,#6; addls
+pc,pc,r1,lsl#2` — se `trapType>6`, cai direto no handler default
+(`0x1cccbc`, só `pop`, nenhum efeito colateral). Entry grava `unit`
+e `unit+0x1ae` em dois globais (`g_lastBWORK`/`g_resultSlot`) usados
+por todos os handlers.
 
-Os dois alvos de `bl` já estão documentados: `change_status_adjust(int)`
-(`0x1ca5a4`, §355) é o filtro de exclusividade de status + gate de
-"duty" de rede que opera sobre os offsets de `BWORK` mapeados em
-§349. `_pspNetRand(char const*, int)` é o RNG **sincronizado por
-rede** (não `rand()` local) já confirmado em `check_tobe_crystal`
-(§558) para decisões que precisam dar o mesmo resultado em todos os
-clientes de uma partida multiplayer (ali era "virar cristal"; aqui é
-dano/efeito de armadilha).
+- **Tipo 0** (`0x1cccc0`): sem chamada — grava direto `unit+0x1d5=1`
+  e `unit+0x1c0(halfword)=0x100`. Trap puramente informativa, sem
+  RNG nem `change_status_adjust`.
+- **Tipos 1 e 2** (`0x1cccd8`/`0x1ccd00`): gravam `unit+0x1cf = 1`
+  (tipo1) ou `=0x10` (tipo2), chamam `change_status_adjust(0)`;
+  sucesso → `resultado.byte0=0`, `resultado+0x2c=0`, `resultado+2=7`;
+  falha → `resultado+0x27=8`.
+- **Tipo 3** (`0x1ccd08`): sem chamada — fórmula determinística: lê
+  `unit+0x32(halfword)`, divide (multiply-by-reciprocal), grava em
+  `unit+0x1b4(halfword)` — **confirma que `+0x1b4` é o campo
+  "quantidade de dano da armadilha"** — e marca `unit+0x1d5=-128`.
+- **Tipo 4** (`0x1ccd2c`, o mais rico): `delta = unit+0x32 - unit+0x30`
+  (halfwords, provável stat atual vs. máximo), chama
+  **`_pspNetRand`** (RNG sincronizado por rede, §558), reduz `%11`,
+  soma `0x5f`, multiplica pelo `delta`, divide de novo, grava em
+  **`unit+0x1b4`** — mesmo campo do tipo 3, confirmando tipo 3 =
+  variante determinística e tipo 4 = variante randomizada
+  (sincronizada entre clientes) do mesmo "dano de armadilha". Clampa
+  um contador em `resultado+6` pro intervalo `[1,999]`, marca
+  `resultado+0x27=-128`, chama `change_status_adjust(0)`.
+- **Tipo 5** (`0x1ccdec`): alterna um byte em `unit+0x1ce`; chama
+  `change_status_adjust(0)`; mesmos destinos de sucesso/falha do
+  tipo 1.
+- **Tipo 6/default-com-efeito** (`0x1ccc8c`): seta o bit `0x10` de
+  `unit+0x1cb`; chama `change_status_adjust(0)`; mesmos destinos de
+  sucesso/falha compartilhados de tipo 1/5.
 
-`getTrapResultDamage` resolve uma armadilha de painel de batalha (2º
-parâmetro = provável tipo/ID da armadilha, selecionando um dos 7
-casos), decide com RNG sincronizado se/quanto efeito aplica, e chama
-`change_status_adjust` até 4 vezes pra gravar o(s) status resultante(s)
-na unidade — coerente com armadilhas que infligem mais de um status
-por acionamento. Fica na vizinhança de `change_status_adjust`
-(`0x1ca5a4`) e do cluster de status/BWORK das seções 349/355, **não**
-no cluster de rede `pspNetTrap*` (§557, detecção de trapaça de rede)
-— são dois "trap" homônimos não relacionados. Os 7 corpos de caso não
-foram lidos individualmente.
+**Conexão**: fica na vizinhança de `change_status_adjust` (`0x1ca5a4`,
+§355) e do cluster de status/BWORK das seções 349/355, **não** no
+cluster de rede `pspNetTrap*` (§557) — são dois "trap" homônimos não
+relacionados.
 
-**Status CSV: `read_structural`** (tabela de salto e call-graph
-resolvidos e cruzados com §355/§558; os 7 corpos de caso não lidos
-instrução a instrução).
+**Status CSV: `read_full`** — os 7 handlers + o caminho de
+guard-fora-de-faixa foram lidos instrução a instrução, incluindo as
+duas fórmulas de dano e os destinos compartilhados de sucesso/falha.
+As constantes exatas de divisão (magic numbers do idioma
+multiply-by-reciprocal) não foram decodificadas pro divisor decimal
+exato — mesma lacuna numérica aceita em outros `read_full`.
 
 ## 585. `asm_function(ulong×6)` — não é um interpretador de opcode: é o trampolim genérico de chamada indireta por aridade (0–5 argumentos) usado pelo sistema de task (2026-10-25, Fase 3, octogésimo primeiro lote, revisão semântica sobre checkpoint do CI)
 
@@ -19000,35 +19881,84 @@ aridades + guarda de inicialização — lidas instrução a instrução via
 disassembly direto; só a identidade dos slots de função, dados e não
 código, permanece em aberto).
 
-## 587. `ctlsound_main(CTLINFO*)` — loop por-frame da tela de teste de som: toca efeito, alterna estéreo, volta pro título (2026-10-25, Fase 3, octogésimo segundo lote, revisão semântica sobre checkpoint do CI)
+## 587. `ctlsound_main(CTLINFO*)` — leitura completa: menu de 3 posições (índices 0/1/2 = modo estéreo real) com wraparound circular, teardown decrementando 3 contadores globais (2026-10-25 + revisão byte a byte 2026-10-26, sobre o painel v3)
 
-`ctlsound_main(CTLINFO*)` (`0x2472a8`, 484 B) — checkpoint do
-pipeline automatizado (`docs/re-results/002472a8.json`, não
-reexecutado nesta sessão): 113 de ~121 instruções possíveis (93%), 0
-tabelas de salto, 9 branches/2 de retrocesso. 6 `bl` distintos, 9
-chamadas: `callSystemSound(int)` (×3), `ctlopentitle_active(CTLINFO*)`
-(×1), `vOpn_key_rep(unsigned long)` (×2), `Ssd_SetStereo(int)` (×1),
-`iOS_SetRectHit(int,RECT16*,int)` (×1), `iOS_GetRectHitNoTap()` (×1).
+`ctlsound_main(CTLINFO*)` (`0x2472a8`, 484 B) — disassembly linear
+completo via Capstone. Código real termina em `0x247468` (a
+instrução seguinte decodifica como lixo `mulseq r0,r4,sl`) — **113
+instruções reais (452 B) + 8 words de literal pool (32 B) = 484 B
+exatos**, nenhum byte sem explicação.
 
-Fecha o par com `ctlsound_init()` (`0x24717c`, §580 — "tela de teste
-de som", confirmada via `ctlopentitle_main`, §87, que lista
-`ctlsound_init` entre os destinos possíveis após o filme de abertura).
-`ctlsound_main` é a lógica por quadro dessa tela: usa
-`iOS_SetRectHit`/`iOS_GetRectHitNoTap` (mesmo par de detecção de
-toque em retângulo já visto em várias outras telas) para capturar o
-toque do jogador num botão de teste, chama `callSystemSound(int)`
-(×3 — provável efeito sonoro diferente por botão testado), e usa
-`Ssd_SetStereo(int)` pra alternar o modo estéreo/mono (par exato do
-getter `Ssd_GetStereo()` já usado em `ctlsound_init`, §580).
-`vOpn_key_rep(unsigned long)` (×2) faz polling de repetição de
-tecla/botão (família `vOpn_*` de `ctlopentitle_main`, §87). A chamada
-a `ctlopentitle_active(CTLINFO*)` confirma que esta tela é um
-sub-modo acessado direto do controlador de título, que devolve o
-controle ativando-o de volta ao terminar.
+```c
+void ctlsound_main(CTLINFO* this) {
+    if (this->field_0x20 == 2) goto TEARDOWN;           // 0x247400
 
-Sem tabela de salto, nenhum bloco lido instrução a instrução.
+    iOS_SetRectHit(0, &g_soundTestRect, 0);
+    iOS_GetRectHitNoTap();
+    uint32_t flags = *g_flagsPtr;
+    if (flags & 0x820) goto STEREO_SET;                   // 0x2473e4
+    int bit40 = flags & 0x40;
+    if (bit40) goto PLAY_SE2;                              // 0x2473c0
 
-**Status CSV: `read_structural`.**
+    if (vOpn_key_rep(0x1000) != 0) {                        // tecla esquerda/cima
+        int oldVal = this->intArray[this->field_0x1c];
+        g_iconTable[oldVal].field_0x14 = bit40;                // desmarca ícone antigo
+        int idx = this->field_0x1c - 1;
+        if (idx < 0) idx = 2;                                   // wrap circular 0..2
+        this->field_0x1c = idx;
+        int newVal = this->intArray[idx];
+        g_iconTable[newVal].field_0x14 = 9;                     // marca ícone novo
+        callSystemSound(3);
+    }
+    if (vOpn_key_rep(0x4000) == 0 && !(*g_flagsPtr & 0x100))
+        return;
+    // tecla direita/baixo OU flag 0x100 (primeira seleção automática):
+    int oldVal2 = this->intArray[this->field_0x1c];
+    g_iconTable[oldVal2].field_0x14 = 0;
+    int idx2 = this->field_0x1c + 1;
+    if (idx2 > 2) idx2 = 0;                                     // wrap circular
+    this->field_0x1c = idx2;
+    int newVal2 = this->intArray[idx2];
+    g_iconTable[newVal2].field_0x14 = 9;
+    return callSystemSound(3);                                   // tail call
+}
+
+STEREO_SET:  // 0x2473e4
+    Ssd_SetStereo(this->field_0x1c);        // *** o índice 0/1/2 do menu É o modo estéreo real ***
+    callSystemSound(1);
+    this->field_0x20 = 2;
+    return;
+
+PLAY_SE2:  // 0x2473c0
+    callSystemSound(2);
+    this->field_0x20 = 2;
+    return;
+
+TEARDOWN:  // 0x247400
+    g_counterA -= 3;
+    g_counterB -= 3;
+    int c = (g_counterC -= 1);
+    ctlopentitle_active(&g_table5[(c - 2) * 0x64]);     // devolve controle real pro título
+}
+```
+
+**Achados concretos**: (1) os 3 slots do menu (índices 0/1/2) **são
+literalmente os 3 argumentos possíveis de `Ssd_SetStereo`** — o menu
+de teste de som não é genérico, é especificamente um seletor de modo
+estéreo com 3 opções; (2) wraparound circular confirmado nos dois
+sentidos; (3) a marcação do ícone recém-desmarcado usa `bit40` no
+caminho "esquerda" mas a constante `0` no caminho "direita" —
+assimetria real, não explicada semanticamente além do que os bytes
+mostram; (4) o teardown decrementa 3 contadores globais (`-3/-3/-1`,
+mesmo padrão de trio de `houkoku_okng`, §577) e chama
+`ctlopentitle_active` com um endereço calculado numa tabela de
+stride `0x64`(100) — confirma que esta tela devolve controle real
+pro controlador de título ao sair, não um "fade" genérico.
+
+**Status CSV: `read_full`** — 100% das 113 instruções reais lidas e
+atribuídas a um ramo explícito; os 8 words de literal pool
+confirmados como dados. Nenhuma chamada local sem símbolo nesta
+função (todos os 6 `bl` resolvidos por nome).
 
 ## 588. `ctltresure_main(CTLINFO*)` — mesmo esqueleto padrão de `ctl*_main`, mas com uma anomalia real: desativa via `ctlunreg_deactive`, não via uma `ctltresure_deactive` própria (2026-10-25, Fase 3, octogésimo segundo lote, revisão semântica sobre checkpoint do CI)
 
@@ -19440,36 +20370,82 @@ há mais nenhum estado da família sem leitura.
 toda a família já fechada; corpo do laço mínimo não lido instrução a
 instrução).
 
-## 600. `UnitTableInit(short)` — inicializa a grade genérica `UnitTable`/`UnitList` pra um contexto de tela específico (2026-10-25, Fase 3, octogésimo quarto lote, revisão semântica sobre checkpoint do CI)
+## 600. `UnitTableInit(short)` — leitura completa: loop de retry de `UnitScroll` (até 10×), cálculo real de posição em grade 5 colunas (mod/div por 5), limpa 8 slots de seleção, carrega 2 texturas (2026-10-25 + revisão byte a byte 2026-10-26, sobre o painel v3)
 
-`UnitTableInit(short)` (`0x1bc87c`, 496 B) — checkpoint do pipeline
-automatizado (`docs/re-results/001bc87c.json`, não reexecutado nesta
-sessão): 107 de ~124 instruções possíveis (86%), 0 tabelas de salto,
-1 branch/1 de retrocesso (laço simples). 5 `bl` distintos:
-`CurChrChg()` (×1), `GetSttsApos(short)` (×1), `UnitScroll(short*,
-short*)` (×1), `WindowInit(short*, int, unsigned char*)` (×1),
-`GetTPage` (×2).
+`UnitTableInit(short)` (`0x1bc87c`, 496 B) foi lida por completo via
+disassembly Capstone linear. **Os "17 slots não cobertos" do
+checkpoint automático (86%) são 17 words de literal pool** (68 B) —
+código real termina em `0x1bca24` (107 instruções = 428 B), e
+428+68=496 B exatos. A cobertura "baixa" era só reflexo de a função
+ter proporcionalmente mais literal pool que o normal (17 globais
+resolvidos via GOT), não código perdido.
 
-Já era citada por nome — sem nunca ter sido lida — na seção 9 e como
-`UnitTableInitFirst` em `BuyUnit()` (§185). O catálogo agora resolvido
-confirma e refina esse papel: `UnitTableInit` é o **setup de
-instância** da máquina genérica já documentada em `UnitTable` (§55,
-rotina parametrizada por 2 callbacks) e `UnitList` (§56) —
-`GetSttsApos`/`UnitScroll` inicializam o estado de scroll; `WindowInit`
-(mesma API de janela/menu genérica de `ItemMenu`, §39) cria a
-janela-contêiner; `CurChrChg()` (§402) seleciona o personagem atual
-exibido inicialmente na grade; `GetTPage` (×2, API real do PS1
-`libgpu`) resolve a página de textura do grid gráfico. O parâmetro
-`short` é quase certamente o seletor de contexto/tela (qual roster
-está sendo inicializado), consistente com `UnitTable` já ser genérica
-por design.
+```c
+void UnitTableInit(short slotIndex) {
+    WindowInit(NULL, 0, NULL);                 // chamada real com os 3 argumentos zerados
+
+    // instala 7 ponteiros de função/callback (todos via GOT) numa
+    // struct de 0x20 bytes (vtable):
+    g_unitTableVTable->field_0x00 = cbA;
+    g_unitTableVTable->field_0x04 = cbA;        // MESMO ponteiro em +0x00 e +0x04
+    g_unitTableVTable->field_0x08 = cbB;
+    g_unitTableVTable->field_0x0c = cbC;
+    g_unitTableVTable->field_0x10 = cbD;
+    g_unitTableVTable->field_0x14 = cbE;
+    g_unitTableVTable->field_0x18 = cbF;
+    g_unitTableVTable->field_0x1c = cbG;
+
+    g_scrollState.field_0xe = 0;
+    g_currentSlot = slotIndex;
+    CurChrChg();                                 // seleciona personagem atual (§402)
+
+    int zeroHits = 0;
+    do {
+        UnitScroll(&g_scrollState.field_0xe, &g_scrollState.field_0x10);
+        if (g_scrollState.field_0xe == 0) zeroHits++;
+    } while (zeroHits <= 9);                      // *** até 10 iterações "zeradas" ***
+
+    short gridField = *(short*)(g_gridInfo + 0x10);
+    int faceID = GetSttsApos(gridField);
+
+    // *** posicionamento real em grade: col = slot % 5, row = slot / 5 ***
+    int row = slotIndex / 5;                       // via multiplicação recíproca
+    int col = slotIndex - row * 5;
+    int x = col * 62;                                // largura de célula = 62 px
+    int y = row * 60 + gridField + 61;               // altura de célula = 60 px + offset
+
+    g_someBuf[0] = (uint8_t)faceID;
+    g_posStruct->x = x;
+    g_posStruct->y = y;
+    g_flagArray[0x724] = 1;
+
+    for (int off = 0; off < 0x20; off += 4)          // limpa 8 slots de 32 bits
+        g_gridInfo[0x20 + off] = -1;
+
+    g_gridInfo->texPage1 = GetTPage(0, 2, 0x3c0, 0x100);   // textura normal
+    g_gridInfo->texPage2 = GetTPage(0, 1, 0x3c0, 0x100);   // textura alternativa (destaque?)
+}
+```
+
+**Achados concretos**: (1) `WindowInit` é chamada com os 3 argumentos
+literalmente zerados; (2) o "laço simples" é, na verdade, um **retry
+de até 10 iterações de `UnitScroll`**, contando quantas vezes o campo
+de scroll ficou exatamente `0`; (3) **achado de maior valor**: cálculo
+de posição numa **grade de 5 colunas** via divisão/módulo por 5
+(idioma de multiplicação recíproca), célula de **62×60 pixels** —
+confirma que `UnitTableInit` posiciona o ícone/cursor da unidade
+`slotIndex` numa grade fixa 5-wide, não numa lista linear; (4) carrega
+**duas texturas diferentes** (variante normal/selecionado).
 
 **Conexão**: fecha, junto com §39/§55/§56/§185/§402, mais um elo do
 subsistema genérico de grade de unidades.
 
-**Status CSV: `read_structural`** (call-graph mapeado e cruzado com
-quatro seções já documentadas; corpo do laço não lido instrução a
-instrução).
+**Status CSV: `read_full`** — 107 de 107 instruções reais lidas e
+atribuídas a um fluxo de controle explícito (incluindo o loop de
+retry e a aritmética de grade 5×), os 17 words de literal pool
+confirmados como dado. Lacunas remanescentes são de identidade
+nominal (callbacks/estruturas), mesmo padrão aceito em outros
+`read_full`.
 
 ## 601. `check_learning(int, unsigned short*)` — resolução da checagem de aprendizado de habilidade por uso em batalha (rolagem de probabilidade sobre a habilidade de comando do job atual) (2026-10-25, Fase 3, octogésimo quarto lote, revisão semântica sobre checkpoint do CI)
 
@@ -20016,3 +20992,2728 @@ Mesma rota dos §605-608.
 **Status CSV**: `read_structural` para as 20 (identidade e call-graph
 confirmados via checkpoint + cruzamento textual; nenhuma teve os
 blocos lidos instrução a instrução).
+
+## 610. Grab-bag de 20 checkpoints `auto_structural` (≥95% cobertura, 0 tabela pendente) aceitos direto, sem fork (2026-10-25, Fase 3, nonagésimo lote)
+
+Mesma rota dos §605-609.
+
+- **`Wdisp_staticwindow2()`** (`0x135080`, 320 B, 98%, 13 `bl`) — o
+  par **W exato** de `disp_staticwindow2()` (§609, base sem prefixo):
+  mesmo catálogo ponto a ponto, só com `W`/`wasm` em vez de sem
+  prefixo/`asm` (`Wdisposememory`/`Wmultiwindow_*`/`Wstatuskanjiprint`/
+  `Wtask_killmyself`/`wasmTaskEntry`/`wasmGetInput1`). Com isso, a
+  família "janela estática 2" fica com **5 membros confirmados**
+  (base/`C`/`D`/`E`/`W`) — mesmo padrão de duplicação por letra já
+  previsto desde `disp_personalwindow` (§46, que citava variantes
+  `A/C/D/E/W`), só que aqui pra uma função-irmã diferente. Falta só
+  o `A`.
+- **`Wfaceuvclut(tagPOLY_FT4*, int, int*)`** (`0x100704`, 316 B, 97%,
+  2 `bl`: `GetTPage`/`GetClut`) e **`attackfaceuvclut(tagPOLY_FT4*, int)`**
+  (`0xc9504`, 316 B, 97%, mesmos 2 `bl`) — fecham o trio completo
+  junto de `faceuvclut` (§606): três contextos (genérico/`W`/ataque)
+  do mesmo cálculo de UV/CLUT de rosto, todos já previstos na §125.
+- **`levelup_one(BWORK*, int)`**/**`levelup_eggmonster(UM_WORK*, int)`**/
+  **`add_jobpointB(int,int,uchar,int)`** (`0x1dc778`/`0x1d8fd0`/
+  `0x1e31f0`, 308-312 B, 99-100%) — fecham o cluster de progressão
+  pós-batalha já citado desde `setexperience` (§605): `levelup_one`
+  chama `adjust_equip_change` (thunk já documentado, §409) +
+  `__udivsi3`; `levelup_eggmonster` é a variante pra monstro
+  "ovo"/recém-nascido; `add_jobpointB` grava o JP via
+  `set_jcflag`/`get_joblevel`/`pspJobGetJobChangeFlag` (API PSP real
+  de troca de job, já citada na linha 6161/11065).
+- **`doSchedulePtclCommandOnce(ushort,uchar,_EffectTCB*)`** (`0x21d408`,
+  316 B, 96%, 4 `bl`: `requestTargetAnimation`/`requestDamageNumber`/
+  `requestDamageResult`/`requestAnimation`) — catálogo idêntico ao
+  já documentado em outra seção (linha 13439-13451: "aciona o
+  pipeline de dano real... e de animação... a partir de scripts de
+  efeito `_EffectTCB*`") — confirma mais um disparador do mesmo
+  pipeline `request*` de dano/animação.
+- **`MakeMapChantedAction()`** (`0x27add8`, 312 B, 99%, 3 `bl`:
+  `CheckCrystalAndTresureBox`, `SetThisDestination`,
+  `EvaluationFunction`) — irmã direta de `ForChantedAction` (§607),
+  mesmo núcleo de avaliação de IA (linha 229), variante "mapa"
+  (provável contexto de magia de área vs. ação única).
+- **`GetBowReachableTangent(BowCheckWork*,int*,int*)`** (`0x2231d8`,
+  312 B, **100%**, 4 `bl`: `getMapIDFromBattleID`,
+  `GetReachableHeight`, `SquareRoot12`, `__divsi3`) — cálculo real de
+  alcance de arco (tangente + raiz quadrada de precisão 12-bit, mesma
+  primitiva de `CheckEventGunResult` §607) — confirma que armas de
+  longo alcance (arco, e provavelmente arma) usam geometria real de
+  trajetória, não só distância em painéis.
+- **`OuterProduct0`** (`0x2a0eec`, 312 B, **100%**, 4 `bl`:
+  **`sceVfpuVector4Set`/`sceVfpuVector4OuterProductXYZ`** + soft-float)
+  — achado novo: primeira referência ao **VFPU** (unidade de ponto
+  flutuante vetorial de hardware do PSP) no projeto — confirma que o
+  motor usa aceleração vetorial real do PSP pra produto externo
+  (cross product), não só o GTE do PS1 emulado em software.
+- **`unzLocateFile`** (`0x81494`, 332 B, **100%**, 7 `bl`, delega pra
+  `unzStringFileNameCompare`/`unzGetCurrentFileInfo64`/`unzGoToFirstFile`/
+  `unzGoToNextFile`, todos já reconhecidos minizip) — API real do
+  minizip, mesma família do §568.
+- **`worldmap_faceload()`** (`0x15570c`, 328 B, 95%, 9 `bl`:
+  `fileDispose`/`saveVram`/`numa_fileAllocateCD`/`__bpGetFileNum`/
+  `__bpInitBinpackData`/`__bpGetBinaryData`/`DrawSync`/`PSX_LoadImage`
+  ×6) — carregamento de rosto no mapa mundi via binpack + CD real,
+  mesma pilha de I/O já confirmada em outras seções de carregamento.
+- **`fftCdLoopTim(CDREC*)`**/**`activateCompressedAnimation(int,int)`**
+  (316/304 B, 97-99%) — `fftCdLoopTim` carrega imagem via `PSX_LoadImage`
+  em loop (provável tela de loading com animação de CD); `activateCompressedAnimation`
+  usa `searchAnimationByID` + `defrost` (descompressão) + `MoveImage`
+  — confirma que existem animações comprimidas descompactadas em
+  tempo real.
+- **`fRoll_mesput(short*)`** (`0x243048`, 316 B, 99%, 2 `bl`:
+  `rolladr_calc`, `create_rollline` — já lida por completo, §293,
+  "parseia linha de crédito, monta primitivo pra `tagSTAFFROLL`") —
+  fecha mais um elo direto do sistema de créditos finais
+  (`vEnd_rollproc`/`vEnd_rollinit`, §571/580).
+- **`pageupdown_cursor(PAGEWININFO*)`** (`0x270b5c`, 308 B, 97%, 1 `bl`
+  local) — navegação de página do widget `pagewin_*` já estabelecido.
+- **`pspMapTexUVCorrect(...)`**/**`xpSetDrawMove`**/**`_tr_stored_block`**
+  (zlib real + 2 funções folha do mapa mundi/PS1) — mais primitivas
+  de baixo nível, mesmo tema de lotes anteriores.
+
+**Status CSV**: `read_structural` para as 20 (identidade e call-graph
+confirmados via checkpoint + cruzamento textual; nenhuma teve os
+blocos lidos instrução a instrução).
+## 611. Lote de 500 funções `auto_structural` (≥95% cobertura, 0 tabela pendente) — processamento em escala: agrupamento automático de famílias idênticas + triagem de achados novos (2026-10-25, Fase 3, nonagésimo primeiro lote)
+
+**Mudança de escala**: a partir deste lote, o pedido foi processar 500
+funções de uma vez em vez dos 15-20 por lote anteriores. Pra isso ser
+honesto em vez de só inflar número, a rota muda: um script compara o
+catálogo de endereços `bl` resolvidos (já presente no checkpoint do
+CI) entre todas as 500 — quando duas ou mais funções têm o catálogo
+**exatamente idêntico** (mesmos endereços, não só nomes parecidos) E
+tamanho dentro de 25% uma da outra, são tratadas como família
+confirmada por similaridade numa única entrada (item 2 da estratégia
+documentada, agora automatizado em vez de caso a caso via
+`family_sim.py`). As demais 462 funções restantes (sem família
+confirmada) são cruzadas contra o resto do `REVERSE_ENGINEERING_NOTES.md`:
+quando todos os `bl` de uma função são nomes **nunca citados antes**,
+ela ganha uma linha de destaque; quando pelo menos um `bl` já é
+conhecido, ela vai pra tabela de referência no final. Nenhuma das 500
+teve bloco lido instrução a instrução — todas ficam `read_structural`.
+
+Composição do lote: **11 famílias confirmadas** (28 funções), **70
+funções com achados genuinamente novos** (destacadas abaixo), **154
+funções-folha** (0 `bl`, sem chamada externa) e **248 funções cujos
+`bl` já eram conhecidos** (tabela de referência).
+
+### 611.1 Famílias confirmadas por catálogo de `bl` idêntico (28 funções em 11 entradas)
+
+- **`Aitemmenu_uvclut(short*, int)` / `Citemmenu_uvclut(short*, int)` / `Ditemmenu_uvclut(short*, int)` / `Eitemmenu_uvclut(short*, int)` / `itemmenu_uvclut(short*, int)`** (`0x000d13b0`, `0x000c443c`, `0x0014be6c`, `0x00123be8`, `0x0012cd74`, 88 B cada) — variantes A/C/D/E + base do cálculo de UV/CLUT do menu de item — mesmo padrão de duplicação por letra já visto em `disp_personalwindow` (§46) e `disp_staticwindow2` (§608/609/610), agora confirmado também pra telas de item.
+- **`WiOS_initsprt_num(tagSPRT*, int)` / `Winitsprt(tagSPRT*)` / `iOS_initsprt_num(tagSPRT*, int)` / `initsprt(tagSPRT*)`** (`0x000fe9d0`, `0x000d6eac`, `0x000d6e48`, `0x000fe96c`, 108 B cada) — duas gerações do par W/sem-W de inicialização de sprite (`initsprt`/`Winitsprt`, já citadas como `bl` em `Winitstatusback`/`initstatusback` §609) mais as variantes `iOS_*_num`/`WiOS_*_num` que recebem uma contagem explícita de sprites.
+- **`WiOS_assist_addlocalprim2(iOS_CMenuTouch*, int)` / `iOS_assist_addlocalprim2(iOS_CMenuTouch*, int)` / `iOS_assist_addlocalprim3(iOS_CMenuTouch*, int, int)`** (`0x000e0f14`, `0x0010f8f4`, `0x0010f948`, 84 B cada) — trio de assistentes de desenho de primitiva pra `iOS_CMenuTouch` (classe de menu de toque já confirmada em `Wmesputmain`, §33) — variantes W/sem-W + uma versão "3" com parâmetro extra.
+- **`Witemuvclut(tagSPRT*, int)` / `itemuvclut(tagSPRT*, int)`** (`0x00100648`, `0x000d8978`, 188 B cada) — par W/sem-W do cálculo de UV/CLUT de item sobre `tagSPRT*` em vez de `tagPOLY_FT4*` — irmã direta da família 611.1 acima, só pra sprite em vez de polígono.
+- **`sceGuDisable` / `sceGuEnable`** (`0x002ab718`, `0x002ab7d4`, 188 B cada) — par liga/desliga da API gráfica PSP `sceGu*` (mesma família já confirmada como a ponte real `GuEmu_libgu_to_gl`, §33 cita o nome).
+- **`Winitpolyft4(tagPOLY_FT4*)` / `initpolyft4(tagPOLY_FT4*)`** (`0x000d6da8`, `0x000fe8cc`, 160 B cada) — par W/sem-W de inicialização de primitiva `POLY_FT4` (a mesma primitiva PS1 usada em `faceuvclut`/`attackfaceuvclut`, §606/610).
+- **`GlTexEnv_GetTextureSize(int, float*, float*, float*, float*)` / `GlTexEnv_GetTextureSize_2X(int, float*, float*, float*, float*)`** (`0x002b0200`, `0x002b0264`, 100 B cada) — par normal/`_2X` do getter de tamanho de textura `GlTexEnv` — confirma mais um caso do padrão 1x/2x já visto em `IS_TEX_2X()` (§591) e `GX_GetScreen{W,H}_1X` (§568).
+- **`Winitdrmode2(DR_MODE*, RECT16*)` / `initdrmode2(DR_MODE*, RECT16*)`** (`0x000e10b4`, `0x0010fb14`, 92 B cada) — par W/sem-W de inicialização de modo de desenho PS1 (`DR_MODE`).
+- **`efrand(int, int)` / `getRandom(short, short)`** (`0x0022a210`, `0x0022a5d0`, 88 B cada) — duas funções de geração de número aleatório com assinatura quase idêntica (faixa min/max) — `efrand` é achado novo, nome sugere "effect random" (RNG dedicado a efeitos visuais, distinto do `ps_rand`/`_pspNetRand` já documentados).
+- **`set_act_end(int)` / `set_move_end(int)`** (`0x001d6344`, `0x001d62ec`, 88 B cada) — par de setters de flag de "fim de ação"/"fim de movimento" — unidade de batalha sinalizando conclusão de uma sub-fase.
+- **`iOS_clearFLAGeventdirect()` / `iOS_clearFLAGmonsentry()`** (`0x000e8048`, `0x000e8010`, 56 B cada) — par de limpadores de flag ("entrada de monstro"/"evento direto") — provavelmente resets de condição de spawn/trigger no mapa.
+
+### 611.2 Achados genuinamente novos (70 funções cujas chamadas nunca haviam sido citadas)
+
+- **`gzvprintf`** (`0x00079058`, 288 B, 100.0%) — *zlib/minizip (biblioteca de terceiros)*: chama `sub_71554`, `sub_7899c`, `sub_78ae8`, `sub_78ce8`.
+- **`defrost(char*, char*)`** (`0x001eb360`, 272 B, 98.53%): chama `sub_1e7460`.
+- **`addlocalprim3(tagPOLY_FT4*, int)`** (`0x001c067c`, 264 B, 96.97%): chama `iOStorideflagGet()`.
+- **`DispClipedPolygonNo(int, int, int)`** (`0x00282374`, 260 B, 96.92%): chama `iOS_setClipoffNoFT4(int)`, `iOS_setClipoffNoFT3(int)`.
+- **`statusfigprint0(int, int, char*, COPYFIELD*)`** (`0x00137424`, 256 B, 95.31%): chama `asmKanjiCopy(char*, char*, COPYFIELD*, int)`.
+- **`eventanmreq(char*)`** (`0x000dd360`, 240 B, 100.0%) — *animação/eventos*: chama `sub_d4c4c`, `sub_d6828`, `sub_dc2a4`, `sub_dd24c`, `requestAnimationFlipOFF(int)`.
+- **`Weventanmreq(char*)`** (`0x001069ac`, 240 B, 100.0%) — *animação/eventos*: chama `sub_fc4a8`, `sub_fe370`, `sub_104668`, `sub_106898`, `requestAnimationFlipOFF(int)`.
+- **`gzputc`** (`0x00078f2c`, 228 B, 100.0%) — *zlib/minizip (biblioteca de terceiros)*: chama `sub_78ce8`, `gzwrite`.
+- **`gzsetparams`** (`0x00079224`, 228 B, 100.0%) — *zlib/minizip (biblioteca de terceiros)*: chama `deflateParams`, `sub_78ae8`, `sub_78ce8`.
+- **`unzGoToNextFile`** (`0x000813b4`, 224 B, 100.0%) — *zlib/minizip (biblioteca de terceiros)*: chama `sub_80158`.
+- **`SetDefaultCamera()`** (`0x00218cf4`, 216 B, 98.15%) — *câmera/GTE*: chama `getMapScrollXYZ()`, `getMapScale()`, `getMapAngle()`.
+- **`CreateEffectTask(char*, short, short)`** (`0x0021d2e0`, 208 B, 98.08%) — *ciclo de efeito permanente*: chama `GetEffectTCB()`, `initScheduleControl(_EffectTCB*, short)`, `initMetascheduleControl(_EffectTCB*)`.
+- **`ApplyMatrixLV`** (`0x002a0998`, 188 B, 97.87%) — *câmera/GTE*: chama `_gte_SetRotMatrix(MATRIX*)`.
+- **`NewPEffectTCB()`** (`0x0021f0e4`, 172 B, 97.67%) — *ciclo de efeito permanente*: chama `system_error(int, int)`.
+- **`Wask_event(int, int, int, SVECTOR*, int)`** (`0x0010d844`, 168 B, 100.0%) — *animação/eventos*: chama `sub_10cb68`, `getAnimationAction(int)`.
+- **`ask_event(int, int, int, SVECTOR*, int)`** (`0x000f39d4`, 168 B, 100.0%) — *animação/eventos*: chama `sub_f2ce8`, `getAnimationAction(int)`.
+- **`RotColorDpq3`** (`0x002a21e8`, 160 B, 100.0%) — *câmera/GTE*: chama `RotColorDpq`.
+- **`loadClutData(unsigned short*, unsigned int, unsigned int, int)`** (`0x00215254`, 160 B, 97.5%): chama `sub_2118fc`.
+- **`gzrewind`** (`0x00077b80`, 152 B, 100.0%) — *zlib/minizip (biblioteca de terceiros)*: chama `sub_714d0`, `gz_error`.
+- **`gzgetc`** (`0x0007854c`, 152 B, 100.0%) — *zlib/minizip (biblioteca de terceiros)*: chama `gzread`.
+- **`AbilityCompare(C_STTS*, short, short)`** (`0x001a8b94`, 144 B, 100.0%) — *sistema de habilidades*: chama `GetAbilityParameter(short, C_STTS*)`.
+- **`new_Vector(VECTOR_DATABASE*, SVECTOR const*)`** (`0x00284594`, 140 B, 100.0%) — *VECTOR_DATABASE (achado novo)*: chama `sub_2844f8`.
+- **`tlHeapStat(tl_mem_stat_t*)`** (`0x0028d7d0`, 132 B, 96.97%): chama `tlCheckHeap()`.
+- **`vOpnwin_noropen(int, RECT16, int, int, unsigned long*)`** (`0x0024ab04`, 128 B, 96.88%) — *família vOpn_*/vEnd_* (telas de transição)*: chama `vOpnwin_set(int, RECT16, int, unsigned long*)`, `vOpnwin_trans(int, unsigned long*)`, `vOpnmess_put(int, int, _POINT, unsigned long*)`.
+- **`SetTrapPanel(int, int, int)`** (`0x00279eec`, 124 B, 96.77%): chama `ClearForBattleRoutine()`.
+- **`gzflush`** (`0x000791a8`, 124 B, 100.0%) — *zlib/minizip (biblioteca de terceiros)*: chama `sub_78ae8`, `sub_78ce8`.
+- **`o_GetCardEvent_X()`** (`0x00245b78`, 120 B, 96.67%) — *animação/eventos*: chama `o_ClearCardEvent_X()`, `TestEvent(long)`.
+- **`o_GetCardEvent()`** (`0x00245aa8`, 120 B, 96.67%) — *animação/eventos*: chama `o_ClearCardEvent()`, `TestEvent(long)`.
+- **`Clear_VectorDataBaseContainer(VECTOR_DATABASE_CONTAINER*)`** (`0x0028441c`, 120 B, 100.0%) — *VECTOR_DATABASE (achado novo)*: chama `Clear_VectorDataBaseObject(VECTOR_DATABASE*)`.
+- **`unzGoToFilePos64`** (`0x00081660`, 116 B, 100.0%) — *zlib/minizip (biblioteca de terceiros)*: chama `sub_80158`.
+- **`unzGoToFirstFile`** (`0x00080a4c`, 112 B, 100.0%) — *zlib/minizip (biblioteca de terceiros)*: chama `sub_80158`.
+- **`check_charge(BWORK*, int)`** (`0x001d1f8c`, 112 B, 96.43%): chama `charge_break(BWORK*)`.
+- **`RotColorDpq3_nom`** (`0x002a23bc`, 112 B, 96.43%) — *câmera/GTE*: chama `RotColorDpq3`.
+- **`fftCdRead2(CDREC*, int, int, int, unsigned long*)`** (`0x00241938`, 112 B, 96.43%): chama `fileReadRequestOffset(unsigned int, unsigned int, unsigned int, void*)`, `CdIntToPos`.
+- **`appare_unit_f(int)`** (`0x001d1d20`, 108 B, 96.3%): chama `sub_1d19e0`.
+- **`unzSetOffset64`** (`0x00082360`, 104 B, 100.0%) — *zlib/minizip (biblioteca de terceiros)*: chama `sub_80158`.
+- **`gzdopen`** (`0x00077ad0`, 104 B, 96.15%) — *zlib/minizip (biblioteca de terceiros)*: chama `sub_714dc`, `sub_714e8`, `sub_714f4`, `sub_77680`.
+- **`RotNclip4`** (`0x002a1c78`, 104 B, 100.0%) — *câmera/GTE*: chama `RotTransPers4`.
+- **`evt_date_low()`** (`0x002593f8`, 104 B, 96.15%): chama `evt_get_date(int*, int*, int*, int*)`.
+- **`fadeCharacterClut(int, int, unsigned short*)`** (`0x00215cbc`, 100 B, 100.0%): chama `requestDestinationClut(int, unsigned int, unsigned int, int, unsigned short*)`.
+- **`iOS_isInCursorRotate()`** (`0x002bf020`, 100 B, 96.0%) — *câmera/GTE*: chama `sub_2b6904`.
+- **`gzoffset64`** (`0x00077498`, 100 B, 100.0%) — *zlib/minizip (biblioteca de terceiros)*: chama `sub_714d0`.
+- **`check_turn_end(int)`** (`0x001d639c`, 96 B, 95.83%): chama `check_unit_active(BWORK*)`.
+- **`fadeSoundEffect(int, int)`** (`0x00216900`, 92 B, 95.65%) — *ciclo de efeito permanente*: chama `EnvSE_Stop(int)`.
+- **`tlGetAllocSize(void const*)`** (`0x0028d43c`, 92 B, 95.65%): chama `sub_28d01c`.
+- **`o_Wait_GetCardState(int)`** (`0x00245c78`, 88 B, 100.0%) — *sistema de save/card*: chama `o_GetCardState()`.
+- **`TransRotPers3`** (`0x002a126c`, 88 B, 100.0%) — *câmera/GTE*: chama `TransRotPers`.
+- **`s7_setEditorProc(_EffectTCB*)`** (`0x0021c274`, 84 B, 100.0%) — *ciclo de efeito permanente*: chama `GetPlugInFuncAdr(short)`.
+- **`s3_killChildTask(_EffectTCB*)`** (`0x0021d1e8`, 84 B, 100.0%) — *ciclo de efeito permanente*: chama `DisposeTCB(short)`.
+- **`snSound_play(int)`** (`0x0026a7d0`, 84 B, 95.24%) — *ciclo de efeito permanente*: chama `stopAllEffect()`.
+- **`o_CardCheck()`** (`0x00245cd0`, 84 B, 100.0%) — *sistema de save/card*: chama `o_SelectCard(int)`, `o_CardInit()`, `o_Wait_GetCardState(int)`.
+- **`drawMessage(int)`** (`0x00243bf4`, 84 B, 95.24%): chama `sub_243a7c`.
+- **`LoadClut`** (`0x002912f8`, 80 B, 100.0%): chama `LoadImage2`.
+- **`checkJumpReset()`** (`0x0020eb34`, 80 B, 95.0%) — *animação/eventos*: chama `inactivateAnimation(int)`.
+- **`xpMallocAlign`** (`0x002a30b0`, 80 B, 95.0%): chama `sub_71b90`, `sub_71b9c`, `tlMallocAlign(unsigned int, unsigned int)`.
+- **`gzdirect`** (`0x000788b0`, 80 B, 100.0%) — *zlib/minizip (biblioteca de terceiros)*: chama `sub_77f0c`.
+- **`resetCharacterPanelPosition(tag_animation*)`** (`0x001f6d4c`, 68 B, 100.0%) — *animação/eventos*: chama `getOriginalAnimationHight(tag_animation*)`.
+- **`unzClose`** (`0x00081c58`, 68 B, 100.0%) — *zlib/minizip (biblioteca de terceiros)*: chama `sub_714dc`, `unzCloseCurrentFile`.
+- **`unzGoToFilePos`** (`0x000816d4`, 68 B, 100.0%) — *zlib/minizip (biblioteca de terceiros)*: chama `unzGoToFilePos64`.
+- **`ApplyRotMatrixLV`** (`0x002a0aa0`, 64 B, 100.0%) — *câmera/GTE*: chama `ApplyRotMatrix`.
+- **`adjust_joblevel(unsigned short*, unsigned char*)`** (`0x001d94b0`, 64 B, 100.0%): chama `get_joblevel(unsigned short)`.
+- **`vOpn_SetCDVolume(int, int)`** (`0x00249a80`, 64 B, 100.0%) — *família vOpn_*/vEnd_* (telas de transição)*: chama `Ssd_SetAttenuator(short)`.
+- **`__bpResetBinpackData`** (`0x0028af88`, 60 B, 100.0%): chama `sub_28aed0`.
+- **`iOSMapNaviCurSet(unsigned long)`** (`0x00254170`, 56 B, 100.0%): chama `iOSTapTimeAreaGet()`.
+- **`DpqColor3`** (`0x002a1594`, 56 B, 100.0%) — *câmera/GTE*: chama `_gte_ldrgb3(CVECTOR*, CVECTOR*, CVECTOR*)`, `_gte_lddp(long)`, `_gte_dpct()`.
+- **`__bpInitBinpackData`** (`0x0028af54`, 52 B, 100.0%): chama `sub_28aed0`.
+- **`GuEmu_GetCLUTAddress(unsigned short, int*, int*)`** (`0x002ae88c`, 52 B, 100.0%): chama `xpLibgpuTPageGet2()`.
+- **`ColorDpq`** (`0x002a14d8`, 52 B, 100.0%) — *câmera/GTE*: chama `_gte_ldrgb(CVECTOR*)`, `_gte_ldlvl(VECTOR*)`, `_gte_lddp(long)`, `_gte_cdp()`.
+- **`DpqColorLight`** (`0x002a15cc`, 52 B, 100.0%) — *câmera/GTE*: chama `_gte_ldrgb(CVECTOR*)`, `_gte_ldlvl(VECTOR*)`, `_gte_lddp(long)`, `_gte_dpcl()`.
+- **`AverageZ3`** (`0x002a12c4`, 48 B, 100.0%) — *câmera/GTE*: chama `_gte_ldsz3(long, long, long)`, `_gte_stotz(long*)`, `_gte_avsz3()`.
+
+### 611.3 Funções-folha sem chamada externa (154)
+
+Nenhuma delega pra fora — nome e assinatura são a única evidência disponível sem disassembly manual. Lista de referência (endereço, nome, bytes, cobertura):
+
+| Endereço | Função | Bytes | Cobertura |
+|---|---|---:|---:|
+| `0x0007f388` | `_tr_align` | 288 | 100.0% |
+| `0x00159c40` | `iosAsmMUL64(long, long, long)` | 272 | 98.53% |
+| `0x00159d50` | `iosAsmMUL3232(long, long, long, long)` | 268 | 98.51% |
+| `0x0015a064` | `iosAsmKanjiCopy(char*, char*, tCOPYFIELD*, int)` | 264 | 96.97% |
+| `0x0007f138` | `_tr_init` | 264 | 98.48% |
+| `0x0007fc50` | `_tr_tally` | 264 | 95.45% |
+| `0x0024988c` | `vOpn_sun2ivaday(int*, int*)` | 256 | 95.31% |
+| `0x0024cf68` | `ctlbrst_deactive(CTLINFO*)` | 256 | 95.31% |
+| `0x0020c834` | `mallocAddress(void*, unsigned int)` | 252 | 96.83% |
+| `0x000ba138` | `CompareLocalTime(_SYSTEMTIME*, _SYSTEMTIME*)` | 248 | 100.0% |
+| `0x001abe0c` | `GetShapeNo(CHR_STTS*, int)` | 248 | 96.77% |
+| `0x0022541c` | `Free(void*)` | 248 | 95.16% |
+| `0x001bc430` | `UnitScroll(short*, short*)` | 240 | 95.0% |
+| `0x00223310` | `GetParabolaYPos(int, int)` | 228 | 98.25% |
+| `0x0025d930` | `speed_calc(SPDINFO*, int)` | 220 | 100.0% |
+| `0x0029c518` | `GsSortLine` | 212 | 98.11% |
+| `0x00215adc` | `initChangeClut()` | 208 | 98.08% |
+| `0x002a103c` | `TransRot_32` | 204 | 98.04% |
+| `0x0024a5c0` | `vOpn_winopen_frmcalc(int, RECT16*, RECT16*)` | 200 | 96.0% |
+| `0x0029c6b8` | `GsGetTimInfo` | 200 | 100.0% |
+| `0x0028dae4` | `tlMoveHeap(long long, int)` | 196 | 97.96% |
+| `0x002a0bc4` | `ScaleMatrixL` | 196 | 100.0% |
+| `0x0020c774` | `mallocForFile(unsigned int)` | 192 | 95.83% |
+| `0x0024a924` | `vOpnwin_set(int, RECT16, int, unsigned long*)` | 192 | 97.92% |
+| `0x001d9f58` | `get_setstatus_max(A_RESULT*)` | 192 | 95.83% |
+| `0x0020c628` | `mallocForSound(unsigned int)` | 188 | 95.74% |
+| `0x00291744` | `SetDrawEnv` | 188 | 100.0% |
+| `0x000ff61c` | `Wdisposememory(char*)` | 188 | 97.87% |
+| `0x0024ab84` | `vOpnpicwin_set(int, RECT16, _POINT, int)` | 180 | 97.78% |
+| `0x001b6f14` | `CountWidthMessage(unsigned char*)` | 176 | 97.73% |
+| `0x001e3988` | `get_movetype(BWORK*)` | 176 | 100.0% |
+| `0x002919c0` | `SetDrawMode` | 172 | 100.0% |
+| `0x00225370` | `Malloc(unsigned long, long)` | 172 | 95.35% |
+| `0x002ca6d4` | `__udivsi3` | 168 | 100.0% |
+| `0x00272598` | `SetMoveAreaSafePanelOnly()` | 168 | 97.62% |
+| `0x0025dd14` | `iOSwldkey_repSet(unsigned long)` | 164 | 95.12% |
+| `0x0024452c` | `rollline_scroll()` | 160 | 97.5% |
+| `0x0020de58` | `resetAllAnimationDirection()` | 160 | 97.5% |
+| `0x0015e3e4` | `iOSAnimeIDCntGet(int, int)` | 160 | 97.5% |
+| `0x002631b4` | `ctlmouketeam_active(CTLINFO*)` | 160 | 95.0% |
+| `0x001d9104` | `set_status_counter(BWORK*, int, int)` | 156 | 97.44% |
+| `0x0015e484` | `iOSAnimeIDCntGet2(BWORK*, int)` | 152 | 97.37% |
+| `0x002432e4` | `fRoll_cdxareq(short*)` | 152 | 97.37% |
+| `0x0015da60` | `iOSSwap(short*, short*, short*, short*, int, int)` | 148 | 100.0% |
+| `0x00290b54` | `ClearOTag` | 148 | 100.0% |
+| `0x00291824` | `SetDrawLoad` | 144 | 100.0% |
+| `0x002cb0c8` | `__ledf2` | 144 | 97.22% |
+| `0x00284314` | `Init_VectorDataBaseObject(VECTOR_DATABASE_CONTAINER*, unsigned int)` | 140 | 100.0% |
+| `0x0022a618` | `_OpenTMD(unsigned long*, int)` | 140 | 97.14% |
+| `0x002433dc` | `fRoll_cdxastop(short*)` | 136 | 97.06% |
+| `0x0020db18` | `setBackColorOffset(short, short, short)` | 136 | 97.06% |
+| `0x00224cc4` | `GetPermanentEffectAnimationAngle()` | 136 | 97.06% |
+| `0x00080844` | `unzStringFileNameCompare` | 136 | 100.0% |
+| `0x002cb0d0` | `__eqdf2` | 136 | 100.0% |
+| `0x0021a5c4` | `SearchNextScheduleDividePos(short, short, long*, long*)` | 132 | 96.97% |
+| `0x001a8b10` | `GetAbilityParameter(short, C_STTS*)` | 132 | 100.0% |
+| `0x00290be8` | `ClearOTagR` | 132 | 100.0% |
+| `0x002cb4bc` | `__aeabi_l2f` | 124 | 100.0% |
+| `0x00210d9c` | `NewEntry(int, int, int, short, short, short, short, BWORK*, int)` | 124 | 96.77% |
+| `0x0029a89c` | `SetDefDrawEnv` | 124 | 100.0% |
+| `0x001ab104` | `IsUntauchable(int)` | 120 | 96.67% |
+| `0x002918ec` | `SetTexWindow` | 120 | 100.0% |
+| `0x001789e0` | `iOS_addPrim_graphic(tagPOLY_FT4*, short)` | 120 | 96.67% |
+| `0x001adcec` | `iOS_addPrim_window_graphics_unitlist(tagPOLY_FT4*, short)` | 120 | 96.67% |
+| `0x001d9ee0` | `copy_entry_coord(BWORK*, EDATA*)` | 120 | 100.0% |
+| `0x001cd058` | `adjust_input_flag(BWORK*)` | 116 | 100.0% |
+| `0x002a1798` | `gteMIMefunc` | 112 | 100.0% |
+| `0x002727fc` | `StayAtSafePanel()` | 112 | 96.43% |
+| `0x0010e0e4` | `Waddlocalprim2(tagPOLY_FT4*)` | 112 | 96.43% |
+| `0x00097a48` | `res1_forward` | 112 | 100.0% |
+| `0x000e05bc` | `addlocalprim2(tagPOLY_FT4*)` | 112 | 96.43% |
+| `0x0021bf70` | `s19_ifChildTaskEQU(_EffectTCB*)` | 108 | 100.0% |
+| `0x001b6e60` | `GetCharAdr(unsigned char*, int)` | 108 | 100.0% |
+| `0x002cb838` | `__ltsf2` | 108 | 96.3% |
+| `0x00282648` | `wgte_color_set_vec(MATRIX const*, int, SVECTOR const*)` | 108 | 100.0% |
+| `0x0026a504` | `snpl_jparasmall()` | 108 | 96.3% |
+| `0x00096f20` | `res1_inverse` | 108 | 96.3% |
+| `0x00213da4` | `startColorRotation(int, int, int, int)` | 104 | 96.15% |
+| `0x002738a8` | `SetThresholdDoNothing()` | 104 | 96.15% |
+| `0x002cb840` | `__eqsf2` | 100 | 100.0% |
+| `0x002a1204` | `SquareSS12` | 100 | 100.0% |
+| `0x0022a268` | `getAbsoluteMaximumOf3(short, short, short)` | 100 | 100.0% |
+| `0x0024358c` | `fRoll_autochg(short*)` | 100 | 96.0% |
+| `0x0007d8b0` | `call_zseek64` | 100 | 100.0% |
+| `0x0015b604` | `iOSTchStatusModeGet()` | 96 | 95.83% |
+| `0x00225a68` | `GetParentObject(short, short)` | 96 | 95.83% |
+| `0x0024322c` | `fRoll_wait(short*)` | 96 | 95.83% |
+| `0x002a1174` | `SquareSL12` | 92 | 100.0% |
+| `0x00291964` | `SetDrawTPage` | 92 | 100.0% |
+| `0x00243508` | `fRoll_bkfadeout(short*)` | 88 | 95.45% |
+| `0x002916b8` | `SetDrawArea` | 88 | 100.0% |
+| `0x00218008` | `ChangeEffectAnimation(effectAnimation*, unsigned char, short)` | 88 | 95.45% |
+| `0x00187658` | `pspWindowCommonIsType(WINOBJ_TYPE, unsigned char, unsigned char, unsigned char, unsigned char)` | 88 | 95.45% |
+| `0x0029b678` | `GsSetDrawBuffClip` | 88 | 95.45% |
+| `0x0024328c` | `fRoll_waitdot(short*)` | 88 | 95.45% |
+| `0x0022a57c` | `getVariationAppearVecRange(_ParticleParameter*, int, VECTOR*)` | 84 | 100.0% |
+| `0x002459ec` | `strSync(DECENV*, int)` | 84 | 100.0% |
+| `0x0022531c` | `NewHeap(void*, long)` | 84 | 95.24% |
+| `0x0022a528` | `getVariationAppearVec(_ParticleParameter*, int, VECTOR*)` | 84 | 100.0% |
+| `0x0022a4d4` | `getVariationAppearRange(_ParticleParameter*, int, VECTOR*)` | 84 | 100.0% |
+| `0x002a0c88` | `TransposeMatrix` | 84 | 100.0% |
+| `0x002434b4` | `fRoll_bkfadein(short*)` | 84 | 95.24% |
+| `0x0026a45c` | `snpl_jparane()` | 84 | 95.24% |
+| `0x0026a4b0` | `snpl_jparabig()` | 84 | 95.24% |
+| `0x0022a480` | `getVariationAppearPosition(_ParticleParameter*, int, VECTOR*)` | 84 | 100.0% |
+| `0x00282478` | `iOS_ClippedInit()` | 80 | 95.0% |
+| `0x001d6430` | `eacape_battlefield(int)` | 80 | 95.0% |
+| `0x0029b4f4` | `GsDefDispBuff` | 80 | 95.0% |
+| `0x0026a5fc` | `snplinf_clr(SNPLINFO*)` | 80 | 100.0% |
+| `0x002591d4` | `evt_get_flgdt(int*, int*)` | 80 | 95.0% |
+| `0x001f639c` | `setLongPositionToPosition(tag_animation*)` | 80 | 100.0% |
+| `0x0029ad6c` | `xpSetDrawOffset` | 76 | 100.0% |
+| `0x0028469c` | `ForEachVector(VECTOR_DATABASE*, short)` | 76 | 100.0% |
+| `0x00077400` | `gzbuffer` | 76 | 100.0% |
+| `0x002b748c` | `isInRectUi(_RECT_UI*, int, int)` | 72 | 100.0% |
+| `0x0007744c` | `gztell64` | 72 | 100.0% |
+| `0x00077b38` | `gzclearerr` | 72 | 100.0% |
+| `0x0028464c` | `delete_Vector(VECTOR_DATABASE*, short)` | 72 | 100.0% |
+| `0x0021c154` | `s22_addValue(_EffectTCB*)` | 72 | 100.0% |
+| `0x0021c19c` | `s23_subValue(_EffectTCB*)` | 72 | 100.0% |
+| `0x00268b9c` | `wldcenter_calc(SVECTOR*, VECTOR*)` | 68 | 100.0% |
+| `0x0021c110` | `s21_countDown(_EffectTCB*)` | 68 | 100.0% |
+| `0x0029a858` | `SetDefDispEnv` | 68 | 100.0% |
+| `0x0021c0cc` | `s20_countUp(_EffectTCB*)` | 68 | 100.0% |
+| `0x002016c4` | `reserveCharacterPosition(tag_animation*)` | 68 | 100.0% |
+| `0x001dc408` | `set_temp_status(BWORK*, int, unsigned char, int)` | 68 | 100.0% |
+| `0x0021bde0` | `s12_ifGE(_EffectTCB*)` | 64 | 100.0% |
+| `0x0021be60` | `s14_ifLE(_EffectTCB*)` | 64 | 100.0% |
+| `0x0021be20` | `s13_ifGT(_EffectTCB*)` | 64 | 100.0% |
+| `0x00187618` | `GetLocalJobNumber(short)` | 64 | 100.0% |
+| `0x0021c04c` | `s1c_ifNotEQU(_EffectTCB*)` | 64 | 100.0% |
+| `0x0021bea0` | `s15_ifLT(_EffectTCB*)` | 64 | 100.0% |
+| `0x0021bda0` | `s11_ifEQU(_EffectTCB*)` | 64 | 100.0% |
+| `0x0021bd60` | `s10_setValue(_EffectTCB*)` | 64 | 100.0% |
+| `0x000b52dc` | `CRECT::SetRect16(int, _RECT_S16*)` | 60 | 100.0% |
+| `0x001d45c4` | `check_turn_frozen(BWORK*)` | 60 | 100.0% |
+| `0x0007d914` | `call_ztell64` | 60 | 100.0% |
+| `0x000b52a0` | `CRECT::SetRect(int, _RECT_S32*)` | 60 | 100.0% |
+| `0x00244938` | `numword_chk(int)` | 60 | 100.0% |
+| `0x0021c014` | `s1b_ifChildTaskNonExist(_EffectTCB*)` | 56 | 100.0% |
+| `0x00279c88` | `MemClearDW(int*, int)` | 56 | 100.0% |
+| `0x000726a8` | `_JNIEnv::CallStaticVoidMethod(_jclass*, _jmethodID*, ...)` | 56 | 100.0% |
+| `0x00072670` | `_JNIEnv::CallStaticIntMethod(_jclass*, _jmethodID*, ...)` | 56 | 100.0% |
+| `0x00072638` | `_JNIEnv::CallStaticObjectMethod(_jclass*, _jmethodID*, ...)` | 56 | 100.0% |
+| `0x002918b4` | `SetDrawStp` | 56 | 100.0% |
+| `0x000724b0` | `_JNIEnv::NewObject(_jclass*, _jmethodID*, ...)` | 56 | 100.0% |
+| `0x0021bfdc` | `s1a_ifChildTaskExist(_EffectTCB*)` | 56 | 100.0% |
+| `0x00285f4c` | `pspFileManager::hockSeek(int)` | 56 | 100.0% |
+| `0x00159a78` | `asmSerchMessagePointer(char*, int)` | 52 | 100.0% |
+| `0x002a11d0` | `SquareSS0` | 52 | 100.0% |
+| `0x00291710` | `SetDrawOffset` | 52 | 100.0% |
+| `0x0016204c` | `wasmSerchMessagePointer(char*, int)` | 52 | 100.0% |
+| `0x00081abc` | `unzeof` | 52 | 100.0% |
+| `0x00284714` | `CalcVectorFromID(VECTOR_DATABASE*, short)` | 52 | 100.0% |
+
+### 611.4 Restante com chamadas já documentadas (248)
+
+Cada uma chama pelo menos um nome já confirmado em seção anterior — tabela de referência (endereço, nome, bytes, cobertura, catálogo de `bl`):
+
+| Endereço | Função | Bytes | Cobertura | Chama |
+|---|---|---:|---:|---|
+| `0x001a9424` | `GetItemType(short, short)` | 304 | 98.68% | `pspItemIsType` |
+| `0x00255908` | `ctlflag_winset(CTLINFO*)` | 304 | 96.05% | `Wread_eventflag(int)`, `wldwin_set(int, RECT16, int, unsigned long*)`, `wldmess_put(int, int, _POINT, unsigned long*)` |
+| `0x00244de8` | `roll_bkfade()` | 304 | 96.05% | `__divsi3` |
+| `0x002bf1fc` | `Main_Settings_DrawYesNo(int, int, int)` | 304 | 96.05% | `CEGL2_IF::AddSprite(int, CEGL2_SPRITE*, float, float, _EGL_SPRITE_LAYOUT*, unsigned char)`, `CEGL2_SPRITE::SetScale(float, float)`, `CEGL2_SPRITE::SetColor(unsigned char, unsigned char, unsigned char)`, `CEGL2_SPRITE::SetAlpha(unsigned char)`... |
+| `0x001d40a8` | `set_monsterability2(int, unsigned char, short*, int, unsigned char*)` | 296 | 95.95% | `gc_bwp(int)`, `check_monsterup(BWORK*)`, `get_command_ability(int, int)` |
+| `0x001ac3c4` | `DrawF4(short*, COLOR*, int, int)` | 296 | 97.3% | `SetSemiTrans` |
+| `0x00249da4` | `vOpn_dataload()` | 288 | 95.83% | `vOpn_loadwait()`, `numa_vOpn_CdRead(CDREC*, unsigned long, unsigned long, unsigned long, unsigned long*)`, `vOpn_bk_load(int, unsigned long*)`, `vOpn_timload(unsigned long*)`... |
+| `0x001ac774` | `DrawLineG3(RECT16*, COLOR*, int, int)` | 280 | 97.14% | `SetSemiTrans` |
+| `0x0024935c` | `vOpn_swapbuff()` | 280 | 95.71% | `pspOpenCheckFlg(PSP_OPEN_FLG)`, `pspPrimDirectParamSet(int, RECT16*)`, `SetDispMask`, `MoveImage`... |
+| `0x00244418` | `vEnd_rollline_put(unsigned long*, int)` | 276 | 97.1% | `AddPrim` |
+| `0x000f38c4` | `disp_plateorspell(ACT*, int, int)` | 272 | 97.06% | `sub_f2ce8`, `get_bwp(int)`, `get_ability_address(int, ABILITY_COMMON_DATA**, void**)` |
+| `0x000d9638` | `fade_eventlocal(ITEMPRIM*, int)` | 272 | 95.59% | `addlocalprim(tagPOLY_FT4*)`, `GetTPage`, `SetTile`, `SetDrawMode`... |
+| `0x002c8ac4` | `IS_SETTINGS_WND_SLIDER_AREA(int, int)` | 272 | 97.06% | `CRECT::GetScreenOffset(int*, int*)`, `CRECT::GetRect(int, _RECT_S32*)` |
+| `0x001d93a4` | `add_jobpoint(int, int)` | 268 | 100.0% | `GetLocalJobNumber(short)`, `get_unitwork_add(int)`, `set_jcflag(unsigned char*, int)`, `get_joblevel(unsigned short)`... |
+| `0x0022a820` | `GetAnimationPosition(int, int, EffectOrder*, SVECTOR*)` | 268 | 100.0% | `sub_714b8`, `get_mapstp(int, int, int)`, `getAnimationPosition(unsigned int)`, `getMapIDFromAnimationID(int)` |
+| `0x002b7050` | `Main_Novel_GetBtnRect(int*, int*, int*, int*, int*, int*)` | 268 | 98.51% | `CGX_SCREEN_CORRECT::Area_ToScreen(int, int, int, int*, int*)`, `CGX_SCREEN_CORRECT::Area_W_Scaled(int, int)`, `CGX_SCREEN_CORRECT::Area_H_Scaled(int, int)`, `RETINA_SCALE(int)` |
+| `0x00101450` | `Wfade_eventlocal(ITEMPRIM*, int)` | 268 | 95.52% | `Waddlocalprim(tagPOLY_FT4*)`, `GetTPage`, `SetTile`, `SetDrawMode`... |
+| `0x0026c12c` | `townbtl_check(int, int*)` | 268 | 95.52% | `Wread_eventflag(int)`, `wld_event(int, int)` |
+| `0x0010d738` | `Wdisp_plateorspell(ACT*, int, int)` | 268 | 97.01% | `sub_10cb68`, `get_bwp(int)`, `get_ability_address(int, ABILITY_COMMON_DATA**, void**)` |
+| `0x001d9250` | `get_job_change_flag(unsigned char*, unsigned char)` | 260 | 100.0% | `sub_715cc` |
+| `0x001f5320` | `displayCursor()` | 256 | 96.88% | `iOSCurHojyo(SVECTOR*)`, `ASHURA_getOTptrZ(int)`, `get_mapstp(int, int, int)`, `sub_1e796c`... |
+| `0x001f5df8` | `MydisplayCursor(int)` | 252 | 96.83% | `ASHURA_getOTptrZ(int)`, `get_mapstp(int, int, int)`, `sub_1e796c`, `sub_1e8d88`... |
+| `0x0026a6d4` | `fastpage_print(int, int)` | 252 | 95.24% | `Wserchmessagepointer(int)`, `Wcount_words2(short*, short*, char*)`, `Wwrite_eventflag(int, int)`, `wldwin_trans(int, unsigned long*)`... |
+| `0x0021b920` | `Dynamics(Physics*)` | 248 | 98.39% | `__divsi3` |
+| `0x001f5d00` | `DrawPanel(int, int, int, int)` | 248 | 98.39% | `ASHURA_getOTptrZ(int)`, `get_mapstp(int, int, int)`, `sub_1e796c`, `sub_1e8d88`... |
+| `0x0018716c` | `CardAccess3()` | 248 | 95.16% | `Wwrite_eventflag(int, int)`, `load_worldname()`, `worldmap_restart()`, `SetLoadData(int)`... |
+| `0x00245720` | `strCallback()` | 244 | 96.72% | `StCdInterrupt`, `PSX_LoadImage` |
+| `0x001ab824` | `AbilityEquip(short, short, short, int)` | 244 | 98.36% | `ItemChg(short, int)`, `SetChrList()`, `GetBestEquip(short, short*)`, `sub_1ab40c`... |
+| `0x001a2a50` | `initMenuTouch(iOS_CMenuTouch*, int)` | 244 | 98.36% | `iOS_CMenuTouch::setDispOffset(int, int)`, `iOS_CMenuTouch::setXIconRect(unsigned char, int, int, int, int)`, `iOS_CMenuTouch::init(int, int, int, int, int, int, int, int)`, `xpLibGetOffset(int*, int*)`... |
+| `0x0025c744` | `shogou_check()` | 244 | 95.08% | `Wread_eventflag(int)` |
+| `0x001d2874` | `set_succession_data(BWORK*, int)` | 244 | 96.72% | `init_target_result(A_RESULT*)` |
+| `0x001bdb1c` | `DrawShapeWithShadow(short*, COLOR*, int, int)` | 240 | 95.0% | `DrawTexFlip(short*, COLOR*, char, int, int, int)`, `GetTPage` |
+| `0x0026bf68` | `town_touch(_POINT, int*, int*)` | 240 | 98.33% | `town_find3(_POINT, int)` |
+| `0x0026be7c` | `town_find3(_POINT, int)` | 236 | 96.61% | `sub_719f8`, `Wread_eventflag(int)`, `__floatsisf`, `__fixsfsi` |
+| `0x00077598` | `gz_error` | 232 | 96.55% | `sub_71494`, `sub_714dc`, `sub_714e8`, `sub_714f4` |
+| `0x000dc604` | `eventsetchrcol(char*)` | 232 | 100.0% | `sub_d6828`, `sub_dc2a4`, `iOS_GetFrameRate()`, `changeCharacterClut(int, int, int, short, short, short)`... |
+| `0x001ceb14` | `reset_status_forevent2(BWORK*)` | 232 | 98.28% | `_changeAnimationStatus_(int, int, int)`, `set_status_counter(BWORK*, int, int)` |
+| `0x0020f1d0` | `getCharacterInfo(int, unsigned short*)` | 228 | 98.25% | `searchAnimationByID(unsigned short)` |
+| `0x001dc29c` | `set_eggmonster(int, int, int)` | 224 | 96.43% | `get_unitwork_add(int)`, `set_unitdata(int)` |
+| `0x000cbb48` | `delTrapWindowTaskall()` | 224 | 98.21% | `send_taskparamater(long, long, long, long)` |
+| `0x0026bda0` | `town_find(_POINT)` | 220 | 96.36% | `Wread_eventflag(int)` |
+| `0x0027b3a4` | `numaSaveDataLoad(unsigned char*)` | 220 | 100.0% | `sub_71494`, `sub_714a0`, `sub_714b8`, `sub_715cc`... |
+| `0x00218640` | `AnimatePermanentObject(int)` | 220 | 98.18% | `Dynamics(Physics*)`, `DrawPermanentShape(PermanentObject*)` |
+| `0x001b6d84` | `MakeTextureChar(unsigned short, int, int, int)` | 220 | 100.0% | `sub_714c4`, `sub_715cc`, `FontToImage(int, unsigned char*, RECT16*, int)`, `DrawSync`... |
+| `0x001d588c` | `set_event_table_skill(BWORK*, ACT*, TURN_TABLE*)` | 220 | 98.18% | `sub_1d3a88`, `set_event_table(TURN_TABLE*, int)`, `copyACTst(ACT*, ACT*)`, `adjust_entry_status(BWORK*)`... |
+| `0x000cb9e0` | `readmaptitle()` | 216 | 96.3% | `allocatememorywait(int)`, `read_eventflag(int)`, `fileReadRequestOffset(unsigned int, unsigned int, unsigned int, void*)`, `CFFT_STATE::SetParam(int, int)`... |
+| `0x00079308` | `gzclose_w` | 216 | 100.0% | `sub_714dc`, `sub_7153c`, `deflateEnd`, `gz_error`... |
+| `0x00201b84` | `resetActionDirection(tag_animation*)` | 216 | 100.0% | `set_unitcoord(int, unsigned char, unsigned char, unsigned char, unsigned char)`, `searchAnimationByID(unsigned short)` |
+| `0x001fea38` | `rideOnChokobo(tag_animation*, tag_animation*)` | 212 | 100.0% | `requestDefaultAnimation(tag_animation*)`, `requestDamageResult(int)` |
+| `0x0025e434` | `mouke_app_chk(int, int)` | 212 | 100.0% | `Wread_eventflag(int)`, `mouke_tbl_get(MOUINFO*, int)`, `sun_to_ivarisday(int*, int*)` |
+| `0x0026c05c` | `townmenu_check(int, int*)` | 208 | 98.08% | `Wread_eventflag(int)` |
+| `0x002a1600` | `ColorMatDpq` | 208 | 100.0% | `sub_71b78`, `ColorDpq`, `LocalLight`, `__floatsisf`... |
+| `0x0028a6a0` | `pspTitleSaveCheck()` | 204 | 98.04% | `pspClearSaveEnv()`, `pspSaveInit()`, `pspSaveUpdate()`, `pspSaveExit()`... |
+| `0x0014bedc` | `joinfaceuvclut(tagPOLY_FT4*, int, int*)` | 204 | 96.08% | `GetTPage`, `GetClut` |
+| `0x00103ff4` | `Weventsetstatus(int, int, int, int)` | 204 | 96.08% | `sub_103fd0`, `wasm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)`, `get_bwp(int)` |
+| `0x000dbba4` | `eventsetstatus(int, int, int, int)` | 204 | 96.08% | `sub_dbb80`, `asm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)`, `get_bwp(int)` |
+| `0x00200a1c` | `startKnockBack(tag_animation*, tag_animation*)` | 204 | 100.0% | `get_movetype(BWORK*)` |
+| `0x0024232c` | `vOpn_arzpic_main()` | 200 | 98.0% | `pspOpenDataBackBufGet(int)` |
+| `0x002a16d0` | `ColorMatCol` | 200 | 100.0% | `sub_71b78`, `ColorCol`, `LocalLight`, `__floatsisf`... |
+| `0x002b77e8` | `RayPick_GT3_input(tagPOLY_GT3*, int, int, int, int)` | 196 | 100.0% | `CEGL_COLLISION::IsVertexInTriangle2D(math::VECTOR2<float>, math::VECTOR2<float>, math::VECTOR2<float>, math::VECTOR2<float>)`, `__floatsisf` |
+| `0x001a8508` | `GetCommandList(short, short*)` | 196 | 97.96% | `GetJobList(unsigned char, short*, int)`, `GetCommandNumber(int)` |
+| `0x0007fd58` | `uncompress` | 192 | 97.92% | `inflateInit_`, `inflate`, `inflateEnd` |
+| `0x0020f350` | `callEventEffect(int, int, void*)` | 192 | 100.0% | `sub_715cc`, `StartEffect(long, long, EffectOrder*)` |
+| `0x0028b638` | `FFT_Main(void*)` | 188 | 97.87% | `ps_main()`, `InitEffectLoadAddress()`, `initXpHeap()`, `exitXpHeap()`... |
+| `0x001cd490` | `set_learning(BWORK*)` | 184 | 97.83% | `GetLocalJobNumber(short)`, `get_command_ability(int, int)` |
+| `0x0020e314` | `moveToPanel(int, SVECTOR*, int, int, int)` | 184 | 100.0% | `sub_714b8`, `search_root_ev(int, int, int, int, int, int, int, int)`, `searchAnimationByID(unsigned short)`, `rideOffChokobo(tag_animation*)`... |
+| `0x0028d0f8` | `tlInitHeap(void*, unsigned int)` | 184 | 95.65% | `sub_714c4` |
+| `0x001d1150` | `resist_monomane_data(BWORK*)` | 180 | 95.56% | `copyACTst(ACT*, ACT*)` |
+| `0x001ee1c4` | `drawItem(tag_animation*)` | 180 | 100.0% | `ASHURA_getOTptrZ(int)`, `sub_1e9e28`, `setShortVector(SVECTOR*, int, int, int)` |
+| `0x0021589c` | `loadBackGradation()` | 180 | 97.78% | `sub_714b8`, `ASHURA_CVECTOR(long, CVECTOR*)` |
+| `0x00215a28` | `transferClutData()` | 180 | 95.56% | `PSX_LoadImage`, `MoveImage` |
+| `0x001f00f4` | `NewWeaponEquip(int, tag_animation*)` | 180 | 97.78% | `get_itemcommon(unsigned short)`, `loadClutData(unsigned short*, unsigned int, unsigned int, int)`, `pspItemGetWeaponVariationClut` |
+| `0x0029c954` | `sceVfpuVector4OuterProductXYZ(ScePspFVector4*, ScePspFVector4 const*, ScePspFVector4 const*)` | 180 | 100.0% | `__subsf3`, `__mulsf3` |
+| `0x001ed964` | `getTapedDirection()` | 180 | 100.0% | `getDirectionVector(int)`, `xpLibGetOffset(int*, int*)`, `iOS_getTouchNowX()`, `iOS_getTouchNowY()` |
+| `0x00285d6c` | `pspJobGetTamanegiLevel(unsigned char (*) [3])` | 176 | 100.0% | `GetLocalJobNumber(short)`, `GetCommandNumber(int)`, `SetBitStream(unsigned char*)`, `GetBitStream(unsigned int)`... |
+| `0x00201008` | `iOSVectorNormal(VECTOR*)` | 176 | 97.73% | `sub_719f8`, `__divsi3`, `__floatunsisf`, `__fixsfsi` |
+| `0x00249cf4` | `vOpn_timload(unsigned long*)` | 176 | 100.0% | `DrawSync`, `PSX_LoadImage` |
+| `0x002741bc` | `SetMove()` | 176 | 95.45% | `MemCpyW(unsigned short*, unsigned short const*, int)`, `ps_rand()` |
+| `0x0029a92c` | `LoadTPage` | 176 | 100.0% | `PSX_LoadImage`, `GetTPage` |
+| `0x001d91a0` | `init_entry_status(BWORK*)` | 176 | 100.0% | `set_status_counter(BWORK*, int, int)` |
+| `0x001abb9c` | `GetJobShape(short, short, short*)` | 176 | 95.45% | `sub_714b8` |
+| `0x001d7340` | `net_change_bwork()` | 172 | 100.0% | `sub_714b8`, `sub_715cc` |
+| `0x001049c4` | `Weventsetchrcol(char*)` | 172 | 100.0% | `sub_fe370`, `sub_104668`, `changeCharacterClut(int, int, int, short, short, short)` |
+| `0x001eec88` | `forceChangeAnimation(int, int, tag_animation*)` | 168 | 100.0% | `iOS_getLastEventNo()`, `iOS_getV2Icon(V2ICON_DATA)` |
+| `0x00285cc4` | `pspJobGetJobChangeFlag(unsigned char*, unsigned char, unsigned char (*) [3], int)` | 168 | 97.62% | `GetLocalJobNumber(short)`, `GetCommandNumber(int)`, `SetBitStream(unsigned char*)`, `GetBitStream(unsigned int)`... |
+| `0x001dbba0` | `employ_from_entry(unsigned char*, int, int, int)` | 168 | 100.0% | `sub_715cc`, `resist_savedata(BWORK*, int)`, `set_monsterwork_j(BWORK*, EDATA*, int, int)` |
+| `0x00073a2c` | `compress2` | 168 | 97.62% | `deflate`, `deflateEnd`, `deflateInit_` |
+| `0x00097e9c` | `_book_maptype1_quantvals` | 168 | 100.0% | `sub_7162c`, `sub_716a4`, `__extendsfdf2`, `__fixdfsi`... |
+| `0x0024556c` | `movie_exit(int)` | 164 | 97.56% | `sub_714b8`, `cdxa_stop()`, `StUnSetRing`, `DecDCToutCallback`... |
+| `0x0008b4f0` | `floor1_interpolate_fit` | 164 | 100.0% | `_vorbis_block_alloc` |
+| `0x0015685c` | `load_worldname()` | 160 | 95.0% | `get_unitwork_add(int)` |
+| `0x00081bb8` | `unzCloseCurrentFile` | 160 | 100.0% | `sub_714dc`, `inflateEnd` |
+| `0x001d4008` | `check_monsterup(BWORK*)` | 160 | 100.0% | `sub_1d3c10`, `get_unit_height(int)` |
+| `0x001ed8b0` | `getBattleWorkAnimationHight(tag_animation*)` | 156 | 100.0% | `searchAnimationByID(unsigned short)`, `sub_1ece44` |
+| `0x000db3a4` | `envvolcontrol()` | 156 | 100.0% | `settaskkind(int)`, `asmTaskEntry()`, `asmGetInput1()`, `iOS_GetFrameRateNative()`... |
+| `0x001d2d48` | `clear_status_animation(BWORK*)` | 156 | 100.0% | `clear_cmemory(void*, int)`, `changeAnimationStatus(int, int, int)` |
+| `0x0027faa0` | `iOS_SuspendWorldMap()` | 156 | 97.44% | `iOS_RESUME_SET_EVENT_W(IOS_RESUME_DATA_EVENT_W*, IOS_RESUME_DATACOPY_MODE)`, `iOS_RESUME_SET_WORK_IW(IOS_RESUME_DATA_WORK_IW*, IOS_RESUME_DATACOPY_MODE)`, `iOS_RESUME_SET_FFTDATA_UNITLIST(IOS_RESUME_DATA_FFTDATA_UNITLIST*, IOS_RESUME_DATACOPY_MODE)`, `iOS_RESUME_SET_RESERVE(IOS_RESUME_DATA_RESERVE*, IOS_RESUME_DATACOPY_MODE)`... |
+| `0x00078900` | `gzclose_r` | 156 | 100.0% | `sub_714dc`, `sub_7153c`, `gz_error`, `inflateEnd` |
+| `0x001ed818` | `getOriginalAnimationHight(tag_animation*)` | 152 | 100.0% | `searchAnimationByID(unsigned short)`, `sub_1ece44` |
+| `0x001ed6fc` | `getDestAnimationHight(tag_animation*)` | 152 | 100.0% | `searchAnimationByID(unsigned short)`, `sub_1ece44` |
+| `0x0014dd4c` | `addbpitem(int)` | 152 | 100.0% | `write_eventflag(int, int)`, `read_eventflag(int)`, `get_bwp(int)`, `get_itemcommon(unsigned short)`... |
+| `0x001a7404` | `SetRyoteFlag(short*, int)` | 152 | 100.0% | `pspItemGetWeaponData`, `pspItemIsType` |
+| `0x00266544` | `iOS_drawMenuAssist_wld(iOS_CMenuTouch*, GsOT*)` | 148 | 100.0% | `iOS_getDispMenuTouch()`, `sub_2664a0`, `iOS_CMenuTouch::setMenuAssistPosition(int)` |
+| `0x0015a1e8` | `iOSLRChgSwype(int, int, int, int)` | 148 | 100.0% | `iOS_getTouchBeginX()`, `iOS_getTouchBeginY()`, `iOS_getTouchSwype()` |
+| `0x001f5b50` | `terminateAnimationSub(int, int, short, short, short)` | 148 | 100.0% | `searchAnimationByID(unsigned short)`, `raiseAnimationPriority(int)`, `changeCharacterClut(int, int, int, short, short, short)` |
+| `0x0011d6b0` | `TEST_read_eventflag(int)` | 144 | 97.22% | `Wcalcformula(int, int, int, int)`, `Wwrite_eventflag(int, int)`, `Wread_eventflag(int)`, `hook_read_eventflag(int*)` |
+| `0x00245690` | `strInit(int, void (*)())` | 144 | 97.22% | `fftCdRead2(CDREC*, int, int, int, unsigned long*)`, `fftCdLoop(CDREC*)`, `StSetStream`, `DecDCTReset`... |
+| `0x00102e14` | `Wenvvolcontrol()` | 140 | 100.0% | `Wsettaskkind(int)`, `wasmTaskEntry()`, `wasmGetInput1()`, `fadeSoundEffect(int, int)`... |
+| `0x002889cc` | `pspOffScreenInit(RECT16*, RECT16*)` | 140 | 97.14% | `sub_714b8`, `xpLibgpuEnableFlg`, `xpLibgpuOffScreenRectSet` |
+| `0x0010c7fc` | `Wrecover_chrname()` | 140 | 97.14% | `Wmakemessagestructure()`, `get_bwp(int)` |
+| `0x000dfb50` | `recover_chrname()` | 140 | 97.14% | `makemessagestructure()`, `get_bwp(int)` |
+| `0x000da9c4` | `checkpara1(int)` | 140 | 100.0% | `task_killmyself()`, `asmGetActiveTask(int)`, `iOS_getV2Icon(V2ICON_DATA)` |
+| `0x001dc37c` | `inc_dead_number(BWORK*)` | 140 | 97.14% | `write_eventflag(int, int)`, `read_eventflag(int)`, `pspNetGetBattleModeFlag()` |
+| `0x00161da4` | `iOSGetStatuswindowTap()` | 136 | 100.0% | `iOSdisp_personalWinPosGet()`, `iOSUnitListFlagGet()`, `iOSUnitListLRDispCheck()`, `iOSUnitListStsMoveCheck()`... |
+| `0x001d2de4` | `init_status_animation(int)` | 136 | 97.06% | `changeAnimationStatus(int, int, int)` |
+| `0x002a2740` | `PadInitDirect` | 132 | 96.97% | `xpLibpad::RepParamSet(short, short)`, `xpPadAnalogAssign` |
+| `0x002bf364` | `Debug_SetMapPolyCheck(int)` | 132 | 96.97% | `CRECT::SetEnable(int, int)`, `iOS_setV2Icon(V2ICON_DATA, int)` |
+| `0x0024a414` | `vOpn_pacdraw(unsigned long*, unsigned long*, int)` | 132 | 96.97% | `vOpn_anim(ANMPAC*, unsigned long*)`, `vOpn_window(WINPAC*, unsigned long*)` |
+| `0x0020e3cc` | `jumpToPanel(int, int, int)` | 128 | 100.0% | `searchAnimationByID(unsigned short)`, `rideOffChokobo(tag_animation*)`, `warningHandler(int)` |
+| `0x001d3d98` | `check_act_ok(BWORK*)` | 128 | 96.88% | `get_coord_address(BWORK*)` |
+| `0x0020f7f4` | `prepareForEventGun(int, int)` | 128 | 100.0% | `searchAnimationByBattleID(unsigned short)`, `setShortVector(SVECTOR*, int, int, int)`, `CheckGunResult(int, SVECTOR*, int)` |
+| `0x00103f50` | `Wmovetopanelsub(char*)` | 128 | 100.0% | `Wcnvglobaltolocalid(int)`, `moveToPanel(int, SVECTOR*, int, int, int)`, `iOS_hook_movetopanel()` |
+| `0x000dc994` | `movetopanelsub(char*)` | 128 | 100.0% | `cnvglobaltolocalid(int)`, `moveToPanel(int, SVECTOR*, int, int, int)`, `iOS_hook_movetopanel()` |
+| `0x001dbc48` | `init_entry_status0(BWORK*)` | 124 | 100.0% | `clear_cmemory(void*, int)` |
+| `0x0024a9e4` | `vOpnwin_trans(int, unsigned long*)` | 124 | 96.77% | `PSX_LoadImage` |
+| `0x00102aa4` | `Wmove_ambient()` | 124 | 96.77% | `Wsettaskkind(int)`, `Wtask_wait(long)`, `wasmGetInput1()`, `iOS_GetFrameRate()`... |
+| `0x000daff0` | `move_ambient()` | 124 | 96.77% | `settaskkind(int)`, `task_wait(long)`, `asmGetInput1()`, `iOS_GetFrameRate()`... |
+| `0x002b1458` | `Project_Core_Bootup()` | 120 | 96.67% | `CFILE_DAT::Load(int, int, int)` |
+| `0x001fd200` | `setTurnOrder()` | 120 | 96.67% | `ASHURA_set_Mesh(int, int)`, `get_turn_unit(int)`, `getskilleffect(ACT*)`, `searchAnimationByBattleID(unsigned short)`... |
+| `0x001a92f8` | `ItemCheck()` | 120 | 96.67% | `ChgMoney(int)`, `GetItemSellPrice(short)`, `GetTotalItem(short)` |
+| `0x0025b878` | `houkokumes_select(int, int)` | 116 | 100.0% | `mkadrtbl_calc(int)`, `get_unitwork_add_wld(int)` |
+| `0x002492b8` | `vEnd_init()` | 116 | 96.55% | `initializeMusicBuffer()`, `vEnd_ctlinit()`, `vOpn_scrinit(int)`, `vOpn_parainit()`... |
+| `0x001d43f4` | `check_unit_active(BWORK*)` | 116 | 100.0% | `check_status_data2(BWORK*, int)` |
+| `0x0025d590` | `directedit_chk()` | 116 | 96.55% | `Wread_eventflag(int)`, `editdirect()`, `iOSTutoFlagSet(int, int)`, `iOS_getV2Icon(V2ICON_DATA)`... |
+| `0x001eb0b4` | `raiseAnimationPriority(int)` | 112 | 96.43% | `searchAnimationByID(unsigned short)` |
+| `0x001ed68c` | `getTargetAnimationHight(tag_animation*, SVECTOR*)` | 112 | 100.0% | `searchAnimationByID(unsigned short)`, `sub_1ece44` |
+| `0x002419d4` | `vOpn_arzmes_init(int, int, unsigned long*)` | 112 | 96.43% | `iOS_setV2Icon(V2ICON_DATA, int)` |
+| `0x0015bfac` | `iOSTchInputCheckCur()` | 112 | 96.43% | `iOS_getV2Icon(V2ICON_DATA)` |
+| `0x001d2324` | `get_mapitem(BWORK*)` | 112 | 96.43% | `read_eventflag(int)`, `check_item_left(int, int, int)`, `check_trap(unsigned char, unsigned char, unsigned char)`, `check_prob(int, int)` |
+| `0x00259324` | `evt_get_date(int*, int*, int*, int*)` | 108 | 96.3% | `Wread_eventflag(int)` |
+| `0x0020f2e4` | `eventEffectCall(int, int, SVECTOR*)` | 108 | 100.0% | `sub_715cc`, `StartEffect(long, long, EffectOrder*)` |
+| `0x00215950` | `loadAnbient()` | 108 | 96.3% | `sub_714b8`, `ASHURA_CVECTOR(long, CVECTOR*)` |
+| `0x002159bc` | `loadFlatColor()` | 108 | 96.3% | `sub_714b8`, `ASHURA_CVECTOR(long, CVECTOR*)` |
+| `0x002ab960` | `sceGuGetMemory_for_iOS` | 108 | 96.3% | `sub_714b8` |
+| `0x000d9a14` | `seekfacefile(int)` | 108 | 96.3% | `allocatememorywait(int)`, `fileReadCDOffset(unsigned long, unsigned long, unsigned long, void*)`, `PSX_LoadImage`, `iOS_getV2Icon(V2ICON_DATA)` |
+| `0x00101914` | `Wseekfacefile(int)` | 108 | 96.3% | `Wallocatememorywait(int)`, `fileReadCDOffset(unsigned long, unsigned long, unsigned long, void*)`, `PSX_LoadImage`, `iOS_getV2Icon(V2ICON_DATA)` |
+| `0x0025c6d8` | `shogou_mesput(CTLINFO*)` | 108 | 100.0% | `Wsend_taskparamater(long, long, long, long)`, `ssd_request(int, int)` |
+| `0x002a2460` | `RotColorMatDpq(SVECTOR*, SVECTOR*, CVECTOR*, long*, CVECTOR*, long, long*)` | 108 | 100.0% | `ColorMatDpq`, `RotTransPers` |
+| `0x0020f164` | `setEventClut(int, int, int)` | 108 | 96.3% | `loadClutData(unsigned short*, unsigned int, unsigned int, int)` |
+| `0x001e0ec4` | `check_invincible(int, int*)` | 104 | 96.15% | `get_coord_address(BWORK*)` |
+| `0x0015a180` | `iOSLRChgTap(int, int, int, int)` | 104 | 100.0% | `iOS_getTouchFreeTap()`, `iOS_getTouchBeginX()`, `iOS_getTouchBeginY()` |
+| `0x00281a2c` | `iOS_v2menuIsInMenu(int, int)` | 104 | 96.15% | `RETINA_SCALE(int)` |
+| `0x000db440` | `eventenvse()` | 100 | 100.0% | `settaskkind(int)`, `asmGetInput1()`, `callSoundEffect(int)`, `callEnvEffect(int)`... |
+| `0x0025e2ac` | `mouke_tbl_get(MOUINFO*, int)` | 100 | 100.0% | `mkadrtbl_calc(int)` |
+| `0x0020e4fc` | `setOffsetAnimationPosition(int, SVECTOR*)` | 100 | 100.0% | `searchAnimationByID(unsigned short)`, `warningHandler(int)` |
+| `0x0020e498` | `offsetAnimationPosition(int, SVECTOR*)` | 100 | 100.0% | `searchAnimationByID(unsigned short)`, `warningHandler(int)` |
+| `0x00102ea0` | `Weventenvse()` | 100 | 100.0% | `Wsettaskkind(int)`, `wasmGetInput1()`, `callSoundEffect(int)`, `callEnvEffect(int)`... |
+| `0x000ba020` | `timeGetTimeM()` | 100 | 96.0% | `sub_71a70`, `__adddf3`, `__floatsidf`, `__muldf3` |
+| `0x002a2184` | `RotColorDpq` | 100 | 100.0% | `NormalColorDpq`, `RotTransPers` |
+| `0x000d8648` | `getanimpos(int)` | 100 | 96.0% | `getAnimationPosition(unsigned int)` |
+| `0x001fecc0` | `rideOffChokobo(tag_animation*)` | 100 | 100.0% | `searchAnimationByID(unsigned short)`, `requestDamageResult(int)` |
+| `0x0020f620` | `getMapIDFromAnimationPosition(int)` | 96 | 95.83% | `searchAnimationByID(unsigned short)` |
+| `0x001a73a4` | `ChrNameSet(short, unsigned char*)` | 96 | 95.83% | `get_unitwork_add(int)` |
+| `0x00100320` | `Wgetanimpos(int)` | 96 | 95.83% | `getAnimationPosition(unsigned int)` |
+| `0x000ffa64` | `Wserchmessagepointer(int)` | 96 | 95.83% | `pspMsgGet(unsigned int)` |
+| `0x000d7e78` | `serchmessagepointer(int)` | 96 | 95.83% | `pspMsgGet(unsigned int)` |
+| `0x001a72d8` | `ChgMoney(int)` | 96 | 95.83% | `Wwrite_eventflag(int, int)`, `Wread_eventflag(int)`, `iOS_hook_gill()` |
+| `0x0015de8c` | `iOSGT4_MapOTZGet(unsigned long, short)` | 96 | 95.83% | `rsin`, `rcos` |
+| `0x002a251c` | `RotNclip3` | 96 | 100.0% | `RotTransPers3` |
+| `0x000da59c` | `initatchrrsvcursor(int)` | 92 | 95.65% | `get_bwp(int)` |
+| `0x0010216c` | `Winitatchrrsvcursor(int)` | 92 | 95.65% | `get_bwp(int)` |
+| `0x001d52e0` | `set_chargeability2(int, unsigned char, short*, unsigned char*, unsigned char*)` | 92 | 100.0% | `sub_715cc`, `set_normability2(int, unsigned char, short*, unsigned char*, unsigned char*, int, unsigned char*, unsigned char*)` |
+| `0x00216884` | `callMusic(int)` | 92 | 95.65% | `loadMusic(int)`, `disposeMusic(int)`, `inactivateMusic()`, `activateMusic(int, int, int)` |
+| `0x001d8f78` | `get_pmaxlevel()` | 88 | 95.45% | `get_unitwork_add(int)` |
+| `0x0020ed84` | `activateEventAnimation(int)` | 88 | 95.45% | `PSX_LoadImage` |
+| `0x001dc8b0` | `levelup_check(BWORK*)` | 88 | 100.0% | `levelup_one(BWORK*, int)` |
+| `0x001351c0` | `Witemmenu_uvclut(short*, int)` | 88 | 100.0% | `Witemuvclut(tagSPRT*, int)`, `GetTPage` |
+| `0x001ab3b4` | `UnitDismiss(short)` | 88 | 95.45% | `IsDismiss(short)`, `ItemEquip(short, short, short)` |
+| `0x0020eadc` | `inactivateAnimation(int)` | 88 | 100.0% | `iOS_getLastEventNo()`, `searchAnimationByID(unsigned short)` |
+| `0x002163bc` | `checkReadMusic()` | 88 | 95.45% | `fileReadCheck()`, `Ssd_AddMusic(void*)` |
+| `0x0021d3b0` | `s2_startTask(_EffectTCB*)` | 88 | 95.45% | `CreateEffectTask(char*, short, short)` |
+| `0x0024aaac` | `vOpnmess_frm(int, _POINT*)` | 88 | 100.0% | `Wserchmessagepointer(int)`, `Wcount_words(short*, short*, char*)` |
+| `0x00288e18` | `pspPushScreenRect(RECT16*, RECT16*)` | 84 | 95.24% | `sub_714b8` |
+| `0x0021c2c8` | `s8_mapScrollXYZ(_EffectTCB*)` | 84 | 100.0% | `setMapScrollXYZ(VECTOR*)` |
+| `0x0025d53c` | `world_init()` | 84 | 100.0% | `wldbg_init()`, `wldctl_init()`, `wldscr_init()`, `wldpara_init()`... |
+| `0x00243c48` | `DeleteData(tagLIST_STAFFROLL*, tagSTAFFROLL*, tagSTAFFROLL*)` | 84 | 100.0% | `xpFree` |
+| `0x00288e6c` | `pspPopScreenRect(RECT16*, RECT16*)` | 80 | 95.0% | `sub_714b8` |
+| `0x0021c35c` | `sb_mapAngle(_EffectTCB*)` | 80 | 100.0% | `setMapAngle(SVECTOR*)` |
+| `0x0026a40c` | `snpl_volchg()` | 80 | 95.0% | `Ssd_SetSpuVolume(short, short)` |
+| `0x0021584c` | `loadClutDataCalc(unsigned short*, unsigned int, unsigned int, int, short, short, short, int)` | 80 | 100.0% | `loadClutDataCalcPlus(int, unsigned short*, unsigned int, unsigned int, int, short, short, short, int)` |
+| `0x001eee60` | `getPositionFromPanel(tag_animation*)` | 80 | 100.0% | `getAnimationHight(tag_animation*)` |
+| `0x001033b0` | `Wtutorial_syscall(int)` | 80 | 95.0% | `Wwrite_eventflag(int, int)`, `wasmTaskEntry()` |
+| `0x002bb53c` | `Main_Suspend()` | 80 | 95.0% | `CTHREAD::Sync()`, `Sleep(unsigned int)`, `iOS_getV2Icon(V2ICON_DATA)` |
+| `0x000db7ec` | `tutorial_syscall(int)` | 80 | 95.0% | `write_eventflag(int, int)`, `asmTaskEntry()` |
+| `0x0024599c` | `strNext(DECENV*)` | 80 | 100.0% | `StGetNext`, `VSync` |
+| `0x0020c14c` | `iOS_isIrobakeEffect()` | 80 | 100.0% | `searchCurrentAnimation()` |
+| `0x002233f4` | `GetLinearPos(VECTOR*, int, int, VECTOR*)` | 76 | 100.0% | `__divsi3` |
+| `0x001feb0c` | `rideOffChokoboS(tag_animation*)` | 76 | 100.0% | `searchAnimationByID(unsigned short)` |
+| `0x001cb064` | `init_target_result(A_RESULT*)` | 76 | 100.0% | `clear_cmemory(void*, int)` |
+| `0x001d513c` | `set_sanjutsuability1(int, unsigned char, short*)` | 76 | 100.0% | `gc_bwp(int)` |
+| `0x001d50f0` | `set_sanjutsuability2(int, unsigned char, short*)` | 76 | 100.0% | `gc_bwp(int)` |
+| `0x001f0504` | `resetTargetAnimation(tag_animation*)` | 76 | 100.0% | `searchAnimationByBattleID(unsigned short)`, `requestDamageResult(int)` |
+| `0x0020e44c` | `rideOnChokoboForced(int, int)` | 76 | 100.0% | `searchAnimationByID(unsigned short)`, `rideOnChokobo(tag_animation*, tag_animation*)` |
+| `0x0020ea90` | `activateAnimation(int)` | 76 | 100.0% | `appare_unit_f(int)`, `searchAnimationByID(unsigned short)` |
+| `0x0028bb3c` | `TE_task_killmyself()` | 76 | 100.0% | `sub_71b3c`, `TE_task_get_no()` |
+| `0x001d4cf4` | `set_itemitem(int, unsigned char, unsigned char*)` | 76 | 100.0% | `gc_bwp(int)`, `sub_1d4c2c` |
+| `0x001d4fc8` | `set_katanaitem(int, unsigned char, unsigned char*)` | 76 | 100.0% | `gc_bwp(int)`, `sub_1d4f10` |
+| `0x00079010` | `gzputs` | 72 | 100.0% | `sub_71494`, `gzwrite` |
+| `0x001d533c` | `set_chargeability(int, unsigned char, short*)` | 72 | 100.0% | `sub_715cc`, `set_chargeability2(int, unsigned char, short*, unsigned char*, unsigned char*)` |
+| `0x0029a9dc` | `LoadClut2` | 72 | 100.0% | `PSX_LoadImage`, `GetClut` |
+| `0x0021c3ec` | `se_mapScale(_EffectTCB*)` | 72 | 100.0% | `setMapScale(VECTOR*)` |
+| `0x00101f3c` | `Wrecieve_statusinfo()` | 72 | 100.0% | `wasmGetActiveTask(int)` |
+| `0x00248e24` | `vEnd_exit()` | 72 | 100.0% | `DrawSync`, `MoveImage` |
+| `0x00153278` | `task_wait_fast(long)` | 72 | 100.0% | `iOS_GetTutorialStartF()`, `asmTaskEntry()` |
+| `0x0015353c` | `Wtask_wait_fast(long)` | 72 | 100.0% | `iOS_GetTutorialStartF()`, `wasmTaskEntry()` |
+| `0x00201c5c` | `resetTargetDirection(tag_animation*)` | 72 | 100.0% | `searchAnimationByBattleID(unsigned short)`, `resetActionDirection(tag_animation*)` |
+| `0x001e0384` | `check_chokobo(BWORK*)` | 68 | 100.0% | `check_status_data2(BWORK*, int)` |
+| `0x0020e7fc` | `getBattleWorkIDFromAnimation(unsigned int)` | 68 | 100.0% | `searchAnimationByID(unsigned short)`, `warningHandler(int)` |
+| `0x00097c00` | `_float32_unpack` | 68 | 100.0% | `sub_71698`, `__floatsidf`, `__truncdfsf2` |
+| `0x000ff6d8` | `Waddstatusback(STTSWINDOWBACK*)` | 64 | 100.0% | `Waddlocalprim(tagPOLY_FT4*)` |
+| `0x00102684` | `Wcheckpara1(int)` | 64 | 100.0% | `Wtask_killmyself()`, `wasmGetActiveTask(int)` |
+| `0x001d584c` | `get_turn_unit(int)` | 64 | 100.0% | `set_event_table(TURN_TABLE*, int)` |
+| `0x0021c644` | `s26_createObjectWithTable(_EffectTCB*)` | 64 | 100.0% | `CreateObjectWithTable(short, int, int, _Object*)` |
+| `0x000d7ae4` | `addstatusback(STTSWINDOWBACK*)` | 64 | 100.0% | `addlocalprim(tagPOLY_FT4*)` |
+| `0x00259460` | `get_ramza_savework()` | 64 | 100.0% | `get_unitwork_add_wld(int)` |
+| `0x00283f14` | `GLIVON_FT3(unsigned long*, tagPOLY_GT3*, short, unsigned long*, unsigned short*)` | 60 | 100.0% | `VectorDataBase(unsigned int)` |
+| `0x00283ed8` | `GLIVON_FT4(unsigned long*, tagPOLY_GT4*, short, unsigned long*, unsigned short*)` | 60 | 100.0% | `VectorDataBase(unsigned int)` |
+| `0x001b6fc4` | `GetFontCode(unsigned char*, short, int)` | 60 | 100.0% | `GetMesAdr(unsigned char*, short, int)`, `GetCharAdr(unsigned char*, int)` |
+| `0x000d6f18` | `initsprtfield(tagSPRT*, int, int)` | 60 | 100.0% | `initsprt(tagSPRT*)` |
+| `0x00249c08` | `vOpn_CdRead(CDREC*, int, int, unsigned long*)` | 60 | 100.0% | `fftCdRead2(CDREC*, int, int, int, unsigned long*)`, `vOpn_loadwait()` |
+| `0x0028afdc` | `__bpGetAllBinarySize` | 60 | 100.0% | `__bpGetFileNum`, `__bpGetBinarySize`, `__bpGetBinaryData` |
+| `0x000fea3c` | `Winitsprtfield(tagSPRT*, int, int)` | 60 | 100.0% | `Winitsprt(tagSPRT*)` |
+| `0x00202f20` | `set_direction_sub(tag_animation*, int)` | 60 | 100.0% | `searchAnimationByID(unsigned short)`, `sub_1faf60` |
+| `0x0020e8dc` | `checkCharacterMove(int)` | 56 | 100.0% | `searchAnimationByID(unsigned short)`, `warningHandler(int)` |
+| `0x000d86d8` | `getanimpos3d(int, short*)` | 56 | 100.0% | `getAnimationPosition(unsigned int)` |
+| `0x001003ac` | `Wgetanimpos3d(int, short*)` | 56 | 100.0% | `getAnimationPosition(unsigned int)` |
+| `0x000d8740` | `checkstatusscroll(int)` | 56 | 100.0% | `get_bwp(int)` |
+| `0x00100414` | `Wcheckstatusscroll(int)` | 56 | 100.0% | `get_bwp(int)` |
+| `0x0020c114` | `iOS_GaryutenseiCheck()` | 56 | 100.0% | `searchCurrentAnimation()` |
+| `0x001537a4` | `WtaskActiveCheck()` | 56 | 100.0% | `Wtask_status(long)` |
+| `0x001534e0` | `taskActiveCheck()` | 56 | 100.0% | `task_status(long)` |
+| `0x00287a40` | `load_hight_font()` | 56 | 100.0% | `mallocForFile(unsigned int)`, `fileReadRequest(unsigned long, unsigned long, void*)`, `__bpInitBinpackData` |
+| `0x001c03a8` | `DrawSingleUnit(short)` | 56 | 100.0% | `DrawUnitWithShadow(short, DVECTOR*, COLOR*, int, int)` |
+| `0x0024a498` | `iOS_vOpn_touchNum_addprim(iOS_CMenuTouchNum*, unsigned long*, int)` | 52 | 100.0% | `AddPrim` |
+| `0x002a0cdc` | `ApplyTransposeMatrixLV` | 52 | 100.0% | `SetRotMatrix`, `ApplyRotMatrixLV`, `TransposeMatrix` |
+| `0x0020dd44` | `getUnitRelativeDirection(unsigned int)` | 52 | 100.0% | `searchAnimationByBattleID(unsigned short)` |
+| `0x001cb844` | `check_reaction_deny_all(BWORK*)` | 52 | 100.0% | `check_reaction_deny(BWORK*)`, `check_reaction_deny2(BWORK*)` |
+| `0x0022a92c` | `GetAnimationPositionFromBattleID(int, int, EffectOrder*, SVECTOR*)` | 48 | 100.0% | `getAnimationIDFormBattleWork(int)` |
+
+**Status CSV**: `read_structural` para as 500 (identidade e call-graph confirmados via checkpoint; nenhuma teve blocos lidos instrução a instrução).
+## 612. Lote de 500 funções `auto_structural` (≥95% cobertura, 0 tabela pendente) — segunda rodada em escala, agora dominada por funções-folha minúsculas (2026-10-25, Fase 3, nonagésimo segundo lote)
+
+Mesma rota do §611 (agrupamento automático por catálogo de `bl`
+idêntico + triagem de achados novos por nome nunca citado), aplicada
+à próxima leva de 500 candidatos do pool `auto_structural`. Como o
+pool já foi "desnatado" pelas maiores primeiro em lotes anteriores,
+esta leva é de funções bem menores (48 a 4 bytes) — **379 das 500 são
+funções-folha** (sem nenhuma chamada), a maior proporção de qualquer
+lote até aqui.
+
+Composição: **2 famílias confirmadas** (14 funções — mas de alto
+valor, ver abaixo), **poucos achados genuinamente novos** (a essa
+profundidade na fila, quase tudo que resta já cita algo conhecido),
+**379 funções-folha** e o restante com chamadas já documentadas.
+
+### 612.1 As duas famílias confirmadas: a API completa de diálogo "Ng" roda como task `asm`/`wasm`
+
+
+- **`disp_attackng()` / `disp_coverng()` / `disp_dismiss_yesno()` / `disp_executeng()` / `disp_okng()` / `disp_yameru_yesno()` / `disp_yesno()`** (`0x000f14b0`, `0x000f1534`, `0x000f14dc`, `0x000f1484`, `0x000f1604`, `0x000f1630`, `0x000f1508`, 44 B cada, variante sem prefixo (`asm`)) — catálogo idêntico nas 7: um local sem símbolo + `asmTaskEntry/asmGetInput2`.
+- **`Wdisp_attackng()` / `Wdisp_coverng()` / `Wdisp_dismiss_yesno()` / `Wdisp_executeng()` / `Wdisp_okng()` / `Wdisp_yameru_yesno()` / `Wdisp_yesno()`** (`0x001062c8`, `0x001063f0`, `0x00106270`, `0x001062f4`, `0x00106320`, `0x0010629c`, `0x0010641c`, 44 B cada, variante com prefixo `W` (`wasm`)) — catálogo idêntico nas 7: um local sem símbolo + `wasmTaskEntry/wasmGetInput2`.
+
+As 14 funções (7+7) são **thunks de registro de task**, não telas
+completas: cada uma só dispara uma task `asm`/`wasm` (framework já
+mapeado em §578/§585/§586) passando, quase certamente, uma constante
+de "tipo de diálogo" diferente por nome (`_yesno`/`_okng`/`_attackng`/
+`_executeng`/`_coverng`/`_dismiss_yesno`/`_yameru_yesno`) pro mesmo
+handler genérico de popup de confirmação (`iOS_dispOkNg`/`ctlokng_init`,
+§577/§580). Confirma, em escala, que toda a família de diálogos
+Sim/Não do jogo (cancelar ataque, confirmar execução, "desistir",
+cobrir ação, etc.) é implementada como uma única máquina de diálogo
+parametrizada por tipo, não 14 implementações separadas — mesmo
+espírito do trampolim genérico `asm_function`/`wasm_function`
+(§585/586), aqui uma camada acima (registro de task, não despacho de
+aridade).
+
+
+### 612.2 Achados genuinamente novos (28 funções)
+
+- **`AverageZ4`** (`0x002a12f4`, 48 B, 100.0%): chama `_gte_ldsz4(long, long, long, long)`, `_gte_stotz(long*)`, `_gte_avsz4()`.
+- **`setMovingAnimationShape()`** (`0x001f1650`, 48 B, 100.0%): chama `searchActiveAnimation()`.
+- **`check_prob(int, int)`** (`0x001d9548`, 48 B, 100.0%): chama `sub_1d6ee0`.
+- **`gzprintf`** (`0x00079178`, 48 B, 100.0%): chama `gzvprintf`.
+- **`Ssd_StopEffect(long)`** (`0x0027134c`, 44 B, 100.0%): chama `SE_CorrectFID(int)`, `SE_StopVFX(int)`.
+- **`SetMulRotMatrix`** (`0x002a092c`, 40 B, 100.0%): chama `_gte_SetRotMatrix(MATRIX*)`, `MulRotMatrix0`.
+- **`PadInit`** (`0x0028e66c`, 40 B, 100.0%): chama `xpPadWorkBufGet`.
+- **`terminateAnimation(int)`** (`0x001f5be4`, 36 B, 100.0%): chama `terminateAnimationSub(int, int, short, short, short)`.
+- **`fadeMapClut(int, unsigned short*)`** (`0x00215c98`, 36 B, 100.0%): chama `requestDestinationClut(int, unsigned int, unsigned int, int, unsigned short*)`.
+- **`get_trap_no(BWORK*)`** (`0x001ccc18`, 36 B, 100.0%): chama `check_trap(unsigned char, unsigned char, unsigned char)`.
+- **`iOS_v2menuCheckSEError()`** (`0x00281a08`, 36 B, 100.0%): chama `iOS_v2menuGetItem()`, `iOS_v2menuGetEnable(V2_MENU_ITEM)`.
+- **`s2a_initScheduleControl(_EffectTCB*)`** (`0x0021d26c`, 36 B, 100.0%): chama `initScheduleControl(_EffectTCB*, short)`.
+- **`sf_pushMapScale(_EffectTCB*)`** (`0x0021c434`, 32 B, 100.0%): chama `pushMapScale()`.
+- **`sc_pushMapAngle(_EffectTCB*)`** (`0x0021c3ac`, 32 B, 100.0%): chama `pushMapAngle()`.
+- **`s24_popMapScale(_EffectTCB*)`** (`0x0021c454`, 32 B, 100.0%): chama `popMapScale()`.
+- **`s9_pushMapScrollXYZ(_EffectTCB*)`** (`0x0021c31c`, 32 B, 100.0%): chama `pushMapScrollXYZ()`.
+- **`s2b_initMetascheduleControl(_EffectTCB*)`** (`0x0021d2c0`, 32 B, 100.0%): chama `initMetascheduleControl(_EffectTCB*)`.
+- **`sd_popMapAngle(_EffectTCB*)`** (`0x0021c3cc`, 32 B, 100.0%): chama `popMapAngle()`.
+- **`sa_popMapScrollXYZ(_EffectTCB*)`** (`0x0021c33c`, 32 B, 100.0%): chama `popMapScrollXYZ()`.
+- **`GsClearDispArea`** (`0x0029b3f0`, 28 B, 100.0%): chama `sceGuClearColor`.
+- **`doublespeed_chk(CDREC*)`** (`0x002419a8`, 28 B, 100.0%): chama `CdFlush`.
+- **`PutDrawEnv`** (`0x00291bc0`, 28 B, 100.0%): chama `sub_29000c`, `xpLibgpuEndRender`.
+- **`OgataInit()`** (`0x00228c5c`, 24 B, 100.0%): chama `InitEffect()`, `InitObjectManager()`, `InitShape()`.
+- **`MulRotMatrix`** (`0x002a0954`, 24 B, 100.0%): chama `MulRotMatrix0`.
+- **`iOS_InitializeHot2()`** (`0x0020ffec`, 24 B, 100.0%): chama `eventflaginit()`, `initBdata()`, `worldmap_new()`.
+- **`charge_break(BWORK*)`** (`0x001d1f78`, 20 B, 100.0%): chama `set_casting_status(BWORK*, unsigned char)`.
+- **`o_WaitCardEvent_X()`** (`0x00245bf0`, 20 B, 100.0%): chama `o_GetCardEvent_X()`.
+- **`set_throwitem(int, unsigned char, unsigned char*)`** (`0x001d4f00`, 16 B, 100.0%): chama `sub_1d4d40`.
+
+### 612.3 Funções-folha sem chamada externa (379)
+
+Nome e assinatura são a única evidência sem disassembly manual:
+
+| Endereço | Função | Bytes | Cobertura |
+|---|---|---:|---:|
+| `0x0021bf40` | `s18_ifObjNumLT(_EffectTCB*)` | 48 | 100.0% |
+| `0x0021bf10` | `s17_ifObjNumGT(_EffectTCB*)` | 48 | 100.0% |
+| `0x0021d290` | `initMetascheduleControl(_EffectTCB*)` | 48 | 100.0% |
+| `0x0021d23c` | `initScheduleControl(_EffectTCB*, short)` | 48 | 100.0% |
+| `0x0021bee0` | `s16_ifObjNumEQU(_EffectTCB*)` | 48 | 100.0% |
+| `0x001d1f48` | `check_move_ability(BWORK*)` | 48 | 100.0% |
+| `0x000773d4` | `gzclose` | 44 | 100.0% |
+| `0x002a1148` | `SquareSL0` | 44 | 100.0% |
+| `0x0025bc50` | `jobnumber_conv(int)` | 40 | 100.0% |
+| `0x0022a994` | `EqualRShift12VECTORToVECTOR(VECTOR*, VECTOR*)` | 40 | 100.0% |
+| `0x001dbcc4` | `unitwork_init2all(BWORK*, int)` | 40 | 100.0% |
+| `0x0022a9e4` | `EqualAnd0xfffSVECTORToSVECTOR(SVECTOR*, SVECTOR*)` | 40 | 100.0% |
+| `0x0022a9bc` | `EqualLShift12VECTORToVECTOR(VECTOR*, VECTOR*)` | 40 | 100.0% |
+| `0x00081a94` | `unztell64` | 40 | 100.0% |
+| `0x001f6374` | `setPositionToLongPosition(tag_animation*)` | 40 | 100.0% |
+| `0x0028e494` | `CdPosToInt` | 36 | 100.0% |
+| `0x0029152c` | `SetSprt8` | 36 | 100.0% |
+| `0x00291628` | `SetTile` | 36 | 100.0% |
+| `0x00291800` | `SetDrawMove` | 36 | 100.0% |
+| `0x00291694` | `SetTile8` | 36 | 100.0% |
+| `0x0029164c` | `SetTile1` | 36 | 100.0% |
+| `0x00291670` | `SetTile16` | 36 | 100.0% |
+| `0x0028e470` | `CdIntToPos` | 36 | 100.0% |
+| `0x00291508` | `SetSprt16` | 36 | 100.0% |
+| `0x00077500` | `gzeof` | 36 | 100.0% |
+| `0x002914e4` | `SetSprt` | 36 | 100.0% |
+| `0x00081a70` | `unztell` | 36 | 100.0% |
+| `0x00285e1c` | `pspJobIsSpecialJob(int)` | 36 | 100.0% |
+| `0x002cab50` | `__aeabi_ui2d` | 36 | 100.0% |
+| `0x0022a2cc` | `getAbsoluteMaximumOf2(short, short)` | 32 | 100.0% |
+| `0x0015ad18` | `iOSCurIsInGame(int, int)` | 32 | 100.0% |
+| `0x001da018` | `clear_cmemory(void*, int)` | 32 | 100.0% |
+| `0x0021bcf8` | `s1_goto(_EffectTCB*)` | 32 | 100.0% |
+| `0x002657d8` | `backpage_put(CTLINFO*, int)` | 32 | 100.0% |
+| `0x001d9948` | `copy_struct_data(void const*, void*, int)` | 32 | 100.0% |
+| `0x0029c934` | `sceVfpuVector4Set(ScePspFVector4*, float, float, float, float)` | 32 | 100.0% |
+| `0x001d9910` | `get_ability_flag(BWORK*, int)` | 32 | 100.0% |
+| `0x0021bcd8` | `s0_end(_EffectTCB*)` | 32 | 100.0% |
+| `0x0007d894` | `call_zopen64` | 28 | 100.0% |
+| `0x0020177c` | `reserveActionDirection(tag_animation*)` | 28 | 100.0% |
+| `0x0022a978` | `EqualSVectorToSVECTOR(SVector*, SVECTOR*)` | 28 | 100.0% |
+| `0x001d9354` | `set_jcflag(unsigned char*, int)` | 28 | 100.0% |
+| `0x0022a95c` | `EqualSVectorToVECTOR(SVector*, VECTOR*)` | 28 | 100.0% |
+| `0x0021c1fc` | `s2d_samplingSQLFrame(_EffectTCB*)` | 24 | 100.0% |
+| `0x00291a84` | `SetShadeTex` | 24 | 100.0% |
+| `0x001d9930` | `copyACTst(ACT*, ACT*)` | 24 | 100.0% |
+| `0x0021c1e4` | `s2c_samplingMSQFrame(_EffectTCB*)` | 24 | 100.0% |
+| `0x0015ff88` | `iOSCircleCtrl(unsigned short)` | 24 | 100.0% |
+| `0x00218628` | `SetAnimationMode(effectAnimation*, short)` | 24 | 100.0% |
+| `0x002c9a25` | `operator new[](unsigned int)` | 20 | 100.0% |
+| `0x00073af0` | `compressBound` | 20 | 100.0% |
+| `0x002826b4` | `iOS_PalleteHosei(unsigned char, int)` | 20 | 100.0% |
+| `0x00215bc0` | `restertMapPaletteAnimation()` | 20 | 100.0% |
+| `0x00215bac` | `stopMapPaletteAnimation()` | 20 | 100.0% |
+| `0x0020f6e0` | `checkModelAnimation(int)` | 20 | 100.0% |
+| `0x00249c44` | `numa_vOpn_CdRead(CDREC*, unsigned long, unsigned long, unsigned long, unsigned long*)` | 20 | 100.0% |
+| `0x00290b40` | `SetDispMask` | 20 | 100.0% |
+| `0x001d6480` | `clear_actendflag(BWORK*)` | 20 | 100.0% |
+| `0x002cd8ec` | `__restore_core_regs` | 20 | 100.0% |
+| `0x0020f714` | `checkVRAMAnimation(int)` | 20 | 100.0% |
+| `0x002a3100` | `xpMallocIO` | 16 | 100.0% |
+| `0x00285e40` | `pspJobGetIndex2Job(int)` | 16 | 100.0% |
+| `0x0021036c` | `setShortVector(SVECTOR*, int, int, int)` | 16 | 100.0% |
+| `0x0022a470` | `getVariationData(int, int, int)` | 16 | 100.0% |
+| `0x0028e694` | `xpSetVblankFunc(void (*)(int, void*), void*)` | 16 | 100.0% |
+| `0x000b9f7c` | `CTHREAD::RequestExit()` | 12 | 100.0% |
+| `0x0021b50c` | `loadData(char*, char**)` | 12 | 100.0% |
+| `0x0028ce48` | `asmClearBuffer(void*, unsigned int)` | 12 | 100.0% |
+| `0x00223f24` | `GetBowFirstSpeed()` | 12 | 100.0% |
+| `0x002a142c` | `SetFogNear` | 12 | 100.0% |
+| `0x0028aec4` | `__bpGetFileNum` | 12 | 100.0% |
+| `0x00282268` | `iOS_clearOkNg()` | 12 | 100.0% |
+| `0x000823c8` | `unzSetOffset` | 12 | 100.0% |
+| `0x00284410` | `Clear_VectorDataBaseObject(VECTOR_DATABASE*)` | 12 | 100.0% |
+| `0x002c9115` | `operator delete(void*)` | 12 | 100.0% |
+| `0x00243a60` | `CreateList(tagLIST_STAFFROLL*, tagSTAFFROLL*)` | 12 | 100.0% |
+| `0x000b9fd4` | `TRACE_Empty(char const*, ...)` | 12 | 100.0% |
+| `0x000b9fb8` | `CTHREAD::RequestResume()` | 12 | 100.0% |
+| `0x00077ab8` | `gzopen` | 12 | 100.0% |
+| `0x001e692c` | `setskilldata_to_ACT(ACT*)` | 12 | 100.0% |
+| `0x0021680c` | `callZingle(int)` | 12 | 100.0% |
+| `0x0020ebb8` | `eventTerminateAnimation(int, int, short, short, short)` | 12 | 100.0% |
+| `0x000b9fac` | `CTHREAD::RequestSuspend()` | 12 | 100.0% |
+| `0x002b2d04` | `SysSE_PlayUI(int)` | 12 | 100.0% |
+| `0x0028afd0` | `__bpGetBinaryData` | 12 | 100.0% |
+| `0x00263f9c` | `ctlnobel_deactive(CTLINFO*)` | 12 | 100.0% |
+| `0x0028afc4` | `__bpGetBinarySize` | 12 | 100.0% |
+| `0x001d8d1c` | `get_itemcommon(unsigned short)` | 12 | 100.0% |
+| `0x00100408` | `Wgetanimpanel(int, SVECTOR*)` | 12 | 100.0% |
+| `0x000ba084` | `Sleep(unsigned int)` | 12 | 100.0% |
+| `0x000d8734` | `getanimpanel(int, SVECTOR*)` | 12 | 100.0% |
+| `0x00077ac4` | `gzopen64` | 12 | 100.0% |
+| `0x002b2cf8` | `SysSE_PlayDef(int)` | 12 | 100.0% |
+| `0x001027b4` | `Whook_wipe()` | 8 | 100.0% |
+| `0x0021037c` | `setLongVector(VECTOR*, int, int, int)` | 8 | 100.0% |
+| `0x002b3444` | `iCloud_Send()` | 8 | 100.0% |
+| `0x00216274` | `checkLoadMusic()` | 8 | 100.0% |
+| `0x00228dc8` | `GetShapePrimPtTopOld()` | 8 | 100.0% |
+| `0x002b36d4` | `Error_FrameMove()` | 8 | 100.0% |
+| `0x0028b500` | `set_SoundOnly_Flg__Fi(int)` | 8 | 100.0% |
+| `0x0028b528` | `getBgmData__FPUsPUs(unsigned short*, unsigned short*)` | 8 | 100.0% |
+| `0x00279f84` | `pspRoutineCheckArithmeticPermission()` | 8 | 100.0% |
+| `0x00245a58` | `getMoviePlayFlg__Fv()` | 8 | 100.0% |
+| `0x0026aee4` | `snpl_jnlocalflg()` | 8 | 100.0% |
+| `0x0026ae24` | `snpl_jnpageflg()` | 8 | 100.0% |
+| `0x0020594c` | `iOS_IsBattleSpeedUp()` | 8 | 100.0% |
+| `0x0008240c` | `zcfree` | 8 | 100.0% |
+| `0x00271424` | `Ssd_GetSeqPlayStatus(SsdSeqRec*)` | 8 | 100.0% |
+| `0x0028b59c` | `CdReadSync` | 8 | 100.0% |
+| `0x002b7a2c` | `GetPanelCursorMode()` | 8 | 100.0% |
+| `0x0028b5f4` | `CdDiskReady` | 8 | 100.0% |
+| `0x0028b5d4` | `CdStatus` | 8 | 100.0% |
+| `0x0028b438` | `sceIoDopen` | 8 | 100.0% |
+| `0x0010fb6c` | `Wcheck_eventtoolmain(int, int)` | 8 | 100.0% |
+| `0x0028b594` | `CdReadFile` | 8 | 100.0% |
+| `0x0028b6f4` | `_FFT_Main()` | 8 | 100.0% |
+| `0x00290e88` | `FntOpen` | 8 | 100.0% |
+| `0x0028cec4` | `SetGraphDebug` | 8 | 100.0% |
+| `0x001024fc` | `Wcopymat(MATRIX*, MATRIX*)` | 8 | 100.0% |
+| `0x0028b488` | `EncSPU2` | 8 | 100.0% |
+| `0x00245814` | `strNextVlc(DECENV*)` | 8 | 100.0% |
+| `0x0028b5a4` | `CdReady` | 8 | 100.0% |
+| `0x00286afc` | `get_vsBattle_bule_trap()` | 8 | 100.0% |
+| `0x002419c4` | `fftCdReset()` | 8 | 100.0% |
+| `0x0028b5dc` | `CdLastCom` | 8 | 100.0% |
+| `0x0020dc5c` | `checkAnimation(unsigned int)` | 8 | 100.0% |
+| `0x000da834` | `copymat(MATRIX*, MATRIX*)` | 8 | 100.0% |
+| `0x0028cf10` | `IsIdleGPU` | 8 | 100.0% |
+| `0x0028b4f8` | `get_SoundOnly_Flg__Fv()` | 8 | 100.0% |
+| `0x0028ced4` | `NextPrim` | 8 | 100.0% |
+| `0x000c8150` | `return_jobdata()` | 8 | 100.0% |
+| `0x00288570` | `Get_AnimList(int)` | 8 | 100.0% |
+| `0x0028b584` | `CdMix` | 8 | 100.0% |
+| `0x00245c04` | `o_WaitCardInfo(int, int)` | 8 | 100.0% |
+| `0x0028b430` | `sceIoDread` | 8 | 100.0% |
+| `0x0028ceb4` | `MargePrim` | 8 | 100.0% |
+| `0x0028b480` | `EncSPU` | 8 | 100.0% |
+| `0x0028b4d8` | `StSetChannel` | 8 | 100.0% |
+| `0x00285f84` | `pspFileManager::hockRead(void*, int)` | 8 | 100.0% |
+| `0x0028b520` | `getToolBgmFlg__Fv()` | 8 | 100.0% |
+| `0x0021bd18` | `s4_killOwnTask(_EffectTCB*)` | 8 | 100.0% |
+| `0x0028cf18` | `GetODE` | 8 | 100.0% |
+| `0x002712a8` | `Ssd_AddWaveData(void*)` | 8 | 100.0% |
+| `0x0028e468` | `CdControlF` | 8 | 100.0% |
+| `0x002ab9e0` | `sceGuSync` | 8 | 100.0% |
+| `0x00280530` | `cSaveFFT::GetMode()` | 8 | 100.0% |
+| `0x0028b55c` | `CdGetSector` | 8 | 100.0% |
+| `0x0028cebc` | `OpenTMD` | 8 | 100.0% |
+| `0x0028b554` | `CdIntstr` | 8 | 100.0% |
+| `0x0028e2dc` | `CdInit` | 8 | 100.0% |
+| `0x0028b428` | `sceIoDclose` | 8 | 100.0% |
+| `0x00286ac8` | `get_netmode()` | 8 | 100.0% |
+| `0x0028b418` | `ScriptCut__Fiii(int, int, int)` | 8 | 100.0% |
+| `0x002884cc` | `getNetBattleJudge()` | 8 | 100.0% |
+| `0x00286ad0` | `get_netmodeadhoc()` | 8 | 100.0% |
+| `0x0028b56c` | `CdDataSync` | 8 | 100.0% |
+| `0x0028b5cc` | `CdReset` | 8 | 100.0% |
+| `0x0028b5bc` | `CdReadyCallback` | 8 | 100.0% |
+| `0x0028ce88` | `GetGraphDebug` | 8 | 100.0% |
+| `0x0028b5b4` | `CdReadCallback` | 8 | 100.0% |
+| `0x00215d60` | `StopCallback` | 8 | 100.0% |
+| `0x001e2b70` | `check_coord(int, int, int)` | 8 | 100.0% |
+| `0x0016f874` | `cfileopen(unsigned char*, unsigned int)` | 8 | 100.0% |
+| `0x000e1110` | `check_eventtoolmain(int, int)` | 8 | 100.0% |
+| `0x0028b4b4` | `StGetNextS` | 8 | 100.0% |
+| `0x001d3598` | `set_playerwork(PENTRY*, unsigned char*)` | 8 | 100.0% |
+| `0x0028b5e4` | `CdLastPos` | 8 | 100.0% |
+| `0x0027b390` | `saveVram(char const*)` | 8 | 100.0% |
+| `0x00286b34` | `net_send` | 8 | 100.0% |
+| `0x0028b564` | `CdGetSector2` | 8 | 100.0% |
+| `0x0028ce80` | `CheckPrim` | 8 | 100.0% |
+| `0x002a0810` | `MulMatrix2` | 8 | 100.0% |
+| `0x002a3114` | `xpMallocErrorFuncSet` | 8 | 100.0% |
+| `0x0028b5fc` | `CdGetDiskType` | 8 | 100.0% |
+| `0x0028b574` | `CdGetToc` | 8 | 100.0% |
+| `0x00290e9c` | `FntFlush` | 8 | 100.0% |
+| `0x00082404` | `zcalloc` | 8 | 100.0% |
+| `0x002b344c` | `iCloud_Receive()` | 8 | 100.0% |
+| `0x001d63fc` | `after_equipchange(BWORK*)` | 8 | 100.0% |
+| `0x00183844` | `CardLoad(unsigned char*, unsigned char*, unsigned long)` | 8 | 100.0% |
+| `0x00244410` | `rolladr_calc(unsigned long, unsigned long)` | 8 | 100.0% |
+| `0x00290e94` | `FntPrint` | 8 | 100.0% |
+| `0x0028ce90` | `GetTimSize` | 8 | 100.0% |
+| `0x0028b4f0` | `DecDCToutCallback` | 8 | 100.0% |
+| `0x00287270` | `GetgTrapCancelResult()` | 8 | 100.0% |
+| `0x001837a8` | `filelseek(int, int, int)` | 8 | 100.0% |
+| `0x0016f87c` | `cfileclose(unsigned int)` | 8 | 100.0% |
+| `0x00286ae0` | `get_main_player()` | 8 | 100.0% |
+| `0x00284694` | `SearchVector(VECTOR_DATABASE*, SVECTOR const*)` | 8 | 100.0% |
+| `0x00101be8` | `Wattackteam_prewait()` | 8 | 100.0% |
+| `0x0028b4e4` | `DecDCTvlc` | 8 | 100.0% |
+| `0x0028ceac` | `Krom2Tim` | 8 | 100.0% |
+| `0x0028b420` | `sceKernelGetGPI()` | 8 | 100.0% |
+| `0x00202fe8` | `get_netTrapLocateModeFlg()` | 8 | 100.0% |
+| `0x000e8094` | `iOS_EventNumberGet()` | 8 | 100.0% |
+| `0x0016f884` | `cfilelseek(int, int, int)` | 8 | 100.0% |
+| `0x0028b470` | `ResetCallback` | 8 | 100.0% |
+| `0x002a0808` | `MulMatrix` | 8 | 100.0% |
+| `0x0028b544` | `CdSearchFile` | 8 | 100.0% |
+| `0x002b3454` | `iCloud_GetSlotCount()` | 8 | 100.0% |
+| `0x00245524` | `movie_loop()` | 8 | 100.0% |
+| `0x00288514` | `getGetItemCount()` | 8 | 100.0% |
+| `0x0015324c` | `return_jobdatafromsmall()` | 8 | 100.0% |
+| `0x0028cf04` | `BreakDraw` | 8 | 100.0% |
+| `0x002712b8` | `Ssd_GetBankWaveSetPtr(short)` | 8 | 100.0% |
+| `0x0028b630` | `exitXpHeap()` | 8 | 100.0% |
+| `0x000d9f2c` | `attackteam_prewait()` | 8 | 100.0% |
+| `0x000b9fc4` | `CTHREAD::SetPriority(int)` | 8 | 100.0% |
+| `0x000b9df0` | `CWORK_MEM::GetAllocSize()` | 8 | 100.0% |
+| `0x0028de74` | `_card_load` | 8 | 100.0% |
+| `0x0028b534` | `getMovieSkipFlg__Fv()` | 8 | 100.0% |
+| `0x0028b4ac` | `StGetNext` | 8 | 100.0% |
+| `0x00241a44` | `vOpn_arzmes_exit()` | 8 | 100.0% |
+| `0x00287268` | `GetgTrapCancelCount()` | 8 | 100.0% |
+| `0x00241930` | `pluge000(short, int, int, int)` | 8 | 100.0% |
+| `0x0028b5ac` | `CdSetDebug` | 8 | 100.0% |
+| `0x002868e4` | `multwindow_keyright_checkexit()` | 8 | 100.0% |
+| `0x0028ce40` | `CAUTOSAVE::GetHeapOffset()` | 8 | 100.0% |
+| `0x0028cf20` | `DrawOTag2` | 8 | 100.0% |
+| `0x0028b604` | `CdReadExec` | 8 | 100.0% |
+| `0x0027131c` | `Ssd_PlayEffect(long)` | 8 | 100.0% |
+| `0x002712fc` | `Ssd_AddMusic(void*)` | 8 | 100.0% |
+| `0x002a26c0` | `PadGetState` | 8 | 100.0% |
+| `0x00286b04` | `get_vsBattle_bule_arithmetic_select()` | 8 | 100.0% |
+| `0x001599a0` | `asmGetGP()` | 8 | 100.0% |
+| `0x0028de84` | `_card_status` | 8 | 100.0% |
+| `0x0028b58c` | `CdRead2` | 8 | 100.0% |
+| `0x0028b5ec` | `CdMode` | 8 | 100.0% |
+| `0x0028de7c` | `_card_read` | 8 | 100.0% |
+| `0x0028ce98` | `IsEndPrim` | 8 | 100.0% |
+| `0x0028b54c` | `CdComstr` | 8 | 100.0% |
+| `0x0028e4b8` | `CdSync` | 8 | 100.0% |
+| `0x0028b5c4` | `CdSyncCallback` | 8 | 100.0% |
+| `0x0026ae84` | `snpl_jnstatflg()` | 8 | 100.0% |
+| `0x00288500` | `getRewardLv()` | 8 | 100.0% |
+| `0x0029ac18` | `GetGraphType` | 8 | 100.0% |
+| `0x0028cecc` | `KanjiFntFlush` | 8 | 100.0% |
+| `0x002815dc` | `test_test_addcolor()` | 8 | 100.0% |
+| `0x0028d434` | `tlMalloc(unsigned int)` | 8 | 100.0% |
+| `0x0028de94` | `nextfile(DIRENTRY*)` | 8 | 100.0% |
+| `0x0028de8c` | `firstfile(char const*, DIRENTRY*)` | 8 | 100.0% |
+| `0x0028b57c` | `CdPlay` | 8 | 100.0% |
+| `0x0028b4d0` | `StGetBackloc` | 8 | 100.0% |
+| `0x000cbd6c` | `CheckTrapCancelCommandWindow()` | 8 | 100.0% |
+| `0x002712d0` | `Ssd_GetStereo()` | 8 | 100.0% |
+| `0x0028ce78` | `ReadTMD` | 8 | 100.0% |
+| `0x0028cea0` | `KanjiFntOpen` | 8 | 100.0% |
+| `0x0028b4a4` | `StFreeRing` | 8 | 100.0% |
+| `0x00286ad8` | `get_parent_child()` | 8 | 100.0% |
+| `0x0028b4bc` | `StNextStatus` | 8 | 100.0% |
+| `0x000b61d4` | `CCOMP_Z_DEC::~CCOMP_Z_DEC()` | 4 | 100.0% |
+| `0x0027129c` | `Ssd_Quit()` | 4 | 100.0% |
+| `0x0028cf34` | `GetDrawOffset` | 4 | 100.0% |
+| `0x0028b540` | `CdFlush` | 4 | 100.0% |
+| `0x001b7ef0` | `CallresetFFT()` | 4 | 100.0% |
+| `0x000cbd74` | `CreateNetStayWindow()` | 4 | 100.0% |
+| `0x00288510` | `Final_CalcMissionPayPoint()` | 4 | 100.0% |
+| `0x002875a4` | `draw_batu(unsigned long*)` | 4 | 100.0% |
+| `0x0028b518` | `setMoviePlayFlg__Fi(int)` | 4 | 100.0% |
+| `0x00271314` | `Ssd_PlaySysEffect(long)` | 4 | 100.0% |
+| `0x0028b4cc` | `StCdInterrupt` | 4 | 100.0% |
+| `0x0028de70` | `_bu_init` | 4 | 100.0% |
+| `0x0029ff94` | `SquareRoot12` | 4 | 100.0% |
+| `0x00286a9c` | `set_nettimer_flag(int, int)` | 4 | 100.0% |
+| `0x0028b498` | `StUnSetRing` | 4 | 100.0% |
+| `0x002c54ac` | `Movie_Uninit()` | 4 | 100.0% |
+| `0x0012b108` | `disp_floateventwindow()` | 4 | 100.0% |
+| `0x00280804` | `hook_win_tail()` | 4 | 100.0% |
+| `0x0028cef8` | `DumpTPage` | 4 | 100.0% |
+| `0x000d8970` | `dispemptywindow()` | 4 | 100.0% |
+| `0x00155708` | `story_faceload()` | 4 | 100.0% |
+| `0x00281640` | `hook_disp_plateorspell(int*)` | 4 | 100.0% |
+| `0x000cbd64` | `CreateTrapCancelCommandWindow()` | 4 | 100.0% |
+| `0x0028b460` | `SpuInit` | 4 | 100.0% |
+| `0x002a3110` | `xpMallocSizeGet` | 4 | 100.0% |
+| `0x0028b46c` | `SetMem` | 4 | 100.0% |
+| `0x0028b510` | `pspMoviePlay__Fv()` | 4 | 100.0% |
+| `0x001019c0` | `LOAD_seekeventfile(int)` | 4 | 100.0% |
+| `0x0028b494` | `StClearRing` | 4 | 100.0% |
+| `0x0021610c` | `iOS_rand()` | 4 | 100.0% |
+| `0x002884c8` | `NetBattleJudge()` | 4 | 100.0% |
+| `0x0028b49c` | `StSetStream` | 4 | 100.0% |
+| `0x002419d0` | `fftCdCancel(CDREC*)` | 4 | 100.0% |
+| `0x002807fc` | `hook_drive_chr(int)` | 4 | 100.0% |
+| `0x000b6584` | `CCRYPT::~CCRYPT()` | 4 | 100.0% |
+| `0x002ab714` | `sceGuClear` | 4 | 100.0% |
+| `0x002b5590` | `Link_Suspend()` | 4 | 100.0% |
+| `0x000feaa4` | `WiOS_chkallocatewindowinit()` | 4 | 100.0% |
+| `0x0028e464` | `CdControlB` | 4 | 100.0% |
+| `0x0027fc2c` | `chk_ucResumeData(unsigned char*, int)` | 4 | 100.0% |
+| `0x002a1038` | `CompMatrixLV` | 4 | 100.0% |
+| `0x000774fc` | `gzoffset` | 4 | 100.0% |
+| `0x0020c5cc` | `myPollhost()` | 4 | 100.0% |
+| `0x002806c0` | `hook_allocate_texture()` | 4 | 100.0% |
+| `0x0020c260` | `fftCdReadCallback()` | 4 | 100.0% |
+| `0x002869f0` | `_pspNetRand(char const*, int)` | 4 | 100.0% |
+| `0x00159920` | `asmKanjiCopy(char*, char*, COPYFIELD*, int)` | 4 | 100.0% |
+| `0x0028cedc` | `CatPrim` | 4 | 100.0% |
+| `0x0028cef0` | `DumpDrawEnv` | 4 | 100.0% |
+| `0x00271304` | `Ssd_DisposeMusic(SsdSeqRec*)` | 4 | 100.0% |
+| `0x00077494` | `gztell` | 4 | 100.0% |
+| `0x00280684` | `hook_musiclod()` | 4 | 100.0% |
+| `0x0028cf30` | `GetDrawArea` | 4 | 100.0% |
+| `0x000ba090` | `SleepM(unsigned int)` | 4 | 100.0% |
+| `0x002ab900` | `sceGuColorFunc` | 4 | 100.0% |
+| `0x002b36b8` | `Boot_Uninit()` | 4 | 100.0% |
+| `0x0028cef4` | `DumpOTag` | 4 | 100.0% |
+| `0x0015991c` | `asmBoxCopy(char*, char*, COPYFIELD*, COPYFIELD*)` | 4 | 100.0% |
+| `0x0020f4f8` | `getCharPrimList(short, Point*, unsigned long*)` | 4 | 100.0% |
+| `0x002a2ff4` | `InitHeap(unsigned long*, unsigned long)` | 4 | 100.0% |
+| `0x001add64` | `unit_dummyfunc()` | 4 | 100.0% |
+| `0x0027b398` | `numa_fileAllocateCD(unsigned long, unsigned long)` | 4 | 100.0% |
+| `0x00176b7c` | `iOSBwork2ChrStts(BWORK*, CHR_STTS*, int)` | 4 | 100.0% |
+| `0x0026c058` | `iOS_debugDispTownCircle(int, int)` | 4 | 100.0% |
+| `0x0028cf2c` | `GetTexWindow` | 4 | 100.0% |
+| `0x0020ce18` | `fileDispose(char*)` | 4 | 100.0% |
+| `0x0020c25c` | `fftCdReadyCallback()` | 4 | 100.0% |
+| `0x00286a98` | `val_letter(int, int, int)` | 4 | 100.0% |
+| `0x0027b678` | `iOS_DEBUG_multiwindow_keyright_hook()` | 4 | 100.0% |
+| `0x0028b464` | `SpuInitHot` | 4 | 100.0% |
+| `0x000c4498` | `attackdebugfunc()` | 4 | 100.0% |
+| `0x002807f8` | `chk_RefLine(int)` | 4 | 100.0% |
+| `0x002b1f38` | `NowLoading_FrameRender()` | 4 | 100.0% |
+| `0x000b63a0` | `CCOMP_Z_ENC::~CCOMP_Z_ENC()` | 4 | 100.0% |
+| `0x0028b4e0` | `DecDCTReset` | 4 | 100.0% |
+| `0x00216818` | `stopZingle(int)` | 4 | 100.0% |
+| `0x00288508` | `CalcRewardLv()` | 4 | 100.0% |
+| `0x0007f384` | `_tr_flush_bits` | 4 | 100.0% |
+| `0x002b5eac` | `Logo_Suspend()` | 4 | 100.0% |
+| `0x00281644` | `hook_code_soundeffect(int)` | 4 | 100.0% |
+| `0x000cbd5c` | `deleteEndModeWindow()` | 4 | 100.0% |
+| `0x0028b4c8` | `StSetMask` | 4 | 100.0% |
+| `0x002712f8` | `Ssd_AddVagPackData(void*)` | 4 | 100.0% |
+| `0x000c4418` | `Adisp_floateventwindow()` | 4 | 100.0% |
+| `0x00225310` | `iOS_CheckPEffect(char const*, int)` | 4 | 100.0% |
+| `0x001a6378` | `iOS_resetCancelDisableAreaForStatusWindow()` | 4 | 100.0% |
+| `0x00100840` | `Winitstatuscphase()` | 4 | 100.0% |
+| `0x00280800` | `hook_fix_bugno_931(int)` | 4 | 100.0% |
+| `0x002a0818` | `SetRotMatrix` | 4 | 100.0% |
+| `0x00280678` | `hook_Debug(char const*)` | 4 | 100.0% |
+| `0x0028cf28` | `GetDrawMode` | 4 | 100.0% |
+| `0x0027b39c` | `numa_fileReadCD(unsigned long, unsigned long, void*)` | 4 | 100.0% |
+| `0x00159a74` | `asmMUL3232(long, long, long, long)` | 4 | 100.0% |
+| `0x002712c0` | `Ssd_AddEffectData(void*)` | 4 | 100.0% |
+| `0x00162044` | `wasmMUL64(long, long, long)` | 4 | 100.0% |
+| `0x00077dc8` | `gzseek` | 4 | 100.0% |
+| `0x00286a94` | `timer_print_screen()` | 4 | 100.0% |
+| `0x002ab888` | `sceGuAlphaFunc` | 4 | 100.0% |
+| `0x00161d9c` | `tDebugBreakTime(int)` | 4 | 100.0% |
+| `0x00290e90` | `FntLoad` | 4 | 100.0% |
+| `0x00101910` | `Wseekpcfile(char*, char*, int, int)` | 4 | 100.0% |
+| `0x00225a64` | `dmyFnc2(_EffectTCB*, _Object*)` | 4 | 100.0% |
+| `0x00280808` | `hook_allSkipTest()` | 4 | 100.0% |
+| `0x00101908` | `Whook_disp_requirement()` | 4 | 100.0% |
+| `0x00286e90` | `rivalCameraWorkProcs()` | 4 | 100.0% |
+| `0x0014b9f8` | `Cdisp_floateventwindow()` | 4 | 100.0% |
+| `0x000e7f0c` | `dmp_tuto(unsigned char*, int)` | 4 | 100.0% |
+| `0x0021681c` | `controlZingle()` | 4 | 100.0% |
+| `0x0028cee4` | `DrawOTagEnv` | 4 | 100.0% |
+| `0x002abd1c` | `sceGuTexFunc` | 4 | 100.0% |
+| `0x00286ae8` | `net_control_ex(void*, void*, int)` | 4 | 100.0% |
+| `0x002884fc` | `setRewardLv(int)` | 4 | 100.0% |
+| `0x00287584` | `load_iconpackdata()` | 4 | 100.0% |
+| `0x00100644` | `Wsend_statuschrno(int)` | 4 | 100.0% |
+| `0x0022a614` | `DumpMemory(int, void*)` | 4 | 100.0% |
+| `0x000cbd50` | `SetTrapNameWindowParam(int, short, int)` | 4 | 100.0% |
+| `0x001f01a8` | `resetActionAnimation(tag_animation*)` | 4 | 100.0% |
+| `0x0028cf00` | `TermPrim` | 4 | 100.0% |
+| `0x00280610` | `iOS_soundDirect(int)` | 4 | 100.0% |
+| `0x0028067c` | `hook_Debug2(char const*)` | 4 | 100.0% |
+| `0x00280680` | `hook_NextEventSet()` | 4 | 100.0% |
+| `0x002b3440` | `Achievement_Unlock(int)` | 4 | 100.0% |
+| `0x002a1438` | `SetFarColor` | 4 | 100.0% |
+| `0x0026ff2c` | `effectdmy()` | 4 | 100.0% |
+| `0x00102128` | `Wevent_init_light()` | 4 | 100.0% |
+| `0x000cbd60` | `SetTrapNameWindowColor(int)` | 4 | 100.0% |
+| `0x0020c258` | `fftDrawSyncCallback()` | 4 | 100.0% |
+| `0x000785e4` | `gzgetc_` | 4 | 100.0% |
+| `0x000cbd54` | `TrapNameWindowManager()` | 4 | 100.0% |
+
+### 612.4 Restante com chamadas já documentadas (79)
+
+| Endereço | Função | Bytes | Cobertura | Chama |
+|---|---|---:|---:|---|
+| `0x000b9da4` | `CWORK_MEM::New(int)` | 48 | 100.0% | `CWORK_MEM::Delete(int)`, `sub_2cdf8c` |
+| `0x0020e560` | `getOffsetAnimationPosition(int)` | 48 | 100.0% | `searchAnimationByID(unsigned short)`, `warningHandler(int)` |
+| `0x0028bf4c` | `_ps_wait()` | 48 | 100.0% | `TE_asmTaskEntry(int)` |
+| `0x00249cc4` | `vEnd_CdReady_Chk()` | 48 | 100.0% | `CdSync` |
+| `0x002b8348` | `Main_IsTitle()` | 48 | 100.0% | `iOS_getV2Icon(V2ICON_DATA)` |
+| `0x00283f50` | `GLIVON_F3(unsigned long*, tagPOLY_F3*, short, unsigned long*)` | 48 | 100.0% | `VectorDataBase(unsigned int)` |
+| `0x00283f80` | `GLIVON_F4(unsigned long*, tagPOLY_F4*, short, unsigned long*)` | 48 | 100.0% | `VectorDataBase(unsigned int)` |
+| `0x0020f874` | `eventWarpEffect(int)` | 44 | 100.0% | `searchAnimationByID(unsigned short)`, `requestTelepoEffect(tag_animation*)` |
+| `0x002a096c` | `ApplyMatrix` | 44 | 100.0% | `_gte_ldv0(SVECTOR*)`, `_gte_SetRotMatrix(MATRIX*)`, `_gte_stlvnl(VECTOR*)`, `_gte_rtv0()` |
+| `0x000f586c` | `attackteam_call(unsigned long*, unsigned long)` | 44 | 100.0% | `event_call(unsigned long*, unsigned long)`, `task_stop(long)`, `pspNetGetErrorCode()` |
+| `0x0015da34` | `iOSCurSameProcs(ActionRequest*)` | 44 | 100.0% | `iOSCurSameOK()` |
+| `0x0020e914` | `eventWeaponEquip(int, int)` | 44 | 100.0% | `searchAnimationByID(unsigned short)` |
+| `0x000d86ac` | `getanimpos2d(int, SVECTOR*)` | 44 | 100.0% | `getAnimationPosition(unsigned int)` |
+| `0x00100380` | `Wgetanimpos2d(int, SVECTOR*)` | 44 | 100.0% | `getAnimationPosition(unsigned int)` |
+| `0x002bef74` | `PIE_OFFSET(unsigned int)` | 44 | 100.0% | `ResumeData_GetHeapOffset()` |
+| `0x002a0a54` | `ApplyMatrixSV` | 44 | 100.0% | `_gte_ldv0(SVECTOR*)`, `_gte_SetRotMatrix(MATRIX*)`, `_gte_stsv(SVECTOR*)`, `_gte_rtv0()` |
+| `0x00284620` | `new_VectorXYZ(VECTOR_DATABASE*, short, short, short)` | 44 | 100.0% | `new_Vector(VECTOR_DATABASE*, SVECTOR const*)` |
+| `0x0020f7c8` | `setCurrentPanel(int)` | 44 | 100.0% | `searchAnimationByBattleID(unsigned short)`, `setActivePanelFromAnimation(tag_animation*)` |
+| `0x0020f5d0` | `getMapIDFromAnimationID(int)` | 40 | 100.0% | `searchAnimationByID(unsigned short)` |
+| `0x002a150c` | `ColorCol` | 40 | 100.0% | `_gte_ldrgb(CVECTOR*)`, `_gte_ldlvl(VECTOR*)`, `_gte_cc()` |
+| `0x002a081c` | `SetMulMatrix` | 40 | 100.0% | `_gte_SetRotMatrix(MATRIX*)`, `MulMatrix0` |
+| `0x002a13c8` | `Intpl` | 40 | 100.0% | `_gte_ldlvl(VECTOR*)`, `_gte_lddp(long)`, `_gte_intpl()` |
+| `0x000940c8` | `_vi_psy_free` | 40 | 100.0% | `sub_714c4` |
+| `0x000940a0` | `_vi_gpsy_free` | 40 | 100.0% | `sub_714c4` |
+| `0x0020f5f8` | `getMapIDFromBattleID(int)` | 40 | 100.0% | `searchAnimationByBattleID(unsigned short)` |
+| `0x0029ff34` | `cln` | 40 | 100.0% | `sub_71b6c`, `__floatsisf`, `__mulsf3`, `__fixsfsi` |
+| `0x00273b10` | `SetSafePanelInRange(int)` | 40 | 100.0% | `SetSafePanel(int, int)` |
+| `0x002a156c` | `DpqColor` | 40 | 100.0% | `_gte_ldrgb(CVECTOR*)`, `_gte_lddp(long)`, `_gte_dpcs()` |
+| `0x001003e4` | `Wgetanimpos3dl(int, long*)` | 36 | 100.0% | `getAnimationPosition(unsigned int)` |
+| `0x000d8710` | `getanimpos3dl(int, long*)` | 36 | 100.0% | `getAnimationPosition(unsigned int)` |
+| `0x0010f99c` | `WiOS_touchNum_addlocalprim2(iOS_CMenuTouchNum*)` | 36 | 100.0% | `Waddlocalprim(tagPOLY_FT4*)` |
+| `0x000dfa70` | `wait_anmend(int)` | 36 | 100.0% | `asmTaskEntry()`, `checkAnimation(unsigned int)` |
+| `0x0021eb8c` | `DoEffect()` | 36 | 100.0% | `DoEffectCameraWork()`, `doEffect_sub()`, `DoPermanentEffect()` |
+| `0x000b9f88` | `CTHREAD::~CTHREAD()` | 36 | 100.0% | `sub_71a58`, `sub_71a64`, `CTHREAD::RequestExit()` |
+| `0x00153518` | `Wtask_wait(long)` | 36 | 100.0% | `wasmTaskEntry()` |
+| `0x00153254` | `task_wait(long)` | 36 | 100.0% | `asmTaskEntry()` |
+| `0x0011dd64` | `extend_windowframe(int, int, RECT16*, int, int)` | 36 | 100.0% | `extend_windowframemain(int, int, RECT16*, int, int, int)` |
+| `0x00108e28` | `Wwait_anmend(int)` | 36 | 100.0% | `wasmTaskEntry()`, `checkAnimation(unsigned int)` |
+| `0x0015b664` | `iOSTchInputCheck()` | 36 | 100.0% | `iOSTchStatusModeGet()`, `iOS_getV2Icon(V2ICON_DATA)` |
+| `0x0011e668` | `Wextend_windowframe(int, int, RECT16*, int, int)` | 36 | 100.0% | `Wextend_windowframemain(int, int, RECT16*, int, int, int)` |
+| `0x0020e720` | `resetAnimationHFlip(int)` | 32 | 100.0% | `searchAnimationByID(unsigned short)` |
+| `0x001ffb30` | `callAnimationSound(tag_animation*, int)` | 32 | 100.0% | `callSoundEffect(int)` |
+| `0x002a1128` | `Square12` | 32 | 100.0% | `_gte_ldlvl(VECTOR*)`, `_gte_stlvnl(VECTOR*)`, `_gte_sqr12()` |
+| `0x0020f6c0` | `startModelAnimation(int, int)` | 32 | 100.0% | `ASHURA_Control(unsigned long, unsigned long, long, long)` |
+| `0x0020f6f4` | `startVRAMAnimation(int, int)` | 32 | 100.0% | `ASHURA_Control(unsigned long, unsigned long, long, long)` |
+| `0x002044e0` | `iOSpreCommandInit()` | 32 | 100.0% | `searchCurrentAnimation()`, `setActivePanelFromAnimation(tag_animation*)` |
+| `0x002a0a80` | `ApplyRotMatrix` | 32 | 100.0% | `_gte_ldv0(SVECTOR*)`, `_gte_stlvnl(VECTOR*)`, `_gte_rtv0()` |
+| `0x001d98a8` | `get_shape2_plus(BWORK*, unsigned char*)` | 32 | 100.0% | `get_shape2(BWORK*, unsigned char*)` |
+| `0x002a1108` | `Square0` | 32 | 100.0% | `_gte_ldlvl(VECTOR*)`, `_gte_stlvnl(VECTOR*)`, `_gte_sqr0()` |
+| `0x0020e694` | `checkAnimationExist(int)` | 28 | 100.0% | `searchAnimationByID(unsigned short)` |
+| `0x00202ee0` | `isInputEnable()` | 28 | 100.0% | `searchCurrentAnimation()` |
+| `0x002a1534` | `LightColor` | 28 | 100.0% | `_gte_ldlvl(VECTOR*)`, `_gte_lc()` |
+| `0x00271324` | `Ssd_PlayEffects01(long, long)` | 28 | 100.0% | `SE_Play(int)` |
+| `0x000daae8` | `hook_wipe()` | 28 | 100.0% | `wait_overlay(int)`, `settaskkind(int)` |
+| `0x002a1550` | `LocalLight` | 28 | 100.0% | `_gte_ldv0(SVECTOR*)`, `_gte_ll()` |
+| `0x00279f68` | `JudgeTimeOut()` | 28 | 100.0% | `VSync` |
+| `0x002bf008` | `chkSeDouble()` | 24 | 100.0% | `iOS_getV2Icon(V2ICON_DATA)` |
+| `0x000b9d8c` | `CWORK_MEM::~CWORK_MEM()` | 24 | 100.0% | `CWORK_MEM::Delete(int)` |
+| `0x00245a40` | `strKickCD(CdlLOC*)` | 24 | 100.0% | `CdRead2` |
+| `0x0021b4f4` | `largeFileRead(long, char*, unsigned long)` | 24 | 100.0% | `system_error(int, int)` |
+| `0x00228c44` | `CreateObjectWithTableWithParentData(short, int, int, int, _Object*)` | 24 | 100.0% | `system_error(int, int)` |
+| `0x0021c214` | `dmyFnc(_EffectTCB*)` | 24 | 100.0% | `system_error(int, int)` |
+| `0x002160f4` | `ps_main()` | 24 | 100.0% | `InitializeAll()`, `PadStop`, `mainLoop()` |
+| `0x001a9228` | `GetItemPrice(short)` | 24 | 100.0% | `pspItemGetCommonData` |
+| `0x0020ea7c` | `loadNewAnimation()` | 20 | 100.0% | `entryAnimations()` |
+| `0x00245b20` | `o_WaitCardEvent()` | 20 | 100.0% | `o_GetCardEvent()` |
+| `0x0029ff98` | `SquareRoot0` | 20 | 100.0% | `sub_719f8`, `__floatsisf`, `__fixsfsi` |
+| `0x000cbc28` | `TrapWindow_Taskchk(int)` | 20 | 100.0% | `task_status(long)` |
+| `0x001a9240` | `GetItemSellPrice(short)` | 20 | 100.0% | `GetItemPrice(short)` |
+| `0x0014bec8` | `disp_requirement()` | 20 | 100.0% | `task_wait(long)` |
+| `0x0020f410` | `eventEffectWait()` | 20 | 100.0% | `LoadEffect()` |
+| `0x0010f110` | `Wattackteam_call(unsigned long*, unsigned long)` | 20 | 100.0% | `Wevent_call(unsigned long*, unsigned long)` |
+| `0x0028bf3c` | `TE_dummy()` | 16 | 100.0% | `TE_asmTaskEntry(int)` |
+| `0x0012b11c` | `disp_abilitywindow()` | 16 | 100.0% | `asmTaskEntry()` |
+| `0x000c442c` | `Adisp_abilitywindow()` | 16 | 100.0% | `asmTaskEntry()` |
+| `0x000d0ddc` | `Ddisp_abilitywindow()` | 16 | 100.0% | `asmTaskEntry()` |
+| `0x0014ba0c` | `Cdisp_abilitywindow()` | 16 | 100.0% | `asmTaskEntry()` |
+| `0x00245b68` | `o_CardInit()` | 16 | 100.0% | `o_ClearCardEvent()` |
+| `0x002a1028` | `CompMatrix` | 16 | 100.0% | `MulMatrix0` |
+
+**Status CSV**: `read_structural` para as 500 (identidade e call-graph confirmados via checkpoint; nenhuma teve blocos lidos instrução a instrução).
+## 613. Lote final de 261 funções `auto_structural` (≥95% cobertura, 0 tabela pendente) — esgota o pool de aceite rápido, dominado pela cauda de zlib/Tremor/libgcc/libunwind (2026-10-25, Fase 3, nonagésimo terceiro lote)
+
+Última leva do pool de aceite rápido (checkpoint do CI com ≥95% de
+cobertura e 0 tabela pendente) — depois deste lote, **todo o pool se
+esgota** (zero candidatos restantes nesse critério). Composição bem
+diferente dos lotes anteriores: a essa profundidade na fila, o que
+resta é quase inteiramente a cauda de bibliotecas de terceiros já
+tema de §569/605-612 — zlib, Tremor (libvorbis de ponto fixo),
+libgcc/compiler-rt e o unwinder ARM EHABI.
+
+**Padrão notável, confirmado por conhecimento de biblioteca (não só
+pelo script)**: várias funções de comparação `__aeabi_*cmp*`
+(`fcmpeq`/`fcmple`/`fcmplt`/`fcmpgt`/`fcmpge` para `float`,
+`dcmpeq`/`dcmple`/`dcmplt`/`dcmpgt`/`dcmpge` para `double`, e as
+variantes `__aeabi_c{f,d}{r,}cmple`) são, por especificação do ABI
+ARM EABI, **wrappers triviais de 1 instrução** sobre o resultado de
+uma comparação de ponto flutuante em registrador de condição — cada
+uma só testa um flag diferente do mesmo resultado de `cmp`. O mesmo
+vale pra `_Unwind_GetLanguageSpecificData`/`GetRegionStart`/
+`GetTextRelBase`/`GetDataRelBase`: acessores triviais de 1 campo
+sobre a estrutura de contexto do unwinder ARM EHABI (mesmo sistema
+de `__gnu_unwind_execute`/`_Unwind_VRS_*`, §569). Nenhuma tem lógica
+própria alguma — são a definição de boilerplate de ABI, mesmo
+critério já usado pra `gl3stubInit` (regra 6 original da Fase 1/2).
+
+Além disso: `_vp_psy_clear`/`drft_clear`/`mdct_clear`/
+`oggpack_writeclear`/`res0_free_info`/`oggpack_readinit`/
+`_vp_global_free` (destruidores do Tremor) e `inflateGetDictionary`
+(zlib) todos delegam pra um dos dois helpers genéricos de baixo
+nível já vistos dezenas de vezes (`sub_714c4`/`sub_714dc`, padrão
+`memset`/`free`-like) — confirma mais uma vez que esses dois
+endereços são utilitários de runtime genéricos, não específicos de
+nenhum subsistema.
+
+
+### 613.1 Achados genuinamente novos (30 funções)
+
+- **`inflateInit2_`** (`0x0007b080`, 256 B, 96.88%): chama `inflateReset2`.
+- **`__gnu_Unwind_Backtrace`** (`0x002cd0c4`, 196 B, 100.0%): chama `sub_2ccb14`, `sub_2ccc24`, `sub_2cd098`.
+- **`deflatePrime`** (`0x000757e4`, 172 B, 100.0%): chama `_tr_flush_bits`.
+- **`__gnu_Unwind_RaiseException`** (`0x002cce40`, 164 B, 100.0%): chama `sub_2ccb14`, `sub_2ccc24`, `sub_2cccb0`.
+- **`__gnu_Unwind_Resume`** (`0x002ccf00`, 116 B, 100.0%): chama `sub_71c2c`, `sub_2cccac`, `sub_2cccb0`, `sub_2ccd14`, `__restore_core_regs`.
+- **`__fixdfdi`** (`0x002cb9ec`, 68 B, 100.0%): chama `__aeabi_dcmplt`, `__fixunsdfdi`.
+- **`__aeabi_cdrcmple`** (`0x002cb158`, 48 B, 100.0%): chama `__eqdf2`.
+- **`___Unwind_Resume_or_Rethrow`** (`0x002cda28`, 36 B, 100.0%): chama `__gnu_Unwind_Resume_or_Rethrow`.
+- **`___Unwind_ForcedUnwind`** (`0x002cda4c`, 36 B, 100.0%): chama `__gnu_Unwind_ForcedUnwind`.
+- **`___Unwind_Resume`** (`0x002cda04`, 36 B, 100.0%): chama `__gnu_Unwind_Resume`.
+- **`_Unwind_Backtrace`** (`0x002cda70`, 36 B, 100.0%): chama `__gnu_Unwind_Backtrace`.
+- **`__aeabi_cfrcmple`** (`0x002cb8a4`, 36 B, 100.0%): chama `__eqsf2`.
+- **`___Unwind_RaiseException`** (`0x002cd9e0`, 36 B, 100.0%): chama `__gnu_Unwind_RaiseException`.
+- **`_Unwind_GetLanguageSpecificData`** (`0x002cdeec`, 28 B, 100.0%): chama `sub_2cdb1c`.
+- **`__aeabi_cdcmple`** (`0x002cb174`, 20 B, 100.0%): chama `__eqdf2`.
+- **`__aeabi_cfcmple`** (`0x002cb8b4`, 20 B, 100.0%): chama `__eqsf2`.
+- **`__aeabi_fcmpeq`** (`0x002cb8c8`, 20 B, 100.0%): chama `__aeabi_cfcmple`.
+- **`__aeabi_fcmple`** (`0x002cb8f0`, 20 B, 100.0%): chama `__aeabi_cfcmple`.
+- **`__aeabi_fcmplt`** (`0x002cb8dc`, 20 B, 100.0%): chama `__aeabi_cfcmple`.
+- **`__aeabi_fcmpgt`** (`0x002cb918`, 20 B, 100.0%): chama `__aeabi_cfrcmple`.
+- **`__aeabi_fcmpge`** (`0x002cb904`, 20 B, 100.0%): chama `__aeabi_cfrcmple`.
+- **`__aeabi_dcmplt`** (`0x002cb19c`, 20 B, 100.0%): chama `__aeabi_cdcmple`.
+- **`__aeabi_dcmpeq`** (`0x002cb188`, 20 B, 100.0%): chama `__aeabi_cdcmple`.
+- **`__aeabi_dcmple`** (`0x002cb1b0`, 20 B, 100.0%): chama `__aeabi_cdcmple`.
+- **`__aeabi_dcmpgt`** (`0x002cb1d8`, 20 B, 100.0%): chama `__aeabi_cdrcmple`.
+- **`__aeabi_dcmpge`** (`0x002cb1c4`, 20 B, 100.0%): chama `__aeabi_cdrcmple`.
+- **`_Unwind_GetRegionStart`** (`0x002cdedc`, 16 B, 100.0%): chama `sub_2cdb1c`.
+- **`__aeabi_ldiv0`** (`0x002cb9dc`, 16 B, 100.0%): chama `sub_71c38`.
+- **`_Unwind_GetTextRelBase`** (`0x002cdf10`, 8 B, 100.0%): chama `sub_71c2c`.
+- **`_Unwind_GetDataRelBase`** (`0x002cdf08`, 8 B, 100.0%): chama `sub_71c2c`.
+
+### 613.2 Funções-folha sem chamada externa (203)
+
+| Endereço | Função | Bytes | Cobertura |
+|---|---|---:|---:|
+| `0x000758c8` | `deflateBound` | 288 | 100.0% |
+| `0x00082de4` | `oggpackB_read` | 268 | 100.0% |
+| `0x000793e0` | `inflateBackInit_` | 268 | 97.01% |
+| `0x00082ce0` | `oggpack_read` | 260 | 98.46% |
+| `0x00082b14` | `oggpackB_look` | 208 | 100.0% |
+| `0x00082a48` | `oggpack_look` | 204 | 98.04% |
+| `0x002cb248` | `__truncdfsf2` | 160 | 100.0% |
+| `0x0007af1c` | `inflateResetKeep` | 156 | 100.0% |
+| `0x0007afe8` | `inflateReset2` | 152 | 100.0% |
+| `0x00082ef0` | `oggpack_read1` | 116 | 100.0% |
+| `0x00082f64` | `oggpackB_read1` | 116 | 100.0% |
+| `0x0007b190` | `inflatePrime` | 112 | 100.0% |
+| `0x002ca125` | `__cxa_type_match` | 112 | 100.0% |
+| `0x00082c38` | `oggpack_adv` | 112 | 100.0% |
+| `0x00096eb4` | `res0_inverse` | 108 | 96.3% |
+| `0x000bd220` | `COggMemMapFile::CallbackSeek(void*, long long, int)` | 100 | 100.0% |
+| `0x0007d0f4` | `inflateMark` | 100 | 100.0% |
+| `0x002cabf0` | `__floatdidf` | 96 | 100.0% |
+| `0x002cb92c` | `__fixsfsi` | 92 | 100.0% |
+| `0x002cb1ec` | `__fixdfsi` | 92 | 100.0% |
+| `0x0007d950` | `fill_zlib_filefunc64_32_def_from_filefunc32` | 92 | 100.0% |
+| `0x002cb988` | `__fixunssfsi` | 84 | 100.0% |
+| `0x000824cc` | `oggpackB_writetrunc` | 84 | 95.24% |
+| `0x0008247c` | `oggpack_writetrunc` | 80 | 95.0% |
+| `0x00075794` | `deflatePending` | 80 | 100.0% |
+| `0x0007a720` | `inflateBackEnd` | 64 | 100.0% |
+| `0x0007cf18` | `inflateSyncPoint` | 64 | 100.0% |
+| `0x002cab9c` | `__extendsfdf2` | 64 | 100.0% |
+| `0x0007cd9c` | `inflateGetHeader` | 60 | 100.0% |
+| `0x00075890` | `deflateTune` | 56 | 100.0% |
+| `0x00075760` | `deflateSetHeader` | 52 | 100.0% |
+| `0x0007afb8` | `inflateReset` | 48 | 100.0% |
+| `0x00082cac` | `oggpack_adv1` | 48 | 100.0% |
+| `0x0007d0c4` | `inflateUndermine` | 48 | 100.0% |
+| `0x00082c0c` | `oggpackB_look1` | 44 | 100.0% |
+| `0x002cab74` | `__floatsidf` | 40 | 100.0% |
+| `0x00082450` | `oggpack_writecheck` | 40 | 100.0% |
+| `0x00082be4` | `oggpack_look1` | 40 | 100.0% |
+| `0x00082520` | `oggpack_reset` | 40 | 100.0% |
+| `0x000bd194` | `CSOUND_LOADER_OGG::GetTotalDecoded() const` | 36 | 100.0% |
+| `0x002ccf74` | `__gnu_Unwind_Resume_or_Rethrow` | 32 | 100.0% |
+| `0x000bd170` | `CSOUND_LOADER_OGG::GetFormatDecoded() const` | 28 | 100.0% |
+| `0x00082fd8` | `oggpack_bytes` | 28 | 100.0% |
+| `0x002ccee4` | `__gnu_Unwind_ForcedUnwind` | 28 | 100.0% |
+| `0x00082880` | `oggpackB_writealign` | 24 | 100.0% |
+| `0x000826ec` | `oggpack_writealign` | 24 | 100.0% |
+| `0x00073a04` | `adler32_combine` | 20 | 100.0% |
+| `0x000bd1c8` | `CSOUND_LOADER_OGG::GetLoopOut() const` | 20 | 100.0% |
+| `0x00073a18` | `adler32_combine64` | 20 | 100.0% |
+| `0x000bd464` | `COggMemMapFile::IsOpen() const` | 16 | 100.0% |
+| `0x00082ff4` | `oggpack_bits` | 16 | 100.0% |
+| `0x000bd144` | `CSOUND_LOADER_OGG::IsTerminated() const` | 8 | 100.0% |
+| `0x000bd14c` | `CSOUND_LOADER_OGG::GetSoundFormat()` | 8 | 100.0% |
+| `0x000bd520` | `CSOUND_LOADER_OGG::IsOpen() const` | 8 | 100.0% |
+| `0x002cd58c` | `__aeabi_unwind_cpp_pr2` | 8 | 100.0% |
+| `0x000bd1b8` | `CSOUND_LOADER_OGG::DecodeAll(unsigned char*)` | 8 | 100.0% |
+| `0x000823e4` | `zlibCompileFlags` | 8 | 100.0% |
+| `0x000bd18c` | `CSOUND_LOADER_OGG::GetTotal() const` | 8 | 100.0% |
+| `0x000bd134` | `COggMemMapFile::CallbackClose(void*)` | 8 | 100.0% |
+| `0x002cd57c` | `__aeabi_unwind_cpp_pr0` | 8 | 100.0% |
+| `0x000bd168` | `CSOUND_LOADER_OGG::GetSoundEncode() const` | 8 | 100.0% |
+| `0x000bd13c` | `COggMemMapFile::CallbackTell(void*)` | 8 | 100.0% |
+| `0x0008300c` | `oggpack_get_buffer` | 8 | 100.0% |
+| `0x000bd1c0` | `CSOUND_LOADER_OGG::GetLoopIn() const` | 8 | 100.0% |
+| `0x002cce38` | `_Unwind_GetCFA` | 8 | 100.0% |
+| `0x002cd584` | `__aeabi_unwind_cpp_pr1` | 8 | 100.0% |
+| `0x000d9a08` | `hook_disp_requirement()` | 4 | 100.0% |
+| `0x0027b3a0` | `numa_fileReadRequest(unsigned int, unsigned int, char*)` | 4 | 100.0% |
+| `0x0027b510` | `dispCmdKind()` | 4 | 100.0% |
+| `0x0020ce14` | `fileAllocateCD(unsigned long, unsigned long)` | 4 | 100.0% |
+| `0x0029b428` | `GsGetActiveBuff` | 4 | 100.0% |
+| `0x0028070c` | `hook_pad2()` | 4 | 100.0% |
+| `0x002712ec` | `Ssd_CheckWideMode()` | 4 | 100.0% |
+| `0x0019e7b4` | `shop_dummyfunc()` | 4 | 100.0% |
+| `0x0028c7e8` | `CAUTOSAVE::~CAUTOSAVE()` | 4 | 100.0% |
+| `0x0027fc78` | `initSaveFFT(char*, char*, bool)` | 4 | 100.0% |
+| `0x002712a0` | `Ssd_Enable()` | 4 | 100.0% |
+| `0x00286744` | `rsetmovie_title_flg__Fv()` | 4 | 100.0% |
+| `0x0028b4ec` | `DecDCTout` | 4 | 100.0% |
+| `0x0028b51c` | `setMovieSkipFlg__Fi(int)` | 4 | 100.0% |
+| `0x00159a70` | `asmMUL64(long, long, long)` | 4 | 100.0% |
+| `0x002168fc` | `recallEnvEffect()` | 4 | 100.0% |
+| `0x001d114c` | `set_monomane_direction(BWORK*, unsigned char)` | 4 | 100.0% |
+| `0x0015d2a8` | `iOSexecuteTurn()` | 4 | 100.0% |
+| `0x0028cf0c` | `ContinueDraw` | 4 | 100.0% |
+| `0x000d0dc8` | `Ddisp_floateventwindow()` | 4 | 100.0% |
+| `0x001836cc` | `iOS_addPrim_window(tagPOLY_FT4*)` | 4 | 100.0% |
+| `0x0027b670` | `iOS_DEBUG_multiwindow_break_hook(unsigned long*)` | 4 | 100.0% |
+| `0x00271318` | `Ssd_PlayEnvEffect(long)` | 4 | 100.0% |
+| `0x000d9a0c` | `hook_trophics()` | 4 | 100.0% |
+| `0x00271308` | `Ssd_LinkMusicData(SsdSeqRec*, void*)` | 4 | 100.0% |
+| `0x00286748` | `setmovie_title_flg__Fv()` | 4 | 100.0% |
+| `0x00271410` | `Ssd_InitEffectTrackRecWithStart(short, long, short, short)` | 4 | 100.0% |
+| `0x0028cefc` | `SetDumpFnt` | 4 | 100.0% |
+| `0x00280670` | `hook_write_eventflag(int, int)` | 4 | 100.0% |
+| `0x002815d8` | `hook_num(int, int, int)` | 4 | 100.0% |
+| `0x002a1024` | `OuterProduct12` | 4 | 100.0% |
+| `0x002712b0` | `Ssd_DisposeNormalWave()` | 4 | 100.0% |
+| `0x00287a14` | `Red_Blue_Draw(int)` | 4 | 100.0% |
+| `0x00100640` | `Wdispemptywindow()` | 4 | 100.0% |
+| `0x0028b50c` | `pspMovieInit__FiPCciiii(int, char*, int, int, int, int)` | 4 | 100.0% |
+| `0x00215d20` | `fadeGradation(int, CVECTOR*)` | 4 | 100.0% |
+| `0x000d8974` | `send_statuschrno(int)` | 4 | 100.0% |
+| `0x002712c4` | `Ssd_DisposeEffectData(void*)` | 4 | 100.0% |
+| `0x00271310` | `Ssd_StopMusic(SsdSeqRec*)` | 4 | 100.0% |
+| `0x002806c8` | `hook_chk_speedup(int)` | 4 | 100.0% |
+| `0x0028856c` | `init_AnimList()` | 4 | 100.0% |
+| `0x0028b4c4` | `StRingStatus` | 4 | 100.0% |
+| `0x002b3758` | `Error_Uninit()` | 4 | 100.0% |
+| `0x000d8bfc` | `initstatuscphase()` | 4 | 100.0% |
+| `0x002a0d10` | `SetTransMatrix` | 4 | 100.0% |
+| `0x0027130c` | `Ssd_StartMusic(SsdSeqRec*, short, short)` | 4 | 100.0% |
+| `0x0028cee0` | `DrawOTagIO` | 4 | 100.0% |
+| `0x0028ce54` | `asmmemcpy(void*, void const*, unsigned int)` | 4 | 100.0% |
+| `0x002875a0` | `draw_maru(unsigned long*)` | 4 | 100.0% |
+| `0x000e62c8` | `DEBUG_CHK_ROLL(SCROLLRECORD*)` | 4 | 100.0% |
+| `0x00162048` | `wasmMUL3232(long, long, long, long)` | 4 | 100.0% |
+| `0x00161ef0` | `wasmBoxCopy(char*, char*, COPYFIELD*, COPYFIELD*)` | 4 | 100.0% |
+| `0x0027fc7c` | `cSaveFFT::~cSaveFFT()` | 4 | 100.0% |
+| `0x0028cee8` | `DumpClut` | 4 | 100.0% |
+| `0x000e62c4` | `DEBUGTRACE_hook_connect_camera()` | 4 | 100.0% |
+| `0x00271344` | `Ssd_StopAllEffect()` | 4 | 100.0% |
+| `0x00271340` | `Ssd_PlayEffects03(long, long, long, long)` | 4 | 100.0% |
+| `0x0028cea8` | `KanjiFntClose` | 4 | 100.0% |
+| `0x00281648` | `hook_1284(char*, int)` | 4 | 100.0% |
+| `0x0015a480` | `iOSSoundSESet(int)` | 4 | 100.0% |
+| `0x0021ebb0` | `error(char, long)` | 4 | 100.0% |
+| `0x0027b674` | `iOS_DEBUG_multiwindow_break_hook2(unsigned long*, int)` | 4 | 100.0% |
+| `0x00161d98` | `tDebugBreakCheck(int)` | 4 | 100.0% |
+| `0x002168e0` | `callSystemSound(int)` | 4 | 100.0% |
+| `0x00121718` | `Edisp_floateventwindow()` | 4 | 100.0% |
+| `0x001a652c` | `GetMessagePtr(int)` | 4 | 100.0% |
+| `0x00137b0c` | `value_input()` | 4 | 100.0% |
+| `0x002807f4` | `hook_cliptest()` | 4 | 100.0% |
+| `0x002169cc` | `pauseEnvEffect()` | 4 | 100.0% |
+| `0x002712b4` | `Ssd_DisposeWaveData(SsdWaveSetRec*)` | 4 | 100.0% |
+| `0x00161da0` | `tDebugPointerErr()` | 4 | 100.0% |
+| `0x000cbd68` | `DeleteTrapCancelCommandWindow()` | 4 | 100.0% |
+| `0x0028850c` | `CalcMissionPayPoint(int)` | 4 | 100.0% |
+| `0x002acb28` | `sceGuViewport` | 4 | 100.0% |
+| `0x002b5eb0` | `Logo_Resume()` | 4 | 100.0% |
+| `0x0014e0e4` | `iOSSetjoinus()` | 4 | 100.0% |
+| `0x0014e9a0` | `sol_draw(int, int, int)` | 4 | 100.0% |
+| `0x00280714` | `hook_drive_connect_chrmove2(int)` | 4 | 100.0% |
+| `0x001dca54` | `callSW(int)` | 4 | 100.0% |
+| `0x0020f424` | `eventEffectStart()` | 4 | 100.0% |
+| `0x002712c8` | `Ssd_AllStop()` | 4 | 100.0% |
+| `0x002ab904` | `sceGuDisplay` | 4 | 100.0% |
+| `0x0028b530` | `setToolBgmFlg__Fi(int)` | 4 | 100.0% |
+| `0x002815e4` | `chk_test_addcolor(unsigned int*)` | 4 | 100.0% |
+| `0x00248ccc` | `ctlcard_init()` | 4 | 100.0% |
+| `0x002ab710` | `sceGuClearColor` | 4 | 100.0% |
+| `0x0014e0e8` | `statushookfunc()` | 4 | 100.0% |
+| `0x002712a4` | `Ssd_Disable()` | 4 | 100.0% |
+| `0x00286ec4` | `check_rival_value(int)` | 4 | 100.0% |
+| `0x0028b508` | `pspMovieEnd__Fv()` | 4 | 100.0% |
+| `0x002abc88` | `sceGuShadeModel` | 4 | 100.0% |
+| `0x0028b514` | `pspMovieStart__Fv()` | 4 | 100.0% |
+| `0x0028b4a0` | `StSetEmulate` | 4 | 100.0% |
+| `0x00280710` | `hook_drive_connect_chrmove()` | 4 | 100.0% |
+| `0x00215d24` | `fadeAnbient(int, CVECTOR*)` | 4 | 100.0% |
+| `0x00215d28` | `fadeFlatColor(int, CVECTOR*)` | 4 | 100.0% |
+| `0x00271348` | `Ssd_StopEffectSet(void*)` | 4 | 100.0% |
+| `0x00288498` | `Draw_TuusinIcon(int, int, unsigned long*)` | 4 | 100.0% |
+| `0x00161ef4` | `wasmKanjiCopy(char*, char*, COPYFIELD*, int)` | 4 | 100.0% |
+| `0x0028b490` | `StSetRing` | 4 | 100.0% |
+| `0x0028cf38` | `GetDrawEnv2` | 4 | 100.0% |
+| `0x00225a60` | `objectLG2(_EffectTCB*, _Object*)` | 4 | 100.0% |
+| `0x0028ceec` | `DumpDispEnv` | 4 | 100.0% |
+| `0x002b6bcc` | `Main_Resume()` | 4 | 100.0% |
+| `0x001019bc` | `Wloadonefile(char*, char*)` | 4 | 100.0% |
+| `0x0028849c` | `Draw_Trap_CancelCommandList(int*, int, int, unsigned long*)` | 4 | 100.0% |
+| `0x002a143c` | `SetBackColor` | 4 | 100.0% |
+| `0x0020c5d4` | `system_warning(int, int)` | 4 | 100.0% |
+| `0x00280708` | `hook_pad()` | 4 | 100.0% |
+| `0x002712f4` | `Ssd_ErrorProc(int)` | 4 | 100.0% |
+| `0x0027fc28` | `chk_ucResumeData2(int)` | 4 | 100.0% |
+| `0x000cbd58` | `CreateTrapNameWindowManagerTask()` | 4 | 100.0% |
+| `0x002b5594` | `Link_Resume()` | 4 | 100.0% |
+| `0x0027b5c8` | `rprintfr(RECT16*, int, int, int)` | 4 | 100.0% |
+| `0x000d9ac0` | `loadonefile(char*, char*)` | 4 | 100.0% |
+| `0x0028b468` | `SpuQuit` | 4 | 100.0% |
+| `0x0028b53c` | `setBgmData__Fii(int, int)` | 4 | 100.0% |
+| `0x002a1268` | `TransRotPers` | 4 | 100.0% |
+| `0x00215d5c` | `PadStop` | 4 | 100.0% |
+| `0x0028b60c` | `CdReadBreak` | 4 | 100.0% |
+| `0x002806c4` | `hook_opt()` | 4 | 100.0% |
+| `0x0010190c` | `Whook_trophics()` | 4 | 100.0% |
+| `0x002806bc` | `hook_read_eventflag(int*)` | 4 | 100.0% |
+| `0x002419cc` | `fftCdLoop(CDREC*)` | 4 | 100.0% |
+| `0x000d9a10` | `seekpcfile(char*, char*, int, int)` | 4 | 100.0% |
+| `0x0020c5d0` | `system_error(int, int)` | 4 | 100.0% |
+| `0x00083014` | `oggpackB_get_buffer` | 4 | 100.0% |
+| `0x00082a44` | `oggpackB_readinit` | 4 | 100.0% |
+| `0x002ccf94` | `_Unwind_Complete` | 4 | 100.0% |
+| `0x00082a14` | `oggpackB_writeclear` | 4 | 100.0% |
+| `0x00083008` | `oggpackB_bits` | 4 | 100.0% |
+| `0x00082548` | `oggpackB_reset` | 4 | 100.0% |
+| `0x00083004` | `oggpackB_bytes` | 4 | 100.0% |
+| `0x0008244c` | `oggpackB_writeinit` | 4 | 100.0% |
+| `0x00082478` | `oggpackB_writecheck` | 4 | 100.0% |
+| `0x00082cdc` | `oggpackB_adv1` | 4 | 100.0% |
+| `0x00082ca8` | `oggpackB_adv` | 4 | 100.0% |
+
+### 613.3 Restante com chamadas já documentadas (28)
+
+| Endereço | Função | Bytes | Cobertura | Chama |
+|---|---|---:|---:|---|
+| `0x00096190` | `res0_pack` | 320 | 100.0% | `oggpack_write`, `ov_ilog` |
+| `0x00076cf0` | `deflateParams` | 280 | 97.14% | `deflate` |
+| `0x00088bf4` | `_ve_envelope_mark` | 264 | 100.0% | `__divsi3` |
+| `0x00094bfc` | `_vp_psy_clear` | 216 | 100.0% | `sub_714dc` |
+| `0x00097970` | `res2_forward` | 216 | 100.0% | `_vorbis_block_alloc`, `sub_97584` |
+| `0x000755e0` | `deflateResetKeep` | 204 | 100.0% | `adler32`, `crc32`, `_tr_init` |
+| `0x000756ac` | `deflateReset` | 180 | 97.78% | `sub_714c4`, `deflateResetKeep` |
+| `0x0007ccf0` | `inflateSetDictionary` | 172 | 100.0% | `adler32`, `sub_7ade4` |
+| `0x000960f0` | `res0_free_look` | 160 | 100.0% | `sub_714c4`, `sub_714dc` |
+| `0x0007cc5c` | `inflateGetDictionary` | 148 | 100.0% | `sub_714b8` |
+| `0x00088cfc` | `_ve_envelope_shift` | 116 | 100.0% | `sub_715e4`, `__divsi3` |
+| `0x0009cc9c` | `drft_clear` | 108 | 100.0% | `sub_714dc` |
+| `0x00095668` | `_vp_ampmax_decay` | 108 | 96.3% | `__addsf3`, `__floatsisf`, `__mulsf3`, `__divsf3`... |
+| `0x00088920` | `_ve_envelope_clear` | 88 | 100.0% | `sub_714dc`, `mdct_clear` |
+| `0x000910e4` | `mdct_clear` | 68 | 100.0% | `sub_714dc` |
+| `0x000bd1dc` | `COggMemMapFile::CallbackRead(void*, unsigned int, unsigned int, void*)` | 68 | 100.0% | `sub_714b8` |
+| `0x000bd334` | `CSOUND_LOADER_OGG::Seek(unsigned long)` | 68 | 100.0% | `ov_pcm_seek` |
+| `0x002cde9c` | `__gnu_unwind_frame` | 64 | 100.0% | `__gnu_unwind_execute` |
+| `0x00082414` | `oggpack_writeinit` | 56 | 100.0% | `sub_714c4`, `sub_714e8` |
+| `0x0008254c` | `oggpack_writeclear` | 44 | 100.0% | `sub_714dc` |
+| `0x000960c4` | `res0_free_info` | 44 | 100.0% | `sub_714c4` |
+| `0x00082a18` | `oggpack_readinit` | 44 | 100.0% | `sub_714c4` |
+| `0x00094078` | `_vp_global_free` | 40 | 100.0% | `sub_714c4` |
+| `0x000bd378` | `CSOUND_LOADER_OGG::Tell() const` | 40 | 100.0% | `ov_pcm_tell` |
+| `0x002ca77c` | `__aeabi_uidivmod` | 32 | 100.0% | `__udivsi3` |
+| `0x000bd504` | `CSOUND_LOADER_OGG::~CSOUND_LOADER_OGG()` | 28 | 100.0% | `CSOUND_LOADER_OGG::~CSOUND_LOADER_OGG()`, `sub_2cdf9c` |
+| `0x000bd154` | `CSOUND_LOADER_OGG::GetFormat() const` | 20 | 100.0% | `sub_714b8` |
+| `0x000bd450` | `COggMemMapFile::~COggMemMapFile()` | 20 | 100.0% | `COggMemMapFile::Close()` |
+
+**Status CSV**: `read_structural` para as 261 (identidade e call-graph confirmados via checkpoint; nenhuma teve blocos lidos instrução a instrução). Esgota o pool `auto_structural` com cobertura ≥95% e 0 tabela pendente — próximo passo: pool `needs_review`.
+
+## 614. Pool `needs_review` esgotado por completo — 33 últimas funções, maioria com tabela de salto pequena resolvida mesmo com cobertura <95% (2026-10-25, Fase 3, nonagésimo quarto lote)
+
+Só restavam 33 checkpoints `needs_review` ainda não reconciliados
+(o resto já tinha sido fechado nos lotes 79-84, via forks, ou
+reclassificado pelo próprio pipeline ao longo da sessão). Diferente
+do pool `auto_structural`, aqui a baixa cobertura automática é real
+(não artefato de métrica) — mas a maioria ainda tem uma tabela de
+salto pequena **resolvida**, o que já basta pra identificar o
+propósito sem exigir leitura byte a byte de cada caso.
+
+### 614.1 Achado de alto valor: `onGotoNextMode(int)` — confirma a hipótese da §35, revela os 8 "módulos de tela" de topo do app
+
+`onGotoNextMode(int)` (`0x2b20f4`, 324 B, 72%) — já citada na §35
+("o nome praticamente confirma que é a função que MUDA
+`*g_gameMode`, ainda que o corpo não tivesse sido lido"). Confirmado
+agora: **2 tabelas de 9 casos cada** (guardas em `0x2b2108`/`0x2b215c`)
+despachando pra 8 `bl` distintos, todos **destrutores "Uninit" de
+módulos de tela de topo do app**: `Boot_Uninit()`, `Error_Uninit()`,
+`Link_Uninit()`, `Logo_Uninit()`, `Main_Uninit()`, `Movie_Uninit()`,
+`Settings_Uninit()`, `SettingsWnd_Uninit()`. Isso revela, pela
+primeira vez, a lista completa dos módulos de tela de nível mais
+alto do app (acima até do par `Main_FrameMove`/`Main_FrameRender`,
+§34/35, que são só o módulo "Main"): **Boot → Logo → Link → Main
+(jogo) / Movie / Settings / SettingsWnd / Error**, cada um com seu
+próprio ciclo `Init`/`Uninit` (par de `Boot_Init()`, ver §614.2
+abaixo). `onGotoNextMode` é o despachante que desliga o módulo atual
+antes de trocar pra outro — a contraparte exata, uma camada acima,
+do padrão "screen manager" já confirmado dentro de `Main_FrameRender`
+(§34.4, que delega só entre `NowLoading`/`SettingsWnd`/jogo normal,
+sub-conjunto deste nível).
+
+### 614.2 Outros achados de jogo
+
+- **`initMap(int, int)`** (`0x210eac`, 368 B, 82%, tabela de 13 casos,
+  19 `bl`): inicialização real de um mapa de batalha — liga
+  `ASHURA_on_disp`/`ASHURA_GNS_Garage` (motor 3D, §32.3),
+  `entryAnimations`/`initEntryEnemyAnimations` (§263), a fila de CLUT
+  completa (`loadBackGradation`/`loadAnbient`/`loadFlatColor`/
+  `transferClutData`/`initChangeClut`, §70/120), `set_playerwork`,
+  `time_flies`, `stopEffect` e `BattleRoutineInit()` (§607) — o
+  bootstrap que une praticamente todos os subsistemas de batalha já
+  documentados separadamente.
+- **`Boot_Init()`** (`0x2b3464`, 300 B, 92%, 12 `bl`): abre
+  `CFILE_DAT` (contêiner de asset, §579) via `Project_Archive_GetFile`,
+  registra uma thread (`CTHREAD::Register`) e inicializa a tela de
+  carregamento (`NowLoading_Init()`) — confirma que o boot do app
+  carrega o arquivo de projeto e dispara I/O assíncrono numa thread
+  dedicada antes mesmo do primeiro frame.
+- **`Savedata_Load(unsigned char*, int*)`** (`0x27fe84`, 384 B, 95%,
+  17 `bl`): mesma pilha de I/O (`CFILE::*`) e API de plataforma
+  (`CAPP_INFO::GetRootPath`/`GetStoragePath`, `pspGetFftPspSaveDataSize`)
+  já confirmada em `Savedata_LoadGameCleared` (lote 86) — o
+  carregamento geral de save, par completo da família `Savedata_*`.
+- **`pspFftSave(int, FFT_SAVE_DATA*, int*)`**/**`pspFftDelete(int*)`**
+  (288/320 B, 64%/58%, ambas com tabela resolvida): delegam pra
+  `xpLibapiSaveStart`/`SaveEnd`/`SaveCheck` (fachada `xpLibapi*` já
+  confirmada sobre `pspSaveBase`, §568) — as duas operações reais de
+  salvar/deletar save do PSP.
+- **`MessageDataSet(int)`**/**`pspMsgGet(unsigned int)`** (284/232 B,
+  tabelas de 9 casos cada): `MessageDataSet` despacha pra
+  `pspMsgGet` (9×) — getter de texto de mensagem por categoria,
+  completa o par setter/getter de dados de mensagem.
+- **`set_casting_status(BWORK*, unsigned char)`** (`0x1dc944`, 272 B,
+  85%, tabela de 9/6, 3 `bl`): liga `_changeAnimationStatus_`/
+  `set_temp_status`/`set_cco_SD`, cluster de status de unidade já
+  mapeado — status real de "conjurando magia".
+- **`set_ct_weapon(ACT*)`** (`0x1caa10`, 248 B, 68%, tabela de 16/4):
+  chama `pspItemIsEmpty` — resolve a arma equipada pra uma ação de
+  combate (`ACT*`), tratando o caso "sem arma".
+- **`houkoku_talkunit(int)`** (`0x25b78c`, 236 B, 86%, tabela de 4/4):
+  chama `get_unitwork_add_wld` — fecha mais um elo do cluster
+  "houkoku" (relatório de campo, §577/592).
+- **`getNextSENo(int)`**/**`getMovieEventNum(int)`**/
+  **`siOS_TCurSucCheck(unsigned int)`** (220/216/208 B, tabelas
+  pequenas resolvidas): utilitários de lookup — próximo efeito
+  sonoro, número de evento de filme, checagem de sucesso de cursor
+  touch (liga a `siOS_TCurPosGet`).
+- **`iOSsetCursorByTouch(...)`**/**`setCursorByTouch(...)`** (392/308
+  B, pair W-like, mesmos 2 locais `sub_1fba1c`/`sub_202ff0`,
+  tabela de 33 casos/3 handlers cada): par de resolvedores de posição
+  de cursor por toque — variante "iOS" vs. genérica.
+- **`get_shape2(BWORK*, uchar*)`**/**`get_mapid(int,int,int,int)`**/
+  **`_ReadTMD(TMD_PRIM*)`**/**`CdControl`** (tabelas resolvidas, 0
+  `bl` — dispatchers puros por tabela de dados): `_ReadTMD` é achado
+  novo (parser do formato `TMD` de modelo 3D do PS1); `CdControl` é
+  achado novo (dispatcher de 27 casos pro controle de CD real,
+  mesma API citada em `fftCdLoopTim` §610 e `numa_vOpn_CdRead` §580).
+- **`Wload_replaceitems(int,int)`**/**`load_replaceitems(int,int)`**
+  (par W/sem-W, 120 B cada, tabela de 12/7): confirma que existe um
+  sistema real de "substituição de item" (provável randomizador ou
+  correção de item quebrado em save antigo), nunca citado por nome
+  completo antes.
+
+### 614.3 `_Unwind_VRS_Get`/`_Unwind_VRS_Set` promovidas (ver nota no §569)
+
+Ambas (92 B, 74% cobertura) agora têm a tabela de 5 casos/3 handlers
+resolvida pelo checkpoint do CI — mesma arquitetura de switch por
+classe de registrador já confirmada em `_Unwind_VRS_Pop` (§569).
+Promovidas de `mentioned_unverified` pra `read_structural`.
+
+### 614.4 Cauda final de compiler-rt/C++ runtime
+
+`__gedf2`/`__gesf2` (comparação "maior-ou-igual" double/float, par
+exato de `__aeabi_*cmp*` do §613), `__aeabi_ul2f`/`__aeabi_ul2d`
+(conversão `unsigned long`→float/double) e `operator delete[](void*)`
+— identidade certa por especificação de ABI/C++, mesmo critério do
+§613, marcadas `read_structural`. Já `__gxx_personality_v0`,
+`__cxa_call_unexpected`, `__cxa_begin_cleanup` e
+`_Unwind_DeleteException` (0 `bl`, 0 tabela, cobertura muito baixa —
+7%/0%/67%/63%) são código de borda de exceção C++ real quase nunca
+exercitado pela descida automática; ficam `mentioned_unverified` —
+identificadas por nome/ABI, não por conteúdo lido.
+
+**Status CSV**: `read_structural` para 29 das 33 (todas com tabela
+resolvida ou identidade certa por ABI), `mentioned_unverified` para
+as 4 restantes (`__gxx_personality_v0`/`__cxa_call_unexpected`/
+`__cxa_begin_cleanup`/`_Unwind_DeleteException`). **Esgota por
+completo o pool `needs_review`** — todos os checkpoints do CI
+(auto_structural + needs_review) estão agora reconciliados no
+`RE_FUNCTION_INVENTORY.csv`.
+## 615. Segundo pool: 500 funções `auto_structural` com cobertura 80-95% (abaixo do corte anterior, mas com 0 tabela pendente) — primeira leva (2026-10-25, Fase 3, nonagésimo quinto lote)
+
+Depois de esgotar os pools `auto_structural≥95%` (§605-613) e
+`needs_review` (§614), restava um terceiro grupo que o filtro
+original deixava de fora por engano: checkpoints com `status:
+auto_structural` mas cobertura abaixo de 95% — 1.049 funções, todas
+com **0 tabela não resolvida** (ou seja, estruturalmente sãs, só com
+cobertura bruta mais baixa por chamada indireta/literal pool, mesma
+causa já vista em casos individuais como `asm_function` antes da
+leitura manual). Primeira leva de 500, mesma rota de agrupamento +
+triagem de novidade dos lotes 91-93.
+
+Composição: **9 famílias confirmadas** (21 funções), achados novos
+destacados abaixo, **164 funções-folha**, resto em tabela.
+
+### 615.1 Famílias confirmadas
+
+- **`Draw_Draw(int)` / `Draw_Lose(int)` / `Draw_Win(int)`** (`0x002875a8`, `0x00287734`, `0x002878b4`) — catálogo de bl idêntico.
+- **`Winitdrmode(DR_MODE*, int)` / `initdrmode(DR_MODE*, int)`** (`0x000e0fb8`, `0x0010fa1c`) — catálogo de bl idêntico.
+- **`Cdisp_eventwaitwindow()` / `Ddisp_eventwaitwindow()` / `Edisp_eventwaitwindow()` / `disp_eventwaitwindow()`** (`0x0012cb3c`, `0x0014bd8c`, `0x000d115c`, `0x00123994`) — catálogo de bl idêntico.
+- **`check_hide_reset(BWORK*)` / `status_handle_main(BWORK*)`** (`0x001cc89c`, `0x001cc950`) — ambas chamam `init_target_result` (A_RESULT*) — par de resets de resultado de alvo, uma pra "esconder"/ocultação, outra pro handler geral de status.
+- **`RequestBowEffect(long, EffectOrder*)` / `RequestLandingEffect(EffectOrder*, VECTOR*)`** (`0x00221028`, `0x00221e84`) — duas requisições de efeito visual que passam por `NewPEffectTCB()` (§614→cluster PermanentEffect) — arco e aterrissagem como dois gatilhos de efeito permanente distintos.
+- **`disp_status2()` / `disp_status2right()`** (`0x000e5708`, `0x000e5680`) — catálogo de bl idêntico.
+- **`Wdisp_status2()` / `Wdisp_status2right()`** (`0x0011c02c`, `0x0011bfa8`) — catálogo de bl idêntico.
+- **`Error_FrameRender()` / `Movie_FrameRender()`** (`0x002b36dc`, `0x002c5434`) — dois dos oito módulos de tela de topo revelados em `onGotoNextMode` (§614) finalmente com seu método `FrameRender` lido: ambos chamam a MESMA sequência `CEGL2_IF::SetScreenSize`/`InitRenderState2D`/`Setup2D` já confirmada como o setup de desenho 2D de `Main_FrameRender` (§34.1) — confirma que todo módulo de tela de topo (Boot/Error/Link/Logo/Main/Movie/Settings/SettingsWnd) reusa o mesmo pipeline `CEGL2_IF` de baixo nível, não implementações de desenho separadas.
+- **`evt_brave_low()` / `evt_faith_low()`** (`0x00259578`, `0x002594e8`) — catálogo de bl idêntico.
+
+### 615.2 Achados genuinamente novos (33 funções)
+
+- **`Wevent_init_memory()`** (`0x00101fe4`, 276 B, 76.81%): chama `iOS_GetFontBuffer()`.
+- **`ctlcenter_main(CTLINFO*)`** (`0x00253a68`, 248 B, 87.1%): chama `wldcenter_move()`.
+- **`iOSsTchBtlEnd()`** (`0x0015a33c`, 224 B, 76.79%): chama `iOSsTchBtlFlagSet(int)`.
+- **`GuEmu_FrameMove()`** (`0x002aca7c`, 172 B, 93.02%): chama `sceGuTexFilter`.
+- **`ctlpremov_init(int, int, int, int, int, char*)`** (`0x00248b70`, 168 B, 88.1%): chama `movie_init(int, int, int, int, int, char*)`.
+- **`NewEffectAnimation(short)`** (`0x00217ebc`, 160 B, 92.5%): chama `NewShape2(unsigned char)`.
+- **`checkScrolling()`** (`0x0020f728`, 160 B, 87.5%): chama `iOSIsCurMode()`.
+- **`task_create(long, char*)`** (`0x001532c0`, 144 B, 94.44%): chama `asmGetGP()`.
+- **`Wtask_create(long, char*)`** (`0x00153584`, 144 B, 94.44%): chama `wasmGetGP()`.
+- **`wasmTaskEntry()`** (`0x00161ef8`, 124 B, 93.55%): chama `tutorial_hookfunc()`.
+- **`ASURA_soundStop()`** (`0x0016a14c`, 124 B, 90.32%): chama `stopEffect(int)`.
+- **`startTurnRelative(int)`** (`0x002042c8`, 116 B, 89.66%): chama `iOSRotAutoSet()`, `startLeftTurn(int)`, `startRightTurn(int)`.
+- **`wldctl_init()`** (`0x00254100`, 112 B, 82.14%): chama `ctlmap_init()`.
+- **`Wmakemessagestructure()`** (`0x0010c79c`, 96 B, 87.5%): chama `iOS_hook_common(char const*, int)`.
+- **`GetItemCategoryPos(int)`** (`0x001ade40`, 96 B, 83.33%): chama `GetItemSmallCategory(short)`, `ItemCategoryPos(int, short*)`.
+- **`uninitTaskEmu()`** (`0x0028b844`, 88 B, 90.91%): chama `sub_71a64`, `sub_71b24`.
+- **`Wmakemessagepacket(char*)`** (`0x00100500`, 80 B, 90.0%): chama `iOS_hook_common(char const*, int)`.
+- **`makemessagepacket(char*)`** (`0x000d8830`, 80 B, 90.0%): chama `iOS_hook_common(char const*, int)`.
+- **`RotNclip3_nom`** (`0x002a257c`, 76 B, 94.74%): chama `RotNclip3`.
+- **`s6_setPersonalProc(_EffectTCB*)`** (`0x0021c22c`, 72 B, 94.44%): chama `GetPlugInFuncAdr(short)`.
+- **`stopEffect(int)`** (`0x00216984`, 72 B, 94.44%): chama `EnvSE_Stop(int)`.
+- **`get_movie_filename(int)`** (`0x0028674c`, 72 B, 77.78%): chama `sub_718cc`.
+- **`TE_task_get_no()`** (`0x0028baf4`, 72 B, 94.44%): chama `sub_71b30`.
+- **`pitchMusic(int, int)`** (`0x00216784`, 68 B, 94.12%): chama `Ssd_SetSeqMasterPitch(SsdSeqRec*, short, short)`.
+- **`panpotMusic(int, int)`** (`0x002167c8`, 68 B, 94.12%): chama `Ssd_SetSeqMasterPanpot(SsdSeqRec*, short, short)`.
+- **`vOpn_pacloop()`** (`0x0024a068`, 68 B, 82.35%): chama `ClearOTagR`.
+- **`effectFadeoutMusic(int, int)`** (`0x00216618`, 68 B, 94.12%): chama `Ssd_SetSeqMasterVolume(SsdSeqRec*, short, short)`.
+- **`tempoMusic(int, int)`** (`0x00216740`, 68 B, 94.12%): chama `Ssd_SetSeqMasterTempo(SsdSeqRec*, short, short)`.
+- **`effectFadeinMusic(int)`** (`0x0021665c`, 64 B, 93.75%): chama `Ssd_SetSeqMasterVolume(SsdSeqRec*, short, short)`.
+- **`GetItemPos(int)`** (`0x001adea0`, 64 B, 87.5%): chama `Witemmenu_uvclut(short*, int)`.
+- **`extend_endornot()`** (`0x000d9eec`, 64 B, 93.75%): chama `sub_d6b20`, `edit_smallpacket()`.
+- **`Wextend_endornot()`** (`0x00101ba8`, 64 B, 93.75%): chama `sub_fe620`, `edit_smallpacket()`.
+- **`STEP_DISP(char const*)`** (`0x0028b6fc`, 60 B, 93.33%): chama `sub_714a0`.
+
+### 615.3 Funções-folha sem chamada externa (164)
+
+| Endereço | Função | Bytes | Cobertura |
+|---|---|---:|---:|
+| `0x001b8c38` | `sort_init()` | 452 | 87.61% |
+| `0x00176b80` | `bChrSort(int)` | 388 | 92.78% |
+| `0x001d2c10` | `get_battlebonus(B_BONUS*)` | 312 | 93.59% |
+| `0x002530b8` | `ctlbrst_zodiac()` | 300 | 93.33% |
+| `0x002702f0` | `scrwin_para_set(int, int, _POINT*, _POINT*)` | 292 | 90.41% |
+| `0x00200bb8` | `eventZoomChange(int)` | 292 | 93.15% |
+| `0x000da35c` | `event_init_memory()` | 288 | 76.39% |
+| `0x00163bb4` | `iOS_initTouchDisable(int)` | 280 | 91.43% |
+| `0x00200e2c` | `eventFukanChange(int)` | 280 | 92.86% |
+| `0x0024971c` | `vOpn_key_rep(unsigned long)` | 280 | 94.29% |
+| `0x00249174` | `vOpn_parainit()` | 260 | 78.46% |
+| `0x001537dc` | `eventflaginit()` | 260 | 81.54% |
+| `0x001bc334` | `GetSttsApos(short)` | 252 | 88.89% |
+| `0x00211b98` | `ExecuteChangePalette()` | 240 | 90.0% |
+| `0x001f35dc` | `EndAnimation(tag_animation*)` | 236 | 94.92% |
+| `0x001eb67c` | `myInitShape()` | 228 | 78.95% |
+| `0x00264378` | `ctlnblwldinfo_init()` | 224 | 78.57% |
+| `0x00187514` | `TimeConvert(int)` | 220 | 89.09% |
+| `0x000fef24` | `Wdisposewindow(MESSAGEPACKET*)` | 216 | 94.44% |
+| `0x002531e4` | `ctltuto_zodiac()` | 212 | 90.57% |
+| `0x00249f94` | `vOpn_pacinit()` | 212 | 86.79% |
+| `0x001a9158` | `IsItem(int)` | 208 | 94.23% |
+| `0x00200f44` | `startFukanChange()` | 196 | 91.84% |
+| `0x00211e50` | `setPresentClutDataAsDefault(unsigned int, unsigned int, int)` | 196 | 93.88% |
+| `0x0021025c` | `InitializePartyItem()` | 196 | 93.88% |
+| `0x00269870` | `snpl_syscur()` | 192 | 89.58% |
+| `0x00261b0c` | `mouke_eventday_chg()` | 188 | 93.62% |
+| `0x000dfa94` | `makemessagestructure()` | 188 | 91.49% |
+| `0x00254f9c` | `ctltownset_init(int, int)` | 184 | 86.96% |
+| `0x0021cf30` | `InitEffect()` | 180 | 86.67% |
+| `0x002699bc` | `snpl_putpara()` | 172 | 83.72% |
+| `0x00261bc8` | `endevent_count(int)` | 160 | 92.5% |
+| `0x0021f328` | `GetPermanentObject()` | 152 | 89.47% |
+| `0x00263254` | `ctlmouketeam_deactive(CTLINFO*)` | 152 | 94.74% |
+| `0x000d7d6c` | `sttsback_blue(STTSWINDOWBACK*)` | 148 | 94.59% |
+| `0x000fe1a4` | `Waddlocalprim(tagPOLY_FT4*)` | 148 | 94.59% |
+| `0x0015d6b4` | `iOSTchCurUnitCheck()` | 148 | 86.49% |
+| `0x000d665c` | `addlocalprim(tagPOLY_FT4*)` | 148 | 94.59% |
+| `0x002b715c` | `setPspDispNum(short, short, short)` | 148 | 89.19% |
+| `0x000d7b24` | `sttsback_normal(STTSWINDOWBACK*)` | 144 | 94.44% |
+| `0x001d6718` | `get_mapstp(int, int, int)` | 144 | 91.67% |
+| `0x00207d6c` | `iOS_mapVectorLimit()` | 144 | 91.67% |
+| `0x00292678` | `__xpLibgpuDrawCallBack(int)` | 144 | 83.33% |
+| `0x000ff95c` | `Wsttsback_blue(STTSWINDOWBACK*)` | 144 | 94.44% |
+| `0x000ff718` | `Wsttsback_normal(STTSWINDOWBACK*)` | 140 | 94.29% |
+| `0x002562fc` | `sthelp_curpos_set(CTLINFO*)` | 140 | 94.29% |
+| `0x00228d40` | `InitPermanentShape()` | 136 | 82.35% |
+| `0x0026dcbc` | `ctltuto_deactive(CTLINFO*)` | 132 | 93.94% |
+| `0x0007d9ac` | `fill_fopen_filefunc` | 132 | 78.79% |
+| `0x0007da30` | `fill_fopen64_filefunc` | 132 | 78.79% |
+| `0x00266654` | `add_winpac(unsigned long*, int*)` | 128 | 93.75% |
+| `0x001bc520` | `scroll_chk()` | 128 | 87.5% |
+| `0x00245610` | `strSetDefDecEnv(DECENV*, int, int, int, int)` | 128 | 90.62% |
+| `0x0024fd74` | `pspCtltutonet_deactive(CTLINFO*)` | 128 | 93.75% |
+| `0x0024a544` | `vOpn_add_winpac(unsigned long*, int*)` | 124 | 93.55% |
+| `0x002665d8` | `add_anmpac(unsigned long*, int*)` | 124 | 93.55% |
+| `0x002b2798` | `SE_CorrectFID(int)` | 124 | 93.55% |
+| `0x0021e760` | `doSequence(short)` | 120 | 90.0% |
+| `0x0024a4cc` | `vOpn_add_anmpac(unsigned long*, int*)` | 120 | 93.33% |
+| `0x00077524` | `gzerror` | 116 | 93.1% |
+| `0x000ff43c` | `Wallocatememoryinit()` | 116 | 93.1% |
+| `0x0024fd00` | `pspCtltutonet_active(CTLINFO*)` | 116 | 93.1% |
+| `0x002816bc` | `iOS_v2menuSetEnable(V2_MENU_ITEM, int)` | 116 | 93.1% |
+| `0x0021cc10` | `s1e_ifMetascheduleEnd(_EffectTCB*)` | 116 | 93.1% |
+| `0x000d7880` | `allocatememoryinit()` | 112 | 92.86% |
+| `0x0028d088` | `tlSetHeap(void*)` | 112 | 85.71% |
+| `0x000feeb4` | `Wdisposewindowbytask(int)` | 112 | 92.86% |
+| `0x00270490` | `curhis_put(int, int, int)` | 112 | 92.86% |
+| `0x0026030c` | `ctlmouke_exit(CTLINFO*)` | 112 | 82.14% |
+| `0x00281730` | `iOS_v2menuGetEnable(V2_MENU_ITEM)` | 108 | 92.59% |
+| `0x002151e8` | `resetClutData(unsigned int, unsigned int, int)` | 108 | 92.59% |
+| `0x0020c930` | `freeForFile(void*)` | 108 | 92.59% |
+| `0x0021cfe4` | `GetEffectTCB()` | 104 | 88.46% |
+| `0x001d18e4` | `Resume_MK_BSTR_IsLoaded(int)` | 104 | 92.31% |
+| `0x0020c6e4` | `freeForSound(void*)` | 104 | 92.31% |
+| `0x0028d1c4` | `tlPushHeap(void*)` | 100 | 84.0% |
+| `0x001e20c0` | `dec_party_item(BWORK*, unsigned short, int)` | 100 | 92.0% |
+| `0x00246300` | `vOpn_ctlinit(int)` | 96 | 91.67% |
+| `0x0026a674` | `op_search(int, int)` | 96 | 91.67% |
+| `0x002ab88c` | `sceGuBlendFunc` | 96 | 87.5% |
+| `0x001d1ffc` | `check_item_left(int, int, int)` | 96 | 91.67% |
+| `0x00288ebc` | `pspGetpspPrimWorkBuf(int)` | 92 | 91.3% |
+| `0x00270b04` | `pagenext_cursor(PAGEWININFO*)` | 88 | 90.91% |
+| `0x00253a10` | `wldctl_active()` | 88 | 81.82% |
+| `0x00253ec8` | `wldctl_deactive()` | 88 | 81.82% |
+| `0x001ca9b8` | `reset_toumei_afterskill(BWORK*)` | 88 | 90.91% |
+| `0x001531f8` | `edit_smallpacket()` | 84 | 90.48% |
+| `0x00265f84` | `iOSSDNovelBackLogCheck()` | 84 | 90.48% |
+| `0x00245de4` | `vOpn_ctlprog()` | 84 | 80.95% |
+| `0x00289fac` | `pspLoadSystemFile()` | 84 | 90.48% |
+| `0x00255758` | `iOSHelpCheck()` | 84 | 90.48% |
+| `0x001eed30` | `getShapeAddress(unsigned short)` | 84 | 85.71% |
+| `0x0010dea4` | `Wexport_localpad(long*)` | 84 | 90.48% |
+| `0x000e0568` | `export_localpad(long*)` | 84 | 90.48% |
+| `0x0025396c` | `ctlmap_deactive(CTLINFO*)` | 80 | 85.0% |
+| `0x00269820` | `snpl_picclr()` | 80 | 90.0% |
+| `0x001fce04` | `setActivePanelFromAnimation(tag_animation*)` | 80 | 85.0% |
+| `0x00228e98` | `GetShapePrim(int)` | 80 | 85.0% |
+| `0x0015a60c` | `siOS_TCurPosGet(unsigned int, int)` | 80 | 90.0% |
+| `0x002496d0` | `vOpn_key_repinit()` | 76 | 84.21% |
+| `0x0025e888` | `day_to_month(int, int*, int*)` | 76 | 94.74% |
+| `0x0020da7c` | `popBackColor()` | 76 | 89.47% |
+| `0x00200ae8` | `startLeftTurnSub(int)` | 76 | 78.95% |
+| `0x0021b570` | `SeekEffect()` | 76 | 89.47% |
+| `0x0015ddf8` | `iOSGT4_MapXYZ(unsigned long, long, long, long)` | 76 | 84.21% |
+| `0x00200b34` | `startRightTurnSub(int)` | 76 | 78.95% |
+| `0x0028dd2c` | `CloseEvent` | 72 | 94.44% |
+| `0x002b32a0` | `musicPlayer_Replay()` | 72 | 88.89% |
+| `0x00249a38` | `vOpn_month2day(int, int)` | 72 | 94.44% |
+| `0x002a2678` | `set_trans_matrix(long, long, long)` | 72 | 88.89% |
+| `0x00242450` | `vEnd_ctlinit()` | 72 | 88.89% |
+| `0x0025e840` | `month_to_day(int, int)` | 72 | 94.44% |
+| `0x0027d420` | `setCancelDisableArea(int, int, int, int, int)` | 72 | 88.89% |
+| `0x001a93dc` | `ChgShopStockItem(short, int)` | 72 | 94.44% |
+| `0x002b3258` | `musicPlayer_Pause()` | 72 | 88.89% |
+| `0x0015369c` | `Wtask_init()` | 72 | 88.89% |
+| `0x001eed84` | `getSequenceAddress(unsigned short)` | 72 | 83.33% |
+| `0x001d189c` | `Resume_MK_BSTR_Init()` | 72 | 88.89% |
+| `0x001cb7fc` | `check_reaction_deny2(BWORK*)` | 72 | 94.44% |
+| `0x001533d8` | `task_init()` | 72 | 88.89% |
+| `0x002b8750` | `iOS_isMovedDist()` | 72 | 94.44% |
+| `0x0015de44` | `iOSGT4_MapXYZClear(unsigned long)` | 72 | 83.33% |
+| `0x001cab08` | `clear_addeffect()` | 68 | 88.24% |
+| `0x002706c8` | `pageanmpac_reset(int, int, int)` | 68 | 94.12% |
+| `0x0010f9c0` | `Wloadcsrc(int, int, int, int)` | 68 | 94.12% |
+| `0x002a0878` | `PushMatrix` | 68 | 88.24% |
+| `0x001cec5c` | `setCasterDirection(int, unsigned char)` | 68 | 82.35% |
+| `0x002a08bc` | `PopMatrix` | 68 | 88.24% |
+| `0x00273864` | `GetDestinationRange()` | 68 | 94.12% |
+| `0x002b758c` | `IS_ICON_AREA(int)` | 68 | 88.24% |
+| `0x00269c3c` | `snpl_mesput3()` | 68 | 94.12% |
+| `0x001e207c` | `getskilldata(int)` | 68 | 94.12% |
+| `0x000fb554` | `chkMessagepacket()` | 64 | 93.75% |
+| `0x0020ef78` | `inactivateCompressedAnimation(int)` | 64 | 93.75% |
+| `0x0026a570` | `snpl_fadewait()` | 64 | 81.25% |
+| `0x00155cac` | `world_stopnoend(int)` | 64 | 93.75% |
+| `0x0028b080` | `pspWorldCallBackExec()` | 64 | 87.5% |
+| `0x0021c08c` | `s1f_ifNumTargetEQU(_EffectTCB*)` | 64 | 93.75% |
+| `0x0021cbd0` | `s1d_ifScheduleEnd(_EffectTCB*)` | 64 | 93.75% |
+| `0x0015365c` | `Wtask_killmyself()` | 64 | 87.5% |
+| `0x0021bd20` | `s5_setSequenceID(_EffectTCB*)` | 64 | 93.75% |
+| `0x00273b38` | `SetSafePanelAhead(int)` | 64 | 93.75% |
+| `0x00153398` | `task_killmyself()` | 64 | 87.5% |
+| `0x001e7420` | `iOS_AddClearItem()` | 64 | 87.5% |
+| `0x001eb794` | `iOSmyGetShapePrim()` | 64 | 93.75% |
+| `0x001eb074` | `countCrystalAnimation()` | 64 | 93.75% |
+| `0x002b8888` | `iOS_InitMovie(int)` | 64 | 87.5% |
+| `0x0020dad8` | `setBackColor(unsigned char, unsigned char, unsigned char)` | 64 | 93.75% |
+| `0x0020e880` | `getFontIDFormBattleWork(int)` | 64 | 93.75% |
+| `0x0016f738` | `iOS_cacheFilesNameClear()` | 60 | 93.33% |
+| `0x002ab5cc` | `GuEmu_Clear()` | 60 | 86.67% |
+| `0x001b7bf0` | `MenuSelVerticalWithSndDirect(unsigned short, unsigned char, int, int)` | 60 | 86.67% |
+| `0x001a7368` | `IsDismiss(short)` | 60 | 93.33% |
+| `0x001d3d5c` | `get_active_unit()` | 60 | 93.33% |
+| `0x00213e0c` | `stopColorRotation(unsigned int)` | 60 | 93.33% |
+| `0x001ca97c` | `overlayMonomaneStack()` | 60 | 93.33% |
+| `0x00153768` | `Wsend_taskparamater4(long, long, long, long, long)` | 60 | 93.33% |
+| `0x002819cc` | `iOS_v2menuInit()` | 60 | 93.33% |
+| `0x002b6fe0` | `iOSReleaseButtonAreaCheck()` | 60 | 93.33% |
+| `0x001534a4` | `send_taskparamater4(long, long, long, long, long)` | 60 | 93.33% |
+| `0x00284784` | `ColorVectorDataBase(unsigned int)` | 60 | 93.33% |
+| `0x0028daac` | `tlGetHeapSize()` | 56 | 92.86% |
+| `0x0021ce78` | `IsPermanentEffect(long)` | 56 | 92.86% |
+| `0x001cec24` | `copy_target_table2(unsigned char*)` | 56 | 92.86% |
+
+### 615.4 Restante com chamadas já documentadas (282)
+
+| Endereço | Função | Bytes | Cobertura | Chama |
+|---|---|---:|---:|---|
+| `0x0025f44c` | `frmbuf_get()` | 496 | 91.13% | `wldbg_draw(GsOT*)`, `ctleeff_draw(GsOT*)`, `wldiwasaki_put(GsOT*)`, `wldfrm_rect(int, RECT16*)`... |
+| `0x0015ad38` | `iOSexecuteCurSlide()` | 492 | 93.5% | `iOSCurIsInGame(int, int)`, `iOS_mapVectorLimit()`, `rsin`, `rcos`... |
+| `0x001569ac` | `editdirect()` | 484 | 91.74% | `Wwrite_eventflag(int, int)`, `Wread_eventflag(int)`, `worldmap_startinit()`, `changewindowamb(int, int, int)`... |
+| `0x001022ec` | `Wtutorial_hookfunc()` | 464 | 88.79% | `get_tutrial_pad()`, `__divsi3` |
+| `0x00267ad0` | `ctlret_main(CTLINFO*)` | 420 | 92.38% | `Wtask_status(long)`, `ctlret_deactive(CTLINFO*)`, `sound_request(int)`, `curhis_get(int)`... |
+| `0x0015a988` | `sBattleTouchRotationMain()` | 416 | 94.23% | `iOS_getTouchTap()`, `iOS_getTouchBeginX()`, `iOS_getTouchNowX()`, `iOS_getTouchSwype()`... |
+| `0x00285f8c` | `hockRead(void*, int, unsigned int)` | 408 | 83.33% | `sub_714c4` |
+| `0x0015e5d4` | `iOSShiftUnitGet()` | 404 | 92.08% | `iOSBtlFreeCurCheck()`, `iOSSoundSESet(int)`, `iOSUnitNumberGet(int, int)`, `iOSsetCursorByTouch(int, int, int, int, int)`... |
+| `0x002b1600` | `GX_Init(int)` | 400 | 91.0% | `CG2D_LOADER::CalcAsTexture(int, int, int*, int*)`, `CEGL2_IF::CEGL2_IF()`, `CEGL2_IF::LoadShaderAll(char*)`, `CEGL2_IF::AllocPacket(int, int)`... |
+| `0x001f4440` | `InitAnimationInit()` | 384 | 88.54% | `iOS_getV2Icon(V2ICON_DATA)` |
+| `0x002453a4` | `fft_ending()` | 384 | 91.67% | `myPollhost()`, `fftCdLoop(CDREC*)`, `getMoviePlayFlg__Fv()`, `vOpn_ctlprog()`... |
+| `0x001d205c` | `check_trap(unsigned char, unsigned char, unsigned char)` | 380 | 93.68% | `read_eventflag(int)`, `check_item_left(int, int, int)`, `check_coord2(int, int, int, unsigned char)` |
+| `0x001b8e64` | `TutrialInit(int)` | 380 | 92.63% | `sub_714b8`, `load_worldname()`, `MakeSaveData(int)`, `SetLoadData(int)`... |
+| `0x0019f798` | `MainShop()` | 380 | 89.47% | `Wsend_taskparamater(long, long, long, long)`, `DrawMessage(int, COMRECORD*)`, `SetMenuSelSide(unsigned char, short)`, `CurChrChg()`... |
+| `0x0020fd1c` | `InitializeAll()` | 376 | 88.3% | `sub_71adc`, `iOSYajiEffectClear()`, `initFileBuffer()`, `sub_20fa50`... |
+| `0x0024f8c0` | `ctltipsmes_main(CTLINFO*)` | 372 | 93.55% | `ctltips_init(int)`, `sound_request(int)`, `iOSTutoReset()`, `iOSTutoFlagCheck(int)`... |
+| `0x0019d634` | `MonsterNameInput()` | 368 | 88.04% | `Wtask_create(long, char*)`, `Wsend_taskparamater(long, long, long, long)`, `iOSUnitListWinReset()`, `iOSUnitListWinOnOff(int)`... |
+| `0x00211a28` | `SetChangePaletteData(unsigned short, unsigned short, unsigned short, unsigned short, unsigned short)` | 368 | 91.3% | `iOS_GetFrameRate()`, `SetDrawMode`, `__divsi3` |
+| `0x000ff2cc` | `Wdisposetexture(RECT16*)` | 368 | 93.48% | `Wtask_killmyself()` |
+| `0x000ff4b0` | `Wallocatememorywait(int)` | 364 | 92.31% | `wasmTaskEntry()`, `FntPrint` |
+| `0x0024b824` | `ctlbar_exit(CTLINFO*)` | 356 | 92.13% | `iOS_setDispMenuTouch(char)`, `wldctl_deactive()`, `ctltownmenu_init(int)`, `wldframe_clr(int)`... |
+| `0x0015af24` | `iOSexecuteScroll()` | 352 | 92.05% | `rsin`, `rcos`, `iOS_getTouchTap()`, `__subsf3`... |
+| `0x002b582c` | `Logo_Init()` | 348 | 85.06% | `CGX_SCREEN_CORRECT::Init(int, int, int, int)`, `CINPUT_IF_TOUCH::ClearAll()`, `CRECT::Register(_RECT_UI*, int)`, `CRECT::SetEnableAll(int)`... |
+| `0x0024ac38` | `vOpn_defscrwin_set(int, int, _POINT*, _POINT*)` | 348 | 90.8% | `Wtask_create(long, char*)` |
+| `0x001e6368` | `forecast_skill(BWORK*, BWORK*, ACT*)` | 348 | 91.95% | `init_target_result(A_RESULT*)`, `calc_result(ACT*, unsigned char)`, `get_coord_address(BWORK*)`, `copyACTst(ACT*, ACT*)`... |
+| `0x001597c0` | `disp_worlddhelpmenu()` | 348 | 91.95% | `Wexport_localpad(long*)`, `Wmesputmain()`, `Wsend_taskparamater(long, long, long, long)`, `wasmGetInput1()`... |
+| `0x002578d4` | `ctlevtinfo_main(CTLINFO*)` | 344 | 90.7% | `iOS_add_anmpac_max(int)`, `sound_request(int)`, `pagewin_main(PAGEWININFO*)`, `iOS_setV2Icon(V2ICON_DATA, int)` |
+| `0x000d78f0` | `allocatememorywait(int)` | 344 | 91.86% | `asmTaskEntry()`, `FntPrint` |
+| `0x0020fe94` | `InitializeHot()` | 344 | 88.37% | `eventflaginit()`, `sort_init()`, `initBdata()`, `initFileBuffer()`... |
+| `0x00248cd0` | `ctlcard_main(CTLINFO*)` | 340 | 89.41% | `callSystemSound(int)`, `vOpn_fadeout(int)`, `SetDispMask` |
+| `0x001d21d8` | `get_stop_event(BWORK*)` | 332 | 93.98% | `change_status_adjust(int)`, `init_target_result(A_RESULT*)`, `set_status_all(int, int)`, `check_move_ability(BWORK*)`... |
+| `0x0026b724` | `worldmap_new()` | 328 | 87.8% | `sub_714b8` |
+| `0x002169d0` | `InitSound()` | 324 | 91.36% | `initSoundHeap()`, `fileOpenForSndCD(unsigned long, unsigned long)`, `fileOpenCD(unsigned long, unsigned long, void*)`, `Ssd_Init(unsigned short)`... |
+| `0x00253d84` | `ctltownset_main(CTLINFO*)` | 324 | 92.59% | `Wwrite_eventflag(int, int)`, `sound_request(int)` |
+| `0x001612d0` | `iOSsTchBtlInit()` | 324 | 80.25% | `iOSsTchBtlFlagSet(int)`, `iOSSlideYajiSet(int)`, `LoadImage_menuData()` |
+| `0x002b2d10` | `Jingle_Play(int)` | 312 | 93.59% | `CFILE_DAT::GetOffset(int)`, `CFILE_DAT::GetSize(int)`, `CSOUND_IF::GetVolume(int)`, `CSOUND_IF::Load(int, char*, unsigned char*, unsigned int, unsigned int, int, int, int, int, int, int)`... |
+| `0x0020c418` | `db_swap(unsigned long*, unsigned long*)` | 312 | 89.74% | `pspgFreamBufCountCountReset()`, `VSync`, `DrawSync`, `FntFlush`... |
+| `0x00162d5c` | `iOS_IsInYellowMesh(int, int)` | 312 | 92.31% | `xpLibGetOffset(int*, int*)`, `RayPick_GT4_input(tagPOLY_GT4*, int, int, int, int)`, `RayPick_GT3_input(tagPOLY_GT3*, int, int, int, int)` |
+| `0x00225514` | `MemoryMapper()` | 304 | 88.16% | `FntPrint` |
+| `0x00255054` | `ctlmap_eventchk()` | 300 | 93.33% | `ctlmap_deactive(CTLINFO*)`, `wld_event(int, int)` |
+| `0x00257af4` | `ctlparty_main(CTLINFO*)` | 300 | 90.67% | `Wtask_status(long)`, `load_worldname()`, `loadPlayerPartyData(int)`, `sound_request(int)` |
+| `0x00256ec8` | `ctltownmenu_exit(CTLINFO*, int)` | 300 | 92.0% | `wldctl_active()`, `iOS_add_anmpac_max(int)` |
+| `0x001b2ac8` | `SetJobName()` | 296 | 90.54% | `GetMesAdr(unsigned char*, short, int)`, `MakeTextureMessage(unsigned char*, short*, RECT16*, int)`, `CountWidthMessage(unsigned char*)` |
+| `0x000c18cc` | `disp_maptitle()` | 288 | 94.44% | `sub_c1468`, `asmTaskEntry()`, `asmGetInput3()`, `iOS_getV2Icon(V2ICON_DATA)`... |
+| `0x00221d64` | `RequestHitMarkEffect(long, EffectOrder*, long)` | 288 | 93.06% | `sub_714b8`, `NewPEffectTCB()`, `ConvertEffectAttribute(int)` |
+| `0x0019f914` | `ExitShop()` | 284 | 91.55% | `Wsend_taskparamater(long, long, long, long)`, `DrawPrice()`, `DrawFunds()`, `FadeOutInit()`... |
+| `0x001ccafc` | `get_floor_damage(BWORK*)` | 284 | 90.14% | `sub_1c88f8`, `change_status_adjust(int)`, `init_target_result(A_RESULT*)`, `get_coord_address(BWORK*)` |
+| `0x0029a2d8` | `DrawOTag` | 276 | 89.86% | `xpLibgpuStartRender`, `sub_291f08`, `sub_2956a0`, `sceGuEnable`... |
+| `0x00291178` | `MoveImage2` | 276 | 94.2% | `sub_714b8`, `sub_28e6f0`, `sub_28e798`, `sub_28e998` |
+| `0x000cbc3c` | `TrapWindowTaskManager(int, int, short, int)` | 276 | 94.2% | `TrapWindow_Taskchk(int)`, `task_create(long, char*)`, `send_taskparamater(long, long, long, long)`, `asmTaskEntry()` |
+| `0x001aec8c` | `DrawEquipCategory(int, int, int)` | 276 | 94.2% | `DrawTexFlip(short*, COLOR*, char, int, int, int)`, `DrawWindow2(unsigned char*, unsigned long, int)`, `GetWindowColor()` |
+| `0x002b7378` | `RENDER_TO_SCREEN(int, int, int*, int*)` | 276 | 91.3% | `CGX_SCREEN_CORRECT::Area_ToScreen(int, int, int, int*, int*)`, `IS_TEX_2X()`, `__floatsisf`, `__mulsf3`... |
+| `0x0022588c` | `NewObject(short, short)` | 272 | 92.65% | `system_error(int, int)`, `NewEffectAnimation(short)` |
+| `0x002b7268` | `SCREEN_TO_RENDER(int, int, int*, int*)` | 272 | 91.18% | `CGX_SCREEN_CORRECT::Area_ToRender(int, int, int, int*, int*)`, `IS_TEX_2X()`, `__floatsisf`, `__divsf3`... |
+| `0x0015d748` | `iOSCurSameOK()` | 272 | 89.71% | `iOSTchCurUnitCheck()`, `iOS_getTouchTap()`, `iOS_getV2Icon(V2ICON_DATA)`, `iOS_setV2Icon(V2ICON_DATA, int)` |
+| `0x00155b4c` | `worldmap_menuinit()` | 272 | 89.71% | `Wevent_init_memory()`, `Wevent_init_system()`, `Wwrite_eventflag(int, int)`, `sub_154b88`... |
+| `0x0028b738` | `initTaskEmu()` | 268 | 92.54% | `sub_714c4`, `sub_71a4c`, `sub_71af4`, `sub_71b00`... |
+| `0x00200cdc` | `startZoomChange(int)` | 268 | 94.03% | `callSystemSound(int)` |
+| `0x002557ac` | `ctlhelp_main(CTLINFO*)` | 268 | 85.07% | `Wtask_status(long)`, `wldctl_active()`, `iOSHelpCheck()`, `iOS_setV2Icon(V2ICON_DATA, int)` |
+| `0x00249ac0` | `vOpn_padread()` | 268 | 91.04% | `resetFFT()`, `vOpn_SetCDVolume(int, int)`, `Ssd_SetAttenuator(short)`, `Ssd_SetSpuVolume(short, short)`... |
+| `0x0025b8ec` | `houkoku_mesput(CTLINFO*, int)` | 264 | 92.42% | `Wwrite_eventflag(int, int)`, `Wtask_create(long, char*)`, `Wtask_status(long)`, `Wsend_taskparamater(long, long, long, long)`... |
+| `0x001bad9c` | `SeExec()` | 260 | 92.31% | `callSoundEffect(int)` |
+| `0x00255654` | `ctlhelp_init(int, int)` | 260 | 87.69% | `Wmakemessagepacket(char*)`, `Wpushmessagepacket()`, `Wtask_create(long, char*)`, `Wsend_taskparamater(long, long, long, long)`... |
+| `0x0019d530` | `FighterName()` | 260 | 86.15% | `Wtask_create(long, char*)`, `Wsend_taskparamater(long, long, long, long)`, `iOSUnitListWinOnOff(int)`, `Name(unsigned char*, short*)`... |
+| `0x00259ad4` | `ctlhismes_main(CTLINFO*)` | 260 | 90.77% | `pagewin_main(PAGEWININFO*)` |
+| `0x00210c9c` | `setMapVector(SVECTOR*, SVECTOR*)` | 256 | 89.06% | `get_mapstp(int, int, int)`, `setShortVector(SVECTOR*, int, int, int)`, `setLongVector(VECTOR*, int, int, int)` |
+| `0x00225210` | `DoPermanentEffect()` | 256 | 89.06% | `ASHURA_getOTptrZ(int)`, `DisposePEffectTCB(unsigned char)` |
+| `0x001cc9fc` | `status_countdown(int)` | 256 | 92.19% | `change_status_adjust(int)`, `init_target_result(A_RESULT*)` |
+| `0x00255180` | `ctlmap_active(CTLINFO*)` | 256 | 90.62% | `Wread_eventflag(int)`, `wldscr_snapshot(int)`, `CFFT_STATE::GetParam(int)`, `CFFT_STATE::SetParam(int, int)` |
+| `0x002b1ff8` | `Debug_DrawFPS()` | 252 | 90.48% | `timeGetTime()`, `CFRAMERATE::GetRate()`, `__divsf3`, `__fixsfsi`... |
+| `0x00225790` | `InitObjectManager()` | 252 | 87.3% | `Malloc(unsigned long, long)` |
+| `0x00188348` | `allitem_count()` | 248 | 91.94% | `sub_714b8`, `get_unitwork_add(int)`, `get_item_number(unsigned short, int)`, `pspItemIsExist`... |
+| `0x001b799c` | `SystemWarningTime(int, int)` | 244 | 90.16% | `Wtask_create(long, char*)`, `Wtask_status(long)`, `Wsend_taskparamater(long, long, long, long)`, `WindowDel(int)` |
+| `0x00100844` | `Wcheckkeyok()` | 240 | 90.0% | `wasmGetInput3()`, `wasmGetActiveF()`, `wasmGetActiveTask(int)` |
+| `0x0025c838` | `ctlshogou_init()` | 240 | 90.0% | `Wtask_create(long, char*)`, `Wtask_status(long)`, `shogou_mesput(CTLINFO*)`, `shogou_check()` |
+| `0x0025c3ac` | `mkdaypt_calc()` | 240 | 93.33% | `mkadrtbl_calc(int)` |
+| `0x00101650` | `Whook_jobmenu()` | 236 | 89.83% | `iOS_setsoundf(int*, int)`, `sub_fe868`, `Wwait_overlay(int)`, `Wtask_wait(long)`... |
+| `0x0015ce74` | `iOSMapIconModeSet(int)` | 236 | 89.83% | `iOSRotSlidCls()`, `iOS_getV2Icon(V2ICON_DATA)`, `iOS_setV2Icon(V2ICON_DATA, int)` |
+| `0x000ef4f4` | `hook_jobmenu()` | 236 | 89.83% | `sub_d6d20`, `wait_overlay(int)`, `iOS_setsoundf(int*, int)`, `task_wait(long)`... |
+| `0x0028d6ec` | `tlCheckHeap()` | 228 | 92.98% | `sub_28cfb4`, `sub_28d01c` |
+| `0x001cea0c` | `set_walker_result(BWORK*, REWARD*)` | 224 | 94.64% | `setskillresult(int)`, `get_unit_jl(BWORK*, int, int*)` |
+| `0x00138234` | `disp_eventwindow()` | 224 | 92.86% | `multiwindow_break(unsigned long*)`, `import_localpad(int)`, `multiwindow_keyright(COMRECORD*, int)`, `task_wait(long)`... |
+| `0x002541c4` | `ctlcenter_init(int)` | 224 | 85.71% | `wldcenter_set(_POINT*, SVECTOR*)` |
+| `0x00134fa0` | `Wdisp_eventwaitwindow()` | 224 | 92.86% | `Wmultiwindow_keyright(COMRECORD*, int)`, `Wimport_localpad(int)`, `Wtask_create(long, char*)`, `Wwait_taskend(long)`... |
+| `0x0015588c` | `title_menuinit()` | 224 | 91.07% | `Wevent_init_memory()`, `Wevent_init_system()`, `Wwrite_eventflag(int, int)`, `numa_fileReadCD(unsigned long, unsigned long, void*)`... |
+| `0x001252d0` | `Wdisp_eventwindow()` | 224 | 92.86% | `Wmultiwindow_break(unsigned long*)`, `Wmultiwindow_keyright(COMRECORD*, int)`, `Wimport_localpad(int)`, `Wtask_wait(long)`... |
+| `0x002b54b4` | `Link_Uninit()` | 220 | 92.73% | `CEGL2_SPRITE::Unload(int)`, `CUI_SCROLLBAR::Delete()`, `CFILE_TXT::~CFILE_TXT()`, `sub_2cdf9c` |
+| `0x002b2ea0` | `Jingle_FrameMove()` | 220 | 92.73% | `CSOUND_IF::Unload(int)`, `CSOUND_IF::IsPlaying(int, int)`, `CSOUND_IF::GetVolume(int)`, `CSOUND_IF::FadeVolume(int, int, int, int)`... |
+| `0x002ab620` | `GuEmu_ClearTexCache()` | 220 | 94.55% | `CEGL2_SPRITE::Unload(int)` |
+| `0x0025f280` | `snpl_load(int)` | 212 | 86.79% | `wldload_wait()`, `wldCdRead(CDREC*, int, int, int, unsigned long*)` |
+| `0x001c02d4` | `JobToAbiChg()` | 212 | 92.45% | `DrawUnitWithShadow(short, DVECTOR*, COLOR*, int, int)` |
+| `0x0024b6bc` | `ctlbar_active(CTLINFO*)` | 212 | 94.34% | `Wsend_taskparamater(long, long, long, long)`, `iOS_setDispMenuTouch(char)`, `pspWorldDisableFlg(PSP_WORLD_FLG)`, `pspWorldCheckFlg(PSP_WORLD_FLG)` |
+| `0x00290cf0` | `ResetGraph` | 208 | 90.38% | `sub_714b8`, `sub_28e6f0`, `sub_28e868` |
+| `0x002b2644` | `EnvSE_Stop(int)` | 208 | 94.23% | `CFFT_STATE::GetParam(int)` |
+| `0x001bab78` | `GetIwaPadData()` | 208 | 88.46% | `Wtask_status(long)`, `TruePadRead(int)`, `GetSttsAMovingTime()` |
+| `0x00255584` | `ctlhelp2_main(CTLINFO*)` | 208 | 86.54% | `Wpopmessagepacket()`, `iOS_add_anmpac_max(int)`, `pagewin_main(PAGEWININFO*)` |
+| `0x00228c74` | `InitShape()` | 204 | 82.35% | `Malloc(unsigned long, long)` |
+| `0x00255e14` | `ctlfsetnum_init(int, int)` | 204 | 86.27% | `valnumwin_set(int, unsigned long, int, _POINT*)` |
+| `0x00257a2c` | `ctlparty_init()` | 200 | 86.0% | `valnumwin_set(int, unsigned long, int, _POINT*)` |
+| `0x000d8fe0` | `get_cursoroffset(int)` | 200 | 92.0% | `__aeabi_idivmod` |
+| `0x00100df8` | `Wget_cursoroffset(int)` | 200 | 92.0% | `__aeabi_idivmod` |
+| `0x002b1e70` | `NowLoading_FrameMove()` | 200 | 90.0% | `timeGetTime()`, `CFRAMERATE::GetRate()`, `CSTEP::Init(int, int, int, int, unsigned int)`, `CSTEP::FrameMove(float, unsigned int)` |
+| `0x0015a7d8` | `iOSScrollButtonMove()` | 200 | 90.0% | `iOSScrollButtonAreaCheck()`, `searchCurrentAnimation()`, `iOSgetCursorVisible()`, `iOSsetCursorByTouch(int, int, int, int, int)` |
+| `0x000da720` | `tutorial_hookfunc()` | 196 | 85.71% | `iOS_getV2Icon(V2ICON_DATA)` |
+| `0x001383a4` | `maptest()` | 196 | 85.71% | `import_localpad(int)`, `task_create(long, char*)` |
+| `0x00242268` | `vOpn_arzpic_init(int)` | 196 | 89.8% | `vOpn_bk_load(int, unsigned long*)`, `pspOpenDataBackBufGet(int)`, `xpMallocIO` |
+| `0x0025e508` | `person_year_up()` | 196 | 93.88% | `Wread_eventflag(int)` |
+| `0x00291098` | `StoreImage2` | 188 | 93.62% | `sub_714b8` |
+| `0x0020c19c` | `fftVSyncCallback()` | 188 | 87.23% | `ps_rand()` |
+| `0x0020f43c` | `debugEffectWait()` | 188 | 80.85% | `iOS_SetFrameRate(int)`, `LoadEffect()`, `UnlockEffect()` |
+| `0x00216308` | `readMusic(int)` | 180 | 93.33% | `errorHandler(int)`, `mallocForSound(unsigned int)`, `fileReadRequest(unsigned long, unsigned long, void*)`, `CFFT_STATE::SetMusicBuffer(int, int)` |
+| `0x002101a8` | `loadPlayerPartyData(int)` | 180 | 93.33% | `clear_unitwork()`, `employ_from_entry(unsigned char*, int, int, int)`, `requestReadEntryData()`, `requestEntryData()`... |
+| `0x00248c18` | `ctlpremov_main(CTLINFO*)` | 180 | 88.89% | `SetDispMask` |
+| `0x001568fc` | `worldmap_restart()` | 176 | 81.82% | `Wmakemessagepacket(char*)`, `Wevent_init_memory()`, `Wevent_init_system()`, `load_worldname()`... |
+| `0x001cce2c` | `get_trap_result(BWORK*)` | 172 | 88.37% | `init_target_result(A_RESULT*)`, `getTrapResultDamage(BWORK*, int)`, `check_trap(unsigned char, unsigned char, unsigned char)` |
+| `0x001bd320` | `UnitTableInitFirst(short)` | 172 | 83.72% | `iOSUnitListWinOnOff(int)`, `iOSWldUnitListWinSet(int)`, `UnitTableInit(short)` |
+| `0x0024998c` | `vOpn_iwaprog()` | 172 | 83.72% | `send_worldkeymask(unsigned long)`, `worldmap_call(unsigned long*, unsigned long)` |
+| `0x002b1f3c` | `Offscreen_ReadPixels(int, int, int, int)` | 172 | 93.02% | `CEGL2_FBO::ReadPixels(unsigned int*, int, int, int, int)`, `sub_2cdf8c` |
+| `0x000da4ac` | `event_init_light()` | 172 | 88.37% | `sub_714b8`, `ASHURA_SetMatrix(long, MATRIX*, MATRIX*, unsigned short)` |
+| `0x002b3610` | `Boot_FrameRender()` | 168 | 88.1% | `CEGL2_IF::SetScreenSize(float, float)`, `CEGL2_IF::ClearBackdrop(float, float, float)`, `CEGL2_IF::InitRenderState2D()`, `CEGL2_IF::Setup2D()`... |
+| `0x00217e14` | `InitEffectAnimation()` | 168 | 92.86% | `GetClut` |
+| `0x002116f0` | `padReadGenerate()` | 168 | 88.1% | `resetFFT()`, `iOS_setReset(int)`, `iOS_getReset()`, `pspNetPadRead` |
+| `0x001f4a88` | `initEntryPlayerAnimations()` | 164 | 87.8% | `return_pentry()`, `read_eventflag(int)`, `set_playerwork2(PENTRY*, unsigned char*)`, `set_playerwork(PENTRY*, unsigned char*)` |
+| `0x00289ac0` | `pspFftLoad(int, FFT_SAVE_DATA*, int*, int)` | 164 | 92.68% | `iOS_fftLoad(int)`, `pspClearSaveData()`, `xpLibapiSaveStart`, `xpLibapiSaveEnd`... |
+| `0x001bb460` | `SetSttsAbi(int)` | 164 | 92.68% | `Wtask_create(long, char*)`, `Wtask_status(long)`, `Wsend_taskparamater(long, long, long, long)`, `iOSUnitListWinOnOff(int)`... |
+| `0x0029a3ec` | `DrawPrim` | 164 | 90.24% | `ClearOTag`, `AddPrim`, `xpLibgpuStartRender`, `sub_291f08`... |
+| `0x00211c88` | `DisplayChangePalette()` | 160 | 87.5% | `ASHURA_getOTptrZ(int)`, `AddPrim` |
+| `0x001bb224` | `SetSttsEqu2(int)` | 156 | 87.18% | `Wtask_create(long, char*)`, `Wtask_status(long)`, `Wsend_taskparamater(long, long, long, long)`, `WindowDel(int)` |
+| `0x000da280` | `recieve_statusinfo()` | 156 | 92.31% | `asmGetActiveTask(int)` |
+| `0x001cd9b0` | `inc_party_item(BWORK*, unsigned short, BWORK*)` | 156 | 94.87% | `get_item_number(unsigned short, int)`, `pspItemIsEmpty`, `pspItemIsBarehand` |
+| `0x001bd3cc` | `UnitListInit()` | 152 | 89.47% | `GetChrList(short, CHR_STTS**, int)`, `RefleshItemUserSort(int)`, `UnitTableInitFirst(short)` |
+| `0x0013819c` | `recover_windows(int, int)` | 152 | 92.11% | `task_create(long, char*)`, `send_taskparamater(long, long, long, long)` |
+| `0x00125238` | `Wrecover_windows(int, int)` | 152 | 92.11% | `Wtask_create(long, char*)`, `Wsend_taskparamater(long, long, long, long)` |
+| `0x0015a744` | `iOSScrollButtonAreaCheck()` | 148 | 94.59% | `searchCurrentAnimation()` |
+| `0x00102208` | `Wexport_suc(int)` | 148 | 91.89% | `wasm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)`, `get_bwp(int)`, `system_error(int, int)` |
+| `0x000e14f4` | `statusfigprint10(int, int, char*, COPYFIELD*)` | 148 | 91.89% | `asmKanjiCopy(char*, char*, COPYFIELD*, int)` |
+| `0x000da63c` | `export_suc(int)` | 148 | 91.89% | `asm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)`, `get_bwp(int)`, `system_error(int, int)` |
+| `0x002b6b38` | `Main_Uninit()` | 148 | 94.59% | `CEGL2_SPRITE::Unload(int)`, `uninitTaskEmu()`, `CFFT_STATE::GetDebugMode()`, `CFFT_STATE::GetMoviePlaying()`... |
+| `0x002bb678` | `iOSMenuOkCancelHelpGet(int, int)` | 148 | 94.59% | `isInRectUi(_RECT_UI*, int, int)`, `iOS_getCarrierType()` |
+| `0x00268ec4` | `wldcenter_move()` | 148 | 94.59% | `__divsi3` |
+| `0x00138314` | `extend_valuefield(int)` | 144 | 91.67% | `getvaluelength(int)` |
+| `0x001253b0` | `Wextend_valuefield(int)` | 144 | 91.67% | `Wgetvaluelength(int)` |
+| `0x00097b70` | `_float32_pack` | 144 | 88.89% | `sub_715fc`, `sub_7162c`, `sub_71680`, `sub_71698`... |
+| `0x002abc8c` | `sceGuTexFilter` | 144 | 94.44% | `CEGL2_IF::GetPacket(int)`, `CFFT_STATE::GetParam(int)` |
+| `0x0020e228` | `get2DPosition(SVECTOR*, SVECTOR*)` | 144 | 86.11% | `ASHURA_matrix(MATRIX*, SVECTOR*, VECTOR*, VECTOR*)`, `SetRotMatrix`, `SetTransMatrix`, `RotTrans` |
+| `0x0026dc2c` | `ctltuto_active(CTLINFO*)` | 144 | 94.44% | `Wsend_taskparamater(long, long, long, long)` |
+| `0x001bb504` | `SetSttsBoth(int)` | 140 | 91.43% | `Wtask_create(long, char*)`, `Wtask_status(long)`, `Wsend_taskparamater(long, long, long, long)` |
+| `0x0021627c` | `readMusicBuffer(int, int)` | 140 | 94.29% | `errorHandler(int)`, `mallocForSound(unsigned int)`, `fileReadRequest(unsigned long, unsigned long, void*)` |
+| `0x00245e38` | `ctlstartmov_init(int, int, int, int)` | 140 | 85.71% | `iOS_InitMovie(int)`, `iOS_StartMovie()` |
+| `0x002b8680` | `RayPick_GT3(tagPOLY_GT3*, int, int)` | 136 | 94.12% | `RayPick_GT3_input(tagPOLY_GT3*, int, int, int, int)`, `iOS_getV2Icon(V2ICON_DATA)` |
+| `0x002b85f8` | `RayPick_GT4(tagPOLY_GT4*, int, int)` | 136 | 94.12% | `RayPick_GT4_input(tagPOLY_GT4*, int, int, int, int)`, `iOS_getV2Icon(V2ICON_DATA)` |
+| `0x0015dfbc` | `iOSActiveUnitGet()` | 132 | 93.94% | `iOSBtlFreeCurCheck()`, `searchCurrentAnimation()`, `iOSsetCursorByTouch(int, int, int, int, int)` |
+| `0x002b2714` | `EnvSE_SetVol(int, int)` | 132 | 90.91% | `CSOUND_IF::IsPlaying(int, int)`, `CFFT_STATE::GetParam(int)` |
+| `0x001abb18` | `MakeChr(short)` | 132 | 93.94% | `GetChrList(short, CHR_STTS**, int)`, `get_unitwork_add(int)`, `set_unitdata(int)` |
+| `0x0025f0b8` | `pic_load(int)` | 128 | 87.5% | `wldload_wait()`, `wldCdRead(CDREC*, int, int, int, unsigned long*)` |
+| `0x0025f358` | `psp_bk_load(int, void*)` | 128 | 90.62% | `wldload_wait()`, `wldCdRead(CDREC*, int, int, int, unsigned long*)` |
+| `0x0025f168` | `bk_load(int)` | 128 | 87.5% | `wldload_wait()`, `wldCdRead(CDREC*, int, int, int, unsigned long*)` |
+| `0x000d9790` | `wait_overlay(int)` | 128 | 90.62% | `asmTaskEntry()` |
+| `0x000d9988` | `wait_loaddata(int)` | 128 | 90.62% | `asmTaskEntry()` |
+| `0x001015a4` | `Wwait_overlay(int)` | 128 | 90.62% | `wasmTaskEntry()` |
+| `0x00101888` | `Wwait_loaddata(int)` | 128 | 90.62% | `wasmTaskEntry()` |
+| `0x0015df3c` | `iOSTapCalcu()` | 128 | 87.5% | `iOS_getTouchPress()` |
+| `0x00249f14` | `vOpn_dataload2()` | 128 | 93.75% | `vOpn_loadwait()`, `numa_vOpn_CdRead(CDREC*, unsigned long, unsigned long, unsigned long, unsigned long*)`, `vOpn_timload(unsigned long*)` |
+| `0x002b3590` | `Boot_FrameMove()` | 128 | 90.62% | `CEGL2_IF::ClearBackdrop(float, float, float)`, `CTHREAD::Sync()`, `onGotoNextMode(int)` |
+| `0x0020c550` | `db_swap_generate(unsigned long*, unsigned long*)` | 124 | 90.32% | `pspgFreamBufCountCountReset()`, `VSync`, `DrawSync`, `FntFlush`... |
+| `0x00105510` | `Wwait_direc(int)` | 124 | 93.55% | `Wcnvglobaltolocalid(int)`, `wasmTaskEntry()` |
+| `0x001baae8` | `SttsAMovingChk()` | 124 | 90.32% | `Wtask_status(long)` |
+| `0x0028bec0` | `TE_VSync(int)` | 124 | 90.32% | `TE_asmTaskEntry(int)` |
+| `0x002b2a18` | `SE_StopVFX(int)` | 124 | 90.32% | `CSOUND_IF::Unload(int)`, `CFFT_STATE::GetParam(int)` |
+| `0x000dcc2c` | `wait_direc(int)` | 120 | 93.33% | `cnvglobaltolocalid(int)`, `asmTaskEntry()` |
+| `0x0015d2ac` | `iOS_GameAreaCheck()` | 120 | 83.33% | `IS_GAME_AREA(int, int)` |
+| `0x001e4e94` | `get_step_no(BWORK*)` | 120 | 93.33% | `_pspNetRand(char const*, int)` |
+| `0x001a47e0` | `pspAbilityCompareSupport(short, short)` | 120 | 90.0% | `SetChrListOne(int)`, `CurChrChg()`, `CurChrChg2()` |
+| `0x000d8c00` | `checkkeyok()` | 116 | 89.66% | `asmGetInput3()`, `asmGetActiveF()` |
+| `0x000e2b04` | `statusnowprint(char*, COPYFIELD*)` | 116 | 93.1% | `asmBoxCopy(char*, char*, COPYFIELD*, COPYFIELD*)` |
+| `0x00201708` | `setActionStartDirection(tag_animation*)` | 116 | 93.1% | `ratan2` |
+| `0x001fd168` | `setActivePanelFromAction(tag_animation*)` | 116 | 89.66% | `searchAnimationByBattleID(unsigned short)` |
+| `0x000c81c4` | `tool_squareinit()` | 116 | 89.66% | `sub_be538`, `task_create(long, char*)` |
+| `0x001b7ef4` | `TruePadRead(int)` | 116 | 93.1% | `CardEventClose()`, `CallresetFFT()`, `pspNetPadRead` |
+| `0x000daa50` | `checktaskkind(int)` | 112 | 92.86% | `asmGetActiveTask(int)` |
+| `0x00103340` | `Wwrite_eventflag(int, int)` | 112 | 92.86% | `Wcalcformula(int, int, int, int)` |
+| `0x000db77c` | `write_eventflag(int, int)` | 112 | 92.86% | `calcformula(int, int, int, int)` |
+| `0x0028e25c` | `OpenEvent(unsigned long, long, long, long (*)())` | 112 | 92.86% | `pspSaveBase::Update()` |
+| `0x001026c4` | `Wchecktaskkind(int)` | 112 | 92.86% | `wasmGetActiveTask(int)` |
+| `0x000d8778` | `import_localstatus(char*, char*, char*, char*)` | 108 | 92.59% | `sub_714b8` |
+| `0x001a9370` | `GetTotalItemBackup(short)` | 108 | 92.59% | `GetTotalItem(short)` |
+| `0x00249c58` | `vOpn_bk_load(int, unsigned long*)` | 108 | 88.89% | `numa_vOpn_CdRead(CDREC*, unsigned long, unsigned long, unsigned long, unsigned long*)` |
+| `0x002b2f7c` | `musicPlayer_Stop()` | 108 | 92.59% | `CSOUND_IF::Unload(int)`, `CSOUND_IF::Stop(int)` |
+| `0x0015d858` | `iOSCurSameOKMove()` | 108 | 92.59% | `iOS_getTouchTap()`, `iOS_getV2Icon(V2ICON_DATA)`, `iOS_setV2Icon(V2ICON_DATA, int)` |
+| `0x00245c0c` | `o_GetCardState()` | 108 | 88.89% | `o_GetCardEvent()`, `o_WaitCardInfo(int, int)` |
+| `0x0010044c` | `Wimport_localstatus(char*, char*, char*, char*)` | 104 | 92.31% | `sub_714b8` |
+| `0x0026a1cc` | `snpl_musicstop()` | 104 | 92.31% | `disposeMusic(int)`, `inactivateMusic()` |
+| `0x00269e04` | `snpl_mfadein()` | 104 | 92.31% | `activateMusic(int, int, int)`, `fadeMusic(int, int)` |
+| `0x0010638c` | `Wdisp_backtotitle_yesno()` | 100 | 92.0% | `sub_105d6c`, `wasmTaskEntry()`, `wasmGetInput2()` |
+| `0x000f15a0` | `disp_backtotitle_yesno()` | 100 | 92.0% | `sub_f0f84`, `asmTaskEntry()`, `asmGetInput2()` |
+| `0x001d1a18` | `set_playerwork_sp(PENTRY*, unsigned char*, int)` | 100 | 92.0% | `set_playerwork_j(BWORK*, int, int)`, `unitwork_init2all(BWORK*, int)` |
+| `0x000cbab8` | `createEndModeWindow()` | 100 | 92.0% | `task_create(long, char*)`, `task_status(long)`, `send_taskparamater(long, long, long, long)` |
+| `0x00228de4` | `NewShape2(unsigned char)` | 96 | 91.67% | `Malloc(unsigned long, long)` |
+| `0x001baa18` | `unit_isdark()` | 96 | 91.67% | `Wtask_status(long)` |
+| `0x001bb1c4` | `SetSttsA2(int)` | 96 | 91.67% | `Wtask_create(long, char*)`, `Wtask_status(long)` |
+| `0x001cd0cc` | `set_calcmode_think()` | 96 | 79.17% | `copy_struct_data(void const*, void*, int)` |
+| `0x0025c49c` | `houkokuinf_init(int)` | 96 | 87.5% | `houkoku_talkunit(int)`, `mksuccess_calc()`, `mkbasept_calc()`, `mkbonus_check()`... |
+| `0x0025d20c` | `world_exit()` | 96 | 91.67% | `initializeMusicBuffer()`, `wldssd_wait()`, `pspWorldDisableFlg(PSP_WORLD_FLG)`, `VSync`... |
+| `0x00150630` | `NetEndSyncProc()` | 96 | 91.67% | `asmTaskEntry()`, `asm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)` |
+| `0x00155d14` | `reactive_worldwindow()` | 92 | 91.3% | `Wtask_create(long, char*)` |
+| `0x0018e358` | `esys_warning(int, int)` | 92 | 86.96% | `eMesEventSingle(int, unsigned int, int, int)`, `callSystemSound(int)` |
+| `0x00156b90` | `hook_tuto(int)` | 92 | 86.96% | `worldmap_restart()`, `UnitList(int, int)` |
+| `0x002b74d4` | `IS_GAME_ROT_AREA(int, int)` | 92 | 91.3% | `isInRectUi(_RECT_UI*, int, int)` |
+| `0x002b7530` | `IS_GAME_MOV_AREA(int, int)` | 92 | 91.3% | `isInRectUi(_RECT_UI*, int, int)` |
+| `0x0026adc0` | `snpl_jpageflg_sub(int)` | 92 | 91.3% | `snplflg_read(unsigned long*, int)` |
+| `0x002b1e14` | `NowLoading_Init()` | 92 | 86.96% | `timeGetTime()`, `CSTEP::Init(int, int, int, int, unsigned int)` |
+| `0x002423f4` | `ctlendmov_init(int, int, int)` | 92 | 86.96% | `set_gEventMovieNo(int)`, `iOS_InitMovie(int)` |
+| `0x002b2e48` | `Jingle_Stop(int)` | 88 | 86.36% | `CFFT_STATE::GetParam(int)` |
+| `0x0026b31c` | `snplread_parcalc()` | 88 | 90.91% | `snplflg_read(unsigned long*, int)` |
+| `0x0021b518` | `LoadOverlayBin(long)` | 88 | 86.36% | `numa_fileReadCD(unsigned long, unsigned long, void*)` |
+| `0x002ab908` | `sceGuStart` | 88 | 90.91% | `sub_714c4`, `sub_2cdf7c`, `sub_2cdf8c` |
+| `0x002b2290` | `GX_ApplyVertexScaling(int)` | 88 | 90.91% | `CGX_SCREEN_CORRECT::GetCorrect(float*, float*, float*)`, `CEGL2_SPRITE::SetVertexOffset(float, float)`, `CEGL2_SPRITE::SetVertexScale(float)` |
+| `0x002b5e58` | `Logo_Uninit()` | 84 | 90.48% | `CEGL2_SPRITE::Unload(int)` |
+| `0x000e2fbc` | `statuskanjiprintadv(int, char*, COPYFIELD*)` | 84 | 90.48% | `asm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)` |
+| `0x0019d7e8` | `DrawUnits()` | 84 | 85.71% | `DrawWindow2(unsigned char*, unsigned long, int)` |
+| `0x00269db0` | `snpl_mfadeout()` | 84 | 90.48% | `fadeMusic(int, int)` |
+| `0x00269f34` | `snpl_mesput2()` | 80 | 90.0% | `Wtask_create(long, char*)`, `Wsend_taskparamater(long, long, long, long)` |
+| `0x0026ae2c` | `snpl_jstatflg_sub(int)` | 80 | 90.0% | `snplflg_read(unsigned long*, int)` |
+| `0x0026ae8c` | `snpl_jlocalflg_sub(int)` | 80 | 90.0% | `snplflg_read(unsigned long*, int)` |
+| `0x000e2b78` | `statuskanjiprint(int, char*, COPYFIELD*)` | 80 | 90.0% | `asm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)` |
+| `0x00221f14` | `RequestReboundEffect()` | 80 | 90.0% | `NewPEffectTCB()` |
+| `0x00243464` | `fRoll_bkput(short*)` | 80 | 90.0% | `vOpn_timload(unsigned long*)` |
+| `0x00249ec4` | `vEnd_dataload()` | 80 | 90.0% | `vOpn_loadwait()`, `numa_vOpn_CdRead(CDREC*, unsigned long, unsigned long, unsigned long, unsigned long*)` |
+| `0x001004b4` | `Wexport_localstatus(char*, char*, char*)` | 76 | 94.74% | `sub_714b8` |
+| `0x000d87e4` | `export_localstatus(char*, char*, char*)` | 76 | 94.74% | `sub_714b8` |
+| `0x00258f68` | `evt_gil_low()` | 76 | 94.74% | `Wread_eventflag(int)` |
+| `0x000e3010` | `statuskanjiprintwithptr(char*, COPYFIELD*, char*)` | 76 | 89.47% | `asm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)` |
+| `0x00270414` | `defscrwin_set(int, int, _POINT*, _POINT*)` | 76 | 89.47% | `Wtask_create(long, char*)`, `scrwin_para_set(int, int, _POINT*, _POINT*)` |
+| `0x0024aa60` | `vOpnmess_put(int, int, _POINT, unsigned long*)` | 76 | 94.74% | `Wstatuskanjiprint(int, char*, COPYFIELD*)` |
+| `0x0028d6a0` | `tlSetMallocUserPointer(void**)` | 76 | 94.74% | `sub_28d01c` |
+| `0x0015a27c` | `iOSPressArea()` | 76 | 89.47% | `iOS_getTouchPress()`, `IS_GAME_AREA(int, int)` |
+| `0x00263abc` | `iOSNovelBrightOn()` | 76 | 94.74% | `iOS_setV2Icon(V2ICON_DATA, int)` |
+| `0x00243a14` | `deleteMessage()` | 76 | 89.47% | `xpFree` |
+| `0x00155d88` | `active_worldwindow()` | 76 | 94.74% | `Wtask_stop(long)` |
+| `0x001baa78` | `sys_warning(int, int)` | 76 | 89.47% | `MesEventSingle(int, unsigned int, int, int)`, `callSoundEffect(int)` |
+| `0x0015a2c8` | `iOSTapArea()` | 76 | 89.47% | `iOS_getTouchTap()`, `IS_GAME_AREA(int, int)` |
+| `0x0019f750` | `DrawFunds()` | 72 | 83.33% | `DrawWindow2(unsigned char*, unsigned long, int)` |
+| `0x0026a234` | `snpl_fadeout()` | 72 | 88.89% | `wldfade_set(int, int)` |
+| `0x002a3068` | `xpMalloc` | 72 | 94.44% | `sub_71b90`, `sub_71b9c`, `tlMalloc(unsigned int)` |
+| `0x000d8880` | `pushmessagepacket()` | 68 | 88.24% | `sub_714b8` |
+| `0x00100550` | `Wpushmessagepacket()` | 68 | 88.24% | `sub_714b8` |
+| `0x002b2b38` | `SysSE_Stop(int)` | 68 | 88.24% | `CFFT_STATE::GetParam(int)` |
+| `0x00258ff8` | `evt_dead_low()` | 68 | 94.12% | `Wread_eventflag(int)` |
+| `0x00242618` | `ctlendmov_main(CTLINFO*)` | 68 | 88.24% | `SetDispMask` |
+| `0x0019d7a4` | `DrawPrice()` | 68 | 82.35% | `DrawWindow2(unsigned char*, unsigned long, int)` |
+| `0x000da558` | `event_start()` | 68 | 88.24% | `sub_d49ac`, `sub_d5ca4`, `event_init_light()`, `asmGetActiveTask(int)` |
+| `0x0029fef0` | `ratan2` | 68 | 94.12% | `sub_71b60`, `__floatsisf`, `__mulsf3`, `__divsf3`... |
+| `0x001cd16c` | `get_weatherdata()` | 68 | 94.12% | `read_eventflag(int)` |
+| `0x00210960` | `MenuTest()` | 68 | 88.24% | `asmTaskEntry()`, `VSync`, `iOS_getTouchPress()` |
+| `0x00204210` | `iOS_isCursorOnUnit()` | 68 | 82.35% | `searchAnimationByPositionBattle(int, int, int)` |
+| `0x001ab7e0` | `IsUntauchableAbility(int)` | 68 | 94.12% | `IsUntauchable(int)` |
+| `0x00216414` | `readMusicBlock(int)` | 68 | 94.12% | `myPollhost()`, `readMusic(int)`, `checkReadMusic()`, `fftCdLoop(CDREC*)`... |
+| `0x001f37e4` | `ExecuteAnimations()` | 68 | 94.12% | `executeAnimationStatus(tag_animation*)`, `executeShape(tag_animation*)`, `executeTerminateAnimation(tag_animation*)` |
+| `0x000d9a80` | `send_sttslinecol(char*)` | 64 | 93.75% | `sub_714b8` |
+| `0x0015d9e0` | `iOSTchCurLimit(int)` | 64 | 93.75% | `searchCurrentAnimation()` |
+| `0x0028be80` | `_ps_test()` | 64 | 87.5% | `TE_asmTaskEntry(int)` |
+| `0x0010634c` | `Wdisp_resume_yesno()` | 64 | 93.75% | `sub_105d6c`, `wasmTaskEntry()`, `wasmGetInput2()` |
+| `0x000f1560` | `disp_resume_yesno()` | 64 | 93.75% | `sub_f0f84`, `asmTaskEntry()`, `asmGetInput2()` |
+| `0x001cd12c` | `reset_calcmode_think()` | 64 | 81.25% | `copy_struct_data(void const*, void*, int)` |
+| `0x0026ebf0` | `ctlsentuto_active(CTLINFO*)` | 64 | 93.75% | `iOS_setV2Icon(V2ICON_DATA, int)` |
+| `0x0024552c` | `cdxa_stop()` | 64 | 93.75% | `vOpn_SetCDVolume(int, int)`, `VSync` |
+| `0x00249278` | `vOpn_init(int)` | 64 | 93.75% | `initializeMusicBuffer()`, `vOpn_ctlinit(int)`, `vOpn_scrinit(int)`, `vOpn_parainit()`... |
+| `0x0010212c` | `Wevent_start()` | 64 | 87.5% | `sub_fc26c`, `Wevent_init_light()`, `wasmGetActiveTask(int)` |
+| `0x002a3028` | `xpFree` | 64 | 93.75% | `sub_71b90`, `sub_71b9c`, `tlFree(void*)` |
+| `0x0021c684` | `s27_setEnvironmentWithTable(_EffectTCB*)` | 64 | 93.75% | `SetGravity(Vector*)`, `SetAirDensity(long)` |
+| `0x00289844` | `pspClearSaveData()` | 60 | 93.33% | `sub_714c4` |
+| `0x00101980` | `Wsend_sttslinecol(char*)` | 60 | 93.33% | `sub_714b8` |
+| `0x0028bf7c` | `_ps_cond()` | 60 | 93.33% | `TE_task_create(int, void (*)(), int)`, `TE_asmTaskEntry(int)` |
+| `0x00249bcc` | `vOpn_loadwait()` | 60 | 93.33% | `fftCdLoop(CDREC*)`, `VSync` |
+| `0x002431b4` | `fRoll_fadein(short*)` | 60 | 86.67% | `vOpn_fadein(int)` |
+| `0x001c7178` | `SelectWindowClutEx(int, int)` | 60 | 86.67% | `SelectWindowClut(int)` |
+| `0x0029b618` | `iOSGsSwapDispBuff()` | 60 | 93.33% | `PutDispEnv`, `GsGetActiveBuff` |
+| `0x002431f0` | `fRoll_fadeout(short*)` | 60 | 86.67% | `vOpn_fadeout(int)` |
+| `0x0015e768` | `iOSShiftUnitSet(int)` | 60 | 86.67% | `iOSBtlFreeCurCheck()`, `iOSGetChrList()` |
+| `0x00269d78` | `snpl_clrlocal()` | 56 | 85.71% | `snplflg_write(unsigned long*, int, int)` |
+| `0x00269d08` | `snpl_clrstat()` | 56 | 85.71% | `snplflg_write(unsigned long*, int, int)` |
+| `0x002bf32c` | `Debug_SetDebugDirectBtn(int)` | 56 | 92.86% | `CRECT::SetEnable(int, int)` |
+
+**Status CSV**: `read_structural` para as 500 (identidade e call-graph confirmados via checkpoint; cobertura automática 80-95% nesta leva por chamada indireta/literal pool, não por falha de extração; nenhuma teve blocos lidos instrução a instrução).
+## 616. Terceiro pool (cobertura 80-95%), última leva de 500 — cauda final dominada por funções-folha (84%) (2026-10-25, Fase 3, nonagésimo sexto lote)
+
+Fecha o pool aberto na §615 (checkpoints `auto_structural` com
+cobertura 80-95%, 0 tabela não resolvida). A única "família" candidata
+detectada pelo script (`RETINA_SCALE(int)`/`IS_TEX_2X()`, mesmo par
+de `bl`) acabou sendo coincidência — ambas só delegam pra
+`CAPP_INFO::GetDeviceScale()`/uma comparação float, não lógica
+duplicada — então ficam tratadas individualmente abaixo, não como
+família confirmada. **84% desta leva (420 de 500) são funções-folha**,
+a maior proporção de qualquer lote até aqui — confirma que a fila,
+ordenada por prioridade de núcleo e depois por tamanho, está
+efetivamente raspando o fundo do que resta no inventário.
+
+
+### 616.1 Achados genuinamente novos (13 funções)
+
+- **`PCopen`** (`0x002a2f60`, 56 B, 92.86%): chama `xpLibSN::PCopen(char*, int, int, int)`.
+- **`EndAllAnimation()`** (`0x001f36c8`, 52 B, 92.31%): chama `EndAnimation(tag_animation*)`.
+- **`xpInitVblankFunc()`** (`0x0028e6a4`, 48 B, 83.33%): chama `xpSetVblankFunc(void (*)(int, void*), void*)`.
+- **`xpInitHeap`** (`0x002a2ff8`, 48 B, 91.67%): chama `sub_71b84`, `tlInitHeap(void*, unsigned int)`.
+- **`vOpn_loopinit()`** (`0x0024932c`, 48 B, 83.33%): chama `vOpn_pacloop()`.
+- **`startRightTurn(int)`** (`0x00204298`, 48 B, 91.67%): chama `setTurning(int)`.
+- **`startLeftTurn(int)`** (`0x00204268`, 48 B, 91.67%): chama `setTurning(int)`.
+- **`Wjobstts_call(unsigned long*, unsigned long)`** (`0x0010f8cc`, 40 B, 90.0%): chama `sub_fb594`.
+- **`jobstts_call(unsigned long*, unsigned long)`** (`0x000e0eec`, 40 B, 90.0%): chama `sub_ddd60`.
+- **`Clear_VectorDataBase()`** (`0x00284494`, 36 B, 88.89%): chama `Clear_VectorDataBaseContainer(VECTOR_DATABASE_CONTAINER*)`.
+- **`StoreImage`** (`0x00291154`, 36 B, 77.78%): chama `StoreImage2`.
+- **`MoveImage`** (`0x0029128c`, 36 B, 77.78%): chama `MoveImage2`.
+- **`initXpHeap()`** (`0x0028b610`, 32 B, 87.5%): chama `xpInitHeap`.
+
+### 616.2 Funções-folha sem chamada externa (420)
+
+| Endereço | Função | Bytes | Cobertura |
+|---|---|---:|---:|
+| `0x000d7ed8` | `getvaluelength(int)` | 56 | 92.86% |
+| `0x001ceca0` | `_rand_()` | 56 | 85.71% |
+| `0x00269a68` | `snpl_hidepara()` | 56 | 85.71% |
+| `0x001f5f44` | `iOS_resetAnimationIrowake()` | 56 | 92.86% |
+| `0x0029aa84` | `OpenTIM` | 56 | 85.71% |
+| `0x000ffac4` | `Wgetvaluelength(int)` | 56 | 92.86% |
+| `0x00280558` | `iOS_fftLoad(int)` | 56 | 85.71% |
+| `0x001d3d24` | `gc_bwp(int)` | 56 | 92.86% |
+| `0x001d1ce8` | `erase_unit_f(int)` | 56 | 92.86% |
+| `0x0021b4a8` | `GetSQLFrameRate(_EffectTCB*)` | 56 | 92.86% |
+| `0x0021b0d0` | `InitEffectLoadAddress()` | 56 | 85.71% |
+| `0x0027b4a4` | `initCmdKind()` | 56 | 85.71% |
+| `0x000e0f68` | `loadcsrc(int, int, int, int)` | 56 | 92.86% |
+| `0x0021b474` | `GetMSQFrameRate(_EffectTCB*)` | 52 | 92.31% |
+| `0x001fd278` | `startInterventionMode()` | 52 | 84.62% |
+| `0x0027b4dc` | `setCmdKind(unsigned int)` | 52 | 84.62% |
+| `0x002675c0` | `ctlret_active(CTLINFO*)` | 52 | 92.31% |
+| `0x00243014` | `fRoll_exit(short*)` | 52 | 92.31% |
+| `0x0020f574` | `getMapXYZ(SVECTOR*)` | 52 | 76.92% |
+| `0x0026c3cc` | `ctltresure_active(CTLINFO*)` | 52 | 92.31% |
+| `0x00153470` | `send_taskparamater(long, long, long, long)` | 52 | 92.31% |
+| `0x0027f14c` | `iOS_ClearRectHitAll()` | 52 | 92.31% |
+| `0x001d9370` | `get_joblevel(unsigned short)` | 52 | 92.31% |
+| `0x00153734` | `Wsend_taskparamater(long, long, long, long)` | 52 | 92.31% |
+| `0x002119c0` | `PushChangePalette()` | 52 | 84.62% |
+| `0x0020eddc` | `inactivateEventAnimation(int)` | 52 | 92.31% |
+| `0x0020da48` | `pushBackColor()` | 52 | 84.62% |
+| `0x002a0844` | `ReadRotMatrix` | 52 | 92.31% |
+| `0x0012f2a8` | `iOSPersonalWinPos(int)` | 52 | 84.62% |
+| `0x002119f4` | `PopChangePalette()` | 52 | 84.62% |
+| `0x000e7488` | `getCodeLength(unsigned char*)` | 52 | 92.31% |
+| `0x002602c0` | `ctlmouke_active(CTLINFO*)` | 52 | 92.31% |
+| `0x0020d7d4` | `pushMapAngle()` | 52 | 84.62% |
+| `0x0020d808` | `popMapAngle()` | 52 | 84.62% |
+| `0x001cb030` | `clear_setstatus(A_RESULT*)` | 52 | 92.31% |
+| `0x00259e70` | `ctlhouk_active(CTLINFO*)` | 52 | 92.31% |
+| `0x002b23a8` | `Music_Pause()` | 48 | 91.67% |
+| `0x0015e068` | `iOSNumberGet(int)` | 48 | 91.67% |
+| `0x0025ffb0` | `iOSSDNovelGetOT(int)` | 48 | 83.33% |
+| `0x00213e48` | `stopAllColorRotation()` | 48 | 91.67% |
+| `0x001d1db8` | `leave_unit_f(int)` | 48 | 91.67% |
+| `0x001d2e6c` | `get_coord_address(BWORK*)` | 48 | 91.67% |
+| `0x0010229c` | `Wgeteventcategory()` | 48 | 83.33% |
+| `0x00243184` | `fRoll_scroll(short*)` | 48 | 91.67% |
+| `0x00289970` | `pspIsNoneSaveData(int)` | 48 | 91.67% |
+| `0x00215d2c` | `battleFileRead()` | 48 | 83.33% |
+| `0x000e0538` | `import_localpad(int)` | 48 | 83.33% |
+| `0x001dc914` | `set_cco_SD(BWORK*)` | 48 | 91.67% |
+| `0x002b2378` | `Music_Stop()` | 48 | 91.67% |
+| `0x001eedf4` | `getWpnSequenceAddress(unsigned short)` | 48 | 83.33% |
+| `0x000da6d0` | `geteventcategory()` | 48 | 83.33% |
+| `0x0021b860` | `SetGravity(Vector*)` | 48 | 91.67% |
+| `0x00270460` | `curhis_get(int)` | 48 | 83.33% |
+| `0x0028ba54` | `TE_task_create(int, void (*)(), int)` | 48 | 91.67% |
+| `0x00159a28` | `asmGetActiveF()` | 44 | 81.82% |
+| `0x001d94f0` | `get_rangedata(unsigned short)` | 44 | 90.91% |
+| `0x00243560` | `fRoll_xawait(short*)` | 44 | 90.91% |
+| `0x001599fc` | `asmGetInput3()` | 44 | 81.82% |
+| `0x0021ceb0` | `WhoUnlockEffect(long)` | 44 | 90.91% |
+| `0x0021b8c4` | `PopGravity()` | 44 | 90.91% |
+| `0x0028baa4` | `TE_task_stop(long)` | 44 | 90.91% |
+| `0x001599d0` | `asmGetInput2()` | 44 | 81.82% |
+| `0x001d2968` | `get_bwp(int)` | 44 | 90.91% |
+| `0x00256e70` | `ctltownmenu_active(CTLINFO*)` | 44 | 90.91% |
+| `0x001d951c` | `get_effectdata(unsigned short)` | 44 | 90.91% |
+| `0x001d1d8c` | `disappare_unit_f(int)` | 44 | 90.91% |
+| `0x00249474` | `vOpn_fadein(int)` | 44 | 90.91% |
+| `0x00256e9c` | `ctltownmenu_deactive(CTLINFO*)` | 44 | 90.91% |
+| `0x00280590` | `GetAbilityName(int)` | 44 | 81.82% |
+| `0x002b23d8` | `Music_Replay()` | 44 | 90.91% |
+| `0x001cb878` | `bcp_roll(BWORK*)` | 44 | 90.91% |
+| `0x0027f180` | `iOS_ClearRectHit(int)` | 44 | 90.91% |
+| `0x000fea78` | `Wallocatewindowinit()` | 44 | 90.91% |
+| `0x0015df10` | `iOSGT4_MapT9Get(unsigned long)` | 44 | 90.91% |
+| `0x000d6f54` | `allocatewindowinit()` | 44 | 90.91% |
+| `0x0020d2b8` | `setMapScroll(VECTOR*)` | 40 | 90.0% |
+| `0x002494a0` | `vOpn_fadeout(int)` | 40 | 90.0% |
+| `0x001d8d28` | `get_jobdata(int)` | 40 | 90.0% |
+| `0x00218dcc` | `InitCamera()` | 40 | 90.0% |
+| `0x0010de7c` | `Wimport_localpad(int)` | 40 | 80.0% |
+| `0x002b2404` | `Music_SetVol(int, int)` | 40 | 90.0% |
+| `0x0020d5d8` | `setMapScale(VECTOR*)` | 40 | 90.0% |
+| `0x002a1b1c` | `read_rgb_fifo(long*, long*, long*)` | 40 | 90.0% |
+| `0x001baea0` | `unitans_init()` | 40 | 90.0% |
+| `0x0020d84c` | `setMapAngle(SVECTOR*)` | 40 | 90.0% |
+| `0x001d73ec` | `clear_unitwork()` | 40 | 90.0% |
+| `0x001fd2c4` | `endInterventionMode()` | 40 | 80.0% |
+| `0x0020c74c` | `initSoundHeap()` | 40 | 90.0% |
+| `0x0010278c` | `Wsettaskkind(int)` | 40 | 80.0% |
+| `0x001cebfc` | `set_target_table2(unsigned char*)` | 40 | 90.0% |
+| `0x000daac0` | `settaskkind(int)` | 40 | 80.0% |
+| `0x00267340` | `iOS_add_anmpac_max(int)` | 40 | 90.0% |
+| `0x002a25f8` | `read_mt(long*, long*, long*)` | 40 | 90.0% |
+| `0x0020f5a8` | `getMapSize(SVECTOR*)` | 40 | 80.0% |
+| `0x002a1aac` | `read_sxsy_fifo3(long*, long*, long*)` | 40 | 90.0% |
+| `0x001cb7d4` | `check_reaction_deny(BWORK*)` | 40 | 90.0% |
+| `0x001024bc` | `Wreaded_mapchange()` | 40 | 90.0% |
+| `0x002231b0` | `GetReachableHeight(int)` | 40 | 90.0% |
+| `0x0026a64c` | `snplinf_init(int)` | 40 | 80.0% |
+| `0x001eedcc` | `getWpnShapeAddress(unsigned short)` | 40 | 80.0% |
+| `0x0028dc30` | `SetRCnt` | 40 | 90.0% |
+| `0x0015ebf4` | `iOSMapTouchCancel()` | 40 | 80.0% |
+| `0x00246360` | `ctlstartmov_main(CTLINFO*)` | 40 | 90.0% |
+| `0x001ca954` | `net_getknockback(unsigned char*, unsigned char*, unsigned char*)` | 40 | 90.0% |
+| `0x001599a8` | `asmGetInput1()` | 40 | 80.0% |
+| `0x002808b8` | `iOS_initTransFace()` | 40 | 90.0% |
+| `0x0020c99c` | `initFileBuffer()` | 40 | 90.0% |
+| `0x0020d060` | `setMapScrollXYZ(VECTOR*)` | 40 | 90.0% |
+| `0x00155cec` | `tutorialstatusget(int)` | 40 | 90.0% |
+| `0x00153374` | `task_stop(long)` | 36 | 88.89% |
+| `0x0027fbf0` | `iOS_WorldMapResumeGetData2(unsigned char**, unsigned int*)` | 36 | 88.89% |
+| `0x0015391c` | `check_eventtool(int, int)` | 36 | 88.89% |
+| `0x00153614` | `Wtask_start(long)` | 36 | 88.89% |
+| `0x0020d02c` | `popMapScrollXYZ()` | 36 | 77.78% |
+| `0x0021b244` | `SetEditTSQPtr()` | 36 | 77.78% |
+| `0x0018e334` | `equans_init()` | 36 | 88.89% |
+| `0x002a1408` | `SetFogFar` | 36 | 88.89% |
+| `0x001eb2d8` | `vramDeleteUsed()` | 36 | 88.89% |
+| `0x001f4a64` | `initEntryEnemyAnimations(int)` | 36 | 88.89% |
+| `0x0020d284` | `popMapScroll()` | 36 | 77.78% |
+| `0x001baac4` | `event_warning(short, int)` | 36 | 88.89% |
+| `0x002806cc` | `iOS_HookAddPrim()` | 36 | 88.89% |
+| `0x0015deec` | `iOSGT4_MapT9(unsigned long, long)` | 36 | 88.89% |
+| `0x0020d260` | `pushMapScroll()` | 36 | 77.78% |
+| `0x00153638` | `Wtask_stop(long)` | 36 | 88.89% |
+| `0x0021b220` | `SetEditANMPtr()` | 36 | 77.78% |
+| `0x0020d5a4` | `popMapScale()` | 36 | 77.78% |
+| `0x0020f514` | `stopAnimation()` | 36 | 88.89% |
+| `0x0028de28` | `EnableEvent` | 36 | 88.89% |
+| `0x00153350` | `task_start(long)` | 36 | 88.89% |
+| `0x0028d228` | `tlPopHeap()` | 36 | 77.78% |
+| `0x0028bad0` | `TE_is_task_end(long)` | 36 | 88.89% |
+| `0x0020d008` | `pushMapScrollXYZ()` | 36 | 77.78% |
+| `0x0028de4c` | `DisableEvent` | 36 | 88.89% |
+| `0x001fd1dc` | `nextTurnOrder()` | 36 | 88.89% |
+| `0x00263fa8` | `iOSSDNovelSysCurCheck()` | 36 | 88.89% |
+| `0x000da7e4` | `readed_mapchange()` | 36 | 88.89% |
+| `0x0020d580` | `pushMapScale()` | 36 | 77.78% |
+| `0x0021cefc` | `LockEffectCompelBreak()` | 32 | 87.5% |
+| `0x0021b8a4` | `PushGravity()` | 32 | 87.5% |
+| `0x00155c8c` | `stop_adventuremessage(int)` | 32 | 87.5% |
+| `0x00270500` | `curhis_clr(int)` | 32 | 87.5% |
+| `0x0028ba84` | `TE_task_start(long)` | 32 | 87.5% |
+| `0x000d88fc` | `stopmenutransfer()` | 32 | 87.5% |
+| `0x0026df10` | `ctlhentuto_active(CTLINFO*)` | 32 | 87.5% |
+| `0x0024f4b0` | `ctltips_active(CTLINFO*)` | 32 | 87.5% |
+| `0x0020696c` | `iOS_IsEnableFlicker()` | 32 | 87.5% |
+| `0x0020f8cc` | `setFrameRate(int)` | 32 | 87.5% |
+| `0x002a2c70` | `PCread` | 32 | 87.5% |
+| `0x000d891c` | `startmenutransfer()` | 32 | 87.5% |
+| `0x0021cedc` | `UnlockEffect()` | 32 | 87.5% |
+| `0x001adc48` | `FadeCondition()` | 32 | 87.5% |
+| `0x002a2ce0` | `PCwrite` | 32 | 87.5% |
+| `0x000c8178` | `tool_readsquare(int, int, int)` | 32 | 87.5% |
+| `0x002a1350` | `ReadGeomOffset` | 32 | 87.5% |
+| `0x0028082c` | `IOS_PSP2IOS_Y(int)` | 32 | 87.5% |
+| `0x001005cc` | `Wstopmenutransfer()` | 32 | 87.5% |
+| `0x0015c01c` | `iOSTchHoseiControl()` | 32 | 87.5% |
+| `0x000da700` | `chk_nexteventtype(int)` | 32 | 87.5% |
+| `0x001005ec` | `Wstartmenutransfer()` | 32 | 87.5% |
+| `0x001022cc` | `Wchk_nexteventtype(int)` | 32 | 87.5% |
+| `0x002119a0` | `ResetChangePalette()` | 32 | 87.5% |
+| `0x0015832c` | `rewrite_worldscroll(int)` | 32 | 87.5% |
+| `0x00202efc` | `iOS_BattleEventCheck()` | 32 | 87.5% |
+| `0x002b2358` | `Music_Play(int, int, int, int)` | 32 | 87.5% |
+| `0x002ae8e0` | `GlTexEnv_GetTextureHandle(int)` | 32 | 87.5% |
+| `0x00153c84` | `iOS_updateDispCameraIconSetting()` | 32 | 87.5% |
+| `0x0015bf38` | `iOSTchMovingModeCheck()` | 32 | 87.5% |
+| `0x0028080c` | `IOS_PSP2IOS_X(int)` | 32 | 87.5% |
+| `0x002b871c` | `iOS_isTouchBegan()` | 32 | 87.5% |
+| `0x0021f308` | `PermanentEffectEndRequest(unsigned char)` | 32 | 87.5% |
+| `0x0015a5ec` | `siOS_TCurGet(unsigned int)` | 32 | 87.5% |
+| `0x000c8158` | `tool_writesquare(int, int, int)` | 32 | 87.5% |
+| `0x002064a8` | `iOS_IsEnableMenuItemTouch()` | 32 | 87.5% |
+| `0x001b9d84` | `iOS_clearTutorialbreak()` | 32 | 87.5% |
+| `0x002a2ca8` | `PClseek` | 32 | 87.5% |
+| `0x002b01e0` | `GlTexEnv_GetTextureHandle_2X(int)` | 32 | 87.5% |
+| `0x002ae8c0` | `GlTexEnv_GetSprite(int)` | 32 | 87.5% |
+| `0x002b1bcc` | `NowLoading_Bootup()` | 28 | 71.43% |
+| `0x00196ea0` | `MenuSelSideDirect(unsigned char, unsigned char)` | 28 | 85.71% |
+| `0x00155870` | `set_worldmoney(int)` | 28 | 85.71% |
+| `0x0021f2ec` | `GetPEffectStatus(unsigned char)` | 28 | 85.71% |
+| `0x002a148c` | `SetColorMatrix` | 28 | 85.71% |
+| `0x0028da90` | `tlMallocErrorFunc(void (*)(TL_MALLOC_ERROR))` | 28 | 85.71% |
+| `0x001a8604` | `Mituryo(short)` | 28 | 85.71% |
+| `0x00290e6c` | `DrawSyncCallback` | 28 | 85.71% |
+| `0x00101434` | `Wsetplatetime(int)` | 28 | 85.71% |
+| `0x002a2a4c` | `xpPadKeyBufGet` | 28 | 85.71% |
+| `0x002885d4` | `pspOpenEnableFlg(PSP_OPEN_FLG)` | 28 | 85.71% |
+| `0x0024d948` | `iOS_BRST_CHECK()` | 28 | 85.71% |
+| `0x00258b00` | `evt_skip3()` | 28 | 85.71% |
+| `0x000d9748` | `iOS_battle_scrollwindow_tap()` | 28 | 85.71% |
+| `0x001ca938` | `net_setknockback(unsigned char, unsigned char, unsigned char)` | 28 | 85.71% |
+| `0x002acb2c` | `GuEmu_GetRAW(int)` | 28 | 85.71% |
+| `0x001d357c` | `set_playerwork2(PENTRY*, unsigned char*)` | 28 | 85.71% |
+| `0x002befa0` | `iOS_OrMenuTouchKeyInput(unsigned int)` | 28 | 85.71% |
+| `0x0029fed4` | `PSX_ccos` | 28 | 85.71% |
+| `0x002b242c` | `Music_IsPlaying()` | 28 | 85.71% |
+| `0x002a1440` | `SetLightMatrix` | 28 | 85.71% |
+| `0x001d751c` | `erase_unit(int)` | 28 | 85.71% |
+| `0x002885b8` | `pspOpenDisableFlg(PSP_OPEN_FLG)` | 28 | 85.71% |
+| `0x00155c5c` | `ret_optionstatus()` | 28 | 85.71% |
+| `0x001c7218` | `TEST_TEST()` | 28 | 85.71% |
+| `0x000d961c` | `setplatetime(int)` | 28 | 85.71% |
+| `0x00159a54` | `asmGetActiveTask(int)` | 28 | 85.71% |
+| `0x0028e5c4` | `VSyncCallback` | 28 | 85.71% |
+| `0x001b70f4` | `DrawMessageWithPosition(int, COMRECORD*, int)` | 28 | 85.71% |
+| `0x0010155c` | `WiOS_battle_scrollwindow_tap()` | 28 | 85.71% |
+| `0x002b7034` | `iOSCancelButtonCheck()` | 28 | 85.71% |
+| `0x000e62a8` | `Set_bravebreak(unsigned short)` | 28 | 85.71% |
+| `0x002a2b10` | `xpPadDebugSet` | 28 | 85.71% |
+| `0x00258b1c` | `evt_skip4()` | 28 | 85.71% |
+| `0x00281678` | `iOS_v2menuGetItem()` | 28 | 85.71% |
+| `0x000e628c` | `Get_bravebreak()` | 28 | 85.71% |
+| `0x00155854` | `set_worldday(int, int)` | 28 | 85.71% |
+| `0x0028e6d4` | `xpSetWaitVSyncFunc(int (*)())` | 28 | 85.71% |
+| `0x0018378c` | `fileclose(unsigned int)` | 28 | 85.71% |
+| `0x00101578` | `WiOS_set_status_pad(unsigned long*)` | 24 | 83.33% |
+| `0x00155d70` | `reactive_worldstatus()` | 24 | 83.33% |
+| `0x002a1b44` | `read_rgb0(long*)` | 24 | 83.33% |
+| `0x0028d688` | `tlFreeAll()` | 24 | 83.33% |
+| `0x002a2a68` | `xpPadWorkBufGet` | 24 | 83.33% |
+| `0x0028b068` | `pspWorldCallBackSet(PSP_WORLD_CALLBACK_ID, void (*)())` | 24 | 83.33% |
+| `0x002b701c` | `iOSHelpButtonCheck()` | 24 | 83.33% |
+| `0x00216848` | `getMusicPointer(int)` | 24 | 83.33% |
+| `0x002a25e0` | `read_opz(long*)` | 24 | 83.33% |
+| `0x002befbc` | `iOS_ClearMenuTouchKeyInput()` | 24 | 83.33% |
+| `0x002a1ad4` | `read_sxsy0(long*)` | 24 | 83.33% |
+| `0x0020f8a0` | `finishAttackTeamSelect()` | 24 | 83.33% |
+| `0x002b7a74` | `ClearDisableMapTouch()` | 24 | 83.33% |
+| `0x002847c0` | `new_ColorVectorDataBase(unsigned int)` | 24 | 83.33% |
+| `0x00259768` | `ctlhistory_deactive(CTLINFO*)` | 24 | 83.33% |
+| `0x002a1b5c` | `read_rgb1(long*)` | 24 | 83.33% |
+| `0x002a2a80` | `xpPadTriggerGet` | 24 | 83.33% |
+| `0x0028b3c4` | `pspWorldDataBackBufGet(int)` | 24 | 83.33% |
+| `0x000823ec` | `zError` | 24 | 83.33% |
+| `0x002a2af8` | `xpPadRepeatGet` | 24 | 83.33% |
+| `0x002675f4` | `ctlret_deactive(CTLINFO*)` | 24 | 83.33% |
+| `0x0027d468` | `disableCancelDisableArea()` | 24 | 83.33% |
+| `0x002a2fb8` | `PCcreat` | 24 | 83.33% |
+| `0x0028a114` | `FFT_GetCurrentSystemFile()` | 24 | 83.33% |
+| `0x001fd2ac` | `resetTurnOrder()` | 24 | 83.33% |
+| `0x002a2a98` | `xpPadGet` | 24 | 83.33% |
+| `0x002a25c8` | `read_otz(long*)` | 24 | 83.33% |
+| `0x0026c400` | `ctltresure_deactive(CTLINFO*)` | 24 | 83.33% |
+| `0x000ddd48` | `tutorial_padcontrol(int*)` | 24 | 83.33% |
+| `0x002a1b8c` | `read_flag(long*)` | 24 | 83.33% |
+| `0x001506bc` | `rsetNetErrorCutFlg()` | 24 | 83.33% |
+| `0x0020f538` | `restartAnimation()` | 24 | 83.33% |
+| `0x000cbb30` | `resetYLine()` | 24 | 83.33% |
+| `0x0027f5f0` | `Resume_Get_WORK_MU_BWorkFontID()` | 24 | 83.33% |
+| `0x001556f0` | `worldcursorposset(int)` | 24 | 83.33% |
+| `0x00283fb0` | `mapclip_setpath(char*)` | 24 | 83.33% |
+| `0x0029fe70` | `InitGeom` | 24 | 83.33% |
+| `0x0010729c` | `Wtutorial_padcontrol(int*)` | 24 | 83.33% |
+| `0x00271284` | `Ssd_Init(unsigned short)` | 24 | 83.33% |
+| `0x0027f608` | `Resume_Get_WORK_MU_BWorkAnimationID()` | 24 | 83.33% |
+| `0x000cbd78` | `pspEntrySquareDataGet()` | 24 | 83.33% |
+| `0x002b36bc` | `Error_Init()` | 24 | 83.33% |
+| `0x0024e904` | `ctlperson_deactive(CTLINFO*)` | 24 | 83.33% |
+| `0x0025ffe0` | `iOS_IsTutoStart()` | 24 | 83.33% |
+| `0x00150690` | `setNetErrorCutFlg()` | 24 | 83.33% |
+| `0x000da5f8` | `return_actionstructure()` | 24 | 83.33% |
+| `0x002602f4` | `ctlmouke_deactive(CTLINFO*)` | 24 | 83.33% |
+| `0x001ed94c` | `getDirectionVector(int)` | 24 | 83.33% |
+| `0x0020f4fc` | `clearOverSpecCtr()` | 24 | 83.33% |
+| `0x002885a0` | `pspOpenCheckFlg(PSP_OPEN_FLG)` | 24 | 83.33% |
+| `0x001531cc` | `ResetgMission_Successflg()` | 24 | 83.33% |
+| `0x00155dec` | `teach_onocursor(int, int)` | 24 | 83.33% |
+| `0x0021b908` | `PopAirDensity()` | 24 | 83.33% |
+| `0x00287588` | `reset_g_NetIcon_DrawFlg()` | 24 | 83.33% |
+| `0x000da808` | `whatweather()` | 24 | 83.33% |
+| `0x002a1ba4` | `read_p(long*)` | 24 | 83.33% |
+| `0x002a2ae0` | `xpPadPspPadDataGet` | 24 | 83.33% |
+| `0x002c53e8` | `Movie_Init()` | 24 | 83.33% |
+| `0x0029b6d0` | `GsSetWorkBase` | 24 | 83.33% |
+| `0x00289880` | `pspClearSaveEnv()` | 24 | 83.33% |
+| `0x0028982c` | `pspPrimReetWorkBuf_current()` | 24 | 83.33% |
+| `0x00155dd4` | `active_worldstatus()` | 24 | 83.33% |
+| `0x002a1aec` | `read_sxsy1(long*)` | 24 | 83.33% |
+| `0x002b376c` | `Error_SetError(int, char*)` | 24 | 83.33% |
+| `0x002a1b04` | `read_sxsy2(long*)` | 24 | 83.33% |
+| `0x002a13f0` | `SetFogNearFar` | 24 | 83.33% |
+| `0x00288f18` | `pspgFreamBufCountCountReset()` | 24 | 83.33% |
+| `0x0026df30` | `ctlhentuto_deactive(CTLINFO*)` | 24 | 83.33% |
+| `0x000e0fa0` | `loadcdst(int, int)` | 24 | 83.33% |
+| `0x002a2ac8` | `xpPadAnalogYGet` | 24 | 83.33% |
+| `0x0029fdbc` | `GteSetDataReg(long, long)` | 24 | 83.33% |
+| `0x001506d4` | `SetgMission_Successflg()` | 24 | 83.33% |
+| `0x00216128` | `iOS_resetTexCacheLine()` | 24 | 83.33% |
+| `0x00259ea4` | `ctlhouk_deactive(CTLINFO*)` | 24 | 83.33% |
+| `0x0020f8ec` | `resetFrameRate()` | 24 | 83.33% |
+| `0x002a2a34` | `xpPadUpdateData` | 24 | 83.33% |
+| `0x0028164c` | `iOS_v2menuSetScreenSize(int, int)` | 24 | 83.33% |
+| `0x0010fa04` | `Wloadcdst(int, int)` | 24 | 83.33% |
+| `0x00280540` | `iOS_fftSave()` | 24 | 83.33% |
+| `0x00248598` | `iOS_TestDraw(unsigned long*)` | 24 | 83.33% |
+| `0x002a2b44` | `xpPadKeyTblGet` | 24 | 83.33% |
+| `0x002a2b2c` | `xpPadKeyTblSet` | 24 | 83.33% |
+| `0x00161e60` | `iOSSetRotMode()` | 24 | 83.33% |
+| `0x0024dcc0` | `ctlkiroku_deactive(CTLINFO*)` | 24 | 83.33% |
+| `0x0025e294` | `mkadrtbl_calc(int)` | 24 | 83.33% |
+| `0x00259750` | `ctlhistory_active(CTLINFO*)` | 24 | 83.33% |
+| `0x0026ec30` | `ctlsentuto_deactive(CTLINFO*)` | 24 | 83.33% |
+| `0x0021b8f0` | `PushAirDensity()` | 24 | 83.33% |
+| `0x0027f5d8` | `Resume_Get_WORK_MU_FontID()` | 24 | 83.33% |
+| `0x001eee48` | `getShapeWaitType(unsigned short)` | 24 | 83.33% |
+| `0x000c8198` | `tool_squarecursor(int, int)` | 24 | 83.33% |
+| `0x002b7a5c` | `SetDisableMapTouch()` | 24 | 83.33% |
+| `0x0015a72c` | `iOSScrollButtonDTap()` | 24 | 83.33% |
+| `0x0029fd90` | `GteGetDataReg(int)` | 24 | 83.33% |
+| `0x001024e4` | `Wwhatweather()` | 24 | 83.33% |
+| `0x002806f0` | `iOS_clearDebugPrimNum()` | 24 | 83.33% |
+| `0x0029febc` | `PSX_csin` | 24 | 83.33% |
+| `0x002a1b74` | `read_rgb2(long*)` | 24 | 83.33% |
+| `0x002a2ab0` | `xpPadAnalogXGet` | 24 | 83.33% |
+| `0x002ab608` | `GuEmu_SetLineInterval(int)` | 24 | 83.33% |
+| `0x000c8138` | `return_pentry()` | 24 | 83.33% |
+| `0x002a2728` | `xpPadAnalogAssign` | 24 | 83.33% |
+| `0x00286894` | `get_gEventMovieNo()` | 20 | 80.0% |
+| `0x0028ba2c` | `getVSyncBlockCountTaskEmu()` | 20 | 80.0% |
+| `0x0020f8b8` | `getFrameTicks()` | 20 | 80.0% |
+| `0x002a13b4` | `InitClip` | 20 | 80.0% |
+| `0x001a4858` | `iOSLearnTypeSet(int)` | 20 | 80.0% |
+| `0x0012f214` | `iOSpersonalWinPosClear(int)` | 20 | 80.0% |
+| `0x0027b480` | `setDrawPrimNum(int)` | 20 | 80.0% |
+| `0x0025f3d8` | `iOS_wld_pad_trg(unsigned long)` | 20 | 80.0% |
+| `0x00101420` | `Wget_padframe()` | 20 | 80.0% |
+| `0x002862e8` | `IsMapTexAsideLoad(unsigned int)` | 20 | 80.0% |
+| `0x00286880` | `getEventStatus()` | 20 | 80.0% |
+| `0x0027fc14` | `chk_ucResumeDataSetAddr(unsigned char*)` | 20 | 80.0% |
+| `0x00286794` | `setEventStatus(int)` | 20 | 80.0% |
+| `0x0029b6e8` | `GsGetWorkBase` | 20 | 80.0% |
+| `0x00287a18` | `set_g_Soldier_Draw_flg(int)` | 20 | 80.0% |
+| `0x001aec64` | `iOSItemTypeSet(int)` | 20 | 80.0% |
+| `0x0015fff4` | `iOSGetTchRotDY()` | 20 | 80.0% |
+| `0x0027b514` | `getCmdKindNum()` | 20 | 80.0% |
+| `0x0028b3dc` | `pspWorldDataRectGet()` | 20 | 80.0% |
+| `0x002450b0` | `TEST_getClearOt()` | 20 | 80.0% |
+| `0x0028a12c` | `FFT_GetSavedata()` | 20 | 80.0% |
+| `0x002b87e8` | `iOS_isInGameArea()` | 20 | 80.0% |
+| `0x0021b4e0` | `GetPlugInFuncAdr(short)` | 20 | 80.0% |
+| `0x00288558` | `getTurnCount_CalcMissionPayPoint()` | 20 | 80.0% |
+| `0x00287a2c` | `get_g_Soldier_Draw_flg()` | 20 | 80.0% |
+| `0x0028851c` | `setMissionNo_CalcMissionPayPoint(int)` | 20 | 80.0% |
+| `0x002843a0` | `new_VectorDataBase(unsigned int)` | 20 | 80.0% |
+| `0x0028d1b0` | `tlGetHeap()` | 20 | 80.0% |
+| `0x00287030` | `get_timing_flag()` | 20 | 80.0% |
+| `0x00286b0c` | `set_limit_turn_flg(int)` | 20 | 80.0% |
+| `0x00155c78` | `ret_adventurestatus()` | 20 | 80.0% |
+| `0x001b4c20` | `IsDark(int)` | 20 | 80.0% |
+| `0x00142f4c` | `WiOS_getOptionAddOfsMode()` | 20 | 80.0% |
+| `0x0015a16c` | `iOSTapTimeAreaGet()` | 20 | 80.0% |
+| `0x002ac000` | `sceGuTexMode` | 20 | 80.0% |
+| `0x002041e8` | `setStartBattleFlg(int)` | 20 | 80.0% |
+| `0x00228dd0` | `GetShapePrimPtNow()` | 20 | 80.0% |
+| `0x002884d4` | `setBattlePoint(int)` | 20 | 80.0% |
+| `0x00289818` | `pspPrimGetWorkBuf_current()` | 20 | 80.0% |
+| `0x0024509c` | `TEST_setClearOt(int)` | 20 | 80.0% |
+| `0x001579c0` | `regist_zodiacot(unsigned int*)` | 20 | 80.0% |
+| `0x002c53c0` | `Main_GetPauseFlag()` | 20 | 80.0% |
+| `0x001adc68` | `FadeMask(int)` | 20 | 80.0% |
+| `0x0027b528` | `getCmdKind(unsigned int)` | 20 | 80.0% |
+| `0x002819b8` | `iOS_v2menuGetType()` | 20 | 80.0% |
+| `0x0012f2dc` | `iOSPersonalWinPosSet(int)` | 20 | 80.0% |
+| `0x0028dcf0` | `StartRCnt` | 20 | 80.0% |
+| `0x001d15b0` | `get_originalability()` | 20 | 80.0% |
+| `0x002a3138` | `xpSetResume` | 20 | 80.0% |
+| `0x0025f3fc` | `iOSSnapshotSet(int)` | 20 | 80.0% |
+| `0x001aec78` | `iOSItemTypeGet()` | 20 | 80.0% |
+| `0x00285f38` | `pspMsgLzwBaseGet(FFTPSP_MSG_LZW)` | 20 | 80.0% |
+| `0x00286aa0` | `get_netdatamode()` | 20 | 80.0% |
+| `0x0028858c` | `pspOpenDataIconBufGet()` | 20 | 80.0% |
+| `0x00101590` | `WiOS_getStatusAllgrayf()` | 20 | 80.0% |
+| `0x00281664` | `iOS_v2menuGetAddr()` | 20 | 80.0% |
+| `0x00287070` | `get_rival()` | 20 | 80.0% |
+| `0x00281694` | `iOS_v2menuSetDecide(int)` | 20 | 80.0% |
+| `0x002010b8` | `iOSmapVectorScrollCheck()` | 20 | 80.0% |
+| `0x0028ba40` | `TE_setTaskType(int)` | 20 | 80.0% |
+| `0x000d9608` | `get_padframe()` | 20 | 80.0% |
+| `0x001bab64` | `GetSttsAMovingTime()` | 20 | 80.0% |
+| `0x000cbb1c` | `getYLine()` | 20 | 80.0% |
+| `0x002abd20` | `sceGuClutMode` | 20 | 80.0% |
+| `0x00216604` | `checkActiveMusic()` | 20 | 80.0% |
+| `0x0025f410` | `iOSSDNovelHelpTrgSet(long)` | 20 | 80.0% |
+| `0x002ab9cc` | `sceGuFinishId` | 20 | 80.0% |
+| `0x002b8708` | `iOS_PressTime()` | 20 | 80.0% |
+| `0x002a2fd0` | `xpInitSPAD` | 20 | 80.0% |
+| `0x0029fd7c` | `GteGetCtrlReg(int)` | 20 | 80.0% |
+| `0x00288530` | `getMissionNo_CalcMissionPayPoint()` | 20 | 80.0% |
+| `0x0015a314` | `iOSsTchBtlFlagGet()` | 20 | 80.0% |
+| `0x000c81b0` | `tool_setarrowmode(int)` | 20 | 80.0% |
+| `0x002ab6fc` | `GPUCmd_GetGPUCmd_IP()` | 20 | 80.0% |
+| `0x002884b4` | `Get_NonDrawTaikiIconFlg()` | 20 | 80.0% |
+| `0x001579ac` | `worldcursormove(int)` | 20 | 80.0% |
+| `0x001531e4` | `GetgMission_Successflg()` | 20 | 80.0% |
+| `0x0015a8a0` | `iOSScrollgStatusModeGet()` | 20 | 80.0% |
+| `0x002a1370` | `ReadGeomScreen` | 20 | 80.0% |
+| `0x0029fda8` | `GteSetCtrlReg(long, long)` | 20 | 80.0% |
+| `0x0028051c` | `iOS_fftDelete()` | 20 | 80.0% |
+| `0x0025f424` | `iOSSDNovelHelpTrgGet()` | 20 | 80.0% |
+| `0x0025691c` | `IOSsTownModeSet(int)` | 20 | 80.0% |
+| `0x00286b20` | `get_limit_turn_flg()` | 20 | 80.0% |
+| `0x001021c8` | `Wreturn_actionstructure()` | 20 | 80.0% |
+| `0x002ab8ec` | `sceGuColor` | 20 | 80.0% |
+| `0x002a133c` | `SetGeomScreen` | 20 | 80.0% |
+| `0x00204254` | `setTurning(int)` | 20 | 80.0% |
+| `0x0028df7c` | `_card_info` | 20 | 80.0% |
+| `0x002a2da4` | `PCclose` | 20 | 80.0% |
+| `0x00161944` | `iOSHelpInputWaitGet()` | 20 | 80.0% |
+| `0x002816a8` | `iOS_v2menuGetDecide()` | 20 | 80.0% |
+| `0x00101fd0` | `iOStorideflagGet()` | 20 | 80.0% |
+| `0x001ac8b4` | `dispFT4num()` | 20 | 80.0% |
+| `0x00245a60` | `o_SelectCard(int)` | 20 | 80.0% |
+| `0x00156550` | `send_worldkeymask(unsigned long)` | 20 | 80.0% |
+| `0x002868a8` | `set_gEventMovieNo(int)` | 20 | 80.0% |
+| `0x0018f994` | `eStopGetPad(int)` | 20 | 80.0% |
+| `0x0015a328` | `iOSsTchBtlFlagSet(int)` | 20 | 80.0% |
+| `0x002168e8` | `callEnvEffect(int)` | 20 | 80.0% |
+| `0x00288544` | `setTurnCount_CalcMissionPayPoint(int)` | 20 | 80.0% |
+
+### 616.3 Restante com chamadas já documentadas (67)
+
+| Endereço | Função | Bytes | Cobertura | Chama |
+|---|---|---:|---:|---|
+| `0x002b88c8` | `iOS_StartMovie()` | 56 | 85.71% | `CFFT_STATE::SetMoviePlaying(int)` |
+| `0x0028da58` | `tlDumpHeap()` | 56 | 92.86% | `tlCheckHeap()` |
+| `0x00200b80` | `endTrunAction()` | 56 | 92.86% | `iOSRotAutoReset()`, `stopEffect(int)` |
+| `0x0026a824` | `snpl_snsndreq()` | 56 | 92.86% | `snSound_play(int)` |
+| `0x0019f718` | `iOSShopHelpStatusCheck()` | 56 | 92.86% | `iOSsTchBtlFlagGet()` |
+| `0x000d88c4` | `popmessagepacket()` | 56 | 85.71% | `sub_714b8` |
+| `0x00100594` | `Wpopmessagepacket()` | 56 | 85.71% | `sub_714b8` |
+| `0x00269d40` | `snpl_setlocal()` | 56 | 85.71% | `snplflg_write(unsigned long*, int, int)` |
+| `0x002c5400` | `Movie_FrameMove()` | 52 | 92.31% | `Android_Movie_IsPlaying()`, `onGotoNextMode(int)` |
+| `0x00228e64` | `startShape()` | 52 | 92.31% | `SetGeomOffset` |
+| `0x001eb760` | `myStartShape()` | 52 | 84.62% | `SetGeomOffset` |
+| `0x00245b34` | `o_ClearCardEvent_X()` | 52 | 92.31% | `TestEvent(long)` |
+| `0x00245a74` | `o_ClearCardEvent()` | 52 | 92.31% | `TestEvent(long)` |
+| `0x002a242c` | `RotColorDpq_nom` | 52 | 92.31% | `RotColorDpq` |
+| `0x00161e2c` | `iOSIsCurMode()` | 52 | 92.31% | `iOS_getV2Icon(V2ICON_DATA)` |
+| `0x0024e8d0` | `ctlperson_active(CTLINFO*)` | 52 | 92.31% | `Wsend_taskparamater(long, long, long, long)` |
+| `0x0024dc8c` | `ctlkiroku_active(CTLINFO*)` | 52 | 92.31% | `Wsend_taskparamater(long, long, long, long)` |
+| `0x001a63dc` | `bak_read(int, void*)` | 52 | 92.31% | `fileReadCD(unsigned long, unsigned long, void*)` |
+| `0x002a145c` | `ReadLightMatrix` | 48 | 91.67% | `sub_714b8` |
+| `0x002a14a8` | `ReadColorMatrix` | 48 | 91.67% | `sub_714b8` |
+| `0x0024ad94` | `openEntry(int)` | 48 | 91.67% | `fileReadCD(unsigned long, unsigned long, void*)` |
+| `0x00202150` | `standerdExecution()` | 48 | 91.67% | `getDisplayPosition()`, `DisplayAnimations()`, `ExecuteAnimations()` |
+| `0x00153420` | `wait_taskend(long)` | 48 | 91.67% | `asmTaskEntry()` |
+| `0x001536e4` | `Wwait_taskend(long)` | 48 | 91.67% | `wasmTaskEntry()` |
+| `0x002433ac` | `fRoll_cdxafout(short*)` | 48 | 91.67% | `vOpn_SetCDVolume(int, int)` |
+| `0x0024337c` | `fRoll_cdxafin(short*)` | 48 | 91.67% | `vOpn_SetCDVolume(int, int)` |
+| `0x0025f138` | `townpic_load(int)` | 48 | 91.67% | `pic_load(int)` |
+| `0x001020f8` | `Wevent_init_system()` | 48 | 91.67% | `Wallocatewindowinit()`, `Wallocatetextureinit()`, `Wallocatememoryinit()`, `VSync` |
+| `0x001e4f0c` | `get_fusui_ability(BWORK*)` | 48 | 83.33% | `get_coord_address(BWORK*)` |
+| `0x002b2260` | `RETINA_SCALE(int)` | 48 | 91.67% | `CAPP_INFO::GetDeviceScale()`, `__aeabi_fcmpge` |
+| `0x00287044` | `get_timing_true()` | 44 | 90.91% | `get_netmodeadhoc()` |
+| `0x00101624` | `Whook_disp_option()` | 44 | 90.91% | `Wwait_overlay(int)` |
+| `0x00269e6c` | `snpl_sndstop()` | 44 | 90.91% | `stopAllEffect()` |
+| `0x0028846c` | `free_hight_font()` | 44 | 90.91% | `xpFree` |
+| `0x002a0900` | `MulRotMatrix0` | 44 | 90.91% | `MulMatrix0` |
+| `0x0027b53c` | `LoadImage_menuData()` | 44 | 90.91% | `PSX_LoadImage` |
+| `0x001021dc` | `Wset_autobattletarget(int, int)` | 44 | 90.91% | `get_bwp(int)` |
+| `0x000da610` | `set_autobattletarget(int, int)` | 44 | 90.91% | `get_bwp(int)` |
+| `0x0028a054` | `pspClearCurrentSystemFile()` | 44 | 90.91% | `sub_714c4` |
+| `0x000d9810` | `hook_disp_option()` | 44 | 90.91% | `wait_overlay(int)` |
+| `0x0028b3f0` | `pspWorldDataRectSet(RECT16*)` | 40 | 90.0% | `sub_714b8` |
+| `0x002b7a34` | `SetDisableMapTouchRect(RECT16*)` | 40 | 90.0% | `sub_714b8` |
+| `0x0024adc4` | `endEntry()` | 40 | 90.0% | `fileReadCD(unsigned long, unsigned long, void*)` |
+| `0x001875f0` | `GetSaveDataInit()` | 40 | 90.0% | `pspSaveDataGet()` |
+| `0x0012f19c` | `get_pitno()` | 40 | 90.0% | `get_unitwork_add(int)` |
+| `0x001a3eb4` | `PoachUnit()` | 40 | 90.0% | `BuyUnit()` |
+| `0x0015e040` | `iOSActUnitCurSet()` | 40 | 90.0% | `iOSBtlFreeCurCheck()` |
+| `0x0021695c` | `stopAllEffect()` | 40 | 90.0% | `EnvSE_Stop(int)` |
+| `0x0020c5d8` | `errorHandler(int)` | 40 | 90.0% | `system_error(int, int)` |
+| `0x0020c600` | `warningHandler(int)` | 40 | 90.0% | `system_warning(int, int)` |
+| `0x001ceaec` | `set_status_all_sp(int, int)` | 40 | 90.0% | `set_status_all(int, int)` |
+| `0x002b2238` | `IS_TEX_2X()` | 40 | 90.0% | `CAPP_INFO::GetDeviceScale()`, `__aeabi_fcmpge` |
+| `0x0026c238` | `iOSNovelModeBackup()` | 36 | 88.89% | `iOSsTchBtlFlagGet()` |
+| `0x0029b654` | `GsSetClip2D` | 36 | 88.89% | `sub_714b8` |
+| `0x00294e64` | `GetDrawEnv` | 36 | 88.89% | `sub_714b8` |
+| `0x00161d74` | `iOSPosH(int)` | 36 | 88.89% | `__divsi3` |
+| `0x00161d50` | `iOSPosW(int)` | 36 | 88.89% | `__divsi3` |
+| `0x001ca580` | `get_net_rival_weapon_range()` | 36 | 88.89% | `pspItemGetWeaponData` |
+| `0x00216860` | `stopMusic()` | 36 | 88.89% | `inactivateMusic()` |
+| `0x00291074` | `PSX_LoadImage` | 36 | 77.78% | `LoadImage2` |
+| `0x00294e44` | `GetDispEnv` | 32 | 87.5% | `sub_714b8` |
+| `0x00288a58` | `pspPrimDirectParamSet(int, RECT16*)` | 32 | 87.5% | `sub_714b8` |
+| `0x001d66f8` | `set_td(unsigned char*)` | 32 | 87.5% | `sub_714b8` |
+| `0x0028ce58` | `sceCtrlPeekBufferPositive` | 32 | 87.5% | `sub_714b8` |
+| `0x00101fa4` | `Wchangeflame(int)` | 28 | 85.71% | `iOS_GetFrameRate()` |
+| `0x0026c25c` | `iOSNovelModeRestore()` | 28 | 85.71% | `iOSsTchBtlFlagSet(int)` |
+| `0x002bef4c` | `iOS_isExistResumeData()` | 24 | 83.33% | `CAUTOSAVE::IsExist()` |
+
+**Status CSV**: `read_structural` para as 500 (identidade e call-graph confirmados via checkpoint; nenhuma teve blocos lidos instrução a instrução). Com este lote, o pool `auto_structural` 80-95% abre em §615 também se esgota por completo.
+
+## 617. Último lote do pool 80-95% — 49 funções finais, maioria funções-folha triviais de 16-20 bytes (2026-10-25, Fase 3, nonagésimo sétimo lote)
+
+Fecha por completo o pool aberto em §615/616 (checkpoints
+`auto_structural` com 0 tabela não resolvida, independente de
+cobertura) — depois deste lote restam **0 candidatos** sob esse
+critério em todo o inventário. Quase todas são getters/setters de
+uma única instrução de carga/retorno (16-20 B, 75-80% de cobertura —
+a "falta" de cobertura nessas é o padrão de alinhamento/prólogo
+trivial já visto, não lógica perdida). Duas exceções com conteúdo
+real: `__aeabi_d2ulz` (conversão double→unsigned long long,
+cadeia completa de 4 chamadas de soft-float já conhecidas) e
+`CSOUND_LOADER_OGG::~CSOUND_LOADER_OGG()` (destrutor real,
+delegando pro `Close()` já citado).
+
+| Endereço | Função | Bytes | Cobertura | Chama |
+|---|---|---:|---:|---|
+| `0x002cba30` | `__aeabi_d2ulz` | 104 | 92.31% | `__subdf3`, `__aeabi_ui2d`, `__muldf3`, `__fixunsdfsi` |
+| `0x000bd4bc` | `CSOUND_LOADER_OGG::~CSOUND_LOADER_OGG()` | 72 | 88.89% | `COggMemMapFile::~COggMemMapFile()`, `CSOUND_LOADER_OGG::Close()` |
+| `0x0009403c` | `_vp_global_look` | 60 | 93.33% | `sub_71608` |
+| `0x000829ec` | `oggpackB_writecopy` | 40 | 90.0% | `sub_82898` |
+| `0x000829c4` | `oggpack_writecopy` | 40 | 90.0% | `sub_82898` |
+| `0x001fcdf0` | `iOSgetCursorVisible()` | 20 | 80.0% | (folha) |
+| `0x002c53d4` | `Main_SetPauseFlag(int)` | 20 | 80.0% | (folha) |
+| `0x00142840` | `WiOS_getOptionAddOfsX()` | 20 | 80.0% | (folha) |
+| `0x002884e8` | `getBattlePoint()` | 20 | 80.0% | (folha) |
+| `0x0020f428` | `eventEffectExecute()` | 20 | 80.0% | (folha) |
+| `0x00286dec` | `GetNetmissionNo()` | 20 | 80.0% | (folha) |
+| `0x002b14d0` | `Project_Archive_GetFile(int)` | 20 | 80.0% | (folha) |
+| `0x00288578` | `pspOpenDataBackBufGet(int)` | 20 | 80.0% | (folha) |
+| `0x002041fc` | `getStartBattleFlg()` | 20 | 80.0% | (folha) |
+| `0x0028dea8` | `InitCARD` | 20 | 80.0% | (folha) |
+| `0x001eee34` | `getEffSequenceAddress()` | 20 | 80.0% | (folha) |
+| `0x00282274` | `iOS_v2menuGetYline()` | 20 | 80.0% | (folha) |
+| `0x001506a8` | `getNetErrorCutFlg()` | 20 | 80.0% | (folha) |
+| `0x001b8e50` | `get_tutrial_pad()` | 20 | 80.0% | (folha) |
+| `0x00161958` | `iOSHelpInputWaitSet(int)` | 20 | 80.0% | (folha) |
+| `0x0015da20` | `iOSGetTchCurLimit()` | 20 | 80.0% | (folha) |
+| `0x0021cf1c` | `GetEffectStatus()` | 20 | 80.0% | (folha) |
+| `0x002884a0` | `Set_NonDrawTaikiIconFlg(int)` | 20 | 80.0% | (folha) |
+| `0x00286ab4` | `set_netdatamode(int)` | 20 | 80.0% | (folha) |
+| `0x0021b890` | `SetAirDensity(long)` | 20 | 80.0% | (folha) |
+| `0x0028deec` | `StopCARD` | 16 | 75.0% | (folha) |
+| `0x002a2be8` | `PCinit` | 16 | 75.0% | (folha) |
+| `0x0020d2a8` | `getMapScroll()` | 16 | 75.0% | (folha) |
+| `0x002b375c` | `Error_GetErrorCode()` | 16 | 75.0% | (folha) |
+| `0x0025f3ec` | `iOSSnapshotGet()` | 16 | 75.0% | (folha) |
+| `0x000823d4` | `zlibVersion` | 16 | 75.0% | (folha) |
+| `0x0018377c` | `fileopen(unsigned char*, unsigned int)` | 16 | 75.0% | (folha) |
+| `0x0020d83c` | `getMapAngle()` | 16 | 75.0% | (folha) |
+| `0x0028decc` | `StartCARD` | 16 | 75.0% | (folha) |
+| `0x00101fc0` | `WgetStatusPad()` | 16 | 75.0% | (folha) |
+| `0x00073c64` | `get_crc_table` | 16 | 75.0% | (folha) |
+| `0x002bef64` | `ResumeData_GetHeapOffset()` | 16 | 75.0% | (folha) |
+| `0x0020dac8` | `getBackColor()` | 16 | 75.0% | (folha) |
+| `0x0020d5c8` | `getMapScale()` | 16 | 75.0% | (folha) |
+| `0x001eee24` | `getEffShapeAddress()` | 16 | 75.0% | (folha) |
+| `0x0027b494` | `getDrawPrimNum()` | 16 | 75.0% | (folha) |
+| `0x001a6368` | `iOSLearnTypeGet()` | 16 | 75.0% | (folha) |
+| `0x002a39b8` | `sceGeEdramGetAddr` | 16 | 75.0% | (folha) |
+| `0x002a2fe4` | `xpGetSPADAddress` | 16 | 75.0% | (folha) |
+| `0x000d6d98` | `getStatusPad()` | 16 | 75.0% | (folha) |
+| `0x002b1fe8` | `Offscreen_Get()` | 16 | 75.0% | (folha) |
+| `0x0020d050` | `getMapScrollXYZ()` | 16 | 75.0% | (folha) |
+| `0x00263aac` | `iOSNovelBrightStop()` | 16 | 75.0% | (folha) |
+| `0x0025690c` | `IOSsTownModeGet()` | 16 | 75.0% | (folha) |
+
+**Status CSV**: `read_structural` para as 49 (identidade confirmada
+via checkpoint; nenhuma teve blocos lidos instrução a instrução).
+**Esgota por completo** qualquer checkpoint do CI com tabela de salto
+resolvida (ou sem tabela) ainda não reconciliado no
+`RE_FUNCTION_INVENTORY.csv`.
+
+## 618. Últimas 6 entradas `unread` do inventário — inconsistência de linha duplicada corrigida, soft-float single-precision com cobertura completa (2026-10-25, Fase 3, nonagésimo oitavo lote)
+
+Investigação do porquê de sobrarem 6 `unread` depois do §617 esgotar
+todo checkpoint pendente: as 6 são o lado "`__aeabi_*`" de 6 pares de
+linha duplicada no CSV (mesmo endereço, dois nomes mangled
+diferentes — `__aeabi_fmul`/`__mulsf3`, `__aeabi_fsub`/`__subsf3`,
+`__aeabi_fdiv`/`__divsf3`, `__aeabi_d2uiz`/`__fixunsdfsi`,
+`__aeabi_ui2f`/`__floatunsisf`, `__aeabi_i2f`/`__floatsisf`) — o lado
+`mentioned_unverified` já vinha herdado da passada automática de
+cruzamento por nome original (pré-Fase 3), mas o lado `__aeabi_*`
+nunca foi atualizado em paralelo. Checkpoint do CI confirma, pra
+todos os 6 endereços: **100% de cobertura (80% só em `__aeabi_ui2f`),
+0 `bl`, função folha** — diferente dos correspondentes de precisão
+dupla (`__aeabi_dadd`/`dsub`/`dmul`/`ddiv`, §569, mantidas
+`mentioned_unverified` por cobertura baixa real) — as versões
+`float` (precisão simples) são bem mais simples (sem a mesma cascata
+de casos especiais IEEE-754) e ficam inteiramente cobertas.
+
+**Status CSV**: `read_structural` pras 6 linhas `__aeabi_*` (e os
+pares `__mulsf3`/`__subsf3`/`__divsf3`/`__fixunsdfsi`/`__floatunsisf`/
+`__floatsisf` sobem de `mentioned_unverified` pra `read_structural`
+junto, mesma identidade/cobertura). **Zero funções `unread`
+restam no `RE_FUNCTION_INVENTORY.csv`** — todo o inventário de 6.455
+funções tem agora status `read_full`, `read_structural` ou
+`mentioned_unverified`.
