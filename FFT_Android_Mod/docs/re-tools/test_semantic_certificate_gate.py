@@ -26,6 +26,7 @@ def approved():
         "test_evidence": ["original ELF", "differential model", "Unicorn"],
         "reviewer": {
             "type": "human", "name": "Independent Reviewer",
+            "github_login": "independent-reviewer",
             "decision": "approved", "approval_pr":
                 "https://github.com/c1c3ru/fft_craft/pull/325",
             "approved_at": "2026-10-26", "notes": "Signed human-scoped review",
@@ -50,6 +51,7 @@ class CertificateGateTests(unittest.TestCase):
     def test_requires_explicit_human_review(self):
         for reviewer in (
             None, "CI", {"type": "bot", "name": "CI",
+                         "github_login": "ci[bot]",
                          "decision": "approved", "approval_pr":
                              "https://github.com/c1c3ru/fft_craft/pull/325",
                          "approved_at": "2026-10-26", "notes": "not human"},
@@ -62,6 +64,34 @@ class CertificateGateTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     gate.verify_one(cert, {"address": ADDRESS, "size": 4},
                                     None, DIGEST)
+
+    def test_remote_approval_tied_to_entry_and_head_commit(self):
+        cert = approved()
+        # The local fixture never claims that this PR is *actually* approved;
+        # the mocked GitHub data only exercises the gate contract.
+        expected_prefix = "repos/c1c3ru/fft_craft/pulls/325"
+        def provider(path):
+            self.assertTrue(path.startswith(expected_prefix))
+            if path == expected_prefix:
+                return {"head": {"sha": "commit-abc"}}
+            if path.endswith("/reviews?per_page=100"):
+                return [{"user": {"login": "independent-reviewer",
+                                  "type": "User"},
+                         "state": "APPROVED", "commit_id": "commit-abc",
+                         "submitted_at": "2026-10-26T15:00:00Z"}]
+            return [{"filename": "FFT_Android_Mod/docs/re-results/"
+                                  "semantic-certificates.json",
+                     "patch": '+  "00002010": {"status": "certified"},'}]
+        self.assertTrue(gate.verify_remote_review(cert, ADDRESS, provider))
+        with self.assertRaisesRegex(ValueError, "certificate entry"):
+            gate.verify_remote_review(cert, "00002014", provider)
+        def wrong_commit(path):
+            value = provider(path)
+            if path == expected_prefix:
+                return {"head": {"sha": "different-head"}}
+            return value
+        with self.assertRaisesRegex(ValueError, "valid human approval"):
+            gate.verify_remote_review(cert, ADDRESS, wrong_commit)
 
     def test_reject_wrong_binary_opcode_or_unverified_tests(self):
         for change in (
