@@ -26,6 +26,47 @@ O histórico CSV contém **5,932** registros de análise anterior, que podem se 
 
 Os relatórios abaixo apresentam **efeitos locais testados sob estados sintéticos** e seus limites. Testes passando não significam que a função inteira foi reconstruída:
 
+## Cobertura semântica e execução paralela
+
+Os números certificados representam **registros formais válidos para este ELF**, não aprovação estrutural. Evidências parciais não certificam equivalência.
+
+| Indicador | Resultado |
+|---|---:|
+| Entradas do inventário | 6,455 |
+| Endereços únicos | 6,329 |
+| Certificados semânticos registrados | 0 |
+| Cobertura semântica por endereço | 0.00% |
+| Cobertura semântica por bytes únicos | 0.00% |
+| Registros parciais no ledger | 0 |
+| Endereços com evidência parcial registrada ou gerada nesta execução | 7 |
+| Relatórios estáticos deste lote | 5 |
+| Relatórios Unicorn deste lote | 2 |
+| Endereços distribuídos aos workers neste lote | 5 |
+| Endereços aguardando certificação | 6,329 |
+
+### Próximos contratos ainda não certificados (maiores primeiro)
+
+| Endereço | Função | Bytes | Estado |
+|---|---|---:|---|
+| `00207e10` | battle() | 17156 | unknown |
+| `0011173c` | Wmesputmain() | 16312 | unknown |
+| `002c141c` | Main_FrameRender() | 16164 | unknown |
+| `0017c27c` | BattleUnitList(unsigned char*, unsigned long*) | 15920 | unknown |
+| `000e88c4` | mesputmain() | 15744 | unknown |
+| `0016a6a4` | ASHURA_addPrim(MATRIX*) | 15412 | unknown |
+| `001aeda0` | ItemMenu() | 13764 | unknown |
+| `002bbb74` | Main_FrameMove() | 13272 | unknown |
+| `0018aeec` | eItemMenu() | 12580 | unknown |
+| `000c5148` | op_attackteam() | 12272 | unknown |
+| `00184670` | CardAccess(int) | 11004 | unknown |
+| `001506ec` | requireprinf() | 10976 | unknown |
+| `00225ac8` | CreateObjectWithTable(short, int, int, _Object*) | 10724 | unknown |
+| `0016fc90` | BattleCardAccess(int) | 10448 | unknown |
+| `00128ed4` | disp_personalwindow() | 8756 | unknown |
+
+O restante da fila permanece nos manifestos e no `SEMANTIC_COVERAGE.md`. Observações Unicorn limitadas e verificações estáticas não alteram automaticamente certificados.
+
+
 - [Três destinos de SysSE_Play e argumentos pós-GetScale verificados por máquina](SEMANTIC_POST_GETTER_PATHS.md)
 - [GetParam/GetScale ARM: 96 microexecuções individuais e via BL original](SEMANTIC_GETPARAM_GETSCALE_MICROEXEC.md)
 - [Instruções e destinos de chamada GetParam/GetScale auditados](SEMANTIC_GETPARAM_GETSCALE_AUDIT.md)
@@ -58,11 +99,11 @@ Estas duas prioridades são **curadas no gerador**; quando um limite for resolvi
 
 ## Pull requests recentes
 
-- [PR #301 — feat(re): seguir desvios ARM após GetParam e argumentos pós-GetScale](https://github.com/c1c3ru/fft_craft/pull/301)
-- [PR #300 — chore(re): automated structural batch 40353693947](https://github.com/c1c3ru/fft_craft/pull/300)
-- [PR #299 — feat(re): mapear os callees ARM GetParam e GetScale antes de ampliar semântica](https://github.com/c1c3ru/fft_craft/pull/299)
-- [PR #298 — chore(re): automated structural batch 40351595820](https://github.com/c1c3ru/fft_craft/pull/298)
-- [PR #297 — feat(re): auditar instruções reais nos próximos limites de som e ícones](https://github.com/c1c3ru/fft_craft/pull/297)
+- [PR #307 — feat(re): centralizar cobertura semântica, workers e Unicorn no STATUS_GERAL](https://github.com/c1c3ru/fft_craft/pull/307)
+- [PR #308 — Feat/re review shards 20261026](https://github.com/c1c3ru/fft_craft/pull/308)
+- [PR #306 — feat(re): publicar evidências Unicorn por função sem certificar semântica integral](https://github.com/c1c3ru/fft_craft/pull/306)
+- [PR #305 — fix(re): correct semantic CI and run first five-address ARM evidence pilot](https://github.com/c1c3ru/fft_craft/pull/305)
+- [PR #304 — feat(re): fila semântica para todas as 6.455 funções e manifests em CI](https://github.com/c1c3ru/fft_craft/pull/304)
 
 ## Atualização automática e fontes
 
