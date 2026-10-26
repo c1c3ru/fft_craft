@@ -12,33 +12,11 @@ on:
         default: '5'
   pull_request:
     paths:
-      - 'FFT_Android_Mod/docs/re-tools/semantic_coverage.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_work_queue.py'
-      - 'FFT_Android_Mod/docs/re-tools/test_semantic_coverage.py'
-      - 'FFT_Android_Mod/docs/re-tools/test_semantic_work_queue.py'
       - '.github/workflows/re-semantic-queue.yml'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_pilot.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_dynamic_evidence.py'
-      - 'FFT_Android_Mod/docs/re-tools/test_semantic_dynamic_evidence.py'
-      - 'FFT_Android_Mod/docs/re-tools/central_semantic_summary.py'
-      - 'FFT_Android_Mod/docs/re-tools/test_central_semantic_summary.py'
-      - 'FFT_Android_Mod/docs/re-tools/status_geral.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_houkoku_next_boundaries.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_history.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_leaf_bxlr.py'
-      - 'FFT_Android_Mod/docs/re-tools/test_semantic_history.py'
-      - 'FFT_Android_Mod/docs/re-tools/test_semantic_leaf_bxlr.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_bxlr_contract_pilot.py'
-      - 'FFT_Android_Mod/docs/re-tools/test_semantic_bxlr_contract_pilot.py'
-      - 'FFT_Android_Mod/docs/re-tools/arm_bx_reference.py'
-      - 'FFT_Android_Mod/docs/re-tools/test_arm_bx_reference.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_run_snapshot.py'
-      - 'FFT_Android_Mod/docs/re-tools/test_semantic_run_snapshot.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_certificate_gate.py'
+      - 'FFT_Android_Mod/docs/re-tools/**'
       - 'FFT_Android_Mod/docs/re-results/semantic-certificates.json'
-      - 'FFT_Android_Mod/docs/re-tools/test_semantic_certificate_gate.py'
-      - 'FFT_Android_Mod/docs/re-tools/semantic_bxlr_review_batch.py'
-      - 'FFT_Android_Mod/docs/re-tools/test_semantic_bxlr_review_batch.py'
+      - 'FFT_Android_Mod/docs/RE_FUNCTION_INVENTORY.csv'
+      - 'FFT_Android_Mod/src/lib/armeabi/libgl2jni.so'
 
 permissions:
   contents: read
@@ -53,29 +31,17 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Test semantic accounting and scheduler
-        run: |
-          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_coverage.py' -v
-          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_work_queue.py' -v
       - name: Install ARM analysis dependencies
         run: python3 -m pip install capstone pyelftools unicorn
+      - name: Compile all ARM tools and run all regressions
+        run: |
+          python3 -m compileall -q FFT_Android_Mod/docs/re-tools
+          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_*.py' -v
       - name: Validate formal semantic certificate gate
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_certificate_gate.py' -v
           python3 FFT_Android_Mod/docs/re-tools/semantic_certificate_gate.py
-      - name: Test dynamic evidence accounting
-        run: python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_dynamic_evidence.py' -v
-      - name: Test centralized dashboard
-        run: python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_central_semantic_summary.py' -v
-      - name: Test prior evidence and new leaf proof candidates
-        run: |
-          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_history.py' -v
-          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_leaf_bxlr.py' -v
-          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_bxlr_contract_pilot.py' -v
-          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_bxlr_review_batch.py' -v
-          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_arm_bx_reference.py' -v
       - name: Generate exact-binary semantic dashboard and worker manifests
         env:
           GH_TOKEN: ${{ github.token }}
