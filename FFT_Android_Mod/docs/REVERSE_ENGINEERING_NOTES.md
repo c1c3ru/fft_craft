@@ -4757,17 +4757,185 @@ Dois achados estruturais atravessam quase todos os 30:
   inline (mesmo fenômeno de handler-compartilhado da 32.2, num grão
   menor).
 
-**O que ainda falta**: 38 dos 68 handlers reais, os blocos de
-epílogo compartilhado (`0x2088d0`/`0x20868c`/`0x20971c`) em si, e
-~40 funções locais sem símbolo citadas acima (`sub_203990`,
-`sub_204f30`, `sub_200de8`, `sub_1fc4cc`, `sub_202180`, `sub_1fa468`,
-`sub_2040bc`, `sub_202854`, `sub_207970`, `sub_207bcc`, `sub_2024f0`,
-`sub_206b00`, etc.).
+## 32.10 Leitura instrução a instrução dos 38 handlers restantes — os 68 handlers reais de `battle()` agora estão TODOS lidos (2026-10-25, Fase 3, centésimo lote)
 
-**Status CSV: `read_structural`** (mantém — 30 de 68 handlers reais
-agora têm leitura byte a byte completa, mas `battle()` só vira
-`read_full` quando os 68 + os epílogos compartilhados estiverem
-todos lidos).
+Continuação direta da 32.9, mesma técnica (5 forks, disassembly
+Capstone direto). Com este lote, **os 68 handlers de estado
+distintos da tabela de 32.2 têm todos leitura byte a byte completa**
+— faltam só os dois blocos "coletivos" (default `0x20a670`, usado
+por 21 estados-sentinela, e o handler compartilhado `0x2092d4`,
+usado por 13 estados) e os próprios blocos de epílogo
+(`0x2088d0`/`0x20868c`/`0x20971c`), que começaram a ser revelados de
+dentro (ver 32.10.81/32.10.72 abaixo) mas não foram abertos como
+blocos independentes.
+
+### Estados 31-38 — mais instâncias do dispatch "menu→ação" e do template "fim de sub-fase"
+
+- **Estado 31** (`0x209a1c`): variante "nua" do núcleo menu→dispatch
+  (11/22/24/39/41/46), sem setup de ícone.
+- **Estado 32** (`0x2099f4`): libera `iOSTchCurLimit(0)`, liga ícone
+  10, delega a `sub_205398`.
+- **Estados 33/34** (`0x209ca0`/`0x209984`): mesmo núcleo
+  menu→dispatch com ícones 4/10 invertidos vs. outras instâncias;
+  **34 bifurca o tipo 7** pra destino distinto de 8/0xff (mesmo
+  padrão do estado 16).
+- **Estado 35** (`0x209ba4`, o mais rico do grupo): estende a cadeia
+  de herança de sub-animação do estado 29 pra **dois elos**
+  (atacante→projétil, e o projétil tem SUA PRÓPRIA sub-animação,
+  resolvida via `searchAnimationByBattleID` + `request_status`);
+  sob 3 gates de sincronização, **grava `36` direto em
+  `*g_battleState`** — 5ª transição hard-coded encontrada.
+- **Estado 36** (`0x2098c8`): único do cluster menu→dispatch que
+  **não** chama `return_actionstructure()` — testa direto um
+  bitmask de flags (`&0x60`) pra decidir se troca o painel ativo.
+- **Estado 37** (`0x20984c`): grupo especial 7/8/0xff + checagem de
+  um byte em offset `+0x2c4` da animação corrente (achado novo).
+- **Estado 38** (`0x209814`): template "fim de sub-fase" (desliga
+  ícones 5/4, delega a `sub_204d1c`).
+
+### Estados 39-46 — mais variantes de menu→dispatch, gate de rede minimalista, carga de Permanent Effect, 4ª transição hard-coded
+
+- **Estado 39** (`0x209550`): menu→dispatch gateado por **não** estar
+  em modo de rede ad-hoc.
+- **Estado 40** (`0x209530`): o handler mais simples do projeto até
+  agora — só `pspNetCheckDuty()` como gate binário.
+- **Estado 41** (`0x2094e4`): menu→dispatch "nu", sem ícone nenhum.
+- **Estado 42** (`0x2094ac`): fim de sub-fase (ícones 5/4/10),
+  delega a `sub_20269c`.
+- **Estado 43** (`0x209458`): **dispara `LoadEffect()`** (§429/§604)
+  e trata falha de carga com fallback (`sub_20191c`) — primeiro
+  estado confirmado dedicado a carregar um efeito permanente.
+- **Estado 44** (`0x2093b0`): fim de animação de ataque — incrementa
+  e zera um contador de frame, **grava `45` direto em
+  `*g_battleState`** (4ª transição hard-coded), e liga
+  `IsPermanentEffect`/`WhoUnlockEffect` (§429/§604) ao desbloqueio
+  de efeito vinculado ao fim do ataque.
+- **Estado 45** (`0x209378`): mesma forma do 42 (fim de sub-fase),
+  helper diferente (`sub_20074c`) — destino natural da transição
+  44→45.
+- **Estado 46** (`0x2092e0`): única instância do grupo 7/8/0xff que
+  **processa** o caso especial no próprio handler (em vez de só
+  desviar) — seta `g_specialActionFlag` (mesmo flag do 29/35/37) e
+  chama 2 locais não resolvidos.
+
+### Estados 47-55 — guards de par compartilhado, pipeline de câmera/scroll nunca visto, o par de fade 53/55 em torno do `initMap` do estado 54
+
+- **Estados 47/48/49** (`0x2092c0`/`0x209154`/`0x208f88`): 48 e 49
+  compartilham o MESMO guard (`sub_2028d0()`) e convergem no mesmo
+  bloco de pré-epílogo (`0x208f94`) — par confirmado por desvio
+  cruzado real entre os dois handlers.
+- **Estado 51** (`0x208f10`): acessa **4 funções de câmera/scroll
+  nunca vistas** (`executeMapScrollXYZ`/`Scroll`/`Scale`/`Angle`,
+  padrão "execute*" análogo a `executeChangeClut`) junto do pipeline
+  de animação já conhecido (`ExecuteAnimations`/`DisplayAnimations`,
+  §263/§200); e **escreve `*g_battleState` a partir de um valor lido
+  de um global** (transição computada, não constante) — 1º caso
+  desse tipo.
+- **Estado 52** (`0x2091a0`): gate por ícone `0x75` (117, fora da
+  faixa 0-0x14 vista até aqui).
+- **Estados 53/54/55** (`0x208fd0`/`0x208bbc`/`0x208b00`): **o trio
+  de fade em torno do carregamento do mapa** — 54 grava branco
+  opaco e **dispara `initMap(int,int)` de verdade** (confirma em qual
+  fase exata do switch de 102 estados o mapa é carregado, §614); 53
+  é a rampa que CONTA PRA CIMA (fade-in, cor cinza) até o limiar
+  `0x101`; 55 é a rampa que CONTA PRA BAIXO (fade-out) até zero —
+  todos os três usam o mesmo par `AddPrim`×2 via `ASHURA_getOTptrZ`
+  sobre a mesma struct de fade (stride 0x1c).
+
+### Estados 56-59 e 72-81 — conclusão do fade com teardown 3D, segunda chamada a `initMap`, o "tick" real por quadro, e o próprio bloco de epílogo revelado por dentro
+
+- **Estado 56** (`0x2091dc`): ao passar do limiar de fade, satura a
+  cor, **grava `57` direto em `*g_battleState`** (6ª transição
+  hard-coded) e chama **`ASHURA_Exit()` + `EndAllAnimation()`** —
+  primeira vez que essas duas funções (citadas desde 32.3/32.7 sem
+  seção própria) são atribuídas a um estado real: "fim de batalha —
+  fade + teardown do motor 3D/animação".
+- **Estado 57** (`0x209090`): **segunda chamada a `initMap`** dentro
+  do loop (a 1ª é do estado 54) — confirma que o mapa pode ser
+  reinicializado em mais de um ponto do switch; quando o resultado é
+  `13` (mesmo valor-gatilho do estado 54), faz uma transição
+  computada a partir de um flag global.
+- **Estado 58** (`0x208efc`): delegação pura, 1 chamada
+  (`sub_204b34`), sem lógica própria.
+- **Estado 59** (`0x208d64`): mesma mecânica de fade de 53/55/56,
+  mas sem gate de limiar — incrementa o acumulador de cor
+  incondicionalmente, sempre avança.
+- **Estados 73/74** (`0x208fa4`/`0x209174`): byte a byte **idênticos**
+  — ligam o ícone `0x17` (23, achado novo) e só tocam o tick padrão
+  se `iOSmapVectorScrollCheck()` (achado novo) confirmar; só o
+  destino de desvio externo muda entre os dois.
+- **Estados 75/76** (`0x2088e0`/`0x208854`): **par ping-pong real**
+  reusando os mesmos helpers locais dos estados 8/9
+  (`sub_2040bc`/`sub_202854`) — confirma que 8/9 e 75/76 são duas
+  instâncias do mesmo template de espera assíncrona, não sistemas
+  diferentes. 76 sempre força a volta pro 75 ao detectar mudança de
+  estado; 75 só força a ida pro 76 quando `*g_battleState==9` nesse
+  ponto (valor de um slot de memória reaproveitado por mais de um
+  subsistema).
+- **Estados 77/78/79** (`0x2089fc`/`0x208974`/`0x208c5c`): 77 e 79
+  são duas entradas paralelas que convergem na MESMA transição
+  hard-coded **`78`** (condicionada a `recieve_statusinfo()==0` e um
+  campo global `==0`) — 79 é a via "direta" (sempre vai pro
+  epílogo, e ainda chama `CFFT_STATE::SetParam` antes); 78 é o
+  destino real, um estado-ponte que só avança quando o ícone `0x23`
+  (setado pra `2` por 77/79) confirma "pronto".
+- **Estado 80** (`0x208998`): dispatcher por um valor global de
+  categoria (`0x200`/`0x300`/`0x500` — enum "em centenas"), com
+  `0x300`/`0x500` convergindo no mesmo destino.
+- **Estado 81** (`0x2088b0`, o handler mais curto): mesmo guard
+  `sub_2028d0()` dos estados 48/49, com transição computada (valor
+  da pilha do chamador); por estar tão colado no epílogo, **revela
+  as duas primeiras instruções reais do próprio bloco `0x2088d0`**
+  (comparação de estado + normalização `estado-0x29`) — confirma que
+  esse trecho é literalmente o mesmo código do bloco de "tick" do
+  estado 72.
+- **Estado 72** (`0x208638`, 540 B — o handler mais rico de toda a
+  função): o **"tick" real por quadro**, achado de maior valor desta
+  rodada. Processa entrada de câmera/toque
+  (`iOSSlideNaviCurMove`/`iOSYajiEffect`/`iOSRotAutoGet`), três
+  switches por flags de rotação/modo, consome a fila de troca de
+  paleta (`executeChangeClut`→`transferClutData`, §70), faz o
+  **swap de double-buffer de rede** (`db_swap`) e **sonda o host**
+  (`myPollhost`, §206) — tudo ANTES de decidir o próximo estado. Ao
+  final, **não** cai no epílogo padrão: salta direto pra
+  `0x208194`, próximo do início físico de `battle()` (os guardas
+  pré-switch da §32.1) — confirma que o estado 72 é o heartbeat
+  universal de frame, não um estado de gameplay como os outros 67.
+
+### Resumo das transições hard-coded descobertas em `battle()` (6 confirmadas)
+
+| Origem | Destino | Condição |
+|---|---:|---|
+| guarda pré-switch (ícone 19) | 75 | `iOS_getV2Icon(0x13)!=0`, §32.6 |
+| 10 | 8 | incondicional dentro do handler |
+| 26 | 25 | `recieve_statusinfo()!=2` |
+| 29 | 30 | 3 flags globais específicas |
+| 35 | 36 | 3 gates de sincronização |
+| 44 | 45 | incondicional (fim de animação de ataque) |
+| 56 | 57 | limiar de fade atingido |
+| 77/79 | 78 | `recieve_statusinfo()==0` + campo global `==0` |
+
+**O que ainda falta pra `read_full` de verdade**: os dois blocos
+coletivos (default `0x20a670`/21 estados, compartilhado
+`0x2092d4`/13 estados) nunca abertos como blocos próprios; os
+próprios blocos de epílogo `0x2088d0`/`0x20868c`/`0x20971c`/`0x208194`
+(parcialmente revelados de dentro pelos estados 72/81, mas não lidos
+como unidade); e ~55 funções locais sem símbolo acumuladas ao longo
+da 32.9/32.10 (`sub_203990`, `sub_204f30`, `sub_200de8`,
+`sub_1fc4cc`, `sub_202180`, `sub_1fa468`, `sub_2040bc`, `sub_202854`,
+`sub_207970`, `sub_207bcc`, `sub_2024f0`, `sub_206b00`, `sub_205398`,
+`sub_20269c`, `sub_20191c`, `sub_20074c`, `sub_203d74`, `sub_204500`,
+`sub_204808`, `sub_2062d0`, `sub_204440`, `sub_204b34`, `sub_204d1c`,
+`sub_20433c`, entre outras).
+
+**Status CSV: `read_structural`** — todos os 68 handlers de estado
+distintos agora têm leitura byte a byte completa (não mais "30 de
+68", mas "68 de 68"), um salto real de cobertura; `battle()` só vira
+`read_full` quando os 2 blocos coletivos + os blocos de epílogo
+compartilhado + as ~55 funções locais restantes também estiverem
+lidos — trabalho significativo ainda, mas o núcleo de 102 estados do
+switch principal está, pela primeira vez, inteiramente mapeado por
+dentro.
 
 ## 33. `Wmesputmain()` — passe estrutural — 2ª maior função do binário, revela um sistema de tasks nunca visto (2026-10-17, Fase 3)
 
