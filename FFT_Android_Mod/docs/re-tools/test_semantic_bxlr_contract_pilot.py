@@ -19,8 +19,9 @@ class BXLrContractPilotTests(unittest.TestCase):
                 pilot.isa_contract(wrong)
 
     def test_even_and_odd_return_preserve_state(self):
+        self.assertEqual(len(pilot.FLAGS), 16)
         self.assertEqual(pilot.verify_interworking(
-            0x2020, bytes.fromhex("1eff2fe1")), 8)
+            0x2020, bytes.fromhex("1eff2fe1")), 32)
 
     def test_reject_invalid_elf_entry_location(self):
         with self.assertRaises(ValueError):

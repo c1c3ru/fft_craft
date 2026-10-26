@@ -23,8 +23,9 @@ from unicorn.arm_const import (
 import semantic_coverage
 import semantic_evidence
 import semantic_leaf_bxlr as leaf
+import arm_bx_reference as arm_model
 
-FLAGS = (0, 0x20000000, 0x60000000, 0xF0000000)
+FLAGS = tuple(n << 28 for n in range(16))  # Exhaustive 16 NZCV combinations
 RETURN = 0x710100
 RAM = 0x700000
 RAM_MARKER = b"CHECKED-ARM-RETURN"
@@ -80,8 +81,9 @@ def verify_interworking(address, code, flags=FLAGS):
             actual_pc = uc.reg_read(UC_ARM_REG_PC)
             actual_cpsr = uc.reg_read(UC_ARM_REG_CPSR)
             # ARM BX performs interworking via bit zero of LR, not arithmetic.
-            target_cpsr = (start_cpsr & ~0x20) | (0x20 if thumb else 0)
-            if pcs != [address, RETURN] or actual_pc != RETURN:
+            expected_pc, target_cpsr = arm_model.branch_exchange_lr(
+                code, expected[UC_ARM_REG_LR], start_cpsr)
+            if pcs != [address, expected_pc] or actual_pc != expected_pc:
                 raise AssertionError(f"incorrect ARM/Thumb return path at {address:08x}")
             if actual_cpsr != target_cpsr:
                 raise AssertionError(f"unexpected CPSR after BX LR at {address:08x}")
@@ -93,7 +95,7 @@ def verify_interworking(address, code, flags=FLAGS):
     return samples
 
 
-def run(binary, inventory, output, report, limit=5):
+def run(binary, inventory, output, report, limit=303):
     if not 1 <= limit <= 303:
         raise ValueError("pilot size must be 1..303")
     binary, inventory = Path(binary), Path(inventory)
@@ -110,6 +112,8 @@ def run(binary, inventory, output, report, limit=5):
         addr = int(row["address"], 16)
         code = semantic_evidence.read_function(binary, addr, 4)
         contract = isa_contract(code)
+        arm_model.branch_exchange_lr(code, RETURN, 0x10)
+        arm_model.branch_exchange_lr(code, RETURN | 1, 0x10)
         samples = verify_interworking(addr, code)
         record = {
             "address": row["address"], "name": row["name"],
@@ -129,20 +133,22 @@ def run(binary, inventory, output, report, limit=5):
             "machine_samples_failed": 0,
             "verified_return_modes": ["ARM", "Thumb"],
             "test_evidence": ["original ELF instruction", "Capstone exact opcode",
+                              "independent pure A32 BX LR transition model",
                               "Unicorn PC/CPSR/general-register/memory differential"],
             "reviewer": None,
+            "test_oracle": "arm_bx_reference.branch_exchange_lr",
             "unverified": ["independent ISA-model review",
                            "environmental exception behavior",
                            "human verification of full-contract scope"],
         }
         (output / (row["address"] + ".json")).write_text(
             json.dumps(record, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    lines = ["# Primeiro piloto de contratos locais completos — BX LR", "",
+    lines = ["# Validação dos contratos locais BX LR — todas as candidatas", "",
              f"ELF SHA-256: `{digest}`", "",
              f"- Entradas de 4 bytes ARM verificadas: **{inspected}**",
              f"- Folhas BX LR disponíveis: **{len(candidates)}**",
-             f"- Contratos locais verificados neste piloto: **{len(chosen)}**",
-             f"- Testes diferenciais ARM/Thumb deste piloto: **{8 * len(chosen)}**", "",
+             f"- Contratos locais verificados neste lote: **{len(chosen)}**",
+             f"- Testes diferenciais ARM/Thumb deste lote: **{2 * len(FLAGS) * len(chosen)}**", "",
              "**Status:** pronto para revisão; **0 novas certificações integrais**. "
              "As pós-condições cobrem o corpo de uma instrução no contexto ARM "
              "normal. A equivalência global, os casos de exceção e a aprovação "
@@ -151,12 +157,12 @@ def run(binary, inventory, output, report, limit=5):
              "|---|---|---|---|"]
     for row in chosen:
         lines.append(f"| `{row['address']}` | {row['name'].replace('|','/')} "
-                     "| `BX LR` | 4 + 4 testes |")
+                     f"| `BX LR` | {len(FLAGS)} + {len(FLAGS)} testes |")
     lines += ["", "Arquivos individuais JSON no artifact do workflow. "
               "Eles não são inseridos automaticamente em `semantic-certificates.json`.", ""]
     report.write_text("\n".join(lines), encoding="utf-8")
     print(f"BXLR_CONTRACT_PILOT_READY={len(chosen)}")
-    print(f"BXLR_CONTRACT_PILOT_SAMPLES={len(chosen)*8}")
+    print(f"BXLR_CONTRACT_PILOT_SAMPLES={len(chosen)*2*len(FLAGS)}")
     print("BXLR_CONTRACT_PILOT_CERTIFIED=0")
     return len(chosen)
 
@@ -167,7 +173,7 @@ def main():
     p.add_argument("--inventory", type=Path, default=semantic_coverage.INVENTORY)
     p.add_argument("--output", type=Path, required=True)
     p.add_argument("--report", type=Path, required=True)
-    p.add_argument("--limit", type=int, default=5)
+    p.add_argument("--limit", type=int, default=303)
     a = p.parse_args()
     run(a.binary, a.inventory, a.output, a.report, a.limit)
 

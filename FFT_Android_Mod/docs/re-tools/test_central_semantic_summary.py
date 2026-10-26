@@ -76,14 +76,14 @@ class CentralSemanticSummaryTests(unittest.TestCase):
             "instruction_word": "1eff2fe1", "contract_stage":
                 "local_isa_contract_checked_review_pending",
             "semantic_status": "partial", "certified": False,
-            "machine_samples_passed": 8, "machine_samples_failed": 0,
+            "machine_samples_passed": 32, "machine_samples_failed": 0,
             "reviewer": None
         })
         report = mod.summarize(self.inventory, self.digest,
                                self.root / "missing.json",
                                contracts_dir=contracts)
         self.assertEqual(report["checked_local_contracts"], 1)
-        self.assertEqual(report["contract_samples"], 8)
+        self.assertEqual(report["contract_samples"], 32)
         self.assertEqual(report["certified"], 0)
         self.assertIn("Contratos locais BX LR", mod.render(report))
         self.write(contracts, "00000010.json", {
@@ -91,7 +91,7 @@ class CentralSemanticSummaryTests(unittest.TestCase):
             "instruction_word": "1eff2fe1", "contract_stage":
                 "local_isa_contract_checked_review_pending",
             "semantic_status": "partial", "certified": True,
-            "machine_samples_passed": 8, "machine_samples_failed": 0,
+            "machine_samples_passed": 32, "machine_samples_failed": 0,
             "reviewer": None
         })
         with self.assertRaises(ValueError):

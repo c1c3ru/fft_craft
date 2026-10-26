@@ -30,6 +30,8 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_leaf_bxlr.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_bxlr_contract_pilot.py'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_bxlr_contract_pilot.py'
+      - 'FFT_Android_Mod/docs/re-tools/arm_bx_reference.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_arm_bx_reference.py'
 
 permissions:
   contents: read
@@ -58,6 +60,7 @@ jobs:
           python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_history.py' -v
           python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_leaf_bxlr.py' -v
           python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_bxlr_contract_pilot.py' -v
+          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_arm_bx_reference.py' -v
       - name: Generate exact-binary semantic dashboard and worker manifests
         env:
           LIMIT: ${{ github.event_name == 'pull_request' && '5' || inputs.limit || '5' }}
@@ -72,7 +75,7 @@ jobs:
             --output /tmp/fft-semantic/dynamic-evidence \
             --report FFT_Android_Mod/docs/re-results/SEMANTIC_LEAF_BXLR.md
           python3 FFT_Android_Mod/docs/re-tools/semantic_bxlr_contract_pilot.py \
-            --limit 5 --output /tmp/fft-semantic/contract-pilot \
+            --limit 303 --output /tmp/fft-semantic/contract-pilot \
             --report FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_CONTRACT_PILOT.md
           python3 FFT_Android_Mod/docs/re-tools/semantic_work_queue.py \
             --workers "$WORKERS" --limit "$LIMIT" \

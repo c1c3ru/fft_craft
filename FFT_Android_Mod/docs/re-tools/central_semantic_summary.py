@@ -85,11 +85,11 @@ def summarize(inventory, digest, certificates_path, pilot_dir=None,
                     or record.get("certified") is not False
                     or record.get("semantic_status") != "partial"
                     or record.get("machine_samples_failed") != 0
-                    or record.get("machine_samples_passed") != 8
+                    or record.get("machine_samples_passed") != 32
                     or record.get("reviewer") is not None):
                 raise ValueError(f"invalid or stale local contract: {path}")
             checked_contracts.add(address)
-            contract_samples += 8
+            contract_samples += 32
     assigned = set()
     if manifests_dir is not None:
         for path in sorted(Path(manifests_dir).glob("semantic-worker-*.json")):
