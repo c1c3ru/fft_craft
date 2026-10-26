@@ -20,13 +20,18 @@ MAX_BATCH = 20
 
 
 def build(binary, inventory, contracts_dir, limit=5,
-          reader=semantic_evidence.read_function, run_id=None):
+          reader=semantic_evidence.read_function, run_id=None,
+          certificates_path=None):
     if type(limit) is not int or not 1 <= limit <= MAX_BATCH:
         raise ValueError("review batch size must be between 1 and 20")
     binary, inventory = Path(binary), Path(inventory)
     digest = hashlib.sha256(binary.read_bytes()).hexdigest()
     ledger = semantic_coverage.ledger(inventory, digest, {})
     by_address = {r["address"]: r for r in ledger}
+    certificates = {}
+    if certificates_path is not None and Path(certificates_path).is_file():
+        certificates = json.loads(Path(certificates_path).read_text(encoding="utf-8"))
+        semantic_coverage.ledger(inventory, digest, certificates)
     contracts_dir = Path(contracts_dir)
     paths = sorted(contracts_dir.glob("*.json"))
     if not paths:
@@ -63,6 +68,26 @@ def build(binary, inventory, contracts_dir, limit=5,
                 or record.get("instruction_sha256") !=
                    hashlib.sha256(original).hexdigest()):
             raise ValueError(f"original ELF bytes changed for candidate: {address}")
+        existing = certificates.get(address)
+        if existing is not None:
+            if existing.get("status") == "certified":
+                continue
+            expected_fields = {
+                "status": "partial", "size": 4,
+                "binary_sha256": digest, "instruction_encoding": "1eff2fe1",
+                "instruction_sha256": record["instruction_sha256"],
+                "proof_class": gate.SCOPE,
+                "scope": "normal_a32_valid_abi_return",
+                "contract": record["contract"],
+                "preconditions": list(gate.PRECONDITIONS),
+                "postconditions": list(gate.POSTCONDITIONS),
+                "memory_effects": list(gate.MEMORY_EFFECTS),
+                "control_flow": list(gate.CONTROL_FLOW),
+                "test_evidence": list(gate.REQUIRED_EVIDENCE),
+                "reviewer": None,
+            }
+            if any(existing.get(k) != v for k, v in expected_fields.items()):
+                raise ValueError(f"ledger and same-run review proof disagree: {address}")
         candidates.append((address, record))
     if len(candidates) < limit:
         raise ValueError("insufficient validated proof candidates")
@@ -165,13 +190,16 @@ def main():
     p.add_argument("--binary", type=Path, default=semantic_coverage.BINARY)
     p.add_argument("--inventory", type=Path, default=semantic_coverage.INVENTORY)
     p.add_argument("--contracts-dir", type=Path, required=True)
+    p.add_argument("--certificates", type=Path,
+                   default=semantic_coverage.RESULTS / "semantic-certificates.json")
     p.add_argument("--limit", type=int, default=5)
     p.add_argument("--manifest", type=Path,
                    default=semantic_coverage.RESULTS / "SEMANTIC_BXLR_REVIEW_BATCH.json")
     p.add_argument("--report", type=Path,
                    default=semantic_coverage.RESULTS / "SEMANTIC_BXLR_REVIEW_BATCH.md")
     a = p.parse_args()
-    write(build(a.binary, a.inventory, a.contracts_dir, a.limit),
+    write(build(a.binary, a.inventory, a.contracts_dir, a.limit,
+                certificates_path=a.certificates),
           a.manifest, a.report)
 
 
