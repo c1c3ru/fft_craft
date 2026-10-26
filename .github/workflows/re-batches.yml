@@ -79,7 +79,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p FFT_Android_Mod/docs/re-results
-          if ! compgen -G 'FFT_Android_Mod/docs/re-results/*.json' > /dev/null; then
+          if [ "$(python3 FFT_Android_Mod/docs/re-tools/checkpoint_files.py --count)" -eq 0 ]; then
             gh run download 40148837136 --repo "${GITHUB_REPOSITORY}" \
               --name reverse-engineering-report \
               --dir FFT_Android_Mod/docs/re-results
@@ -91,7 +91,7 @@ jobs:
       - name: Record starting checkpoint count
         id: starting
         run: |
-          count=$(find FFT_Android_Mod/docs/re-results -maxdepth 1 -name '*.json' | wc -l)
+          count=$(python3 FFT_Android_Mod/docs/re-tools/checkpoint_files.py --count)
           echo "count=$count" >> "$GITHUB_OUTPUT"
       - name: Analyze next bounded batch
         env:
@@ -126,18 +126,7 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/check_smoke.py \
             FFT_Android_Mod/docs/re-results
       - name: Summarize accepted vs review
-        run: |
-          python3 - <<'PY'
-          import collections, json
-          from pathlib import Path
-          files = list(Path('FFT_Android_Mod/docs/re-results').glob('*.json'))
-          results = [json.loads(p.read_text()) for p in files]
-          statuses = collections.Counter(x['status'] for x in results)
-          print('Total checkpoints:', len(results))
-          print('Status counts:', dict(statuses))
-          if any(x.get('status') == 'error' for x in results):
-              raise SystemExit('Errors in checkpoints: refusing automated merge')
-          PY
+        run: python3 FFT_Android_Mod/docs/re-tools/checkpoint_files.py --verify
       - name: Generate progress and review queue
         run: |
           python3 FFT_Android_Mod/docs/re-tools/progress_report.py
@@ -247,7 +236,7 @@ jobs:
         env:
           BEFORE: ${{ steps.starting.outputs.count }}
         run: |
-          after=$(find FFT_Android_Mod/docs/re-results -maxdepth 1 -name '*.json' | wc -l)
+          after=$(python3 FFT_Android_Mod/docs/re-tools/checkpoint_files.py --count)
           if [ "$after" -gt "$BEFORE" ]; then
             echo "has_new=true" >> "$GITHUB_OUTPUT"
           else
