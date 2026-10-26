@@ -105,6 +105,9 @@ def main():
     certificates = (json.loads(args.certificates.read_text(encoding="utf-8"))
                     if args.certificates.exists() else {})
     rows = ledger(args.inventory, digest, certificates)
+    if any(r["semantic_status"] == "certified" for r in rows):
+        from semantic_certificate_gate import gate
+        gate(args.binary, args.inventory, args.certificates)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(report(rows, digest), encoding="utf-8")
     print(f"SEMANTIC_CERTIFIED={sum(r['semantic_status']=='certified' for r in rows)}")
