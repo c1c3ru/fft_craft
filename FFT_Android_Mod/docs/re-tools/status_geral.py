@@ -234,7 +234,8 @@ def generate(inventory, results, priority, binary, pulls_json=None,
     semantic = central_semantic_summary.summarize(
         inventory, data["digest"], results / "semantic-certificates.json",
         pilot_dir, dynamic_dir, manifests_dir, history_dir=results,
-        contracts_dir=contracts_dir)
+        contracts_dir=contracts_dir,
+        snapshot_path=results / "SEMANTIC_RUN_SNAPSHOT.json")
     return render(data, results, prs, semantic)
 
 

@@ -210,6 +210,12 @@ jobs:
             --output /tmp/fft-semantic/pilot
           python3 FFT_Android_Mod/docs/re-tools/semantic_history.py \
             --output FFT_Android_Mod/docs/re-results/SEMANTIC_HISTORY_INDEX.md
+          python3 FFT_Android_Mod/docs/re-tools/semantic_run_snapshot.py \
+            --pilot-dir /tmp/fft-semantic/pilot \
+            --dynamic-dir /tmp/fft-semantic/dynamic-evidence \
+            --contracts-dir /tmp/fft-semantic/contract-pilot \
+            --manifests-dir /tmp/fft-semantic/manifests \
+            --output FFT_Android_Mod/docs/re-results/SEMANTIC_RUN_SNAPSHOT.json
       - name: Update central FFT Craft dashboard
         env:
           GH_TOKEN: ${{ github.token }}

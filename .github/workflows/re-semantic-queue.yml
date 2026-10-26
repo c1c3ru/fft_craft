@@ -32,6 +32,8 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_bxlr_contract_pilot.py'
       - 'FFT_Android_Mod/docs/re-tools/arm_bx_reference.py'
       - 'FFT_Android_Mod/docs/re-tools/test_arm_bx_reference.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_run_snapshot.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_run_snapshot.py'
 
 permissions:
   contents: read
@@ -86,6 +88,12 @@ jobs:
             --output /tmp/fft-semantic/pilot
           python3 FFT_Android_Mod/docs/re-tools/semantic_history.py \
             --output FFT_Android_Mod/docs/re-results/SEMANTIC_HISTORY_INDEX.md
+          python3 FFT_Android_Mod/docs/re-tools/semantic_run_snapshot.py \
+            --pilot-dir /tmp/fft-semantic/pilot \
+            --dynamic-dir /tmp/fft-semantic/dynamic-evidence \
+            --contracts-dir /tmp/fft-semantic/contract-pilot \
+            --manifests-dir /tmp/fft-semantic/manifests \
+            --output FFT_Android_Mod/docs/re-results/SEMANTIC_RUN_SNAPSHOT.json
           python3 FFT_Android_Mod/docs/re-tools/semantic_houkoku_next_boundaries.py \
             --output FFT_Android_Mod/docs/re-results/SEMANTIC_HOUKOKU_NEXT_BOUNDARIES.md
           python3 FFT_Android_Mod/docs/re-tools/status_geral.py \
@@ -101,6 +109,8 @@ jobs:
             /tmp/fft-semantic/SEMANTIC_LEAF_BXLR.md
           cp FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_CONTRACT_PILOT.md \
             /tmp/fft-semantic/SEMANTIC_BXLR_CONTRACT_PILOT.md
+          cp FFT_Android_Mod/docs/re-results/SEMANTIC_RUN_SNAPSHOT.json \
+            /tmp/fft-semantic/SEMANTIC_RUN_SNAPSHOT.json
       - uses: actions/upload-artifact@v4
         with:
           name: fft-semantic-manifests
