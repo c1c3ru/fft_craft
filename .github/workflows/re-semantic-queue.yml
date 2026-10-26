@@ -48,16 +48,12 @@ jobs:
         if: ${{ hashFiles('FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_REVIEW_REQUEST.json') != '' }}
         run: |
           python3 FFT_Android_Mod/docs/re-tools/semantic_review_protocol.py \
-            --output /tmp/expected-bxlr-review.json --limit 5
-          cmp /tmp/expected-bxlr-review.json \
-            FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_REVIEW_REQUEST.json
+            --verify-request FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_REVIEW_REQUEST.json
       - name: Verify second review request against freshly executed original ELF
         if: ${{ hashFiles('FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_REVIEW_REQUEST_R2.json') != '' }}
         run: |
           python3 FFT_Android_Mod/docs/re-tools/semantic_review_protocol.py \
-            --output /tmp/expected-bxlr-review-r2.json --limit 5
-          cmp /tmp/expected-bxlr-review-r2.json \
-            FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_REVIEW_REQUEST_R2.json
+            --verify-request FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_REVIEW_REQUEST_R2.json
       - name: Generate exact-binary semantic dashboard and worker manifests
         env:
           GH_TOKEN: ${{ github.token }}
