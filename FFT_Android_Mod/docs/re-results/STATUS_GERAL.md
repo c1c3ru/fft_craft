@@ -26,6 +26,7 @@ O histórico CSV contém **5,932** registros de análise anterior, que podem se 
 
 Os relatórios abaixo apresentam **efeitos locais testados sob estados sintéticos** e seus limites. Testes passando não significam que a função inteira foi reconstruída:
 
+- [Destinos ARM seguintes de houkoku_okng auditados sem executar ramos desconhecidos](SEMANTIC_HOUKOKU_NEXT_BOUNDARIES.md)
 - [Três destinos de SysSE_Play e argumentos pós-GetScale verificados por máquina](SEMANTIC_POST_GETTER_PATHS.md)
 - [GetParam/GetScale ARM: 96 microexecuções individuais e via BL original](SEMANTIC_GETPARAM_GETSCALE_MICROEXEC.md)
 - [Instruções e destinos de chamada GetParam/GetScale auditados](SEMANTIC_GETPARAM_GETSCALE_AUDIT.md)
@@ -100,11 +101,11 @@ Estas duas prioridades são **curadas no gerador**; quando um limite for resolvi
 
 ## Pull requests recentes
 
+- [PR #317 — feat(re): auditar destinos ARM pendentes de houkoku_okng e atualizar painel](https://github.com/c1c3ru/fft_craft/pull/317)
+- [PR #316 — fix(ci): validate current centralized semantic fields instead of obso…](https://github.com/c1c3ru/fft_craft/pull/316)
+- [PR #315 — chore(re): automated structural batch 40384616728](https://github.com/c1c3ru/fft_craft/pull/315)
 - [PR #314 — feat(re): expandir evidência Unicorn e corrigir teste do STATUS_GERAL](https://github.com/c1c3ru/fft_craft/pull/314)
 - [PR #313 — chore(re): automated structural batch 40383654586](https://github.com/c1c3ru/fft_craft/pull/313)
-- [PR #312 — Feat/re three callees dynamic evidence 20261026](https://github.com/c1c3ru/fft_craft/pull/312)
-- [PR #311 — chore(re): automated structural batch 40375878660](https://github.com/c1c3ru/fft_craft/pull/311)
-- [PR #310 — fix(re): corrigir divergência semântica no STATUS_GERAL e testar métricas](https://github.com/c1c3ru/fft_craft/pull/310)
 
 ## Atualização automática e fontes
 
