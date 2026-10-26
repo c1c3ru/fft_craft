@@ -15,6 +15,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
 
 jobs:
   unit-tests:
@@ -355,6 +356,8 @@ jobs:
           print("PASS: 32 real ELF ARM post-getter decisions and next-call argument tests")
           PY
       - name: Validate central project dashboard on real ELF
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           python3 FFT_Android_Mod/docs/re-tools/status_geral.py
           python3 - <<'PY'
