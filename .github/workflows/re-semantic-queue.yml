@@ -24,6 +24,10 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/test_central_semantic_summary.py'
       - 'FFT_Android_Mod/docs/re-tools/status_geral.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_houkoku_next_boundaries.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_history.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_leaf_bxlr.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_history.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_leaf_bxlr.py'
 
 permissions:
   contents: read
@@ -47,6 +51,10 @@ jobs:
         run: python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_dynamic_evidence.py' -v
       - name: Test centralized dashboard
         run: python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_central_semantic_summary.py' -v
+      - name: Test prior evidence and new leaf proof candidates
+        run: |
+          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_history.py' -v
+          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_leaf_bxlr.py' -v
       - name: Generate exact-binary semantic dashboard and worker manifests
         env:
           LIMIT: ${{ github.event_name == 'pull_request' && '5' || inputs.limit || '5' }}
@@ -55,15 +63,20 @@ jobs:
           set -euo pipefail
           mkdir -p /tmp/fft-semantic
           python3 FFT_Android_Mod/docs/re-tools/semantic_coverage.py --output /tmp/fft-semantic/SEMANTIC_COVERAGE.md
+          python3 FFT_Android_Mod/docs/re-tools/semantic_dynamic_evidence.py \
+            --output /tmp/fft-semantic/dynamic-evidence
+          python3 FFT_Android_Mod/docs/re-tools/semantic_leaf_bxlr.py \
+            --output /tmp/fft-semantic/dynamic-evidence \
+            --report FFT_Android_Mod/docs/re-results/SEMANTIC_LEAF_BXLR.md
           python3 FFT_Android_Mod/docs/re-tools/semantic_work_queue.py \
-            --workers "$WORKERS" --limit "$LIMIT" --output /tmp/fft-semantic/manifests
-          if [ "${{ github.event_name }}" = 'pull_request' ]; then
-            python3 FFT_Android_Mod/docs/re-tools/semantic_dynamic_evidence.py \
-              --output /tmp/fft-semantic/dynamic-evidence
-            python3 FFT_Android_Mod/docs/re-tools/semantic_pilot.py \
-              --workers "$WORKERS" --manifests /tmp/fft-semantic/manifests \
-              --output /tmp/fft-semantic/pilot
-          fi
+            --workers "$WORKERS" --limit "$LIMIT" \
+            --candidate-evidence-dir /tmp/fft-semantic/dynamic-evidence \
+            --output /tmp/fft-semantic/manifests
+          python3 FFT_Android_Mod/docs/re-tools/semantic_pilot.py \
+            --workers "$WORKERS" --manifests /tmp/fft-semantic/manifests \
+            --output /tmp/fft-semantic/pilot
+          python3 FFT_Android_Mod/docs/re-tools/semantic_history.py \
+            --output FFT_Android_Mod/docs/re-results/SEMANTIC_HISTORY_INDEX.md
           python3 FFT_Android_Mod/docs/re-tools/semantic_houkoku_next_boundaries.py \
             --output FFT_Android_Mod/docs/re-results/SEMANTIC_HOUKOKU_NEXT_BOUNDARIES.md
           python3 FFT_Android_Mod/docs/re-tools/status_geral.py \
@@ -72,6 +85,10 @@ jobs:
             --manifests-dir /tmp/fft-semantic/manifests
           cp FFT_Android_Mod/docs/re-results/STATUS_GERAL.md \
             /tmp/fft-semantic/STATUS_GERAL.md
+          cp FFT_Android_Mod/docs/re-results/SEMANTIC_HISTORY_INDEX.md \
+            /tmp/fft-semantic/SEMANTIC_HISTORY_INDEX.md
+          cp FFT_Android_Mod/docs/re-results/SEMANTIC_LEAF_BXLR.md \
+            /tmp/fft-semantic/SEMANTIC_LEAF_BXLR.md
       - uses: actions/upload-artifact@v4
         with:
           name: fft-semantic-manifests
