@@ -99,6 +99,20 @@ class CentralSemanticSummaryTests(unittest.TestCase):
                           self.root / "missing.json",
                           contracts_dir=contracts)
 
+    def test_certified_record_requires_original_binary_gate(self):
+        certpath = self.root / "certs.json"
+        certpath.write_text(json.dumps({
+            "00000020": {
+                "status": "certified", "binary_sha256": self.digest,
+                "size": 80, "contract": "claimed",
+                "preconditions": ["a"], "postconditions": ["b"],
+                "control_flow": ["c"], "memory_effects": ["d"],
+                "test_evidence": ["e"], "reviewer": "somebody"
+            }
+        }))
+        with self.assertRaisesRegex(ValueError, "original ELF proof validation"):
+            mod.summarize(self.inventory, self.digest, certpath)
+
     def test_stale_evidence_rejected(self):
         self.write(self.dynamic, "00000010.json",
                    {"address": "00000010", "binary_sha256": "b"*64,
