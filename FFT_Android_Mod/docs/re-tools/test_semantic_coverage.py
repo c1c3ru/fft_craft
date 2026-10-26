@@ -26,7 +26,8 @@ class SemanticCoverageTests(unittest.TestCase):
         rows = mod.ledger(self.path, "a" * 64, {})
         self.assertEqual([x["semantic_status"] for x in rows], ["unknown", "unknown"])
         report = mod.report(rows, "a" * 64)
-        self.assertIn("Funções inventariadas | 2", report)
+        self.assertIn("Entradas/símbolos no inventário | 2", report)
+        self.assertIn("Endereços de execução únicos | 2", report)
         self.assertIn("Semântica integral certificada por registro | 0", report)
 
     def test_partial_is_not_certified(self):

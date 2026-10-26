@@ -1,0 +1,65 @@
+name: Semantic coverage manifests
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: 'Maximum uncertified functions to schedule'
+        required: false
+        default: '5'
+      workers:
+        description: 'Number of independent manifests'
+        required: false
+        default: '5'
+  pull_request:
+    paths:
+      - 'FFT_Android_Mod/docs/re-tools/semantic_coverage.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_work_queue.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_coverage.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_work_queue.py'
+      - '.github/workflows/re-semantic-queue.yml'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_pilot.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_dynamic_evidence.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_dynamic_evidence.py'
+
+permissions:
+  contents: read
+
+jobs:
+  manifests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test semantic accounting and scheduler
+        run: |
+          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_coverage.py' -v
+          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_work_queue.py' -v
+      - name: Install ARM analysis dependencies
+        run: python3 -m pip install capstone pyelftools unicorn
+      - name: Test dynamic evidence accounting
+        run: python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_dynamic_evidence.py' -v
+      - name: Generate exact-binary semantic dashboard and worker manifests
+        env:
+          LIMIT: ${{ github.event_name == 'pull_request' && '5' || inputs.limit || '5' }}
+          WORKERS: ${{ inputs.workers || '5' }}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/fft-semantic
+          python3 FFT_Android_Mod/docs/re-tools/semantic_coverage.py --output /tmp/fft-semantic/SEMANTIC_COVERAGE.md
+          python3 FFT_Android_Mod/docs/re-tools/semantic_work_queue.py \
+            --workers "$WORKERS" --limit "$LIMIT" --output /tmp/fft-semantic/manifests
+          if [ "${{ github.event_name }}" = 'pull_request' ]; then
+            python3 FFT_Android_Mod/docs/re-tools/semantic_dynamic_evidence.py \
+              --output /tmp/fft-semantic/dynamic-evidence
+            python3 FFT_Android_Mod/docs/re-tools/semantic_pilot.py \
+              --workers "$WORKERS" --manifests /tmp/fft-semantic/manifests \
+              --output /tmp/fft-semantic/pilot
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fft-semantic-manifests
+          path: /tmp/fft-semantic/
+          retention-days: 30
