@@ -137,6 +137,13 @@ def gate(binary, inventory, certificates_path):
     rows = semantic_coverage.ledger(inventory, digest, certificates)
     by_addr = {r["address"]: r for r in rows}
     certified = []
+    review_cache = {}
+
+    def cached_github(path):
+        if path not in review_cache:
+            review_cache[path] = github_json(path)
+        return review_cache[path]
+
     for address in sorted(certificates):
         record = certificates[address]
         if record.get("status") != "certified":
@@ -144,7 +151,7 @@ def gate(binary, inventory, certificates_path):
         verify_one(record, by_addr[address], binary, digest)
         # A string in reviewer metadata is never treated as proof of consent:
         # GitHub must show an APPROVED review for the affected PR and head.
-        verify_remote_review(record, address)
+        verify_remote_review(record, address, provider=cached_github)
         certified.append(address)
     print(f"SEMANTIC_APPROVED_CERTIFICATES_VERIFIED={len(certified)}")
     print(f"SEMANTIC_APPROVED_CERTIFICATE_BYTES={sum(by_addr[a]['size'] for a in certified)}")
