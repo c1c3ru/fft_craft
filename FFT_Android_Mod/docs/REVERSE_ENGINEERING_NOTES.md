@@ -19436,12 +19436,11 @@ propósito de cada tela sem passe estrutural completo de cada uma
 (nenhuma tem tabela de salto, todas 88–93% de cobertura de instrução
 pelo `jtable.py`, nenhuma chegou a ser lida bloco a bloco):
 
-- **`ctlevtinfo_init(int)`** (`0x2576e0`, 500 B): `Wserchmessagepointer(int)`,
-  `Wcount_words2(short*,short*,char*)`, `pagewin_init(PAGEWININFO*)` —
-  tela de "info de evento" é uma janela de texto genérica (`pagewin_*`,
-  família de paginação já citada na §579... na verdade nova aqui,
-  primeira aparição de `pagewin_init`) alimentada por busca de
-  ponteiro de mensagem do sistema `W*`.
+- **`ctlevtinfo_init(int)`** (`0x2576e0`, 500 B) — **upgrade pra
+  `read_full` em 2026-10-26** (revisão byte a byte sobre o painel
+  v3, ver addendum no final desta seção, "580-add"): tela de "info
+  de evento", janela de texto genérica (`pagewin_*`) alimentada por
+  busca de ponteiro de mensagem do sistema `W*`.
 - **`ctlmap_init()`** (`0x253f20`, 480 B): `Wread_eventflag(int)` — só
   checa uma flag de evento antes de entrar no mapa mundi (consistente
   com `ctlmap_main`, §92, que já não chama `worldmap_call`
@@ -19504,10 +19503,66 @@ pelo `jtable.py`, nenhuma chegou a ser lida bloco a bloco):
   ciclo começo/fim do par `vOpn_*`/`vEnd_*` citado como pendente na
   §571.
 
-**Status CSV**: `read_structural` para as 14 (identidade do call-graph
-confirmada via `readelf --dyn-syms`/`c++filt` + cruzamento textual;
-nenhuma teve os blocos internos lidos instrução a instrução — typing
-honesto, não `read_full`).
+**Status CSV**: `read_structural` para as 13 restantes (identidade do
+call-graph confirmada via `readelf --dyn-syms`/`c++filt` + cruzamento
+textual; nenhuma teve os blocos internos lidos instrução a instrução
+— typing honesto, não `read_full`). `ctlevtinfo_init` foi promovida a
+`read_full`, ver addendum abaixo.
+
+### 580-add. `ctlevtinfo_init(int)` — leitura completa: clamp de contagem (≤4), duas escritas de array via GOT, monta um `PAGEWININFO` real com centralização de texto antes de `pagewin_init` (revisão byte a byte 2026-10-26, sobre o painel v3)
+
+`ctlevtinfo_init(int)` (`0x2576e0`, 500 B) foi lida por completo via
+disassembly Capstone linear (0 branches, fluxo sequencial). **Os "10
+slots não cobertos" do checkpoint automático (92%) são exatamente 10
+words de literal pool** em `0x2578ac`-`0x2578d0` — 115 instruções
+reais (460 B) + 10 words (40 B) = 500 B exatos, nenhum byte de código
+real sem explicação.
+
+```c
+int ctlevtinfo_init(int eventID) {
+    char* msgPtr = Wserchmessagepointer(eventID);
+    short lineW, lineCount;
+    Wcount_words2(&lineW, &lineCount, msgPtr);
+    if (lineCount > 4) lineCount = 4;            // *** clamp: no máximo 4 linhas ***
+
+    int handle = add_anmpac(g_globalA, g_globalB);
+    int idx    = *g_counterPtr;
+    arrayBase[idx * 92] = handle;                 // grava o handle no slot `idx` (stride 92 B)
+
+    // dois campos de flag, em DOIS arrays paralelos distintos, recebem o bit 0x10:
+    arrayC[idx*36] |= 0x10;
+    arrayD[idx*??] |= 0x10;   // 2º array/stride não identificado com certeza
+
+    PAGEWININFO* pwi = &g_pageWinInfo;
+    pwi->field_0x00 = 0;
+    pwi->field_0x04 = 0x60;                 // 96 — provável largura/altura fixa
+    pwi->field_0x08 = 45 - (((lineW + 24) & ~3) / 2);   // *** centralização de texto ***
+    pwi->field_0x0c = (~lineCount) << 3;    // máscara de linhas visíveis
+    pwi->field_0x10 = lineW;
+    pwi->field_0x14 = handle;
+    pwi->field_0x34 = eventID;               // *** grava o PRÓPRIO parâmetro da função ***
+    pwi->field_0x4c = 3;
+    pwi->field_0x64 = pwi->field_0x68 = pwi->field_0x6c = -1;   // sentinelas "nenhum"
+
+    pagewin_init(pwi);
+
+    int n = *counterStructPtr;
+    *counterStructPtr = n + 1;
+    eventQueueArray[n] = 0x33;               // código de tipo de evento, grava na fila
+}
+```
+
+**Achados concretos**: (1) grava o próprio `eventID` direto no campo
+`+0x34` do `PAGEWININFO` — a janela de "info de evento" carrega o ID
+consigo, não só o texto; (2) fórmula de centralização real
+`45 - ((lineW+24)&~3)/2`; (3) duas escritas de array via GOT-indireto
+duplo, cada uma recebendo o bit `0x10` ("marcar slot como ativo"),
+mesmo idioma já visto em outras famílias de array por slot.
+
+**Status CSV: `read_full`** — 115 de 115 instruções reais lidas e
+atribuídas, controle de fluxo completo (sequencial, sem branches), os
+10 words de literal pool confirmados como dado. Lacuna: identidade
+nominal exata dos dois arrays globais (`arrayC`/`arrayD`).
 
 ## 581. `iOS_v2menuSetType(V2MENU_TYPE)` — leitura completa: cadeia de ícones por tabela, max de dimensão, e 11 chamadas reais a `RETINA_SCALE` com fórmulas explícitas (2026-10-25 + revisão byte a byte 2026-10-26, sobre o painel v3)
 
@@ -19576,104 +19631,172 @@ tratava esta função sob um padrão ainda mais rigoroso
 (microexecução); esta leitura byte a byte satisfaz o padrão
 `read_full` do projeto, que é o que o CSV rastreia.
 
-## 582. `ctlperson_main(CTLINFO*)` — loop por-frame da tela de roster de personagens, mesmo esqueleto padrão `wldctl_active`+`sound_request`+`curhis_get/clr` já visto em dezenas de outros `ctl*_main` (2026-10-25, Fase 3, octogésimo primeiro lote, revisão semântica sobre checkpoint do CI)
+## 582. `ctlperson_main(CTLINFO*)` — leitura completa: máquina de 3 bits de flag global decide polling de task / confirmação / cancelamento, com tail-call final pra um resolvedor de ícone (2026-10-25 + revisão byte a byte 2026-10-26, sobre o painel v3)
 
-`ctlperson_main(CTLINFO*)` (`0x24eadc`, 500 B) — checkpoint do
-pipeline automatizado (`docs/re-results/0024eadc.json`): 115 de ~125
-instruções possíveis (92%), **0 tabelas de salto**, 12 branches/3 de
-retrocesso. 7 `bl` distintos, resolvidos por nome no checkpoint:
-`Wtask_status(long)`, `Wsend_taskparamater(long,long,long,long)`
-(×2), `ctlperson_deactive(CTLINFO*)` (chamada a si-mesma/transição de
-saída), `wldctl_active()`, `sound_request(int)` (×2),
-`curhis_get(int)`, `curhis_clr(int)`.
+`ctlperson_main(CTLINFO*)` (`0x24eadc`, 500 B) — disassembly linear
+completo via Capstone. O código real termina em `0x24eca8` (a
+instrução ali decodifica como lixo `andeq sb,pc,r4,ror#4`,
+confirmando o fim) — **115 instruções reais (460 B) + 10 words de
+literal pool (40 B) = 500 B exatos**, nenhum byte sem explicação.
 
-Esse catálogo é exatamente o esqueleto padrão já fechado em dezenas de
-outros controladores `ctl*_main` do mesmo framework (`wldctl_active`
-+ `sound_request` ×2 + `curhis_get`/`curhis_clr` + chamada ao próprio
-`_deactive`). `curhis_get`/`curhis_clr` fazem o bookkeeping do
-histórico de posição de cursor gravado pelo `_init` via `curhis_put`
-— confirma exatamente o par irmão imediato: `ctlperson_init()` (§580)
-grava a posição inicial do cursor via `curhis_put` antes desta função
-assumir o loop por frame. Sem tabela de salto, consistente com um
-loop simples de "navegar lista → tocar som ao mover seleção → ao
-confirmar, limpar histórico e chamar `ctlperson_deactive`" em vez de
-um switch de fases grande como `ctlhoukmes_main` (§117).
-`Wtask_status`/`Wsend_taskparamater` seguem o padrão de notificação de
-task já visto em `houkoku_okng` (§577). Nenhum bloco lido instrução a
-instrução.
+Fluxo real (dois globais: `g_flagsA`, bit 2, consultado no topo;
+`g_flagsB`, bits `0x20`/`0x40`/`0x100`, consultado em seguida):
 
-**Status CSV: `read_structural`.**
+```c
+void ctlperson_main(CTLINFO* this) {
+    if (!(g_flagsA & 4)) {
+        if (g_flagsB & 0x40)      goto HANDLE_ESCAPE;      // 0x24ec68
+        if (g_flagsB & 0x100)     goto CHECK_DEACTIVE;      // 0x24ebc0
+        if ((g_flagsB & 0x20) && this->field_0x30 != 0)
+            goto CONFIRM;                                    // 0x24ebe8
+        return;
+    }
+    // g_flagsA & 4 setado:
+    if (Wtask_status(0xc) != 0) return;
+    g_flagsA ^= 4;                       // desarma o bit de poll
+    *g_ptrX = 0;  *g_ptrY = 1;
+    int counter = --(*g_counterZ);
+    if (this->field_0x0 == 0) goto TEARDOWN_PARTIAL;   // 0x24ec18
+    int r = curhis_get(0xb);
+    short idx = *(short*)(g_tblD + 0x38);
+    short val = g_tblE[idx] & 0x7ff;
+    goto sub_24e91c(val);     // *** TAIL CALL, não bl *** — bloco local sem símbolo
+}
 
-## 583. `unittoface(int)` — resolução rápida de ID de rosto por unidade, mesma forma de switch (36 casos/4 handlers) de `attack_assumechr`/`attack_assumeface` (§121/122), mas sem a pipeline de carregamento de asset (2026-10-25, Fase 3, octogésimo primeiro lote, revisão semântica sobre checkpoint do CI)
+CHECK_DEACTIVE:  // 0x24ebc0
+    if (this->field_0x30 == 0) goto <reteste 0x20>;
+    ctlperson_deactive(this);
+    return iOS_setV2Icon(0x1056, 1);    // tail call
 
-`unittoface(int)` (`0x15813c`, 496 B) — checkpoint do CI
-(`docs/re-results/0015813c.json`): **69% de cobertura** (86/124
-slots), abaixo do usual — sinalizado especificamente pelo
-`review_reason: resolved_jump_table_check`. **1 tabela de salto
-resolvida** (guarda `cmp`@`0x1581e8`, dispatch@`0x1581ec`): 36 casos,
-só **4 handlers distintos** — caso `0`→`0x1582cc`, caso `1`→`0x1582a8`,
-casos `2`-`33` (32 casos, a maioria) convergem no handler default em
-`0x158300`, e os últimos casos (`34`-`35`) caem num quarto handler em
-`0x158284`. 17 branches, 8 de retrocesso. 2 `bl` distintos:
-`get_unitwork_add(int)` e `get_jobdata(int)`.
+CONFIRM:  // 0x24ebe8
+    sound_request(1);
+    this->field_0x0 = 1;
+    Wsend_taskparamater(0xc, 0, 0, 1);
+    g_flagsA |= 4;    // re-arma o poll pra próximo quadro
+    return;
 
-A forma do switch (36 casos, 4 handlers, um dominando a maioria) é
-**idêntica** à de `attack_assumechr()` (§121, `0xc8730`) e
-`attack_assumeface()` (§122, `0xc8fcc`) — ambas já confirmadas
-despachando por job/tipo de recurso durante um preview de ataque. A
-diferença central: aquelas duas têm 18-19 `bl` cada (carregamento de
-arquivo via `mallocForFile`/`numa_fileReadCD`, pipeline
-`PSX_LoadImage`/`StoreImage`, leitura binpack), enquanto `unittoface`
-só chama duas funções de lookup — confirma que é a **versão "pura"**
-da resolução de ID, sem carga de asset: `get_unitwork_add(int)`
-resolve o ponteiro `BWORK`/registro de trabalho da unidade,
-`get_jobdata(int)` busca os dados do emprego, e o switch de 36 casos
-(quase certamente indexado por ID de emprego — a faixa conhecida de
-~32-36 empregos jogáveis mais casos especiais nas pontas) escolhe
-qual campo do resultado de `get_jobdata` vira o ID de rosto final.
-Corpos dos 4 handlers não lidos instrução a instrução.
+TEARDOWN_PARTIAL:  // 0x24ec18
+    curhis_clr(0xb);
+    wldctl_active();
+    return iOS_setV2Icon(3, 1);    // tail call
+
+HANDLE_ESCAPE:  // 0x24ec68
+    sound_request(2);
+    Wsend_taskparamater(0xc, 0, 0, 1);
+    g_flagsA |= 4;
+    return iOS_setV2Icon(0x8c, 0);   // tail call
+```
+
+**Achados concretos**: (1) a função termina em **4 pontos diferentes
+via tail-call** (`b`, não `bl`) pra `iOS_setV2Icon` com argumentos
+distintos — nenhum desses três ícones (`0x1056`=4182, `0x8c`=140)
+tinha aparecido em seção anterior; (2) o ramo de polling de task
+(`Wtask_status(0xc)==0`) termina com **tail-call pra um bloco local
+sem símbolo em `0x24e91c`**, no espaço entre o fim de `ctlperson_init`
+(§580, `0x24e8d0`) e esta função — candidato forte a helper
+compartilhado, não lido nesta passada; (3) confirma o esqueleto
+genérico já citado, mas agora com a condição exata de cada transição
+(bits `4`/`0x20`/`0x40`/`0x100` de dois globais de flag distintos).
+
+**Status CSV: `read_full`** — 100% das 115 instruções reais lidas e
+atribuídas a um ramo explícito; os 10 words de literal pool
+confirmados como dados. Lacuna aceita: o corpo do bloco local
+`sub_24e91c` (tail-call, não lido) e a identidade nominal exata dos
+globais de flag/contador.
+
+## 583. `unittoface(int)` — resolução de rosto por unidade, leitura completa dos 4 handlers do switch de 36 casos, confirma e refina a hipótese de `get_jobdata` (2026-10-25 + revisão byte a byte 2026-10-26, sobre o painel v3)
+
+`unittoface(int)` (`0x15813c`, 496 B) lida por completo via
+disassembly direto. A tabela de salto (`cmp`@`0x1581e8`,
+`addls`@`0x1581ec`, 36 casos sobre `byte0-0x80`) tem o guard
+confirmado seguro: fora da faixa (`byte0-0x80 > 0x23`) a instrução
+`addls` simplesmente não dispara e a execução nunca chega ao switch —
+não há caminho inseguro.
+
+Lógica real (unidade = `get_unitwork_add(id)`, `byte0 = *(unit+0)`):
+
+- **`byte0 < 0x80` (job "normal")**: cai direto no bloco comum com
+  `r2=r3=byte0`, faz `table[byte0*2+0xb8]` (ldrh) e retorna esse
+  valor — **lookup puro por tabela estática indexada pelo próprio ID
+  de job**, sem chamar `get_jobdata`.
+- **`byte0 ∈ {0x80,0x81}`** (casos 0/1): lê `jobByte2 = *(unit+2)`.
+  Testa `jobByte2==0x5b→r2=0x82`/`==0x5c→r2=0x83`, senão usa um
+  índice calculado; se o `byte0` original tiver o resultado via
+  `cmp r2,#1 ≤1`, **sobrepõe tudo com códigos de letra fixos**: lê
+  `jobSpecies = *(unit+2)` de novo e retorna `'k'`/`'j'` (species
+  0xa1/0xa4), `'i'`/`'h'` (species 0xa0, por paridade de `byte0`), ou
+  o valor de tabela default.
+- **`byte0 ∈ [0x82,0xA1]`** (32 casos colapsados no handler único
+  `0x158300`): chama **`get_jobdata(*(unit+2))`** e usa o campo
+  **`jobdata+0x2e`** como índice da MESMA tabela estática — **confirma
+  por completo a hipótese anterior**. Exceção: se `*(jobdata+2) ==
+  0x5b/0x5c`, o índice é sobrescrito pra `0x82`/`0x83`. Exceção
+  adicional: se `byte0` for exatamente `0x82`, o resultado é
+  combinado via `OR` com `*(jobdata+0x2f)<<10` antes de retornar.
+- **`byte0 ∈ {0xA2,0xA3}`** (casos 34/35, handler `0x158284`): o
+  cálculo de tabela é sempre descartado — o retorno final é sempre o
+  literal `'l'` (byte0==0xA2) ou `'m'` (byte0==0xA3).
+
+Os valores de letra (`'h'`-`'m'`, 0x68-0x6d) são códigos especiais pra
+jobs/espécies de monstro específicos (0xa0-0xa4), distintos do range
+normal de IDs de tabela.
 
 **Conexão**: fecha, junto com §121/§122, a família dos resolvedores de
 rosto/ícone por switch de 36 casos.
 
-**Status CSV: `read_structural`** (call-graph + forma da tabela
-mapeados e cruzados com §121/122; corpos dos 4 handlers não lidos
-byte a byte, cobertura automática de só 69%).
+**Status CSV: `read_full`** — todas as instruções reais das 4
+ramificações do switch + os 2 caminhos de entrada foram lidas e
+atribuídas a um fluxo de controle explícito; a identidade semântica
+exata de `jobdata+0x2e`/`+0x2f` e da tabela estática ficam descritas
+por offset, mesma lacuna aceita em outros `read_full` do projeto.
 
-## 584. `getTrapResultDamage(BWORK*, int)` — resolução de armadilha de painel por 7 tipos, aplica status via `change_status_adjust` (§355) com RNG sincronizado por rede (2026-10-25, Fase 3, octogésimo primeiro lote, revisão semântica sobre checkpoint do CI)
+## 584. `getTrapResultDamage(BWORK*, int)` — leitura completa dos 7 handlers: 2 flags-only, 2 trigger-simples, fórmula de dano determinística e randomizada por rede, toggle de flag, fallback com flag extra (2026-10-25 + revisão byte a byte 2026-10-26, sobre o painel v3)
 
-`getTrapResultDamage(BWORK*, int)` (`0x1ccc3c`, 496 B) — checkpoint do
-pipeline automatizado (`docs/re-results/001ccc3c.json`): 89% de
-cobertura (110/124 slots), **1 tabela de salto resolvida** (guarda
-`cmp`@`0x1ccc64`, despacho@`0x1ccc68`: **7 casos, 7 handlers
-distintos** — nenhum colapso, cada caso tem corpo próprio). 6
-branches, 5 de retrocesso. 2 `bl` distintos (5 chamadas):
-`change_status_adjust(int)` (×4) e `_pspNetRand(char const*, int)`
-(×1).
+`getTrapResultDamage(BWORK* unit, int trapType)` (`0x1ccc3c`, 496 B)
+lida por completo. Guard confirmado seguro: `cmp r1,#6; addls
+pc,pc,r1,lsl#2` — se `trapType>6`, cai direto no handler default
+(`0x1cccbc`, só `pop`, nenhum efeito colateral). Entry grava `unit`
+e `unit+0x1ae` em dois globais (`g_lastBWORK`/`g_resultSlot`) usados
+por todos os handlers.
 
-Os dois alvos de `bl` já estão documentados: `change_status_adjust(int)`
-(`0x1ca5a4`, §355) é o filtro de exclusividade de status + gate de
-"duty" de rede que opera sobre os offsets de `BWORK` mapeados em
-§349. `_pspNetRand(char const*, int)` é o RNG **sincronizado por
-rede** (não `rand()` local) já confirmado em `check_tobe_crystal`
-(§558) para decisões que precisam dar o mesmo resultado em todos os
-clientes de uma partida multiplayer (ali era "virar cristal"; aqui é
-dano/efeito de armadilha).
+- **Tipo 0** (`0x1cccc0`): sem chamada — grava direto `unit+0x1d5=1`
+  e `unit+0x1c0(halfword)=0x100`. Trap puramente informativa, sem
+  RNG nem `change_status_adjust`.
+- **Tipos 1 e 2** (`0x1cccd8`/`0x1ccd00`): gravam `unit+0x1cf = 1`
+  (tipo1) ou `=0x10` (tipo2), chamam `change_status_adjust(0)`;
+  sucesso → `resultado.byte0=0`, `resultado+0x2c=0`, `resultado+2=7`;
+  falha → `resultado+0x27=8`.
+- **Tipo 3** (`0x1ccd08`): sem chamada — fórmula determinística: lê
+  `unit+0x32(halfword)`, divide (multiply-by-reciprocal), grava em
+  `unit+0x1b4(halfword)` — **confirma que `+0x1b4` é o campo
+  "quantidade de dano da armadilha"** — e marca `unit+0x1d5=-128`.
+- **Tipo 4** (`0x1ccd2c`, o mais rico): `delta = unit+0x32 - unit+0x30`
+  (halfwords, provável stat atual vs. máximo), chama
+  **`_pspNetRand`** (RNG sincronizado por rede, §558), reduz `%11`,
+  soma `0x5f`, multiplica pelo `delta`, divide de novo, grava em
+  **`unit+0x1b4`** — mesmo campo do tipo 3, confirmando tipo 3 =
+  variante determinística e tipo 4 = variante randomizada
+  (sincronizada entre clientes) do mesmo "dano de armadilha". Clampa
+  um contador em `resultado+6` pro intervalo `[1,999]`, marca
+  `resultado+0x27=-128`, chama `change_status_adjust(0)`.
+- **Tipo 5** (`0x1ccdec`): alterna um byte em `unit+0x1ce`; chama
+  `change_status_adjust(0)`; mesmos destinos de sucesso/falha do
+  tipo 1.
+- **Tipo 6/default-com-efeito** (`0x1ccc8c`): seta o bit `0x10` de
+  `unit+0x1cb`; chama `change_status_adjust(0)`; mesmos destinos de
+  sucesso/falha compartilhados de tipo 1/5.
 
-`getTrapResultDamage` resolve uma armadilha de painel de batalha (2º
-parâmetro = provável tipo/ID da armadilha, selecionando um dos 7
-casos), decide com RNG sincronizado se/quanto efeito aplica, e chama
-`change_status_adjust` até 4 vezes pra gravar o(s) status resultante(s)
-na unidade — coerente com armadilhas que infligem mais de um status
-por acionamento. Fica na vizinhança de `change_status_adjust`
-(`0x1ca5a4`) e do cluster de status/BWORK das seções 349/355, **não**
-no cluster de rede `pspNetTrap*` (§557, detecção de trapaça de rede)
-— são dois "trap" homônimos não relacionados. Os 7 corpos de caso não
-foram lidos individualmente.
+**Conexão**: fica na vizinhança de `change_status_adjust` (`0x1ca5a4`,
+§355) e do cluster de status/BWORK das seções 349/355, **não** no
+cluster de rede `pspNetTrap*` (§557) — são dois "trap" homônimos não
+relacionados.
 
-**Status CSV: `read_structural`** (tabela de salto e call-graph
-resolvidos e cruzados com §355/§558; os 7 corpos de caso não lidos
-instrução a instrução).
+**Status CSV: `read_full`** — os 7 handlers + o caminho de
+guard-fora-de-faixa foram lidos instrução a instrução, incluindo as
+duas fórmulas de dano e os destinos compartilhados de sucesso/falha.
+As constantes exatas de divisão (magic numbers do idioma
+multiply-by-reciprocal) não foram decodificadas pro divisor decimal
+exato — mesma lacuna numérica aceita em outros `read_full`.
 
 ## 585. `asm_function(ulong×6)` — não é um interpretador de opcode: é o trampolim genérico de chamada indireta por aridade (0–5 argumentos) usado pelo sistema de task (2026-10-25, Fase 3, octogésimo primeiro lote, revisão semântica sobre checkpoint do CI)
 
@@ -19758,35 +19881,84 @@ aridades + guarda de inicialização — lidas instrução a instrução via
 disassembly direto; só a identidade dos slots de função, dados e não
 código, permanece em aberto).
 
-## 587. `ctlsound_main(CTLINFO*)` — loop por-frame da tela de teste de som: toca efeito, alterna estéreo, volta pro título (2026-10-25, Fase 3, octogésimo segundo lote, revisão semântica sobre checkpoint do CI)
+## 587. `ctlsound_main(CTLINFO*)` — leitura completa: menu de 3 posições (índices 0/1/2 = modo estéreo real) com wraparound circular, teardown decrementando 3 contadores globais (2026-10-25 + revisão byte a byte 2026-10-26, sobre o painel v3)
 
-`ctlsound_main(CTLINFO*)` (`0x2472a8`, 484 B) — checkpoint do
-pipeline automatizado (`docs/re-results/002472a8.json`, não
-reexecutado nesta sessão): 113 de ~121 instruções possíveis (93%), 0
-tabelas de salto, 9 branches/2 de retrocesso. 6 `bl` distintos, 9
-chamadas: `callSystemSound(int)` (×3), `ctlopentitle_active(CTLINFO*)`
-(×1), `vOpn_key_rep(unsigned long)` (×2), `Ssd_SetStereo(int)` (×1),
-`iOS_SetRectHit(int,RECT16*,int)` (×1), `iOS_GetRectHitNoTap()` (×1).
+`ctlsound_main(CTLINFO*)` (`0x2472a8`, 484 B) — disassembly linear
+completo via Capstone. Código real termina em `0x247468` (a
+instrução seguinte decodifica como lixo `mulseq r0,r4,sl`) — **113
+instruções reais (452 B) + 8 words de literal pool (32 B) = 484 B
+exatos**, nenhum byte sem explicação.
 
-Fecha o par com `ctlsound_init()` (`0x24717c`, §580 — "tela de teste
-de som", confirmada via `ctlopentitle_main`, §87, que lista
-`ctlsound_init` entre os destinos possíveis após o filme de abertura).
-`ctlsound_main` é a lógica por quadro dessa tela: usa
-`iOS_SetRectHit`/`iOS_GetRectHitNoTap` (mesmo par de detecção de
-toque em retângulo já visto em várias outras telas) para capturar o
-toque do jogador num botão de teste, chama `callSystemSound(int)`
-(×3 — provável efeito sonoro diferente por botão testado), e usa
-`Ssd_SetStereo(int)` pra alternar o modo estéreo/mono (par exato do
-getter `Ssd_GetStereo()` já usado em `ctlsound_init`, §580).
-`vOpn_key_rep(unsigned long)` (×2) faz polling de repetição de
-tecla/botão (família `vOpn_*` de `ctlopentitle_main`, §87). A chamada
-a `ctlopentitle_active(CTLINFO*)` confirma que esta tela é um
-sub-modo acessado direto do controlador de título, que devolve o
-controle ativando-o de volta ao terminar.
+```c
+void ctlsound_main(CTLINFO* this) {
+    if (this->field_0x20 == 2) goto TEARDOWN;           // 0x247400
 
-Sem tabela de salto, nenhum bloco lido instrução a instrução.
+    iOS_SetRectHit(0, &g_soundTestRect, 0);
+    iOS_GetRectHitNoTap();
+    uint32_t flags = *g_flagsPtr;
+    if (flags & 0x820) goto STEREO_SET;                   // 0x2473e4
+    int bit40 = flags & 0x40;
+    if (bit40) goto PLAY_SE2;                              // 0x2473c0
 
-**Status CSV: `read_structural`.**
+    if (vOpn_key_rep(0x1000) != 0) {                        // tecla esquerda/cima
+        int oldVal = this->intArray[this->field_0x1c];
+        g_iconTable[oldVal].field_0x14 = bit40;                // desmarca ícone antigo
+        int idx = this->field_0x1c - 1;
+        if (idx < 0) idx = 2;                                   // wrap circular 0..2
+        this->field_0x1c = idx;
+        int newVal = this->intArray[idx];
+        g_iconTable[newVal].field_0x14 = 9;                     // marca ícone novo
+        callSystemSound(3);
+    }
+    if (vOpn_key_rep(0x4000) == 0 && !(*g_flagsPtr & 0x100))
+        return;
+    // tecla direita/baixo OU flag 0x100 (primeira seleção automática):
+    int oldVal2 = this->intArray[this->field_0x1c];
+    g_iconTable[oldVal2].field_0x14 = 0;
+    int idx2 = this->field_0x1c + 1;
+    if (idx2 > 2) idx2 = 0;                                     // wrap circular
+    this->field_0x1c = idx2;
+    int newVal2 = this->intArray[idx2];
+    g_iconTable[newVal2].field_0x14 = 9;
+    return callSystemSound(3);                                   // tail call
+}
+
+STEREO_SET:  // 0x2473e4
+    Ssd_SetStereo(this->field_0x1c);        // *** o índice 0/1/2 do menu É o modo estéreo real ***
+    callSystemSound(1);
+    this->field_0x20 = 2;
+    return;
+
+PLAY_SE2:  // 0x2473c0
+    callSystemSound(2);
+    this->field_0x20 = 2;
+    return;
+
+TEARDOWN:  // 0x247400
+    g_counterA -= 3;
+    g_counterB -= 3;
+    int c = (g_counterC -= 1);
+    ctlopentitle_active(&g_table5[(c - 2) * 0x64]);     // devolve controle real pro título
+}
+```
+
+**Achados concretos**: (1) os 3 slots do menu (índices 0/1/2) **são
+literalmente os 3 argumentos possíveis de `Ssd_SetStereo`** — o menu
+de teste de som não é genérico, é especificamente um seletor de modo
+estéreo com 3 opções; (2) wraparound circular confirmado nos dois
+sentidos; (3) a marcação do ícone recém-desmarcado usa `bit40` no
+caminho "esquerda" mas a constante `0` no caminho "direita" —
+assimetria real, não explicada semanticamente além do que os bytes
+mostram; (4) o teardown decrementa 3 contadores globais (`-3/-3/-1`,
+mesmo padrão de trio de `houkoku_okng`, §577) e chama
+`ctlopentitle_active` com um endereço calculado numa tabela de
+stride `0x64`(100) — confirma que esta tela devolve controle real
+pro controlador de título ao sair, não um "fade" genérico.
+
+**Status CSV: `read_full`** — 100% das 113 instruções reais lidas e
+atribuídas a um ramo explícito; os 8 words de literal pool
+confirmados como dados. Nenhuma chamada local sem símbolo nesta
+função (todos os 6 `bl` resolvidos por nome).
 
 ## 588. `ctltresure_main(CTLINFO*)` — mesmo esqueleto padrão de `ctl*_main`, mas com uma anomalia real: desativa via `ctlunreg_deactive`, não via uma `ctltresure_deactive` própria (2026-10-25, Fase 3, octogésimo segundo lote, revisão semântica sobre checkpoint do CI)
 
@@ -20198,36 +20370,82 @@ há mais nenhum estado da família sem leitura.
 toda a família já fechada; corpo do laço mínimo não lido instrução a
 instrução).
 
-## 600. `UnitTableInit(short)` — inicializa a grade genérica `UnitTable`/`UnitList` pra um contexto de tela específico (2026-10-25, Fase 3, octogésimo quarto lote, revisão semântica sobre checkpoint do CI)
+## 600. `UnitTableInit(short)` — leitura completa: loop de retry de `UnitScroll` (até 10×), cálculo real de posição em grade 5 colunas (mod/div por 5), limpa 8 slots de seleção, carrega 2 texturas (2026-10-25 + revisão byte a byte 2026-10-26, sobre o painel v3)
 
-`UnitTableInit(short)` (`0x1bc87c`, 496 B) — checkpoint do pipeline
-automatizado (`docs/re-results/001bc87c.json`, não reexecutado nesta
-sessão): 107 de ~124 instruções possíveis (86%), 0 tabelas de salto,
-1 branch/1 de retrocesso (laço simples). 5 `bl` distintos:
-`CurChrChg()` (×1), `GetSttsApos(short)` (×1), `UnitScroll(short*,
-short*)` (×1), `WindowInit(short*, int, unsigned char*)` (×1),
-`GetTPage` (×2).
+`UnitTableInit(short)` (`0x1bc87c`, 496 B) foi lida por completo via
+disassembly Capstone linear. **Os "17 slots não cobertos" do
+checkpoint automático (86%) são 17 words de literal pool** (68 B) —
+código real termina em `0x1bca24` (107 instruções = 428 B), e
+428+68=496 B exatos. A cobertura "baixa" era só reflexo de a função
+ter proporcionalmente mais literal pool que o normal (17 globais
+resolvidos via GOT), não código perdido.
 
-Já era citada por nome — sem nunca ter sido lida — na seção 9 e como
-`UnitTableInitFirst` em `BuyUnit()` (§185). O catálogo agora resolvido
-confirma e refina esse papel: `UnitTableInit` é o **setup de
-instância** da máquina genérica já documentada em `UnitTable` (§55,
-rotina parametrizada por 2 callbacks) e `UnitList` (§56) —
-`GetSttsApos`/`UnitScroll` inicializam o estado de scroll; `WindowInit`
-(mesma API de janela/menu genérica de `ItemMenu`, §39) cria a
-janela-contêiner; `CurChrChg()` (§402) seleciona o personagem atual
-exibido inicialmente na grade; `GetTPage` (×2, API real do PS1
-`libgpu`) resolve a página de textura do grid gráfico. O parâmetro
-`short` é quase certamente o seletor de contexto/tela (qual roster
-está sendo inicializado), consistente com `UnitTable` já ser genérica
-por design.
+```c
+void UnitTableInit(short slotIndex) {
+    WindowInit(NULL, 0, NULL);                 // chamada real com os 3 argumentos zerados
+
+    // instala 7 ponteiros de função/callback (todos via GOT) numa
+    // struct de 0x20 bytes (vtable):
+    g_unitTableVTable->field_0x00 = cbA;
+    g_unitTableVTable->field_0x04 = cbA;        // MESMO ponteiro em +0x00 e +0x04
+    g_unitTableVTable->field_0x08 = cbB;
+    g_unitTableVTable->field_0x0c = cbC;
+    g_unitTableVTable->field_0x10 = cbD;
+    g_unitTableVTable->field_0x14 = cbE;
+    g_unitTableVTable->field_0x18 = cbF;
+    g_unitTableVTable->field_0x1c = cbG;
+
+    g_scrollState.field_0xe = 0;
+    g_currentSlot = slotIndex;
+    CurChrChg();                                 // seleciona personagem atual (§402)
+
+    int zeroHits = 0;
+    do {
+        UnitScroll(&g_scrollState.field_0xe, &g_scrollState.field_0x10);
+        if (g_scrollState.field_0xe == 0) zeroHits++;
+    } while (zeroHits <= 9);                      // *** até 10 iterações "zeradas" ***
+
+    short gridField = *(short*)(g_gridInfo + 0x10);
+    int faceID = GetSttsApos(gridField);
+
+    // *** posicionamento real em grade: col = slot % 5, row = slot / 5 ***
+    int row = slotIndex / 5;                       // via multiplicação recíproca
+    int col = slotIndex - row * 5;
+    int x = col * 62;                                // largura de célula = 62 px
+    int y = row * 60 + gridField + 61;               // altura de célula = 60 px + offset
+
+    g_someBuf[0] = (uint8_t)faceID;
+    g_posStruct->x = x;
+    g_posStruct->y = y;
+    g_flagArray[0x724] = 1;
+
+    for (int off = 0; off < 0x20; off += 4)          // limpa 8 slots de 32 bits
+        g_gridInfo[0x20 + off] = -1;
+
+    g_gridInfo->texPage1 = GetTPage(0, 2, 0x3c0, 0x100);   // textura normal
+    g_gridInfo->texPage2 = GetTPage(0, 1, 0x3c0, 0x100);   // textura alternativa (destaque?)
+}
+```
+
+**Achados concretos**: (1) `WindowInit` é chamada com os 3 argumentos
+literalmente zerados; (2) o "laço simples" é, na verdade, um **retry
+de até 10 iterações de `UnitScroll`**, contando quantas vezes o campo
+de scroll ficou exatamente `0`; (3) **achado de maior valor**: cálculo
+de posição numa **grade de 5 colunas** via divisão/módulo por 5
+(idioma de multiplicação recíproca), célula de **62×60 pixels** —
+confirma que `UnitTableInit` posiciona o ícone/cursor da unidade
+`slotIndex` numa grade fixa 5-wide, não numa lista linear; (4) carrega
+**duas texturas diferentes** (variante normal/selecionado).
 
 **Conexão**: fecha, junto com §39/§55/§56/§185/§402, mais um elo do
 subsistema genérico de grade de unidades.
 
-**Status CSV: `read_structural`** (call-graph mapeado e cruzado com
-quatro seções já documentadas; corpo do laço não lido instrução a
-instrução).
+**Status CSV: `read_full`** — 107 de 107 instruções reais lidas e
+atribuídas a um fluxo de controle explícito (incluindo o loop de
+retry e a aritmética de grade 5×), os 17 words de literal pool
+confirmados como dado. Lacunas remanescentes são de identidade
+nominal (callbacks/estruturas), mesmo padrão aceito em outros
+`read_full`.
 
 ## 601. `check_learning(int, unsigned short*)` — resolução da checagem de aprendizado de habilidade por uso em batalha (rolagem de probabilidade sobre a habilidade de comando do job atual) (2026-10-25, Fase 3, octogésimo quarto lote, revisão semântica sobre checkpoint do CI)
 

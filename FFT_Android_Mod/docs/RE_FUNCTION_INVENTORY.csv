@@ -750,14 +750,14 @@ address,size,mangled,demangled,status,section_ref
 001b6778,500,_Z14FontToImageAllPhP6RECT16iiS_Psisi,"FontToImageAll(unsigned char*, RECT16*, int, int, unsigned char*, short*, int, short, int)",read_full,NOTES §548
 001efc6c,500,_Z23requestDefaultAnimationP13tag_animation,requestDefaultAnimation(tag_animation*),read_full,NOTES §564
 0021cc84,500,_Z11StartEffectllP11EffectOrder,"StartEffect(long, long, EffectOrder*)",read_structural,NOTES §420
-0024eadc,500,_Z14ctlperson_mainP7CTLINFO,ctlperson_main(CTLINFO*),read_structural,NOTES §582
-002576e0,500,_Z15ctlevtinfo_initi,ctlevtinfo_init(int),read_structural,NOTES §580
+0024eadc,500,_Z14ctlperson_mainP7CTLINFO,ctlperson_main(CTLINFO*),read_full,NOTES §582
+002576e0,500,_Z15ctlevtinfo_initi,ctlevtinfo_init(int),read_full,NOTES §580-add
 000969bc,496,res2_class,res2_class,read_structural,NOTES §569
-0015813c,496,_Z10unittofacei,unittoface(int),read_structural,NOTES §583
+0015813c,496,_Z10unittofacei,unittoface(int),read_full,NOTES §583
 001896e4,496,_Z12eGetItemListssaPsth,"eGetItemList(short, short, signed char, short*, unsigned short, unsigned char)",read_full,NOTES §549
 00194048,496,_Z11jDrawFT4RGBP6RECT16iiP5COLORitti,"jDrawFT4RGB(RECT16*, int, int, COLOR*, int, unsigned short, unsigned short, int)",read_full,NOTES §514
-001bc87c,496,_Z13UnitTableInits,UnitTableInit(short),read_structural,NOTES §600
-001ccc3c,496,_Z19getTrapResultDamageP5BWORKi,"getTrapResultDamage(BWORK*, int)",read_structural,NOTES §584
+001bc87c,496,_Z13UnitTableInits,UnitTableInit(short),read_full,NOTES §600
+001ccc3c,496,_Z19getTrapResultDamageP5BWORKi,"getTrapResultDamage(BWORK*, int)",read_full,NOTES §584
 0025f44c,496,_Z10frmbuf_getv,frmbuf_get(),read_structural,NOTES §615
 0027070c,496,_Z14pagewinmes_putP11PAGEWININFOi,"pagewinmes_put(PAGEWININFO*, int)",read_structural,NOTES §605
 0028d498,496,_Z6tlFreePv,tlFree(void*),read_structural,NOTES §605
@@ -771,7 +771,7 @@ address,size,mangled,demangled,status,section_ref
 001569ac,484,_Z10editdirectv,editdirect(),read_structural,NOTES §615
 001d6514,484,_Z6set_mdPh,set_md(unsigned char*),read_structural,NOTES §605
 001c4eb0,484,_Z10ValueFunc2Ph,ValueFunc2(unsigned char*),read_full,NOTES §550
-002472a8,484,_Z13ctlsound_mainP7CTLINFO,ctlsound_main(CTLINFO*),read_structural,NOTES §587
+002472a8,484,_Z13ctlsound_mainP7CTLINFO,ctlsound_main(CTLINFO*),read_full,NOTES §587
 0026f308,484,_Z13ctlunreg_mainP7CTLINFO,ctlunreg_main(CTLINFO*),read_structural,NOTES §371
 0029f730,484,_Z8_gte_ncsv,_gte_ncs(),read_full,NOTES §553
 00072b0c,480,_Z16Android_FileEnumiPcP5CLIST,"Android_FileEnum(int, char*, CLIST*)",read_structural,NOTES §566
