@@ -82,11 +82,11 @@ class CertificateGateTests(unittest.TestCase):
                          "submitted_at": "2026-10-26T15:00:00Z"}]
             return [{"filename": "FFT_Android_Mod/docs/re-results/"
                                   "semantic-certificates.json",
-                     "patch": ('@@ -1,9 +1,9 @@\\n'
-                               ' {\\n'
-                               '   "00002010": {\\n'
-                               '-    "status": "partial",\\n'
-                               '+    "status": "certified",\\n'
+                     "patch": ('@@ -1,9 +1,9 @@\n'
+                               ' {\n'
+                               '   "00002010": {\n'
+                               '-    "status": "partial",\n'
+                               '+    "status": "certified",\n'
                                '     "size": 4,')}]
         self.assertTrue(gate.verify_remote_review(cert, ADDRESS, provider))
         with self.assertRaisesRegex(ValueError, "specific certificate"):
