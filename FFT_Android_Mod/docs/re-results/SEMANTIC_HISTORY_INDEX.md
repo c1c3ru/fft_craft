@@ -12,7 +12,7 @@ ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 | Documento histórico | Tipo | PASS declarados completos |
 |---|---|---:|
 | [Isolated ARM conditional branch microexecution](SEMANTIC_BRANCH_MICROEXEC.md) | static_or_boundary_audit | 0 |
-| [Primeiro piloto de contratos locais completos — BX LR](SEMANTIC_BXLR_CONTRACT_PILOT.md) | static_or_boundary_audit | 0 |
+| [Validação dos contratos locais BX LR — todas as candidatas](SEMANTIC_BXLR_CONTRACT_PILOT.md) | static_or_boundary_audit | 0 |
 | [ARM function entry and state-transition microexecution](SEMANTIC_ENTRY_PREFIX.md) | microexecution_report | 1 |
 | [First-level ARM call contracts: GetParam / GetScale](SEMANTIC_GETPARAM_GETSCALE_AUDIT.md) | static_or_boundary_audit | 0 |
 | [Original ARM GetParam / GetScale — microexecuted contracts](SEMANTIC_GETPARAM_GETSCALE_MICROEXEC.md) | microexecution_report | 3 |

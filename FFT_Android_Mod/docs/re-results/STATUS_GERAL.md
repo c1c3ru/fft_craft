@@ -56,8 +56,8 @@ Os números certificados representam **registros formais válidos para este ELF*
 | Documentos semânticos históricos do mesmo ELF | 24 |
 | Documentos históricos com testes declarados | 13 |
 | Candidatas BX LR verificadas, pendentes de revisão | 303 |
-| Contratos locais BX LR com retorno ARM/Thumb verificado (revisão pendente) | 5 |
-| Execuções ARM/Thumb adicionais dos contratos locais | 40 |
+| Contratos locais BX LR com retorno ARM/Thumb verificado (revisão pendente) | 303 |
+| Execuções ARM/Thumb adicionais dos contratos locais | 9,696 |
 | Relatórios estáticos deste lote | 5 |
 | Relatórios Unicorn deste lote | 309 |
 | Microexecuções Unicorn verificadas neste lote (sem duplicar suítes) | 1,380 |
@@ -109,11 +109,11 @@ Estas duas prioridades são **curadas no gerador**; quando um limite for resolvi
 
 ## Pull requests recentes
 
+- [PR #323 — feat(re): validar todas as 303 funções BX LR contra modelo independente ARM/Thumb](https://github.com/c1c3ru/fft_craft/pull/323)
+- [PR #322 — chore(re): automated structural batch 40389908108](https://github.com/c1c3ru/fft_craft/pull/322)
 - [PR #321 — feat(re): iniciar contratos semânticos locais completos com retornos ARM/Thumb](https://github.com/c1c3ru/fft_craft/pull/321)
 - [PR #320 — chore(re): automated structural batch 40388256641](https://github.com/c1c3ru/fft_craft/pull/320)
 - [PR #319 — feat(re): reaproveitar evidências históricas e validar folhas ARM rumo aos contratos integrais](https://github.com/c1c3ru/fft_craft/pull/319)
-- [PR #318 — chore(re): automated structural batch 40385077935](https://github.com/c1c3ru/fft_craft/pull/318)
-- [PR #317 — feat(re): auditar destinos ARM pendentes de houkoku_okng e atualizar painel](https://github.com/c1c3ru/fft_craft/pull/317)
 
 ## Atualização automática e fontes
 
