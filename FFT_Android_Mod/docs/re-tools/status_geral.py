@@ -13,6 +13,7 @@ from collections import Counter
 from pathlib import Path
 
 import progress_report
+import central_semantic_summary
 
 ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "docs/re-results"
@@ -112,7 +113,7 @@ def recent_prs(raw, repository=REPO):
     return results[:5]
 
 
-def render(data, results, prs=None):
+def render(data, results, prs=None, semantic=None):
     accepted, review, total = (data["accepted_count"], data["review_count"],
                                data["checkpoints"])
     if accepted + review > total:
@@ -155,6 +156,8 @@ def render(data, results, prs=None):
         "sintéticos** e seus limites. Testes passando não significam que "
         "a função inteira foi reconstruída:", "",
     ]
+    if semantic is not None:
+        lines += [central_semantic_summary.render(semantic), ""]
     for filename, description in MILESTONES:
         if (results / filename).is_file():
             lines.append(f"- [{description}]({filename})")
@@ -211,12 +214,16 @@ def render(data, results, prs=None):
     return "\n".join(lines)
 
 
-def generate(inventory, results, priority, binary, pulls_json=None):
+def generate(inventory, results, priority, binary, pulls_json=None,
+             pilot_dir=None, dynamic_dir=None, manifests_dir=None):
     data = progress_report.summarize(inventory, results, binary, priority)
     prs = None
     if pulls_json is not None and pulls_json.is_file():
         prs = json.loads(pulls_json.read_text(encoding="utf-8"))
-    return render(data, results, prs)
+    semantic = central_semantic_summary.summarize(
+        inventory, data["digest"], results / "semantic-certificates.json",
+        pilot_dir, dynamic_dir, manifests_dir)
+    return render(data, results, prs, semantic)
 
 
 def main():
@@ -230,9 +237,13 @@ def main():
                         default=ROOT / "src/lib/armeabi/libgl2jni.so")
     parser.add_argument("--pulls-json", type=Path,
                         help="Optional GitHub REST merged-PR list saved by workflow")
+    parser.add_argument("--pilot-dir", type=Path)
+    parser.add_argument("--dynamic-dir", type=Path)
+    parser.add_argument("--manifests-dir", type=Path)
     args = parser.parse_args()
     text = generate(args.inventory, args.results, args.priority, args.binary,
-                    args.pulls_json)
+                    args.pulls_json, args.pilot_dir, args.dynamic_dir,
+                    args.manifests_dir)
     dest = args.results / "STATUS_GERAL.md"
     temporary = dest.with_suffix(".md.tmp")
     temporary.write_text(text, encoding="utf-8")
