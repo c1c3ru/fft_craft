@@ -31,6 +31,7 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/semantic_next_pointer_microexec.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_getparam_getscale.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_getparam_getscale_exec.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_post_getter_paths.py'
       - 'FFT_Android_Mod/docs/re-tools/structural_v3.py'
       - 'FFT_Android_Mod/docs/re-tools/structural_v3_report.py'
       - 'FFT_Android_Mod/docs/re-tools/parallel_loop.py'
@@ -175,6 +176,7 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_next_pointer_microexec.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_getparam_getscale.py
           python3 FFT_Android_Mod/docs/re-tools/semantic_getparam_getscale_exec.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_post_getter_paths.py
       - name: Publish v3 coverage diagnostics and migration counts
         run: |
           python3 FFT_Android_Mod/docs/re-tools/structural_v3_report.py
