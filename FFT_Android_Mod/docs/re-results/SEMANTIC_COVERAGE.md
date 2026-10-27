@@ -8,11 +8,11 @@ ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 |---|---:|
 | Entradas/símbolos no inventário | 6,455 |
 | Endereços de execução únicos | 6,329 |
-| Semântica integral certificada por registro | 5 |
-| Evidência parcial registrada | 20 |
+| Semântica integral certificada por registro | 25 |
+| Evidência parcial registrada | 0 |
 | Sem certificação registrada | 6,304 |
-| Progresso certificado por endereço | 0.08% |
-| Progresso certificado por bytes | 0.00% |
+| Progresso certificado por endereço | 0.40% |
+| Progresso certificado por bytes | 0.01% |
 
 Contagens medem **certificados registrados no ledger**, não a ausência de conhecimento em relatórios anteriores.
 Um certificado revisado e testes diferenciais são necessários antes de afirmar equivalência. O esquema não prova completude por si.
@@ -5895,31 +5895,11 @@ Um certificado revisado e testes diferenciais são necessários antes de afirmar
 | `00083004` | oggpackB_bytes | 4 | unknown |
 | `00083008` | oggpackB_bits | 4 | unknown |
 | `00083014` | oggpackB_get_buffer | 4 | unknown |
-| `000af9bc` | CCAMERA::Uninit() | 4 | partial |
-| `000b3524` | CINPUT_DATA::~CINPUT_DATA() | 4 | partial |
-| `000b4f70` | CRECT::CRECT() | 4 | partial |
-| `000b4f74` | CRECT::~CRECT() | 4 | partial |
-| `000b5524` | CRECT::MoveCursor(int) | 4 | partial |
-| `000b5528` | CRECT::MoveCursorPos(int, int) | 4 | partial |
 | `000b5ac8` | CUI_SCROLLBAR::Delete() | 4 | unknown |
-| `000b61d4` | CCOMP_Z_DEC::~CCOMP_Z_DEC() | 4 | partial |
-| `000b6200` | CCOMP_Z_DEC::Error(char const*) | 4 | partial |
-| `000b63a0` | CCOMP_Z_ENC::~CCOMP_Z_ENC() | 4 | partial |
-| `000b63cc` | CCOMP_Z_ENC::Error(char const*) | 4 | partial |
-| `000b6580` | CCRYPT::CCRYPT() | 4 | partial |
-| `000b6584` | CCRYPT::~CCRYPT() | 4 | partial |
 | `000b661c` | CCRYPT::Decrypt(unsigned char*, int, unsigned int) | 4 | unknown |
-| `000b789c` | CFILE_UTIL::CFILE_UTIL() | 4 | partial |
-| `000b78a0` | CFILE_UTIL::~CFILE_UTIL() | 4 | partial |
-| `000b7988` | CFILE_UTIL::DirGetWindows(char*) | 4 | partial |
-| `000b798c` | CFILE_UTIL::DirGetSystem(char*) | 4 | partial |
-| `000b7998` | CFILE_UTIL::DirGetExecute(char*, char*) | 4 | partial |
 | `000b8a54` | CLIST::GetDataAsStr(int) | 4 | unknown |
-| `000b8bdc` | CSTR_UTIL::CSTR_UTIL() | 4 | partial |
-| `000b8be0` | CSTR_UTIL::~CSTR_UTIL() | 4 | partial |
 | `000ba090` | SleepM(unsigned int) | 4 | unknown |
 | `000bb058` | CSOUND_IF::ResetLoopPoint(int) | 4 | unknown |
-| `000bb834` | CSOUND_IF_SL::FrameMove(int, float) | 4 | partial |
 | `000bbb10` | CSOUND_IF_SL::SetTrans(int, float, float, float) | 4 | unknown |
 | `000bcbf0` | CSOUND_LOADER::FrameMove(int, float) | 4 | unknown |
 | `000bd964` | CFRAMERATE::~CFRAMERATE() | 4 | unknown |
