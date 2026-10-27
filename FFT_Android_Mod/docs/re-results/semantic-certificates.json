@@ -255,7 +255,7 @@
     ]
   },
   "000af9bc": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CCAMERA::Uninit()",
@@ -290,16 +290,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40477590319",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/344",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "GitHub review 5671155811, APPROVED em 2026-10-27T16:59:06Z do commit 436d9f36402410e00e8c8a73da353d1ca0db731b. Escopo: instrucao A32 BX LR em execucao normal; sem equivalencia de programa inteiro."
+    },
     "unverified": [
-      "independent human technical review pending",
-      "GitHub APPROVED review on immutable contract fingerprints pending",
-      "unmodeled exceptional behavior"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000b3524": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CINPUT_DATA::~CINPUT_DATA()",
@@ -334,16 +341,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40477590319",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/344",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "GitHub review 5671155811, APPROVED em 2026-10-27T16:59:06Z do commit 436d9f36402410e00e8c8a73da353d1ca0db731b. Escopo: instrucao A32 BX LR em execucao normal; sem equivalencia de programa inteiro."
+    },
     "unverified": [
-      "independent human technical review pending",
-      "GitHub APPROVED review on immutable contract fingerprints pending",
-      "unmodeled exceptional behavior"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000b4f70": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CRECT::CRECT()",
@@ -378,16 +392,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40477590319",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/344",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "GitHub review 5671155811, APPROVED em 2026-10-27T16:59:06Z do commit 436d9f36402410e00e8c8a73da353d1ca0db731b. Escopo: instrucao A32 BX LR em execucao normal; sem equivalencia de programa inteiro."
+    },
     "unverified": [
-      "independent human technical review pending",
-      "GitHub APPROVED review on immutable contract fingerprints pending",
-      "unmodeled exceptional behavior"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000b4f74": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CRECT::~CRECT()",
@@ -422,16 +443,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40477590319",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/344",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "GitHub review 5671155811, APPROVED em 2026-10-27T16:59:06Z do commit 436d9f36402410e00e8c8a73da353d1ca0db731b. Escopo: instrucao A32 BX LR em execucao normal; sem equivalencia de programa inteiro."
+    },
     "unverified": [
-      "independent human technical review pending",
-      "GitHub APPROVED review on immutable contract fingerprints pending",
-      "unmodeled exceptional behavior"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000b5524": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CRECT::MoveCursor(int)",
@@ -466,16 +494,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40477590319",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/344",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "GitHub review 5671155811, APPROVED em 2026-10-27T16:59:06Z do commit 436d9f36402410e00e8c8a73da353d1ca0db731b. Escopo: instrucao A32 BX LR em execucao normal; sem equivalencia de programa inteiro."
+    },
     "unverified": [
-      "independent human technical review pending",
-      "GitHub APPROVED review on immutable contract fingerprints pending",
-      "unmodeled exceptional behavior"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000b5528": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CRECT::MoveCursorPos(int, int)",
@@ -510,16 +545,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40477590319",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/344",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "GitHub review 5671155811, APPROVED em 2026-10-27T16:59:06Z do commit 436d9f36402410e00e8c8a73da353d1ca0db731b. Escopo: instrucao A32 BX LR em execucao normal; sem equivalencia de programa inteiro."
+    },
     "unverified": [
-      "independent human technical review pending",
-      "GitHub APPROVED review on immutable contract fingerprints pending",
-      "unmodeled exceptional behavior"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000b61d4": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CCOMP_Z_DEC::~CCOMP_Z_DEC()",
@@ -554,16 +596,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40477590319",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/344",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "GitHub review 5671155811, APPROVED em 2026-10-27T16:59:06Z do commit 436d9f36402410e00e8c8a73da353d1ca0db731b. Escopo: instrucao A32 BX LR em execucao normal; sem equivalencia de programa inteiro."
+    },
     "unverified": [
-      "independent human technical review pending",
-      "GitHub APPROVED review on immutable contract fingerprints pending",
-      "unmodeled exceptional behavior"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000b6200": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CCOMP_Z_DEC::Error(char const*)",
@@ -598,16 +647,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40477590319",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/344",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "GitHub review 5671155811, APPROVED em 2026-10-27T16:59:06Z do commit 436d9f36402410e00e8c8a73da353d1ca0db731b. Escopo: instrucao A32 BX LR em execucao normal; sem equivalencia de programa inteiro."
+    },
     "unverified": [
-      "independent human technical review pending",
-      "GitHub APPROVED review on immutable contract fingerprints pending",
-      "unmodeled exceptional behavior"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000b63a0": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CCOMP_Z_ENC::~CCOMP_Z_ENC()",
@@ -642,16 +698,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40477590319",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/344",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "GitHub review 5671155811, APPROVED em 2026-10-27T16:59:06Z do commit 436d9f36402410e00e8c8a73da353d1ca0db731b. Escopo: instrucao A32 BX LR em execucao normal; sem equivalencia de programa inteiro."
+    },
     "unverified": [
-      "independent human technical review pending",
-      "GitHub APPROVED review on immutable contract fingerprints pending",
-      "unmodeled exceptional behavior"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000b63cc": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CCOMP_Z_ENC::Error(char const*)",
@@ -686,16 +749,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40477590319",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/344",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "GitHub review 5671155811, APPROVED em 2026-10-27T16:59:06Z do commit 436d9f36402410e00e8c8a73da353d1ca0db731b. Escopo: instrucao A32 BX LR em execucao normal; sem equivalencia de programa inteiro."
+    },
     "unverified": [
-      "independent human technical review pending",
-      "GitHub APPROVED review on immutable contract fingerprints pending",
-      "unmodeled exceptional behavior"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000b6580": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CCRYPT::CCRYPT()",
@@ -730,16 +800,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40477590319",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/344",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "GitHub review 5671155811, APPROVED em 2026-10-27T16:59:06Z do commit 436d9f36402410e00e8c8a73da353d1ca0db731b. Escopo: instrucao A32 BX LR em execucao normal; sem equivalencia de programa inteiro."
+    },
     "unverified": [
-      "independent human technical review pending",
-      "GitHub APPROVED review on immutable contract fingerprints pending",
-      "unmodeled exceptional behavior"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000b6584": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CCRYPT::~CCRYPT()",
@@ -774,16 +851,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40477590319",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/344",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "GitHub review 5671155811, APPROVED em 2026-10-27T16:59:06Z do commit 436d9f36402410e00e8c8a73da353d1ca0db731b. Escopo: instrucao A32 BX LR em execucao normal; sem equivalencia de programa inteiro."
+    },
     "unverified": [
-      "independent human technical review pending",
-      "GitHub APPROVED review on immutable contract fingerprints pending",
-      "unmodeled exceptional behavior"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000b789c": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CFILE_UTIL::CFILE_UTIL()",
@@ -818,16 +902,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40477590319",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/344",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "GitHub review 5671155811, APPROVED em 2026-10-27T16:59:06Z do commit 436d9f36402410e00e8c8a73da353d1ca0db731b. Escopo: instrucao A32 BX LR em execucao normal; sem equivalencia de programa inteiro."
+    },
     "unverified": [
-      "independent human technical review pending",
-      "GitHub APPROVED review on immutable contract fingerprints pending",
-      "unmodeled exceptional behavior"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000b78a0": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CFILE_UTIL::~CFILE_UTIL()",
@@ -862,16 +953,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40477590319",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/344",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "GitHub review 5671155811, APPROVED em 2026-10-27T16:59:06Z do commit 436d9f36402410e00e8c8a73da353d1ca0db731b. Escopo: instrucao A32 BX LR em execucao normal; sem equivalencia de programa inteiro."
+    },
     "unverified": [
-      "independent human technical review pending",
-      "GitHub APPROVED review on immutable contract fingerprints pending",
-      "unmodeled exceptional behavior"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000b7988": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CFILE_UTIL::DirGetWindows(char*)",
@@ -906,16 +1004,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40477590319",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/344",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "GitHub review 5671155811, APPROVED em 2026-10-27T16:59:06Z do commit 436d9f36402410e00e8c8a73da353d1ca0db731b. Escopo: instrucao A32 BX LR em execucao normal; sem equivalencia de programa inteiro."
+    },
     "unverified": [
-      "independent human technical review pending",
-      "GitHub APPROVED review on immutable contract fingerprints pending",
-      "unmodeled exceptional behavior"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000b798c": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CFILE_UTIL::DirGetSystem(char*)",
@@ -950,16 +1055,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40477590319",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/344",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "GitHub review 5671155811, APPROVED em 2026-10-27T16:59:06Z do commit 436d9f36402410e00e8c8a73da353d1ca0db731b. Escopo: instrucao A32 BX LR em execucao normal; sem equivalencia de programa inteiro."
+    },
     "unverified": [
-      "independent human technical review pending",
-      "GitHub APPROVED review on immutable contract fingerprints pending",
-      "unmodeled exceptional behavior"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000b7998": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CFILE_UTIL::DirGetExecute(char*, char*)",
@@ -994,16 +1106,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40477590319",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/344",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "GitHub review 5671155811, APPROVED em 2026-10-27T16:59:06Z do commit 436d9f36402410e00e8c8a73da353d1ca0db731b. Escopo: instrucao A32 BX LR em execucao normal; sem equivalencia de programa inteiro."
+    },
     "unverified": [
-      "independent human technical review pending",
-      "GitHub APPROVED review on immutable contract fingerprints pending",
-      "unmodeled exceptional behavior"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000b8bdc": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CSTR_UTIL::CSTR_UTIL()",
@@ -1038,16 +1157,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40477590319",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/344",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "GitHub review 5671155811, APPROVED em 2026-10-27T16:59:06Z do commit 436d9f36402410e00e8c8a73da353d1ca0db731b. Escopo: instrucao A32 BX LR em execucao normal; sem equivalencia de programa inteiro."
+    },
     "unverified": [
-      "independent human technical review pending",
-      "GitHub APPROVED review on immutable contract fingerprints pending",
-      "unmodeled exceptional behavior"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000b8be0": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CSTR_UTIL::~CSTR_UTIL()",
@@ -1082,16 +1208,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40477590319",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/344",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "GitHub review 5671155811, APPROVED em 2026-10-27T16:59:06Z do commit 436d9f36402410e00e8c8a73da353d1ca0db731b. Escopo: instrucao A32 BX LR em execucao normal; sem equivalencia de programa inteiro."
+    },
     "unverified": [
-      "independent human technical review pending",
-      "GitHub APPROVED review on immutable contract fingerprints pending",
-      "unmodeled exceptional behavior"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000bb834": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CSOUND_IF_SL::FrameMove(int, float)",
@@ -1126,12 +1259,19 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40477590319",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/344",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "GitHub review 5671155811, APPROVED em 2026-10-27T16:59:06Z do commit 436d9f36402410e00e8c8a73da353d1ca0db731b. Escopo: instrucao A32 BX LR em execucao normal; sem equivalencia de programa inteiro."
+    },
     "unverified": [
-      "independent human technical review pending",
-      "GitHub APPROVED review on immutable contract fingerprints pending",
-      "unmodeled exceptional behavior"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   }
 }
