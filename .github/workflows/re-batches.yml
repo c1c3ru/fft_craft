@@ -143,6 +143,8 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_post_getter_paths.py
       - name: Audit unresolved houkoku ARM destinations
         run: python3 FFT_Android_Mod/docs/re-tools/semantic_houkoku_next_boundaries.py
+      - name: Microexecute two original sound_request ARM branches
+        run: python3 FFT_Android_Mod/docs/re-tools/semantic_sound_two_hop_exec.py
       - name: Publish v3 coverage diagnostics and migration counts
         run: |
           python3 FFT_Android_Mod/docs/re-tools/structural_v3_report.py
