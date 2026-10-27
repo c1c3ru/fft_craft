@@ -22,7 +22,7 @@ REVIEW_PATH = "FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_REVIEW_REQUEST.json
 REVIEW_RETRY_PATH = "FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_REVIEW_REQUEST_R2.json"
 REVIEW_PATHS = (REVIEW_PATH, REVIEW_RETRY_PATH)
 REVIEW_BASE = "FFT_Android_Mod/docs/re-results/"
-REVIEW_FILENAME = re.compile(r"SEMANTIC_BXLR_REVIEW_REQUEST(?:_R[2-9][0-9]*)?\.json\Z")
+REVIEW_FILENAME = re.compile(r"SEMANTIC_BXLR_REVIEW_REQUEST(?:_R(?:[2-9]|[1-9][0-9]+))?\.json\Z")
 
 
 def is_review_request_path(path):
