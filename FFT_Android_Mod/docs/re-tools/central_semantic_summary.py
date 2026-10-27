@@ -122,7 +122,7 @@ def summarize(inventory, digest, certificates_path, pilot_dir=None,
                 or packet.get("status") != "review_pending"
                 or packet.get("certified_functions") != 0
                 or not isinstance(candidates, list)
-                or not 1 <= len(candidates) <= 303):
+                or not 0 <= len(candidates) <= 303):
             raise ValueError("invalid or stale BX LR review batch")
         batch_addresses = set()
         for candidate in candidates:
