@@ -2,7 +2,7 @@
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Execução de origem do CI: `40543517314`
+Execução de origem do CI: `40546798622`
 
 - Contratos locais preparados para revisão: **5**
 - Microexecuções **novas neste passo**: **0** (reutiliza as 32 observações ARM/Thumb por candidato).
@@ -12,11 +12,11 @@ Execução de origem do CI: `40543517314`
 
 | Endereço | Função | Opcode original | Testes anteriores | Estado |
 |---|---|---|---:|---|
-| `000af9bc` | CCAMERA::Uninit() | `1eff2fe1` | 32 | revisão pendente |
-| `000b3524` | CINPUT_DATA::~CINPUT_DATA() | `1eff2fe1` | 32 | revisão pendente |
-| `000b4f70` | CRECT::CRECT() | `1eff2fe1` | 32 | revisão pendente |
-| `000b4f74` | CRECT::~CRECT() | `1eff2fe1` | 32 | revisão pendente |
-| `000b5524` | CRECT::MoveCursor(int) | `1eff2fe1` | 32 | revisão pendente |
+| `000bbb10` | CSOUND_IF_SL::SetTrans(int, float, float, float) | `1eff2fe1` | 32 | revisão pendente |
+| `000bcbf0` | CSOUND_LOADER::FrameMove(int, float) | `1eff2fe1` | 32 | revisão pendente |
+| `000bd964` | CFRAMERATE::~CFRAMERATE() | `1eff2fe1` | 32 | revisão pendente |
+| `000bdb6c` | CSTEP::~CSTEP() | `1eff2fe1` | 32 | revisão pendente |
+| `000c4418` | Adisp_floateventwindow() | `1eff2fe1` | 32 | revisão pendente |
 
 ## Como concluir a revisão
 
