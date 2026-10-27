@@ -19,6 +19,8 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "docs/re-results"
 REPO = "c1c3ru/fft_craft"
 MILESTONES = (
+    ("SEMANTIC_SOUND_TWO_HOP_EXEC.md",
+     "sound_request: dois desvios ARM microexecutados ate destino ainda desconhecido"),
     ("SEMANTIC_BATCH_SCALING.md",
      "Lotes semânticos de 100/200 funções com revisão independente"),
     ("SEMANTIC_BXLR_REVIEW_BATCH.md",
