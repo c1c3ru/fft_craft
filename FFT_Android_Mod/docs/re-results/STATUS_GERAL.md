@@ -26,6 +26,7 @@ O histórico CSV contém **5,932** registros de análise anterior, que podem se 
 
 Os relatórios abaixo apresentam **efeitos locais testados sob estados sintéticos** e seus limites. Testes passando não significam que a função inteira foi reconstruída:
 
+- [sound_request: destino 0x271314 e tres entradas ARM auditados no ELF original; execucao ainda pendente](SEMANTIC_SOUND_DESTINATION_271314.md)
 - [sound_request: dois desvios ARM microexecutados ate destino ainda desconhecido](SEMANTIC_SOUND_TWO_HOP_EXEC.md)
 - [Lotes semânticos de 100/200 funções com revisão independente](SEMANTIC_BATCH_SCALING.md)
 - [Primeiro lote de cinco contratos BX LR preparados para revisão humana](SEMANTIC_BXLR_REVIEW_BATCH.md)
@@ -98,10 +99,11 @@ O restante da fila permanece nos manifestos e no `SEMANTIC_COVERAGE.md`. Observa
 
 ### Lacunas semânticas conhecidas
 
+- `0x271314`: Microexecutar o destino de sound_request e distinguir tres entradas ARM sem supor efeitos de som.
 - `0x2bf008`: Investigar o próximo BL de SysSE_Play depois do desvio condicionado.
 - `0x0a7034`: Investigar o próximo BL de iOS_SetIconPosition com os argumentos já observados.
 
-Estas duas prioridades são **curadas no gerador**; quando um limite for resolvido, a descrição deve ser atualizada no mesmo PR de análise.
+Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a descrição deve ser atualizada no mesmo PR de análise.
 
 ### Revisão estrutural — fila atual do núcleo
 
@@ -116,11 +118,11 @@ Estas duas prioridades são **curadas no gerador**; quando um limite for resolvi
 
 ## Pull requests recentes
 
+- [PR #360 — feat(re): auditar destino ARM 0x271314 e atualizar documentação centralizada](https://github.com/c1c3ru/fft_craft/pull/360)
+- [PR #359 — chore(re): automated structural batch 40558269722](https://github.com/c1c3ru/fft_craft/pull/359)
 - [PR #358 — feat(re): executar cadeia ARM real de dois saltos em sound_request](https://github.com/c1c3ru/fft_craft/pull/358)
 - [PR #357 — chore(re): automated structural batch 40556989346](https://github.com/c1c3ru/fft_craft/pull/357)
 - [PR #356 — feat(re): certificar últimas 178 funções ARM BX LR com aprovação do PR #354](https://github.com/c1c3ru/fft_craft/pull/356)
-- [PR #354 — review(re): aprovação independente das 178 folhas A32 BX LR restantes (R5)](https://github.com/c1c3ru/fft_craft/pull/354)
-- [PR #355 — chore(re): automated structural batch 40555207364](https://github.com/c1c3ru/fft_craft/pull/355)
 
 ## Atualização automática e fontes
 
