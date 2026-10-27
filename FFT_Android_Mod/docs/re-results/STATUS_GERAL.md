@@ -56,7 +56,7 @@ Evidências geradas e verificadas nesta execução do pipeline.
 | Certificados semânticos registrados | 125 |
 | Cobertura semântica por endereço | 1.98% |
 | Cobertura semântica por bytes únicos | 0.03% |
-| Registros parciais no ledger | 0 |
+| Registros parciais no ledger | 178 |
 | Endereços com evidência parcial no lote de referência | 184 |
 | Documentos semânticos históricos do mesmo ELF | 25 |
 | Documentos históricos com testes declarados | 13 |
@@ -115,11 +115,11 @@ Estas duas prioridades são **curadas no gerador**; quando um limite for resolvi
 
 ## Pull requests recentes
 
+- [PR #352 — feat(re): preparar últimas 178 folhas ARM BX LR para revisão e certificação](https://github.com/c1c3ru/fft_craft/pull/352)
+- [PR #353 — chore(re): automated structural batch 40554628588](https://github.com/c1c3ru/fft_craft/pull/353)
 - [PR #351 — feat(re): certificar 100 contratos A32 BX LR com APPROVED real do PR #350](https://github.com/c1c3ru/fft_craft/pull/351)
 - [PR #350 — review(re): APPROVED independente de 100 contratos semânticos ARM BX LR (R4)](https://github.com/c1c3ru/fft_craft/pull/350)
 - [PR #349 — chore(re): automated structural batch 40550839542](https://github.com/c1c3ru/fft_craft/pull/349)
-- [PR #348 — feat(re): escalar verificação semântica para 100–303 contratos BX LR por rodada](https://github.com/c1c3ru/fft_craft/pull/348)
-- [PR #347 — chore(re): automated structural batch 40546798622](https://github.com/c1c3ru/fft_craft/pull/347)
 
 ## Atualização automática e fontes
 
