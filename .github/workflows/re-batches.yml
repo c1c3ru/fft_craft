@@ -149,6 +149,8 @@ jobs:
         run: python3 FFT_Android_Mod/docs/re-tools/semantic_sound_destination_271314.py
       - name: Microexecute three ARM sound entry prefixes on original ELF
         run: python3 FFT_Android_Mod/docs/re-tools/semantic_sound_three_entry_exec.py
+      - name: Audit original SysSE_PlayDef A32 destination bytes
+        run: python3 FFT_Android_Mod/docs/re-tools/semantic_sound_playdef_entry.py
       - name: Publish v3 coverage diagnostics and migration counts
         run: |
           python3 FFT_Android_Mod/docs/re-tools/structural_v3_report.py
