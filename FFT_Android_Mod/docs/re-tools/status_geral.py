@@ -179,6 +179,9 @@ def render(data, results, prs=None, semantic=None):
         f"**{data['historical_count']:,}** registros de análise anterior, "
         "que podem se sobrepor aos checkpoints. "
         "**Não somamos esses conjuntos para criar um percentual global fictício.**",
+        "", "## Fluxo de reconstrução funcional", "",
+        "A prioridade é reconstruir comportamento verificável (estrutura, semântica, C/C++, diferencial), não aumentar certificados.",
+        "[Etapas, gates e prioridades](../RECONSTRUCTION_WORKFLOW.md)",
         "", "## Evidência e testes semânticos", "",
         evidence_status(results, data["digest"], review), "",
         "Os relatórios abaixo apresentam **efeitos locais testados sob estados "
