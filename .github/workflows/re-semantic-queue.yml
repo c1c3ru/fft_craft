@@ -84,6 +84,8 @@ jobs:
             --output FFT_Android_Mod/docs/re-results/SEMANTIC_RUN_SNAPSHOT.json
           python3 FFT_Android_Mod/docs/re-tools/semantic_houkoku_next_boundaries.py \
             --output FFT_Android_Mod/docs/re-results/SEMANTIC_HOUKOKU_NEXT_BOUNDARIES.md
+          python3 FFT_Android_Mod/docs/re-tools/semantic_sound_two_hop_exec.py \
+            --output FFT_Android_Mod/docs/re-results/SEMANTIC_SOUND_TWO_HOP_EXEC.md
           python3 FFT_Android_Mod/docs/re-tools/status_geral.py \
             --pilot-dir /tmp/fft-semantic/pilot \
             --dynamic-dir /tmp/fft-semantic/dynamic-evidence \
@@ -103,6 +105,8 @@ jobs:
             /tmp/fft-semantic/SEMANTIC_BXLR_REVIEW_BATCH.json
           cp FFT_Android_Mod/docs/re-results/SEMANTIC_RUN_SNAPSHOT.json \
             /tmp/fft-semantic/SEMANTIC_RUN_SNAPSHOT.json
+          cp FFT_Android_Mod/docs/re-results/SEMANTIC_SOUND_TWO_HOP_EXEC.md \
+            /tmp/fft-semantic/SEMANTIC_SOUND_TWO_HOP_EXEC.md
       - uses: actions/upload-artifact@v4
         with:
           name: fft-semantic-manifests
