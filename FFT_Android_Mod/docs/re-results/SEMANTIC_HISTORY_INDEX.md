@@ -2,9 +2,9 @@
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-- Relatórios históricos vinculados a este ELF: **25**
+- Relatórios históricos vinculados a este ELF: **26**
 - Documentos com contagens de microexecuções declaradas: **13**
-- Documentos de auditoria estática / limites: **12**
+- Documentos de auditoria estática / limites: **13**
 - Documentos com outro SHA-256 excluídos: **0**
 
 **Importante:** os relatórios abaixo foram gerados em etapas anteriores. Suas contagens podem se sobrepor e não são somadas às microexecuções deste lote. A presença de um relatório e um texto PASS não é certificação integral nem reexecução do teste.
@@ -29,6 +29,7 @@ ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 | [sound_request — conservative ARM tail-branch chain](SEMANTIC_SOUND_CHAIN.md) | microexecution_report | 1 |
 | [Original ARM boundaries — sound dispatcher and icon positioning](SEMANTIC_SOUND_DISPATCH_AUDIT.md) | static_or_boundary_audit | 0 |
 | [Bounded ARM sound dispatcher and icon-position prologue execution](SEMANTIC_SOUND_ICON_MICROEXEC.md) | microexecution_report | 2 |
+| [SysSE_PlayDef: auditoria estática da entrada A32 0x2b2cf8](SEMANTIC_SOUND_PLAYDEF_ENTRY.md) | static_or_boundary_audit | 0 |
 | [Three real ARM callees — initial machine-code audit](SEMANTIC_THREE_CALLEES_AUDIT.md) | static_or_boundary_audit | 0 |
 | [Three callees and two caller continuations — original ARM execution](SEMANTIC_THREE_CALLEES_EXECUTION.md) | microexecution_report | 1 |
 | [Two consecutive ARM guards — bounded machine execution](SEMANTIC_TWO_GUARDS.md) | microexecution_report | 1 |

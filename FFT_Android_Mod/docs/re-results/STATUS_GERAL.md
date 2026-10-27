@@ -26,6 +26,7 @@ O histórico CSV contém **5,932** registros de análise anterior, que podem se 
 
 Os relatórios abaixo apresentam **efeitos locais testados sob estados sintéticos** e seus limites. Testes passando não significam que a função inteira foi reconstruída:
 
+- [SysSE_PlayDef 0x2b2cf8: auditoria estática A32 de 128 bytes; nenhuma instrução executada](SEMANTIC_SOUND_PLAYDEF_ENTRY.md)
 - [sound_request: 384 microexecucoes em tres entradas ARM ate destinos de funcao nao executados](SEMANTIC_SOUND_THREE_ENTRY_EXEC.md)
 - [Correção de 25 manifestos/250 tarefas e conflito do PR automatizado #362; sem novos certificados](SEMANTIC_PIPELINE_RECOVERY.md)
 - [sound_request: destino 0x271314 e tres entradas ARM auditados no ELF original; execucao ainda pendente](SEMANTIC_SOUND_DESTINATION_271314.md)
@@ -62,7 +63,7 @@ Evidências geradas e verificadas nesta execução do pipeline.
 | Cobertura semântica por bytes únicos | 0.07% |
 | Registros parciais no ledger | 0 |
 | Endereços com evidência parcial no lote de referência | 11 |
-| Documentos semânticos históricos do mesmo ELF | 25 |
+| Documentos semânticos históricos do mesmo ELF | 26 |
 | Documentos históricos com testes declarados | 13 |
 | Candidatas BX LR verificadas, pendentes de revisão | 303 |
 | Contratos BX LR preparados para revisão humana (não certificados) | 0 |
@@ -120,11 +121,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #368 — feat(re): auditar entrada A32 original de SysSE_PlayDef em 0x2b2cf8](https://github.com/c1c3ru/fft_craft/pull/368)
+- [PR #367 — chore(re): automated structural batch 40566148585](https://github.com/c1c3ru/fft_craft/pull/367)
 - [PR #365 — feat(re): integrar 384 testes ARM de som preservando correções do pipeline](https://github.com/c1c3ru/fft_craft/pull/365)
 - [PR #366 — chore(re): automated structural batch 40565385882](https://github.com/c1c3ru/fft_craft/pull/366)
 - [PR #364 — fix(re): processar 25 manifestos/250 tarefas e evitar merge automático de resultados obsoletos](https://github.com/c1c3ru/fft_craft/pull/364)
-- [PR #361 — chore(re): automated structural batch 40560837081](https://github.com/c1c3ru/fft_craft/pull/361)
-- [PR #360 — feat(re): auditar destino ARM 0x271314 e atualizar documentação centralizada](https://github.com/c1c3ru/fft_craft/pull/360)
 
 ## Atualização automática e fontes
 
