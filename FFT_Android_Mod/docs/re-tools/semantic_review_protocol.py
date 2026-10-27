@@ -8,6 +8,7 @@ ledger entries in a later PR. Approval is read from GitHub, never fabricated.
 import argparse
 import hashlib
 import json
+import re
 from pathlib import Path
 
 import semantic_coverage
@@ -20,6 +21,22 @@ REVIEW_PATH = "FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_REVIEW_REQUEST.json
 # adds a fresh, immutable request file; do not rewrite the already merged one.
 REVIEW_RETRY_PATH = "FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_REVIEW_REQUEST_R2.json"
 REVIEW_PATHS = (REVIEW_PATH, REVIEW_RETRY_PATH)
+REVIEW_BASE = "FFT_Android_Mod/docs/re-results/"
+REVIEW_FILENAME = re.compile(r"SEMANTIC_BXLR_REVIEW_REQUEST(?:_R(?:[2-9]|[1-9][0-9]+))?\.json\Z")
+
+
+def is_review_request_path(path):
+    """Accept only enumerated versioned immutable review requests."""
+    return (isinstance(path, str) and path.startswith(REVIEW_BASE)
+            and REVIEW_FILENAME.fullmatch(path[len(REVIEW_BASE):]) is not None)
+
+
+def reviewed_request_paths(folder):
+    folder = Path(folder)
+    return sorted(p for p in folder.glob("SEMANTIC_BXLR_REVIEW_REQUEST*.json")
+                  if is_review_request_path(REVIEW_BASE + p.name))
+
+
 FIELDS = (
     "binary_sha256", "size", "proof_class", "scope",
     "instruction_encoding", "instruction_sha256", "contract",
@@ -165,8 +182,19 @@ def main():
                    default=semantic_coverage.RESULTS / "semantic-certificates.json")
     p.add_argument("--output", type=Path)
     p.add_argument("--verify-request", type=Path)
+    p.add_argument("--verify-all", action="store_true")
     p.add_argument("--limit", type=int, default=5)
     args = p.parse_args()
+    if args.verify_all:
+        if args.output is not None or args.verify_request is not None:
+            p.error("--verify-all conflicts with --output/--verify-request")
+        paths = reviewed_request_paths(semantic_coverage.RESULTS)
+        if not paths:
+            p.error("no immutable review requests found")
+        for request_path in paths:
+            verify_request(args.binary, args.inventory, args.ledger, request_path)
+        print(f"SEMANTIC_REVIEW_REQUEST_FILES_REVERIFIED={len(paths)}")
+        return
     if args.verify_request is not None:
         if args.output is not None:
             p.error("--verify-request cannot be used with --output")
