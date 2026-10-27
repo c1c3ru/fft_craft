@@ -26,6 +26,7 @@ O histórico CSV contém **5,932** registros de análise anterior, que podem se 
 
 Os relatórios abaixo apresentam **efeitos locais testados sob estados sintéticos** e seus limites. Testes passando não significam que a função inteira foi reconstruída:
 
+- [sound_request: 384 microexecucoes em tres entradas ARM ate destinos de funcao nao executados](SEMANTIC_SOUND_THREE_ENTRY_EXEC.md)
 - [Correção de 25 manifestos/250 tarefas e conflito do PR automatizado #362; sem novos certificados](SEMANTIC_PIPELINE_RECOVERY.md)
 - [sound_request: destino 0x271314 e tres entradas ARM auditados no ELF original; execucao ainda pendente](SEMANTIC_SOUND_DESTINATION_271314.md)
 - [sound_request: dois desvios ARM microexecutados ate destino ainda desconhecido](SEMANTIC_SOUND_TWO_HOP_EXEC.md)
@@ -100,7 +101,7 @@ O restante da fila permanece nos manifestos e no `SEMANTIC_COVERAGE.md`. Observa
 
 ### Lacunas semânticas conhecidas
 
-- `0x271314`: Microexecutar o destino de sound_request e distinguir tres entradas ARM sem supor efeitos de som.
+- `0x2b2cf8`: Investigar SysSE_PlayDef apos a microexecucao das tres entradas ARM de som sem inferir efeitos externos.
 - `0x2bf008`: Investigar o próximo BL de SysSE_Play depois do desvio condicionado.
 - `0x0a7034`: Investigar o próximo BL de iOS_SetIconPosition com os argumentos já observados.
 
@@ -119,11 +120,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #365 — feat(re): integrar 384 testes ARM de som preservando correções do pipeline](https://github.com/c1c3ru/fft_craft/pull/365)
+- [PR #366 — chore(re): automated structural batch 40565385882](https://github.com/c1c3ru/fft_craft/pull/366)
 - [PR #364 — fix(re): processar 25 manifestos/250 tarefas e evitar merge automático de resultados obsoletos](https://github.com/c1c3ru/fft_craft/pull/364)
 - [PR #361 — chore(re): automated structural batch 40560837081](https://github.com/c1c3ru/fft_craft/pull/361)
 - [PR #360 — feat(re): auditar destino ARM 0x271314 e atualizar documentação centralizada](https://github.com/c1c3ru/fft_craft/pull/360)
-- [PR #359 — chore(re): automated structural batch 40558269722](https://github.com/c1c3ru/fft_craft/pull/359)
-- [PR #358 — feat(re): executar cadeia ARM real de dois saltos em sound_request](https://github.com/c1c3ru/fft_craft/pull/358)
 
 ## Atualização automática e fontes
 
