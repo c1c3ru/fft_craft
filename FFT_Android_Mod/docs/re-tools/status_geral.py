@@ -19,6 +19,8 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "docs/re-results"
 REPO = "c1c3ru/fft_craft"
 MILESTONES = (
+    ("SEMANTIC_SOUND_DESTINATION_271314.md",
+     "sound_request: destino 0x271314 e tres entradas ARM auditados no ELF original; execucao ainda pendente"),
     ("SEMANTIC_SOUND_TWO_HOP_EXEC.md",
      "sound_request: dois desvios ARM microexecutados ate destino ainda desconhecido"),
     ("SEMANTIC_BATCH_SCALING.md",
@@ -55,6 +57,7 @@ MILESTONES = (
      "Retorno ARM real e alterações de memória antes da primeira chamada"),
 )
 CURRENT_SEMANTIC_BOUNDARIES = (
+    ("0x271314", "Microexecutar o destino de sound_request e distinguir tres entradas ARM sem supor efeitos de som"),
     ("0x2bf008", "Investigar o próximo BL de SysSE_Play depois do desvio condicionado"),
     ("0x0a7034", "Investigar o próximo BL de iOS_SetIconPosition com os argumentos já observados"),
 )
@@ -183,7 +186,7 @@ def render(data, results, prs=None, semantic=None):
                   "### Lacunas semânticas conhecidas", ""])
     for address, description in CURRENT_SEMANTIC_BOUNDARIES:
         lines.append(f"- `{address}`: {description}.")
-    lines += ["", "Estas duas prioridades são **curadas no gerador**; "
+    lines += ["", "Estas prioridades são **curadas no gerador**; "
               "quando um limite for resolvido, a descrição deve ser "
               "atualizada no mesmo PR de análise.", "",
               "### Revisão estrutural — fila atual do núcleo", "",
