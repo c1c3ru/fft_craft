@@ -16,14 +16,14 @@ import semantic_evidence
 import semantic_bxlr_contract_pilot as local
 import semantic_certificate_gate as gate
 
-MAX_BATCH = 20
+MAX_BATCH = 303
 
 
 def build(binary, inventory, contracts_dir, limit=5,
           reader=semantic_evidence.read_function, run_id=None,
           certificates_path=None):
     if type(limit) is not int or not 1 <= limit <= MAX_BATCH:
-        raise ValueError("review batch size must be between 1 and 20")
+        raise ValueError("review batch size must be between 1 and 303")
     binary, inventory = Path(binary), Path(inventory)
     digest = hashlib.sha256(binary.read_bytes()).hexdigest()
     ledger = semantic_coverage.ledger(inventory, digest, {})
@@ -192,7 +192,7 @@ def main():
     p.add_argument("--contracts-dir", type=Path, required=True)
     p.add_argument("--certificates", type=Path,
                    default=semantic_coverage.RESULTS / "semantic-certificates.json")
-    p.add_argument("--limit", type=int, default=5)
+    p.add_argument("--limit", type=int, default=100)
     p.add_argument("--manifest", type=Path,
                    default=semantic_coverage.RESULTS / "SEMANTIC_BXLR_REVIEW_BATCH.json")
     p.add_argument("--report", type=Path,
