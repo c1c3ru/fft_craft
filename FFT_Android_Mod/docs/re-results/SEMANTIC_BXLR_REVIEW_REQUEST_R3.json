@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "review_protocol": "independent_github_review_request_v1",
+  "elf_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "status": "human_review_requested",
+  "certified": false,
+  "certificate_fingerprints": {
+    "000af9bc": "b7fbd108cba062287f301672f84108fd24955331f52f1ced2b508d2384358d19",
+    "000b3524": "dda987529bcf2bca155f8409089141cddc741ed5f623ee2accffdd6a2e3a6c50",
+    "000b4f70": "73ecca7203fa4ce55226dec1360b2b49830802addb6c07c0274c11f788219c4a",
+    "000b4f74": "8537af0397aaaba5b15b8ce128f7216fbd1bb06efc4f2d8d0efbf9e39b0320d0",
+    "000b5524": "2fb5c9d50942aa0e0e95a1f59c6291758eda5161c63abb86945bb0eddb2396c1",
+    "000b5528": "3a2e2df8fd67623eeae98d2b623090028c73516b1c992a8f83f5e12782153b61",
+    "000b61d4": "3a149a10951b8333efa987baffc0a2a2ab7bce0d6839c58c0de8038826293beb",
+    "000b6200": "8597ad91711fb63e00b142ab1fa764581da8cc7789c58b6f575c8323030ad182",
+    "000b63a0": "51989b94e355ba58526d1316851587056f2d45853240270d6c01c83fc3868110",
+    "000b63cc": "5d2d6a4edcb277c64a0623fc2ce7bc0de8400d8139a6b3616e55246d0a88c135",
+    "000b6580": "a5300939e2885c54b602d622f1568762a00ac0b2ba895433ade5f3ee482dba80",
+    "000b6584": "7cfb08db70d0163a0f038bdcca7eadc67382f1dc471ea5c5aac489e3d2565c44",
+    "000b789c": "ae0bd62b38086910f7044e07a806cab9cfa16028cfdf1fcbe309ac8d15d88a88",
+    "000b78a0": "69d93f7539d8e4ec77bf1ae0b60228c16e996cb372c2baa1682542332922785f",
+    "000b7988": "ee8521d6cd67274b1ae3ccab36c6346c4bc5ce421ca4eb84c1d36717281140b1",
+    "000b798c": "d81aaa8c02556a310f5b6a9dd20bbe76611c181c4bf3c5a7de2509c04ba84b07",
+    "000b7998": "b7bde43972d8c50f47ee9ce1cbf9a4a833ca38375aa24c1a3759de7350bbd960",
+    "000b8bdc": "1465117725b22ade595814462ffd7ee92fc84edee5684981b800658c9b7f10a2",
+    "000b8be0": "3dc05ca373781ea0cfe2435780e2279d168c35a0d3610d2c9ad9d2d676fd5f2b",
+    "000bb834": "59513db9e11903322d596a29c173fc0ed89aa75206f3011a920112aa30218ce8"
+  },
+  "instructions_to_reviewer": "Review exact original ELF, ARM/Thumb return normal-state scope, exceptions excluded, address and each contract fingerprint. Approve this PR only if all requested contracts are independently accepted."
+}
