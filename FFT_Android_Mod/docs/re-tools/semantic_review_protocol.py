@@ -16,6 +16,7 @@ import semantic_evidence
 import semantic_bxlr_contract_pilot as bxlr
 
 PROTOCOL = "independent_github_review_request_v1"
+MAX_REVIEW_ADDRESSES = 303  # Available SHA-bound BX LR one-instruction contracts
 REVIEW_PATH = "FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_REVIEW_REQUEST.json"
 # A prior request was merged without an APPROVED review. Every new review round
 # adds a fresh, immutable request file; do not rewrite the already merged one.
@@ -60,8 +61,8 @@ def fingerprint(address, record):
 
 
 def make_request(binary, inventory, ledger_path, limit=5):
-    if type(limit) is not int or not 1 <= limit <= 20:
-        raise ValueError("review request limit must be between 1 and 20")
+    if type(limit) is not int or not 1 <= limit <= MAX_REVIEW_ADDRESSES:
+        raise ValueError("review request limit must be between 1 and 303")
     binary = Path(binary)
     digest = hashlib.sha256(binary.read_bytes()).hexdigest()
     records = json.loads(Path(ledger_path).read_text(encoding="utf-8"))
@@ -140,7 +141,7 @@ def verify_request(binary, inventory, ledger_path, request_path):
         raise ValueError("invalid original ELF review request")
     fingerprints = request["certificate_fingerprints"]
     if (not isinstance(fingerprints, dict)
-            or not 1 <= len(fingerprints) <= 20):
+            or not 1 <= len(fingerprints) <= MAX_REVIEW_ADDRESSES):
         raise ValueError("invalid reviewed address set")
     records = json.loads(ledger_path.read_text(encoding="utf-8"))
     rows = semantic_coverage.ledger(inventory, digest, records)
@@ -183,7 +184,7 @@ def main():
     p.add_argument("--output", type=Path)
     p.add_argument("--verify-request", type=Path)
     p.add_argument("--verify-all", action="store_true")
-    p.add_argument("--limit", type=int, default=5)
+    p.add_argument("--limit", type=int, default=100)
     args = p.parse_args()
     if args.verify_all:
         if args.output is not None or args.verify_request is not None:
