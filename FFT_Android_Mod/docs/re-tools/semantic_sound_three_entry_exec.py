@@ -41,6 +41,7 @@ WORDS = {
 
 # Traces include the final address observed at the code hook,
 # BEFORE its first instruction is executed.
+DESTINATIONS = (0x2B2CF8, 0x2B2448, 0x2B2814)
 PATHS = {
     "sound_request": (0x26B374, (0x26B374, 0x2168E0, 0x271314, 0x2B2CF8), False),
     "relay_f4": (0x2168F4, (0x2168F4, 0x271318, 0x2B2448), False),
@@ -52,14 +53,16 @@ def original_words(binary):
     if hashlib.sha256(Path(binary).read_bytes()).hexdigest() != ELF_SHA256:
         raise ValueError("Original ELF identity mismatch")
     sites = {address: semantic_evidence.read_function(binary, address, 4)
-             for address in WORDS}
+             for address in tuple(WORDS) + DESTINATIONS}
     validate(sites)
     return sites
 
 
 def validate(sites):
-    if set(sites) != set(WORDS):
-        raise ValueError("Missing or unexpected ARM sound entry words")
+    if set(sites) != (set(WORDS) | set(DESTINATIONS)):
+        raise ValueError("Missing or unexpected ARM sound entry/destination words")
+    if any(len(sites[address]) != 4 for address in DESTINATIONS):
+        raise ValueError("Truncated original ARM sound destination opcode")
     md = Cs(CS_ARCH_ARM, CS_MODE_ARM)
     for address, (expected_hex, expected_name, expected_ops) in WORDS.items():
         raw = sites[address]
@@ -97,8 +100,7 @@ def execute(sites, mode, r0, cpsr):
         uc.mem_map(address, PAGE_SIZE, UC_PROT_ALL)
     for address, raw in sites.items():
         uc.mem_write(address, raw)
-    # Original destination opcode may be mapped, but is never run.
-    uc.mem_write(destination, bytes.fromhex("0000a0e1"))
+    # Destination words are original ELF bytes but code hook stops before executing.
     uc.mem_write(DATA, CANARY)
     uc.reg_write(UC_ARM_REG_CPSR, cpsr)
     for reg, value in regs.items():
