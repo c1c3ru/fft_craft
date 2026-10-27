@@ -1275,7 +1275,7 @@
     ]
   },
   "000bbb10": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CSOUND_IF_SL::SetTrans(int, float, float, float)",
@@ -1310,16 +1310,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000bcbf0": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CSOUND_LOADER::FrameMove(int, float)",
@@ -1354,16 +1361,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000bd964": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CFRAMERATE::~CFRAMERATE()",
@@ -1398,16 +1412,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000bdb6c": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CSTEP::~CSTEP()",
@@ -1442,16 +1463,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000c4418": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "Adisp_floateventwindow()",
@@ -1486,16 +1514,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000c4494": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "Aitemmenu_call(unsigned long*, unsigned long, int)",
@@ -1530,16 +1565,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000c4498": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "attackdebugfunc()",
@@ -1574,16 +1616,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000cbd50": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "SetTrapNameWindowParam(int, short, int)",
@@ -1618,16 +1667,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000cbd54": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "TrapNameWindowManager()",
@@ -1662,16 +1718,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000cbd58": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CreateTrapNameWindowManagerTask()",
@@ -1706,16 +1769,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000cbd5c": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "deleteEndModeWindow()",
@@ -1750,16 +1820,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000cbd60": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "SetTrapNameWindowColor(int)",
@@ -1794,16 +1871,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000cbd64": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CreateTrapCancelCommandWindow()",
@@ -1838,16 +1922,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000cbd68": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "DeleteTrapCancelCommandWindow()",
@@ -1882,16 +1973,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000cbd74": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CreateNetStayWindow()",
@@ -1926,16 +2024,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000d0dc8": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "Ddisp_floateventwindow()",
@@ -1970,16 +2075,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000d1408": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "Ditemmenu_call(unsigned long*, unsigned long, int)",
@@ -2014,16 +2126,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000d6f80": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "iOS_chkallocatewindowinit()",
@@ -2058,16 +2177,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000d7384": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "disposewindowbytask(int)",
@@ -2102,16 +2228,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000d8970": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "dispemptywindow()",
@@ -2146,16 +2279,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000d8974": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "send_statuschrno(int)",
@@ -2190,16 +2330,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000d8bfc": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "initstatuscphase()",
@@ -2234,16 +2381,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000d9a08": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "hook_disp_requirement()",
@@ -2278,16 +2432,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000d9a0c": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "hook_trophics()",
@@ -2322,16 +2483,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000d9a10": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "seekpcfile(char*, char*, int, int)",
@@ -2366,16 +2534,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000d9ac0": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "loadonefile(char*, char*)",
@@ -2410,16 +2585,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000d9b0c": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "request_tooltest()",
@@ -2454,16 +2636,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000da334": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "request_effectmes(int, int, int, int)",
@@ -2498,16 +2687,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000da338": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "request_warnmes(int, int, int, int)",
@@ -2542,16 +2738,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000e62c4": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "DEBUGTRACE_hook_connect_camera()",
@@ -2586,16 +2789,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000e62c8": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "DEBUG_CHK_ROLL(SCROLLRECORD*)",
@@ -2630,16 +2840,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000e7f0c": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "dmp_tuto(unsigned char*, int)",
@@ -2674,16 +2891,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "000feaa4": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "WiOS_chkallocatewindowinit()",
@@ -2718,16 +2942,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "00100640": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "Wdispemptywindow()",
@@ -2762,16 +2993,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "00100644": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "Wsend_statuschrno(int)",
@@ -2806,16 +3044,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "00100840": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "Winitstatuscphase()",
@@ -2850,16 +3095,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "00101908": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "Whook_disp_requirement()",
@@ -2894,16 +3146,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "0010190c": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "Whook_trophics()",
@@ -2938,16 +3197,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "00101910": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "Wseekpcfile(char*, char*, int, int)",
@@ -2982,16 +3248,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "001019bc": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "Wloadonefile(char*, char*)",
@@ -3026,16 +3299,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "00101a0c": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "Wrequest_tooltest()",
@@ -3070,16 +3350,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "00101f9c": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "Wrequest_effectmes(int, int, int, int)",
@@ -3114,16 +3401,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "00101fa0": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "Wrequest_warnmes(int, int, int, int)",
@@ -3158,16 +3452,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "00102128": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "Wevent_init_light()",
@@ -3202,16 +3503,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "00121718": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "Edisp_floateventwindow()",
@@ -3246,16 +3554,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "00123c40": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "Eitemmenu_call(unsigned long*, unsigned long, int)",
@@ -3290,16 +3605,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "0012b108": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "disp_floateventwindow()",
@@ -3334,16 +3656,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "0014b9f8": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "Cdisp_floateventwindow()",
@@ -3378,16 +3707,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "0014bec4": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "Citemmenu_call(unsigned long*, unsigned long, int)",
@@ -3422,16 +3758,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "0014e0e8": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "statushookfunc()",
@@ -3466,16 +3809,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "0014e9a0": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "sol_draw(int, int, int)",
@@ -3510,16 +3860,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "00155708": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "story_faceload()",
@@ -3554,16 +3911,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "0015f044": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "iOSUnitListLRCurSet(unsigned char*, unsigned short*, int, int, int, int)",
@@ -3598,16 +3962,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "00161d98": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "tDebugBreakCheck(int)",
@@ -3642,16 +4013,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "00161d9c": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "tDebugBreakTime(int)",
@@ -3686,16 +4064,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "00161da0": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "tDebugPointerErr()",
@@ -3730,16 +4115,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "0016f840": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "cCardInit()",
@@ -3774,16 +4166,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "001836cc": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "iOS_addPrim_window(tagPOLY_FT4*)",
@@ -3818,16 +4217,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "0018372c": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "CardInit()",
@@ -3862,16 +4268,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "0019e7b4": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "shop_dummyfunc()",
@@ -3906,16 +4319,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "001add64": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "unit_dummyfunc()",
@@ -3950,16 +4370,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "001d114c": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "set_monomane_direction(BWORK*, unsigned char)",
@@ -3994,16 +4421,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "001dca54": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "callSW(int)",
@@ -4038,16 +4472,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "001e7368": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "pspNetTrapSpread(BWORK*, int)",
@@ -4082,16 +4523,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "00202f1c": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "pspNetOutPutAnimationData()",
@@ -4126,16 +4574,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "0020c258": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "fftDrawSyncCallback()",
@@ -4170,16 +4625,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "0020c25c": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "fftCdReadyCallback()",
@@ -4214,16 +4676,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "0020c260": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "fftCdReadCallback()",
@@ -4258,16 +4727,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "0020c5cc": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "myPollhost()",
@@ -4302,16 +4778,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "0020c5d0": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "system_error(int, int)",
@@ -4346,16 +4829,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "0020c5d4": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "system_warning(int, int)",
@@ -4390,16 +4880,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "0020f4f8": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "getCharPrimList(short, Point*, unsigned long*)",
@@ -4434,16 +4931,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "0020f904": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "iOS_dispAnimetion()",
@@ -4478,16 +4982,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "0020fb14": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "initializeDebugFont()",
@@ -4522,16 +5033,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "00215d5c": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "PadStop",
@@ -4566,16 +5084,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "002168fc": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "recallEnvEffect()",
@@ -4610,16 +5135,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "002169cc": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "pauseEnvEffect()",
@@ -4654,16 +5186,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "0021ebb0": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "error(char, long)",
@@ -4698,16 +5237,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "00225310": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "iOS_CheckPEffect(char const*, int)",
@@ -4742,16 +5288,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "00225a60": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "objectLG2(_EffectTCB*, _Object*)",
@@ -4786,16 +5339,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "00225a64": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "dmyFnc2(_EffectTCB*, _Object*)",
@@ -4830,16 +5390,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "0022a614": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "DumpMemory(int, void*)",
@@ -4874,16 +5441,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "002419cc": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "fftCdLoop(CDREC*)",
@@ -4918,16 +5492,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "002419d0": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "fftCdCancel(CDREC*)",
@@ -4962,16 +5543,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "002524cc": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "ctlworkingst_deactive(CTLINFO*)",
@@ -5006,16 +5594,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "00252b68": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "ctlworkend_active(CTLINFO*)",
@@ -5050,16 +5645,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "00252b6c": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "ctlworkend_deactive(CTLINFO*)",
@@ -5094,16 +5696,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "00258ac4": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "evt_skip0()",
@@ -5138,16 +5747,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "0025f354": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "wld_btlsect_seek()",
@@ -5182,16 +5798,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "00267f38": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "wldrute_init()",
@@ -5226,16 +5849,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "0026c058": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "iOS_debugDispTownCircle(int, int)",
@@ -5270,16 +5900,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "0026ff2c": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "effectdmy()",
@@ -5314,16 +5951,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "0027129c": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "Ssd_Quit()",
@@ -5358,16 +6002,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "002712a0": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "Ssd_Enable()",
@@ -5402,16 +6053,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "002712a4": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "Ssd_Disable()",
@@ -5446,16 +6104,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "002712b0": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "Ssd_DisposeNormalWave()",
@@ -5490,16 +6155,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "002712b4": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "Ssd_DisposeWaveData(SsdWaveSetRec*)",
@@ -5534,16 +6206,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "002712c0": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "Ssd_AddEffectData(void*)",
@@ -5578,16 +6257,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "002712c4": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "Ssd_DisposeEffectData(void*)",
@@ -5622,16 +6308,23 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   },
   "002712c8": {
-    "status": "partial",
+    "status": "certified",
     "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
     "size": 4,
     "name": "Ssd_AllStop()",
@@ -5666,12 +6359,19 @@
     ],
     "machine_samples_passed": 32,
     "evidence_ci_run": "40546798622",
-    "review_stage": "independent_human_review_pending",
-    "reviewer": null,
+    "review_stage": "independent_human_review_approved",
+    "reviewer": {
+      "type": "human",
+      "name": "deppimaracanau",
+      "github_login": "deppimaracanau",
+      "decision": "approved",
+      "approval_pr": "https://github.com/c1c3ru/fft_craft/pull/350",
+      "review_protocol": "independent_github_review_request_v1",
+      "approved_at": "2026-10-27",
+      "notes": "Revisão APPROVED real #5671817979 por deppimaracanau, em 2026-10-27T17:47:49Z no commit d8e30a7e9b8818132a7dc230cc58a6de012affa6. Escopo de uma instrucao A32 BX LR em retornos normais ARM/Thumb."
+    },
     "unverified": [
-      "independent technical review pending",
-      "GitHub APPROVED review of immutable SHA256 request pending",
-      "normal-state exceptions outside scope"
+      "unmodeled exceptional behavior outside normal valid ARM/Thumb returns"
     ]
   }
 }
