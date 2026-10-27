@@ -8,11 +8,11 @@ ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 |---|---:|
 | Entradas/símbolos no inventário | 6,455 |
 | Endereços de execução únicos | 6,329 |
-| Semântica integral certificada por registro | 125 |
-| Evidência parcial registrada | 178 |
+| Semântica integral certificada por registro | 303 |
+| Evidência parcial registrada | 0 |
 | Sem certificação registrada | 6,026 |
-| Progresso certificado por endereço | 1.98% |
-| Progresso certificado por bytes | 0.03% |
+| Progresso certificado por endereço | 4.79% |
+| Progresso certificado por bytes | 0.07% |
 
 Contagens medem **certificados registrados no ledger**, não a ausência de conhecimento em relatórios anteriores.
 Um certificado revisado e testes diferenciais são necessários antes de afirmar equivalência. O esquema não prova completude por si.
@@ -5949,164 +5949,23 @@ Um certificado revisado e testes diferenciais são necessários antes de afirmar
 | `0025ecd4` | wldscr_snapshot(int) | 4 | unknown |
 | `0026b374` | sound_request(int) | 4 | unknown |
 | `0026c278` | iOS_getMasaCdbOt_graphics_sdnovel(int) | 4 | unknown |
-| `002712cc` | Ssd_SetStereo(int) | 4 | partial |
-| `002712d8` | Ssd_SetAttenuator(short) | 4 | partial |
-| `002712dc` | Ssd_SetReverbParam(long, short, long, long) | 4 | partial |
-| `002712e0` | Ssd_SetSpuVolume(short, short) | 4 | partial |
-| `002712e4` | Ssd_SetCDVolume(short, short) | 4 | partial |
-| `002712e8` | Ssd_SetCDMixingReverb(int, int) | 4 | partial |
-| `002712ec` | Ssd_CheckWideMode() | 4 | partial |
-| `002712f0` | Ssd_SetVolumeRec(short, SpuVolume*, char) | 4 | partial |
-| `002712f4` | Ssd_ErrorProc(int) | 4 | partial |
-| `002712f8` | Ssd_AddVagPackData(void*) | 4 | partial |
-| `00271304` | Ssd_DisposeMusic(SsdSeqRec*) | 4 | partial |
-| `00271308` | Ssd_LinkMusicData(SsdSeqRec*, void*) | 4 | partial |
-| `0027130c` | Ssd_StartMusic(SsdSeqRec*, short, short) | 4 | partial |
-| `00271310` | Ssd_StopMusic(SsdSeqRec*) | 4 | partial |
 | `00271314` | Ssd_PlaySysEffect(long) | 4 | unknown |
 | `00271318` | Ssd_PlayEnvEffect(long) | 4 | unknown |
-| `00271340` | Ssd_PlayEffects03(long, long, long, long) | 4 | partial |
 | `00271344` | Ssd_StopAllEffect() | 4 | unknown |
-| `00271348` | Ssd_StopEffectSet(void*) | 4 | partial |
-| `00271410` | Ssd_InitEffectTrackRecWithStart(short, long, short, short) | 4 | partial |
-| `00271414` | Ssd_SetSeqMasterVolume(SsdSeqRec*, short, short) | 4 | partial |
-| `00271418` | Ssd_SetSeqMasterTempo(SsdSeqRec*, short, short) | 4 | partial |
-| `0027141c` | Ssd_SetSeqMasterPitch(SsdSeqRec*, short, short) | 4 | partial |
-| `00271420` | Ssd_SetSeqMasterPanpot(SsdSeqRec*, short, short) | 4 | partial |
 | `0027b398` | numa_fileAllocateCD(unsigned long, unsigned long) | 4 | unknown |
 | `0027b39c` | numa_fileReadCD(unsigned long, unsigned long, void*) | 4 | unknown |
 | `0027b3a0` | numa_fileReadRequest(unsigned int, unsigned int, char*) | 4 | unknown |
-| `0027b510` | dispCmdKind() | 4 | partial |
-| `0027b5c8` | rprintfr(RECT16*, int, int, int) | 4 | partial |
-| `0027b670` | iOS_DEBUG_multiwindow_break_hook(unsigned long*) | 4 | partial |
-| `0027b674` | iOS_DEBUG_multiwindow_break_hook2(unsigned long*, int) | 4 | partial |
-| `0027b678` | iOS_DEBUG_multiwindow_keyright_hook() | 4 | partial |
-| `0027fc28` | chk_ucResumeData2(int) | 4 | partial |
-| `0027fc2c` | chk_ucResumeData(unsigned char*, int) | 4 | partial |
 | `0027fc78` | initSaveFFT(char*, char*, bool) | 4 | unknown |
-| `0027fc7c` | cSaveFFT::~cSaveFFT() | 4 | partial |
-| `002805e4` | iOS_hookHelp(int*) | 4 | partial |
 | `00280610` | iOS_soundDirect(int) | 4 | unknown |
-| `00280614` | iOS_hook_disp_option() | 4 | partial |
-| `00280618` | iOS_hook_disp_optionmain() | 4 | partial |
-| `0028061c` | iOS_hook_common(char const*, int) | 4 | partial |
-| `00280670` | hook_write_eventflag(int, int) | 4 | partial |
-| `00280674` | hook_calcformula(int, int) | 4 | partial |
-| `00280678` | hook_Debug(char const*) | 4 | partial |
-| `0028067c` | hook_Debug2(char const*) | 4 | partial |
-| `00280680` | hook_NextEventSet() | 4 | partial |
-| `00280684` | hook_musiclod() | 4 | partial |
-| `002806b0` | iOS_hook_worldhelpmenu() | 4 | partial |
-| `002806b4` | iOS_hook_gill() | 4 | partial |
-| `002806b8` | iOS_hook_movetopanel() | 4 | partial |
-| `002806bc` | hook_read_eventflag(int*) | 4 | partial |
-| `002806c0` | hook_allocate_texture() | 4 | partial |
-| `002806c4` | hook_opt() | 4 | partial |
-| `002806c8` | hook_chk_speedup(int) | 4 | partial |
-| `00280708` | hook_pad() | 4 | partial |
-| `0028070c` | hook_pad2() | 4 | partial |
-| `00280710` | hook_drive_connect_chrmove() | 4 | partial |
-| `00280714` | hook_drive_connect_chrmove2(int) | 4 | partial |
-| `002807f4` | hook_cliptest() | 4 | partial |
-| `002807f8` | chk_RefLine(int) | 4 | partial |
-| `002807fc` | hook_drive_chr(int) | 4 | partial |
-| `00280800` | hook_fix_bugno_931(int) | 4 | partial |
-| `00280804` | hook_win_tail() | 4 | partial |
-| `00280808` | hook_allSkipTest() | 4 | partial |
-| `00280854` | iOS_hook_line() | 4 | partial |
-| `002809c8` | iOS_hook_num() | 4 | partial |
-| `002815d8` | hook_num(int, int, int) | 4 | partial |
-| `002815e4` | chk_test_addcolor(unsigned int*) | 4 | partial |
-| `00281640` | hook_disp_plateorspell(int*) | 4 | partial |
-| `00281644` | hook_code_soundeffect(int) | 4 | partial |
-| `00281648` | hook_1284(char*, int) | 4 | partial |
-| `00286124` | SetSpadStack(unsigned long) | 4 | partial |
-| `00286128` | ResetSpadStack() | 4 | partial |
-| `00286744` | rsetmovie_title_flg__Fv() | 4 | partial |
-| `00286748` | setmovie_title_flg__Fv() | 4 | partial |
 | `002869f0` | _pspNetRand(char const*, int) | 4 | unknown |
-| `00286a30` | pspNetSetPadPushTiming(unsigned long) | 4 | partial |
-| `00286a94` | timer_print_screen() | 4 | partial |
-| `00286a98` | val_letter(int, int, int) | 4 | partial |
-| `00286a9c` | set_nettimer_flag(int, int) | 4 | partial |
-| `00286ae8` | net_control_ex(void*, void*, int) | 4 | partial |
-| `00286e88` | pspNetAgreementInterruptInit() | 4 | partial |
-| `00286e8c` | pspNetCheckRivalAction() | 4 | partial |
-| `00286e90` | rivalCameraWorkProcs() | 4 | partial |
-| `00286ec4` | check_rival_value(int) | 4 | partial |
-| `00287084` | pspNetCheckTrapOnlyStatus(int) | 4 | partial |
-| `00287090` | pspNetTrapDeliveryInit(char) | 4 | partial |
-| `00287584` | load_iconpackdata() | 4 | partial |
-| `002875a0` | draw_maru(unsigned long*) | 4 | partial |
-| `002875a4` | draw_batu(unsigned long*) | 4 | partial |
-| `00287a14` | Red_Blue_Draw(int) | 4 | partial |
-| `00288498` | Draw_TuusinIcon(int, int, unsigned long*) | 4 | partial |
-| `0028849c` | Draw_Trap_CancelCommandList(int*, int, int, unsigned long*) | 4 | partial |
-| `002884c8` | NetBattleJudge() | 4 | partial |
-| `002884fc` | setRewardLv(int) | 4 | partial |
-| `00288508` | CalcRewardLv() | 4 | partial |
-| `0028850c` | CalcMissionPayPoint(int) | 4 | partial |
-| `00288510` | Final_CalcMissionPayPoint() | 4 | partial |
-| `0028856c` | init_AnimList() | 4 | partial |
 | `00289968` | pspSaveUpdate() | 4 | unknown |
 | `0028996c` | pspSaveExit() | 4 | unknown |
-| `0028b460` | SpuInit | 4 | partial |
-| `0028b464` | SpuInitHot | 4 | partial |
-| `0028b468` | SpuQuit | 4 | partial |
-| `0028b46c` | SetMem | 4 | partial |
-| `0028b490` | StSetRing | 4 | partial |
-| `0028b494` | StClearRing | 4 | partial |
-| `0028b498` | StUnSetRing | 4 | partial |
-| `0028b49c` | StSetStream | 4 | partial |
-| `0028b4a0` | StSetEmulate | 4 | partial |
-| `0028b4c4` | StRingStatus | 4 | partial |
-| `0028b4c8` | StSetMask | 4 | partial |
-| `0028b4cc` | StCdInterrupt | 4 | partial |
-| `0028b4e0` | DecDCTReset | 4 | partial |
-| `0028b4ec` | DecDCTout | 4 | partial |
-| `0028b508` | pspMovieEnd__Fv() | 4 | partial |
-| `0028b50c` | pspMovieInit__FiPCciiii(int, char*, int, int, int, int) | 4 | partial |
-| `0028b510` | pspMoviePlay__Fv() | 4 | partial |
-| `0028b514` | pspMovieStart__Fv() | 4 | partial |
-| `0028b518` | setMoviePlayFlg__Fi(int) | 4 | partial |
-| `0028b51c` | setMovieSkipFlg__Fi(int) | 4 | partial |
-| `0028b530` | setToolBgmFlg__Fi(int) | 4 | partial |
-| `0028b53c` | setBgmData__Fii(int, int) | 4 | partial |
-| `0028b540` | CdFlush | 4 | partial |
-| `0028b60c` | CdReadBreak | 4 | partial |
-| `0028c200` | CFFT_STATE::~CFFT_STATE() | 4 | partial |
-| `0028c7e8` | CAUTOSAVE::~CAUTOSAVE() | 4 | partial |
 | `0028ce54` | asmmemcpy(void*, void const*, unsigned int) | 4 | unknown |
-| `0028cea8` | KanjiFntClose | 4 | partial |
-| `0028cedc` | CatPrim | 4 | partial |
-| `0028cee0` | DrawOTagIO | 4 | partial |
-| `0028cee4` | DrawOTagEnv | 4 | partial |
-| `0028cee8` | DumpClut | 4 | partial |
-| `0028ceec` | DumpDispEnv | 4 | partial |
-| `0028cef0` | DumpDrawEnv | 4 | partial |
-| `0028cef4` | DumpOTag | 4 | partial |
-| `0028cef8` | DumpTPage | 4 | partial |
-| `0028cefc` | SetDumpFnt | 4 | partial |
-| `0028cf00` | TermPrim | 4 | partial |
-| `0028cf0c` | ContinueDraw | 4 | partial |
-| `0028cf28` | GetDrawMode | 4 | partial |
-| `0028cf2c` | GetTexWindow | 4 | partial |
-| `0028cf30` | GetDrawArea | 4 | partial |
-| `0028cf34` | GetDrawOffset | 4 | partial |
-| `0028cf38` | GetDrawEnv2 | 4 | partial |
-| `0028de70` | _bu_init | 4 | partial |
 | `0028e464` | CdControlB | 4 | unknown |
 | `0028e5c0` | VSync | 4 | unknown |
-| `00290e90` | FntLoad | 4 | partial |
 | `0029266c` | xpLibgpuDrawUserOffScreen | 4 | unknown |
-| `00292708` | xpLibgpuDrawCallBackSet | 4 | partial |
 | `00294ed4` | xpLibgpuVramAddrGet | 4 | unknown |
-| `0029551c` | xpLibgpuBuffersSet | 4 | partial |
-| `00295568` | xpLibgpuMoveImage | 4 | partial |
-| `0029b3e8` | iOS_chkclutaddr() | 4 | partial |
-| `0029b3ec` | GsInit3D | 4 | partial |
 | `0029b428` | GsGetActiveBuff | 4 | unknown |
-| `0029da84` | _gte_nop() | 4 | partial |
 | `0029dd14` | _gte_rt_b() | 4 | unknown |
 | `0029dedc` | _gte_rtps_b() | 4 | unknown |
 | `0029df20` | _gte_rtpt_b() | 4 | unknown |
@@ -6167,61 +6026,24 @@ Um certificado revisado e testes diferenciais são necessários antes de afirmar
 | `0029fc74` | _gte_nclip_b() | 4 | unknown |
 | `0029fcb4` | _gte_avsz3_b() | 4 | unknown |
 | `0029fcf8` | _gte_avsz4_b() | 4 | unknown |
-| `0029fcfc` | _gte_op12() | 4 | partial |
 | `0029fd00` | _gte_op12_b() | 4 | unknown |
-| `0029fd04` | _gte_op0() | 4 | partial |
 | `0029fd08` | _gte_op0_b() | 4 | unknown |
-| `0029fd0c` | _gte_gpf12() | 4 | partial |
 | `0029fd10` | _gte_gpf12_b() | 4 | unknown |
-| `0029fd14` | _gte_gpf0() | 4 | partial |
 | `0029fd18` | _gte_gpf0_b() | 4 | unknown |
-| `0029fd1c` | _gte_gpl12() | 4 | partial |
 | `0029fd20` | _gte_gpl12_b() | 4 | unknown |
-| `0029fd24` | _gte_gpl0() | 4 | partial |
 | `0029fd28` | _gte_gpl0_b() | 4 | unknown |
-| `0029fd2c` | _gte_mvmva_core(long) | 4 | partial |
 | `0029fd30` | _gte_mvmva_core_b(long) | 4 | unknown |
 | `0029ff94` | SquareRoot12 | 4 | unknown |
 | `002a010c` | RotMatrixC | 4 | unknown |
 | `002a0818` | SetRotMatrix | 4 | unknown |
 | `002a0d10` | SetTransMatrix | 4 | unknown |
-| `002a1024` | OuterProduct12 | 4 | partial |
 | `002a1038` | CompMatrixLV | 4 | unknown |
 | `002a1268` | TransRotPers | 4 | unknown |
 | `002a1438` | SetFarColor | 4 | unknown |
 | `002a143c` | SetBackColor | 4 | unknown |
-| `002a2ff4` | InitHeap(unsigned long*, unsigned long) | 4 | partial |
 | `002a3110` | xpMallocSizeGet | 4 | unknown |
 | `002a311c` | xpGetHeap | 4 | unknown |
 | `002a3134` | xpMoveHeap | 4 | unknown |
 | `002a379c` | pspSaveBase::ErrorMsgStrGet(pspSaveBase::PspSaveErrorMsgType) | 4 | unknown |
-| `002ab710` | sceGuClearColor | 4 | partial |
-| `002ab714` | sceGuClear | 4 | partial |
-| `002ab888` | sceGuAlphaFunc | 4 | partial |
-| `002ab900` | sceGuColorFunc | 4 | partial |
-| `002ab904` | sceGuDisplay | 4 | partial |
-| `002abc88` | sceGuShadeModel | 4 | partial |
-| `002abd1c` | sceGuTexFunc | 4 | partial |
-| `002acb28` | sceGuViewport | 4 | partial |
-| `002b0420` | CAPP_INFO::~CAPP_INFO() | 4 | partial |
 | `002b04bc` | CAPP_INFO::IsEnableVibration() | 4 | unknown |
-| `002b06b0` | CAPP_INFO::Get() | 4 | partial |
-| `002b142c` | SettingsBundle_Uninit() | 4 | partial |
-| `002b1454` | SettingsBundle_OnDefaultsChanged() | 4 | partial |
-| `002b1f38` | NowLoading_FrameRender() | 4 | partial |
-| `002b3440` | Achievement_Unlock(int) | 4 | partial |
-| `002b36b8` | Boot_Uninit() | 4 | partial |
-| `002b3758` | Error_Uninit() | 4 | partial |
-| `002b5590` | Link_Suspend() | 4 | partial |
-| `002b5594` | Link_Resume() | 4 | partial |
-| `002b5eac` | Logo_Suspend() | 4 | partial |
-| `002b5eb0` | Logo_Resume() | 4 | partial |
-| `002b6bcc` | Main_Resume() | 4 | partial |
 | `002bf1d8` | iOS_setFaceData(int, int, int, int) | 4 | unknown |
-| `002bf1f8` | iOS_hook_request_status(int, int) | 4 | partial |
-| `002c54ac` | Movie_Uninit() | 4 | partial |
-| `002c6ef0` | Settings_Suspend() | 4 | partial |
-| `002c6ef4` | Settings_Resume() | 4 | partial |
-| `002c8abc` | SettingsWnd_Suspend() | 4 | partial |
-| `002c8ac0` | SettingsWnd_Resume() | 4 | partial |
-| `002ccf94` | _Unwind_Complete | 4 | partial |

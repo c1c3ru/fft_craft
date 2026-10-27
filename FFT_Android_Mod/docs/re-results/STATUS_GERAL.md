@@ -16,7 +16,7 @@
 | Checkpoints pendentes de criação | 0 | Não incluem funções cobertas apenas pelo histórico CSV |
 | Metas de núcleo em revisão | 34 | De 2,345 checkpoints do núcleo |
 | v3: checkpoints / aprovados / revisão | 1,258 / 1,208 / 50 | Subconjunto já analisado pelas regras v3 |
-| Equivalência semântica integral registrada | **125** | Certificados revisáveis vinculados ao ELF; microexecuções não são certificados |
+| Equivalência semântica integral registrada | **303** | Certificados revisáveis vinculados ao ELF; microexecuções não são certificados |
 
 O histórico CSV contém **5,932** registros de análise anterior, que podem se sobrepor aos checkpoints. **Não somamos esses conjuntos para criar um percentual global fictício.**
 
@@ -53,22 +53,22 @@ Evidências geradas e verificadas nesta execução do pipeline.
 |---|---:|
 | Entradas do inventário | 6,455 |
 | Endereços únicos | 6,329 |
-| Certificados semânticos registrados | 125 |
-| Cobertura semântica por endereço | 1.98% |
-| Cobertura semântica por bytes únicos | 0.03% |
-| Registros parciais no ledger | 178 |
-| Endereços com evidência parcial no lote de referência | 184 |
+| Certificados semânticos registrados | 303 |
+| Cobertura semântica por endereço | 4.79% |
+| Cobertura semântica por bytes únicos | 0.07% |
+| Registros parciais no ledger | 0 |
+| Endereços com evidência parcial no lote de referência | 11 |
 | Documentos semânticos históricos do mesmo ELF | 25 |
 | Documentos históricos com testes declarados | 13 |
 | Candidatas BX LR verificadas, pendentes de revisão | 303 |
-| Contratos BX LR preparados para revisão humana (não certificados) | 100 |
+| Contratos BX LR preparados para revisão humana (não certificados) | 0 |
 | Contratos locais BX LR com retorno ARM/Thumb verificado (revisão pendente) | 303 |
 | Execuções ARM/Thumb adicionais dos contratos locais | 9,696 |
 | Relatórios estáticos deste lote | 5 |
 | Relatórios Unicorn deste lote | 309 |
 | Microexecuções Unicorn verificadas neste lote (sem duplicar suítes) | 1,380 |
 | Endereços distribuídos aos workers neste lote | 5 |
-| Endereços aguardando certificação | 6,204 |
+| Endereços aguardando certificação | 6,026 |
 
 ### Próximos contratos ainda não certificados (maiores primeiro)
 
@@ -115,11 +115,11 @@ Estas duas prioridades são **curadas no gerador**; quando um limite for resolvi
 
 ## Pull requests recentes
 
+- [PR #356 — feat(re): certificar últimas 178 funções ARM BX LR com aprovação do PR #354](https://github.com/c1c3ru/fft_craft/pull/356)
+- [PR #354 — review(re): aprovação independente das 178 folhas A32 BX LR restantes (R5)](https://github.com/c1c3ru/fft_craft/pull/354)
+- [PR #355 — chore(re): automated structural batch 40555207364](https://github.com/c1c3ru/fft_craft/pull/355)
 - [PR #352 — feat(re): preparar últimas 178 folhas ARM BX LR para revisão e certificação](https://github.com/c1c3ru/fft_craft/pull/352)
 - [PR #353 — chore(re): automated structural batch 40554628588](https://github.com/c1c3ru/fft_craft/pull/353)
-- [PR #351 — feat(re): certificar 100 contratos A32 BX LR com APPROVED real do PR #350](https://github.com/c1c3ru/fft_craft/pull/351)
-- [PR #350 — review(re): APPROVED independente de 100 contratos semânticos ARM BX LR (R4)](https://github.com/c1c3ru/fft_craft/pull/350)
-- [PR #349 — chore(re): automated structural batch 40550839542](https://github.com/c1c3ru/fft_craft/pull/349)
 
 ## Atualização automática e fontes
 
