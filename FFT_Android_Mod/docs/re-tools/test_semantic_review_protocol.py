@@ -203,8 +203,11 @@ class SemanticReviewProtocolTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.build(0)
         with self.assertRaises(ValueError):
-            self.build(21)
+            self.build(304)
         self.assertEqual(len(self.build(1)["certificate_fingerprints"]), 1)
+        # The larger batch cap must not silently accept missing evidence.
+        with self.assertRaisesRegex(ValueError, "not enough"):
+            self.build(100)
 
 
 if __name__ == "__main__":
