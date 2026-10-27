@@ -26,6 +26,7 @@ O histórico CSV contém **5,932** registros de análise anterior, que podem se 
 
 Os relatórios abaixo apresentam **efeitos locais testados sob estados sintéticos** e seus limites. Testes passando não significam que a função inteira foi reconstruída:
 
+- [Lotes semânticos de 100/200 funções com revisão independente](SEMANTIC_BATCH_SCALING.md)
 - [Primeiro lote de cinco contratos BX LR preparados para revisão humana](SEMANTIC_BXLR_REVIEW_BATCH.md)
 - [Política de certificação: contrato integral, ELF, revisão independente e CI](SEMANTIC_CERTIFICATION_POLICY.md)
 - [Primeiros contratos locais BX LR com retornos ARM/Thumb verificados](SEMANTIC_BXLR_CONTRACT_PILOT.md)
@@ -55,12 +56,12 @@ Evidências geradas e verificadas nesta execução do pipeline.
 | Certificados semânticos registrados | 25 |
 | Cobertura semântica por endereço | 0.40% |
 | Cobertura semântica por bytes únicos | 0.01% |
-| Registros parciais no ledger | 0 |
+| Registros parciais no ledger | 100 |
 | Endereços com evidência parcial no lote de referência | 284 |
 | Documentos semânticos históricos do mesmo ELF | 25 |
 | Documentos históricos com testes declarados | 13 |
 | Candidatas BX LR verificadas, pendentes de revisão | 303 |
-| Contratos BX LR preparados para revisão humana (não certificados) | 5 |
+| Contratos BX LR preparados para revisão humana (não certificados) | 100 |
 | Contratos locais BX LR com retorno ARM/Thumb verificado (revisão pendente) | 303 |
 | Execuções ARM/Thumb adicionais dos contratos locais | 9,696 |
 | Relatórios estáticos deste lote | 5 |
@@ -114,11 +115,11 @@ Estas duas prioridades são **curadas no gerador**; quando um limite for resolvi
 
 ## Pull requests recentes
 
+- [PR #348 — feat(re): escalar verificação semântica para 100–303 contratos BX LR por rodada](https://github.com/c1c3ru/fft_craft/pull/348)
+- [PR #347 — chore(re): automated structural batch 40546798622](https://github.com/c1c3ru/fft_craft/pull/347)
 - [PR #346 — feat(re): certificar 20 contratos A32 BX LR aprovados no PR #344](https://github.com/c1c3ru/fft_craft/pull/346)
 - [PR #344 — review(re): aprovação independente do segundo lote de 20 contratos ARM BX LR (R3)](https://github.com/c1c3ru/fft_craft/pull/344)
 - [PR #345 — chore(re): automated structural batch 40543517314](https://github.com/c1c3ru/fft_craft/pull/345)
-- [PR #343 — feat(re): preparar 20 contratos ARM BX LR e escalar revisões independentes R3+](https://github.com/c1c3ru/fft_craft/pull/343)
-- [PR #342 — chore(re): automated structural batch 40477590319](https://github.com/c1c3ru/fft_craft/pull/342)
 
 ## Atualização automática e fontes
 
