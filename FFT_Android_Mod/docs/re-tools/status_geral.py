@@ -19,6 +19,8 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "docs/re-results"
 REPO = "c1c3ru/fft_craft"
 MILESTONES = (
+    ("SEMANTIC_SOUND_PLAYDEF_ENTRY.md",
+     "SysSE_PlayDef 0x2b2cf8: auditoria estática A32 de 128 bytes; nenhuma instrução executada"),
     ("SEMANTIC_SOUND_THREE_ENTRY_EXEC.md",
      "sound_request: 384 microexecucoes em tres entradas ARM ate destinos de funcao nao executados"),
     ("SEMANTIC_PIPELINE_RECOVERY.md",
