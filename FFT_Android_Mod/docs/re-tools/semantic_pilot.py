@@ -52,8 +52,8 @@ def main():
     p.add_argument("--output", type=Path, required=True)
     p.add_argument("--workers", type=int, default=5)
     args = p.parse_args()
-    if not 1 <= args.workers <= 16:
-        p.error("workers must be 1..16")
+    if not 1 <= args.workers <= 32:
+        p.error("workers must be 1..32 (manifest shards; execution threads capped at 16)")
     digest = hashlib.sha256(args.binary.read_bytes()).hexdigest()
     tasks = []
     for path in sorted(args.manifests.glob("semantic-worker-*.json")):
@@ -66,7 +66,10 @@ def main():
         raise ValueError("duplicate addresses across manifests")
     args.output.mkdir(parents=True, exist_ok=True)
     failures = []
-    with futures.ThreadPoolExecutor(max_workers=args.workers) as pool:
+    concurrency = min(args.workers, 16)
+    print(f"PILOT_MANIFEST_SHARDS={len(list(args.manifests.glob('semantic-worker-*.json')))}")
+    print(f"PILOT_CONCURRENT_THREADS={concurrency}")
+    with futures.ThreadPoolExecutor(max_workers=concurrency) as pool:
         running = {pool.submit(inspect_task, task, args.binary, digest): task for task in tasks}
         for future in futures.as_completed(running):
             task = running[future]
