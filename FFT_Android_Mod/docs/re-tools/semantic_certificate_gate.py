@@ -173,8 +173,8 @@ def verify_remote_review(record, address, provider=github_json):
         raise ValueError("declared approval date differs from GitHub")
     fingerprint = protocol.fingerprint(address, record)
     changed = [file for file in files if
-               file.get("filename") in protocol.REVIEW_PATHS and
-               isinstance(file.get("patch"), str)]
+               protocol.is_review_request_path(file.get("filename"))
+               and isinstance(file.get("patch"), str)]
     def includes_approved_fingerprint(patch):
         for line in patch.splitlines():
             if not line.startswith("+") or line.startswith("+++"):
