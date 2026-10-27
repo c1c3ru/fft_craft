@@ -162,6 +162,43 @@ class SemanticReviewProtocolTests(unittest.TestCase):
                 protocol.verify_request(self.elf, self.inventory, self.ledger,
                                         request_path)
 
+    def test_accepts_versioned_review_requests_but_not_unrelated_paths(self):
+        accepted = [
+            protocol.REVIEW_PATH, protocol.REVIEW_RETRY_PATH,
+            protocol.REVIEW_BASE + "SEMANTIC_BXLR_REVIEW_REQUEST_R3.json",
+            protocol.REVIEW_BASE + "SEMANTIC_BXLR_REVIEW_REQUEST_R100.json",
+        ]
+        rejected = [
+            protocol.REVIEW_BASE + "SEMANTIC_BXLR_REVIEW_REQUEST_R1.json",
+            protocol.REVIEW_BASE + "SEMANTIC_BXLR_REVIEW_REQUEST_R0.json",
+            protocol.REVIEW_BASE + "SEMANTIC_BXLR_REVIEW_REQUEST_R3.json.bak",
+            protocol.REVIEW_BASE + "../SEMANTIC_BXLR_REVIEW_REQUEST_R3.json",
+            "FFT_Android_Mod/docs/re-results/arbitrary.json",
+            None, "", "SEMANTIC_BXLR_REVIEW_REQUEST_R3.json"
+        ]
+        for value in accepted:
+            with self.subTest(value=value):
+                self.assertTrue(protocol.is_review_request_path(value))
+        for value in rejected:
+            with self.subTest(value=value):
+                self.assertFalse(protocol.is_review_request_path(value))
+        review_dir = self.root / "requests"
+        review_dir.mkdir()
+        for filename in (
+            "SEMANTIC_BXLR_REVIEW_REQUEST.json",
+            "SEMANTIC_BXLR_REVIEW_REQUEST_R2.json",
+            "SEMANTIC_BXLR_REVIEW_REQUEST_R3.json",
+            "SEMANTIC_BXLR_REVIEW_REQUEST_R4.json.bak",
+            "OTHER.json",
+        ):
+            (review_dir / filename).write_text("{}")
+        self.assertEqual(
+            [p.name for p in protocol.reviewed_request_paths(review_dir)],
+            ["SEMANTIC_BXLR_REVIEW_REQUEST.json",
+             "SEMANTIC_BXLR_REVIEW_REQUEST_R2.json",
+             "SEMANTIC_BXLR_REVIEW_REQUEST_R3.json"],
+        )
+
     def test_small_valid_limit(self):
         with self.assertRaises(ValueError):
             self.build(0)
