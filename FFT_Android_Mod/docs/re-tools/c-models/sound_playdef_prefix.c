@@ -12,14 +12,8 @@
  * PC=0x2b2b7c; all remaining general registers/NZCV unchanged; no data
  * accesses in this bounded prefix. No claim about the eventual audio effect.
  */
-#include <stdint.h>
 #include <stddef.h>
-
-typedef struct {
-    uint32_t next_pc;
-    uint32_t r0;
-    uint32_t r1;
-} FFTSoundPrefix;
+#include "sound_playdef_prefix.h"
 
 int fft_sound_playdef_prefix(uint32_t input_r0, FFTSoundPrefix *out)
 {
