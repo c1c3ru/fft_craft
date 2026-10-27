@@ -145,6 +145,8 @@ jobs:
         run: python3 FFT_Android_Mod/docs/re-tools/semantic_houkoku_next_boundaries.py
       - name: Microexecute two original sound_request ARM branches
         run: python3 FFT_Android_Mod/docs/re-tools/semantic_sound_two_hop_exec.py
+      - name: Audit next sound_request target and all 3 ARM incoming entries
+        run: python3 FFT_Android_Mod/docs/re-tools/semantic_sound_destination_271314.py
       - name: Publish v3 coverage diagnostics and migration counts
         run: |
           python3 FFT_Android_Mod/docs/re-tools/structural_v3_report.py
