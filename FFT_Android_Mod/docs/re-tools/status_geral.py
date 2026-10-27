@@ -19,6 +19,8 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "docs/re-results"
 REPO = "c1c3ru/fft_craft"
 MILESTONES = (
+    ("SEMANTIC_PIPELINE_RECOVERY.md",
+     "Correção de 25 manifestos/250 tarefas e conflito do PR automatizado #362; sem novos certificados"),
     ("SEMANTIC_SOUND_DESTINATION_271314.md",
      "sound_request: destino 0x271314 e tres entradas ARM auditados no ELF original; execucao ainda pendente"),
     ("SEMANTIC_SOUND_TWO_HOP_EXEC.md",
