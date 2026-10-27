@@ -9,8 +9,8 @@ ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 | Entradas/símbolos no inventário | 6,455 |
 | Endereços de execução únicos | 6,329 |
 | Semântica integral certificada por registro | 25 |
-| Evidência parcial registrada | 0 |
-| Sem certificação registrada | 6,304 |
+| Evidência parcial registrada | 100 |
+| Sem certificação registrada | 6,204 |
 | Progresso certificado por endereço | 0.40% |
 | Progresso certificado por bytes | 0.01% |
 
@@ -5900,65 +5900,65 @@ Um certificado revisado e testes diferenciais são necessários antes de afirmar
 | `000b8a54` | CLIST::GetDataAsStr(int) | 4 | unknown |
 | `000ba090` | SleepM(unsigned int) | 4 | unknown |
 | `000bb058` | CSOUND_IF::ResetLoopPoint(int) | 4 | unknown |
-| `000bbb10` | CSOUND_IF_SL::SetTrans(int, float, float, float) | 4 | unknown |
-| `000bcbf0` | CSOUND_LOADER::FrameMove(int, float) | 4 | unknown |
-| `000bd964` | CFRAMERATE::~CFRAMERATE() | 4 | unknown |
-| `000bdb6c` | CSTEP::~CSTEP() | 4 | unknown |
+| `000bbb10` | CSOUND_IF_SL::SetTrans(int, float, float, float) | 4 | partial |
+| `000bcbf0` | CSOUND_LOADER::FrameMove(int, float) | 4 | partial |
+| `000bd964` | CFRAMERATE::~CFRAMERATE() | 4 | partial |
+| `000bdb6c` | CSTEP::~CSTEP() | 4 | partial |
 | `000be41c` | CSTEP_BATCH::GetData() | 4 | unknown |
 | `000be420` | CSTEP_BATCH::GetDataF() | 4 | unknown |
 | `000be424` | CSTEP_BATCH::GetProgress() | 4 | unknown |
 | `000be440` | CSTEP_BATCH::SetProgress(float) | 4 | unknown |
-| `000c4418` | Adisp_floateventwindow() | 4 | unknown |
-| `000c4494` | Aitemmenu_call(unsigned long*, unsigned long, int) | 4 | unknown |
-| `000c4498` | attackdebugfunc() | 4 | unknown |
-| `000cbd50` | SetTrapNameWindowParam(int, short, int) | 4 | unknown |
-| `000cbd54` | TrapNameWindowManager() | 4 | unknown |
-| `000cbd58` | CreateTrapNameWindowManagerTask() | 4 | unknown |
-| `000cbd5c` | deleteEndModeWindow() | 4 | unknown |
-| `000cbd60` | SetTrapNameWindowColor(int) | 4 | unknown |
-| `000cbd64` | CreateTrapCancelCommandWindow() | 4 | unknown |
-| `000cbd68` | DeleteTrapCancelCommandWindow() | 4 | unknown |
-| `000cbd74` | CreateNetStayWindow() | 4 | unknown |
-| `000d0dc8` | Ddisp_floateventwindow() | 4 | unknown |
-| `000d1408` | Ditemmenu_call(unsigned long*, unsigned long, int) | 4 | unknown |
-| `000d6f80` | iOS_chkallocatewindowinit() | 4 | unknown |
-| `000d7384` | disposewindowbytask(int) | 4 | unknown |
-| `000d8970` | dispemptywindow() | 4 | unknown |
-| `000d8974` | send_statuschrno(int) | 4 | unknown |
-| `000d8bfc` | initstatuscphase() | 4 | unknown |
-| `000d9a08` | hook_disp_requirement() | 4 | unknown |
-| `000d9a0c` | hook_trophics() | 4 | unknown |
-| `000d9a10` | seekpcfile(char*, char*, int, int) | 4 | unknown |
-| `000d9ac0` | loadonefile(char*, char*) | 4 | unknown |
-| `000d9b0c` | request_tooltest() | 4 | unknown |
-| `000da334` | request_effectmes(int, int, int, int) | 4 | unknown |
-| `000da338` | request_warnmes(int, int, int, int) | 4 | unknown |
-| `000e62c4` | DEBUGTRACE_hook_connect_camera() | 4 | unknown |
-| `000e62c8` | DEBUG_CHK_ROLL(SCROLLRECORD*) | 4 | unknown |
-| `000e7f0c` | dmp_tuto(unsigned char*, int) | 4 | unknown |
-| `000feaa4` | WiOS_chkallocatewindowinit() | 4 | unknown |
-| `00100640` | Wdispemptywindow() | 4 | unknown |
-| `00100644` | Wsend_statuschrno(int) | 4 | unknown |
-| `00100840` | Winitstatuscphase() | 4 | unknown |
-| `00101908` | Whook_disp_requirement() | 4 | unknown |
-| `0010190c` | Whook_trophics() | 4 | unknown |
-| `00101910` | Wseekpcfile(char*, char*, int, int) | 4 | unknown |
-| `001019bc` | Wloadonefile(char*, char*) | 4 | unknown |
+| `000c4418` | Adisp_floateventwindow() | 4 | partial |
+| `000c4494` | Aitemmenu_call(unsigned long*, unsigned long, int) | 4 | partial |
+| `000c4498` | attackdebugfunc() | 4 | partial |
+| `000cbd50` | SetTrapNameWindowParam(int, short, int) | 4 | partial |
+| `000cbd54` | TrapNameWindowManager() | 4 | partial |
+| `000cbd58` | CreateTrapNameWindowManagerTask() | 4 | partial |
+| `000cbd5c` | deleteEndModeWindow() | 4 | partial |
+| `000cbd60` | SetTrapNameWindowColor(int) | 4 | partial |
+| `000cbd64` | CreateTrapCancelCommandWindow() | 4 | partial |
+| `000cbd68` | DeleteTrapCancelCommandWindow() | 4 | partial |
+| `000cbd74` | CreateNetStayWindow() | 4 | partial |
+| `000d0dc8` | Ddisp_floateventwindow() | 4 | partial |
+| `000d1408` | Ditemmenu_call(unsigned long*, unsigned long, int) | 4 | partial |
+| `000d6f80` | iOS_chkallocatewindowinit() | 4 | partial |
+| `000d7384` | disposewindowbytask(int) | 4 | partial |
+| `000d8970` | dispemptywindow() | 4 | partial |
+| `000d8974` | send_statuschrno(int) | 4 | partial |
+| `000d8bfc` | initstatuscphase() | 4 | partial |
+| `000d9a08` | hook_disp_requirement() | 4 | partial |
+| `000d9a0c` | hook_trophics() | 4 | partial |
+| `000d9a10` | seekpcfile(char*, char*, int, int) | 4 | partial |
+| `000d9ac0` | loadonefile(char*, char*) | 4 | partial |
+| `000d9b0c` | request_tooltest() | 4 | partial |
+| `000da334` | request_effectmes(int, int, int, int) | 4 | partial |
+| `000da338` | request_warnmes(int, int, int, int) | 4 | partial |
+| `000e62c4` | DEBUGTRACE_hook_connect_camera() | 4 | partial |
+| `000e62c8` | DEBUG_CHK_ROLL(SCROLLRECORD*) | 4 | partial |
+| `000e7f0c` | dmp_tuto(unsigned char*, int) | 4 | partial |
+| `000feaa4` | WiOS_chkallocatewindowinit() | 4 | partial |
+| `00100640` | Wdispemptywindow() | 4 | partial |
+| `00100644` | Wsend_statuschrno(int) | 4 | partial |
+| `00100840` | Winitstatuscphase() | 4 | partial |
+| `00101908` | Whook_disp_requirement() | 4 | partial |
+| `0010190c` | Whook_trophics() | 4 | partial |
+| `00101910` | Wseekpcfile(char*, char*, int, int) | 4 | partial |
+| `001019bc` | Wloadonefile(char*, char*) | 4 | partial |
 | `001019c0` | LOAD_seekeventfile(int) | 4 | unknown |
-| `00101a0c` | Wrequest_tooltest() | 4 | unknown |
-| `00101f9c` | Wrequest_effectmes(int, int, int, int) | 4 | unknown |
-| `00101fa0` | Wrequest_warnmes(int, int, int, int) | 4 | unknown |
-| `00102128` | Wevent_init_light() | 4 | unknown |
-| `00121718` | Edisp_floateventwindow() | 4 | unknown |
-| `00123c40` | Eitemmenu_call(unsigned long*, unsigned long, int) | 4 | unknown |
-| `0012b108` | disp_floateventwindow() | 4 | unknown |
+| `00101a0c` | Wrequest_tooltest() | 4 | partial |
+| `00101f9c` | Wrequest_effectmes(int, int, int, int) | 4 | partial |
+| `00101fa0` | Wrequest_warnmes(int, int, int, int) | 4 | partial |
+| `00102128` | Wevent_init_light() | 4 | partial |
+| `00121718` | Edisp_floateventwindow() | 4 | partial |
+| `00123c40` | Eitemmenu_call(unsigned long*, unsigned long, int) | 4 | partial |
+| `0012b108` | disp_floateventwindow() | 4 | partial |
 | `00137b0c` | value_input() | 4 | unknown |
-| `0014b9f8` | Cdisp_floateventwindow() | 4 | unknown |
-| `0014bec4` | Citemmenu_call(unsigned long*, unsigned long, int) | 4 | unknown |
+| `0014b9f8` | Cdisp_floateventwindow() | 4 | partial |
+| `0014bec4` | Citemmenu_call(unsigned long*, unsigned long, int) | 4 | partial |
 | `0014e0e4` | iOSSetjoinus() | 4 | unknown |
-| `0014e0e8` | statushookfunc() | 4 | unknown |
-| `0014e9a0` | sol_draw(int, int, int) | 4 | unknown |
-| `00155708` | story_faceload() | 4 | unknown |
+| `0014e0e8` | statushookfunc() | 4 | partial |
+| `0014e9a0` | sol_draw(int, int, int) | 4 | partial |
+| `00155708` | story_faceload() | 4 | partial |
 | `0015991c` | asmBoxCopy(char*, char*, COPYFIELD*, COPYFIELD*) | 4 | unknown |
 | `00159920` | asmKanjiCopy(char*, char*, COPYFIELD*, int) | 4 | unknown |
 | `00159a70` | asmMUL64(long, long, long) | 4 | unknown |
@@ -5966,89 +5966,89 @@ Um certificado revisado e testes diferenciais são necessários antes de afirmar
 | `0015a480` | iOSSoundSESet(int) | 4 | unknown |
 | `0015d174` | iOSstartTurn() | 4 | unknown |
 | `0015d2a8` | iOSexecuteTurn() | 4 | unknown |
-| `0015f044` | iOSUnitListLRCurSet(unsigned char*, unsigned short*, int, int, int, int) | 4 | unknown |
-| `00161d98` | tDebugBreakCheck(int) | 4 | unknown |
-| `00161d9c` | tDebugBreakTime(int) | 4 | unknown |
-| `00161da0` | tDebugPointerErr() | 4 | unknown |
+| `0015f044` | iOSUnitListLRCurSet(unsigned char*, unsigned short*, int, int, int, int) | 4 | partial |
+| `00161d98` | tDebugBreakCheck(int) | 4 | partial |
+| `00161d9c` | tDebugBreakTime(int) | 4 | partial |
+| `00161da0` | tDebugPointerErr() | 4 | partial |
 | `00161ef0` | wasmBoxCopy(char*, char*, COPYFIELD*, COPYFIELD*) | 4 | unknown |
 | `00161ef4` | wasmKanjiCopy(char*, char*, COPYFIELD*, int) | 4 | unknown |
 | `00162044` | wasmMUL64(long, long, long) | 4 | unknown |
 | `00162048` | wasmMUL3232(long, long, long, long) | 4 | unknown |
-| `0016f840` | cCardInit() | 4 | unknown |
+| `0016f840` | cCardInit() | 4 | partial |
 | `001728dc` | cGetFrameRate() | 4 | unknown |
 | `0017357c` | cWaitLoadImage(RECT16*, unsigned char*) | 4 | unknown |
 | `00173580` | cWaitStoreImage(RECT16*, unsigned char*) | 4 | unknown |
 | `00176690` | bGetFrameRate() | 4 | unknown |
 | `00176b7c` | iOSBwork2ChrStts(BWORK*, CHR_STTS*, int) | 4 | unknown |
-| `001836cc` | iOS_addPrim_window(tagPOLY_FT4*) | 4 | unknown |
-| `0018372c` | CardInit() | 4 | unknown |
+| `001836cc` | iOS_addPrim_window(tagPOLY_FT4*) | 4 | partial |
+| `0018372c` | CardInit() | 4 | partial |
 | `00188018` | eGetFrameRate() | 4 | unknown |
 | `0019374c` | jGetFrameRate() | 4 | unknown |
-| `0019e7b4` | shop_dummyfunc() | 4 | unknown |
+| `0019e7b4` | shop_dummyfunc() | 4 | partial |
 | `001a6378` | iOS_resetCancelDisableAreaForStatusWindow() | 4 | unknown |
 | `001a652c` | GetMessagePtr(int) | 4 | unknown |
 | `001a6cc4` | GetFrameRate() | 4 | unknown |
-| `001add64` | unit_dummyfunc() | 4 | unknown |
+| `001add64` | unit_dummyfunc() | 4 | partial |
 | `001b7ef0` | CallresetFFT() | 4 | unknown |
-| `001d114c` | set_monomane_direction(BWORK*, unsigned char) | 4 | unknown |
-| `001dca54` | callSW(int) | 4 | unknown |
-| `001e7368` | pspNetTrapSpread(BWORK*, int) | 4 | unknown |
+| `001d114c` | set_monomane_direction(BWORK*, unsigned char) | 4 | partial |
+| `001dca54` | callSW(int) | 4 | partial |
+| `001e7368` | pspNetTrapSpread(BWORK*, int) | 4 | partial |
 | `001f01a8` | resetActionAnimation(tag_animation*) | 4 | unknown |
-| `00202f1c` | pspNetOutPutAnimationData() | 4 | unknown |
-| `0020c258` | fftDrawSyncCallback() | 4 | unknown |
-| `0020c25c` | fftCdReadyCallback() | 4 | unknown |
-| `0020c260` | fftCdReadCallback() | 4 | unknown |
-| `0020c5cc` | myPollhost() | 4 | unknown |
-| `0020c5d0` | system_error(int, int) | 4 | unknown |
-| `0020c5d4` | system_warning(int, int) | 4 | unknown |
+| `00202f1c` | pspNetOutPutAnimationData() | 4 | partial |
+| `0020c258` | fftDrawSyncCallback() | 4 | partial |
+| `0020c25c` | fftCdReadyCallback() | 4 | partial |
+| `0020c260` | fftCdReadCallback() | 4 | partial |
+| `0020c5cc` | myPollhost() | 4 | partial |
+| `0020c5d0` | system_error(int, int) | 4 | partial |
+| `0020c5d4` | system_warning(int, int) | 4 | partial |
 | `0020ccb8` | fileReadCDOffset(unsigned long, unsigned long, unsigned long, void*) | 4 | unknown |
 | `0020ce14` | fileAllocateCD(unsigned long, unsigned long) | 4 | unknown |
 | `0020ce18` | fileDispose(char*) | 4 | unknown |
 | `0020dba0` | requestStatusResult(unsigned int) | 4 | unknown |
 | `0020f424` | eventEffectStart() | 4 | unknown |
-| `0020f4f8` | getCharPrimList(short, Point*, unsigned long*) | 4 | unknown |
-| `0020f904` | iOS_dispAnimetion() | 4 | unknown |
-| `0020fb14` | initializeDebugFont() | 4 | unknown |
+| `0020f4f8` | getCharPrimList(short, Point*, unsigned long*) | 4 | partial |
+| `0020f904` | iOS_dispAnimetion() | 4 | partial |
+| `0020fb14` | initializeDebugFont() | 4 | partial |
 | `00215d20` | fadeGradation(int, CVECTOR*) | 4 | unknown |
 | `00215d24` | fadeAnbient(int, CVECTOR*) | 4 | unknown |
 | `00215d28` | fadeFlatColor(int, CVECTOR*) | 4 | unknown |
-| `00215d5c` | PadStop | 4 | unknown |
+| `00215d5c` | PadStop | 4 | partial |
 | `00215db4` | resetFFT() | 4 | unknown |
 | `0021610c` | iOS_rand() | 4 | unknown |
 | `00216818` | stopZingle(int) | 4 | unknown |
 | `0021681c` | controlZingle() | 4 | unknown |
 | `002168e0` | callSystemSound(int) | 4 | unknown |
 | `002168e4` | callSoundEffect(int) | 4 | unknown |
-| `002168fc` | recallEnvEffect() | 4 | unknown |
-| `002169cc` | pauseEnvEffect() | 4 | unknown |
-| `0021ebb0` | error(char, long) | 4 | unknown |
-| `00225310` | iOS_CheckPEffect(char const*, int) | 4 | unknown |
-| `00225a60` | objectLG2(_EffectTCB*, _Object*) | 4 | unknown |
-| `00225a64` | dmyFnc2(_EffectTCB*, _Object*) | 4 | unknown |
-| `0022a614` | DumpMemory(int, void*) | 4 | unknown |
-| `002419cc` | fftCdLoop(CDREC*) | 4 | unknown |
-| `002419d0` | fftCdCancel(CDREC*) | 4 | unknown |
+| `002168fc` | recallEnvEffect() | 4 | partial |
+| `002169cc` | pauseEnvEffect() | 4 | partial |
+| `0021ebb0` | error(char, long) | 4 | partial |
+| `00225310` | iOS_CheckPEffect(char const*, int) | 4 | partial |
+| `00225a60` | objectLG2(_EffectTCB*, _Object*) | 4 | partial |
+| `00225a64` | dmyFnc2(_EffectTCB*, _Object*) | 4 | partial |
+| `0022a614` | DumpMemory(int, void*) | 4 | partial |
+| `002419cc` | fftCdLoop(CDREC*) | 4 | partial |
+| `002419d0` | fftCdCancel(CDREC*) | 4 | partial |
 | `00248ccc` | ctlcard_init() | 4 | unknown |
-| `002524cc` | ctlworkingst_deactive(CTLINFO*) | 4 | unknown |
-| `00252b68` | ctlworkend_active(CTLINFO*) | 4 | unknown |
-| `00252b6c` | ctlworkend_deactive(CTLINFO*) | 4 | unknown |
-| `00258ac4` | evt_skip0() | 4 | unknown |
+| `002524cc` | ctlworkingst_deactive(CTLINFO*) | 4 | partial |
+| `00252b68` | ctlworkend_active(CTLINFO*) | 4 | partial |
+| `00252b6c` | ctlworkend_deactive(CTLINFO*) | 4 | partial |
+| `00258ac4` | evt_skip0() | 4 | partial |
 | `0025e67c` | get_unitwork_add_wld(int) | 4 | unknown |
 | `0025ecd4` | wldscr_snapshot(int) | 4 | unknown |
-| `0025f354` | wld_btlsect_seek() | 4 | unknown |
-| `00267f38` | wldrute_init() | 4 | unknown |
+| `0025f354` | wld_btlsect_seek() | 4 | partial |
+| `00267f38` | wldrute_init() | 4 | partial |
 | `0026b374` | sound_request(int) | 4 | unknown |
-| `0026c058` | iOS_debugDispTownCircle(int, int) | 4 | unknown |
+| `0026c058` | iOS_debugDispTownCircle(int, int) | 4 | partial |
 | `0026c278` | iOS_getMasaCdbOt_graphics_sdnovel(int) | 4 | unknown |
-| `0026ff2c` | effectdmy() | 4 | unknown |
-| `0027129c` | Ssd_Quit() | 4 | unknown |
-| `002712a0` | Ssd_Enable() | 4 | unknown |
-| `002712a4` | Ssd_Disable() | 4 | unknown |
-| `002712b0` | Ssd_DisposeNormalWave() | 4 | unknown |
-| `002712b4` | Ssd_DisposeWaveData(SsdWaveSetRec*) | 4 | unknown |
-| `002712c0` | Ssd_AddEffectData(void*) | 4 | unknown |
-| `002712c4` | Ssd_DisposeEffectData(void*) | 4 | unknown |
-| `002712c8` | Ssd_AllStop() | 4 | unknown |
+| `0026ff2c` | effectdmy() | 4 | partial |
+| `0027129c` | Ssd_Quit() | 4 | partial |
+| `002712a0` | Ssd_Enable() | 4 | partial |
+| `002712a4` | Ssd_Disable() | 4 | partial |
+| `002712b0` | Ssd_DisposeNormalWave() | 4 | partial |
+| `002712b4` | Ssd_DisposeWaveData(SsdWaveSetRec*) | 4 | partial |
+| `002712c0` | Ssd_AddEffectData(void*) | 4 | partial |
+| `002712c4` | Ssd_DisposeEffectData(void*) | 4 | partial |
+| `002712c8` | Ssd_AllStop() | 4 | partial |
 | `002712cc` | Ssd_SetStereo(int) | 4 | unknown |
 | `002712d8` | Ssd_SetAttenuator(short) | 4 | unknown |
 | `002712dc` | Ssd_SetReverbParam(long, short, long, long) | 4 | unknown |
