@@ -119,7 +119,7 @@ class ReviewBatchTests(unittest.TestCase):
 
     def test_missing_or_few_valid_candidates_is_fatal(self):
         with self.assertRaises(ValueError):
-            self.prepare(limit=21)
+            self.prepare(limit=304)
         with self.assertRaisesRegex(ValueError, "insufficient"):
             self.prepare(limit=3)
         for path in self.contracts.glob("*.json"):
