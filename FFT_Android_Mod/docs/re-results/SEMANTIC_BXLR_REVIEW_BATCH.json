@@ -1,14 +1,14 @@
 {
   "schema": 1,
   "elf_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "source_ci_run_id": "40550839542",
+  "source_ci_run_id": "40554628588",
   "status": "review_pending",
   "sample_accounting": "reuses previous 32 samples per function; adds zero",
   "certified_functions": 0,
   "candidates": [
     {
-      "address": "000bbb10",
-      "name": "CSOUND_IF_SL::SetTrans(int, float, float, float)",
+      "address": "002712cc",
+      "name": "Ssd_SetStereo(int)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -49,7 +49,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000bbb10.json",
+      "source_artifact": "contract-pilot/002712cc.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -58,8 +58,8 @@
       ]
     },
     {
-      "address": "000bcbf0",
-      "name": "CSOUND_LOADER::FrameMove(int, float)",
+      "address": "002712d8",
+      "name": "Ssd_SetAttenuator(short)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -100,7 +100,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000bcbf0.json",
+      "source_artifact": "contract-pilot/002712d8.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -109,8 +109,8 @@
       ]
     },
     {
-      "address": "000bd964",
-      "name": "CFRAMERATE::~CFRAMERATE()",
+      "address": "002712dc",
+      "name": "Ssd_SetReverbParam(long, short, long, long)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -151,7 +151,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000bd964.json",
+      "source_artifact": "contract-pilot/002712dc.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -160,8 +160,8 @@
       ]
     },
     {
-      "address": "000bdb6c",
-      "name": "CSTEP::~CSTEP()",
+      "address": "002712e0",
+      "name": "Ssd_SetSpuVolume(short, short)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -202,7 +202,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000bdb6c.json",
+      "source_artifact": "contract-pilot/002712e0.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -211,8 +211,8 @@
       ]
     },
     {
-      "address": "000c4418",
-      "name": "Adisp_floateventwindow()",
+      "address": "002712e4",
+      "name": "Ssd_SetCDVolume(short, short)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -253,7 +253,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000c4418.json",
+      "source_artifact": "contract-pilot/002712e4.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -262,8 +262,8 @@
       ]
     },
     {
-      "address": "000c4494",
-      "name": "Aitemmenu_call(unsigned long*, unsigned long, int)",
+      "address": "002712e8",
+      "name": "Ssd_SetCDMixingReverb(int, int)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -304,7 +304,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000c4494.json",
+      "source_artifact": "contract-pilot/002712e8.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -313,8 +313,8 @@
       ]
     },
     {
-      "address": "000c4498",
-      "name": "attackdebugfunc()",
+      "address": "002712ec",
+      "name": "Ssd_CheckWideMode()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -355,7 +355,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000c4498.json",
+      "source_artifact": "contract-pilot/002712ec.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -364,8 +364,8 @@
       ]
     },
     {
-      "address": "000cbd50",
-      "name": "SetTrapNameWindowParam(int, short, int)",
+      "address": "002712f0",
+      "name": "Ssd_SetVolumeRec(short, SpuVolume*, char)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -406,7 +406,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000cbd50.json",
+      "source_artifact": "contract-pilot/002712f0.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -415,8 +415,8 @@
       ]
     },
     {
-      "address": "000cbd54",
-      "name": "TrapNameWindowManager()",
+      "address": "002712f4",
+      "name": "Ssd_ErrorProc(int)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -457,7 +457,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000cbd54.json",
+      "source_artifact": "contract-pilot/002712f4.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -466,8 +466,8 @@
       ]
     },
     {
-      "address": "000cbd58",
-      "name": "CreateTrapNameWindowManagerTask()",
+      "address": "002712f8",
+      "name": "Ssd_AddVagPackData(void*)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -508,7 +508,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000cbd58.json",
+      "source_artifact": "contract-pilot/002712f8.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -517,8 +517,8 @@
       ]
     },
     {
-      "address": "000cbd5c",
-      "name": "deleteEndModeWindow()",
+      "address": "00271304",
+      "name": "Ssd_DisposeMusic(SsdSeqRec*)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -559,7 +559,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000cbd5c.json",
+      "source_artifact": "contract-pilot/00271304.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -568,8 +568,8 @@
       ]
     },
     {
-      "address": "000cbd60",
-      "name": "SetTrapNameWindowColor(int)",
+      "address": "00271308",
+      "name": "Ssd_LinkMusicData(SsdSeqRec*, void*)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -610,7 +610,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000cbd60.json",
+      "source_artifact": "contract-pilot/00271308.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -619,8 +619,8 @@
       ]
     },
     {
-      "address": "000cbd64",
-      "name": "CreateTrapCancelCommandWindow()",
+      "address": "0027130c",
+      "name": "Ssd_StartMusic(SsdSeqRec*, short, short)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -661,7 +661,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000cbd64.json",
+      "source_artifact": "contract-pilot/0027130c.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -670,8 +670,8 @@
       ]
     },
     {
-      "address": "000cbd68",
-      "name": "DeleteTrapCancelCommandWindow()",
+      "address": "00271310",
+      "name": "Ssd_StopMusic(SsdSeqRec*)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -712,7 +712,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000cbd68.json",
+      "source_artifact": "contract-pilot/00271310.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -721,8 +721,8 @@
       ]
     },
     {
-      "address": "000cbd74",
-      "name": "CreateNetStayWindow()",
+      "address": "00271340",
+      "name": "Ssd_PlayEffects03(long, long, long, long)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -763,7 +763,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000cbd74.json",
+      "source_artifact": "contract-pilot/00271340.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -772,8 +772,8 @@
       ]
     },
     {
-      "address": "000d0dc8",
-      "name": "Ddisp_floateventwindow()",
+      "address": "00271348",
+      "name": "Ssd_StopEffectSet(void*)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -814,7 +814,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000d0dc8.json",
+      "source_artifact": "contract-pilot/00271348.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -823,8 +823,8 @@
       ]
     },
     {
-      "address": "000d1408",
-      "name": "Ditemmenu_call(unsigned long*, unsigned long, int)",
+      "address": "00271410",
+      "name": "Ssd_InitEffectTrackRecWithStart(short, long, short, short)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -865,7 +865,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000d1408.json",
+      "source_artifact": "contract-pilot/00271410.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -874,8 +874,8 @@
       ]
     },
     {
-      "address": "000d6f80",
-      "name": "iOS_chkallocatewindowinit()",
+      "address": "00271414",
+      "name": "Ssd_SetSeqMasterVolume(SsdSeqRec*, short, short)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -916,7 +916,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000d6f80.json",
+      "source_artifact": "contract-pilot/00271414.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -925,8 +925,8 @@
       ]
     },
     {
-      "address": "000d7384",
-      "name": "disposewindowbytask(int)",
+      "address": "00271418",
+      "name": "Ssd_SetSeqMasterTempo(SsdSeqRec*, short, short)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -967,7 +967,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000d7384.json",
+      "source_artifact": "contract-pilot/00271418.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -976,8 +976,8 @@
       ]
     },
     {
-      "address": "000d8970",
-      "name": "dispemptywindow()",
+      "address": "0027141c",
+      "name": "Ssd_SetSeqMasterPitch(SsdSeqRec*, short, short)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -1018,7 +1018,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000d8970.json",
+      "source_artifact": "contract-pilot/0027141c.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -1027,8 +1027,8 @@
       ]
     },
     {
-      "address": "000d8974",
-      "name": "send_statuschrno(int)",
+      "address": "00271420",
+      "name": "Ssd_SetSeqMasterPanpot(SsdSeqRec*, short, short)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -1069,7 +1069,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000d8974.json",
+      "source_artifact": "contract-pilot/00271420.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -1078,8 +1078,8 @@
       ]
     },
     {
-      "address": "000d8bfc",
-      "name": "initstatuscphase()",
+      "address": "0027b510",
+      "name": "dispCmdKind()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -1120,7 +1120,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000d8bfc.json",
+      "source_artifact": "contract-pilot/0027b510.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -1129,8 +1129,8 @@
       ]
     },
     {
-      "address": "000d9a08",
-      "name": "hook_disp_requirement()",
+      "address": "0027b5c8",
+      "name": "rprintfr(RECT16*, int, int, int)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -1171,7 +1171,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000d9a08.json",
+      "source_artifact": "contract-pilot/0027b5c8.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -1180,8 +1180,8 @@
       ]
     },
     {
-      "address": "000d9a0c",
-      "name": "hook_trophics()",
+      "address": "0027b670",
+      "name": "iOS_DEBUG_multiwindow_break_hook(unsigned long*)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -1222,7 +1222,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000d9a0c.json",
+      "source_artifact": "contract-pilot/0027b670.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -1231,8 +1231,8 @@
       ]
     },
     {
-      "address": "000d9a10",
-      "name": "seekpcfile(char*, char*, int, int)",
+      "address": "0027b674",
+      "name": "iOS_DEBUG_multiwindow_break_hook2(unsigned long*, int)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -1273,7 +1273,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000d9a10.json",
+      "source_artifact": "contract-pilot/0027b674.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -1282,8 +1282,8 @@
       ]
     },
     {
-      "address": "000d9ac0",
-      "name": "loadonefile(char*, char*)",
+      "address": "0027b678",
+      "name": "iOS_DEBUG_multiwindow_keyright_hook()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -1324,7 +1324,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000d9ac0.json",
+      "source_artifact": "contract-pilot/0027b678.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -1333,8 +1333,8 @@
       ]
     },
     {
-      "address": "000d9b0c",
-      "name": "request_tooltest()",
+      "address": "0027fc28",
+      "name": "chk_ucResumeData2(int)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -1375,7 +1375,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000d9b0c.json",
+      "source_artifact": "contract-pilot/0027fc28.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -1384,8 +1384,8 @@
       ]
     },
     {
-      "address": "000da334",
-      "name": "request_effectmes(int, int, int, int)",
+      "address": "0027fc2c",
+      "name": "chk_ucResumeData(unsigned char*, int)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -1426,7 +1426,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000da334.json",
+      "source_artifact": "contract-pilot/0027fc2c.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -1435,8 +1435,8 @@
       ]
     },
     {
-      "address": "000da338",
-      "name": "request_warnmes(int, int, int, int)",
+      "address": "0027fc7c",
+      "name": "cSaveFFT::~cSaveFFT()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -1477,7 +1477,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000da338.json",
+      "source_artifact": "contract-pilot/0027fc7c.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -1486,8 +1486,8 @@
       ]
     },
     {
-      "address": "000e62c4",
-      "name": "DEBUGTRACE_hook_connect_camera()",
+      "address": "002805e4",
+      "name": "iOS_hookHelp(int*)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -1528,7 +1528,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000e62c4.json",
+      "source_artifact": "contract-pilot/002805e4.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -1537,8 +1537,8 @@
       ]
     },
     {
-      "address": "000e62c8",
-      "name": "DEBUG_CHK_ROLL(SCROLLRECORD*)",
+      "address": "00280614",
+      "name": "iOS_hook_disp_option()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -1579,7 +1579,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000e62c8.json",
+      "source_artifact": "contract-pilot/00280614.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -1588,8 +1588,8 @@
       ]
     },
     {
-      "address": "000e7f0c",
-      "name": "dmp_tuto(unsigned char*, int)",
+      "address": "00280618",
+      "name": "iOS_hook_disp_optionmain()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -1630,7 +1630,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000e7f0c.json",
+      "source_artifact": "contract-pilot/00280618.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -1639,8 +1639,8 @@
       ]
     },
     {
-      "address": "000feaa4",
-      "name": "WiOS_chkallocatewindowinit()",
+      "address": "0028061c",
+      "name": "iOS_hook_common(char const*, int)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -1681,7 +1681,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/000feaa4.json",
+      "source_artifact": "contract-pilot/0028061c.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -1690,8 +1690,8 @@
       ]
     },
     {
-      "address": "00100640",
-      "name": "Wdispemptywindow()",
+      "address": "00280670",
+      "name": "hook_write_eventflag(int, int)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -1732,7 +1732,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/00100640.json",
+      "source_artifact": "contract-pilot/00280670.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -1741,8 +1741,8 @@
       ]
     },
     {
-      "address": "00100644",
-      "name": "Wsend_statuschrno(int)",
+      "address": "00280674",
+      "name": "hook_calcformula(int, int)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -1783,7 +1783,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/00100644.json",
+      "source_artifact": "contract-pilot/00280674.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -1792,8 +1792,8 @@
       ]
     },
     {
-      "address": "00100840",
-      "name": "Winitstatuscphase()",
+      "address": "00280678",
+      "name": "hook_Debug(char const*)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -1834,7 +1834,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/00100840.json",
+      "source_artifact": "contract-pilot/00280678.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -1843,8 +1843,8 @@
       ]
     },
     {
-      "address": "00101908",
-      "name": "Whook_disp_requirement()",
+      "address": "0028067c",
+      "name": "hook_Debug2(char const*)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -1885,7 +1885,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/00101908.json",
+      "source_artifact": "contract-pilot/0028067c.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -1894,8 +1894,8 @@
       ]
     },
     {
-      "address": "0010190c",
-      "name": "Whook_trophics()",
+      "address": "00280680",
+      "name": "hook_NextEventSet()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -1936,7 +1936,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/0010190c.json",
+      "source_artifact": "contract-pilot/00280680.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -1945,8 +1945,8 @@
       ]
     },
     {
-      "address": "00101910",
-      "name": "Wseekpcfile(char*, char*, int, int)",
+      "address": "00280684",
+      "name": "hook_musiclod()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -1987,7 +1987,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/00101910.json",
+      "source_artifact": "contract-pilot/00280684.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -1996,8 +1996,8 @@
       ]
     },
     {
-      "address": "001019bc",
-      "name": "Wloadonefile(char*, char*)",
+      "address": "002806b0",
+      "name": "iOS_hook_worldhelpmenu()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -2038,7 +2038,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/001019bc.json",
+      "source_artifact": "contract-pilot/002806b0.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -2047,8 +2047,8 @@
       ]
     },
     {
-      "address": "00101a0c",
-      "name": "Wrequest_tooltest()",
+      "address": "002806b4",
+      "name": "iOS_hook_gill()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -2089,7 +2089,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/00101a0c.json",
+      "source_artifact": "contract-pilot/002806b4.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -2098,8 +2098,8 @@
       ]
     },
     {
-      "address": "00101f9c",
-      "name": "Wrequest_effectmes(int, int, int, int)",
+      "address": "002806b8",
+      "name": "iOS_hook_movetopanel()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -2140,7 +2140,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/00101f9c.json",
+      "source_artifact": "contract-pilot/002806b8.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -2149,8 +2149,8 @@
       ]
     },
     {
-      "address": "00101fa0",
-      "name": "Wrequest_warnmes(int, int, int, int)",
+      "address": "002806bc",
+      "name": "hook_read_eventflag(int*)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -2191,7 +2191,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/00101fa0.json",
+      "source_artifact": "contract-pilot/002806bc.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -2200,8 +2200,8 @@
       ]
     },
     {
-      "address": "00102128",
-      "name": "Wevent_init_light()",
+      "address": "002806c0",
+      "name": "hook_allocate_texture()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -2242,7 +2242,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/00102128.json",
+      "source_artifact": "contract-pilot/002806c0.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -2251,8 +2251,8 @@
       ]
     },
     {
-      "address": "00121718",
-      "name": "Edisp_floateventwindow()",
+      "address": "002806c4",
+      "name": "hook_opt()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -2293,7 +2293,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/00121718.json",
+      "source_artifact": "contract-pilot/002806c4.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -2302,8 +2302,8 @@
       ]
     },
     {
-      "address": "00123c40",
-      "name": "Eitemmenu_call(unsigned long*, unsigned long, int)",
+      "address": "002806c8",
+      "name": "hook_chk_speedup(int)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -2344,7 +2344,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/00123c40.json",
+      "source_artifact": "contract-pilot/002806c8.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -2353,8 +2353,8 @@
       ]
     },
     {
-      "address": "0012b108",
-      "name": "disp_floateventwindow()",
+      "address": "00280708",
+      "name": "hook_pad()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -2395,7 +2395,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/0012b108.json",
+      "source_artifact": "contract-pilot/00280708.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -2404,8 +2404,8 @@
       ]
     },
     {
-      "address": "0014b9f8",
-      "name": "Cdisp_floateventwindow()",
+      "address": "0028070c",
+      "name": "hook_pad2()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -2446,7 +2446,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/0014b9f8.json",
+      "source_artifact": "contract-pilot/0028070c.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -2455,8 +2455,8 @@
       ]
     },
     {
-      "address": "0014bec4",
-      "name": "Citemmenu_call(unsigned long*, unsigned long, int)",
+      "address": "00280710",
+      "name": "hook_drive_connect_chrmove()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -2497,7 +2497,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/0014bec4.json",
+      "source_artifact": "contract-pilot/00280710.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -2506,8 +2506,8 @@
       ]
     },
     {
-      "address": "0014e0e8",
-      "name": "statushookfunc()",
+      "address": "00280714",
+      "name": "hook_drive_connect_chrmove2(int)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -2548,7 +2548,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/0014e0e8.json",
+      "source_artifact": "contract-pilot/00280714.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -2557,8 +2557,8 @@
       ]
     },
     {
-      "address": "0014e9a0",
-      "name": "sol_draw(int, int, int)",
+      "address": "002807f4",
+      "name": "hook_cliptest()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -2599,7 +2599,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/0014e9a0.json",
+      "source_artifact": "contract-pilot/002807f4.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -2608,8 +2608,8 @@
       ]
     },
     {
-      "address": "00155708",
-      "name": "story_faceload()",
+      "address": "002807f8",
+      "name": "chk_RefLine(int)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -2650,7 +2650,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/00155708.json",
+      "source_artifact": "contract-pilot/002807f8.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -2659,8 +2659,8 @@
       ]
     },
     {
-      "address": "0015f044",
-      "name": "iOSUnitListLRCurSet(unsigned char*, unsigned short*, int, int, int, int)",
+      "address": "002807fc",
+      "name": "hook_drive_chr(int)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -2701,7 +2701,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/0015f044.json",
+      "source_artifact": "contract-pilot/002807fc.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -2710,8 +2710,8 @@
       ]
     },
     {
-      "address": "00161d98",
-      "name": "tDebugBreakCheck(int)",
+      "address": "00280800",
+      "name": "hook_fix_bugno_931(int)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -2752,7 +2752,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/00161d98.json",
+      "source_artifact": "contract-pilot/00280800.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -2761,8 +2761,8 @@
       ]
     },
     {
-      "address": "00161d9c",
-      "name": "tDebugBreakTime(int)",
+      "address": "00280804",
+      "name": "hook_win_tail()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -2803,7 +2803,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/00161d9c.json",
+      "source_artifact": "contract-pilot/00280804.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -2812,8 +2812,8 @@
       ]
     },
     {
-      "address": "00161da0",
-      "name": "tDebugPointerErr()",
+      "address": "00280808",
+      "name": "hook_allSkipTest()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -2854,7 +2854,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/00161da0.json",
+      "source_artifact": "contract-pilot/00280808.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -2863,8 +2863,8 @@
       ]
     },
     {
-      "address": "0016f840",
-      "name": "cCardInit()",
+      "address": "00280854",
+      "name": "iOS_hook_line()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -2905,7 +2905,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/0016f840.json",
+      "source_artifact": "contract-pilot/00280854.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -2914,8 +2914,8 @@
       ]
     },
     {
-      "address": "001836cc",
-      "name": "iOS_addPrim_window(tagPOLY_FT4*)",
+      "address": "002809c8",
+      "name": "iOS_hook_num()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -2956,7 +2956,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/001836cc.json",
+      "source_artifact": "contract-pilot/002809c8.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -2965,8 +2965,8 @@
       ]
     },
     {
-      "address": "0018372c",
-      "name": "CardInit()",
+      "address": "002815d8",
+      "name": "hook_num(int, int, int)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -3007,7 +3007,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/0018372c.json",
+      "source_artifact": "contract-pilot/002815d8.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -3016,8 +3016,8 @@
       ]
     },
     {
-      "address": "0019e7b4",
-      "name": "shop_dummyfunc()",
+      "address": "002815e4",
+      "name": "chk_test_addcolor(unsigned int*)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -3058,7 +3058,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/0019e7b4.json",
+      "source_artifact": "contract-pilot/002815e4.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -3067,8 +3067,8 @@
       ]
     },
     {
-      "address": "001add64",
-      "name": "unit_dummyfunc()",
+      "address": "00281640",
+      "name": "hook_disp_plateorspell(int*)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -3109,7 +3109,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/001add64.json",
+      "source_artifact": "contract-pilot/00281640.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -3118,8 +3118,8 @@
       ]
     },
     {
-      "address": "001d114c",
-      "name": "set_monomane_direction(BWORK*, unsigned char)",
+      "address": "00281644",
+      "name": "hook_code_soundeffect(int)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -3160,7 +3160,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/001d114c.json",
+      "source_artifact": "contract-pilot/00281644.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -3169,8 +3169,8 @@
       ]
     },
     {
-      "address": "001dca54",
-      "name": "callSW(int)",
+      "address": "00281648",
+      "name": "hook_1284(char*, int)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -3211,7 +3211,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/001dca54.json",
+      "source_artifact": "contract-pilot/00281648.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -3220,8 +3220,8 @@
       ]
     },
     {
-      "address": "001e7368",
-      "name": "pspNetTrapSpread(BWORK*, int)",
+      "address": "00286124",
+      "name": "SetSpadStack(unsigned long)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -3262,7 +3262,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/001e7368.json",
+      "source_artifact": "contract-pilot/00286124.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -3271,8 +3271,8 @@
       ]
     },
     {
-      "address": "00202f1c",
-      "name": "pspNetOutPutAnimationData()",
+      "address": "00286128",
+      "name": "ResetSpadStack()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -3313,7 +3313,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/00202f1c.json",
+      "source_artifact": "contract-pilot/00286128.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -3322,8 +3322,8 @@
       ]
     },
     {
-      "address": "0020c258",
-      "name": "fftDrawSyncCallback()",
+      "address": "00286744",
+      "name": "rsetmovie_title_flg__Fv()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -3364,7 +3364,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/0020c258.json",
+      "source_artifact": "contract-pilot/00286744.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -3373,8 +3373,8 @@
       ]
     },
     {
-      "address": "0020c25c",
-      "name": "fftCdReadyCallback()",
+      "address": "00286748",
+      "name": "setmovie_title_flg__Fv()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -3415,7 +3415,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/0020c25c.json",
+      "source_artifact": "contract-pilot/00286748.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -3424,8 +3424,8 @@
       ]
     },
     {
-      "address": "0020c260",
-      "name": "fftCdReadCallback()",
+      "address": "00286a30",
+      "name": "pspNetSetPadPushTiming(unsigned long)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -3466,7 +3466,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/0020c260.json",
+      "source_artifact": "contract-pilot/00286a30.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -3475,8 +3475,8 @@
       ]
     },
     {
-      "address": "0020c5cc",
-      "name": "myPollhost()",
+      "address": "00286a94",
+      "name": "timer_print_screen()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -3517,7 +3517,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/0020c5cc.json",
+      "source_artifact": "contract-pilot/00286a94.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -3526,8 +3526,8 @@
       ]
     },
     {
-      "address": "0020c5d0",
-      "name": "system_error(int, int)",
+      "address": "00286a98",
+      "name": "val_letter(int, int, int)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -3568,7 +3568,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/0020c5d0.json",
+      "source_artifact": "contract-pilot/00286a98.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -3577,8 +3577,8 @@
       ]
     },
     {
-      "address": "0020c5d4",
-      "name": "system_warning(int, int)",
+      "address": "00286a9c",
+      "name": "set_nettimer_flag(int, int)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -3619,7 +3619,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/0020c5d4.json",
+      "source_artifact": "contract-pilot/00286a9c.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -3628,8 +3628,8 @@
       ]
     },
     {
-      "address": "0020f4f8",
-      "name": "getCharPrimList(short, Point*, unsigned long*)",
+      "address": "00286ae8",
+      "name": "net_control_ex(void*, void*, int)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -3670,7 +3670,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/0020f4f8.json",
+      "source_artifact": "contract-pilot/00286ae8.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -3679,8 +3679,8 @@
       ]
     },
     {
-      "address": "0020f904",
-      "name": "iOS_dispAnimetion()",
+      "address": "00286e88",
+      "name": "pspNetAgreementInterruptInit()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -3721,7 +3721,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/0020f904.json",
+      "source_artifact": "contract-pilot/00286e88.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -3730,8 +3730,8 @@
       ]
     },
     {
-      "address": "0020fb14",
-      "name": "initializeDebugFont()",
+      "address": "00286e8c",
+      "name": "pspNetCheckRivalAction()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -3772,7 +3772,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/0020fb14.json",
+      "source_artifact": "contract-pilot/00286e8c.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -3781,8 +3781,8 @@
       ]
     },
     {
-      "address": "00215d5c",
-      "name": "PadStop",
+      "address": "00286e90",
+      "name": "rivalCameraWorkProcs()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -3823,7 +3823,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/00215d5c.json",
+      "source_artifact": "contract-pilot/00286e90.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -3832,8 +3832,8 @@
       ]
     },
     {
-      "address": "002168fc",
-      "name": "recallEnvEffect()",
+      "address": "00286ec4",
+      "name": "check_rival_value(int)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -3874,7 +3874,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/002168fc.json",
+      "source_artifact": "contract-pilot/00286ec4.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -3883,8 +3883,8 @@
       ]
     },
     {
-      "address": "002169cc",
-      "name": "pauseEnvEffect()",
+      "address": "00287084",
+      "name": "pspNetCheckTrapOnlyStatus(int)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -3925,7 +3925,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/002169cc.json",
+      "source_artifact": "contract-pilot/00287084.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -3934,8 +3934,8 @@
       ]
     },
     {
-      "address": "0021ebb0",
-      "name": "error(char, long)",
+      "address": "00287090",
+      "name": "pspNetTrapDeliveryInit(char)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -3976,7 +3976,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/0021ebb0.json",
+      "source_artifact": "contract-pilot/00287090.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -3985,8 +3985,8 @@
       ]
     },
     {
-      "address": "00225310",
-      "name": "iOS_CheckPEffect(char const*, int)",
+      "address": "00287584",
+      "name": "load_iconpackdata()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -4027,7 +4027,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/00225310.json",
+      "source_artifact": "contract-pilot/00287584.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -4036,8 +4036,8 @@
       ]
     },
     {
-      "address": "00225a60",
-      "name": "objectLG2(_EffectTCB*, _Object*)",
+      "address": "002875a0",
+      "name": "draw_maru(unsigned long*)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -4078,7 +4078,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/00225a60.json",
+      "source_artifact": "contract-pilot/002875a0.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -4087,8 +4087,8 @@
       ]
     },
     {
-      "address": "00225a64",
-      "name": "dmyFnc2(_EffectTCB*, _Object*)",
+      "address": "002875a4",
+      "name": "draw_batu(unsigned long*)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -4129,7 +4129,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/00225a64.json",
+      "source_artifact": "contract-pilot/002875a4.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -4138,8 +4138,8 @@
       ]
     },
     {
-      "address": "0022a614",
-      "name": "DumpMemory(int, void*)",
+      "address": "00287a14",
+      "name": "Red_Blue_Draw(int)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -4180,7 +4180,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/0022a614.json",
+      "source_artifact": "contract-pilot/00287a14.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -4189,8 +4189,8 @@
       ]
     },
     {
-      "address": "002419cc",
-      "name": "fftCdLoop(CDREC*)",
+      "address": "00288498",
+      "name": "Draw_TuusinIcon(int, int, unsigned long*)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -4231,7 +4231,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/002419cc.json",
+      "source_artifact": "contract-pilot/00288498.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -4240,8 +4240,8 @@
       ]
     },
     {
-      "address": "002419d0",
-      "name": "fftCdCancel(CDREC*)",
+      "address": "0028849c",
+      "name": "Draw_Trap_CancelCommandList(int*, int, int, unsigned long*)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -4282,7 +4282,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/002419d0.json",
+      "source_artifact": "contract-pilot/0028849c.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -4291,8 +4291,8 @@
       ]
     },
     {
-      "address": "002524cc",
-      "name": "ctlworkingst_deactive(CTLINFO*)",
+      "address": "002884c8",
+      "name": "NetBattleJudge()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -4333,7 +4333,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/002524cc.json",
+      "source_artifact": "contract-pilot/002884c8.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -4342,8 +4342,8 @@
       ]
     },
     {
-      "address": "00252b68",
-      "name": "ctlworkend_active(CTLINFO*)",
+      "address": "002884fc",
+      "name": "setRewardLv(int)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -4384,7 +4384,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/00252b68.json",
+      "source_artifact": "contract-pilot/002884fc.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -4393,8 +4393,8 @@
       ]
     },
     {
-      "address": "00252b6c",
-      "name": "ctlworkend_deactive(CTLINFO*)",
+      "address": "00288508",
+      "name": "CalcRewardLv()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -4435,7 +4435,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/00252b6c.json",
+      "source_artifact": "contract-pilot/00288508.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -4444,8 +4444,8 @@
       ]
     },
     {
-      "address": "00258ac4",
-      "name": "evt_skip0()",
+      "address": "0028850c",
+      "name": "CalcMissionPayPoint(int)",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -4486,7 +4486,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/00258ac4.json",
+      "source_artifact": "contract-pilot/0028850c.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -4495,8 +4495,8 @@
       ]
     },
     {
-      "address": "0025f354",
-      "name": "wld_btlsect_seek()",
+      "address": "00288510",
+      "name": "Final_CalcMissionPayPoint()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -4537,7 +4537,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/0025f354.json",
+      "source_artifact": "contract-pilot/00288510.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -4546,8 +4546,8 @@
       ]
     },
     {
-      "address": "00267f38",
-      "name": "wldrute_init()",
+      "address": "0028856c",
+      "name": "init_AnimList()",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -4588,7 +4588,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/00267f38.json",
+      "source_artifact": "contract-pilot/0028856c.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -4597,8 +4597,8 @@
       ]
     },
     {
-      "address": "0026c058",
-      "name": "iOS_debugDispTownCircle(int, int)",
+      "address": "0028b460",
+      "name": "SpuInit",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -4639,7 +4639,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/0026c058.json",
+      "source_artifact": "contract-pilot/0028b460.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -4648,8 +4648,8 @@
       ]
     },
     {
-      "address": "0026ff2c",
-      "name": "effectdmy()",
+      "address": "0028b464",
+      "name": "SpuInitHot",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -4690,7 +4690,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/0026ff2c.json",
+      "source_artifact": "contract-pilot/0028b464.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -4699,8 +4699,8 @@
       ]
     },
     {
-      "address": "0027129c",
-      "name": "Ssd_Quit()",
+      "address": "0028b468",
+      "name": "SpuQuit",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -4741,7 +4741,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/0027129c.json",
+      "source_artifact": "contract-pilot/0028b468.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -4750,8 +4750,8 @@
       ]
     },
     {
-      "address": "002712a0",
-      "name": "Ssd_Enable()",
+      "address": "0028b46c",
+      "name": "SetMem",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -4792,7 +4792,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/002712a0.json",
+      "source_artifact": "contract-pilot/0028b46c.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -4801,8 +4801,8 @@
       ]
     },
     {
-      "address": "002712a4",
-      "name": "Ssd_Disable()",
+      "address": "0028b490",
+      "name": "StSetRing",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -4843,7 +4843,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/002712a4.json",
+      "source_artifact": "contract-pilot/0028b490.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -4852,8 +4852,8 @@
       ]
     },
     {
-      "address": "002712b0",
-      "name": "Ssd_DisposeNormalWave()",
+      "address": "0028b494",
+      "name": "StClearRing",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -4894,7 +4894,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/002712b0.json",
+      "source_artifact": "contract-pilot/0028b494.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -4903,8 +4903,8 @@
       ]
     },
     {
-      "address": "002712b4",
-      "name": "Ssd_DisposeWaveData(SsdWaveSetRec*)",
+      "address": "0028b498",
+      "name": "StUnSetRing",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -4945,7 +4945,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/002712b4.json",
+      "source_artifact": "contract-pilot/0028b498.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -4954,8 +4954,8 @@
       ]
     },
     {
-      "address": "002712c0",
-      "name": "Ssd_AddEffectData(void*)",
+      "address": "0028b49c",
+      "name": "StSetStream",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -4996,7 +4996,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/002712c0.json",
+      "source_artifact": "contract-pilot/0028b49c.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -5005,8 +5005,8 @@
       ]
     },
     {
-      "address": "002712c4",
-      "name": "Ssd_DisposeEffectData(void*)",
+      "address": "0028b4a0",
+      "name": "StSetEmulate",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -5047,7 +5047,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/002712c4.json",
+      "source_artifact": "contract-pilot/0028b4a0.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
@@ -5056,8 +5056,8 @@
       ]
     },
     {
-      "address": "002712c8",
-      "name": "Ssd_AllStop()",
+      "address": "0028b4c4",
+      "name": "StRingStatus",
       "status": "partial",
       "certified": false,
       "review_stage": "independent_human_review_pending",
@@ -5098,7 +5098,7 @@
       ],
       "same_run_machine_samples": 32,
       "new_machine_samples_in_this_step": 0,
-      "source_artifact": "contract-pilot/002712c8.json",
+      "source_artifact": "contract-pilot/0028b4c4.json",
       "reviewer": null,
       "blocking_review_items": [
         "independent human assessment of ARM ISA scope and assumptions",
