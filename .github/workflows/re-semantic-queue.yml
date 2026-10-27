@@ -116,8 +116,9 @@ jobs:
           cp FFT_Android_Mod/docs/re-results/SEMANTIC_SOUND_DESTINATION_271314.md \
             /tmp/fft-semantic/SEMANTIC_SOUND_DESTINATION_271314.md
           cp FFT_Android_Mod/docs/re-results/SEMANTIC_SOUND_THREE_ENTRY_EXEC.md \
-          cp FFT_Android_Mod/docs/re-results/SEMANTIC_SOUND_PLAYDEF_ENTRY.md \
             /tmp/fft-semantic/SEMANTIC_SOUND_THREE_ENTRY_EXEC.md
+          cp FFT_Android_Mod/docs/re-results/SEMANTIC_SOUND_PLAYDEF_ENTRY.md \
+            /tmp/fft-semantic/SEMANTIC_SOUND_PLAYDEF_ENTRY.md
       - uses: actions/upload-artifact@v4
         with:
           name: fft-semantic-manifests
