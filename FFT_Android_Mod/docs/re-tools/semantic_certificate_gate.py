@@ -185,8 +185,12 @@ def verify_remote_review(record, address, provider=github_json):
             if matched and matched.group(1) == address and matched.group(2) == fingerprint:
                 return True
         return False
-    approved_sources = [item for item in changed
-                        if includes_approved_fingerprint(item["patch"])]
+    # GitHub can truncate large unified diffs. A newly ADDED file is a
+    # reliable PR-file fact; its entire content is fetched from the exact
+    # reviewer-approved commit below and the fingerprint checked there.
+    approved_sources = [item for item in changed if
+                        item.get("status") == "added"
+                        or includes_approved_fingerprint(item["patch"])]
     if len(approved_sources) != 1:
         raise ValueError("review PR must add the exact scoped fingerprint in one review request")
     approved_path = approved_sources[0]["filename"]
