@@ -19,6 +19,8 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "docs/re-results"
 REPO = "c1c3ru/fft_craft"
 MILESTONES = (
+    ("SEMANTIC_BATCH_SCALING.md",
+     "Lotes semânticos de 100/200 funções com revisão independente"),
     ("SEMANTIC_BXLR_REVIEW_BATCH.md",
      "Primeiro lote de cinco contratos BX LR preparados para revisão humana"),
     ("SEMANTIC_CERTIFICATION_POLICY.md",
