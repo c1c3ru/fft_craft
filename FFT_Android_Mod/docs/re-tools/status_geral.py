@@ -19,6 +19,8 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "docs/re-results"
 REPO = "c1c3ru/fft_craft"
 MILESTONES = (
+    ("SEMANTIC_SOUND_THREE_ENTRY_EXEC.md",
+     "sound_request e entradas ARM alternativas: 384 microexecucoes ate destinos externos sem executar seus efeitos"),
     ("SEMANTIC_SOUND_DESTINATION_271314.md",
      "sound_request: destino 0x271314 e tres entradas ARM auditados no ELF original; execucao ainda pendente"),
     ("SEMANTIC_SOUND_TWO_HOP_EXEC.md",
@@ -57,7 +59,7 @@ MILESTONES = (
      "Retorno ARM real e alterações de memória antes da primeira chamada"),
 )
 CURRENT_SEMANTIC_BOUNDARIES = (
-    ("0x271314", "Microexecutar o destino de sound_request e distinguir tres entradas ARM sem supor efeitos de som"),
+    ("0x2b2cf8", "Investigar SysSE_PlayDef(int) apos os tres saltos ARM reais de sound_request sem executar chamadas desconhecidas"),
     ("0x2bf008", "Investigar o próximo BL de SysSE_Play depois do desvio condicionado"),
     ("0x0a7034", "Investigar o próximo BL de iOS_SetIconPosition com os argumentos já observados"),
 )
