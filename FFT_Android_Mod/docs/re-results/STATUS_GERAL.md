@@ -114,11 +114,11 @@ Estas duas prioridades são **curadas no gerador**; quando um limite for resolvi
 
 ## Pull requests recentes
 
+- [PR #341 — chore(re): automated structural batch 40419767759](https://github.com/c1c3ru/fft_craft/pull/341)
 - [PR #340 — feat(re): certificar os cinco primeiros contratos ARM BX LR após aprovação independente #338](https://github.com/c1c3ru/fft_craft/pull/340)
 - [PR #338 — review(re): solicitação de APPROVED independente — cinco contratos BX LR (rodada 2)](https://github.com/c1c3ru/fft_craft/pull/338)
 - [PR #339 — chore(re): automated structural batch 40417516285](https://github.com/c1c3ru/fft_craft/pull/339)
 - [PR #337 — Fix/re review second round 20261026](https://github.com/c1c3ru/fft_craft/pull/337)
-- [PR #335 — review(re): aprovação humana independente dos primeiros cinco contratos ARM BX LR](https://github.com/c1c3ru/fft_craft/pull/335)
 
 ## Atualização automática e fontes
 
