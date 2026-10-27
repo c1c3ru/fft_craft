@@ -15,8 +15,7 @@ on:
       - '.github/workflows/re-semantic-queue.yml'
       - 'FFT_Android_Mod/docs/re-tools/**'
       - 'FFT_Android_Mod/docs/re-results/semantic-certificates.json'
-      - 'FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_REVIEW_REQUEST.json'
-      - 'FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_REVIEW_REQUEST_R2.json'
+      - 'FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_REVIEW_REQUEST*.json'
       - 'FFT_Android_Mod/docs/RE_FUNCTION_INVENTORY.csv'
       - 'FFT_Android_Mod/src/lib/armeabi/libgl2jni.so'
 
@@ -44,16 +43,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           python3 FFT_Android_Mod/docs/re-tools/semantic_certificate_gate.py
-      - name: Verify immutable review request against original ELF
-        if: ${{ hashFiles('FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_REVIEW_REQUEST.json') != '' }}
+      - name: Reverify all immutable review rounds against exact original ELF
         run: |
-          python3 FFT_Android_Mod/docs/re-tools/semantic_review_protocol.py \
-            --verify-request FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_REVIEW_REQUEST.json
-      - name: Verify second review request against freshly executed original ELF
-        if: ${{ hashFiles('FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_REVIEW_REQUEST_R2.json') != '' }}
-        run: |
-          python3 FFT_Android_Mod/docs/re-tools/semantic_review_protocol.py \
-            --verify-request FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_REVIEW_REQUEST_R2.json
+          python3 FFT_Android_Mod/docs/re-tools/semantic_review_protocol.py --verify-all
       - name: Generate exact-binary semantic dashboard and worker manifests
         env:
           GH_TOKEN: ${{ github.token }}
