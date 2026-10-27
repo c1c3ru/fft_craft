@@ -92,6 +92,8 @@ jobs:
             --output FFT_Android_Mod/docs/re-results/SEMANTIC_SOUND_THREE_ENTRY_EXEC.md
           python3 FFT_Android_Mod/docs/re-tools/semantic_sound_playdef_entry.py \
             --output FFT_Android_Mod/docs/re-results/SEMANTIC_SOUND_PLAYDEF_ENTRY.md
+          python3 FFT_Android_Mod/docs/re-tools/semantic_sound_functional_reconstruction.py \
+            --output FFT_Android_Mod/docs/re-results/SEMANTIC_SOUND_FUNCTIONAL_RECONSTRUCTION.md
           python3 FFT_Android_Mod/docs/re-tools/status_geral.py \
             --pilot-dir /tmp/fft-semantic/pilot \
             --dynamic-dir /tmp/fft-semantic/dynamic-evidence \
@@ -119,6 +121,8 @@ jobs:
             /tmp/fft-semantic/SEMANTIC_SOUND_THREE_ENTRY_EXEC.md
           cp FFT_Android_Mod/docs/re-results/SEMANTIC_SOUND_PLAYDEF_ENTRY.md \
             /tmp/fft-semantic/SEMANTIC_SOUND_PLAYDEF_ENTRY.md
+          cp FFT_Android_Mod/docs/re-results/SEMANTIC_SOUND_FUNCTIONAL_RECONSTRUCTION.md \
+            /tmp/fft-semantic/SEMANTIC_SOUND_FUNCTIONAL_RECONSTRUCTION.md
       - uses: actions/upload-artifact@v4
         with:
           name: fft-semantic-manifests
