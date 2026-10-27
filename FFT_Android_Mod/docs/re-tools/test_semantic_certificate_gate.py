@@ -128,6 +128,51 @@ class CertificateGateTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "differs from proposed"):
             gate.verify_remote_review(cert, ADDRESS, forgery)
 
+    def test_large_added_pr_review_without_patch_still_requires_exact_hash(self):
+        cert = approved()
+        fingerprint = protocol.fingerprint(ADDRESS, cert)
+        content = {
+            "schema": 1, "review_protocol": protocol.PROTOCOL,
+            "elf_sha256": DIGEST, "status": "human_review_requested",
+            "certified": False,
+            "certificate_fingerprints": {ADDRESS: fingerprint},
+        }
+        prefix = "repos/c1c3ru/fft_craft/pulls/325"
+        def provider(path):
+            if path == prefix:
+                return {"head": {"sha": "large-head"},
+                        "user": {"login": "request-author"}}
+            if path.endswith("/reviews?per_page=100"):
+                return [{"user": {"login": "independent-reviewer", "type": "User"},
+                         "state": "APPROVED", "commit_id": "large-head",
+                         "submitted_at": "2026-10-26T15:00:00Z"}]
+            if path.endswith("/files?per_page=100"):
+                return [{"filename": protocol.REVIEW_BASE +
+                         "SEMANTIC_BXLR_REVIEW_REQUEST_R4.json",
+                         "status": "added"}]  # GitHub omitted large diff patch
+            if "/contents/" in path:
+                return {"encoding": "base64", "content": base64.b64encode(
+                    json.dumps(content).encode()).decode()}
+            raise AssertionError(path)
+        self.assertTrue(gate.verify_remote_review(cert, ADDRESS, provider))
+        def modified_file(path):
+            data = provider(path)
+            if path.endswith("/files?per_page=100"):
+                return [dict(data[0], status="modified")]
+            return data
+        with self.assertRaisesRegex(ValueError, "exact scoped fingerprint"):
+            gate.verify_remote_review(cert, ADDRESS, modified_file)
+        def tampered_blob(path):
+            data = provider(path)
+            if "/contents/" in path:
+                bad = dict(content)
+                bad["certificate_fingerprints"] = {ADDRESS: "f" * 64}
+                return {"encoding": "base64", "content": base64.b64encode(
+                    json.dumps(bad).encode()).decode()}
+            return data
+        with self.assertRaisesRegex(ValueError, "differs from proposed"):
+            gate.verify_remote_review(cert, ADDRESS, tampered_blob)
+
     def test_second_round_review_requires_new_file_and_exact_head(self):
         cert = approved()
         fingerprint = protocol.fingerprint(ADDRESS, cert)

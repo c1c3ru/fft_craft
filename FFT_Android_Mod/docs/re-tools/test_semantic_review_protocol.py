@@ -55,6 +55,22 @@ class SemanticReviewProtocolTests(unittest.TestCase):
             return protocol.make_request(self.elf, self.inventory,
                                          self.ledger, limit=limit)
 
+    def test_request_of_100_separately_bound_addresses(self):
+        import copy
+        template = self.records["00002010"]
+        addresses = [f"{0x2010 + i * 4:08x}" for i in range(100)]
+        self.records = {address: copy.deepcopy(template) for address in addresses}
+        self.inventory.write_text("address,size,demangled\n" +
+                                  "".join(f"{address},4,leaf_{i}\n"
+                                          for i, address in enumerate(addresses)))
+        self.save()
+        request = self.build(limit=100)
+        fingerprints = request["certificate_fingerprints"]
+        self.assertEqual(set(fingerprints), set(addresses))
+        self.assertEqual(len(set(fingerprints.values())), 100)
+        self.assertEqual(request["certified"], False)
+        self.assertEqual(protocol.MAX_REVIEW_ADDRESSES, 303)
+
     def test_two_distinct_original_elf_review_fingerprints(self):
         request = self.build()
         self.assertEqual(request["review_protocol"], protocol.PROTOCOL)
@@ -203,8 +219,11 @@ class SemanticReviewProtocolTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.build(0)
         with self.assertRaises(ValueError):
-            self.build(21)
+            self.build(304)
         self.assertEqual(len(self.build(1)["certificate_fingerprints"]), 1)
+        # The larger batch cap must not silently accept missing evidence.
+        with self.assertRaisesRegex(ValueError, "not enough"):
+            self.build(100)
 
 
 if __name__ == "__main__":

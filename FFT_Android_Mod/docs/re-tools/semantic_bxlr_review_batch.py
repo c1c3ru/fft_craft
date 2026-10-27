@@ -16,14 +16,14 @@ import semantic_evidence
 import semantic_bxlr_contract_pilot as local
 import semantic_certificate_gate as gate
 
-MAX_BATCH = 20
+MAX_BATCH = 303
 
 
 def build(binary, inventory, contracts_dir, limit=5,
           reader=semantic_evidence.read_function, run_id=None,
-          certificates_path=None):
+          certificates_path=None, up_to=False):
     if type(limit) is not int or not 1 <= limit <= MAX_BATCH:
-        raise ValueError("review batch size must be between 1 and 20")
+        raise ValueError("review batch size must be between 1 and 303")
     binary, inventory = Path(binary), Path(inventory)
     digest = hashlib.sha256(binary.read_bytes()).hexdigest()
     ledger = semantic_coverage.ledger(inventory, digest, {})
@@ -90,7 +90,9 @@ def build(binary, inventory, contracts_dir, limit=5,
                 raise ValueError(f"ledger and same-run review proof disagree: {address}")
         candidates.append((address, record))
     if len(candidates) < limit:
-        raise ValueError("insufficient validated proof candidates")
+        if not up_to:
+            raise ValueError("insufficient validated proof candidates")
+        limit = len(candidates)
     result = []
     for address, source in candidates[:limit]:
         result.append({
@@ -192,14 +194,16 @@ def main():
     p.add_argument("--contracts-dir", type=Path, required=True)
     p.add_argument("--certificates", type=Path,
                    default=semantic_coverage.RESULTS / "semantic-certificates.json")
-    p.add_argument("--limit", type=int, default=5)
+    p.add_argument("--limit", type=int, default=100)
+    p.add_argument("--up-to", action="store_true", help="allow fewer remaining uncertified addresses")
     p.add_argument("--manifest", type=Path,
                    default=semantic_coverage.RESULTS / "SEMANTIC_BXLR_REVIEW_BATCH.json")
     p.add_argument("--report", type=Path,
                    default=semantic_coverage.RESULTS / "SEMANTIC_BXLR_REVIEW_BATCH.md")
     a = p.parse_args()
     write(build(a.binary, a.inventory, a.contracts_dir, a.limit,
-                certificates_path=a.certificates),
+                certificates_path=a.certificates,
+                up_to=a.up_to),
           a.manifest, a.report)
 
 

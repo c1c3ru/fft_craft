@@ -117,9 +117,18 @@ class ReviewBatchTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unverified or stale"):
             self.prepare()
 
+    def test_capped_review_batch_with_fewer_remaining_candidates(self):
+        result = batch.build(
+            self.binary, self.inventory, self.contracts, limit=100,
+            reader=lambda binary, address, size: CODE,
+            up_to=True)
+        self.assertEqual(len(result["candidates"]), 2)
+        self.assertEqual(result["certified_functions"], 0)
+        self.assertEqual(result["candidates"][0]["new_machine_samples_in_this_step"], 0)
+
     def test_missing_or_few_valid_candidates_is_fatal(self):
         with self.assertRaises(ValueError):
-            self.prepare(limit=21)
+            self.prepare(limit=304)
         with self.assertRaisesRegex(ValueError, "insufficient"):
             self.prepare(limit=3)
         for path in self.contracts.glob("*.json"):
