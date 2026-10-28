@@ -45,8 +45,8 @@ A prioridade é reconstruir comportamento verificável (estrutura, semântica, C
 
 ### Próximas atividades executáveis
 
-- **B01 (P1, em andamento)** — Consolidar inventario unico ELF (ARM/Thumb), JNI/Smali e assets OBB, deduplicar aliases e apontar manifestos, erros e exclusoes. **Aceite:** Relatorio de inventario com total unico, cobertura de bytes e origem de cada entrada, sem dupla contagem.
 - **A04 (P1, em andamento)** — Executar auditoria estática delimitada dos sete destinos ELF A02, inspecionar os primeiros blocos e interpretar o dispatcher 0x000b6c58; depois criar contratos semânticos de destino e testes ARM sem extrapolação. **Aceite:** CFG e contratos por destino com testes diferenciais completos até próximas fronteiras; fluxo do autoloop classificado com evidência de reachability ou lacuna explícita.
+- **B01 (P1, em andamento)** — Consolidar inventario unico ELF (ARM/Thumb), JNI/Smali e assets OBB, deduplicar aliases e apontar manifestos, erros e exclusoes. **Aceite:** Relatorio de inventario com total unico, cobertura de bytes e origem de cada entrada, sem dupla contagem.
 
 ### Próximas dependências não liberadas
 
@@ -174,11 +174,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #404 — feat(re): A04 auditoria dos sete destinos ARM no ELF original](https://github.com/c1c3ru/fft_craft/pull/404)
+- [PR #403 — chore(re): automated structural batch 40738059076](https://github.com/c1c3ru/fft_craft/pull/403)
 - [PR #402 — test(ci): validar A02 e detectar jobs duplicados sem conflito no painel](https://github.com/c1c3ru/fft_craft/pull/402)
 - [PR #401 — chore(re): automated structural batch 40736489646](https://github.com/c1c3ru/fft_craft/pull/401)
 - [PR #399 — Fix/re a02 verified ledger ci guard 20261028](https://github.com/c1c3ru/fft_craft/pull/399)
-- [PR #398 — feat(re): A02 11 fronteiras ARM com B delimitado e checkpoints originais](https://github.com/c1c3ru/fft_craft/pull/398)
-- [PR #397 — chore(re): automated structural batch 40733363796](https://github.com/c1c3ru/fft_craft/pull/397)
 
 ## Atualização automática e fontes
 
