@@ -58,12 +58,17 @@
       "id": "A01",
       "phase": "F1",
       "priority": 1,
-      "status": "planned",
+      "status": "done",
       "depends_on": [],
       "title": "Issue #388: adicionar contratos conservadores STRB/LDRB e LDR com offsets maiores com testes de aliasing",
-      "next_action": "Issue #388: adicionar contratos conservadores STRB/LDRB e LDR com offsets maiores com testes de aliasing, dados sinteticos e canarias.",
+      "next_action": "A01 concluída com 2 STRB, 1 LDRB e 7 LDR de deslocamento maior (320 testes) no ELF original; continuar por A02 nos 11 opcodes com saltos, mantendo contratos delimitados.",
       "acceptance": "Byte/word read/write avaliados no ELF original sob modelos independentes; CI verde; catalogo dos 21 atualizado.",
-      "evidence": []
+      "evidence": [
+        "https://github.com/c1c3ru/fft_craft/actions/runs/40730706242",
+        "https://github.com/c1c3ru/fft_craft/pull/394",
+        "FFT_Android_Mod/docs/re-results/SEMANTIC_A01_MEMORY.md",
+        "Artifact real-elf-250-static-audit ID 12833619024: 10 original ELF entries, 320 differential tests, 11 out-of-contract"
+      ]
     },
     {
       "id": "A02",
@@ -74,7 +79,7 @@
         "A01"
       ],
       "title": "Issue #388: mapear nove opcodes+salto",
-      "next_action": "Issue #388: mapear nove opcodes+salto, um LDR+salto e auto-loop, parando antes do destino de controle desconhecido.",
+      "next_action": "A02: reconstruir nove sequências de operação+B, um LDR+B e um auto-loop, testar prefixos ARM até ANTES dos destinos e registrar efeitos/caminhos não modelados sem executar salto infinito.",
       "acceptance": "Todos os 21 classificados com motivo, trace limitado ou bloqueio justificado; sem loop infinito ou certificado automatico.",
       "evidence": []
     },

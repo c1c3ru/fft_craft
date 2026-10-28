@@ -32,6 +32,8 @@ MILESTONES = (
      "SysSE_PlayDef 0x2b2cf8: auditoria estática A32 de 128 bytes; nenhuma instrução executada"),
     ("SEMANTIC_SOUND_THREE_ENTRY_EXEC.md",
      "sound_request: 384 microexecucoes em tres entradas ARM ate destinos de funcao nao executados"),
+    ("SEMANTIC_A01_MEMORY.md",
+     "A01 concluída: 10 rotinas STRB/LDRB/LDR no ELF real, 320 testes diferenciais (run #40730706242); 11 pendentes para A02"),
     ("SEMANTIC_REMAINING_34.md",
      "Issue #388: 34 endereços catalogados; 13 STR/BX LR e 416 testes Unicorn aprovados; 21 pendentes"),
     ("SEMANTIC_LOOP_250_FULL.md",

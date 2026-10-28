@@ -8,6 +8,8 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/semantic_manifest_audit.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_loop_250.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_remaining_34.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a01_memory_21.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_a01_memory_21.py'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_remaining_34.py'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_loop_250.py'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_manifest_audit.py'
@@ -42,6 +44,7 @@ jobs:
           python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_manifest_audit.py' -v
           python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_loop_250.py' -v
           python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_remaining_34.py' -v
+          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_a01_memory_21.py' -v
       - name: Check certificates independently (never add any)
         env:
           GH_TOKEN: ${{ github.token }}
@@ -177,6 +180,43 @@ jobs:
           cmp /tmp/remaining-34-before.json /tmp/fft-real-250/semantic-remaining-34-checkpoint.json
           grep -qx 'REMAINING_34_FAILED=0' /tmp/fft-real-250/remaining-34-resume.log
           grep -qx 'REMAINING_34_NEW_CERTIFICATES=0' /tmp/fft-real-250/remaining-34-resume.log
+      - name: A01 original ELF byte and wide-load differential loop
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a01_memory_21.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --manifests /tmp/fft-real-250/manifests \
+            --pilot /tmp/fft-real-250/pilot \
+            --full-checkpoint /tmp/fft-real-250/semantic-loop-full-checkpoint.json \
+            --remaining-checkpoint /tmp/fft-real-250/semantic-remaining-34-checkpoint.json \
+            --checkpoint /tmp/fft-real-250/semantic-a01-memory-checkpoint.json \
+            --report /tmp/fft-real-250/SEMANTIC_A01_MEMORY.md \
+            --expected-prior 21 --round-size 5 \
+            | tee /tmp/fft-real-250/semantic-a01-memory.log
+          grep -qx 'A01_INPUT_UNMODELED=21' /tmp/fft-real-250/semantic-a01-memory.log
+          grep -qx 'A01_STRB_TESTED=2' /tmp/fft-real-250/semantic-a01-memory.log
+          grep -qx 'A01_LDRB_TESTED=1' /tmp/fft-real-250/semantic-a01-memory.log
+          grep -qx 'A01_LDR_LARGE_TESTED=7' /tmp/fft-real-250/semantic-a01-memory.log
+          grep -qx 'A01_NEW_ENTRIES=10' /tmp/fft-real-250/semantic-a01-memory.log
+          grep -qx 'A01_NEW_DYNAMIC_CASES=320' /tmp/fft-real-250/semantic-a01-memory.log
+          grep -qx 'A01_STILL_UNMODELED=11' /tmp/fft-real-250/semantic-a01-memory.log
+          grep -qx 'A01_FAILED=0' /tmp/fft-real-250/semantic-a01-memory.log
+          grep -qx 'A01_NEW_CERTIFICATES=0' /tmp/fft-real-250/semantic-a01-memory.log
+          cp /tmp/fft-real-250/semantic-a01-memory-checkpoint.json /tmp/semantic-a01-memory-before.json
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a01_memory_21.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --manifests /tmp/fft-real-250/manifests \
+            --pilot /tmp/fft-real-250/pilot \
+            --full-checkpoint /tmp/fft-real-250/semantic-loop-full-checkpoint.json \
+            --remaining-checkpoint /tmp/fft-real-250/semantic-remaining-34-checkpoint.json \
+            --checkpoint /tmp/fft-real-250/semantic-a01-memory-checkpoint.json \
+            --report /tmp/fft-real-250/SEMANTIC_A01_MEMORY.md \
+            --expected-prior 21 --round-size 5 \
+            | tee /tmp/fft-real-250/semantic-a01-memory-resume.log
+          cmp /tmp/semantic-a01-memory-before.json /tmp/fft-real-250/semantic-a01-memory-checkpoint.json
+          grep -qx 'A01_NEW_DYNAMIC_CASES=320' /tmp/fft-real-250/semantic-a01-memory-resume.log
+          grep -qx 'A01_FAILED=0' /tmp/fft-real-250/semantic-a01-memory-resume.log
+          grep -qx 'A01_NEW_CERTIFICATES=0' /tmp/fft-real-250/semantic-a01-memory-resume.log
       - name: Preserve run artifacts, including failures
         if: always()
         uses: actions/upload-artifact@v4
