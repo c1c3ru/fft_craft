@@ -28,6 +28,7 @@ class StatusGeralTests(unittest.TestCase):
         (self.results / "SEMANTIC_EVIDENCE_INDEX.md").write_text(
             f"ELF SHA-256: `{SHA}`\nEvidence collected: **89/89** pending functions.\n",
             encoding="utf-8")
+        (self.results / "SEMANTIC_LOOP_250.md").write_text("ELF SHA-256: `" + SHA + "`\n", encoding="utf-8")
         (self.results / "SEMANTIC_SOUND_ICON_MICROEXEC.md").write_text(
             "Sound dispatcher microexecutions: 10/10 PASS.", encoding="utf-8")
         (self.results / "REVIEW_QUEUE.csv").write_text(
