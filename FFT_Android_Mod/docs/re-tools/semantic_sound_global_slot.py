@@ -93,7 +93,7 @@ def elf_slot_metadata(binary, address):
                     "section": sec.name, "type": int(relocation["r_info_type"]),
                     "symbol": symbol_name,
                     "addend": int(relocation["r_addend"])
-                    if relocation.is_RELA() else None,
+                    if sec.is_RELA() else None,
                 })
         return matches[0], relocations
 
