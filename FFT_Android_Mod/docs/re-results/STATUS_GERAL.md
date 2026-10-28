@@ -45,8 +45,8 @@ A prioridade é reconstruir comportamento verificável (estrutura, semântica, C
 
 ### Próximas atividades executáveis
 
+- **A04 (P1, em andamento)** — A04: sete destinos auditados; dispatcher (512 casos), getter (32) e dois veneers GOT (64) microexecutados com checkpoints — total 608 testes locais. Restam 0x000ab674 (prólogo, estado global e BL 0x000b6620), 0x000b461c (prólogo e BL 0x000b45d0), 0x002b1bb0 (retorno condicional) e a reachability do autoloop 0x002a1268. Não promover certificados nem marcar A04 done até CFG/efeitos integrais verificados. **Aceite:** CFG e contratos por destino com testes diferenciais completos até próximas fronteiras; fluxo do autoloop classificado com evidência de reachability ou lacuna explícita.
 - **B01 (P1, em andamento)** — Consolidar inventario unico ELF (ARM/Thumb), JNI/Smali e assets OBB, deduplicar aliases e apontar manifestos, erros e exclusoes. **Aceite:** Relatorio de inventario com total unico, cobertura de bytes e origem de cada entrada, sem dupla contagem.
-- **A04 (P1, em andamento)** — Executar auditoria estática delimitada dos sete destinos ELF A02, inspecionar os primeiros blocos e interpretar o dispatcher 0x000b6c58; depois criar contratos semânticos de destino e testes ARM sem extrapolação. **Aceite:** CFG e contratos por destino com testes diferenciais completos até próximas fronteiras; fluxo do autoloop classificado com evidência de reachability ou lacuna explícita.
 
 ### Próximas dependências não liberadas
 
@@ -75,7 +75,9 @@ Os relatórios abaixo apresentam **efeitos locais testados sob estados sintétic
 - [sound_request: reconstrução parcial C do prefixo A32 e 128 comparações ARM/C](SEMANTIC_SOUND_FUNCTIONAL_RECONSTRUCTION.md)
 - [SysSE_PlayDef 0x2b2cf8: auditoria estática A32 de 128 bytes; nenhuma instrução executada](SEMANTIC_SOUND_PLAYDEF_ENTRY.md)
 - [sound_request: 384 microexecucoes em tres entradas ARM ate destinos de funcao nao executados](SEMANTIC_SOUND_THREE_ENTRY_EXEC.md)
-- [A04 em andamento: sete destinos externos do ELF real em auditoria de blocos e code-vs-data; sem equivalência](SEMANTIC_A04_DESTINATIONS.md)
+- [A04: dois veneers ARM via GOT/PC com 64 microexecuções e zero alvos indiretos executados (run #40751407523)](SEMANTIC_A04_VENEERS.md)
+- [A04: dispatcher e getter originais microexecutados em 544 cenários, com memória controlada (run #40750531709)](SEMANTIC_A04_DISPATCHER.md)
+- [A04: sete destinos ARM auditados estaticamente em 672 bytes do ELF original (run #40748750630); três destinos sem execução](SEMANTIC_A04_DESTINATIONS.md)
 - [A02 validada no ELF: 11 entradas, 352 microexecuções ARM e 0 destinos externos executados (run #40735782606); A04 investiga sete destinos](SEMANTIC_A02_BRANCHES.md)
 - [A01 concluída: 10 rotinas STRB/LDRB/LDR no ELF real, 320 testes diferenciais (run #40730706242); 11 pendentes para A02](SEMANTIC_A01_MEMORY.md)
 - [Issue #388: 34 endereços catalogados; 13 STR/BX LR e 416 testes Unicorn aprovados; 21 pendentes](SEMANTIC_REMAINING_34.md)
@@ -174,11 +176,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
-- [PR #402 — test(ci): validar A02 e detectar jobs duplicados sem conflito no painel](https://github.com/c1c3ru/fft_craft/pull/402)
-- [PR #401 — chore(re): automated structural batch 40736489646](https://github.com/c1c3ru/fft_craft/pull/401)
-- [PR #399 — Fix/re a02 verified ledger ci guard 20261028](https://github.com/c1c3ru/fft_craft/pull/399)
-- [PR #398 — feat(re): A02 11 fronteiras ARM com B delimitado e checkpoints originais](https://github.com/c1c3ru/fft_craft/pull/398)
-- [PR #397 — chore(re): automated structural batch 40733363796](https://github.com/c1c3ru/fft_craft/pull/397)
+- [PR #410 — docs(re): centralizar evidências A04 e manter três destinos pendentes](https://github.com/c1c3ru/fft_craft/pull/410)
+- [PR #411 — chore(re): automated structural batch 40752057494](https://github.com/c1c3ru/fft_craft/pull/411)
+- [PR #408 — feat(re): A04 validar dois saltos indiretos ARM PC/GOT sem executar os alvos](https://github.com/c1c3ru/fft_craft/pull/408)
+- [PR #409 — chore(re): automated structural batch 40751245753](https://github.com/c1c3ru/fft_craft/pull/409)
+- [PR #407 — feat(re): validar dispatcher ARM e getter A04 em 544 cenários](https://github.com/c1c3ru/fft_craft/pull/407)
 
 ## Atualização automática e fontes
 
