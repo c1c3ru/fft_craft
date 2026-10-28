@@ -25,6 +25,43 @@ O histórico CSV contém **5,932** registros de análise anterior, que podem se 
 A prioridade é reconstruir comportamento verificável (estrutura, semântica, C/C++, diferencial), não aumentar certificados.
 [Etapas, gates e prioridades](../RECONSTRUCTION_WORKFLOW.md)
 
+## Plano de conclusão da engenharia reversa do app
+
+[Plano e critérios de aceite](../RE_COMPLETION_PLAN.md) · [Fila e evidências versionadas](RE_COMPLETION_TRACKER.json)
+
+**Escopo:** engenharia reversa funcional, C/C++, JNI/Smali, APK/OBB e execução em Android suportado.
+
+**Atividades:** 16 totais; **0 concluídas com evidência**; **1 em andamento**; **1 prontas para iniciar**; **0 bloqueadas**. Dependências pendentes não contam como prontas.
+
+| Etapa | Gate de saída | Concluídas / total |
+|---|---|---:|
+| F0 — Linha de base e escopo | Inventario e artefatos de referencia versionados, areas descobertas/dados separadas, riscos/alcancabilidade documentados | 0/1 |
+| F1 — Contratos de instrucao e CFG | 21 alvos ARM restantes classificados e testados quando seguros; CFG e pendencias estruturais auditados | 0/3 |
+| F2 — Reconstrucao semantica de subsistemas | Fluxos nativos relevantes com contratos completos, memoria/calls/branch e traces com limites | 0/4 |
+| F3 — Reimplementacao funcional independente | Modulos compilaveis com diferencial original x C/C++ sem divergencias do gate | 0/2 |
+| F4 — Integracao APK/Android/OBB | ABI e JNI integrados, APK assinado reproduzivel, instalacao/carregamento em dispositivos suportados | 0/2 |
+| F5 — Validacao funcional e regressao | Matriz real Android/OBB com zero divergencias criticas e evidencias de teste | 0/2 |
+| F6 — Aceite final e documentacao | Todos fluxos do escopo com disposition validada e nenhuma lacuna funcional relevante | 0/2 |
+
+### Próximas atividades executáveis
+
+- **B01 (P1, em andamento)** — Consolidar inventario unico ELF (ARM/Thumb), JNI/Smali e assets OBB, deduplicar aliases e apontar manifestos, erros e exclusoes. **Aceite:** Relatorio de inventario com total unico, cobertura de bytes e origem de cada entrada, sem dupla contagem.
+- **A01 (P1, pronta)** — Issue #388: adicionar contratos conservadores STRB/LDRB e LDR com offsets maiores com testes de aliasing, dados sinteticos e canarias. **Aceite:** Byte/word read/write avaliados no ELF original sob modelos independentes; CI verde; catalogo dos 21 atualizado.
+
+### Próximas dependências não liberadas
+
+- **A02**: aguarda A01.
+- **A03**: aguarda B01.
+- **C01**: aguarda R01, R02.
+- **C02**: aguarda R03, R04.
+- **I01**: aguarda C01, C02.
+- **Q01**: aguarda I02.
+- **R01**: aguarda B01.
+- **R02**: aguarda B01.
+
+**Regra por PR:** mudar estado, ação seguinte, dependências e evidências no JSON; atualizar o relatório técnico; regenerar este painel; exigir CI verde. Somente marcar done com provas e todas as dependências concluídas.
+**Gate global:** nenhuma lacuna funcional relevante; fluxos originais comparados à reimplementação, APK/OBB instalado e matriz de testes Android aprovada. Microexecuções e certificados de BX LR não satisfazem esse gate.
+
 ## Evidência e testes semânticos
 
 50/50 relatórios estáticos de evidências. **Relatórios não são equivalência semântica certificada.**

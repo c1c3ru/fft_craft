@@ -25,6 +25,26 @@ class StatusGeralTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.results = Path(self.temp.name)
+        (self.results / "RE_COMPLETION_TRACKER.json").write_text(json.dumps({
+            "schema": 1,
+            "project": "FFT test",
+            "scope": "end_to_end_android_app",
+            "elf_sha256": SHA,
+            "phases": [{"id": f"F{i}", "title": f"Etapa {i}",
+                        "exit_gate": f"Entrega de etapa {i}"} for i in range(7)],
+            "tasks": [
+                {"id": "A01", "phase": "F0", "priority": 1,
+                 "title": "Map original", "status": "in_progress",
+                 "depends_on": [], "evidence": [],
+                 "next_action": "Mapear o ELF real",
+                 "acceptance": "Inventario rastreavel"},
+                {"id": "B01", "phase": "F1", "priority": 1,
+                 "title": "Expand ARM", "status": "planned",
+                 "depends_on": ["A01"], "evidence": [],
+                 "next_action": "Expandir contratos ARM",
+                 "acceptance": "Comparar efeitos em Unicorn"},
+            ],
+        }), encoding="utf-8")
         (self.results / "SEMANTIC_EVIDENCE_INDEX.md").write_text(
             f"ELF SHA-256: `{SHA}`\nEvidence collected: **89/89** pending functions.\n",
             encoding="utf-8")
@@ -68,6 +88,12 @@ class StatusGeralTests(unittest.TestCase):
         self.assertIn("(SEMANTIC_LOOP_250.md)", report)
         self.assertIn("(SEMANTIC_LOOP_250_FULL.md)", report)
         self.assertIn("(SEMANTIC_REMAINING_34.md)", report)
+        self.assertIn("(../RE_COMPLETION_PLAN.md)", report)
+        self.assertIn("(RE_COMPLETION_TRACKER.json)", report)
+        self.assertIn("A01", report)
+        self.assertIn("B01", report)
+        self.assertIn("aguarda A01", report)
+        self.assertIn("0 concluídas com evidência", report)
 
     def test_semantic_headline_matches_detailed_dashboard(self):
         semantic = {
@@ -86,6 +112,14 @@ class StatusGeralTests(unittest.TestCase):
                         report.index("## Cobertura semântica e execução paralela"))
         self.assertLess(report.index("## Cobertura semântica e execução paralela"),
                         report.index("## Próximas prioridades"))
+
+    def test_completion_tracker_rejects_stale_elf(self):
+        tracker_path = self.results / "RE_COMPLETION_TRACKER.json"
+        obj = json.loads(tracker_path.read_text())
+        obj["elf_sha256"] = "b" * 64
+        tracker_path.write_text(json.dumps(obj))
+        with self.assertRaisesRegex(ValueError, "ELF"):
+            status.render(metrics(), self.results)
 
     def test_v3_only_accepts_same_binary_records(self):
         counts = status.current_v3(self.results, SHA)

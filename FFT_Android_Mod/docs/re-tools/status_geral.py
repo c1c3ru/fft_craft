@@ -14,6 +14,7 @@ from pathlib import Path
 
 import progress_report
 import central_semantic_summary
+import re_completion_tracker
 
 ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "docs/re-results"
@@ -194,7 +195,9 @@ def render(data, results, prs=None, semantic=None):
         "", "## Fluxo de reconstrução funcional", "",
         "A prioridade é reconstruir comportamento verificável (estrutura, semântica, C/C++, diferencial), não aumentar certificados.",
         "[Etapas, gates e prioridades](../RECONSTRUCTION_WORKFLOW.md)",
-        "", "## Evidência e testes semânticos", "",
+        "", re_completion_tracker.render_file(
+            results / "RE_COMPLETION_TRACKER.json", data["digest"]),
+        "## Evidência e testes semânticos", "",
         evidence_status(results, data["digest"], review), "",
         "Os relatórios abaixo apresentam **efeitos locais testados sob estados "
         "sintéticos** e seus limites. Testes passando não significam que "

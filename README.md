@@ -2,6 +2,8 @@
 
 **[Acompanhar o progresso da engenharia reversa — STATUS_GERAL.md](FFT_Android_Mod/docs/re-results/STATUS_GERAL.md)**
 
+**[Plano de conclusão do app — etapas, gates e próximas atividades](FFT_Android_Mod/docs/RE_COMPLETION_PLAN.md)**
+
 O painel é regenerado pelo GitHub Actions após cada lote validado e distingue
 aprovação estrutural de evidência semântica e de equivalência integral.
 
