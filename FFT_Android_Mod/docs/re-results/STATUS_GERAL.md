@@ -31,12 +31,12 @@ A prioridade é reconstruir comportamento verificável (estrutura, semântica, C
 
 **Escopo:** engenharia reversa funcional, C/C++, JNI/Smali, APK/OBB e execução em Android suportado.
 
-**Atividades:** 17 totais; **1 concluídas com evidência**; **2 em andamento**; **0 prontas para iniciar**; **0 bloqueadas**. Dependências pendentes não contam como prontas.
+**Atividades:** 17 totais; **2 concluídas com evidência**; **1 em andamento**; **1 prontas para iniciar**; **0 bloqueadas**. Dependências pendentes não contam como prontas.
 
 | Etapa | Gate de saída | Concluídas / total |
 |---|---|---:|
 | F0 — Linha de base e escopo | Inventario e artefatos de referencia versionados, areas descobertas/dados separadas, riscos/alcancabilidade documentados | 0/1 |
-| F1 — Contratos de instrucao e CFG | 21 alvos ARM restantes classificados e testados quando seguros; CFG e pendencias estruturais auditados | 1/4 |
+| F1 — Contratos de instrucao e CFG | 21 alvos ARM restantes classificados e testados quando seguros; CFG e pendencias estruturais auditados | 2/4 |
 | F2 — Reconstrucao semantica de subsistemas | Fluxos nativos relevantes com contratos completos, memoria/calls/branch e traces com limites | 0/4 |
 | F3 — Reimplementacao funcional independente | Modulos compilaveis com diferencial original x C/C++ sem divergencias do gate | 0/2 |
 | F4 — Integracao APK/Android/OBB | ABI e JNI integrados, APK assinado reproduzivel, instalacao/carregamento em dispositivos suportados | 0/2 |
@@ -45,13 +45,12 @@ A prioridade é reconstruir comportamento verificável (estrutura, semântica, C
 
 ### Próximas atividades executáveis
 
-- **A02 (P1, em andamento)** — Executar as dez sequências A32 prefixo+B e o auto-loop de um passo no ELF original, verificar 352 cenários locais e checkpoint idêntico, sem executar destinos externos. **Aceite:** Todos os 21 classificados com motivo, trace limitado ou bloqueio justificado; sem loop infinito ou certificado automatico.
+- **A04 (P1, pronta)** — A04: investigar os sete destinos originais 0x002b1bb0, 0x000714e8, 0x000714dc, 0x000ab674, 0x000b461c, 0x000b6c58 e 0x000b8a18; começar por 0x000b6c58 e classificar reachability do auto-loop 0x002a1268. **Aceite:** CFG e contratos por destino com testes diferenciais completos até próximas fronteiras; fluxo do autoloop classificado com evidência de reachability ou lacuna explícita.
 - **B01 (P1, em andamento)** — Consolidar inventario unico ELF (ARM/Thumb), JNI/Smali e assets OBB, deduplicar aliases e apontar manifestos, erros e exclusoes. **Aceite:** Relatorio de inventario com total unico, cobertura de bytes e origem de cada entrada, sem dupla contagem.
 
 ### Próximas dependências não liberadas
 
 - **A03**: aguarda B01.
-- **A04**: aguarda A02.
 - **C01**: aguarda R01, R02.
 - **C02**: aguarda R03, R04.
 - **I01**: aguarda C01, C02.
@@ -75,7 +74,7 @@ Os relatórios abaixo apresentam **efeitos locais testados sob estados sintétic
 - [sound_request: reconstrução parcial C do prefixo A32 e 128 comparações ARM/C](SEMANTIC_SOUND_FUNCTIONAL_RECONSTRUCTION.md)
 - [SysSE_PlayDef 0x2b2cf8: auditoria estática A32 de 128 bytes; nenhuma instrução executada](SEMANTIC_SOUND_PLAYDEF_ENTRY.md)
 - [sound_request: 384 microexecucoes em tres entradas ARM ate destinos de funcao nao executados](SEMANTIC_SOUND_THREE_ENTRY_EXEC.md)
-- [A02: onze prefixos/saltos ARM do ELF, 10 externos e um autoloop de um passo; testes aguardando CI](SEMANTIC_A02_BRANCHES.md)
+- [A02 validada no ELF: 11 entradas, 352 microexecuções ARM e 0 destinos externos executados (run #40735782606); A04 investiga sete destinos](SEMANTIC_A02_BRANCHES.md)
 - [A01 concluída: 10 rotinas STRB/LDRB/LDR no ELF real, 320 testes diferenciais (run #40730706242); 11 pendentes para A02](SEMANTIC_A01_MEMORY.md)
 - [Issue #388: 34 endereços catalogados; 13 STR/BX LR e 416 testes Unicorn aprovados; 21 pendentes](SEMANTIC_REMAINING_34.md)
 - [Loop ELF 250: 216 candidatos A32, 6.912 microexecuções e 14 checkpoints (run #40713115396); sem novos certificados](SEMANTIC_LOOP_250_FULL.md)
