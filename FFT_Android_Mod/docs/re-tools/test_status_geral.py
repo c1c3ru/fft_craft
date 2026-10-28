@@ -28,6 +28,7 @@ class StatusGeralTests(unittest.TestCase):
         (self.results / "SEMANTIC_EVIDENCE_INDEX.md").write_text(
             f"ELF SHA-256: `{SHA}`\nEvidence collected: **89/89** pending functions.\n",
             encoding="utf-8")
+        (self.results / "SEMANTIC_LOOP_250.md").write_text("ELF SHA-256: `" + SHA + "`\n", encoding="utf-8")
         (self.results / "SEMANTIC_SOUND_ICON_MICROEXEC.md").write_text(
             "Sound dispatcher microexecutions: 10/10 PASS.", encoding="utf-8")
         (self.results / "REVIEW_QUEUE.csv").write_text(
@@ -60,6 +61,7 @@ class StatusGeralTests(unittest.TestCase):
         self.assertIn("Não somamos esses conjuntos", report)
         self.assertIn("89/89 relatórios estáticos", report)
         self.assertIn("0025a228", report)
+        self.assertIn("(SEMANTIC_LOOP_250.md)", report)
 
     def test_semantic_headline_matches_detailed_dashboard(self):
         semantic = {
