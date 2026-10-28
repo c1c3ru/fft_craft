@@ -53,7 +53,7 @@ jobs:
           grep -qx 'RE_COMPLETION_TRACKER_VALID=1' /tmp/re-plan-check.log
           # New tasks are expected as reverse engineering discovers gaps.
           # Enforce a positive validated count instead of freezing the roadmap at 16.
-          grep -Eq '^RE_COMPLETION_TRACKER_TASKS=[1-9][0-9]*
+          test "$(sed -n 's/^RE_COMPLETION_TRACKER_TASKS=//p' /tmp/re-plan-check.log)" -ge 1
 
   structural-smoke:
     # Bounded smoke tests run on PRs as well as manual dispatches.
