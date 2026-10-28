@@ -102,6 +102,47 @@ jobs:
           cmp /tmp/fft-loop-before.json /tmp/fft-real-250/semantic-loop-checkpoint.json
           grep -qx 'LOOP_FAILED=0' /tmp/fft-real-250/semantic-loop-resume.log
           grep -qx 'LOOP_NEW_CERTIFICATES=0' /tmp/fft-real-250/semantic-loop-resume.log
+      - name: Expand loop to all eligible A32 entries in the 250-task batch
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/semantic_loop_250.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --manifests /tmp/fft-real-250/manifests \
+            --pilot /tmp/fft-real-250/pilot \
+            --max-candidates 250 --round-size 16 \
+            --checkpoint /tmp/fft-real-250/semantic-loop-full-checkpoint.json \
+            --report /tmp/fft-real-250/SEMANTIC_LOOP_250_FULL.md \
+            | tee /tmp/fft-real-250/semantic-loop-full.log
+          grep -qx 'LOOP_FAILED=0' /tmp/fft-real-250/semantic-loop-full.log
+          grep -qx 'LOOP_NEW_CERTIFICATES=0' /tmp/fft-real-250/semantic-loop-full.log
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          folder = Path('/tmp/fft-real-250')
+          snapshot = json.loads((folder / 'semantic-loop-full-checkpoint.json').read_text())
+          selected = snapshot['selected']
+          rounds = snapshot['rounds']
+          actual = sum(record['samples'] for record in rounds)
+          assert snapshot['eligible'] == len(selected), 'Some eligible A32 entries were omitted'
+          assert 0 < len(selected) <= 250, 'Invalid selected count'
+          assert actual == len(selected) * 32, 'Missing or duplicate sample'
+          assert all(len(record['items']) <= 16 for record in rounds), 'Invalid iteration width'
+          assert snapshot['new_certificates'] == 0
+          print(f'LOOP_FULL_ENTRIES={len(selected)}')
+          print(f'LOOP_FULL_DIFFERENTIAL_PASSED={actual}')
+          PY
+          cp /tmp/fft-real-250/semantic-loop-full-checkpoint.json /tmp/fft-loop-full-before.json
+          python3 FFT_Android_Mod/docs/re-tools/semantic_loop_250.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --manifests /tmp/fft-real-250/manifests \
+            --pilot /tmp/fft-real-250/pilot \
+            --max-candidates 250 --round-size 16 \
+            --checkpoint /tmp/fft-real-250/semantic-loop-full-checkpoint.json \
+            --report /tmp/fft-real-250/SEMANTIC_LOOP_250_FULL.md \
+            | tee /tmp/fft-real-250/semantic-loop-full-resume.log
+          cmp /tmp/fft-loop-full-before.json /tmp/fft-real-250/semantic-loop-full-checkpoint.json
+          grep -qx 'LOOP_FAILED=0' /tmp/fft-real-250/semantic-loop-full-resume.log
+          grep -qx 'LOOP_NEW_CERTIFICATES=0' /tmp/fft-real-250/semantic-loop-full-resume.log
       - name: Preserve run artifacts, including failures
         if: always()
         uses: actions/upload-artifact@v4
