@@ -52,6 +52,31 @@ class SemanticLoopTests(unittest.TestCase):
         self.assertIn("Nenhum callee", report)
         self.assertIn("303 certificados", report)
 
+    def test_unicorn_register_bank_regression(self):
+        """Original bug: installing LR before selecting user CPSR bank jumped to zero."""
+        from unittest import mock
+        import semantic_evidence
+        cases = (
+            (0x823e4, words(0xe3a00055, loop.BX_LR)),
+            (0x8300c, words(0xe5900008, loop.BX_LR)),
+            (0xa8210, words(0xe280001c, loop.BX_LR)),
+            (0x92000, words(0xea000000)),
+        )
+        for address, raw in cases:
+            with self.subTest(address=hex(address)):
+                spec = {**loop.decode(raw, address),
+                        "address": f"{address:08x}", "size": len(raw)}
+                def read_fixture(binary, start, size):
+                    if start == address and size == len(raw):
+                        return raw
+                    if spec["kind"] == "branch_prefix" and start == address + 8:
+                        return words(loop.BX_LR)
+                    raise ValueError("unexpected binary read in synthetic test")
+                with mock.patch.object(semantic_evidence, "read_function",
+                                       side_effect=read_fixture):
+                    for flags in (0, 0x40000000, 0x90000000):
+                        loop.execute(None, spec, 0x12345678, flags)
+
     def test_rotated_immediate(self):
         # MOV r0, #0x80000000 (imm8 0x80 rotated right 8).
         spec = loop.decode(words(0xe3a00480, loop.BX_LR), 0x2000)
