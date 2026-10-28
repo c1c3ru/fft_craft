@@ -97,12 +97,15 @@
         "A02"
       ],
       "title": "Reconstruir os sete destinos externos dos saltos ARM A02",
-      "next_action": "A04 static: sete destinos reais e 672 bytes inspecionados (run 40748750630); executar agora quatro callers A02 até BX LR do dispatcher 0x000b6c58 e getter 0x000b8a18, comparar 544 cenários, depois modelar os cinco alvos restantes e reachability do autoloop.",
+      "next_action": "A04: sete destinos auditados; dispatcher 0x000b6c58 (4 entradas) e getter 0x000b8a18 verificados em 544 execuções ARM (run 40749838024). Próximos: dois veneers LDR PC via GOT (0x714dc/0x714e8), prólogos com BL (0xab674/0xb461c) e ramo condicional 0x2b1bb0; classificar reachability do autoloop 0x2a1268.",
       "acceptance": "CFG e contratos por destino com testes diferenciais completos até próximas fronteiras; fluxo do autoloop classificado com evidência de reachability ou lacuna explícita.",
       "evidence": [
         "https://github.com/c1c3ru/fft_craft/actions/runs/40748750630",
         "FFT_Android_Mod/docs/re-results/SEMANTIC_A04_DESTINATIONS.md",
-        "Artifact real-elf-250-static-audit #12841958525: 7 targets/672 original ELF bytes inspected, 0 targets executed"
+        "Artifact real-elf-250-static-audit #12841958525: 7 targets/672 original ELF bytes inspected, 0 targets executed",
+        "https://github.com/c1c3ru/fft_craft/actions/runs/40749838024",
+        "FFT_Android_Mod/docs/re-results/SEMANTIC_A04_DISPATCHER.md",
+        "Artifact #12842678515: 512 original-ARM dispatcher/caller +32 getter differential cases, original ELF, replay identical, 0 failures"
       ]
     },
     {
