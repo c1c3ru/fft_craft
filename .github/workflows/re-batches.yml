@@ -151,6 +151,8 @@ jobs:
         run: python3 FFT_Android_Mod/docs/re-tools/semantic_sound_three_entry_exec.py
       - name: Audit original SysSE_PlayDef A32 destination bytes
         run: python3 FFT_Android_Mod/docs/re-tools/semantic_sound_playdef_entry.py
+      - name: Reconstruct verified sound prefix and compare original ARM to C
+        run: python3 FFT_Android_Mod/docs/re-tools/semantic_sound_functional_reconstruction.py
       - name: Publish v3 coverage diagnostics and migration counts
         run: |
           python3 FFT_Android_Mod/docs/re-tools/structural_v3_report.py

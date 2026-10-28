@@ -19,6 +19,8 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "docs/re-results"
 REPO = "c1c3ru/fft_craft"
 MILESTONES = (
+    ("SEMANTIC_SOUND_FUNCTIONAL_RECONSTRUCTION.md",
+     "sound_request: reconstrução parcial C do prefixo A32 e 128 comparações ARM/C"),
     ("SEMANTIC_SOUND_PLAYDEF_ENTRY.md",
      "SysSE_PlayDef 0x2b2cf8: auditoria estática A32 de 128 bytes; nenhuma instrução executada"),
     ("SEMANTIC_SOUND_THREE_ENTRY_EXEC.md",
@@ -177,6 +179,9 @@ def render(data, results, prs=None, semantic=None):
         f"**{data['historical_count']:,}** registros de análise anterior, "
         "que podem se sobrepor aos checkpoints. "
         "**Não somamos esses conjuntos para criar um percentual global fictício.**",
+        "", "## Fluxo de reconstrução funcional", "",
+        "A prioridade é reconstruir comportamento verificável (estrutura, semântica, C/C++, diferencial), não aumentar certificados.",
+        "[Etapas, gates e prioridades](../RECONSTRUCTION_WORKFLOW.md)",
         "", "## Evidência e testes semânticos", "",
         evidence_status(results, data["digest"], review), "",
         "Os relatórios abaixo apresentam **efeitos locais testados sob estados "
