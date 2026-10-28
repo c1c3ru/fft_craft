@@ -121,11 +121,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #369 — chore(re): automated structural batch 40568009721](https://github.com/c1c3ru/fft_craft/pull/369)
 - [PR #368 — feat(re): auditar entrada A32 original de SysSE_PlayDef em 0x2b2cf8](https://github.com/c1c3ru/fft_craft/pull/368)
 - [PR #367 — chore(re): automated structural batch 40566148585](https://github.com/c1c3ru/fft_craft/pull/367)
 - [PR #365 — feat(re): integrar 384 testes ARM de som preservando correções do pipeline](https://github.com/c1c3ru/fft_craft/pull/365)
 - [PR #366 — chore(re): automated structural batch 40565385882](https://github.com/c1c3ru/fft_craft/pull/366)
-- [PR #364 — fix(re): processar 25 manifestos/250 tarefas e evitar merge automático de resultados obsoletos](https://github.com/c1c3ru/fft_craft/pull/364)
 
 ## Atualização automática e fontes
 
