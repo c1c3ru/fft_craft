@@ -97,9 +97,13 @@
         "A02"
       ],
       "title": "Reconstruir os sete destinos externos dos saltos ARM A02",
-      "next_action": "Executar auditoria estática delimitada dos sete destinos ELF A02, inspecionar os primeiros blocos e interpretar o dispatcher 0x000b6c58; depois criar contratos semânticos de destino e testes ARM sem extrapolação.",
+      "next_action": "A04 static: sete destinos reais e 672 bytes inspecionados (run 40748750630); executar agora quatro callers A02 até BX LR do dispatcher 0x000b6c58 e getter 0x000b8a18, comparar 544 cenários, depois modelar os cinco alvos restantes e reachability do autoloop.",
       "acceptance": "CFG e contratos por destino com testes diferenciais completos até próximas fronteiras; fluxo do autoloop classificado com evidência de reachability ou lacuna explícita.",
-      "evidence": []
+      "evidence": [
+        "https://github.com/c1c3ru/fft_craft/actions/runs/40748750630",
+        "FFT_Android_Mod/docs/re-results/SEMANTIC_A04_DESTINATIONS.md",
+        "Artifact real-elf-250-static-audit #12841958525: 7 targets/672 original ELF bytes inspected, 0 targets executed"
+      ]
     },
     {
       "id": "A03",
