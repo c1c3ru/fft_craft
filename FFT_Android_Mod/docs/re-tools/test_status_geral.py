@@ -60,6 +60,7 @@ class StatusGeralTests(unittest.TestCase):
         self.assertIn("Não somamos esses conjuntos", report)
         self.assertIn("89/89 relatórios estáticos", report)
         self.assertIn("0025a228", report)
+        self.assertIn("(SEMANTIC_LOOP_250.md)", report)
 
     def test_semantic_headline_matches_detailed_dashboard(self):
         semantic = {
