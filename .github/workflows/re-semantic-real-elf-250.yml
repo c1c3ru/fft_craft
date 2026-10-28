@@ -6,6 +6,8 @@ on:
     paths:
       - '.github/workflows/re-semantic-real-elf-250.yml'
       - 'FFT_Android_Mod/docs/re-tools/semantic_manifest_audit.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_loop_250.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_loop_250.py'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_manifest_audit.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_work_queue.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_pilot.py'
@@ -36,6 +38,7 @@ jobs:
           set -euo pipefail
           python3 -m compileall -q FFT_Android_Mod/docs/re-tools
           python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_manifest_audit.py' -v
+          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_loop_250.py' -v
       - name: Check certificates independently (never add any)
         env:
           GH_TOKEN: ${{ github.token }}
@@ -74,6 +77,31 @@ jobs:
           grep -qx 'REAL_ELF_AUDIT_STATIC_REPORTS=250' /tmp/fft-real-250/audit.log
           grep -qx 'REAL_ELF_AUDIT_REINSPECTED=1' /tmp/fft-real-250/audit.log
           grep -qx 'REAL_ELF_AUDIT_CERTIFICATES_CREATED=0' /tmp/fft-real-250/audit.log
+      - name: Iterative ARM differential loop with immutable checkpoints
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/semantic_loop_250.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --manifests /tmp/fft-real-250/manifests \
+            --pilot /tmp/fft-real-250/pilot \
+            --max-candidates 24 --round-size 8 \
+            --checkpoint /tmp/fft-real-250/semantic-loop-checkpoint.json \
+            --report /tmp/fft-real-250/SEMANTIC_LOOP_250.md \
+            | tee /tmp/fft-real-250/semantic-loop.log
+          grep -qx 'LOOP_FAILED=0' /tmp/fft-real-250/semantic-loop.log
+          grep -qx 'LOOP_NEW_CERTIFICATES=0' /tmp/fft-real-250/semantic-loop.log
+          cp /tmp/fft-real-250/semantic-loop-checkpoint.json /tmp/fft-loop-before.json
+          python3 FFT_Android_Mod/docs/re-tools/semantic_loop_250.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --manifests /tmp/fft-real-250/manifests \
+            --pilot /tmp/fft-real-250/pilot \
+            --max-candidates 24 --round-size 8 \
+            --checkpoint /tmp/fft-real-250/semantic-loop-checkpoint.json \
+            --report /tmp/fft-real-250/SEMANTIC_LOOP_250.md \
+            | tee /tmp/fft-real-250/semantic-loop-resume.log
+          cmp /tmp/fft-loop-before.json /tmp/fft-real-250/semantic-loop-checkpoint.json
+          grep -qx 'LOOP_FAILED=0' /tmp/fft-real-250/semantic-loop-resume.log
+          grep -qx 'LOOP_NEW_CERTIFICATES=0' /tmp/fft-real-250/semantic-loop-resume.log
       - name: Preserve run artifacts, including failures
         if: always()
         uses: actions/upload-artifact@v4
