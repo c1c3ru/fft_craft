@@ -31,6 +31,7 @@ A prioridade é reconstruir comportamento verificável (estrutura, semântica, C
 
 Os relatórios abaixo apresentam **efeitos locais testados sob estados sintéticos** e seus limites. Testes passando não significam que a função inteira foi reconstruída:
 
+- [Corpo comum 0x2b2b7c: desmontagem original A32 e execução limitada antes de efeitos não modelados](SEMANTIC_SOUND_COMMON_BODY_2B2B7C.md)
 - [sound_request: reconstrução parcial C do prefixo A32 e 128 comparações ARM/C](SEMANTIC_SOUND_FUNCTIONAL_RECONSTRUCTION.md)
 - [SysSE_PlayDef 0x2b2cf8: auditoria estática A32 de 128 bytes; nenhuma instrução executada](SEMANTIC_SOUND_PLAYDEF_ENTRY.md)
 - [sound_request: 384 microexecucoes em tres entradas ARM ate destinos de funcao nao executados](SEMANTIC_SOUND_THREE_ENTRY_EXEC.md)
@@ -108,7 +109,7 @@ O restante da fila permanece nos manifestos e no `SEMANTIC_COVERAGE.md`. Observa
 
 ### Lacunas semânticas conhecidas
 
-- `0x2b2cf8`: Investigar SysSE_PlayDef apos a microexecucao das tres entradas ARM de som sem inferir efeitos externos.
+- `0x2b2b7c`: Investigar primeira fronteira com acesso a dados ou chamada no corpo compartilhado; validar memória e retornos sem inventar efeitos sonoros.
 - `0x2bf008`: Investigar o próximo BL de SysSE_Play depois do desvio condicionado.
 - `0x0a7034`: Investigar o próximo BL de iOS_SetIconPosition com os argumentos já observados.
 
@@ -127,11 +128,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #373 — feat(re): auditar e microexecutar prefixo seguro do corpo compartilhado ARM 0x2b2b7c](https://github.com/c1c3ru/fft_craft/pull/373)
+- [PR #372 — chore(re): automated structural batch 40695639804](https://github.com/c1c3ru/fft_craft/pull/372)
 - [PR #370 — feat(re): reconstrução funcional ARM→C e teste diferencial de som](https://github.com/c1c3ru/fft_craft/pull/370)
 - [PR #371 — chore(re): automated structural batch 40666108387](https://github.com/c1c3ru/fft_craft/pull/371)
 - [PR #369 — chore(re): automated structural batch 40568009721](https://github.com/c1c3ru/fft_craft/pull/369)
-- [PR #368 — feat(re): auditar entrada A32 original de SysSE_PlayDef em 0x2b2cf8](https://github.com/c1c3ru/fft_craft/pull/368)
-- [PR #367 — chore(re): automated structural batch 40566148585](https://github.com/c1c3ru/fft_craft/pull/367)
 
 ## Atualização automática e fontes
 
