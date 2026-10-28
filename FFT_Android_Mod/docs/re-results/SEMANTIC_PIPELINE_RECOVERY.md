@@ -27,3 +27,11 @@ O PR #362 foi encerrado **sem merge**, para não sobrescrever resultados da `mai
 - O painel centralizado `STATUS_GERAL.md` referencia esta análise e deve manter links às evidências originais. Nenhuma contagem é aumentada só porque os manifestos foram gerados.
 
 **Limite de garantia:** uma proteção contra publicação concorrente não prova ausência de outros processos alterando a `main` e não autoriza promover evidência parcial a certificação.
+
+## Auditoria reprodutível de 250 tarefas no ELF original (em validação)
+
+Foi preparado o workflow [Real ELF semantic manifest audit (250)](../../../.github/workflows/re-semantic-real-elf-250.yml), executável em pull request ou manualmente. Ele cria **25 manifestos** com **250 tarefas únicas**, processa cada tarefa usando o `libgl2jni.so` original e faz uma **segunda inspeção determinística** de cada endereço para detectar saídas ausentes, duplicadas, adulteradas ou incompatíveis com o ELF SHA-256 conhecido.
+
+O job exige os marcadores `TOTAL_TASKS=250`, `PILOT_PARTIAL=250`, `PILOT_FAILED=0`, `PILOT_MANIFEST_SHARDS=25`, `PILOT_CONCURRENT_THREADS=16`, `REAL_ELF_AUDIT_STATIC_REPORTS=250` e `REAL_ELF_AUDIT_REINSPECTED=1`. O artefato `real-elf-250-static-audit` contém os manifestos, relatórios JSON individuais, logs e `REAL_ELF_250_AUDIT.md`; a aprovação do job depende da inspeção de **todos** os resultados. Os testes unitários do verificador usam dados sintéticos e **não** contam como evidência do ELF real.
+
+**Situação no momento desta alteração:** código e CI de validação propostos; os 250 resultados reais só podem ser declarados confirmados **após a conclusão bem-sucedida do novo job no GitHub Actions**. A auditoria é **estática e limitada**: não executa as funções no Unicorn e não cria certificados semânticos. As 303 certificações formais existentes permanecem inalteradas.
