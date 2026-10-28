@@ -20,6 +20,8 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "docs/re-results"
 REPO = "c1c3ru/fft_craft"
 MILESTONES = (
+    ("CI_RELIABILITY_2026-10-28.md",
+     "CI auditado: falhas históricas de fixture e Unicorn separadas do HEAD verde; cancelar apenas runs obsoletos de PR"),
     ("SEMANTIC_SOUND_GLOBAL_SLOT.md",
      "Som: slot global do ELF em 0x34615c, relocação e 512 leituras ARM com memória sintética"),
     ("SEMANTIC_SOUND_COMMON_PROLOGUE.md",
