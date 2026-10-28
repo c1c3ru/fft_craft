@@ -65,6 +65,24 @@ class VeneerTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "Original ELF byte mismatch"):
                 veneer.validate_sources(None)
 
+    def test_central_a04_task_retains_evidence_and_unfinished_scope(self):
+        import json
+        from pathlib import Path
+        folder = Path(__file__).resolve().parents[1] / "re-results"
+        data = json.loads((folder / "RE_COMPLETION_TRACKER.json").read_text(encoding="utf-8"))
+        task = next(x for x in data["tasks"] if x["id"] == "A04")
+        self.assertEqual(task["status"], "in_progress")
+        self.assertIn("0x000ab674", task["next_action"])
+        self.assertIn("0x000b461c", task["next_action"])
+        self.assertIn("0x002b1bb0", task["next_action"])
+        evidence = " ".join(task["evidence"])
+        for run in ("40748750630", "40750531709", "40751407523"):
+            self.assertIn(run, evidence)
+        for report in ("SEMANTIC_A04_DESTINATIONS.md", "SEMANTIC_A04_DISPATCHER.md",
+                       "SEMANTIC_A04_VENEERS.md"):
+            self.assertTrue((folder / report).is_file())
+            self.assertIn(report, evidence)
+
     def test_no_semantic_certificate_promoted(self):
         result = veneer.snapshot("a"*64, "b"*64, [])
         self.assertEqual(result["new_certificates"], 0)

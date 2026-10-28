@@ -17,7 +17,7 @@ Somente os 8 bytes originais de `MOV/MUL+B` e os 12 bytes originais de cada vene
 
 Oráculo independente: R0 depois do `MOV` ou `MUL`, R12/IP igual ao slot pós-writeback, preservação dos demais registradores e NZCV, SP/LR, PC no destino sintético, uma leitura de 32 bits do slot, nenhuma escrita na tabela e trace completo. O CI exige 8 seeds × 4 conjuntos de flags × 2 veneers = **64 execuções locais**, checkpoint idempotente e zero certificados.
 
-**Estado de validação:** 64 casos são o gate planejado; ainda não é um resultado confirmado nesta revisão. A04 permanecerá em andamento após esse gate.
+**Validação confirmada no ELF original:** [GitHub Actions run #40751407523](https://github.com/c1c3ru/fft_craft/actions/runs/40751407523), artefato `real-elf-250-static-audit` ID `12843668897`, commit `312fafc518e092c1ec759e33ace2d15ddf0dc3c5`. Foram **64 execuções diferenciais**, dois slots GOT/IP verificados, zero diferenças, zero destinos indiretos externos executados e zero certificados criados. O segundo processamento reproduziu o mesmo checkpoint byte por byte. Isto demonstra somente os efeitos originais sob memória sintética, não o destino real das resoluções de linker. A04 continua em andamento.
 
 ### Próximas fronteiras
 
