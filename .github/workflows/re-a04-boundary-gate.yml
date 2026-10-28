@@ -1,0 +1,28 @@
+name: A04 unresolved-boundary integrity gate
+
+on:
+  pull_request:
+    paths:
+      - 'FFT_Android_Mod/docs/re-results/RE_COMPLETION_TRACKER.json'
+      - 'FFT_Android_Mod/docs/re-tools/re_a04_boundary_gate.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_re_a04_boundary_gate.py'
+      - '.github/workflows/re-a04-boundary-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  a04-boundary-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check unresolved original-ELF boundaries
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/re_a04_boundary_gate.py
+          PYTHONPATH=FFT_Android_Mod/docs/re-tools python3 -m unittest -v test_re_a04_boundary_gate
