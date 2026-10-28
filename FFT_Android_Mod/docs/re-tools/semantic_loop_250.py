@@ -124,9 +124,11 @@ def execute(binary, spec, seed, flags):
     regs = {UC_ARM_REG_R0: r0, UC_ARM_REG_R1: r1,
             UC_ARM_REG_R2: 0x13579bdf, UC_ARM_REG_R3: 0x2468ace0,
             UC_ARM_REG_SP: 0x700ffc, UC_ARM_REG_LR: RETURN}
+    # CPSR selects the ARM register bank: install user mode BEFORE writing LR/SP.
+    # Writing CPSR after LR would select a different bank and BX LR jumps to 0.
+    uc.reg_write(UC_ARM_REG_CPSR, flags | 0x10)
     for reg, value in regs.items():
         uc.reg_write(reg, value)
-    uc.reg_write(UC_ARM_REG_CPSR, flags | 0x10)
     trace, reads, writes = [], [], []
 
     def code_hook(emu, pc, size, user_data):
