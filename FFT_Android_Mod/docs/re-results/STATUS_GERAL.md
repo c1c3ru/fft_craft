@@ -20,12 +20,18 @@
 
 O histórico CSV contém **5,932** registros de análise anterior, que podem se sobrepor aos checkpoints. **Não somamos esses conjuntos para criar um percentual global fictício.**
 
+## Fluxo de reconstrução funcional
+
+A prioridade é reconstruir comportamento verificável (estrutura, semântica, C/C++, diferencial), não aumentar certificados.
+[Etapas, gates e prioridades](../RECONSTRUCTION_WORKFLOW.md)
+
 ## Evidência e testes semânticos
 
 50/50 relatórios estáticos de evidências. **Relatórios não são equivalência semântica certificada.**
 
 Os relatórios abaixo apresentam **efeitos locais testados sob estados sintéticos** e seus limites. Testes passando não significam que a função inteira foi reconstruída:
 
+- [sound_request: reconstrução parcial C do prefixo A32 e 128 comparações ARM/C](SEMANTIC_SOUND_FUNCTIONAL_RECONSTRUCTION.md)
 - [SysSE_PlayDef 0x2b2cf8: auditoria estática A32 de 128 bytes; nenhuma instrução executada](SEMANTIC_SOUND_PLAYDEF_ENTRY.md)
 - [sound_request: 384 microexecucoes em tres entradas ARM ate destinos de funcao nao executados](SEMANTIC_SOUND_THREE_ENTRY_EXEC.md)
 - [Correção de 25 manifestos/250 tarefas e conflito do PR automatizado #362; sem novos certificados](SEMANTIC_PIPELINE_RECOVERY.md)
@@ -121,11 +127,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #370 — feat(re): reconstrução funcional ARM→C e teste diferencial de som](https://github.com/c1c3ru/fft_craft/pull/370)
+- [PR #371 — chore(re): automated structural batch 40666108387](https://github.com/c1c3ru/fft_craft/pull/371)
 - [PR #369 — chore(re): automated structural batch 40568009721](https://github.com/c1c3ru/fft_craft/pull/369)
 - [PR #368 — feat(re): auditar entrada A32 original de SysSE_PlayDef em 0x2b2cf8](https://github.com/c1c3ru/fft_craft/pull/368)
 - [PR #367 — chore(re): automated structural batch 40566148585](https://github.com/c1c3ru/fft_craft/pull/367)
-- [PR #365 — feat(re): integrar 384 testes ARM de som preservando correções do pipeline](https://github.com/c1c3ru/fft_craft/pull/365)
-- [PR #366 — chore(re): automated structural batch 40565385882](https://github.com/c1c3ru/fft_craft/pull/366)
 
 ## Atualização automática e fontes
 
