@@ -7,6 +7,8 @@ on:
       - '.github/workflows/re-semantic-real-elf-250.yml'
       - 'FFT_Android_Mod/docs/re-tools/semantic_manifest_audit.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_loop_250.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_remaining_34.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_remaining_34.py'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_loop_250.py'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_manifest_audit.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_work_queue.py'
@@ -39,6 +41,7 @@ jobs:
           python3 -m compileall -q FFT_Android_Mod/docs/re-tools
           python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_manifest_audit.py' -v
           python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_loop_250.py' -v
+          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_remaining_34.py' -v
       - name: Check certificates independently (never add any)
         env:
           GH_TOKEN: ${{ github.token }}
@@ -143,6 +146,38 @@ jobs:
           cmp /tmp/fft-loop-full-before.json /tmp/fft-real-250/semantic-loop-full-checkpoint.json
           grep -qx 'LOOP_FAILED=0' /tmp/fft-real-250/semantic-loop-full-resume.log
           grep -qx 'LOOP_NEW_CERTIFICATES=0' /tmp/fft-real-250/semantic-loop-full-resume.log
+      - name: Catalog 34 remaining opcodes and run bounded STR microexecutions
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/semantic_remaining_34.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --manifests /tmp/fft-real-250/manifests \
+            --pilot /tmp/fft-real-250/pilot \
+            --prior-checkpoint /tmp/fft-real-250/semantic-loop-full-checkpoint.json \
+            --checkpoint /tmp/fft-real-250/semantic-remaining-34-checkpoint.json \
+            --report /tmp/fft-real-250/SEMANTIC_REMAINING_34.md \
+            --expected-missing 34 --round-size 8 \
+            | tee /tmp/fft-real-250/remaining-34.log
+          grep -qx 'REMAINING_34_CATALOG=34' /tmp/fft-real-250/remaining-34.log
+          grep -qx 'REMAINING_34_FAILED=0' /tmp/fft-real-250/remaining-34.log
+          grep -qx 'REMAINING_34_NEW_CERTIFICATES=0' /tmp/fft-real-250/remaining-34.log
+          cp /tmp/fft-real-250/semantic-remaining-34-checkpoint.json /tmp/remaining-34-before.json 2>/dev/null || true
+          python3 FFT_Android_Mod/docs/re-tools/semantic_remaining_34.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --manifests /tmp/fft-real-250/manifests \
+            --pilot /tmp/fft-real-250/pilot \
+            --prior-checkpoint /tmp/fft-real-250/semantic-loop-full-checkpoint.json \
+            --checkpoint /tmp/fft-real-250/semantic-remaining-34-checkpoint.json \
+            --report /tmp/fft-real-250/SEMANTIC_REMAINING_34.md \
+            --expected-missing 34 --round-size 8 \
+            | tee /tmp/fft-real-250/remaining-34-resume.log
+          if test -f /tmp/remaining-34-before.json; then
+            cmp /tmp/remaining-34-before.json /tmp/fft-real-250/semantic-remaining-34-checkpoint.json
+          else
+            test ! -f /tmp/fft-real-250/semantic-remaining-34-checkpoint.json
+          fi
+          grep -qx 'REMAINING_34_FAILED=0' /tmp/fft-real-250/remaining-34-resume.log
+          grep -qx 'REMAINING_34_NEW_CERTIFICATES=0' /tmp/fft-real-250/remaining-34-resume.log
       - name: Preserve run artifacts, including failures
         if: always()
         uses: actions/upload-artifact@v4
