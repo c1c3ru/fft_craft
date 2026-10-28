@@ -6,6 +6,8 @@ on:
     paths:
       - '.github/workflows/re-batches.yml'
       - 'FFT_Android_Mod/docs/re-tools/**'
+      - 'FFT_Android_Mod/docs/RE_COMPLETION_PLAN.md'
+      - 'FFT_Android_Mod/docs/re-results/RE_COMPLETION_TRACKER.json'
       - 'FFT_Android_Mod/docs/re-results/semantic-certificates.json'
       - 'FFT_Android_Mod/docs/RE_FUNCTION_INVENTORY.csv'
       - 'FFT_Android_Mod/src/lib/armeabi/libgl2jni.so'
@@ -43,6 +45,13 @@ jobs:
           python3 -m pip install capstone pyelftools unicorn
           python3 -m compileall -q FFT_Android_Mod/docs/re-tools
           python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_*.py' -v
+      - name: Validate completion tracker before auto-generating dashboard
+        run: |
+          set -euo pipefail
+          sha=$(sha256sum FFT_Android_Mod/src/lib/armeabi/libgl2jni.so | cut -d' ' -f1)
+          python3 FFT_Android_Mod/docs/re-tools/re_completion_tracker.py \
+            --tracker FFT_Android_Mod/docs/re-results/RE_COMPLETION_TRACKER.json \
+            --expected-sha "$sha"
       - name: Restore initial batch checkpoints
         env:
           GH_TOKEN: ${{ github.token }}
