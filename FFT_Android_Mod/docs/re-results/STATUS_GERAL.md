@@ -31,12 +31,12 @@ A prioridade é reconstruir comportamento verificável (estrutura, semântica, C
 
 **Escopo:** engenharia reversa funcional, C/C++, JNI/Smali, APK/OBB e execução em Android suportado.
 
-**Atividades:** 16 totais; **0 concluídas com evidência**; **2 em andamento**; **0 prontas para iniciar**; **0 bloqueadas**. Dependências pendentes não contam como prontas.
+**Atividades:** 16 totais; **1 concluídas com evidência**; **1 em andamento**; **1 prontas para iniciar**; **0 bloqueadas**. Dependências pendentes não contam como prontas.
 
 | Etapa | Gate de saída | Concluídas / total |
 |---|---|---:|
 | F0 — Linha de base e escopo | Inventario e artefatos de referencia versionados, areas descobertas/dados separadas, riscos/alcancabilidade documentados | 0/1 |
-| F1 — Contratos de instrucao e CFG | 21 alvos ARM restantes classificados e testados quando seguros; CFG e pendencias estruturais auditados | 0/3 |
+| F1 — Contratos de instrucao e CFG | 21 alvos ARM restantes classificados e testados quando seguros; CFG e pendencias estruturais auditados | 1/3 |
 | F2 — Reconstrucao semantica de subsistemas | Fluxos nativos relevantes com contratos completos, memoria/calls/branch e traces com limites | 0/4 |
 | F3 — Reimplementacao funcional independente | Modulos compilaveis com diferencial original x C/C++ sem divergencias do gate | 0/2 |
 | F4 — Integracao APK/Android/OBB | ABI e JNI integrados, APK assinado reproduzivel, instalacao/carregamento em dispositivos suportados | 0/2 |
@@ -46,11 +46,10 @@ A prioridade é reconstruir comportamento verificável (estrutura, semântica, C
 ### Próximas atividades executáveis
 
 - **B01 (P1, em andamento)** — Consolidar inventario unico ELF (ARM/Thumb), JNI/Smali e assets OBB, deduplicar aliases e apontar manifestos, erros e exclusoes. **Aceite:** Relatorio de inventario com total unico, cobertura de bytes e origem de cada entrada, sem dupla contagem.
-- **A01 (P1, em andamento)** — Executar o novo loop diferencial de STRB/LDRB/LDR com bytes do ELF original, validar 320 cenários em 10 entradas, repetir checkpoints e documentar os 11 saltos pendentes na issue #388. **Aceite:** Byte/word read/write avaliados no ELF original sob modelos independentes; CI verde; catalogo dos 21 atualizado.
+- **A02 (P1, pronta)** — A02: reconstruir nove sequências de operação+B, um LDR+B e um auto-loop, testar prefixos ARM até ANTES dos destinos e registrar efeitos/caminhos não modelados sem executar salto infinito. **Aceite:** Todos os 21 classificados com motivo, trace limitado ou bloqueio justificado; sem loop infinito ou certificado automatico.
 
 ### Próximas dependências não liberadas
 
-- **A02**: aguarda A01.
 - **A03**: aguarda B01.
 - **C01**: aguarda R01, R02.
 - **C02**: aguarda R03, R04.
@@ -58,6 +57,7 @@ A prioridade é reconstruir comportamento verificável (estrutura, semântica, C
 - **Q01**: aguarda I02.
 - **R01**: aguarda B01.
 - **R02**: aguarda B01.
+- **R03**: aguarda A03.
 
 **Regra por PR:** mudar estado, ação seguinte, dependências e evidências no JSON; atualizar o relatório técnico; regenerar este painel; exigir CI verde. Somente marcar done com provas e todas as dependências concluídas.
 **Gate global:** nenhuma lacuna funcional relevante; fluxos originais comparados à reimplementação, APK/OBB instalado e matriz de testes Android aprovada. Microexecuções e certificados de BX LR não satisfazem esse gate.
@@ -74,7 +74,7 @@ Os relatórios abaixo apresentam **efeitos locais testados sob estados sintétic
 - [sound_request: reconstrução parcial C do prefixo A32 e 128 comparações ARM/C](SEMANTIC_SOUND_FUNCTIONAL_RECONSTRUCTION.md)
 - [SysSE_PlayDef 0x2b2cf8: auditoria estática A32 de 128 bytes; nenhuma instrução executada](SEMANTIC_SOUND_PLAYDEF_ENTRY.md)
 - [sound_request: 384 microexecucoes em tres entradas ARM ate destinos de funcao nao executados](SEMANTIC_SOUND_THREE_ENTRY_EXEC.md)
-- [A01 iniciada: STRB/LDRB/LDR deslocado no ELF original, com checkpoints; resultado depende de CI](SEMANTIC_A01_MEMORY.md)
+- [A01 concluída: 10 rotinas STRB/LDRB/LDR no ELF real, 320 testes diferenciais (run #40730706242); 11 pendentes para A02](SEMANTIC_A01_MEMORY.md)
 - [Issue #388: 34 endereços catalogados; 13 STR/BX LR e 416 testes Unicorn aprovados; 21 pendentes](SEMANTIC_REMAINING_34.md)
 - [Loop ELF 250: 216 candidatos A32, 6.912 microexecuções e 14 checkpoints (run #40713115396); sem novos certificados](SEMANTIC_LOOP_250_FULL.md)
 - [Loop semântico A32: 24 funções-folha e 768 microexecuções do ELF (run #40710246666), zero novos certificados](SEMANTIC_LOOP_250.md)
