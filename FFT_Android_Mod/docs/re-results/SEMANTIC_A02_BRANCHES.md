@@ -27,7 +27,7 @@
 
 **Há sete destinos externos únicos, ainda sem garantia de comportamento.** O mesmo destino `000b6c58` é compartilhado por quatro entradas com valores diferentes de R2, e a prova do primeiro salto não cobre o dispatcher que recebe esse estado.
 
-**Estado nesta revisão:** esperando evidência do CI do ELF original. O gate esperado é 11 entradas, 352 execuções delimitadas, 0 destinos executados, 0 falhas e 0 novos certificados. Não afirmar equivalência de função completa.
+**Evidência confirmada:** [run #40735782606](https://github.com/c1c3ru/fft_craft/actions/runs/40735782606) do ELF real, commit `bb5230f82502b988ba3839c950b8559fb4448d4c`: **11 entradas, 10 prefixos+B externos, um autoloop com passo único e 352 testes diferenciais locais**. Logs de execução e repetição: `A02_DYNAMIC_CASES=352`, `A02_BRANCH_TARGETS_EXECUTED=0`, `A02_FAILED=0`, `A02_NEW_CERTIFICATES=0`, com comparação byte a byte do checkpoint reproduzido. **Este gate confirma somente prefixos e alvos de salto, não executa nem certifica os sete destinos externos.**
 
 ## Próxima atividade após A02
 
