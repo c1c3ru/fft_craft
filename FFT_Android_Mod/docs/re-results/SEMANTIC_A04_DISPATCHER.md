@@ -24,6 +24,6 @@ O outro destino curto `0x000b8a18` tem `LDR R0,[R0,#8]` e `BX LR`. Será compara
 
 **Gate exigido pelo CI:** quatro callers originais × quatro valores de row × oito seeds × quatro estados NZCV = **512 testes integrados**; getter = **32 testes**; total esperado **544**. Comparar PC trace real, duas leituras esperadas no dispatcher, uma no getter, ausência de escrituras, conteúdo integral de regiões sintéticas e sentinelas, R0–R12, SP/LR, CPSR e checkpoint reprodutível. Nenhum certificado novo.
 
-**Estado:** gate ainda não executado na revisão deste relatório. O pipeline registrará o resultado medido após o run real.
+**Resultado comprovado no ELF original:** [workflow #40749838024](https://github.com/c1c3ru/fft_craft/actions/runs/40749838024), artifact `real-elf-250-static-audit` ID `12842678515`, commit `dbedd42dbf60670cd30d577ec8e59e3779f07e87`: **4 callers / 512 testes diferenciais + 1 getter / 32 testes = 544 execuções**, sem falhas, sem certificados adicionais e checkpoint reproduzido byte por byte. Memória sintética controlada e dois acessos por cenário do dispatcher; nenhum código externo a esses blocos foi executado.
 
 **Fronteiras não resolvidas:** cinco dos sete destinos ainda não foram microexecutados (`000714dc`, `000714e8`, `000ab674`, `000b461c`, `002b1bb0`); duas sequências são saltos indiretos, outras têm chamadas/pilhas/retorno condicional. O auto-loop `002a1268` segue sem reachability e terminação provadas. Nenhum cenário sintético estabelece equivalência global do jogo ou dos valores reais de Android.
