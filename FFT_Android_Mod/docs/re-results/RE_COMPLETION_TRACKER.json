@@ -97,7 +97,7 @@
         "A02"
       ],
       "title": "Reconstruir os sete destinos externos dos saltos ARM A02",
-      "next_action": "A04: sete destinos auditados; dispatcher (512 casos), getter (32) e dois veneers GOT (64) microexecutados com checkpoints — total 608 testes locais. Restam 0x000ab674 (prólogo, estado global e BL 0x000b6620), 0x000b461c (prólogo e BL 0x000b45d0), 0x002b1bb0 (retorno condicional) e a reachability do autoloop 0x002a1268. Não promover certificados nem marcar A04 done até CFG/efeitos integrais verificados.",
+      "next_action": "A04: dispatcher 544 + GOT veneers 64 + BXNE 128 cenários locais validados. BL: auditar 2 chamadas (0x000b6620 e 0x000b45d0), prólogos, continuações e fallthrough 0x002b1bb8; executar apenas prefixo simples até antes de BL (32 casos previstos). Estudar globais de 0x000ab674 e reachability de 0x002a1268. Não marcar done sem CFG integral.",
       "acceptance": "CFG e contratos por destino com testes diferenciais completos até próximas fronteiras; fluxo do autoloop classificado com evidência de reachability ou lacuna explícita.",
       "evidence": [
         "https://github.com/c1c3ru/fft_craft/actions/runs/40748750630",
@@ -108,7 +108,10 @@
         "Artifact #12843397708: four original MOV+B callers through indexed dispatcher and getter, 544 ARM cases, 0 failed, byte-identical checkpoint",
         "https://github.com/c1c3ru/fft_craft/actions/runs/40751407523",
         "FFT_Android_Mod/docs/re-results/SEMANTIC_A04_VENEERS.md",
-        "Artifact #12843668897: two original ARM indirect GOT veneers, 64 cases, 0 failed and zero target calls"
+        "Artifact #12843668897: two original ARM indirect GOT veneers, 64 cases, 0 failed and zero target calls",
+        "https://github.com/c1c3ru/fft_craft/actions/runs/40753982995",
+        "FFT_Android_Mod/docs/re-results/SEMANTIC_A04_CONDITIONAL.md",
+        "PR #413: 128 conditional-return / fallthrough-stop states; no unknown fallthrough instruction executed"
       ]
     },
     {

@@ -13,7 +13,7 @@ O teste `semantic_a04_conditional_exec.py` compara o Unicorn com um modelo Pytho
 
 O teste cobre 4 valores × 8 seeds × 4 estados iniciais de NZCV = **128 execuções locais esperadas**. Verifica trace completo de PC, registradores, SP/LR, NZCV, ausência de efeitos de memória e checkpoint idempotente. Não executa `0x002b1bb8`, não demonstra comportamento de caller real Android e não gera certificados.
 
-**Estado do CI:** gate pendente de confirmação; resultados não devem ser promovidos até o workflow original ELF passar.
+**Resultado confirmado no ELF original:** [workflow #40753982995](https://github.com/c1c3ru/fft_craft/actions/runs/40753982995), commit `d54680d04d3861cc663f0064f1f26986f1dc4755` do PR #413: **128 microexecuções locais**, sendo 96 retornos condicionais e 32 paradas antes do fallthrough desconhecido, zero falhas, zero execução do caminho desconhecido e zero certificados novos. Os cinco checks do commit foram aprovados e o PR #413 foi integrado; isso não certifica o corpo completo.
 
 ## Pendências após esta rodada
 
