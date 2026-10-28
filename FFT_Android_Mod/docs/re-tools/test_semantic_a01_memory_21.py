@@ -95,7 +95,8 @@ class A01Tests(unittest.TestCase):
 
     def test_refuse_untested_jumps_and_require_checkpoint_identity(self):
         row = {"address": "002a1268", "size": 4, "raw_hex": "feffffea",
-               "assembly": ["b #0x2a1268"], "contract": None}
+               "assembly": ["b #0x2a1268"], "contract": None,
+               "status": "unmodeled_not_executed"}
         self.assertIsNone(a01.decode(bytes.fromhex(row["raw_hex"]), int(row["address"], 16)))
         with self.assertRaisesRegex(ValueError, "Refusing"):
             a01.execute(None, row, 0, 0)
