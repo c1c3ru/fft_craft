@@ -132,11 +132,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #387 — feat(re): expandir loop A32 para todos os candidatos elegíveis do lote ELF 250](https://github.com/c1c3ru/fft_craft/pull/387)
+- [PR #385 — chore(re): automated structural batch 40711617963](https://github.com/c1c3ru/fft_craft/pull/385)
 - [PR #382 — fix(re): instrumentar falha de fetch Unicorn no loop ELF 250](https://github.com/c1c3ru/fft_craft/pull/382)
 - [PR #383 — chore(re): automated structural batch 40709743653](https://github.com/c1c3ru/fft_craft/pull/383)
 - [PR #381 — feat(re): engenharia de loop A32 com microexecução diferencial e painel central](https://github.com/c1c3ru/fft_craft/pull/381)
-- [PR #379 — Analysis/re sound common body 2b2b7c 20261028](https://github.com/c1c3ru/fft_craft/pull/379)
-- [PR #380 — ci(re): validar 250 tarefas reais do ELF com auditoria dupla de 25 manifestos](https://github.com/c1c3ru/fft_craft/pull/380)
 
 ## Atualização automática e fontes
 

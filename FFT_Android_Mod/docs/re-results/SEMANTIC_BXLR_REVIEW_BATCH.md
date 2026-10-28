@@ -2,7 +2,7 @@
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Execução de origem do CI: `40711617963`
+Execução de origem do CI: `40714261707`
 
 - Contratos locais preparados para revisão: **0**
 - Microexecuções **novas neste passo**: **0** (reutiliza as 32 observações ARM/Thumb por candidato).
