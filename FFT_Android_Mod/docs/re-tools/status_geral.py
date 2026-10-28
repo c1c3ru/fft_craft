@@ -31,6 +31,8 @@ MILESTONES = (
      "SysSE_PlayDef 0x2b2cf8: auditoria estática A32 de 128 bytes; nenhuma instrução executada"),
     ("SEMANTIC_SOUND_THREE_ENTRY_EXEC.md",
      "sound_request: 384 microexecucoes em tres entradas ARM ate destinos de funcao nao executados"),
+    ("SEMANTIC_LOOP_250_FULL.md",
+     "Loop ELF 250: 216 candidatos A32, 6.912 microexecuções e 14 checkpoints (run #40713115396); sem novos certificados"),
     ("SEMANTIC_LOOP_250.md",
      "Loop semântico A32: 24 funções-folha e 768 microexecuções do ELF (run #40710246666), zero novos certificados"),
     ("SEMANTIC_PIPELINE_RECOVERY.md",
