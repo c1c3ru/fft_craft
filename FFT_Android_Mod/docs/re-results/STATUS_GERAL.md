@@ -45,7 +45,7 @@ A prioridade é reconstruir comportamento verificável (estrutura, semântica, C
 
 ### Próximas atividades executáveis
 
-- **A04 (P1, em andamento)** — A04: dispatcher 544 + GOT veneers 64 + BXNE 128 cenários locais validados. BL: auditar 2 chamadas (0x000b6620 e 0x000b45d0), prólogos, continuações e fallthrough 0x002b1bb8; executar apenas prefixo simples até antes de BL (32 casos previstos). Estudar globais de 0x000ab674 e reachability de 0x002a1268. Não marcar done sem CFG integral. **Aceite:** CFG e contratos por destino com testes diferenciais completos até próximas fronteiras; fluxo do autoloop classificado com evidência de reachability ou lacuna explícita.
+- **A04 (P1, em andamento)** — A04: dispatcher 544 + GOT veneers 64 + BXNE 128 cenários locais validados; retorno condicional 0x002b1bb0 tem fallthrough 0x002b1bb8 ainda desconhecido. Auditar BL em 0x000ab674 → 0x000b6620 e 0x000b461c → 0x000b45d0, prólogos, globais, callee e continuações. Executar só prefixos seguros antes de BL; classificar reachability do auto-loop 0x002a1268. Manter A04 in_progress até CFG e efeitos integrais provados. **Aceite:** CFG e contratos por destino com testes diferenciais completos até próximas fronteiras; fluxo do autoloop classificado com evidência de reachability ou lacuna explícita.
 - **B01 (P1, em andamento)** — Consolidar inventario unico ELF (ARM/Thumb), JNI/Smali e assets OBB, deduplicar aliases e apontar manifestos, erros e exclusoes. **Aceite:** Relatorio de inventario com total unico, cobertura de bytes e origem de cada entrada, sem dupla contagem.
 
 ### Próximas dependências não liberadas
