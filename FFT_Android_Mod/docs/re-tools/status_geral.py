@@ -19,6 +19,8 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "docs/re-results"
 REPO = "c1c3ru/fft_craft"
 MILESTONES = (
+    ("SEMANTIC_SOUND_COMMON_BODY_2B2B7C.md",
+     "Corpo comum 0x2b2b7c: desmontagem original A32 e execução limitada antes de efeitos não modelados"),
     ("SEMANTIC_SOUND_FUNCTIONAL_RECONSTRUCTION.md",
      "sound_request: reconstrução parcial C do prefixo A32 e 128 comparações ARM/C"),
     ("SEMANTIC_SOUND_PLAYDEF_ENTRY.md",
@@ -65,7 +67,7 @@ MILESTONES = (
      "Retorno ARM real e alterações de memória antes da primeira chamada"),
 )
 CURRENT_SEMANTIC_BOUNDARIES = (
-    ("0x2b2cf8", "Investigar SysSE_PlayDef apos a microexecucao das tres entradas ARM de som sem inferir efeitos externos"),
+    ("0x2b2b7c", "Investigar primeira fronteira com acesso a dados ou chamada no corpo compartilhado; validar memória e retornos sem inventar efeitos sonoros"),
     ("0x2bf008", "Investigar o próximo BL de SysSE_Play depois do desvio condicionado"),
     ("0x0a7034", "Investigar o próximo BL de iOS_SetIconPosition com os argumentos já observados"),
 )
