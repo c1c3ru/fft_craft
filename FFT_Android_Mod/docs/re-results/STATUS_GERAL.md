@@ -46,7 +46,7 @@ A prioridade é reconstruir comportamento verificável (estrutura, semântica, C
 ### Próximas atividades executáveis
 
 - **B01 (P1, em andamento)** — Consolidar inventario unico ELF (ARM/Thumb), JNI/Smali e assets OBB, deduplicar aliases e apontar manifestos, erros e exclusoes. **Aceite:** Relatorio de inventario com total unico, cobertura de bytes e origem de cada entrada, sem dupla contagem.
-- **A04 (P1, em andamento)** — Executar auditoria estática delimitada dos sete destinos ELF A02, inspecionar os primeiros blocos e interpretar o dispatcher 0x000b6c58; depois criar contratos semânticos de destino e testes ARM sem extrapolação. **Aceite:** CFG e contratos por destino com testes diferenciais completos até próximas fronteiras; fluxo do autoloop classificado com evidência de reachability ou lacuna explícita.
+- **A04 (P1, em andamento)** — A04 static: sete destinos reais e 672 bytes inspecionados (run 40748750630); executar agora quatro callers A02 até BX LR do dispatcher 0x000b6c58 e getter 0x000b8a18, comparar 544 cenários, depois modelar os cinco alvos restantes e reachability do autoloop. **Aceite:** CFG e contratos por destino com testes diferenciais completos até próximas fronteiras; fluxo do autoloop classificado com evidência de reachability ou lacuna explícita.
 
 ### Próximas dependências não liberadas
 
@@ -75,7 +75,8 @@ Os relatórios abaixo apresentam **efeitos locais testados sob estados sintétic
 - [sound_request: reconstrução parcial C do prefixo A32 e 128 comparações ARM/C](SEMANTIC_SOUND_FUNCTIONAL_RECONSTRUCTION.md)
 - [SysSE_PlayDef 0x2b2cf8: auditoria estática A32 de 128 bytes; nenhuma instrução executada](SEMANTIC_SOUND_PLAYDEF_ENTRY.md)
 - [sound_request: 384 microexecucoes em tres entradas ARM ate destinos de funcao nao executados](SEMANTIC_SOUND_THREE_ENTRY_EXEC.md)
-- [A04 em andamento: sete destinos externos do ELF real em auditoria de blocos e code-vs-data; sem equivalência](SEMANTIC_A04_DESTINATIONS.md)
+- [A04 dispatcher: quatro callers originais e getter serão comparados por Unicorn e modelo independente (gate 544 cenários)](SEMANTIC_A04_DISPATCHER.md)
+- [A04: sete destinos externos, 672 bytes inspecionados no ELF original (run #40748750630); cinco ainda sem execução](SEMANTIC_A04_DESTINATIONS.md)
 - [A02 validada no ELF: 11 entradas, 352 microexecuções ARM e 0 destinos externos executados (run #40735782606); A04 investiga sete destinos](SEMANTIC_A02_BRANCHES.md)
 - [A01 concluída: 10 rotinas STRB/LDRB/LDR no ELF real, 320 testes diferenciais (run #40730706242); 11 pendentes para A02](SEMANTIC_A01_MEMORY.md)
 - [Issue #388: 34 endereços catalogados; 13 STR/BX LR e 416 testes Unicorn aprovados; 21 pendentes](SEMANTIC_REMAINING_34.md)
