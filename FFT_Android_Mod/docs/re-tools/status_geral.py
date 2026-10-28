@@ -32,7 +32,7 @@ MILESTONES = (
     ("SEMANTIC_SOUND_THREE_ENTRY_EXEC.md",
      "sound_request: 384 microexecucoes em tres entradas ARM ate destinos de funcao nao executados"),
     ("SEMANTIC_REMAINING_34.md",
-     "Issue #388: auditoria de 34 instrucoes curtas e microexecucao segura de STR/BX LR"),
+     "Issue #388: 34 endereços catalogados; 13 STR/BX LR e 416 testes Unicorn aprovados; 21 pendentes"),
     ("SEMANTIC_LOOP_250_FULL.md",
      "Loop ELF 250: 216 candidatos A32, 6.912 microexecuções e 14 checkpoints (run #40713115396); sem novos certificados"),
     ("SEMANTIC_LOOP_250.md",
