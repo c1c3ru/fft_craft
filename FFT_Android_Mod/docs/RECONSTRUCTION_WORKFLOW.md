@@ -18,7 +18,8 @@ Cada função ou trecho delimitado possui: endereço e bytes do ELF, chamadas/sa
 | Subsistema/trecho | Estrutura | Semântica | Implementação | Diferencial |
 |---|---|---|---|---|
 | `sound_request → 0x2b2cf8 → 0x2b2b7c` | Desvios e três instruções comprovados | Prefixo controlado, sem memória | C do prefixo em `docs/re-tools/c-models/sound_playdef_prefix.c` | 128 amostras A32 × C exigidas no CI da alteração |
-| Corpo compartilhado em `0x2b2b7c` | Janela A32 de 128 bytes auditada e separação de instruções perigosas | Prefixo inicial executado sob estados controlados, interrompendo antes de qualquer efeito não modelado; relatório parcial | Não implementado | Apenas validação controlada do ARM, ainda sem comparação em C |
+| Corpo compartilhado em `0x2b2b7c` | Janela A32 de 128 bytes auditada | Cinco instruções originais executadas até antes da leitura global `0x2b2b90`, com 8 saves e literal real | Modelo C parcial em `c-models/sound_common_prologue.c` | 128 estados ARM/C com PC/SP/registradores e palavras salvas na pilha |
+| Slot indireto `0x34615c` | PC+R3 rastreado até ELF PT_LOAD; procura por REL/RELA | `LDR` original em `0x2b2b90` executado com **memória sintética declarada**, sem provar valor de runtime | Não implementado; ponteiro global desconhecido | 512 leituras ARM de uma instrução; sem diferencial C nem equivalência de função |
 | Entrada alternativa `0x2b2d04` | Trampolim A32 auditado | A executar no escopo próprio | Não implementado | Não iniciado |
 | Destino `0x2b2448` | Encaminhamento ARM identificado | Corpo não executado nesse experimento | Não implementado | Não iniciado |
 | Destino `0x2b2814` | Encaminhamento e decremento de R0 identificados | Corpo não executado nesse experimento | Não implementado | Não iniciado |
@@ -45,4 +46,4 @@ O relatório auditável produzido é `FFT_Android_Mod/docs/re-results/SEMANTIC_S
 
 ## Próxima investigação
 
-Revisar `docs/re-results/SEMANTIC_SOUND_COMMON_BODY_2B2B7C.md` para identificar a primeira barreira de execução no corpo compartilhado `0x2b2b7c`. Mapear somente a memória e os destinos exigidos pelo opcode original dessa barreira, verificar leituras/escritas/flags e construir o próximo trecho C/C++ apenas quando os efeitos forem confirmados. O relatório atual não certifica a função nem reproduz áudio.
+O literal original de `0x2b2ce8` identifica o endereço `0x34615c` como local de leitura do `LDR R0,[PC,R3]` de `0x2b2b90`. Consulte `docs/re-results/SEMANTIC_SOUND_GLOBAL_SLOT.md` para verificar segmento PT_LOAD, bytes estáticos e possíveis REL/RELA. Os 512 testes ARM usam **conteúdos sintéticos** para esse slot, não os dados relocados do processo original. A próxima etapa é rastrear a inicialização real ou relocação do slot e verificar o próximo desvio ou BL, mantendo o controle de memória; nenhuma função sonora completa foi certificada.
