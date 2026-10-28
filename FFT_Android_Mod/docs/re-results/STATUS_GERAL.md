@@ -31,6 +31,7 @@ A prioridade é reconstruir comportamento verificável (estrutura, semântica, C
 
 Os relatórios abaixo apresentam **efeitos locais testados sob estados sintéticos** e seus limites. Testes passando não significam que a função inteira foi reconstruída:
 
+- [Som: slot global do ELF em 0x34615c, relocação e 512 leituras ARM com memória sintética](SEMANTIC_SOUND_GLOBAL_SLOT.md)
 - [Corpo comum 0x2b2b7c: cinco instruções ARM e 128 testes diferenciais C com pilha e literal originais](SEMANTIC_SOUND_COMMON_PROLOGUE.md)
 - [Corpo comum 0x2b2b7c: desmontagem original A32 e execução limitada antes de efeitos não modelados](SEMANTIC_SOUND_COMMON_BODY_2B2B7C.md)
 - [sound_request: reconstrução parcial C do prefixo A32 e 128 comparações ARM/C](SEMANTIC_SOUND_FUNCTIONAL_RECONSTRUCTION.md)
@@ -110,7 +111,7 @@ O restante da fila permanece nos manifestos e no `SEMANTIC_COVERAGE.md`. Observa
 
 ### Lacunas semânticas conhecidas
 
-- `0x2b2b90`: Investigar a leitura indireta LDR R0,[PC,R3] da área global do som, mapeando o ponteiro sem inventar efeitos externos.
+- `0x34615c`: Investigar a inicialização/relocação em tempo de execução do slot de som; o ELF estático não prova seu valor em memória do processo.
 - `0x2bf008`: Investigar o próximo BL de SysSE_Play depois do desvio condicionado.
 - `0x0a7034`: Investigar o próximo BL de iOS_SetIconPosition com os argumentos já observados.
 
@@ -129,11 +130,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #377 — feat(re): rastrear slot global ARM 0x34615c e testar LDR com memória controlada](https://github.com/c1c3ru/fft_craft/pull/377)
+- [PR #376 — chore(re): automated structural batch 40698289300](https://github.com/c1c3ru/fft_craft/pull/376)
 - [PR #375 — feat(re): executar prólogo real ARM com pilha/literal e validar reconstrução C](https://github.com/c1c3ru/fft_craft/pull/375)
 - [PR #374 — chore(re): automated structural batch 40696824826](https://github.com/c1c3ru/fft_craft/pull/374)
 - [PR #373 — feat(re): auditar e microexecutar prefixo seguro do corpo compartilhado ARM 0x2b2b7c](https://github.com/c1c3ru/fft_craft/pull/373)
-- [PR #372 — chore(re): automated structural batch 40695639804](https://github.com/c1c3ru/fft_craft/pull/372)
-- [PR #370 — feat(re): reconstrução funcional ARM→C e teste diferencial de som](https://github.com/c1c3ru/fft_craft/pull/370)
 
 ## Atualização automática e fontes
 
