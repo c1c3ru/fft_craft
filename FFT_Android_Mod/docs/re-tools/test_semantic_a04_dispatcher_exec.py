@@ -67,7 +67,7 @@ class A04DispatcherTests(unittest.TestCase):
     def test_checkpoint_does_not_add_certificates(self):
         state = a04.snapshot("a"*64, "b"*64, [{"name": "test", "cases": 32}])
         self.assertEqual(state["new_certificates"], 0)
-        self.assertIn("Unknown", a04.report(state).replace("unverified", "Unknown"))
+        self.assertIn("No new certificates.", a04.report(state))
 
 
 if __name__ == "__main__":
