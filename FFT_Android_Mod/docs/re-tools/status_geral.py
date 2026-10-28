@@ -35,7 +35,7 @@ MILESTONES = (
     ("SEMANTIC_SOUND_THREE_ENTRY_EXEC.md",
      "sound_request: 384 microexecucoes em tres entradas ARM ate destinos de funcao nao executados"),
     ("SEMANTIC_A04_BL_BOUNDARIES.md",
-     "A04: dois BL e cinco fronteiras auditadas no ELF; prólogo simples verificado até antes da chamada (CI pendente)"),
+     "A04: 2 BL, 672 bytes auditados e 32 testes do prólogo até antes do callee (run #40757008125); callees não executados"),
     ("SEMANTIC_A04_CONDITIONAL.md",
      "A04: 128 testes de retorno condicional BXNE em ELF, com zero fallthrough desconhecido executado (run #40753982995)"),
     ("SEMANTIC_A04_VENEERS.md",
