@@ -74,14 +74,19 @@
       "id": "A02",
       "phase": "F1",
       "priority": 1,
-      "status": "in_progress",
+      "status": "done",
       "depends_on": [
         "A01"
       ],
       "title": "Issue #388: mapear nove opcodes+salto",
-      "next_action": "Executar as dez sequências A32 prefixo+B e o auto-loop de um passo no ELF original, verificar 352 cenários locais e checkpoint idêntico, sem executar destinos externos.",
+      "next_action": "A02 concluída: 10 prefixos+B e um autoloop de passo único, 352 testes no ELF, zero destino externo executado; continuar pela A04, os sete destinos externos.",
       "acceptance": "Todos os 21 classificados com motivo, trace limitado ou bloqueio justificado; sem loop infinito ou certificado automatico.",
-      "evidence": []
+      "evidence": [
+        "https://github.com/c1c3ru/fft_craft/actions/runs/40735782606",
+        "FFT_Android_Mod/docs/re-results/SEMANTIC_A02_BRANCHES.md",
+        "A02 original ELF: 11 bounded entry points, 352 differential executions, 0 destinations executed, 0 failures, checkpoint byte-identical",
+        "https://github.com/c1c3ru/fft_craft/pull/398"
+      ]
     },
     {
       "id": "A04",
@@ -92,7 +97,7 @@
         "A02"
       ],
       "title": "Reconstruir os sete destinos externos dos saltos ARM A02",
-      "next_action": "Auditar sete destinos únicos dos B de A02 (priorizar 0x000b6c58), provar código versus dados, modelar dispatcher/callees, estados globais e alcance; explicar o autoloop 0x002a1268.",
+      "next_action": "A04: investigar os sete destinos originais 0x002b1bb0, 0x000714e8, 0x000714dc, 0x000ab674, 0x000b461c, 0x000b6c58 e 0x000b8a18; começar por 0x000b6c58 e classificar reachability do auto-loop 0x002a1268.",
       "acceptance": "CFG e contratos por destino com testes diferenciais completos até próximas fronteiras; fluxo do autoloop classificado com evidência de reachability ou lacuna explícita.",
       "evidence": []
     },

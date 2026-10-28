@@ -35,7 +35,7 @@ MILESTONES = (
     ("SEMANTIC_SOUND_THREE_ENTRY_EXEC.md",
      "sound_request: 384 microexecucoes em tres entradas ARM ate destinos de funcao nao executados"),
     ("SEMANTIC_A02_BRANCHES.md",
-     "A02: onze prefixos/saltos ARM exatos do ELF; dez B externos delimitados e um self-loop de um passo; execução aguardando CI"),
+     "A02 validada no ELF: 11 entradas, 352 microexecuções ARM e 0 destinos externos executados (run #40735782606); A04 investiga sete destinos"),
     ("SEMANTIC_A01_MEMORY.md",
      "A01 concluída: 10 rotinas STRB/LDRB/LDR no ELF real, 320 testes diferenciais (run #40730706242); 11 pendentes para A02"),
     ("SEMANTIC_REMAINING_34.md",
