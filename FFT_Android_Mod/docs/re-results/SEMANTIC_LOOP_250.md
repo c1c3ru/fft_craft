@@ -15,7 +15,7 @@ O [workflow Real ELF semantic manifest audit (250)](https://github.com/c1c3ru/ff
 
 ## Resultados e garantia
 
-**Status da expansão:** código e CI propostos; a execução dos novos testes diferenciais e suas contagens só são confirmadas quando o job do PR concluir com sucesso. Os 250 relatórios anteriores continuam válidos como evidência **estática**.
+**Resultado verificado:** o [workflow real-ELF #40710246666](https://github.com/c1c3ru/fft_craft/actions/runs/40710246666), commit `533c78b7dad0ad20d13b16b18138a51a75bad5c7`, concluiu o job `real-elf-250` com **success**. Os logs registram `LOOP_ELIGIBLE=216`, `LOOP_SELECTED=24`, `LOOP_ROUNDS=3`, `LOOP_DIFFERENTIAL_PASSED=768`, `LOOP_FAILED=0`, `LOOP_NEW_CERTIFICATES=0`. O checkpoint do segundo ciclo de execução foi idêntico ao original (`cmp` aprovado). Os 24 candidatos executados são funções-folha A32: **12 LDR, 9 ADD e 3 MOV**, cada uma com 32 cenários. **34** dos 250 endereços não satisfizeram os contratos de opcode/efeitos desta rodada, e outros 192 elegíveis não foram executados por causa do limite de 24. As 250 inspeções estáticas continuam válidas e não devem ser confundidas com microexecução integral das 250 funções. Os dados brutos estão no artefato `real-elf-250-static-audit` (ID `12826152000`) do run citado.
 
 A validação do loop **não** equivale a reconstrução integral das 250 funções. Um salto validado para antes do destino não executa o destino. Dados sintéticos não demonstram estados reais da aplicação. Os 303 certificados formais existentes não são alterados e **nenhum novo certificado** é criado.
 

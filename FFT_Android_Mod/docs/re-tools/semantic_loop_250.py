@@ -124,9 +124,11 @@ def execute(binary, spec, seed, flags):
     regs = {UC_ARM_REG_R0: r0, UC_ARM_REG_R1: r1,
             UC_ARM_REG_R2: 0x13579bdf, UC_ARM_REG_R3: 0x2468ace0,
             UC_ARM_REG_SP: 0x700ffc, UC_ARM_REG_LR: RETURN}
+    # CPSR selects the ARM register bank: install user mode BEFORE writing LR/SP.
+    # Writing CPSR after LR would select a different bank and BX LR jumps to 0.
+    uc.reg_write(UC_ARM_REG_CPSR, flags | 0x10)
     for reg, value in regs.items():
         uc.reg_write(reg, value)
-    uc.reg_write(UC_ARM_REG_CPSR, flags | 0x10)
     trace, reads, writes = [], [], []
 
     def code_hook(emu, pc, size, user_data):
@@ -143,7 +145,13 @@ def execute(binary, spec, seed, flags):
     uc.hook_add(UC_HOOK_CODE, code_hook)
     uc.hook_add(UC_HOOK_MEM_READ, read_hook)
     uc.hook_add(UC_HOOK_MEM_WRITE, write_hook)
-    uc.emu_start(addr, MASK, timeout=1000000, count=4)
+    try:
+        uc.emu_start(addr, MASK, timeout=1000000, count=4)
+    except Exception as error:
+        raise AssertionError(f"Unicorn error address={spec['address']} "
+                             f"kind={spec['kind']} op={spec.get('op')} "
+                             f"target=0x{target:x} pc=0x{uc.reg_read(UC_ARM_REG_PC):x} "
+                             f"trace={[hex(x) for x in trace]}") from error
     steps = 1 if spec["kind"] == "branch_prefix" else 2
     if trace != [addr + i * 4 for i in range(steps)] + [target]:
         raise AssertionError("unexpected A32 trace")

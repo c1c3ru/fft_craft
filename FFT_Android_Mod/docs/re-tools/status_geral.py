@@ -32,7 +32,7 @@ MILESTONES = (
     ("SEMANTIC_SOUND_THREE_ENTRY_EXEC.md",
      "sound_request: 384 microexecucoes em tres entradas ARM ate destinos de funcao nao executados"),
     ("SEMANTIC_LOOP_250.md",
-     "Engenharia de loop: triagem A32 no lote de 250, testes diferenciais e checkpoints sem certificação"),
+     "Loop semântico A32: 24 funções-folha e 768 microexecuções do ELF (run #40710246666), zero novos certificados"),
     ("SEMANTIC_PIPELINE_RECOVERY.md",
      "Correção de 25 manifestos/250 tarefas e conflito do PR automatizado #362; sem novos certificados"),
     ("SEMANTIC_SOUND_DESTINATION_271314.md",
