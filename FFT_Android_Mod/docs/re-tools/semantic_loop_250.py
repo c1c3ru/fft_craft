@@ -143,7 +143,13 @@ def execute(binary, spec, seed, flags):
     uc.hook_add(UC_HOOK_CODE, code_hook)
     uc.hook_add(UC_HOOK_MEM_READ, read_hook)
     uc.hook_add(UC_HOOK_MEM_WRITE, write_hook)
-    uc.emu_start(addr, MASK, timeout=1000000, count=4)
+    try:
+        uc.emu_start(addr, MASK, timeout=1000000, count=4)
+    except Exception as error:
+        raise AssertionError(f"Unicorn error address={spec['address']} "
+                             f"kind={spec['kind']} op={spec.get('op')} "
+                             f"target=0x{target:x} pc=0x{uc.reg_read(UC_ARM_REG_PC):x} "
+                             f"trace={[hex(x) for x in trace]}") from error
     steps = 1 if spec["kind"] == "branch_prefix" else 2
     if trace != [addr + i * 4 for i in range(steps)] + [target]:
         raise AssertionError("unexpected A32 trace")
