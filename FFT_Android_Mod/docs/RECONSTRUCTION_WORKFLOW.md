@@ -18,7 +18,7 @@ Cada função ou trecho delimitado possui: endereço e bytes do ELF, chamadas/sa
 | Subsistema/trecho | Estrutura | Semântica | Implementação | Diferencial |
 |---|---|---|---|---|
 | `sound_request → 0x2b2cf8 → 0x2b2b7c` | Desvios e três instruções comprovados | Prefixo controlado, sem memória | C do prefixo em `docs/re-tools/c-models/sound_playdef_prefix.c` | 128 amostras A32 × C exigidas no CI da alteração |
-| Corpo compartilhado em `0x2b2b7c` | Próxima fronteira | Não comprovado integralmente | Não implementado | Não iniciado |
+| Corpo compartilhado em `0x2b2b7c` | Janela A32 de 128 bytes auditada e separação de instruções perigosas | Prefixo inicial executado sob estados controlados, interrompendo antes de qualquer efeito não modelado; relatório parcial | Não implementado | Apenas validação controlada do ARM, ainda sem comparação em C |
 | Entrada alternativa `0x2b2d04` | Trampolim A32 auditado | A executar no escopo próprio | Não implementado | Não iniciado |
 | Destino `0x2b2448` | Encaminhamento ARM identificado | Corpo não executado nesse experimento | Não implementado | Não iniciado |
 | Destino `0x2b2814` | Encaminhamento e decremento de R0 identificados | Corpo não executado nesse experimento | Não implementado | Não iniciado |
@@ -45,4 +45,4 @@ O relatório auditável produzido é `FFT_Android_Mod/docs/re-results/SEMANTIC_S
 
 ## Próxima investigação
 
-Ler e decompor o corpo compartilhado em `0x2b2b7c` usando o ELF original, identificar blocos e tabelas/literais, executar somente prefixos com contexto controlado, modelar possíveis chamadas e só depois traduzir outras porções para C/C++.
+Revisar `docs/re-results/SEMANTIC_SOUND_COMMON_BODY_2B2B7C.md` para identificar a primeira barreira de execução no corpo compartilhado `0x2b2b7c`. Mapear somente a memória e os destinos exigidos pelo opcode original dessa barreira, verificar leituras/escritas/flags e construir o próximo trecho C/C++ apenas quando os efeitos forem confirmados. O relatório atual não certifica a função nem reproduz áudio.
