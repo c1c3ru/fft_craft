@@ -78,6 +78,21 @@ class A02Tests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "incomplete or duplicated"):
                 a02.classify(None, rows + rows[:1])
 
+    def test_safely_identifies_seven_unique_external_destinations(self):
+        targets = set()
+        self_jumps = []
+        for address, (raw_hex, kind) in a02.EXPECTED.items():
+            decoded = a02.decode(bytes.fromhex(raw_hex), int(address, 16))
+            if kind == "self_branch":
+                self_jumps.append(address)
+                self.assertEqual(decoded["target"], int(address, 16))
+            else:
+                targets.add(decoded["target"])
+                self.assertNotEqual(decoded["target"], int(address, 16))
+        self.assertEqual(len(targets), 7)
+        self.assertIn(0xb6c58, targets)
+        self.assertEqual(self_jumps, ["002a1268"])
+
     def test_state_never_claims_full_function_or_formal_certificate(self):
         item = {"address": "002a1268", "raw_hex": "feffffea",
                 "assembly": ["b #0x2a1268"],
