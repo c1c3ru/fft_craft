@@ -174,11 +174,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #408 — feat(re): A04 validar dois saltos indiretos ARM PC/GOT sem executar os alvos](https://github.com/c1c3ru/fft_craft/pull/408)
+- [PR #409 — chore(re): automated structural batch 40751245753](https://github.com/c1c3ru/fft_craft/pull/409)
 - [PR #407 — feat(re): validar dispatcher ARM e getter A04 em 544 cenários](https://github.com/c1c3ru/fft_craft/pull/407)
 - [PR #406 — chore(re): automated structural batch 40749567598](https://github.com/c1c3ru/fft_craft/pull/406)
 - [PR #404 — feat(re): A04 auditoria dos sete destinos ARM no ELF original](https://github.com/c1c3ru/fft_craft/pull/404)
-- [PR #403 — chore(re): automated structural batch 40738059076](https://github.com/c1c3ru/fft_craft/pull/403)
-- [PR #402 — test(ci): validar A02 e detectar jobs duplicados sem conflito no painel](https://github.com/c1c3ru/fft_craft/pull/402)
 
 ## Atualização automática e fontes
 
