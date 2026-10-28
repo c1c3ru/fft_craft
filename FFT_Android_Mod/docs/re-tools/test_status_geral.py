@@ -29,6 +29,8 @@ class StatusGeralTests(unittest.TestCase):
             f"ELF SHA-256: `{SHA}`\nEvidence collected: **89/89** pending functions.\n",
             encoding="utf-8")
         (self.results / "SEMANTIC_LOOP_250.md").write_text("ELF SHA-256: `" + SHA + "`\n", encoding="utf-8")
+        (self.results / "SEMANTIC_REMAINING_34.md").write_text(
+            "ELF SHA-256: " + SHA + "\n", encoding="utf-8")
         (self.results / "SEMANTIC_LOOP_250_FULL.md").write_text(
             "ELF SHA-256: `" + SHA + "`\n", encoding="utf-8")
         (self.results / "SEMANTIC_SOUND_ICON_MICROEXEC.md").write_text(
@@ -65,6 +67,7 @@ class StatusGeralTests(unittest.TestCase):
         self.assertIn("0025a228", report)
         self.assertIn("(SEMANTIC_LOOP_250.md)", report)
         self.assertIn("(SEMANTIC_LOOP_250_FULL.md)", report)
+        self.assertIn("(SEMANTIC_REMAINING_34.md)", report)
 
     def test_semantic_headline_matches_detailed_dashboard(self):
         semantic = {
