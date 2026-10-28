@@ -15,8 +15,8 @@
 
 ## Próximas atividades após A01
 
-A **A02** depende de A01. Restarão as sequências com operações e salto, `LDR+B` e `B` que retorna ao próprio endereço, para contratos específicos de prefixos com limite de execução e tratamento explícito de destinos. Não entrar em destinos desconhecidos ou em loop infinito.
+A **A02** está liberada após esta A01: priorizar nove sequências operação+salto (`00072910`, `00082404`, `0008240c`, `000a94bc`, `000b4700`, `000b6c68`, `000b6cd0`, `000b6ee0`, `000b6ee8`), um `LDR+B` (`000b6f80`) e o auto-loop `002a1268`. Testar somente prefixos até antes dos destinos, com contratos específicos e limite de execução; não entrar em saltos próprios ou destinos desconhecidos. Não entrar em destinos desconhecidos ou em loop infinito.
 
-**Resultado da rodada A01:** pendente de confirmação pelo CI do PR. Os 10 endereços acima são candidatos; as 320 microexecuções são um gate esperado, não evidência de execução até o workflow confirmar.
+**Resultado confirmado no ELF original:** [workflow #40730706242](https://github.com/c1c3ru/fft_craft/actions/runs/40730706242), commit `a6a2670d1ad1717135a92516840b123595fd1e2d`, artifact `real-elf-250-static-audit` ID `12833619024`: **21 entradas previamente não executadas auditadas, 10 rotinas novas microexecutadas em 320 cenários**, sendo **2 STRB, 1 LDRB e 7 LDR de offsets maiores**. O CI verificou `A01_FAILED=0`, `A01_NEW_CERTIFICATES=0` e que o checkpoint foi idêntico após a reexecução integral. Os 11 outros endereços não foram executados porque possuem saltos/fluxos não abrangidos pelo contrato. **Total acumulado do lote 250: 239 entradas com testes locais**, sem transformar microexecuções em certificados.
 
 **Limites:** estas são verificações **locais sob estados sintéticos**, não prova da função completa, de equivalência do app, de valores reais em Android nem de reconstrução C/C++ integral. Os 303 certificados prévios não mudam.
