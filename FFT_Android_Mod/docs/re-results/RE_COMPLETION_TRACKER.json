@@ -58,10 +58,10 @@
       "id": "A01",
       "phase": "F1",
       "priority": 1,
-      "status": "planned",
+      "status": "in_progress",
       "depends_on": [],
       "title": "Issue #388: adicionar contratos conservadores STRB/LDRB e LDR com offsets maiores com testes de aliasing",
-      "next_action": "Issue #388: adicionar contratos conservadores STRB/LDRB e LDR com offsets maiores com testes de aliasing, dados sinteticos e canarias.",
+      "next_action": "Executar o novo loop diferencial de STRB/LDRB/LDR com bytes do ELF original, validar 320 cenários em 10 entradas, repetir checkpoints e documentar os 11 saltos pendentes na issue #388.",
       "acceptance": "Byte/word read/write avaliados no ELF original sob modelos independentes; CI verde; catalogo dos 21 atualizado.",
       "evidence": []
     },
