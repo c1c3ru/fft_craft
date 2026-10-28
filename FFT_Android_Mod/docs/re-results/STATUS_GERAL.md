@@ -45,7 +45,7 @@ A prioridade é reconstruir comportamento verificável (estrutura, semântica, C
 
 ### Próximas atividades executáveis
 
-- **A04 (P1, em andamento)** — A04: dispatcher 544 + GOT veneers 64 + BXNE 128 cenários locais validados; retorno condicional 0x002b1bb0 tem fallthrough 0x002b1bb8 ainda desconhecido. Auditar BL em 0x000ab674 → 0x000b6620 e 0x000b461c → 0x000b45d0, prólogos, globais, callee e continuações. Executar só prefixos seguros antes de BL; classificar reachability do auto-loop 0x002a1268. Manter A04 in_progress até CFG e efeitos integrais provados. **Aceite:** CFG e contratos por destino com testes diferenciais completos até próximas fronteiras; fluxo do autoloop classificado com evidência de reachability ou lacuna explícita.
+- **A04 (P1, em andamento)** — A04: dispatcher 544, GOT veneers 64, BXNE 128 e prólogo antes de BL 32 cenários locais confirmados no ELF original (total A04 768). BL de 0x000ab674 → 0x000b6620 e de 0x000b461c → 0x000b45d0 ainda exigem callee/CFG completos; fallthrough de 0x002b1bb0 → 0x002b1bb8 e autoloop 0x002a1268 permanecem desconhecidos. Não executar destino desconhecido nem marcar A04 done. **Aceite:** CFG e contratos por destino com testes diferenciais completos até próximas fronteiras; fluxo do autoloop classificado com evidência de reachability ou lacuna explícita.
 - **B01 (P1, em andamento)** — Consolidar inventario unico ELF (ARM/Thumb), JNI/Smali e assets OBB, deduplicar aliases e apontar manifestos, erros e exclusoes. **Aceite:** Relatorio de inventario com total unico, cobertura de bytes e origem de cada entrada, sem dupla contagem.
 
 ### Próximas dependências não liberadas
@@ -75,7 +75,7 @@ Os relatórios abaixo apresentam **efeitos locais testados sob estados sintétic
 - [sound_request: reconstrução parcial C do prefixo A32 e 128 comparações ARM/C](SEMANTIC_SOUND_FUNCTIONAL_RECONSTRUCTION.md)
 - [SysSE_PlayDef 0x2b2cf8: auditoria estática A32 de 128 bytes; nenhuma instrução executada](SEMANTIC_SOUND_PLAYDEF_ENTRY.md)
 - [sound_request: 384 microexecucoes em tres entradas ARM ate destinos de funcao nao executados](SEMANTIC_SOUND_THREE_ENTRY_EXEC.md)
-- [A04: dois BL e cinco fronteiras auditadas no ELF; prólogo simples verificado até antes da chamada (CI pendente)](SEMANTIC_A04_BL_BOUNDARIES.md)
+- [A04: 2 BL, 672 bytes auditados e 32 testes do prólogo até antes do callee (run #40757008125); callees não executados](SEMANTIC_A04_BL_BOUNDARIES.md)
 - [A04: 128 testes de retorno condicional BXNE em ELF, com zero fallthrough desconhecido executado (run #40753982995)](SEMANTIC_A04_CONDITIONAL.md)
 - [A04: dois veneers ARM via GOT/PC com 64 microexecuções e zero alvos indiretos executados (run #40751407523)](SEMANTIC_A04_VENEERS.md)
 - [A04: dispatcher e getter originais microexecutados em 544 cenários, com memória controlada (run #40750531709)](SEMANTIC_A04_DISPATCHER.md)
