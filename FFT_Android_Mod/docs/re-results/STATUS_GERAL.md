@@ -173,11 +173,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #402 — test(ci): validar A02 e detectar jobs duplicados sem conflito no painel](https://github.com/c1c3ru/fft_craft/pull/402)
+- [PR #401 — chore(re): automated structural batch 40736489646](https://github.com/c1c3ru/fft_craft/pull/401)
 - [PR #399 — Fix/re a02 verified ledger ci guard 20261028](https://github.com/c1c3ru/fft_craft/pull/399)
 - [PR #398 — feat(re): A02 11 fronteiras ARM com B delimitado e checkpoints originais](https://github.com/c1c3ru/fft_craft/pull/398)
 - [PR #397 — chore(re): automated structural batch 40733363796](https://github.com/c1c3ru/fft_craft/pull/397)
-- [PR #396 — Fix/ci cancel superseded pr runs 20261028](https://github.com/c1c3ru/fft_craft/pull/396)
-- [PR #395 — chore(re): automated structural batch 40731929672](https://github.com/c1c3ru/fft_craft/pull/395)
 
 ## Atualização automática e fontes
 
