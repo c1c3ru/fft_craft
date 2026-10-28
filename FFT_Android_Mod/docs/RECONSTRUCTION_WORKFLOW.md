@@ -18,7 +18,7 @@ Cada função ou trecho delimitado possui: endereço e bytes do ELF, chamadas/sa
 | Subsistema/trecho | Estrutura | Semântica | Implementação | Diferencial |
 |---|---|---|---|---|
 | `sound_request → 0x2b2cf8 → 0x2b2b7c` | Desvios e três instruções comprovados | Prefixo controlado, sem memória | C do prefixo em `docs/re-tools/c-models/sound_playdef_prefix.c` | 128 amostras A32 × C exigidas no CI da alteração |
-| Corpo compartilhado em `0x2b2b7c` | Janela A32 de 128 bytes auditada e separação de instruções perigosas | Prefixo inicial executado sob estados controlados, interrompendo antes de qualquer efeito não modelado; relatório parcial | Não implementado | Apenas validação controlada do ARM, ainda sem comparação em C |
+| Corpo compartilhado em `0x2b2b7c` | Janela A32 de 128 bytes auditada | Cinco instruções originais executadas até antes da leitura global `0x2b2b90`, com 8 saves e literal real | Modelo C parcial em `c-models/sound_common_prologue.c` | 128 estados ARM/C com PC/SP/registradores e palavras salvas na pilha |
 | Entrada alternativa `0x2b2d04` | Trampolim A32 auditado | A executar no escopo próprio | Não implementado | Não iniciado |
 | Destino `0x2b2448` | Encaminhamento ARM identificado | Corpo não executado nesse experimento | Não implementado | Não iniciado |
 | Destino `0x2b2814` | Encaminhamento e decremento de R0 identificados | Corpo não executado nesse experimento | Não implementado | Não iniciado |
@@ -45,4 +45,4 @@ O relatório auditável produzido é `FFT_Android_Mod/docs/re-results/SEMANTIC_S
 
 ## Próxima investigação
 
-Revisar `docs/re-results/SEMANTIC_SOUND_COMMON_BODY_2B2B7C.md` para identificar a primeira barreira de execução no corpo compartilhado `0x2b2b7c`. Mapear somente a memória e os destinos exigidos pelo opcode original dessa barreira, verificar leituras/escritas/flags e construir o próximo trecho C/C++ apenas quando os efeitos forem confirmados. O relatório atual não certifica a função nem reproduz áudio.
+A partir de `docs/re-results/SEMANTIC_SOUND_COMMON_PROLOGUE.md`, investigar em separado a leitura indireta ARM em `0x2b2b90` (`LDR R0,[PC,R3]`), calculando sua localização por registradores e literal do ELF e mapeando somente a memória comprovada. Continuar a execução apenas após estabelecer a origem e as condições de validade do ponteiro. O prólogo C não reproduz áudio nem certifica a função completa.
