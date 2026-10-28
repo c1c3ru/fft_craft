@@ -15,6 +15,8 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_destinations.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_dispatcher_exec.py'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_dispatcher_exec.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_veneer_exec.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_veneer_exec.py'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_a01_memory_21.py'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_remaining_34.py'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_loop_250.py'
@@ -60,6 +62,7 @@ jobs:
           python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_a02_branch_11.py' -v
           python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_a04_destinations.py' -v
           python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_a04_dispatcher_exec.py' -v
+          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_a04_veneer_exec.py' -v
       - name: Check certificates independently (never add any)
         env:
           GH_TOKEN: ${{ github.token }}
@@ -316,6 +319,32 @@ jobs:
           grep -qx 'A04_DYNAMIC_CASES=544' /tmp/fft-real-250/a04-dispatcher-replay.log
           grep -qx 'A04_FAILED=0' /tmp/fft-real-250/a04-dispatcher-replay.log
           grep -qx 'A04_NEW_CERTIFICATES=0' /tmp/fft-real-250/a04-dispatcher-replay.log
+      - name: A04 validate two original ELF GOT/PLT candidate veneers
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_veneer_exec.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --static-a04-checkpoint /tmp/fft-real-250/semantic-a04-targets-checkpoint.json \
+            --checkpoint /tmp/fft-real-250/semantic-a04-veneer-checkpoint.json \
+            --report /tmp/fft-real-250/SEMANTIC_A04_VENEERS.md \
+            | tee /tmp/fft-real-250/a04-veneer.log
+          grep -qx 'A04_VENEER_TARGETS=2' /tmp/fft-real-250/a04-veneer.log
+          grep -qx 'A04_VENEER_CASES=64' /tmp/fft-real-250/a04-veneer.log
+          grep -qx 'A04_GOT_SLOTS_VERIFIED=2' /tmp/fft-real-250/a04-veneer.log
+          grep -qx 'A04_INDIRECT_DESTINATIONS_EXECUTED=0' /tmp/fft-real-250/a04-veneer.log
+          grep -qx 'A04_FAILED=0' /tmp/fft-real-250/a04-veneer.log
+          grep -qx 'A04_NEW_CERTIFICATES=0' /tmp/fft-real-250/a04-veneer.log
+          cp /tmp/fft-real-250/semantic-a04-veneer-checkpoint.json /tmp/a04-veneer-before.json
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_veneer_exec.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --static-a04-checkpoint /tmp/fft-real-250/semantic-a04-targets-checkpoint.json \
+            --checkpoint /tmp/fft-real-250/semantic-a04-veneer-checkpoint.json \
+            --report /tmp/fft-real-250/SEMANTIC_A04_VENEERS.md \
+            | tee /tmp/fft-real-250/a04-veneer-replay.log
+          cmp /tmp/a04-veneer-before.json /tmp/fft-real-250/semantic-a04-veneer-checkpoint.json
+          grep -qx 'A04_VENEER_CASES=64' /tmp/fft-real-250/a04-veneer-replay.log
+          grep -qx 'A04_FAILED=0' /tmp/fft-real-250/a04-veneer-replay.log
+          grep -qx 'A04_NEW_CERTIFICATES=0' /tmp/fft-real-250/a04-veneer-replay.log
       - name: Preserve run artifacts, including failures
         if: always()
         uses: actions/upload-artifact@v4
