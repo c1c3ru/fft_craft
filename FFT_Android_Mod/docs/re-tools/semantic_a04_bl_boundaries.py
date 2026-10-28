@@ -151,8 +151,9 @@ def execute(binary, seed, flags):
     initial = [(seed ^ (i * 0x11111111)) & MASK for i in range(13)]
     expected_regs, writes_expected = oracle(seed)
     uc = Uc(UC_ARCH_ARM, UC_MODE_ARM)
-    for addr in (SOURCE, SIMPLE_TARGET, STACK_BASE):
-        uc.mem_map(addr & ~0xfff, 0x1000, UC_PROT_ALL)
+    for page in sorted({SOURCE & ~0xfff, SIMPLE_TARGET & ~0xfff,
+                        STACK_BASE & ~0xfff}):
+        uc.mem_map(page, 0x1000, UC_PROT_ALL)
     uc.mem_write(SOURCE, source)
     uc.mem_write(SIMPLE_TARGET, body)
     memory_initial = bytes((i * 7 + seed) & 255 for i in range(0x1000))
