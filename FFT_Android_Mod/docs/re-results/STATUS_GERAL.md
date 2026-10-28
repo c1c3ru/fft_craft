@@ -176,11 +176,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #413 — feat(re): A04 validar retorno ARM BXNE e fallthrough delimitado](https://github.com/c1c3ru/fft_craft/pull/413)
+- [PR #412 — chore(re): automated structural batch 40752942623](https://github.com/c1c3ru/fft_craft/pull/412)
 - [PR #410 — docs(re): centralizar evidências A04 e manter três destinos pendentes](https://github.com/c1c3ru/fft_craft/pull/410)
 - [PR #411 — chore(re): automated structural batch 40752057494](https://github.com/c1c3ru/fft_craft/pull/411)
 - [PR #408 — feat(re): A04 validar dois saltos indiretos ARM PC/GOT sem executar os alvos](https://github.com/c1c3ru/fft_craft/pull/408)
-- [PR #409 — chore(re): automated structural batch 40751245753](https://github.com/c1c3ru/fft_craft/pull/409)
-- [PR #407 — feat(re): validar dispatcher ARM e getter A04 em 544 cenários](https://github.com/c1c3ru/fft_craft/pull/407)
 
 ## Atualização automática e fontes
 
