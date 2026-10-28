@@ -131,11 +131,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #381 — feat(re): engenharia de loop A32 com microexecução diferencial e painel central](https://github.com/c1c3ru/fft_craft/pull/381)
+- [PR #379 — Analysis/re sound common body 2b2b7c 20261028](https://github.com/c1c3ru/fft_craft/pull/379)
+- [PR #380 — ci(re): validar 250 tarefas reais do ELF com auditoria dupla de 25 manifestos](https://github.com/c1c3ru/fft_craft/pull/380)
+- [PR #378 — chore(re): automated structural batch 40699688505](https://github.com/c1c3ru/fft_craft/pull/378)
 - [PR #377 — feat(re): rastrear slot global ARM 0x34615c e testar LDR com memória controlada](https://github.com/c1c3ru/fft_craft/pull/377)
-- [PR #376 — chore(re): automated structural batch 40698289300](https://github.com/c1c3ru/fft_craft/pull/376)
-- [PR #375 — feat(re): executar prólogo real ARM com pilha/literal e validar reconstrução C](https://github.com/c1c3ru/fft_craft/pull/375)
-- [PR #374 — chore(re): automated structural batch 40696824826](https://github.com/c1c3ru/fft_craft/pull/374)
-- [PR #373 — feat(re): auditar e microexecutar prefixo seguro do corpo compartilhado ARM 0x2b2b7c](https://github.com/c1c3ru/fft_craft/pull/373)
 
 ## Atualização automática e fontes
 
