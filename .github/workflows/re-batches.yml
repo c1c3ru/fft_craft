@@ -155,6 +155,8 @@ jobs:
         run: python3 FFT_Android_Mod/docs/re-tools/semantic_sound_functional_reconstruction.py
       - name: Audit and safely microexecute original sound common body
         run: python3 FFT_Android_Mod/docs/re-tools/semantic_sound_common_body.py
+      - name: Reconstruct real sound common-body prologue and compare ARM to C
+        run: python3 FFT_Android_Mod/docs/re-tools/semantic_sound_common_prologue.py
       - name: Publish v3 coverage diagnostics and migration counts
         run: |
           python3 FFT_Android_Mod/docs/re-tools/structural_v3_report.py
