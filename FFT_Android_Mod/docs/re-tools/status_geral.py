@@ -19,6 +19,8 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "docs/re-results"
 REPO = "c1c3ru/fft_craft"
 MILESTONES = (
+    ("SEMANTIC_SOUND_GLOBAL_SLOT.md",
+     "Som: slot global do ELF em 0x34615c, relocação e 512 leituras ARM com memória sintética"),
     ("SEMANTIC_SOUND_COMMON_PROLOGUE.md",
      "Corpo comum 0x2b2b7c: cinco instruções ARM e 128 testes diferenciais C com pilha e literal originais"),
     ("SEMANTIC_SOUND_COMMON_BODY_2B2B7C.md",
@@ -69,7 +71,7 @@ MILESTONES = (
      "Retorno ARM real e alterações de memória antes da primeira chamada"),
 )
 CURRENT_SEMANTIC_BOUNDARIES = (
-    ("0x2b2b90", "Investigar a leitura indireta LDR R0,[PC,R3] da área global do som, mapeando o ponteiro sem inventar efeitos externos"),
+    ("0x34615c", "Investigar a inicialização/relocação em tempo de execução do slot de som; o ELF estático não prova seu valor em memória do processo"),
     ("0x2bf008", "Investigar o próximo BL de SysSE_Play depois do desvio condicionado"),
     ("0x0a7034", "Investigar o próximo BL de iOS_SetIconPosition com os argumentos já observados"),
 )

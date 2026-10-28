@@ -98,6 +98,8 @@ jobs:
             --output FFT_Android_Mod/docs/re-results/SEMANTIC_SOUND_COMMON_BODY_2B2B7C.md
           python3 FFT_Android_Mod/docs/re-tools/semantic_sound_common_prologue.py \
             --output FFT_Android_Mod/docs/re-results/SEMANTIC_SOUND_COMMON_PROLOGUE.md
+          python3 FFT_Android_Mod/docs/re-tools/semantic_sound_global_slot.py \
+            --output FFT_Android_Mod/docs/re-results/SEMANTIC_SOUND_GLOBAL_SLOT.md
           python3 FFT_Android_Mod/docs/re-tools/status_geral.py \
             --pilot-dir /tmp/fft-semantic/pilot \
             --dynamic-dir /tmp/fft-semantic/dynamic-evidence \
@@ -131,6 +133,8 @@ jobs:
             /tmp/fft-semantic/SEMANTIC_SOUND_COMMON_BODY_2B2B7C.md
           cp FFT_Android_Mod/docs/re-results/SEMANTIC_SOUND_COMMON_PROLOGUE.md \
             /tmp/fft-semantic/SEMANTIC_SOUND_COMMON_PROLOGUE.md
+          cp FFT_Android_Mod/docs/re-results/SEMANTIC_SOUND_GLOBAL_SLOT.md \
+            /tmp/fft-semantic/SEMANTIC_SOUND_GLOBAL_SLOT.md
       - uses: actions/upload-artifact@v4
         with:
           name: fft-semantic-manifests
