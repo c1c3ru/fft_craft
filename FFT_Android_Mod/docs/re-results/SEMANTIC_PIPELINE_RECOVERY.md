@@ -27,3 +27,11 @@ O PR #362 foi encerrado **sem merge**, para não sobrescrever resultados da `mai
 - O painel centralizado `STATUS_GERAL.md` referencia esta análise e deve manter links às evidências originais. Nenhuma contagem é aumentada só porque os manifestos foram gerados.
 
 **Limite de garantia:** uma proteção contra publicação concorrente não prova ausência de outros processos alterando a `main` e não autoriza promover evidência parcial a certificação.
+
+## Auditoria reprodutível de 250 tarefas no ELF original (em validação)
+
+Foi preparado o workflow [Real ELF semantic manifest audit (250)](../../../.github/workflows/re-semantic-real-elf-250.yml), executável em pull request ou manualmente. Ele cria **25 manifestos** com **250 tarefas únicas**, processa cada tarefa usando o `libgl2jni.so` original e faz uma **segunda inspeção determinística** de cada endereço para detectar saídas ausentes, duplicadas, adulteradas ou incompatíveis com o ELF SHA-256 conhecido.
+
+O job exige os marcadores `TOTAL_TASKS=250`, `PILOT_PARTIAL=250`, `PILOT_FAILED=0`, `PILOT_MANIFEST_SHARDS=25`, `PILOT_CONCURRENT_THREADS=16`, `REAL_ELF_AUDIT_STATIC_REPORTS=250` e `REAL_ELF_AUDIT_REINSPECTED=1`. O artefato `real-elf-250-static-audit` contém os manifestos, relatórios JSON individuais, logs e `REAL_ELF_250_AUDIT.md`; a aprovação do job depende da inspeção de **todos** os resultados. Os testes unitários do verificador usam dados sintéticos e **não** contam como evidência do ELF real.
+
+**Resultado confirmado em 28/10/2026:** [execução GitHub Actions #40703703569](https://github.com/c1c3ru/fft_craft/actions/runs/40703703569), job `real-elf-250` **success**. Logs: `TOTAL_TASKS=250`, `PILOT_MANIFEST_SHARDS=25`, `PILOT_CONCURRENT_THREADS=16`, `PILOT_PARTIAL=250`, `PILOT_FAILED=0`, `REAL_ELF_AUDIT_MANIFESTS=25`, `REAL_ELF_AUDIT_TASKS=250`, `REAL_ELF_AUDIT_STATIC_REPORTS=250`, `REAL_ELF_AUDIT_REINSPECTED=1`, `REAL_ELF_AUDIT_CERTIFICATES_CREATED=0`. Artefato GitHub Actions `real-elf-250-static-audit` (ID `12823665321`, 143.399 bytes compactados, retenção configurada de 30 dias) com relatórios e logs. **A execução real de 250 inspeções estáticas foi confirmada e reinspecionada no mesmo ELF**, mas **não** significa que 250 funções tenham sido executadas no Unicorn, nem que 250 contratos semânticos tenham sido certificados. As 303 certificações existentes permanecem inalteradas.

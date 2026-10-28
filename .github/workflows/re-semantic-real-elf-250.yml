@@ -1,0 +1,84 @@
+name: Real ELF semantic manifest audit (250)
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/re-semantic-real-elf-250.yml'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_manifest_audit.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_manifest_audit.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_work_queue.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_pilot.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_evidence.py'
+      - 'FFT_Android_Mod/docs/RE_FUNCTION_INVENTORY.csv'
+      - 'FFT_Android_Mod/docs/re-results/semantic-certificates.json'
+      - 'FFT_Android_Mod/src/lib/armeabi/libgl2jni.so'
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  real-elf-250:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - name: Checkout exact revision
+        uses: actions/checkout@v4
+      - name: Configure Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install ARM inspection dependencies
+        run: python3 -m pip install capstone pyelftools unicorn
+      - name: Compile tools and execute synthetic verifier regressions
+        run: |
+          set -euo pipefail
+          python3 -m compileall -q FFT_Android_Mod/docs/re-tools
+          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_semantic_manifest_audit.py' -v
+      - name: Check certificates independently (never add any)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 FFT_Android_Mod/docs/re-tools/semantic_certificate_gate.py
+      - name: Generate 25 manifests for 250 uncertified entrypoints
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/fft-real-250
+          python3 FFT_Android_Mod/docs/re-tools/semantic_work_queue.py \
+            --workers 25 --limit 250 \
+            --output /tmp/fft-real-250/manifests | tee /tmp/fft-real-250/queue.log
+          grep -qx 'TOTAL_TASKS=250' /tmp/fft-real-250/queue.log
+          test "$(find /tmp/fft-real-250/manifests -name 'semantic-worker-*.json' | wc -l)" -eq 25
+      - name: Run bounded static inspection against the real ELF
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/semantic_pilot.py \
+            --workers 25 \
+            --manifests /tmp/fft-real-250/manifests \
+            --output /tmp/fft-real-250/pilot | tee /tmp/fft-real-250/pilot.log
+          grep -qx 'PILOT_PARTIAL=250' /tmp/fft-real-250/pilot.log
+          grep -qx 'PILOT_FAILED=0' /tmp/fft-real-250/pilot.log
+          grep -qx 'PILOT_MANIFEST_SHARDS=25' /tmp/fft-real-250/pilot.log
+          grep -qx 'PILOT_CONCURRENT_THREADS=16' /tmp/fft-real-250/pilot.log
+      - name: Independently audit every output and repeat ELF inspection
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/semantic_manifest_audit.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --manifests /tmp/fft-real-250/manifests \
+            --pilot /tmp/fft-real-250/pilot \
+            --expected-workers 25 --expected-tasks 250 \
+            --reinspect \
+            --report /tmp/fft-real-250/REAL_ELF_250_AUDIT.md \
+            | tee /tmp/fft-real-250/audit.log
+          grep -qx 'REAL_ELF_AUDIT_STATIC_REPORTS=250' /tmp/fft-real-250/audit.log
+          grep -qx 'REAL_ELF_AUDIT_REINSPECTED=1' /tmp/fft-real-250/audit.log
+          grep -qx 'REAL_ELF_AUDIT_CERTIFICATES_CREATED=0' /tmp/fft-real-250/audit.log
+      - name: Preserve run artifacts, including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-elf-250-static-audit
+          path: /tmp/fft-real-250/
+          retention-days: 30
+          if-no-files-found: warn
