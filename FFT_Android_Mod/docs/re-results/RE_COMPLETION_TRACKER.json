@@ -1,0 +1,255 @@
+{
+  "schema": 1,
+  "project": "FFT Craft Android / ARM reverse engineering",
+  "scope": "end_to_end_android_app",
+  "elf_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "baseline_date": "2026-10-28",
+  "status_source": "FFT_Android_Mod/docs/re-results/STATUS_GERAL.md",
+  "phases": [
+    {
+      "id": "F0",
+      "title": "Linha de base e escopo",
+      "exit_gate": "Inventario e artefatos de referencia versionados, areas descobertas/dados separadas, riscos/alcancabilidade documentados"
+    },
+    {
+      "id": "F1",
+      "title": "Contratos de instrucao e CFG",
+      "exit_gate": "21 alvos ARM restantes classificados e testados quando seguros; CFG e pendencias estruturais auditados"
+    },
+    {
+      "id": "F2",
+      "title": "Reconstrucao semantica de subsistemas",
+      "exit_gate": "Fluxos nativos relevantes com contratos completos, memoria/calls/branch e traces com limites"
+    },
+    {
+      "id": "F3",
+      "title": "Reimplementacao funcional independente",
+      "exit_gate": "Modulos compilaveis com diferencial original x C/C++ sem divergencias do gate"
+    },
+    {
+      "id": "F4",
+      "title": "Integracao APK/Android/OBB",
+      "exit_gate": "ABI e JNI integrados, APK assinado reproduzivel, instalacao/carregamento em dispositivos suportados"
+    },
+    {
+      "id": "F5",
+      "title": "Validacao funcional e regressao",
+      "exit_gate": "Matriz real Android/OBB com zero divergencias criticas e evidencias de teste"
+    },
+    {
+      "id": "F6",
+      "title": "Aceite final e documentacao",
+      "exit_gate": "Todos fluxos do escopo com disposition validada e nenhuma lacuna funcional relevante"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "B01",
+      "phase": "F0",
+      "priority": 1,
+      "status": "in_progress",
+      "depends_on": [],
+      "title": "Consolidar inventario unico ELF (ARM/Thumb)",
+      "next_action": "Consolidar inventario unico ELF (ARM/Thumb), JNI/Smali e assets OBB, deduplicar aliases e apontar manifestos, erros e exclusoes.",
+      "acceptance": "Relatorio de inventario com total unico, cobertura de bytes e origem de cada entrada, sem dupla contagem.",
+      "evidence": []
+    },
+    {
+      "id": "A01",
+      "phase": "F1",
+      "priority": 1,
+      "status": "planned",
+      "depends_on": [],
+      "title": "Issue #388: adicionar contratos conservadores STRB/LDRB e LDR com offsets maiores com testes de aliasing",
+      "next_action": "Issue #388: adicionar contratos conservadores STRB/LDRB e LDR com offsets maiores com testes de aliasing, dados sinteticos e canarias.",
+      "acceptance": "Byte/word read/write avaliados no ELF original sob modelos independentes; CI verde; catalogo dos 21 atualizado.",
+      "evidence": []
+    },
+    {
+      "id": "A02",
+      "phase": "F1",
+      "priority": 1,
+      "status": "planned",
+      "depends_on": [
+        "A01"
+      ],
+      "title": "Issue #388: mapear nove opcodes+salto",
+      "next_action": "Issue #388: mapear nove opcodes+salto, um LDR+salto e auto-loop, parando antes do destino de controle desconhecido.",
+      "acceptance": "Todos os 21 classificados com motivo, trace limitado ou bloqueio justificado; sem loop infinito ou certificado automatico.",
+      "evidence": []
+    },
+    {
+      "id": "A03",
+      "phase": "F1",
+      "priority": 1,
+      "status": "planned",
+      "depends_on": [
+        "B01"
+      ],
+      "title": "Resolver 50 checkpoints em revisao",
+      "next_action": "Resolver 50 checkpoints em revisao, priorizando jump tables, EnvSE_Play, Savedata_Load, Boot_Init, initMap e controles de entrada.",
+      "acceptance": "CFG de blocos com evidencias por endereco, dados inline separados, destinos de salto justificados; fila revisada.",
+      "evidence": []
+    },
+    {
+      "id": "R01",
+      "phase": "F2",
+      "priority": 1,
+      "status": "planned",
+      "depends_on": [
+        "B01"
+      ],
+      "title": "Rastrear slot de som 0x34615c e BL em 0x2bf008 com ambiente real em dispositivo ou emulacao configurada fielmente.",
+      "next_action": "Rastrear slot de som 0x34615c e BL em 0x2bf008 com ambiente real em dispositivo ou emulacao configurada fielmente.",
+      "acceptance": "Valor do ponteiro em runtime, cadeia de chamadas, memoria e efeitos registrados ou limitacao explicita.",
+      "evidence": []
+    },
+    {
+      "id": "R02",
+      "phase": "F2",
+      "priority": 1,
+      "status": "planned",
+      "depends_on": [
+        "B01"
+      ],
+      "title": "Continuar iOS_SetIconPosition desde 0x0a7034 e fluxo de touchscreen/UI com contratos de chamadas.",
+      "next_action": "Continuar iOS_SetIconPosition desde 0x0a7034 e fluxo de touchscreen/UI com contratos de chamadas.",
+      "acceptance": "Trace entrada-ate-saida, flags, R0-R15, memoria e callees com gates diferenciais.",
+      "evidence": []
+    },
+    {
+      "id": "R03",
+      "phase": "F2",
+      "priority": 1,
+      "status": "planned",
+      "depends_on": [
+        "A03"
+      ],
+      "title": "Reconstruir Boot_Init",
+      "next_action": "Reconstruir Boot_Init, Main_FrameMove, Main_FrameRender, menus e battle com chamadas e efeitos de estado global.",
+      "acceptance": "Matriz de caminhos de fluxo principal e contratos verificaveis dos subsistemas usados no jogo.",
+      "evidence": []
+    },
+    {
+      "id": "R04",
+      "phase": "F2",
+      "priority": 2,
+      "status": "planned",
+      "depends_on": [
+        "A03"
+      ],
+      "title": "Validar OBB/assets",
+      "next_action": "Validar OBB/assets, leitura de arquivos, save/load e comportamento de persistencia, erros e excecoes.",
+      "acceptance": "Round trip de arquivos originais e formatos observados sem corrupção e rastreabilidade de offsets.",
+      "evidence": []
+    },
+    {
+      "id": "C01",
+      "phase": "F3",
+      "priority": 1,
+      "status": "planned",
+      "depends_on": [
+        "R01",
+        "R02"
+      ],
+      "title": "Substituir rotinas de som",
+      "next_action": "Substituir rotinas de som, entrada e despacho que tenham contratos fechados por implementacoes C/C++ independentes.",
+      "acceptance": "Build com avisos como erros; comparacao de efeitos ARM vs C/C++ nos mesmos estados, zero divergencias.",
+      "evidence": []
+    },
+    {
+      "id": "C02",
+      "phase": "F3",
+      "priority": 1,
+      "status": "planned",
+      "depends_on": [
+        "R03",
+        "R04"
+      ],
+      "title": "Reimplementar por modulos os fluxos completos de game loop",
+      "next_action": "Reimplementar por modulos os fluxos completos de game loop, batalha, menus, persistencia e grafico.",
+      "acceptance": "Contratos integrais de subsistema; regression e diferencial nativo cobrindo paths, erro e estado global.",
+      "evidence": []
+    },
+    {
+      "id": "I01",
+      "phase": "F4",
+      "priority": 1,
+      "status": "planned",
+      "depends_on": [
+        "C01",
+        "C02"
+      ],
+      "title": "Integrar ABI nativo/JNI",
+      "next_action": "Integrar ABI nativo/JNI, DEX/Smali, manifest e recursos, incluindo abertura e renderizacao.",
+      "acceptance": "APK/OBB reproduzivel, JNI resolvido, inicializacao, menu, som e grafico testados em ABI declarada.",
+      "evidence": []
+    },
+    {
+      "id": "I02",
+      "phase": "F4",
+      "priority": 2,
+      "status": "planned",
+      "depends_on": [
+        "I01"
+      ],
+      "title": "Integrar assinatura",
+      "next_action": "Integrar assinatura, instalacao e OBB sem redistribuir binarios protegidos; auditar compatibilidade Android 32-bit.",
+      "acceptance": "Install/launch sem bloqueios conhecidos, logs e pacote versionado para testes internos.",
+      "evidence": []
+    },
+    {
+      "id": "Q01",
+      "phase": "F5",
+      "priority": 1,
+      "status": "planned",
+      "depends_on": [
+        "I02"
+      ],
+      "title": "Executar matriz referencia vs app em boot",
+      "next_action": "Executar matriz referencia vs app em boot, menus, battle, save/load, audio, touch, assets, desempenho e ciclo de vida.",
+      "acceptance": "Teste funcional com zero divergencias criticas, resultados e logs por dispositivo e build.",
+      "evidence": []
+    },
+    {
+      "id": "Q02",
+      "phase": "F5",
+      "priority": 2,
+      "status": "planned",
+      "depends_on": [
+        "Q01"
+      ],
+      "title": "Executar regressao de limites e estabilidade: save quebrado",
+      "next_action": "Executar regressao de limites e estabilidade: save quebrado, assets ausentes, retomada, threads, memoria, crash.",
+      "acceptance": "Nenhum bloqueador critico e riscos remanescentes registrados com reprodutores.",
+      "evidence": []
+    },
+    {
+      "id": "X01",
+      "phase": "F6",
+      "priority": 1,
+      "status": "planned",
+      "depends_on": [
+        "Q02"
+      ],
+      "title": "Fechar disposition de todo codigo e fluxo relevante: reimplementado",
+      "next_action": "Fechar disposition de todo codigo e fluxo relevante: reimplementado, preservado sob escopo, inalcançavel demonstrado ou pendente.",
+      "acceptance": "Nenhuma dependencia funcional sem resposta, inventario final rastreavel e evidencias por subsistema.",
+      "evidence": []
+    },
+    {
+      "id": "X02",
+      "phase": "F6",
+      "priority": 1,
+      "status": "planned",
+      "depends_on": [
+        "X01"
+      ],
+      "title": "Publicar relatorio de aceite interno",
+      "next_action": "Publicar relatorio de aceite interno, matriz Android e instrucoes de build e teste; checar direitos de assets.",
+      "acceptance": "Aceite final aprovado, artefato de teste reproduzivel, limites e licencas documentados.",
+      "evidence": []
+    }
+  ],
+  "definition_of_done": "No critical unknown functional dependency; validated original-vs-reimplementation behavior and reproducible installable Android APK/OBB for declared support matrix. No automatic formal certification."
+}
