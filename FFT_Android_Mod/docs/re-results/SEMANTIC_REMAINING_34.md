@@ -14,7 +14,7 @@ O workflow `re-semantic-real-elf-250.yml` executa classificação, microexecuç�
 
 ## Estado
 
-**Execução confirmada no ELF real:** o job [Real ELF semantic manifest audit](https://github.com/c1c3ru/fft_craft/actions/runs/40716377693) catalogou **34 entradas**, executou **13 rotinas STR/BX LR** com **416 cenários diferenciais**, em **2 rodadas**. Todas as verificações de escrita, retorno e registradores passaram, e o checkpoint foi reproduzido na segunda execução (`REMAINING_34_FAILED=0`, `REMAINING_34_NEW_CERTIFICATES=0`). Evidências brutas: artifact `real-elf-250-static-audit` ID `12829627339`.
+**Execução confirmada no ELF real:** o job [Real ELF semantic manifest audit](https://github.com/c1c3ru/fft_craft/actions/runs/40718099438) catalogou **34 entradas**, executou **13 rotinas STR/BX LR** com **416 cenários diferenciais**, em **2 rodadas**. Todas as verificações de escrita, retorno e registradores passaram, e o checkpoint foi reproduzido na segunda execução (`REMAINING_34_FAILED=0`, `REMAINING_34_NEW_CERTIFICATES=0`). Evidências brutas: artifact `real-elf-250-static-audit` ID `12829627339`.
 
 **21 entradas ainda sem modelo de execução**, registradas por endereço e bytes no arquivo `SEMANTIC_REMAINING_34.md` do artefato: dois `STRB/BX LR` (0x000a9404, 0x000b1ad4); sete `LDR/BX LR` com deslocamento maior que o limite original (0x000ad8d0, 0x000ae088, 0x000af110, 0x000af118, 0x000b67b0, 0x000b682c, 0x000b6ac4); um `LDRB/BX LR` (0x000b1acc); nove sequências de operação seguida de salto (0x00072910, 0x00082404, 0x0008240c, 0x000a94bc, 0x000b4700, 0x000b6c68, 0x000b6cd0, 0x000b6ee0, 0x000b6ee8); um `LDR` seguido de salto externo (0x000b6f80); e um salto para o próprio endereço (0x002a1268). Não executar o salto infinito como função-folha.
 
