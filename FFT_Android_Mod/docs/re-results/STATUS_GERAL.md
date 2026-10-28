@@ -172,11 +172,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #396 — Fix/ci cancel superseded pr runs 20261028](https://github.com/c1c3ru/fft_craft/pull/396)
+- [PR #395 — chore(re): automated structural batch 40731929672](https://github.com/c1c3ru/fft_craft/pull/395)
 - [PR #394 — feat(re): A01 executar STRB LDRB e LDR no ELF real com diferencial e checkpoints](https://github.com/c1c3ru/fft_craft/pull/394)
 - [PR #393 — chore(re): automated structural batch 40723421818](https://github.com/c1c3ru/fft_craft/pull/393)
 - [PR #392 — docs(re): plano objetivo de conclusão total com engenharia de loop e acompanhamento automático](https://github.com/c1c3ru/fft_craft/pull/392)
-- [PR #391 — chore(re): automated structural batch 40719353204](https://github.com/c1c3ru/fft_craft/pull/391)
-- [PR #390 — feat(re): triagem dos 34 endereços A32 e loop STR/BX LR auditável](https://github.com/c1c3ru/fft_craft/pull/390)
 
 ## Atualização automática e fontes
 
