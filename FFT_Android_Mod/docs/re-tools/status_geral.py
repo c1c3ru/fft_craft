@@ -35,7 +35,7 @@ MILESTONES = (
     ("SEMANTIC_SOUND_THREE_ENTRY_EXEC.md",
      "sound_request: 384 microexecucoes em tres entradas ARM ate destinos de funcao nao executados"),
     ("SEMANTIC_A04_DISPATCHER.md",
-     "A04 dispatcher: quatro callers originais e getter serão comparados por Unicorn e modelo independente (gate 544 cenários)"),
+     "A04 dispatcher e getter: 544 microexecuções ARM originais aprovadas (run #40749838024); cinco destinos ainda pendentes"),
     ("SEMANTIC_A04_DESTINATIONS.md",
      "A04: sete destinos externos, 672 bytes inspecionados no ELF original (run #40748750630); cinco ainda sem execução"),
     ("SEMANTIC_A02_BRANCHES.md",
