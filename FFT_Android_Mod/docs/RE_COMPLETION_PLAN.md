@@ -41,12 +41,13 @@
 ## Próximas ações, nesta ordem
 
 1. **L01 — #388:** modelos com testes `STRB`/`LDRB` e leituras com offsets maiores, sob memória sintética e rastreio de efeitos. Não executar o auto-loop `0x002a1268` de forma ilimitada.
-2. **L02 — #388:** nove prefixos com operação+B e um LDR+B: comparar estado antes do destino e mapear cada callee/destino sem extrapolar a função inteira.
+2. **L02 / A02 — #388:** nove prefixos com operação+B, um LDR+B e um auto-loop: testar efeitos e PC antes de executar qualquer destino, com checkpoint idempotente e loop limitado a um passo.
+4. **L02b / A04 — destinos dos saltos:** reconstruir sete destinos externos únicos (prioridade `0x000b6c58`), provar código/dados, CFG, argumentos e efeitos reais até fronteiras verificadas; esclarecer a reachability do auto-loop. Não confundir 352 testes locais com função completa.
 3. **L03 — CFG:** resolver 50 pendências estruturais; priorizar `EnvSE_Play`, `iOSsetCursorByTouch`, `Savedata_Load`, `pspFftSave`, `initMap` e `Boot_Init`, pois conectam subsistemas observáveis.
-4. **L04 — runtime:** obter traces do slot de som `0x34615c`, `SysSE_Play` em `0x2bf008` e `iOS_SetIconPosition` em `0x0a7034`, diferenciando valores reais de memória sintética.
-5. **L05 — fluxo principal:** reconstruir `Boot_Init → Main_FrameMove/Render → menus/battle/save` e contratos entre callers/callees. Priorizar interações efetivas em vez de funções isoladas por tamanho.
-6. **L06 — execução comparativa:** estabelecer suíte original × C/C++ e matriz Android para cada fluxo concluído; nenhum gate de subsistema se satisfaz apenas por testes do prólogo.
-7. **L07 — integração final:** build nativo/JNI/APK/OBB assinado em ambiente reproduzível e testes completos em dispositivo de ABI suportada; corrigir toda divergência.
+5. **L04 — runtime:** obter traces do slot de som `0x34615c`, `SysSE_Play` em `0x2bf008` e `iOS_SetIconPosition` em `0x0a7034`, diferenciando valores reais de memória sintética.
+6. **L05 — fluxo principal:** reconstruir `Boot_Init → Main_FrameMove/Render → menus/battle/save` e contratos entre callers/callees. Priorizar interações efetivas em vez de funções isoladas por tamanho.
+7. **L06 — execução comparativa:** estabelecer suíte original × C/C++ e matriz Android para cada fluxo concluído; nenhum gate de subsistema se satisfaz apenas por testes do prólogo.
+8. **L07 — integração final:** build nativo/JNI/APK/OBB assinado em ambiente reproduzível e testes completos em dispositivo de ABI suportada; corrigir toda divergência.
 
 ## Operação e atualização do documento central
 
