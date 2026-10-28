@@ -60,6 +60,22 @@ class BlBoundaryTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "prologue"):
                 target.prefix_original(None)
 
+    def test_static_bl_first_target_requires_correct_original_destination(self):
+        src = target.SIMPLE_TARGET
+        pc = src + 12
+        displacement = 0xb45d0 - (pc + 8)
+        good_bl = (0xeb000000 | ((displacement >> 2) & 0xffffff)).to_bytes(4, "little")
+        body = bytes.fromhex("70402de90050a0e10140a0e1") + good_bl
+        # Static scan itself cannot prove the callee. Refuse a changed first BL.
+        with mock.patch.object(
+                semantic_evidence, "read_function",
+                return_value=body + bytes(target.SCAN_BYTES - len(body))):
+            row = target.first_call(None, src, 0xb45d0)
+            self.assertEqual(row["call"]["target"], "000b45d0")
+            self.assertFalse(row["call"]["executed"])
+            with self.assertRaisesRegex(ValueError, "target"):
+                target.first_call(None, src, 0xb6620)
+
     def test_snapshot_only_records_a_bounded_prefix(self):
         state = {"callsites": [], "scanned_bytes": 672}
         snap = target.checkpoint(state, [
