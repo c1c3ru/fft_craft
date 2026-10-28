@@ -92,12 +92,12 @@
       "id": "A04",
       "phase": "F1",
       "priority": 1,
-      "status": "planned",
+      "status": "in_progress",
       "depends_on": [
         "A02"
       ],
       "title": "Reconstruir os sete destinos externos dos saltos ARM A02",
-      "next_action": "A04: investigar os sete destinos originais 0x002b1bb0, 0x000714e8, 0x000714dc, 0x000ab674, 0x000b461c, 0x000b6c58 e 0x000b8a18; começar por 0x000b6c58 e classificar reachability do auto-loop 0x002a1268.",
+      "next_action": "Executar auditoria estática delimitada dos sete destinos ELF A02, inspecionar os primeiros blocos e interpretar o dispatcher 0x000b6c58; depois criar contratos semânticos de destino e testes ARM sem extrapolação.",
       "acceptance": "CFG e contratos por destino com testes diferenciais completos até próximas fronteiras; fluxo do autoloop classificado com evidência de reachability ou lacuna explícita.",
       "evidence": []
     },
