@@ -187,7 +187,7 @@ def report(state):
         "Observed original ARM vs independent register/memory model, "
         "read addresses and width, PC trace, SP/LR, CPSR, and zero writes.",
         "", "Constraints: synthetic valid pointers/array; never a real Android "
-        "runtime value. Only the enumerated inputs are tested. Other six "
+        "runtime value. Only the enumerated inputs are tested. Other five "
         "external targets, calling conventions under real runtime, reachability "
         "and whole-function equivalence remain open. No new certificates.",
         ""])
