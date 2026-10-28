@@ -11,6 +11,7 @@ from pathlib import Path
 import semantic_manifest_audit as manifest_audit
 
 MASK = 0xffffffff
+BX_LR = 0xe12fff1e
 SEEDS = (0, 1, 0x100, 0x80000000, 0xffffffff, 0x12345678, 0xdeadbeef, 0xa5a5a5a5)
 FLAGS = (0, 0x20000000, 0x40000000, 0x90000000)
 OPS = {0: "and", 1: "eor", 2: "sub", 4: "add", 12: "orr", 13: "mov"}
@@ -30,7 +31,7 @@ def decode(raw, addr):
         target = (addr + 8 + delta * 4) & MASK
         return ({"kind": "branch_prefix", "target": target, "opcode": raw.hex()}
                 if target != addr and target % 4 == 0 else None)
-    if len(raw) != 8 or int.from_bytes(raw[4:], "little") != 0xe12fff1e or word >> 28 != 14:
+    if len(raw) != 8 or int.from_bytes(raw[4:], "little") != BX_LR or word >> 28 != 14:
         return None
     if ((word >> 25) & 7) == 1 and not (word & (1 << 20)):
         op, rn, rd = (word >> 21) & 15, (word >> 16) & 15, (word >> 12) & 15
