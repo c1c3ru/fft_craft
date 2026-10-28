@@ -68,6 +68,7 @@ A prioridade é reconstruir comportamento verificável (estrutura, semântica, C
 
 Os relatórios abaixo apresentam **efeitos locais testados sob estados sintéticos** e seus limites. Testes passando não significam que a função inteira foi reconstruída:
 
+- [CI auditado: falhas históricas de fixture e Unicorn separadas do HEAD verde; cancelar apenas runs obsoletos de PR](CI_RELIABILITY_2026-10-28.md)
 - [Som: slot global do ELF em 0x34615c, relocação e 512 leituras ARM com memória sintética](SEMANTIC_SOUND_GLOBAL_SLOT.md)
 - [Corpo comum 0x2b2b7c: cinco instruções ARM e 128 testes diferenciais C com pilha e literal originais](SEMANTIC_SOUND_COMMON_PROLOGUE.md)
 - [Corpo comum 0x2b2b7c: desmontagem original A32 e execução limitada antes de efeitos não modelados](SEMANTIC_SOUND_COMMON_BODY_2B2B7C.md)

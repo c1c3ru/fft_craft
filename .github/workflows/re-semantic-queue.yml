@@ -19,6 +19,12 @@ on:
       - 'FFT_Android_Mod/docs/RE_FUNCTION_INVENTORY.csv'
       - 'FFT_Android_Mod/src/lib/armeabi/libgl2jni.so'
 
+# Limit obsolete CI runs to the latest revision of each pull request.
+# Keep manually dispatched runs independent of cancellation.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 permissions:
   contents: read
   pull-requests: read
