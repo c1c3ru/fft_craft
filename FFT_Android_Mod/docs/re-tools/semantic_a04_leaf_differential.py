@@ -21,7 +21,7 @@ ENTRY = 0xb45d0
 RET = 0x710000
 BASE = 0x500000
 MASK = 0xffffffff
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 BINARY = ROOT / "src/lib/armeabi/libgl2jni.so"
 SOURCE = Path(__file__).resolve().parent / "c-models/a04_index_slot.c"
 
