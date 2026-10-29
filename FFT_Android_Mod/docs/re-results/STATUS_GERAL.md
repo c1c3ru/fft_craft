@@ -45,7 +45,7 @@ A prioridade é reconstruir comportamento verificável (estrutura, semântica, C
 
 ### Próximas atividades executáveis
 
-- **A04 (P1, em andamento)** — A04 in_progress: fronteiras 0x000ab674 → 0x000b6620 e 0x000b461c → 0x000b45d0 possuem diferenciais ARM×C delimitados, com strcpy/strlen sintéticas no caminho não nulo. Os 48 BL A32 diretos para 0x000b6620 foram classificados estruturalmente: 46 com preparações de 0x10c e operator new Thumb _Znwj; outros dois em CEGL2_SHADER::Load com ponteiros locais em SP+0x14 e SP+0x120 dentro de frame 0x234, geometria verificada para o campo +0x104..+0x107. Próximo gate prioritário: proveniência de R1 e NUL/comprimento máximo ≤259 bytes em caminhos reais; validar CFG, aliasing, falhas de new, Android/JNI, libc real e 0x002b1bb0 → 0x002b1bb8. Autoloop 0x002a1268 permanece com alcançabilidade desconhecida. Não executar destino não modelado nem marcar A04 done. **Aceite:** CFG e contratos por destino com testes diferenciais completos até próximas fronteiras; fluxo do autoloop classificado com evidência de reachability ou lacuna explícita.
+- **A04 (P1, em andamento)** — A04 in_progress: 48 BL A32 para 0xb6620 classificados e origem de R1 rastreada em lote (sem prova global NUL). No fluxo de 0x20ca48 → CAPP_INFO::GetRootPath (0x2b04f0) foi executado o getter ARM original (20 casos). CAPP_INFO::Init usa Android_GetSystemPath(0/1,char*) e JNI/StorageUtil.GetIntPath / GetExt1Path, com strcpy importado não delimitado. Literal /base/\0 de 7 bytes e fftpack.bin\0 de 12 bytes confirmados no ELF; layout candidato de RootPath tem 260 bytes. É necessário que a string Java tenha no máximo 242 bytes na representação JNI para caber no caminho completo — condição ainda NÃO comprovada no runtime Android. Próximo gate: medir/controlar bytes reais dos dois seletores, conferir NUL, null/exception/overflow e testar API C segura, mantendo JNI e libc originais isoladas. As demais fronteiras A04 (autoloop 0x002a1268, fallthrough 0x002b1bb0→0x002b1bb8, indireções) permanecem abertas; não marcar done nem incrementar certificados sem prova. Fronteira original ELF 0x000ab674 ainda monitorada por gate A04. Fronteira original ELF 0x000b45d0 ainda monitorada por gate A04. Fronteira original ELF 0x000b461c ainda monitorada por gate A04. Fronteira original ELF 0x000b6620 ainda monitorada por gate A04. A alcançabilidade do autoloop 0x002a1268 permanece desconhecida e exige validação do CFG e execução segura antes de encerrar a A04. **Aceite:** CFG e contratos por destino com testes diferenciais completos até próximas fronteiras; fluxo do autoloop classificado com evidência de reachability ou lacuna explícita.
 - **B01 (P1, em andamento)** — Consolidar inventario unico ELF (ARM/Thumb), JNI/Smali e assets OBB, deduplicar aliases e apontar manifestos, erros e exclusoes. **Aceite:** Relatorio de inventario com total unico, cobertura de bytes e origem de cada entrada, sem dupla contagem.
 
 ### Próximas dependências não liberadas
@@ -178,11 +178,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #451 — fix(re): preservar alcançabilidade desconhecida do autoloop A04 no rastreador](https://github.com/c1c3ru/fft_craft/pull/451)
+- [PR #449 — feat(re): investigar implementação original do prefixo em 0x002b04f0](https://github.com/c1c3ru/fft_craft/pull/449)
+- [PR #450 — chore(re): automated structural batch 40916609415](https://github.com/c1c3ru/fft_craft/pull/450)
 - [PR #447 — test(re): validar cálculo ARM do sufixo fftpack.bin e condição de 248 bytes](https://github.com/c1c3ru/fft_craft/pull/447)
 - [PR #448 — chore(re): automated structural batch 40911323125](https://github.com/c1c3ru/fft_craft/pull/448)
-- [PR #444 — feat(re): seguir fontes R1 de argumentos ABI um salto acima no ELF original](https://github.com/c1c3ru/fft_craft/pull/444)
-- [PR #446 — test(re): investigar origem literal de R1 em 0x0020ca48](https://github.com/c1c3ru/fft_craft/pull/446)
-- [PR #445 — chore(re): automated structural batch 40909955523](https://github.com/c1c3ru/fft_craft/pull/445)
 
 ## Atualização automática e fontes
 
