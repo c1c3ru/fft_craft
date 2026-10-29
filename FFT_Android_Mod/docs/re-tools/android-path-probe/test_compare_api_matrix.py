@@ -85,6 +85,11 @@ class AggregationTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             module.consolidate(self.files(wrong),[29])
 
+    def test_emulator_script_supplies_expected_sdk_to_python(self):
+        source=Path(__file__).with_name("run-emulator.sh").read_text(encoding="utf-8")
+        self.assertIn('python3 - "$OUT" "$EXPECTED_API" <<', source)
+        self.assertIn("expected_api=sys.argv[2]", source)
+
     def test_missing_api_is_rejected(self):
         with self.assertRaises(ValueError):
             module.consolidate(self.files(measurement(29)),[23,29])
