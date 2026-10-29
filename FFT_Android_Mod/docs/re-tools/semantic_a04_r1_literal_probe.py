@@ -111,6 +111,8 @@ def surrounding(binary):
     source_addr = (0x20ca30 + 8 + relative) & 0xffffffff
     source = semantic_evidence.read_function(binary,source_addr,12)
     nul = source.find(b"\x00")
+    if source != b"fftpack.bin\x00" or nul != 11:
+        raise ValueError("Original filename literal content changed")
     # FP=SP+0x10; saved guard at SP+0x114. The address interval is
     # 0x104 (260) bytes, but does not by itself prove writable capacity.
     geometric_space = 0x114 - 0x10
@@ -141,8 +143,8 @@ def surrounding(binary):
             "context_after_copy":[{"pc":f"{x.address:08x}",
                                    "mnemonic":x.mnemonic,"operands":x.op_str}
                                   for x in ops if COPY_CALL<=x.address<=CALLSITE],
-            "literal_source_bytes_verified":False,
-            "nul_within_12_source_bytes_verified":False,
+            "literal_source_bytes_verified":True,
+            "nul_within_12_source_bytes_verified":True,
             "source_origin_bounds_verified":False,
             "reachable_path_verified":False}
 
