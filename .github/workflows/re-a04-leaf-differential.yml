@@ -1,0 +1,30 @@
+name: A04 original ARM vs C leaf differential
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/re-a04-leaf-differential.yml'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_leaf_differential.py'
+      - 'FFT_Android_Mod/docs/re-tools/c-models/a04_slot.c'
+      - 'FFT_Android_Mod/src/lib/armeabi/libgl2jni.so'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-arm-vs-c:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install emulator and disassembler
+        run: python3 -m pip install unicorn capstone pyelftools
+      - name: Validate C model and original ELF differential
+        run: |
+          set -euo pipefail
+          python3 -m py_compile FFT_Android_Mod/docs/re-tools/semantic_a04_leaf_differential.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_leaf_differential.py
