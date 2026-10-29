@@ -178,11 +178,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #444 — feat(re): seguir fontes R1 de argumentos ABI um salto acima no ELF original](https://github.com/c1c3ru/fft_craft/pull/444)
+- [PR #446 — test(re): investigar origem literal de R1 em 0x0020ca48](https://github.com/c1c3ru/fft_craft/pull/446)
+- [PR #445 — chore(re): automated structural batch 40909955523](https://github.com/c1c3ru/fft_craft/pull/445)
 - [PR #443 — feat(re): rastrear R1 nos 48 chamadores A04 com análise paralela de NUL/limites](https://github.com/c1c3ru/fft_craft/pull/443)
 - [PR #442 — chore(re): automated structural batch 40908701669](https://github.com/c1c3ru/fft_craft/pull/442)
-- [PR #440 — test(re): verificar limites dos dois buffers shader no stack frame ARM original](https://github.com/c1c3ru/fft_craft/pull/440)
-- [PR #439 — feat(re): classificar 14 chamadores A04 em lote com CI paralelo](https://github.com/c1c3ru/fft_craft/pull/439)
-- [PR #438 — Feat/re a04 batch xrefs shader 20261029](https://github.com/c1c3ru/fft_craft/pull/438)
 
 ## Atualização automática e fontes
 
