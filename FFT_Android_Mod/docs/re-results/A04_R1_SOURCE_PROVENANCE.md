@@ -48,3 +48,29 @@ Alguns resultados dependem de fluxos de controle não modelados e slots de pilha
 - **2 definições condicionais**: reconstruir ambos os caminhos de controle e as fontes alternativas antes de decidir que o ponteiro é limitado.
 
 A04 continua `in_progress`, sem promoção automática de cobertura ou certificados novos.
+
+
+## Segundo salto: chamadores dos argumentos ABI — run #40910244917
+
+O [workflow #40910244917](https://github.com/c1c3ru/fft_craft/actions/runs/40910244917) passou com um quinto job independente. O analisador `semantic_a04_r1_upstream.py` percorreu novamente o ELF ARM original e procurou `BL` A32 diretos para as funções que recebem `R1` por argumento ABI.
+
+| Métrica de investigação | Resultado |
+|---|---:|
+| Usos de R1 classificados anteriormente como argumento ABI | 18 |
+| Entradas de funções proprietárias distintas nesse grupo | 13 |
+| Relações de chamadas A32 diretas contabilizadas pelos usos | 9 |
+| Usos sem chamador A32 direto identificado | 10 |
+| Fontes com NUL e comprimento máximo demonstrados | **0** |
+
+Os casos sem `BL` direto identificável **não** foram classificados como código morto; podem ser chamados por Thumb/BLX, tabelas de função, JNI ou outros mecanismos ainda não observados.
+
+Duas entradas do shader recebem a origem em argumentos ABI **R2** e **R3** e não tiveram chamadores A32 diretos encontrados nesse levantamento. Em BMP, TGA, TIM, abertura de DAT/TXT e utilitários de arquivos foram identificadas novas relações A32 candidatas que permitem continuar a busca no nível dos chamadores anteriores.
+
+### Gate seguinte
+
+1. Nos nove vínculos diretos identificados, rastrear o registrador ABI correspondente no chamador anterior; distinguir ponteiro de constante/literal, buffer construído localmente e parâmetro repassado.
+2. Nos dez usos sem `BL` A32 direto, inventariar referências Thumb, BLX, vtable/indireção e entradas JNI. Nenhuma ausência de chamada A32 equivale a ausência de execução.
+3. Para os 21 usos derivados de SP e sete recuperados de slots, rastrear instruções produtoras (escritas, formatação, cópias, leitura de arquivo) e a presença de NUL no percurso efetivamente executado.
+4. Somente atribuir `bounded_nul_proven` após evidência de limite de **259 bytes de conteúdo**, terminador presente e condições de controle/aliasing; caso contrário manter `unresolved`.
+
+Este segundo salto continua estrutural, não um certificado semântico.
