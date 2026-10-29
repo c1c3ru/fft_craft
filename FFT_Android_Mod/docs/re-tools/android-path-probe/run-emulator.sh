@@ -35,7 +35,9 @@ assert r["native_method"] == "JNI GetStringUTFLength", r
 assert r["original_strcpy_executed"] is False, r
 assert r["native_ascii_242"] == 242, r
 assert r["native_ascii_243"] == 243, r
-assert r["native_emoji_one"] == 6, r
+assert r["native_emoji_one"] == 4, r
+assert r["native_emoji_utf_bytes_hex"] == "f09f9880", r
+assert r["native_nul_utf_bytes_hex"] == "61c08062", r
 assert r["native_embedded_nul"] == 4, r
 for key in ("GetIntPath","GetExt1Path"):
     data=r[key]
