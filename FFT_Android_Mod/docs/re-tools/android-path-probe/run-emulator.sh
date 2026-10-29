@@ -5,7 +5,7 @@ OUT="/tmp/a04-android-path.json"
 if [ "$#" -ge 2 ]; then OUT="$2"; fi
 EXPECTED_API="${3:-}"
 if [ -n "$EXPECTED_API" ]; then
-  ACTUAL_API="$(adb shell getprop ro.build.version.sdk | tr -d '\\r')"
+  ACTUAL_API="$(adb shell getprop ro.build.version.sdk | tr -d '\r')"
   if [ "$ACTUAL_API" != "$EXPECTED_API" ]; then
     echo "Android API mismatch: expected $EXPECTED_API, got $ACTUAL_API" >&2
     exit 1
