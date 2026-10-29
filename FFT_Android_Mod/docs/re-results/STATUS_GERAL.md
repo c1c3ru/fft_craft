@@ -178,11 +178,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #454 — test(re): medir bytes JNI de GetIntPath/GetExt1Path em emulador Android](https://github.com/c1c3ru/fft_craft/pull/454)
+- [PR #455 — chore(re): automated structural batch 40922147849](https://github.com/c1c3ru/fft_craft/pull/455)
 - [PR #453 — test(re): validar 242/243 bytes JNI UTF modificado e modelo C em JDK 17/21](https://github.com/c1c3ru/fft_craft/pull/453)
 - [PR #452 — chore(re): automated structural batch 40919931409](https://github.com/c1c3ru/fft_craft/pull/452)
 - [PR #451 — fix(re): preservar alcançabilidade desconhecida do autoloop A04 no rastreador](https://github.com/c1c3ru/fft_craft/pull/451)
-- [PR #449 — feat(re): investigar implementação original do prefixo em 0x002b04f0](https://github.com/c1c3ru/fft_craft/pull/449)
-- [PR #450 — chore(re): automated structural batch 40916609415](https://github.com/c1c3ru/fft_craft/pull/450)
 
 ## Atualização automática e fontes
 
