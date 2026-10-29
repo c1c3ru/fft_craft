@@ -1,0 +1,88 @@
+name: A04 original prefix provider 0x2b04f0
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/re-a04-prefix-provider.yml'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_prefix_provider.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_rootpath_field.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_rootpath_helper.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_rootpath_jni_copy.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_java_path_lookup.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_storageutil_contract.py'
+      - 'FFT_Android_Mod/docs/re-tools/c-models/a04_rootpath_safe.c'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_rootpath_safe.py'
+      - 'FFT_Android_Mod/src/smali/com/yox_project/silver_arrow/StorageUtil.smali'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_rootpath_field.py'
+      - 'FFT_Android_Mod/docs/re-results/A04_PREFIX_PROVIDER.md'
+      - 'FFT_Android_Mod/src/lib/armeabi/libgl2jni.so'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-prefix-provider:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original ARM disassembler
+        run: python3 -m pip install capstone pyelftools unicorn
+      - name: Audit original prefix function, repeat exact checkpoint
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/a04-prefix
+          python3 -m py_compile FFT_Android_Mod/docs/re-tools/semantic_a04_prefix_provider.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_prefix_provider.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --checkpoint /tmp/a04-prefix/provider.json
+          cp /tmp/a04-prefix/provider.json /tmp/a04-prefix/first.json
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_prefix_provider.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --checkpoint /tmp/a04-prefix/provider.json
+          cmp /tmp/a04-prefix/first.json /tmp/a04-prefix/provider.json
+      - name: Original getter differential and initializer import provenance
+        run: |
+          set -euo pipefail
+          PYTHONPATH=FFT_Android_Mod/docs/re-tools python3 -m unittest -v test_semantic_a04_rootpath_field
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_rootpath_field.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --checkpoint /tmp/a04-prefix/rootpath.json
+          cp /tmp/a04-prefix/rootpath.json /tmp/a04-prefix/rootpath-first.json
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_rootpath_field.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --checkpoint /tmp/a04-prefix/rootpath.json
+          cmp /tmp/a04-prefix/rootpath-first.json /tmp/a04-prefix/rootpath.json
+      - name: Examine original 0x729e4 rootpath construction helper
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_rootpath_helper.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --checkpoint /tmp/a04-prefix/rootpath-helper.json
+          cp /tmp/a04-prefix/rootpath-helper.json /tmp/a04-prefix/rootpath-helper-first.json
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_rootpath_helper.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --checkpoint /tmp/a04-prefix/rootpath-helper.json
+          cmp /tmp/a04-prefix/rootpath-helper-first.json /tmp/a04-prefix/rootpath-helper.json
+      - name: Verify JNI string extraction chain and original initializer suffix literals
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_rootpath_jni_copy.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --checkpoint /tmp/a04-prefix/jni-copy.json
+          cp /tmp/a04-prefix/jni-copy.json /tmp/a04-prefix/jni-copy-first.json
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_rootpath_jni_copy.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --checkpoint /tmp/a04-prefix/jni-copy.json
+          cmp /tmp/a04-prefix/jni-copy-first.json /tmp/a04-prefix/jni-copy.json
+      - name: Resolve Java path class, JNI signature and seven source-method selectors
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_java_path_lookup.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --checkpoint /tmp/a04-prefix/java-selector.json
+          cp /tmp/a04-prefix/java-selector.json /tmp/a04-prefix/java-selector-first.json
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_java_path_lookup.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --checkpoint /tmp/a04-prefix/java-selector.json
+          cmp /tmp/a04-prefix/java-selector-first.json /tmp/a04-prefix/java-selector.json
+      - name: Verify Java StorageUtil methods against actual JNI selector names
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_storageutil_contract.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --smali FFT_Android_Mod/src/smali/com/yox_project/silver_arrow/StorageUtil.smali --checkpoint /tmp/a04-prefix/storageutil.json
+          cp /tmp/a04-prefix/storageutil.json /tmp/a04-prefix/storageutil-first.json
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_storageutil_contract.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --smali FFT_Android_Mod/src/smali/com/yox_project/silver_arrow/StorageUtil.smali --checkpoint /tmp/a04-prefix/storageutil.json
+          cmp /tmp/a04-prefix/storageutil-first.json /tmp/a04-prefix/storageutil.json
+      - name: Bounded host C reconstruction and negative safety regressions
+        run: |
+          set -euo pipefail
+          PYTHONPATH=FFT_Android_Mod/docs/re-tools python3 -m unittest -v test_semantic_a04_rootpath_safe
+      - uses: actions/upload-artifact@v4
+        with:
+          name: a04-original-prefix-provider-2b04f0
+          path: /tmp/a04-prefix/
+          retention-days: 30
