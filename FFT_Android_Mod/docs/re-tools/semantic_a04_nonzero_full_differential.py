@@ -65,7 +65,7 @@ def original_sections():
 
 
 def run_original(sections, content, seed, flags):
-    if len(content) > 128 or b"\x00" in content:
+    if len(content) > 0x103 or b"\x00" in content:
         raise ValueError("Only bounded NUL-free source contents accepted")
     caller, loop, helper, copy_plt, len_plt = sections
     em = Uc(UC_ARCH_ARM, UC_MODE_ARM)
@@ -157,7 +157,7 @@ def run_original(sections, content, seed, flags):
     em.hook_add(UC_HOOK_CODE, on_code)
     em.hook_add(UC_HOOK_MEM_READ, on_read)
     em.hook_add(UC_HOOK_MEM_WRITE, on_write)
-    em.emu_start(CALLER, RETURN+4, timeout=4_000_000, count=1500)
+    em.emu_start(CALLER, RETURN+4, timeout=4_000_000, count=8000)
     if not pcs or pcs[-1] != RETURN or em.reg_read(UC_ARM_REG_PC) != RETURN:
         raise AssertionError(f"Main A04 did not reach return: {pcs[-12:]}")
     if [event[0] for event in libc_events] != ["strcpy","strlen"]:
@@ -233,6 +233,8 @@ def main():
         samples += [bytes([i,0x5c,0x41]) for i in
                     (0x40,0x5c,0x80,0x81,0x9f,0xa0,0xdf,0xe0,0xfc,0xfd)]
         samples += [b"alpha\\beta"*5, b"\x81\\x\\z", b"\xe0\\x\\z"]
+        samples += [b"x"*0x101, b"x"*0x102, b"x"*0x103]
+        samples += [b"\\x"*0x81, b"\\x"*0x81+b"\\"]
         checked = 0
         for content in samples:
             for flags in (0,0xf0000000):
