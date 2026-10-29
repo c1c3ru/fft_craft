@@ -10,9 +10,20 @@ int a04_b6620_model(uint8_t *destination, size_t destination_capacity,
         return 0;
     if (!source)
         return a04_zero_path(destination, destination_capacity, 0u);
-    /* This wrapper is not a drop-in ABI implementation. Only disjoint
-     * non-overlapping source/destination buffers are within the contract.
-     * The caller must enforce this precondition. */
+    if (source_capacity == 0u)
+        return 0;
+
+    /* Fail closed on overlap. Integer address conversion is an explicit
+     * platform assumption for the separately built host C test artifact;
+     * not a portable, all-address-spaces proof. */
+    uintptr_t dst = (uintptr_t)destination;
+    uintptr_t src = (uintptr_t)source;
+    if (destination_capacity > UINTPTR_MAX - dst ||
+            source_capacity > UINTPTR_MAX - src)
+        return 0;
+    if (dst < src + source_capacity && src < dst + destination_capacity)
+        return 0;
+
     return a04_copy_normalize_nonzero(destination, destination_capacity,
                                      source, source_capacity);
 }
