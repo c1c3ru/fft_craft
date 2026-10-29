@@ -28,8 +28,13 @@ jobs:
         run: |
           set -euo pipefail
           echo "ANDROID_HOME=$ANDROID_HOME"
-          sdkmanager --version
-          sdkmanager --install "platforms;android-35" "build-tools;35.0.0" "ndk;26.1.10909125" "cmake;3.22.1"
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          if [ ! -x "$SDKMANAGER" ]; then
+            SDKMANAGER="$ANDROID_HOME/cmdline-tools/16.0/bin/sdkmanager"
+          fi
+          test -x "$SDKMANAGER"
+          "$SDKMANAGER" --version
+          "$SDKMANAGER" --install "platforms;android-35" "build-tools;35.0.0" "ndk;26.1.10909125" "cmake;3.22.1"
       - name: Compile debug-only APK under the same package ID as the game
         run: |
           gradle --no-daemon --stacktrace --project-dir FFT_Android_Mod/docs/re-tools/android-path-probe :app:assembleDebug
