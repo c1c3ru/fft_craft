@@ -41,3 +41,31 @@ O workflow [run #40892165075](https://github.com/c1c3ru/fft_craft/actions/runs/4
 O teste `semantic_a04_sjis_loop_differential.py` verificou a memória da string inteira, escrita condicional de barras, seis escritas de salvamento da pilha, restauração de R4–R8/SP, R0–R3, NZCV e retorno via PC. A evidência também exigiu corrigir uma suposição de teste: **LR é volátil após BL**, não é restaurado simplesmente porque a rotina faz `POP {...,PC}`. Os dois endereços de retorno observados pelo teste são `0x000b9444` após `strlen` e `0x000b9458` após o classificador.
 
 **Escopo limitado:** o stub sintético de `strlen` não implementa ou executa a biblioteca Android; o fluxo completo de `strcpy` e o chamador `0x000b6620` para R1!=0 ainda não foram executados em conjunto. Nenhum novo certificado semântico formal foi emitido; A04 permanece em andamento.
+
+
+## A04 — diferencial integrado do chamador R1 != 0
+
+O [GitHub Actions run #40898972993](https://github.com/c1c3ru/fft_craft/actions/runs/40898972993) confirmou **1.128 execuções diferenciais ARM × C sem falhas** do caminho de `0x000b6620` com origem não nula. O programa de evidência é `docs/re-tools/semantic_a04_nonzero_full_differential.py`; o modelo C independente é `docs/re-tools/c-models/a04_nonzero_full.c`.
+
+### Cobertura *demonstrada*, sem extrapolação
+
+- **Original ARM efetivamente executado:** `0x000b6620` até o retorno, ambos os veneers PLT, `0x000b942c` e `0x000b8be4`.
+- **Importações substituídas, não executadas da libc:** `strcpy` e `strlen`, com stubs sintéticos de retorno ABI e contratos controlados. Ambos os símbolos foram previamente identificados por `R_ARM_JUMP_SLOT` no ELF original.
+- **Estado comparado:** string resultante inteira e NUL, origem imutável, palavra de metadados `+0x104`, escritas ARM observadas na pilha e na string, conteúdo integral da pilha, R0/R1/R2/R3, registradores preservados R4–R8, SP, LR volátil, IP após GOT e NZCV.
+- **Estados de entrada:** strings NUL-terminadas de até 259 bytes de dados, com buffers separados de 4096 bytes, quatro combinações de flags e metadados por string. Foram exercitados valores de byte de 1 a 255 e exemplos multibyte e de separadores.
+- **Limites não demonstrados:** libc Android real, aliasing/sobreposição entre buffers, origem sem NUL, destino sem espaço, estados fora do domínio sintético e integrações JNI/jogo. Entradas longas são rejeitadas pelo modelo C, não executadas no ARM.
+- **Contagem de certificados formais novos:** zero. Não se altera a avaliação de cobertura global apenas por executar esse domínio delimitado.
+
+O conjunto de provas da A04 agora contém a função-folha Shift-JIS (**1.040 casos**), seu laço (**556**) e o caminho completo do chamador não nulo com stubs (**1.128**). São testes de escopos relacionados e **não** significam 2.724 funções ou instruções distintas certificadas.
+
+### Próximo gate da engenharia de loop
+
+1. Aprovar os checks restantes no SHA final do PR e manter a rastreabilidade.
+2. Consolidar os contratos R1=0 e R1!=0 numa única interface C de alto nível, preservando os diferentes efeitos ABI.
+3. Verificar tamanhos e condições de origem/destino no uso real do aplicativo Android. Não usar a hipótese de buffer grande sem prova no chamador.
+4. Exercitar cenários de fronteira próximos de `0x104` apenas com memória suficiente e verificar separadamente limites da rotina de cópia.
+5. Conservar `A04` como `in_progress` até fechar integração e pré-condições reais.
+
+### Gate de fronteira adicional (+0x104)
+
+No [run #40898972993](https://github.com/c1c3ru/fft_craft/actions/runs/40898972993), o teste chegou a **259 bytes de dados + NUL** (NUL no offset 0x103), preservando o campo 0x104–0x107 para a escrita final da rotina original. Inclui também sequências com separadores e bytes Shift-JIS próximos ao limite; 1.128 casos integram o caminho R1!=0, com zero divergências. O código C rejeita comprimentos que alcançariam o campo 0x104, sem executar essas entradas inválidas no ARM original.
