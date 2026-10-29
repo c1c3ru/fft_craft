@@ -172,8 +172,10 @@ def run_original(sections, content, seed, flags):
         raise AssertionError("A04 caller ABI return or argument registers differ")
     if em.reg_read(UC_ARM_REG_R3) != 0 or em.reg_read(UC_ARM_REG_SP) != SP:
         raise AssertionError("A04 caller R3/SP did not match")
-    if em.reg_read(UC_ARM_REG_LR) != 0xb6644:
-        raise AssertionError("Original ARM BL left unexpected volatile LR")
+    expected_lr = 0xb9444 if len(content) == 0 else 0xb9458
+    if em.reg_read(UC_ARM_REG_LR) != expected_lr:
+        raise AssertionError(f"Original ARM volatile LR mismatch for {content.hex()}: "
+                             f"{em.reg_read(UC_ARM_REG_LR):08x}, expected {expected_lr:08x}")
     if em.reg_read(UC_ARM_REG_IP) != GOT_LEN:
         raise AssertionError("Original strlen PLT did not write back IP")
     loop_expected = expected_loop(content)
