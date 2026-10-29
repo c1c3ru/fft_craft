@@ -86,7 +86,13 @@ def surrounding(binary):
     if not ops or ops[-1].address!=CALLSITE:
         raise ValueError("A32 symbol disassembly did not reach targeted BL")
     by={x.address:x for x in ops}
-    expected={0x20ca28:("mov","r2, #0xc"),
+    expected={0x20c9e4:("sub","sp, sp, #0x11c"),
+              0x20c9f8:("str","r0, [sp, #0x114]"),
+              0x20ca04:("add","fp, sp, #0x10"),
+              0x20ca18:("bl","#0x714a0"),
+              0x20ca20:("bl","#0x71494"),
+              0x20ca24:("ldr","r1, [pc, #0x17c]"),
+              0x20ca28:("mov","r2, #0xc"),
               COPY_CALL:("bl","#0x714b8"),
               0x20ca38:("mov","r0, #0x10c"),
               0x20ca3c:("bl","#0x2cdf6c"),
@@ -98,7 +104,33 @@ def surrounding(binary):
             raise ValueError(f"Original copy/create/caller chain mutated at {pc:08x}")
     preceding=[x for x in ops if x.address<COPY_CALL]
     preceding=preceding[-36:]
-    return {"owner_symbols":symbols,
+    # LDR R1,[PC,#0x17c] at 0x20ca24 reads a little-endian
+    # PC-relative displacement used by ADD R1,PC,R1 at 0x20ca30.
+    literal_word_at = 0x20ca24 + 8 + 0x17c
+    relative = int.from_bytes(semantic_evidence.read_function(binary,literal_word_at,4), "little")
+    source_addr = (0x20ca30 + 8 + relative) & 0xffffffff
+    source = semantic_evidence.read_function(binary,source_addr,12)
+    nul = source.find(b"\\x00")
+    # FP=SP+0x10; saved guard at SP+0x114. The address interval is
+    # 0x104 (260) bytes, but does not by itself prove writable capacity.
+    geometric_space = 0x114 - 0x10
+    max_length_before_copy = geometric_space - 12
+    return {"source_literal": {"ldr_literal_address":f"{literal_word_at:08x}",
+                                "relative_u32":f"{relative:08x}",
+                                "source_address":f"{source_addr:08x}",
+                                "source_12_bytes_hex":source.hex(),
+                                "first_nul_offset":nul if nul>=0 else None,
+                                "nul_within_12_bytes":nul>=0},
+            "preexisting_upstream_calls": {"strcpy_pltsite":"0020ca18",
+                                           "strlen_pltsite":"0020ca20",
+                                           "memcpy_pltsite":"0020ca34"},
+            "stack_geometry": {"local_sp_offset":0x10,
+                               "guard_sp_offset":0x114,
+                               "bytes_until_guard":geometric_space,
+                               "memcpy_bytes":12,
+                               "required_initial_strlen_max":max_length_before_copy,
+                               "actual_initial_strlen_bounded":False},
+            "owner_symbols":symbols,
             "copy_bytes_immediate":12,
             "stack_local_source_candidate":"fp",
             "pre_copy_disassembly":[{"pc":f"{x.address:08x}",
@@ -138,6 +170,8 @@ def main():
         raise ValueError("Original producer evidence changed")
     a.output.write_text(payload,encoding="utf-8")
     print("A04_SOURCE_COPY_IMPORT="+json.dumps(result["memcopy_import"]))
+    print("A04_SOURCE_LITERAL="+json.dumps(result["caller"]["source_literal"]))
+    print("A04_SOURCE_STACK_PRECONDITIONS="+json.dumps(result["caller"]["stack_geometry"]))
     for op in result["caller"]["pre_copy_disassembly"]:
         print("A04_SOURCE_PRECOPY "+op["pc"]+" "+op["mnemonic"]+" "+op["operands"])
     print("A04_SOURCE_NUL_PROVEN=0")
