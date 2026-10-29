@@ -6,6 +6,8 @@ on:
       - '.github/workflows/re-a04-r1-sources.yml'
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_r1_sources.py'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_r1_sources.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_r1_upstream.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_r1_upstream.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_b6620_xrefs.py'
       - 'FFT_Android_Mod/docs/re-results/A04_R1_SOURCE_PROVENANCE.md'
       - 'FFT_Android_Mod/src/lib/armeabi/libgl2jni.so'
@@ -76,4 +78,28 @@ jobs:
         with:
           name: a04-r1-aggregate-48
           path: /tmp/a04-r1-all/
+          retention-days: 30
+
+  r1-upstream-abi-arguments:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python3 -m pip install capstone pyelftools
+      - name: Trace A32 direct upstream callers of incoming ABI strings
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/a04-r1-upstream
+          PYTHONPATH=FFT_Android_Mod/docs/re-tools python3 -m unittest -v test_semantic_a04_r1_upstream
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_r1_upstream.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --checkpoint /tmp/a04-r1-upstream/upstream.json
+          cp /tmp/a04-r1-upstream/upstream.json /tmp/a04-r1-upstream/first.json
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_r1_upstream.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --checkpoint /tmp/a04-r1-upstream/upstream.json
+          cmp /tmp/a04-r1-upstream/first.json /tmp/a04-r1-upstream/upstream.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: a04-r1-upstream-abi-evidence
+          path: /tmp/a04-r1-upstream/
           retention-days: 30
