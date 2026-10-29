@@ -6,6 +6,8 @@ on:
       - '.github/workflows/re-a04-714a0-audit.yml'
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_714a0_audit.py'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_714a0_audit.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_714a0_slot.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_714a0_slot.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_callee_cfg.py'
       - 'FFT_Android_Mod/src/lib/armeabi/libgl2jni.so'
   workflow_dispatch:
@@ -23,11 +25,11 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install ARM disassembly tools
-        run: python3 -m pip install capstone pyelftools
+        run: python3 -m pip install capstone pyelftools unicorn
       - name: Test verifier
         run: |
           set -euo pipefail
-          PYTHONPATH=FFT_Android_Mod/docs/re-tools python3 -m unittest -v test_semantic_a04_714a0_audit
+          PYTHONPATH=FFT_Android_Mod/docs/re-tools python3 -m unittest -v test_semantic_a04_714a0_audit test_semantic_a04_714a0_slot
       - name: Verify original ELF and candidate CFG
         run: |
           set -euo pipefail
@@ -43,6 +45,19 @@ jobs:
             --report /tmp/fft-a04-714a0/report.md
           cmp /tmp/fft-a04-714a0/first.json /tmp/fft-a04-714a0/state.json
           cat /tmp/fft-a04-714a0/report.md
+      - name: Locate original ELF relocation and bounded 714a0 veneer semantics
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_714a0_slot.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --checkpoint /tmp/fft-a04-714a0/got-slot.json \
+            --report /tmp/fft-a04-714a0/got-slot.md
+          cp /tmp/fft-a04-714a0/got-slot.json /tmp/fft-a04-714a0/first-got-slot.json
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_714a0_slot.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --checkpoint /tmp/fft-a04-714a0/got-slot.json \
+            --report /tmp/fft-a04-714a0/got-slot.md
+          cmp /tmp/fft-a04-714a0/got-slot.json /tmp/fft-a04-714a0/first-got-slot.json
       - uses: actions/upload-artifact@v4
         with:
           name: a04-714a0-original-cfg
