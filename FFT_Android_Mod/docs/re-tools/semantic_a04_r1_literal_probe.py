@@ -111,6 +111,8 @@ def surrounding(binary):
     source_addr = (0x20ca30 + 8 + relative) & 0xffffffff
     source = semantic_evidence.read_function(binary,source_addr,12)
     nul = source.find(b"\x00")
+    if source != b"fftpack.bin\x00" or nul != 11:
+        raise ValueError("Original filename literal content changed")
     # FP=SP+0x10; saved guard at SP+0x114. The address interval is
     # 0x104 (260) bytes, but does not by itself prove writable capacity.
     geometric_space = 0x114 - 0x10
@@ -141,10 +143,79 @@ def surrounding(binary):
             "context_after_copy":[{"pc":f"{x.address:08x}",
                                    "mnemonic":x.mnemonic,"operands":x.op_str}
                                   for x in ops if COPY_CALL<=x.address<=CALLSITE],
-            "literal_source_bytes_verified":False,
-            "nul_within_12_source_bytes_verified":False,
+            "literal_source_bytes_verified":True,
+            "nul_within_12_source_bytes_verified":True,
             "source_origin_bounds_verified":False,
             "reachable_path_verified":False}
+
+
+
+def emulate_literal_pointer(binary):
+    """Execute only LDR/MOV/ADD/ADD from original ARM, stop before memcpy BL."""
+    from unicorn import (Uc, UC_ARCH_ARM, UC_MODE_ARM, UC_PROT_ALL,
+                         UC_HOOK_CODE, UC_HOOK_MEM_READ, UC_HOOK_MEM_WRITE)
+    from unicorn.arm_const import (UC_ARM_REG_CPSR, UC_ARM_REG_PC,
+                                   UC_ARM_REG_R0, UC_ARM_REG_R1, UC_ARM_REG_R2,
+                                   UC_ARM_REG_R3, UC_ARM_REG_R11)
+    first = 0x20ca24
+    call = 0x20ca34
+    literal_at = 0x20cba8
+    source = 0x2ddcc0
+    code = semantic_evidence.read_function(binary,first,20)
+    literal = semantic_evidence.read_function(binary,literal_at,4)
+    suffix = semantic_evidence.read_function(binary,source,12)
+    if suffix != b"fftpack.bin\x00":
+        raise ValueError("ELF original source literal unexpectedly changed")
+    count = 0
+    for size in (0,1,12,128,247,248,249,259,260):
+        for flags in (0,0x20000000,0x40000000,0xf0000000):
+            uc = Uc(UC_ARCH_ARM, UC_MODE_ARM)
+            uc.mem_map(first & ~0xfff,0x1000,UC_PROT_ALL)
+            uc.mem_map(source & ~0xfff,0x1000,UC_PROT_ALL)
+            uc.mem_write(first,code)
+            uc.mem_write(literal_at,literal)
+            uc.mem_write(source,suffix)
+            uc.reg_write(UC_ARM_REG_CPSR,0x10 | flags)
+            for reg,value in ((UC_ARM_REG_R0,size),
+                              (UC_ARM_REG_R1,0xdeadbeef),
+                              (UC_ARM_REG_R2,0xcafebabe),
+                              (UC_ARM_REG_R3,0x12345678),
+                              (UC_ARM_REG_R11,0x500000)):
+                uc.reg_write(reg,value)
+            visited,reads,writes=[],[],[]
+            def on_code(emu,pc,width,unused):
+                visited.append(pc)
+                if pc==call:
+                    emu.emu_stop()
+                elif pc not in (first,first+4,first+8,first+12):
+                    raise AssertionError(f"Unknown original source PC {pc:08x}")
+            uc.hook_add(UC_HOOK_CODE,on_code)
+            uc.hook_add(UC_HOOK_MEM_READ,
+                        lambda emu,typ,addr,width,value,unused:reads.append((addr,width)))
+            uc.hook_add(UC_HOOK_MEM_WRITE,
+                        lambda emu,typ,addr,width,value,unused:writes.append((addr,width)))
+            uc.emu_start(first,call+4,count=8,timeout=1000000)
+            if visited!=[first,first+4,first+8,first+12,call]:
+                raise AssertionError(f"Original ARM producer path differs: {visited}")
+            if reads!=[(literal_at,4)] or writes:
+                raise AssertionError(f"Original ARM source pointer effects differ: {reads},{writes}")
+            if (uc.reg_read(UC_ARM_REG_R0)!=0x500000+size or
+                uc.reg_read(UC_ARM_REG_R1)!=source or
+                uc.reg_read(UC_ARM_REG_R2)!=12 or
+                uc.reg_read(UC_ARM_REG_R3)!=0x12345678 or
+                uc.reg_read(UC_ARM_REG_R11)!=0x500000 or
+                uc.reg_read(UC_ARM_REG_PC)!=call):
+                raise AssertionError(f"Original ARM source argument computation diverges for {size}")
+            if (uc.reg_read(UC_ARM_REG_CPSR) & 0xf0000000)!=flags:
+                raise AssertionError("Original ARM producer changed NZCV")
+            # size >248 is *only* exercised as an arithmetic computation.
+            # NEVER execute the subsequent memcpy on invalid-size inputs.
+            count+=1
+    return {"original_arm_address_calculation_cases":count,
+            "actual_memcpy_executed":False,
+            "unbounded_original_strcpy_executed":False,
+            "max_prefix_bytes_before_guard_copy":248,
+            "all_source_lengths_proven_bounded":False}
 
 
 def audit(binary):
@@ -153,6 +224,7 @@ def audit(binary):
     return {"schema":1,"elf_sha256":SHA,
             "memcopy_import":import_identity(binary),
             "caller":surrounding(binary),
+            "bounded_original_arm":emulate_literal_pointer(binary),
             "dynamic_copy_executed":False,
             "bounded_nul_proven":False,
             "new_certificates":0}
@@ -171,6 +243,7 @@ def main():
     a.output.write_text(payload,encoding="utf-8")
     print("A04_SOURCE_COPY_IMPORT="+json.dumps(result["memcopy_import"]))
     print("A04_SOURCE_LITERAL="+json.dumps(result["caller"]["source_literal"]))
+    print("A04_SOURCE_ARM_ADDRESSING="+json.dumps(result["bounded_original_arm"]))
     print("A04_SOURCE_STACK_PRECONDITIONS="+json.dumps(result["caller"]["stack_geometry"]))
     for op in result["caller"]["pre_copy_disassembly"]:
         print("A04_SOURCE_PRECOPY "+op["pc"]+" "+op["mnemonic"]+" "+op["operands"])
