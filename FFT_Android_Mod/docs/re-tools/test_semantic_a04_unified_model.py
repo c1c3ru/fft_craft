@@ -128,5 +128,8 @@ def run_differential():
 
 
 if __name__=="__main__":
-    unittest.main(module=None, exit=False, argv=["ignored"])
+    suite = unittest.defaultTestLoader.loadTestsFromTestCase(DirectCallEncoderTests)
+    result = unittest.TextTestRunner(verbosity=2).run(suite)
+    if not result.wasSuccessful():
+        raise SystemExit(1)
     print(json.dumps(run_differential(), sort_keys=True))
