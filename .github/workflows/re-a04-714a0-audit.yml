@@ -18,6 +18,8 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_b8be4_audit.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_sjis_differential.py'
       - 'FFT_Android_Mod/docs/re-tools/c-models/a04_sjis_lead.c'
+      - 'FFT_Android_Mod/docs/re-tools/c-models/a04_sjis_slash_loop.c'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_sjis_loop_differential.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_callee_cfg.py'
       - 'FFT_Android_Mod/src/lib/armeabi/libgl2jni.so'
   workflow_dispatch:
@@ -96,6 +98,10 @@ jobs:
         run: |
           set -euo pipefail
           python3 FFT_Android_Mod/docs/re-tools/semantic_a04_sjis_differential.py
+      - name: Differential original Shift-JIS string loop with bounded strlen stub
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_sjis_loop_differential.py
       - uses: actions/upload-artifact@v4
         with:
           name: a04-714a0-original-cfg
