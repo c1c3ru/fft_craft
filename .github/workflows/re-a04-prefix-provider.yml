@@ -8,6 +8,7 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_rootpath_field.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_rootpath_helper.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_rootpath_jni_copy.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_java_path_lookup.py'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_rootpath_field.py'
       - 'FFT_Android_Mod/docs/re-results/A04_PREFIX_PROVIDER.md'
       - 'FFT_Android_Mod/src/lib/armeabi/libgl2jni.so'
@@ -58,6 +59,13 @@ jobs:
           cp /tmp/a04-prefix/jni-copy.json /tmp/a04-prefix/jni-copy-first.json
           python3 FFT_Android_Mod/docs/re-tools/semantic_a04_rootpath_jni_copy.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --checkpoint /tmp/a04-prefix/jni-copy.json
           cmp /tmp/a04-prefix/jni-copy-first.json /tmp/a04-prefix/jni-copy.json
+      - name: Resolve Java path class, JNI signature and seven source-method selectors
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_java_path_lookup.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --checkpoint /tmp/a04-prefix/java-selector.json
+          cp /tmp/a04-prefix/java-selector.json /tmp/a04-prefix/java-selector-first.json
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_java_path_lookup.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --checkpoint /tmp/a04-prefix/java-selector.json
+          cmp /tmp/a04-prefix/java-selector-first.json /tmp/a04-prefix/java-selector.json
       - uses: actions/upload-artifact@v4
         with:
           name: a04-original-prefix-provider-2b04f0
