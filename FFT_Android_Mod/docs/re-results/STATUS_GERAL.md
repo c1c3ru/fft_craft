@@ -45,7 +45,7 @@ A prioridade é reconstruir comportamento verificável (estrutura, semântica, C
 
 ### Próximas atividades executáveis
 
-- **A04 (P1, em andamento)** — A04 in_progress: fronteiras 0x000ab674 → 0x000b6620 e 0x000b461c → 0x000b45d0 agora possuem contratos C/ARM diferenciais delimitados (144 casos da folha 0x000b45d0; 48 do caminho R1=0 e 1128 do R1!=0 com libc sintética). O ELF possui 48 BL diretos candidatos a 0x000b6620, 3 a 0x000b45d0; 34 das 48 chamadas exibem operador new Thumb _Znwj com 0x10c bytes via veneer ARM comprovado por 8 casos. Investigar 14 callsites sem esse padrão, origem e limite de R1, aliasing, falha na alocação, JNI/Android real e 0x002b1bb0 → 0x002b1bb8. Autoloop 0x002a1268 permanece desconhecido quanto à alcançabilidade. Não declarar equivalência irrestrita, executar destinos não modelados nem marcar A04 done. **Aceite:** CFG e contratos por destino com testes diferenciais completos até próximas fronteiras; fluxo do autoloop classificado com evidência de reachability ou lacuna explícita.
+- **A04 (P1, em andamento)** — A04 in_progress: fronteiras 0x000ab674 → 0x000b6620 e 0x000b461c → 0x000b45d0 possuem diferenciais ARM×C delimitados, com strcpy/strlen sintéticas no caminho não nulo. Os 48 BL A32 diretos para 0x000b6620 foram classificados estruturalmente: 46 com preparações de 0x10c e operator new Thumb _Znwj; outros dois em CEGL2_SHADER::Load com ponteiros locais em SP+0x14 e SP+0x120 dentro de frame 0x234, geometria verificada para o campo +0x104..+0x107. Próximo gate prioritário: proveniência de R1 e NUL/comprimento máximo ≤259 bytes em caminhos reais; validar CFG, aliasing, falhas de new, Android/JNI, libc real e 0x002b1bb0 → 0x002b1bb8. Autoloop 0x002a1268 permanece com alcançabilidade desconhecida. Não executar destino não modelado nem marcar A04 done. **Aceite:** CFG e contratos por destino com testes diferenciais completos até próximas fronteiras; fluxo do autoloop classificado com evidência de reachability ou lacuna explícita.
 - **B01 (P1, em andamento)** — Consolidar inventario unico ELF (ARM/Thumb), JNI/Smali e assets OBB, deduplicar aliases e apontar manifestos, erros e exclusoes. **Aceite:** Relatorio de inventario com total unico, cobertura de bytes e origem de cada entrada, sem dupla contagem.
 
 ### Próximas dependências não liberadas
@@ -178,11 +178,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #440 — test(re): verificar limites dos dois buffers shader no stack frame ARM original](https://github.com/c1c3ru/fft_craft/pull/440)
+- [PR #439 — feat(re): classificar 14 chamadores A04 em lote com CI paralelo](https://github.com/c1c3ru/fft_craft/pull/439)
+- [PR #438 — Feat/re a04 batch xrefs shader 20261029](https://github.com/c1c3ru/fft_craft/pull/438)
+- [PR #437 — chore(re): automated structural batch 40904339095](https://github.com/c1c3ru/fft_craft/pull/437)
 - [PR #435 — docs(re): registrar `_Znwj`, 34/48 cadeias de alocação e pendências A04](https://github.com/c1c3ru/fft_craft/pull/435)
-- [PR #436 — chore(re): automated structural batch 40902393510](https://github.com/c1c3ru/fft_craft/pull/436)
-- [PR #434 — feat(re): consolidar contratos A04 em C e auditar chamadores no ELF original](https://github.com/c1c3ru/fft_craft/pull/434)
-- [PR #433 — chore(re): automated structural batch 40899711033](https://github.com/c1c3ru/fft_craft/pull/433)
-- [PR #432 — feat(re): executar ramo A04 R1!=0 ponta a ponta com libc controlada e modelo C](https://github.com/c1c3ru/fft_craft/pull/432)
 
 ## Atualização automática e fontes
 
