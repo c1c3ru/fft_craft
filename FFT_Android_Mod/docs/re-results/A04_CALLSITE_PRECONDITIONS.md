@@ -22,3 +22,18 @@ Critérios para considerar a capacidade do destino provada:
 5. Só então testar fluxos com ponteiros reais (em VM/dispositivo autorizado) e documentar versão de libc, ABI e parâmetros.
 
 **Ainda não há garantia de capacidade real dos buffers, equivalência da libc Android ou validação JNI demonstrada por esses artefatos.** A04 segue in_progress, e não há novo certificado formal.
+
+
+## Evidências executadas neste ciclo
+
+O gate [#40902177041](https://github.com/c1c3ru/fft_craft/actions/runs/40902177041) passou na versão original do ELF, com contratos fail-closed e artefatos reprodutíveis:
+
+- C unificado vs ARM original: 16 casos do ramo R1=0, 40 do ramo R1!=0 (importações strcpy e strlen isoladas por stubs), zero divergências. Além disso, 8 entradas inseguras rejeitadas somente em C.
+- Inventário A32 direto: 48 BL candidatos a 0x000b6620 e 3 a 0x000b45d0. Não inclui Thumb, BLX indiretos nem provas de alcançabilidade.
+- Dos 48 candidatos para 0x000b6620, **34** têm o padrão imediato MOV R0,#0x10c; BL 0x002cdf6c, com preparação de R1 e preservação do retorno em R0 até o destino. Os outros **14** precisam de rastreamento específico.
+- Veneer original em 0x002cdf6c: LDR IP,[PC,#4], ADD IP,PC,IP, BX IP; literal file-backed 0xffffba3d em 0x002cdf78. O cálculo original aponta para **0x002c99b5**, entrada Thumb de _Znwj (símbolo STT_FUNC do ELF), operator new(unsigned int). O tamanho observado passado pelos 34 padrões é **0x10c = 268 bytes**.
+- O veneer ARM original foi executado por Unicorn em **8 entradas sintéticas**, com zero falhas. Verificaram-se a leitura do literal, o destino PC Thumb, a atualização de IP, os argumentos e as flags. **A rotina operator new, suas chamadas internas e o heap do Android não foram executados.**
+- O objeto esperado de 268 bytes supera os 264 bytes mínimos necessários para armazenar a palavra em offset 0x104. Isso suporta uma hipótese de alocação com capacidade suficiente, condicionada à execução alcançável, sucesso do new, validade do ponteiro e integridade das definições registradas.
+- O tamanho máximo da string de origem, ausência de aliasing e garantia de NUL em contexto real permanecem desconhecidos.
+
+O rastreador RE_COMPLETION_TRACKER.json deve manter **A04=in_progress**: o diferencial com buffers sintéticos não converte essas hipóteses em segurança do uso real. No próximo loop, priorizar os 14 callsites que não casaram com o padrão, cadeia JNI e a proveniência de R1, além dos limites de alocação/falha.

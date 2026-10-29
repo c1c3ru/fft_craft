@@ -97,7 +97,7 @@
         "A02"
       ],
       "title": "Reconstruir os sete destinos externos dos saltos ARM A02",
-      "next_action": "A04: dispatcher 544, GOT veneers 64, BXNE 128 e prólogo antes de BL 32 cenários locais confirmados no ELF original (total A04 768). BL de 0x000ab674 → 0x000b6620 e de 0x000b461c → 0x000b45d0 ainda exigem callee/CFG completos; fallthrough de 0x002b1bb0 → 0x002b1bb8 e autoloop 0x002a1268 permanecem desconhecidos. Não executar destino desconhecido nem marcar A04 done.",
+      "next_action": "A04 in_progress: fronteiras 0x000ab674 → 0x000b6620 e 0x000b461c → 0x000b45d0 agora possuem contratos C/ARM diferenciais delimitados (144 casos da folha 0x000b45d0; 48 do caminho R1=0 e 1128 do R1!=0 com libc sintética). O ELF possui 48 BL diretos candidatos a 0x000b6620, 3 a 0x000b45d0; 34 das 48 chamadas exibem operador new Thumb _Znwj com 0x10c bytes via veneer ARM comprovado por 8 casos. Investigar 14 callsites sem esse padrão, origem e limite de R1, aliasing, falha na alocação, JNI/Android real e 0x002b1bb0 → 0x002b1bb8. Autoloop 0x002a1268 permanece desconhecido quanto à alcançabilidade. Não declarar equivalência irrestrita, executar destinos não modelados nem marcar A04 done.",
       "acceptance": "CFG e contratos por destino com testes diferenciais completos até próximas fronteiras; fluxo do autoloop classificado com evidência de reachability ou lacuna explícita.",
       "evidence": [
         "https://github.com/c1c3ru/fft_craft/actions/runs/40748750630",
@@ -114,7 +114,11 @@
         "PR #413: 128 conditional-return / fallthrough-stop states; no unknown fallthrough instruction executed",
         "https://github.com/c1c3ru/fft_craft/actions/runs/40757008125",
         "FFT_Android_Mod/docs/re-results/SEMANTIC_A04_BL_BOUNDARIES.md",
-        "A04 BL: 2 original callsites, 672 scanned bytes, 32 bounded ARM pre-BL cases, zero callees executed; checkpoint replay PASS"
+        "A04 BL: 2 original callsites, 672 scanned bytes, 32 bounded ARM pre-BL cases, zero callees executed; checkpoint replay PASS",
+        "https://github.com/c1c3ru/fft_craft/pull/432",
+        "https://github.com/c1c3ru/fft_craft/pull/434",
+        "https://github.com/c1c3ru/fft_craft/actions/runs/40902177041",
+        "FFT_Android_Mod/docs/re-results/A04_CALLSITE_PRECONDITIONS.md"
       ]
     },
     {
