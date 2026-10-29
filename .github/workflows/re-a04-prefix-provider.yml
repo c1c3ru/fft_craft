@@ -9,6 +9,8 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_rootpath_helper.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_rootpath_jni_copy.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_java_path_lookup.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_storageutil_contract.py'
+      - 'FFT_Android_Mod/src/smali/com/yox_project/silver_arrow/StorageUtil.smali'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_rootpath_field.py'
       - 'FFT_Android_Mod/docs/re-results/A04_PREFIX_PROVIDER.md'
       - 'FFT_Android_Mod/src/lib/armeabi/libgl2jni.so'
@@ -66,6 +68,13 @@ jobs:
           cp /tmp/a04-prefix/java-selector.json /tmp/a04-prefix/java-selector-first.json
           python3 FFT_Android_Mod/docs/re-tools/semantic_a04_java_path_lookup.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --checkpoint /tmp/a04-prefix/java-selector.json
           cmp /tmp/a04-prefix/java-selector-first.json /tmp/a04-prefix/java-selector.json
+      - name: Verify Java StorageUtil methods against actual JNI selector names
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_storageutil_contract.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --smali FFT_Android_Mod/src/smali/com/yox_project/silver_arrow/StorageUtil.smali --checkpoint /tmp/a04-prefix/storageutil.json
+          cp /tmp/a04-prefix/storageutil.json /tmp/a04-prefix/storageutil-first.json
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_storageutil_contract.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --smali FFT_Android_Mod/src/smali/com/yox_project/silver_arrow/StorageUtil.smali --checkpoint /tmp/a04-prefix/storageutil.json
+          cmp /tmp/a04-prefix/storageutil-first.json /tmp/a04-prefix/storageutil.json
       - uses: actions/upload-artifact@v4
         with:
           name: a04-original-prefix-provider-2b04f0
