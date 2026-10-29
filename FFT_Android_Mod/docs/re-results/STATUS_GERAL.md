@@ -178,11 +178,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #447 — test(re): validar cálculo ARM do sufixo fftpack.bin e condição de 248 bytes](https://github.com/c1c3ru/fft_craft/pull/447)
+- [PR #448 — chore(re): automated structural batch 40911323125](https://github.com/c1c3ru/fft_craft/pull/448)
 - [PR #444 — feat(re): seguir fontes R1 de argumentos ABI um salto acima no ELF original](https://github.com/c1c3ru/fft_craft/pull/444)
 - [PR #446 — test(re): investigar origem literal de R1 em 0x0020ca48](https://github.com/c1c3ru/fft_craft/pull/446)
 - [PR #445 — chore(re): automated structural batch 40909955523](https://github.com/c1c3ru/fft_craft/pull/445)
-- [PR #443 — feat(re): rastrear R1 nos 48 chamadores A04 com análise paralela de NUL/limites](https://github.com/c1c3ru/fft_craft/pull/443)
-- [PR #442 — chore(re): automated structural batch 40908701669](https://github.com/c1c3ru/fft_craft/pull/442)
 
 ## Atualização automática e fontes
 
