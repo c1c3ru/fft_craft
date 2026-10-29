@@ -178,11 +178,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #421 — chore(re): automated structural batch 40757053097](https://github.com/c1c3ru/fft_craft/pull/421)
 - [PR #419 — test(re): revalidar BL original A04 após correção do rastreador](https://github.com/c1c3ru/fft_craft/pull/419)
 - [PR #418 — fix(re): manter fronteiras A04 explícitas no rastreador e status](https://github.com/c1c3ru/fft_craft/pull/418)
 - [PR #417 — Feat/re a04 veneer got 20261028](https://github.com/c1c3ru/fft_craft/pull/417)
 - [PR #414 — Feat/re a04 dispatcher differential 20261028](https://github.com/c1c3ru/fft_craft/pull/414)
-- [PR #416 — Feat/re a04 bl boundary audit 20261028](https://github.com/c1c3ru/fft_craft/pull/416)
 
 ## Atualização automática e fontes
 
