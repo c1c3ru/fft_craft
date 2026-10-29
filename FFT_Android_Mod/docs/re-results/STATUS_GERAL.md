@@ -178,11 +178,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #428 — feat(re): auditar callee externo 0x000714a0 no ELF ARM original](https://github.com/c1c3ru/fft_craft/pull/428)
+- [PR #427 — feat(re): validar caminho R1=0 de 0x000b6620 com ARM × C](https://github.com/c1c3ru/fft_craft/pull/427)
+- [PR #426 — feat(re): contrato ARM 0x000b45d0 e diferencial C independente](https://github.com/c1c3ru/fft_craft/pull/426)
+- [PR #425 — chore(re): automated structural batch 40867975485](https://github.com/c1c3ru/fft_craft/pull/425)
 - [PR #424 — feat(re): aprofundar CFG e fronteiras dos callees A04 no ELF original](https://github.com/c1c3ru/fft_craft/pull/424)
-- [PR #422 — docs(re): registrar 32 testes BL originais e próximas lacunas A04](https://github.com/c1c3ru/fft_craft/pull/422)
-- [PR #420 — test(re): proteger fronteiras A04 pendentes com gate de regressão](https://github.com/c1c3ru/fft_craft/pull/420)
-- [PR #423 — chore(re): automated structural batch 40853861246](https://github.com/c1c3ru/fft_craft/pull/423)
-- [PR #421 — chore(re): automated structural batch 40757053097](https://github.com/c1c3ru/fft_craft/pull/421)
 
 ## Atualização automática e fontes
 
