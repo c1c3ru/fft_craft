@@ -1,0 +1,39 @@
+name: A04 R1 literal and 12-byte producer evidence
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/re-a04-r1-literal-probe.yml'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_r1_literal_probe.py'
+      - 'FFT_Android_Mod/docs/re-results/A04_R1_LITERAL_PROBE.md'
+      - 'FFT_Android_Mod/src/lib/armeabi/libgl2jni.so'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-elf-r1-literal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Original ARM disassembler dependencies
+        run: python3 -m pip install capstone pyelftools
+      - name: Verify original imported copy and string source, repeat deterministic checkpoint
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/a04-literal
+          python3 -m py_compile FFT_Android_Mod/docs/re-tools/semantic_a04_r1_literal_probe.py
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_r1_literal_probe.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --output /tmp/a04-literal/producer.json
+          cp /tmp/a04-literal/producer.json /tmp/a04-literal/first.json
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_r1_literal_probe.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --output /tmp/a04-literal/producer.json
+          cmp /tmp/a04-literal/first.json /tmp/a04-literal/producer.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: a04-r1-literal-original-elf
+          path: /tmp/a04-literal/
+          retention-days: 30
