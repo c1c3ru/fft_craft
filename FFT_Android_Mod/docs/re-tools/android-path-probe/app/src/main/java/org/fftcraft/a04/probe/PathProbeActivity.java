@@ -23,6 +23,7 @@ public final class PathProbeActivity extends Activity {
 
     static { System.loadLibrary("a04_android_path_probe"); }
     private static native int getJniModifiedUtf8ByteLength(String text);
+    private static native String getJniUtfBytesHex(String text);
 
     private static JSONObject measure(String source, String value) throws Exception {
         JSONObject out = new JSONObject();
@@ -73,6 +74,8 @@ public final class PathProbeActivity extends Activity {
                     new String(new char[243]).replace('\0', 'x')));
             result.put("native_emoji_one", getJniModifiedUtf8ByteLength("\ud83d\ude00"));
             result.put("native_embedded_nul", getJniModifiedUtf8ByteLength("a\0b"));
+            result.put("native_emoji_utf_bytes_hex", getJniUtfBytesHex("\ud83d\ude00"));
+            result.put("native_nul_utf_bytes_hex", getJniUtfBytesHex("a\0b"));
             result.put("status", "sampled_not_a_global_bound");
             persist(result);
         } catch (Throwable failure) {
