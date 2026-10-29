@@ -11,7 +11,8 @@ from collections import deque
 from pathlib import Path
 
 from capstone import Cs, CS_ARCH_ARM, CS_MODE_ARM
-from capstone.arm import (ARM_OP_IMM, ARM_OP_MEM, ARM_INS_B, ARM_INS_BL,\n                          ARM_INS_BLX, ARM_INS_BX, ARM_CC_AL, ARM_CC_INVALID)
+from capstone.arm import (ARM_OP_IMM, ARM_OP_MEM, ARM_INS_B, ARM_INS_BL,
+                          ARM_INS_BLX, ARM_INS_BX, ARM_CC_AL, ARM_CC_INVALID)
 import semantic_evidence
 
 SHA = "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc"
@@ -73,8 +74,8 @@ def inventory(data, entry, max_blocks=MAX_BLOCKS, max_instructions=MAX_INSTRUCTI
                 memory.append({"pc": f"{pc:08x}", "access": "register_list_memory_candidate", "instruction": ins.mnemonic})
             mnemonic = ins.mnemonic.split(".")[0]
             next_pc = pc + 4
-            is_call = mnemonic.startswith("bl")
-            is_branch = mnemonic == "b" or (mnemonic.startswith("b") and mnemonic not in ("bic", "bkpt") and not is_call)
+            is_call = ins.id in (ARM_INS_BL, ARM_INS_BLX)
+            is_branch = ins.id in (ARM_INS_B, ARM_INS_BX)
             touches_pc = (("pc" in ins.op_str.lower().split(",")[0].split())
                           or (mnemonic in ("pop", "ldm", "ldmia") and "pc" in ins.op_str.lower()))
             if is_call:
