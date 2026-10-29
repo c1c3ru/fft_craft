@@ -8,6 +8,8 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_b6620_xrefs.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_alloc_provenance.py'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_alloc_provenance.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_new_veneer.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_new_veneer.py'
       - 'FFT_Android_Mod/docs/re-tools/c-models/a04_b6620_model.c'
       - 'FFT_Android_Mod/docs/re-tools/c-models/a04_b6620_model.h'
       - 'FFT_Android_Mod/docs/re-results/A04_CALLSITE_PRECONDITIONS.md'
@@ -56,6 +58,13 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_a04_alloc_provenance.py \
             --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
             --output /tmp/fft-a04-unified/allocator-chain.json
+      - name: Prove bounded original A32-to-Thumb new-operator veneer
+        run: |
+          set -euo pipefail
+          PYTHONPATH=FFT_Android_Mod/docs/re-tools python3 -m unittest -v test_semantic_a04_new_veneer
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_new_veneer.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --output /tmp/fft-a04-unified/operator-new-veneer.json
       - uses: actions/upload-artifact@v4
         with:
           name: a04-unified-model-and-caller-inventory
