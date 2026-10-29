@@ -4,7 +4,16 @@ APK="$1"
 OUT="/tmp/a04-android-path.json"
 if [ "$#" -ge 2 ]; then OUT="$2"; fi
 PKG="com.square_enix.android_googleplay.FFT_en2"
-adb install -r "$APK"
+# Never overwrite a real game installation or run this diagnostic on a phone.
+if [ "$(adb shell getprop ro.kernel.qemu | tr -d '\r')" != "1" ]; then
+  echo "A04 path probe is restricted to an Android emulator" >&2
+  exit 1
+fi
+if adb shell pm path "$PKG" | grep -q '^package:'; then
+  echo "Refusing to replace an existing installation with the same package ID" >&2
+  exit 1
+fi
+adb install "$APK"
 adb shell am start -W -n "$PKG/org.fftcraft.a04.probe.PathProbeActivity"
 for attempt in $(seq 1 20); do
   if adb shell run-as "$PKG" cat files/a04_path_probe.json > "$OUT" 2>/dev/null; then
