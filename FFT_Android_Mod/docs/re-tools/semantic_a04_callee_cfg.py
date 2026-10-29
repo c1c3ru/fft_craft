@@ -11,7 +11,7 @@ from collections import deque
 from pathlib import Path
 
 from capstone import Cs, CS_ARCH_ARM, CS_MODE_ARM
-from capstone.arm import ARM_OP_IMM, ARM_OP_MEM, ARM_REG_PC
+from capstone.arm import (ARM_OP_IMM, ARM_OP_MEM, ARM_INS_B, ARM_INS_BL,\n                          ARM_INS_BLX, ARM_INS_BX, ARM_CC_AL, ARM_CC_INVALID)
 import semantic_evidence
 
 SHA = "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc"
@@ -87,7 +87,7 @@ def inventory(data, entry, max_blocks=MAX_BLOCKS, max_instructions=MAX_INSTRUCTI
                 break
             if is_branch or touches_pc:
                 dest = ins.operands[0].imm if is_branch and ins.operands and ins.operands[0].type == ARM_OP_IMM else None
-                conditional = mnemonic not in ("b", "bx") and not touches_pc
+                conditional = ins.cc not in (ARM_CC_AL, ARM_CC_INVALID)
                 if dest is not None:
                     edges.append({"from": f"{pc:08x}", "to": f"{dest & 0xffffffff:08x}", "type": "conditional_candidate" if conditional else "branch"})
                     if entry <= dest < end and dest % 4 == 0:
