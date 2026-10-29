@@ -91,7 +91,7 @@ def one_hop(binary):
             "incoming_abi_downstream_calls":len(records),
             "unique_containing_function_entries":unique_targets,
             "sources_without_a32_upstream_caller":no_direct,
-            "total_source_to_function_a32_edges":sum(len(x["sample_upstream_callers"])
+            "total_source_to_function_a32_edges":sum(x["one_hop_direct_a32_bl_count"]
                                                      for x in records),
             "records":records,
             "global_reachability_verified":False,
