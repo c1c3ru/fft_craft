@@ -10,6 +10,8 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_714a0_slot.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_714a0_strcpy.py'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_714a0_strcpy.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_714a0_postcopy.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_714a0_postcopy.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_callee_cfg.py'
       - 'FFT_Android_Mod/src/lib/armeabi/libgl2jni.so'
   workflow_dispatch:
@@ -31,7 +33,7 @@ jobs:
       - name: Test verifier
         run: |
           set -euo pipefail
-          PYTHONPATH=FFT_Android_Mod/docs/re-tools python3 -m unittest -v test_semantic_a04_714a0_audit test_semantic_a04_714a0_slot test_semantic_a04_714a0_strcpy
+          PYTHONPATH=FFT_Android_Mod/docs/re-tools python3 -m unittest -v test_semantic_a04_714a0_audit test_semantic_a04_714a0_slot test_semantic_a04_714a0_strcpy test_semantic_a04_714a0_postcopy
       - name: Verify original ELF and candidate CFG
         run: |
           set -euo pipefail
@@ -66,6 +68,12 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_a04_714a0_strcpy.py \
             --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
             --output /tmp/fft-a04-714a0/strcpy-caller.json
+      - name: Decode next original callee after strcpy
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_714a0_postcopy.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --output /tmp/fft-a04-714a0/postcopy.json
       - uses: actions/upload-artifact@v4
         with:
           name: a04-714a0-original-cfg
