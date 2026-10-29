@@ -97,7 +97,7 @@
         "A02"
       ],
       "title": "Reconstruir os sete destinos externos dos saltos ARM A02",
-      "next_action": "A04 in_progress: fronteiras 0x000ab674 → 0x000b6620 e 0x000b461c → 0x000b45d0 agora possuem contratos C/ARM diferenciais delimitados (144 casos da folha 0x000b45d0; 48 do caminho R1=0 e 1128 do R1!=0 com libc sintética). O ELF possui 48 BL diretos candidatos a 0x000b6620, 3 a 0x000b45d0; 34 das 48 chamadas exibem operador new Thumb _Znwj com 0x10c bytes via veneer ARM comprovado por 8 casos. Investigar 14 callsites sem esse padrão, origem e limite de R1, aliasing, falha na alocação, JNI/Android real e 0x002b1bb0 → 0x002b1bb8. Autoloop 0x002a1268 permanece desconhecido quanto à alcançabilidade. Não declarar equivalência irrestrita, executar destinos não modelados nem marcar A04 done.",
+      "next_action": "A04 in_progress: fronteiras 0x000ab674 → 0x000b6620 e 0x000b461c → 0x000b45d0 possuem diferenciais ARM×C delimitados, com strcpy/strlen sintéticas no caminho não nulo. Os 48 BL A32 diretos para 0x000b6620 foram classificados estruturalmente: 46 com preparações de 0x10c e operator new Thumb _Znwj; outros dois em CEGL2_SHADER::Load com ponteiros locais em SP+0x14 e SP+0x120 dentro de frame 0x234, geometria verificada para o campo +0x104..+0x107. Próximo gate prioritário: proveniência de R1 e NUL/comprimento máximo ≤259 bytes em caminhos reais; validar CFG, aliasing, falhas de new, Android/JNI, libc real e 0x002b1bb0 → 0x002b1bb8. Autoloop 0x002a1268 permanece com alcançabilidade desconhecida. Não executar destino não modelado nem marcar A04 done.",
       "acceptance": "CFG e contratos por destino com testes diferenciais completos até próximas fronteiras; fluxo do autoloop classificado com evidência de reachability ou lacuna explícita.",
       "evidence": [
         "https://github.com/c1c3ru/fft_craft/actions/runs/40748750630",
@@ -118,7 +118,12 @@
         "https://github.com/c1c3ru/fft_craft/pull/432",
         "https://github.com/c1c3ru/fft_craft/pull/434",
         "https://github.com/c1c3ru/fft_craft/actions/runs/40902177041",
-        "FFT_Android_Mod/docs/re-results/A04_CALLSITE_PRECONDITIONS.md"
+        "FFT_Android_Mod/docs/re-results/A04_CALLSITE_PRECONDITIONS.md",
+        "https://github.com/c1c3ru/fft_craft/pull/439",
+        "https://github.com/c1c3ru/fft_craft/pull/440",
+        "https://github.com/c1c3ru/fft_craft/actions/runs/40905433751",
+        "https://github.com/c1c3ru/fft_craft/actions/runs/40905850904",
+        "FFT_Android_Mod/docs/re-results/A04_CALLSITE_BATCH_TRIAGE.md"
       ]
     },
     {
