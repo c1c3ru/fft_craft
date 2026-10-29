@@ -22,7 +22,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Original ARM disassembler dependencies
-        run: python3 -m pip install capstone pyelftools
+        run: python3 -m pip install capstone pyelftools unicorn
       - name: Verify original imported copy and string source, repeat deterministic checkpoint
         run: |
           set -euo pipefail
