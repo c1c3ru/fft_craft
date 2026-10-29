@@ -11,7 +11,7 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_714a0_strcpy.py'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_714a0_strcpy.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_714a0_postcopy.py'
-      - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_714a0_postcopy test_semantic_a04_b942c_strlen.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_714a0_postcopy.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_b942c_strlen.py'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_b942c_strlen.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_callee_cfg.py'
@@ -35,7 +35,7 @@ jobs:
       - name: Test verifier
         run: |
           set -euo pipefail
-          PYTHONPATH=FFT_Android_Mod/docs/re-tools python3 -m unittest -v test_semantic_a04_714a0_audit test_semantic_a04_714a0_slot test_semantic_a04_714a0_strcpy test_semantic_a04_714a0_postcopy
+          PYTHONPATH=FFT_Android_Mod/docs/re-tools python3 -m unittest -v test_semantic_a04_714a0_audit test_semantic_a04_714a0_slot test_semantic_a04_714a0_strcpy test_semantic_a04_714a0_postcopy test_semantic_a04_b942c_strlen
       - name: Verify original ELF and candidate CFG
         run: |
           set -euo pipefail
