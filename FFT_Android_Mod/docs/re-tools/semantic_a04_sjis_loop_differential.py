@@ -117,9 +117,13 @@ def run_original(function, helper, veneer, content, initial_flags):
     for reg, value in ((UC_ARM_REG_R0, expected["r0"]),
                        (UC_ARM_REG_R1, 0x5c), (UC_ARM_REG_R2, expected["r2"]),
                        (UC_ARM_REG_R3, expected["r3"]),
-                       (UC_ARM_REG_LR, RETURN), (UC_ARM_REG_SP, SP)):
+                       (UC_ARM_REG_SP, SP)):
         if uc.reg_read(reg) != value:
             raise AssertionError(f"Unexpected ARM register {reg} for {content.hex()}")
+    # BL changes LR; the original routine returns through the saved PC on stack.
+    expected_lr = 0xb9444 if len(content) == 0 else 0xb9458
+    if uc.reg_read(UC_ARM_REG_LR) != expected_lr:
+        raise AssertionError("Original BL did not establish expected volatile LR")
     if (uc.reg_read(UC_ARM_REG_CPSR) & 0xf0000000) != expected["nzcv"]:
         raise AssertionError(f"Loop NZCV mismatch for {content.hex()}")
     saved_words = [v for _, v in SAVED] + [RETURN]
