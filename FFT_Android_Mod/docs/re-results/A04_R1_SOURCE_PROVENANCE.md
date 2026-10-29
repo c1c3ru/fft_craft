@@ -22,3 +22,29 @@ Os 48 resultados ficam em um checkpoint JSON, com identificador de callsite, sí
 4. Atualizar a issue #441 com fontes demonstradas, pendências e risco de overflow por callsite.
 
 **A04 permanece in_progress; nenhum certificado novo.**
+
+
+## Resultado executado no ELF original — run #40909542660
+
+O [workflow com quatro jobs](https://github.com/c1c3ru/fft_craft/actions/runs/40909542660) passou no commit de implementação inicial: nove regressões unitárias e a análise determinística de **48/48 callsites**, divididos em **35 file-io, 11 outros e dois shader**.
+
+| Classe conservadora do último rastreio de R1 | Quantidade |
+|---|---:|
+| `incoming_abi_argument_candidate` | 18 |
+| `stack_pointer_derived_candidate` | 21 |
+| `stack_slot_candidate` | 7 |
+| `conditional_definition_unknown` | 2 |
+| **Total** | **48** |
+
+Evidência particular nos shaders: `0x000ab6a4` recebe R1 a partir do argumento de entrada R2; `0x000ab6cc` recebe R1 a partir do argumento de entrada R3, após transporte por registradores preservados. Nada nesse rastreio estabelece comprimento máximo ou NUL para essas entradas.
+
+Alguns resultados dependem de fluxos de controle não modelados e slots de pilha não rastreados até os produtores. A classificação representa **candidatos de origem**, não validação do dado contido no endereço. O resultado de prova de NUL dentro de 260 bytes foi **0/48**, sem exploração de falha nem ensaio dinâmico de overflow. Essa ausência de prova não deve ser descrita como 48 vulnerabilidades confirmadas.
+
+### Próximas experiências de alto impacto
+
+- **18 argumentos ABI**: seguir o símbolo dono até os seus chamadores, incluindo API externa e JNI; recuperar garantia de comprimento e contratos de terminação.
+- **21 endereços SP**: identificar qual chamada ou rotina preencheu a região local, se há escrita de NUL, e comparar capacidade com a região real de armazenamento.
+- **7 slots de pilha**: rastrear o `STR` anterior de cada slot na mesma base SP e quaisquer alterações de SP; se houver branch, repetir por caminho.
+- **2 definições condicionais**: reconstruir ambos os caminhos de controle e as fontes alternativas antes de decidir que o ponteiro é limitado.
+
+A04 continua `in_progress`, sem promoção automática de cobertura ou certificados novos.
