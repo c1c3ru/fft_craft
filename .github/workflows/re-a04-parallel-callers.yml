@@ -1,0 +1,63 @@
+name: A04 parallel caller closure triage
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/re-a04-parallel-callers.yml'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_xrefs_batch.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_xrefs_batch.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_shader_callers.py'
+      - 'FFT_Android_Mod/docs/re-results/A04_CALLSITE_BATCH_TRIAGE.md'
+      - 'FFT_Android_Mod/src/lib/armeabi/libgl2jni.so'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  a32-caller-batch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python3 -m pip install capstone pyelftools
+      - name: Batch classify all original A32 callsites and replay
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/a04-batch
+          PYTHONPATH=FFT_Android_Mod/docs/re-tools python3 -m unittest -v test_semantic_a04_xrefs_batch
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_xrefs_batch.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --checkpoint /tmp/a04-batch/batch.json --report /tmp/a04-batch/report.md
+          cp /tmp/a04-batch/batch.json /tmp/a04-batch/first.json
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_xrefs_batch.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --checkpoint /tmp/a04-batch/batch.json --report /tmp/a04-batch/report.md
+          cmp /tmp/a04-batch/first.json /tmp/a04-batch/batch.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: a04-batch-a32-callers
+          path: /tmp/a04-batch/
+          retention-days: 30
+
+  shader-pointer-provenance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python3 -m pip install capstone pyelftools
+      - name: Inspect original shader callers and replay
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/a04-shader
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_shader_callers.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --checkpoint /tmp/a04-shader/shader.json
+          cp /tmp/a04-shader/shader.json /tmp/a04-shader/first.json
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_shader_callers.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --checkpoint /tmp/a04-shader/shader.json
+          cmp /tmp/a04-shader/first.json /tmp/a04-shader/shader.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: a04-shader-pointer-provenance
+          path: /tmp/a04-shader/
+          retention-days: 30
