@@ -6,6 +6,7 @@ on:
       - '.github/workflows/re-a04-prefix-provider.yml'
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_prefix_provider.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_rootpath_field.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_rootpath_helper.py'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_rootpath_field.py'
       - 'FFT_Android_Mod/docs/re-results/A04_PREFIX_PROVIDER.md'
       - 'FFT_Android_Mod/src/lib/armeabi/libgl2jni.so'
@@ -42,6 +43,13 @@ jobs:
           cp /tmp/a04-prefix/rootpath.json /tmp/a04-prefix/rootpath-first.json
           python3 FFT_Android_Mod/docs/re-tools/semantic_a04_rootpath_field.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --checkpoint /tmp/a04-prefix/rootpath.json
           cmp /tmp/a04-prefix/rootpath-first.json /tmp/a04-prefix/rootpath.json
+      - name: Examine original 0x729e4 rootpath construction helper
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_rootpath_helper.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --checkpoint /tmp/a04-prefix/rootpath-helper.json
+          cp /tmp/a04-prefix/rootpath-helper.json /tmp/a04-prefix/rootpath-helper-first.json
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_rootpath_helper.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --checkpoint /tmp/a04-prefix/rootpath-helper.json
+          cmp /tmp/a04-prefix/rootpath-helper-first.json /tmp/a04-prefix/rootpath-helper.json
       - uses: actions/upload-artifact@v4
         with:
           name: a04-original-prefix-provider-2b04f0
