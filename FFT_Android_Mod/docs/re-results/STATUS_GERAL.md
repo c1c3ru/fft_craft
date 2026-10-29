@@ -178,11 +178,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #432 — feat(re): executar ramo A04 R1!=0 ponta a ponta com libc controlada e modelo C](https://github.com/c1c3ru/fft_craft/pull/432)
+- [PR #431 — chore(re): automated structural batch 40897847016](https://github.com/c1c3ru/fft_craft/pull/431)
 - [PR #429 — feat(re): validar normalização Shift-JIS ARM × C e restaurar regressões A04](https://github.com/c1c3ru/fft_craft/pull/429)
 - [PR #430 — chore(re): automated structural batch 40890226832](https://github.com/c1c3ru/fft_craft/pull/430)
 - [PR #428 — feat(re): auditar callee externo 0x000714a0 no ELF ARM original](https://github.com/c1c3ru/fft_craft/pull/428)
-- [PR #427 — feat(re): validar caminho R1=0 de 0x000b6620 com ARM × C](https://github.com/c1c3ru/fft_craft/pull/427)
-- [PR #426 — feat(re): contrato ARM 0x000b45d0 e diferencial C independente](https://github.com/c1c3ru/fft_craft/pull/426)
 
 ## Atualização automática e fontes
 
