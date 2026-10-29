@@ -40,6 +40,17 @@ O probe verificou NUL Java em `"a\0b"` (4 bytes JNI) e strings ASCII de 242 e 24
 - [AOSP ART — comportamento histórico de GetStringUTFLength/GetStringUTFChars](https://android.googlesource.com/platform/art/+/ef21fb5f2520c604a6d5659452488a93433ee85a/runtime/jni/jni_internal.cc)
 - [Discussão do Android NDK sobre codificação de emoji](https://github.com/android/ndk/issues/283)
 
-A asserção do probe foi corrigida para o comportamento Android observado (**4 bytes**) e passou a verificar **os bytes efetivos de GetStringUTFChars em hexadecimal**, além da contagem. A validação dessa correção fica condicionada ao próximo run no commit correspondente.
+A asserção do probe foi corrigida para o comportamento Android observado (**4 bytes**) e passou a verificar **os bytes efetivos de GetStringUTFChars em hexadecimal**, além da contagem. O [run #40923703664](https://github.com/c1c3ru/fft_craft/actions/runs/40923703664) confirmou **sucesso** no APK de diagnóstico com o novo gate de hexadecimais.
+
+### Segundo ensaio: gate Android API 29 aprovado
+
+| Método de plataforma espelhado | Bytes JNI | Limite B<=242 |
+|---|---:|---|
+| Context.getFilesDir().getPath() | **61** | satisfeito nesta amostra |
+| Context.getExternalFilesDir(null).getPath() | **81** | satisfeito nesta amostra |
+
+O JSON também confirmou `U+1F600` como `f09f9880` (4 bytes) e `a\u0000b` como `61c08062` (4 bytes), ambos provenientes de `GetStringUTFChars` no emulador. O teste de build, o emulador e o gate de conteúdo passaram; os workflows gerais do PR #457 também ficaram verdes. O artifact do run persiste apenas status, contagens e bytes sintéticos, sem gravar diretórios reais.
+
+**Cuidado:** esses dados não constituem prova de um teto máximo dos diretórios Android em todos os dispositivos e instalações. A execução do ELF original, seus controles de concorrência, seus fallthroughs e seu `strcpy` continuam fora do escopo do teste.
 
 **Não confundir a amostra do APK de diagnóstico com execução do jogo**: seu único valor comprobatório é o comportamento dos getters do Android sob o mesmo package ID, em ambiente isolado. Outros dispositivos/API levels/usuários podem produzir caminhos mais longos, nulos ou diferentes. A04 segue in_progress; nenhum certificado de segurança ou equivalência total.
