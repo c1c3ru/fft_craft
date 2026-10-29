@@ -27,3 +27,17 @@ ELF ARM original SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6
 - Integrar R1!=0 desde `0x000b6620` e testar equivalência de registradores, memória e efeitos nas duas chamadas de biblioteca, sem afirmar equivalência geral de libc.
 
 **Status:** A04 em andamento. As relações de importação `strcpy` e `strlen` são estruturais e verificadas por relocations reais; endereços de implementação Android permanecem dependentes de runtime. Nenhuma rotina integral é certificada por esta documentação.
+
+
+## Prova incremental do laço ARM original (Unicorn × C)
+
+O workflow [run #40892165075](https://github.com/c1c3ru/fft_craft/actions/runs/40892165075) concluiu **success** com o ELF de SHA fixo, **25 testes unitários e dois diferenciais originais**:
+
+| Entrada ARM | Método | Casos | Divergências |
+|---|---|---:|---:|
+| `0x000b8be4` | Função-folha inteira ARM × C (`a04_sjis_lead.c`) | 1040 | 0 |
+| `0x000b942c` | Laço ARM original + classificador ARM original; `strlen` sintético e controlado × modelo C `a04_sjis_slash_loop.c` | 556 | 0 |
+
+O teste `semantic_a04_sjis_loop_differential.py` verificou a memória da string inteira, escrita condicional de barras, seis escritas de salvamento da pilha, restauração de R4–R8/SP, R0–R3, NZCV e retorno via PC. A evidência também exigiu corrigir uma suposição de teste: **LR é volátil após BL**, não é restaurado simplesmente porque a rotina faz `POP {...,PC}`. Os dois endereços de retorno observados pelo teste são `0x000b9444` após `strlen` e `0x000b9458` após o classificador.
+
+**Escopo limitado:** o stub sintético de `strlen` não implementa ou executa a biblioteca Android; o fluxo completo de `strcpy` e o chamador `0x000b6620` para R1!=0 ainda não foram executados em conjunto. Nenhum novo certificado semântico formal foi emitido; A04 permanece em andamento.
