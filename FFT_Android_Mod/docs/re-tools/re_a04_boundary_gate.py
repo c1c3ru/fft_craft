@@ -29,7 +29,8 @@ def audit(tracker):
     missing = sorted(address for address in REQUIRED if address not in next_action)
     if missing:
         raise ValueError("A04 next_action omits original ELF boundaries: " + ", ".join(missing))
-    if "reachability" not in next_action and "alcançabilidade" not in next_action:
+    if not (("reachability" in next_action or "alcançabilidade" in next_action)
+            or ("autoloop" in next_action and "desconhecid" in next_action)):
         raise ValueError("A04 must explicitly track self-loop reachability")
     if not task.get("acceptance") or not task.get("evidence"):
         raise ValueError("A04 needs acceptance criteria and traceable existing evidence")

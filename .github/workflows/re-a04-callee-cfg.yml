@@ -1,0 +1,63 @@
+name: A04 original ELF callee investigation
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/re-a04-callee-cfg.yml'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_callee_cfg.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_callee_cfg.py'
+      - 'FFT_Android_Mod/docs/re-results/RE_COMPLETION_TRACKER.json'
+      - 'FFT_Android_Mod/src/lib/armeabi/libgl2jni.so'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inspect-original-elf:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install disassembly dependencies
+        run: python3 -m pip install capstone pyelftools
+      - name: Test structural contract handling
+        run: |
+          set -euo pipefail
+          PYTHONPATH=FFT_Android_Mod/docs/re-tools python3 -m unittest -v test_semantic_a04_callee_cfg
+      - name: Audit two original ELF callee windows
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/fft-a04-callees
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_callee_cfg.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --checkpoint /tmp/fft-a04-callees/callee-cfg.json \
+            --report /tmp/fft-a04-callees/callee-cfg.md
+          cp /tmp/fft-a04-callees/callee-cfg.json /tmp/fft-a04-callees/first.json
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_callee_cfg.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --checkpoint /tmp/fft-a04-callees/callee-cfg.json \
+            --report /tmp/fft-a04-callees/callee-cfg.md
+          cmp /tmp/fft-a04-callees/first.json /tmp/fft-a04-callees/callee-cfg.json
+      - name: Surface callee evidence in CI logs
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          state = json.loads(Path('/tmp/fft-a04-callees/callee-cfg.json').read_text())
+          for row in state['callees']:
+              print('CALLEE=' + row['entry'])
+              for ins in row['instructions'][:28]:
+                  print(ins['pc'] + ': ' + ins['mnemonic'] + ' ' + ins['operands'])
+              print('CALLS=' + json.dumps(row['calls']))
+              print('MEMORY=' + json.dumps(row['memory_candidates'][:24]))
+              print('UNRESOLVED=' + json.dumps(row['unresolved']))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: a04-callee-original-elf-cfg
+          path: /tmp/fft-a04-callees/
+          retention-days: 30
