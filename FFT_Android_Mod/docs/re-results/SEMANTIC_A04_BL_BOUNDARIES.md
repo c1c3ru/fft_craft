@@ -15,7 +15,7 @@ O novo `semantic_a04_bl_boundaries.py` compara o SHA original, exige o checkpoin
 
 No bloco `000b461c`, o candidato simples é `PUSH {r4,r5,r6,lr}; MOV r5,r0; MOV r4,r1; BL 000b45d0`. O fluxo inicial de `000b4700` prepara `R1=0` antes do desvio. Os testes usam bytes originais exatos e verificam, sob memória sintética: os quatro valores gravados pela PUSH, SP, R0–R12, LR, flags NZCV e a preservação de toda a memória fora dessas escritas. A execução interrompe no PC da instrução BL, **sem executar a chamada**.
 
-**Gate previsto no CI:** 2 BL originais, 672 bytes auditados, 8 seeds × 4 flags = **32 microexecuções limitadas**, zero destinos de BL executados, zero falhas, zero certificados e checkpoint byte a byte reproduzível. Este número é uma expectativa até a confirmação do workflow.
+**Resultado confirmado no ELF original:** [run #40757008125](https://github.com/c1c3ru/fft_craft/actions/runs/40757008125), commit `24c6bca62fbcf118e2272260e9c87d36c0dbd3dc`: **2 locais BL auditados, 672 bytes inspecionados e 32 microexecuções locais do prólogo até antes do BL**, com zero divergências, zero callees desconhecidos executados, zero certificados criados e checkpoint reproduzido byte a byte. O job real-ELF terminou `success`. Não equivale a executar os dois callees.
 
 ## Próximas atividades
 

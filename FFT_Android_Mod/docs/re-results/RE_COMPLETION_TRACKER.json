@@ -97,7 +97,7 @@
         "A02"
       ],
       "title": "Reconstruir os sete destinos externos dos saltos ARM A02",
-      "next_action": "A04: dispatcher 544 + GOT veneers 64 + BXNE 128 cenários locais validados; retorno condicional 0x002b1bb0 tem fallthrough 0x002b1bb8 ainda desconhecido. Auditar BL em 0x000ab674 → 0x000b6620 e 0x000b461c → 0x000b45d0, prólogos, globais, callee e continuações. Executar só prefixos seguros antes de BL; classificar reachability do auto-loop 0x002a1268. Manter A04 in_progress até CFG e efeitos integrais provados.",
+      "next_action": "A04: dispatcher 544, GOT veneers 64, BXNE 128 e prólogo antes de BL 32 cenários locais confirmados no ELF original (total A04 768). BL de 0x000ab674 → 0x000b6620 e de 0x000b461c → 0x000b45d0 ainda exigem callee/CFG completos; fallthrough de 0x002b1bb0 → 0x002b1bb8 e autoloop 0x002a1268 permanecem desconhecidos. Não executar destino desconhecido nem marcar A04 done.",
       "acceptance": "CFG e contratos por destino com testes diferenciais completos até próximas fronteiras; fluxo do autoloop classificado com evidência de reachability ou lacuna explícita.",
       "evidence": [
         "https://github.com/c1c3ru/fft_craft/actions/runs/40748750630",
@@ -111,7 +111,10 @@
         "Artifact #12843668897: two original ARM indirect GOT veneers, 64 cases, 0 failed and zero target calls",
         "https://github.com/c1c3ru/fft_craft/actions/runs/40753982995",
         "FFT_Android_Mod/docs/re-results/SEMANTIC_A04_CONDITIONAL.md",
-        "PR #413: 128 conditional-return / fallthrough-stop states; no unknown fallthrough instruction executed"
+        "PR #413: 128 conditional-return / fallthrough-stop states; no unknown fallthrough instruction executed",
+        "https://github.com/c1c3ru/fft_craft/actions/runs/40757008125",
+        "FFT_Android_Mod/docs/re-results/SEMANTIC_A04_BL_BOUNDARIES.md",
+        "A04 BL: 2 original callsites, 672 scanned bytes, 32 bounded ARM pre-BL cases, zero callees executed; checkpoint replay PASS"
       ]
     },
     {
