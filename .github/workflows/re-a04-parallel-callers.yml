@@ -7,6 +7,8 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_xrefs_batch.py'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_xrefs_batch.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_shader_callers.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_shader_stack_geometry.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_shader_stack_geometry.py'
       - 'FFT_Android_Mod/docs/re-results/A04_CALLSITE_BATCH_TRIAGE.md'
       - 'FFT_Android_Mod/src/lib/armeabi/libgl2jni.so'
   workflow_dispatch:
@@ -56,6 +58,11 @@ jobs:
           cp /tmp/a04-shader/shader.json /tmp/a04-shader/first.json
           python3 FFT_Android_Mod/docs/re-tools/semantic_a04_shader_callers.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --checkpoint /tmp/a04-shader/shader.json
           cmp /tmp/a04-shader/first.json /tmp/a04-shader/shader.json
+          PYTHONPATH=FFT_Android_Mod/docs/re-tools python3 -m unittest -v test_semantic_a04_shader_stack_geometry
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_shader_stack_geometry.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --checkpoint /tmp/a04-shader/geometry.json
+          cp /tmp/a04-shader/geometry.json /tmp/a04-shader/geometry-first.json
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_shader_stack_geometry.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --checkpoint /tmp/a04-shader/geometry.json
+          cmp /tmp/a04-shader/geometry-first.json /tmp/a04-shader/geometry.json
       - uses: actions/upload-artifact@v4
         with:
           name: a04-shader-pointer-provenance
