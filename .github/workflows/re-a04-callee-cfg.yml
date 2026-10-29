@@ -23,7 +23,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install disassembly dependencies
-        run: python3 -m pip install capstone pyelftools
+        run: python3 -m pip install capstone pyelftools unicorn
       - name: Test structural contract handling
         run: |
           set -euo pipefail
@@ -42,6 +42,10 @@ jobs:
             --checkpoint /tmp/fft-a04-callees/callee-cfg.json \
             --report /tmp/fft-a04-callees/callee-cfg.md
           cmp /tmp/fft-a04-callees/first.json /tmp/fft-a04-callees/callee-cfg.json
+      - name: Execute original ARM vs independent C differential
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_leaf_differential.py
       - name: Surface callee evidence in CI logs
         run: |
           python3 - <<'PY'
