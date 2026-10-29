@@ -1,0 +1,54 @@
+name: A04 unified C model and original caller provenance
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/re-a04-unified-callers.yml'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_unified_model.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_b6620_xrefs.py'
+      - 'FFT_Android_Mod/docs/re-tools/c-models/a04_b6620_model.c'
+      - 'FFT_Android_Mod/docs/re-tools/c-models/a04_b6620_model.h'
+      - 'FFT_Android_Mod/docs/re-results/A04_CALLSITE_PRECONDITIONS.md'
+      - 'FFT_Android_Mod/src/lib/armeabi/libgl2jni.so'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-arm-unified:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original ARM audit dependencies
+        run: python3 -m pip install capstone unicorn pyelftools
+      - name: Unified C model against both original ARM branches
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            FFT_Android_Mod/docs/re-tools/test_semantic_a04_unified_model.py \
+            FFT_Android_Mod/docs/re-tools/semantic_a04_b6620_xrefs.py
+          mkdir -p /tmp/fft-a04-unified
+          python3 FFT_Android_Mod/docs/re-tools/test_semantic_a04_unified_model.py | tee /tmp/fft-a04-unified/unified-model.jsonl
+      - name: Original ELF direct A32 BL caller inventory and deterministic replay
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_b6620_xrefs.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --output /tmp/fft-a04-unified/xrefs.json \
+            --report /tmp/fft-a04-unified/xrefs.md
+          cp /tmp/fft-a04-unified/xrefs.json /tmp/fft-a04-unified/xrefs-original.json
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_b6620_xrefs.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --output /tmp/fft-a04-unified/xrefs.json \
+            --report /tmp/fft-a04-unified/xrefs.md
+          cmp /tmp/fft-a04-unified/xrefs-original.json /tmp/fft-a04-unified/xrefs.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: a04-unified-model-and-caller-inventory
+          path: /tmp/fft-a04-unified/
+          retention-days: 30
