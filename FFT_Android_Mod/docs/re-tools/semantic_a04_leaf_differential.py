@@ -28,7 +28,7 @@ def execute(code, index, value, initial_flags):
     uc.mem_write(ENTRY, code)
     memory = bytearray(b"\xa5" * 0x1000)
     memory[offset:offset + 4] = value.to_bytes(4, "little")
-    uc.mem_write(BASE, memory)
+    uc.mem_write(BASE, bytes(memory))
     for register, val in ((UC_ARM_REG_R0, BASE), (UC_ARM_REG_R1, index),
                           (UC_ARM_REG_R2, 0x12345678), (UC_ARM_REG_R3, 0xdeadbeef),
                           (UC_ARM_REG_LR, RETURN), (UC_ARM_REG_SP, 0x600ffc),
