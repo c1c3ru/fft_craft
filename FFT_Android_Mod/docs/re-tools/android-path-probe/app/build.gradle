@@ -1,0 +1,27 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'org.fftcraft.a04.probe'
+    compileSdk 35
+
+    defaultConfig {
+        // Deliberately same package identity for comparable Android path shape.
+        // Do NOT install alongside the original game APK.
+        applicationId 'com.square_enix.android_googleplay.FFT_en2'
+        minSdk 23
+        targetSdk 28
+        versionCode 1
+        versionName '0.1-probe'
+    }
+
+    ndkVersion '26.1.10909125'
+
+    externalNativeBuild {
+        cmake {
+            path file('src/main/cpp/CMakeLists.txt')
+            version '3.22.1'
+        }
+    }
+}
