@@ -10,6 +10,8 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_rootpath_jni_copy.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_java_path_lookup.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_storageutil_contract.py'
+      - 'FFT_Android_Mod/docs/re-tools/c-models/a04_rootpath_safe.c'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_rootpath_safe.py'
       - 'FFT_Android_Mod/src/smali/com/yox_project/silver_arrow/StorageUtil.smali'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_rootpath_field.py'
       - 'FFT_Android_Mod/docs/re-results/A04_PREFIX_PROVIDER.md'
@@ -75,6 +77,10 @@ jobs:
           cp /tmp/a04-prefix/storageutil.json /tmp/a04-prefix/storageutil-first.json
           python3 FFT_Android_Mod/docs/re-tools/semantic_a04_storageutil_contract.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --smali FFT_Android_Mod/src/smali/com/yox_project/silver_arrow/StorageUtil.smali --checkpoint /tmp/a04-prefix/storageutil.json
           cmp /tmp/a04-prefix/storageutil-first.json /tmp/a04-prefix/storageutil.json
+      - name: Bounded host C reconstruction and negative safety regressions
+        run: |
+          set -euo pipefail
+          PYTHONPATH=FFT_Android_Mod/docs/re-tools python3 -m unittest -v test_semantic_a04_rootpath_safe
       - uses: actions/upload-artifact@v4
         with:
           name: a04-original-prefix-provider-2b04f0
