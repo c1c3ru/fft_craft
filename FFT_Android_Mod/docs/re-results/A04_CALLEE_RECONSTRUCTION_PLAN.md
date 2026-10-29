@@ -21,3 +21,15 @@ A informação de valores reais de registradores e ponteiros nas duas entradas *
 6. **Avançar:** ampliar por bloco, não por contagem de instruções; conservar status `in_progress` até demonstrar o caminho completo.
 
 Não foram criados certificados nem declarada equivalência das duas funções.
+
+
+## Ciclo seguinte — candidato semântico 0x000b45d0
+
+A desmontagem no ELF original, verificada pelo run #40867844255, revelou uma rotina sem BL:
+`MOV R3,#12; MUL R1,R3,R1; ADD R3,R0,R1; LDR R3,[R3,#0x14c]; CMN R3,#1; ADDNE R0,R0,R1; ADDNE R0,R0,#0x14c; MOVEQ R0,#0; BX LR`.
+
+**Contrato proposto e limitado:** com R0 apontando para uma área sintética alinhada e índice R1 válido, a rotina lê a palavra em `R0 + 0x14c + 12*R1`, retornando zero se for `0xffffffff` ou o endereço dessa palavra caso contrário. O teste diferencial compara os valores finais de R0, R1, R3, R2 preservado, NZCV calculado independentemente, o único read de 4 bytes, nenhuma escrita de memória e a sequência completa de PCs. Usa seis índices × seis palavras × quatro flags = **144 casos pretendidos**.
+
+Implementação C independente: `docs/re-tools/c-models/a04_index_slot.c`. Executor diferencial: `docs/re-tools/semantic_a04_leaf_differential.py`. O programa C valida os limites antes de ler. O original é emulado só com índices seguros, com bytes extraídos do ELF cuja identidade é fixada por SHA-256. O pipeline compila com `-Wall -Wextra -Werror` e exige zero divergências. Não há promoção para certificado formal nem cobertura de índices inválidos no ARM original.
+
+**Importante:** a existência dos arquivos não é sucesso de execução; somente o status do GitHub Actions no commit final poderá fundamentar essa conclusão.
