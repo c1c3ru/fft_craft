@@ -3,6 +3,14 @@ set -euo pipefail
 APK="$1"
 OUT="/tmp/a04-android-path.json"
 if [ "$#" -ge 2 ]; then OUT="$2"; fi
+EXPECTED_API="${3:-}"
+if [ -n "$EXPECTED_API" ]; then
+  ACTUAL_API="$(adb shell getprop ro.build.version.sdk | tr -d '\r')"
+  if [ "$ACTUAL_API" != "$EXPECTED_API" ]; then
+    echo "Android API mismatch: expected $EXPECTED_API, got $ACTUAL_API" >&2
+    exit 1
+  fi
+fi
 PKG="com.square_enix.android_googleplay.FFT_en2"
 # Never overwrite a real game installation or run this diagnostic on a phone.
 if [ "$(adb shell getprop ro.kernel.qemu | tr -d '\r')" != "1" ]; then
@@ -28,6 +36,10 @@ import json
 import sys
 with open(sys.argv[1], encoding="utf-8") as stream:
     r=json.load(stream)
+expected_api=sys.argv[2]
+assert isinstance(r.get("android_sdk"),int), r
+if expected_api:
+    assert r["android_sdk"] == int(expected_api), r
 assert r["status"] == "sampled_not_a_global_bound", r
 assert r["running_original_game_apk"] is False, r
 assert r["same_package_name_as_original_game"] is True, r

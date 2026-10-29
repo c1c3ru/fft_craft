@@ -54,3 +54,21 @@ O JSON também confirmou `U+1F600` como `f09f9880` (4 bytes) e `a\u0000b` como `
 **Cuidado:** esses dados não constituem prova de um teto máximo dos diretórios Android em todos os dispositivos e instalações. A execução do ELF original, seus controles de concorrência, seus fallthroughs e seu `strcpy` continuam fora do escopo do teste.
 
 **Não confundir a amostra do APK de diagnóstico com execução do jogo**: seu único valor comprobatório é o comportamento dos getters do Android sob o mesmo package ID, em ambiente isolado. Outros dispositivos/API levels/usuários podem produzir caminhos mais longos, nulos ou diferentes. A04 segue in_progress; nenhum certificado de segurança ou equivalência total.
+
+
+## Extensão da matriz: APIs Android 23, 29 e 35
+
+A partir do teste API 29 aprovado, o workflow executa **a mesma compilação do APK de diagnóstico** em três emuladores x86_64 isolados, com `fail-fast: false`. O objetivo é medir a variabilidade entre versões do Android, não declarar um limite máximo universal. O script `run-emulator.sh` confere que `ro.build.version.sdk` e o campo `android_sdk` do JSON correspondam ao nível realmente pedido; mantém a proibição de substituir um jogo instalado no mesmo pacote.
+
+Após os três jobs, `compare-api-matrix.py` agrega somente o nível de API, a presença de cada retorno, sua contagem de bytes JNI, a margem para 242 bytes e a sinalização de excesso. **Não transporta nem armazena os caminhos reais no artefato consolidado**, embora o probe individual também só publique suas contagens. Saídas nulas permanecem explicitamente `present=false`, nunca são contadas como caminho de comprimento zero. Um resultado acima de 242 bytes deve ser **reportado como observação de risco**, não ocultado para obter CI verde.
+
+O agregador rejeita duplicidade de API, rotulagem incorreta de um emulador, inconsistência entre bytes e flag de limite, além de alegações de que o APK original ou a `strcpy` original foram executados. O CI executa seis testes sintéticos para evitar promoções indevidas de cobertura ou vazamento de caminhos em relatórios.
+
+Em todos os cenários:
+
+- O APK é **independente do jogo**; compartilha apenas a identidade de pacote necessária ao formato de caminho.
+- A versão do ART pode alterar o comportamento de codificação observado; o JSON de JNI continua sendo a fonte direta de contagem.
+- A condição `B <= 242` segue necessária para o layout reconstruído de `/base/fftpack.bin\0`, sem ser garantia universal de sistema.
+- `A04=in_progress` e o número de certificados novos permanece **zero**.
+
+**Próximo gate depois da matriz:** investigar diferenças legítimas entre perfil/usuário/armazenamento, testar retornos nulos e exceções, e medir no próprio processo do jogo em ambiente autorizado, sem provocar `strcpy` excessiva.

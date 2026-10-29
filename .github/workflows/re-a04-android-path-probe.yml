@@ -6,6 +6,8 @@ on:
       - '.github/workflows/re-a04-android-path-probe.yml'
       - 'FFT_Android_Mod/docs/re-tools/android-path-probe/**'
       - 'FFT_Android_Mod/docs/re-results/A04_ANDROID_EMULATOR_PATHS.md'
+      - 'FFT_Android_Mod/docs/re-tools/android-path-probe/compare-api-matrix.py'
+      - 'FFT_Android_Mod/docs/re-tools/android-path-probe/test_compare_api_matrix.py'
   workflow_dispatch:
 
 permissions:
@@ -46,6 +48,10 @@ jobs:
 
   measure-on-emulator:
     needs: build-test-only-probe-apk
+    strategy:
+      fail-fast: false
+      matrix:
+        api_level: [23, 29, 35]
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -62,14 +68,42 @@ jobs:
       - name: Sample internal/external path bytes via Android JNI
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
+          api-level: ${{ matrix.api_level }}
           target: google_apis
           arch: x86_64
-          script: bash FFT_Android_Mod/docs/re-tools/android-path-probe/run-emulator.sh probe-apk/app-debug.apk a04-android-emulator.json
+          script: bash FFT_Android_Mod/docs/re-tools/android-path-probe/run-emulator.sh probe-apk/app-debug.apk a04-android-api-${{ matrix.api_level }}.json ${{ matrix.api_level }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: a04-android-emulator-path-byte-evidence
-          path: a04-android-emulator.json
+          name: a04-android-api-${{ matrix.api_level }}-path-byte-evidence
+          path: a04-android-api-${{ matrix.api_level }}.json
           if-no-files-found: warn
+          retention-days: 30
+
+  compare-api-measurements:
+    needs: measure-on-emulator
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download all API-level-only path measurements
+        uses: actions/download-artifact@v4
+        with:
+          pattern: a04-android-api-*-path-byte-evidence
+          path: /tmp/a04-api-matrix
+      - name: Validate aggregator fail-closed regression cases
+        run: |
+          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools/android-path-probe -p 'test_compare_api_matrix.py' -v
+      - name: Compare measured JNI byte counts (observations, not universal bounds)
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/android-path-probe/compare-api-matrix.py \
+            --input /tmp/a04-api-matrix \
+            --output /tmp/a04-api-matrix-summary.json \
+            --expected-apis 23 29 35
+          cat /tmp/a04-api-matrix-summary.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: a04-android-api-matrix-summary
+          path: /tmp/a04-api-matrix-summary.json
           retention-days: 30
