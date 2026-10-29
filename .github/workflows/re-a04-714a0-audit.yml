@@ -11,7 +11,9 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_714a0_strcpy.py'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_714a0_strcpy.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_714a0_postcopy.py'
-      - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_714a0_postcopy.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_714a0_postcopy test_semantic_a04_b942c_strlen.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_b942c_strlen.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_b942c_strlen.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_callee_cfg.py'
       - 'FFT_Android_Mod/src/lib/armeabi/libgl2jni.so'
   workflow_dispatch:
@@ -74,6 +76,12 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_a04_714a0_postcopy.py \
             --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
             --output /tmp/fft-a04-714a0/postcopy.json
+      - name: Verify next original libc import and post-strlen CFG
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_b942c_strlen.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --output /tmp/fft-a04-714a0/strlen.json
       - uses: actions/upload-artifact@v4
         with:
           name: a04-714a0-original-cfg
