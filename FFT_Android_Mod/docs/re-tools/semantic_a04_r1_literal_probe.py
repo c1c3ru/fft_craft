@@ -110,7 +110,7 @@ def surrounding(binary):
     relative = int.from_bytes(semantic_evidence.read_function(binary,literal_word_at,4), "little")
     source_addr = (0x20ca30 + 8 + relative) & 0xffffffff
     source = semantic_evidence.read_function(binary,source_addr,12)
-    nul = source.find(b"\\x00")
+    nul = source.find(b"\x00")
     # FP=SP+0x10; saved guard at SP+0x114. The address interval is
     # 0x104 (260) bytes, but does not by itself prove writable capacity.
     geometric_space = 0x114 - 0x10
