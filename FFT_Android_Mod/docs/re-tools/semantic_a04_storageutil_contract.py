@@ -89,7 +89,7 @@ def analyze(binary,smali_file):
         "rootpath_suffix_bytes":ROOT_SUFFIX_BYTES,
         "fftpack_suffix_bytes":FFT_SUFFIX_BYTES,
         "max_java_path_bytes_for_both_suffixes":
-            CAPACITY-ROOT_SUFFIX_BYTES-FFT_SUFFIX_BYTES,
+            CAPACITY-ROOT_SUFFIX_BYTES-FFT_SUFFIX_BYTES+1,
         "java_utf8_byte_length_limit_proven":False,
         "java_return_is_nul_terminated_by_jni_executed":False,
         "new_certificates":0}
