@@ -178,11 +178,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #461 — test(re): ampliar provas Android JNI de caminhos às APIs 23/29/35](https://github.com/c1c3ru/fft_craft/pull/461)
+- [PR #460 — chore(re): automated structural batch 40929258228](https://github.com/c1c3ru/fft_craft/pull/460)
 - [PR #459 — docs(re): consolidar gate Android API29 JNI e manter fronteiras A04 explícitas](https://github.com/c1c3ru/fft_craft/pull/459)
 - [PR #458 — chore(re): automated structural batch 40923873878](https://github.com/c1c3ru/fft_craft/pull/458)
 - [PR #457 — fix(re): validar bytes UTF reais do Android ART no probe A04](https://github.com/c1c3ru/fft_craft/pull/457)
-- [PR #456 — chore(re): automated structural batch 40923266484](https://github.com/c1c3ru/fft_craft/pull/456)
-- [PR #454 — test(re): medir bytes JNI de GetIntPath/GetExt1Path em emulador Android](https://github.com/c1c3ru/fft_craft/pull/454)
 
 ## Atualização automática e fontes
 
