@@ -28,7 +28,7 @@ class ExternalCalleeAuditTests(unittest.TestCase):
                 "memory_candidates": [], "calls": [], "unresolved": []}}
         report = target.report(row)
         self.assertIn("primeiro efeito desconhecido", report)
-        self.assertIn("não certificar automaticamente", report)
+        self.assertIn("nem certificar automaticamente", report)
 
 if __name__ == "__main__":
     unittest.main()
