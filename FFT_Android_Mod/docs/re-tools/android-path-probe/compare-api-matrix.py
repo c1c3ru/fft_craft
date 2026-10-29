@@ -34,6 +34,11 @@ def consolidate(files, expected_apis):
             raise ValueError("Incomplete diagnostic APK provenance")
         if source.get("native_ascii_242")!=242 or source.get("native_ascii_243")!=243:
             raise ValueError("JNI boundary counters absent")
+        if (source.get("bounded_c_ascii_242")!=1
+                or source.get("bounded_c_ascii_243")!=0
+                or source.get("bounded_c_nul_java")!=1
+                or source.get("bounded_c_emoji_one")!=1):
+            raise ValueError("Bounded reference C model gate absent")
         if source.get("native_nul_utf_bytes_hex")!="61c08062":
             raise ValueError("ART NUL byte evidence absent")
         if source.get("native_emoji_utf_bytes_hex")!="f09f9880":
@@ -47,10 +52,14 @@ def consolidate(files, expected_apis):
                 n=row.get("jni_mutf8_byte_length")
                 if type(n) is not int or n<0 or row.get("within_242_bytes")!=(n<=BOUND):
                     raise ValueError("Inconsistent JNI count: "+method)
+                if row.get("bounded_c_model_accepted") is not (n<=BOUND):
+                    raise ValueError("JNI length and safe C builder result disagree")
                 observations[method]={"present":True,"jni_bytes":n,
                                       "remaining_budget_bytes":BOUND-n,
                                       "observed_within_budget":n<=BOUND}
             else:
+                if row.get("bounded_c_model_accepted") is not None:
+                    raise ValueError("Absent Java path must not claim C execution")
                 if row.get("jni_mutf8_byte_length") is not None:
                     raise ValueError("Absent path must have null count")
                 observations[method]={"present":False,"jni_bytes":None,
@@ -75,6 +84,7 @@ def consolidate(files, expected_apis):
         "libc_strcpy_on_untrusted_input_executed":False,
         "java_jni_path_safety_certificates":0,
         "path_contents_retained":False,
+        "bounded_reference_c_builder_executed_on_android_art":True,
     }
 
 
