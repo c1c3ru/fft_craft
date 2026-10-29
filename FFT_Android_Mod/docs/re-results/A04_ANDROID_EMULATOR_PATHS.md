@@ -25,3 +25,21 @@ Também não reproduz `strcpy` original nem tenta entradas excedentes em libc se
 2. Executar uma instrumentação autorizada no próprio processo do APK original para obter os jstrings devolvidos por `StorageUtil` e comparar com os parâmetros entregues ao JNI nativo, sem injetar ponteiros nem executar cópias excedentes.
 3. Verificar falhas de `getExternalFilesDir(null)`, exceções, retorno nulo e valores de comprimento acima de 242 bytes.
 4. Manter A04 `in_progress` e nenhum certificado novo enquanto as condições de runtime do jogo não forem verificadas.
+
+## Primeiro ensaio Android API 29 — evidência real e divergência de codificação
+
+O [run #40922599862](https://github.com/c1c3ru/fft_craft/actions/runs/40922599862) conseguiu compilar, instalar e executar o APK independente no emulador e publicou o JSON de saída. O job foi marcado **failure** porque a asserção de teste ainda esperava a codificação de um caractere suplementar segundo o OpenJDK, não a implementação Android ART.
+
+| Fonte observada no emulador API 29 | Bytes `GetStringUTFLength` | Critério <=242 |
+|---|---:|---|
+| `Context.getFilesDir().getPath()` | **61** | sim, nesta amostra |
+| `Context.getExternalFilesDir(null).getPath()` | **81** | sim, nesta amostra |
+
+O probe verificou NUL Java em `"a\0b"` (4 bytes JNI) e strings ASCII de 242 e 243 bytes corretamente. Para o emoji `U+1F600`, o Android ART reportou **4 bytes** contra **6 bytes** no host OpenJDK 17/21. O código-fonte do Android ART reconhece explicitamente que emite sequência UTF-8 de quatro bytes nesse caso, embora a especificação JNI descreva Modified UTF-8 de seis bytes:
+
+- [AOSP ART — comportamento histórico de GetStringUTFLength/GetStringUTFChars](https://android.googlesource.com/platform/art/+/ef21fb5f2520c604a6d5659452488a93433ee85a/runtime/jni/jni_internal.cc)
+- [Discussão do Android NDK sobre codificação de emoji](https://github.com/android/ndk/issues/283)
+
+A asserção do probe foi corrigida para o comportamento Android observado (**4 bytes**) e passou a verificar **os bytes efetivos de GetStringUTFChars em hexadecimal**, além da contagem. A validação dessa correção fica condicionada ao próximo run no commit correspondente.
+
+**Não confundir a amostra do APK de diagnóstico com execução do jogo**: seu único valor comprobatório é o comportamento dos getters do Android sob o mesmo package ID, em ambiente isolado. Outros dispositivos/API levels/usuários podem produzir caminhos mais longos, nulos ou diferentes. A04 segue in_progress; nenhum certificado de segurança ou equivalência total.
