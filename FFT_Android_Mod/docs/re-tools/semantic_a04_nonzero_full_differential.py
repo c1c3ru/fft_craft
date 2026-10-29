@@ -245,13 +245,11 @@ def main():
                     src_ptr = (ctypes.c_uint8*SIZE).from_buffer(src)
                     if fn(dest_ptr,SIZE,src_ptr,SIZE) != 1 or bytes(dest) != observed:
                         raise AssertionError(f"ARM/C whole-path divergence: {content.hex()}")
-                    if bytes(src) != bytes(b"\x7c"*0):
-                        # Source immutability is independently checked below.
-                        expected_src = bytearray(b"\x7c"*SIZE)
-                        expected_src[:len(content)] = content
-                        expected_src[len(content)] = 0
-                        if src != expected_src:
-                            raise AssertionError("Host C modified source")
+                    expected_src = bytearray(b"\x7c"*SIZE)
+                    expected_src[:len(content)] = content
+                    expected_src[len(content)] = 0
+                    if src != expected_src:
+                        raise AssertionError("Host C modified source")
                     checked += 1
         for bad in (b"\x81"*0x104,b"\x81"*0x105):
             dest=bytearray(b"\xa5"*SIZE)
