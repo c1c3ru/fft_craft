@@ -31,7 +31,7 @@ for attempt in $(seq 1 20); do
   fi
   sleep 1
 done
-python3 - "$OUT" <<'PY'
+python3 - "$OUT" "$EXPECTED_API" <<'PY'
 import json
 import sys
 with open(sys.argv[1], encoding="utf-8") as stream:
