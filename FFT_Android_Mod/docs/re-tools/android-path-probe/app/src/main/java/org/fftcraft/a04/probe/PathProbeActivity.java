@@ -24,6 +24,7 @@ public final class PathProbeActivity extends Activity {
     static { System.loadLibrary("a04_android_path_probe"); }
     private static native int getJniModifiedUtf8ByteLength(String text);
     private static native String getJniUtfBytesHex(String text);
+    private static native int safeBuildPathWithinBound(String text);
 
     private static JSONObject measure(String source, String value) throws Exception {
         JSONObject out = new JSONObject();
@@ -33,6 +34,11 @@ public final class PathProbeActivity extends Activity {
         int bytes = exists ? getJniModifiedUtf8ByteLength(value) : -1;
         out.put("jni_mutf8_byte_length", exists ? bytes : JSONObject.NULL);
         out.put("within_242_bytes", exists ? bytes <= MAX_JNI_BYTES : JSONObject.NULL);
+        int safe = exists ? safeBuildPathWithinBound(value) : -1;
+        if (exists && safe != (bytes <= MAX_JNI_BYTES ? 1 : 0)) {
+            throw new IllegalStateException("Bounded native reference disagrees with JNI byte gate");
+        }
+        out.put("bounded_c_model_accepted", exists ? safe == 1 : JSONObject.NULL);
         out.put("java_utf16_length", exists ? value.length() : JSONObject.NULL);
         // No path contents are retained in CI artifacts.
         return out;
@@ -72,6 +78,12 @@ public final class PathProbeActivity extends Activity {
                     new String(new char[242]).replace('\0', 'x')));
             result.put("native_ascii_243", getJniModifiedUtf8ByteLength(
                     new String(new char[243]).replace('\0', 'x')));
+            result.put("bounded_c_ascii_242", safeBuildPathWithinBound(
+                    new String(new char[242]).replace('\0', 'x')));
+            result.put("bounded_c_ascii_243", safeBuildPathWithinBound(
+                    new String(new char[243]).replace('\0', 'x')));
+            result.put("bounded_c_nul_java", safeBuildPathWithinBound("a\0b"));
+            result.put("bounded_c_emoji_one", safeBuildPathWithinBound("\ud83d\ude00"));
             result.put("native_emoji_one", getJniModifiedUtf8ByteLength("\ud83d\ude00"));
             result.put("native_embedded_nul", getJniModifiedUtf8ByteLength("a\0b"));
             result.put("native_emoji_utf_bytes_hex", getJniUtfBytesHex("\ud83d\ude00"));
