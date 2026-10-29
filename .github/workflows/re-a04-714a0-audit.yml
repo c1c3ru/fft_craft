@@ -1,0 +1,50 @@
+name: A04 external callee 714a0 original ELF audit
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/re-a04-714a0-audit.yml'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_714a0_audit.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_714a0_audit.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_callee_cfg.py'
+      - 'FFT_Android_Mod/src/lib/armeabi/libgl2jni.so'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-elf-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install ARM disassembly tools
+        run: python3 -m pip install capstone pyelftools
+      - name: Test verifier
+        run: |
+          set -euo pipefail
+          PYTHONPATH=FFT_Android_Mod/docs/re-tools python3 -m unittest -v test_semantic_a04_714a0_audit
+      - name: Verify original ELF and candidate CFG
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/fft-a04-714a0
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_714a0_audit.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --checkpoint /tmp/fft-a04-714a0/state.json \
+            --report /tmp/fft-a04-714a0/report.md
+          cp /tmp/fft-a04-714a0/state.json /tmp/fft-a04-714a0/first.json
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_714a0_audit.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --checkpoint /tmp/fft-a04-714a0/state.json \
+            --report /tmp/fft-a04-714a0/report.md
+          cmp /tmp/fft-a04-714a0/first.json /tmp/fft-a04-714a0/state.json
+          cat /tmp/fft-a04-714a0/report.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: a04-714a0-original-cfg
+          path: /tmp/fft-a04-714a0/
+          retention-days: 30
