@@ -77,6 +77,7 @@ def main():
         raise ValueError("Unexpected original ELF SHA")
     code = semantic_evidence.read_function(BINARY, ENTRY, 0x34)
     md = Cs(CS_ARCH_ARM, CS_MODE_ARM)
+    md.detail = True
     rows = {ins.address: ins for ins in md.disasm(code, ENTRY)}
     expected = {ENTRY: "cmp", ENTRY+4: "push", ENTRY+8: "mov",
                 ENTRY+12: "beq", ENTRY+0x10: "bl", ENTRY+0x24: "mov",
