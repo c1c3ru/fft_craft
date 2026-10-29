@@ -29,10 +29,11 @@ def execute(code, index, value, initial_flags):
     memory = bytearray(b"\xa5" * 0x1000)
     memory[offset:offset + 4] = value.to_bytes(4, "little")
     uc.mem_write(BASE, bytes(memory))
-    # Configure processor mode before writing banked SP/LR.\n    uc.reg_write(UC_ARM_REG_CPSR, 0x10 | initial_flags)\n    for register, val in ((UC_ARM_REG_R0, BASE), (UC_ARM_REG_R1, index),
+    # Configure processor mode before writing banked SP/LR.
+    uc.reg_write(UC_ARM_REG_CPSR, 0x10 | initial_flags)
+    for register, val in ((UC_ARM_REG_R0, BASE), (UC_ARM_REG_R1, index),
                           (UC_ARM_REG_R2, 0x12345678), (UC_ARM_REG_R3, 0xdeadbeef),
-                          (UC_ARM_REG_LR, RETURN), (UC_ARM_REG_SP, 0x600ffc),
-                          (UC_ARM_REG_CPSR, 0x10 | initial_flags)):
+                          (UC_ARM_REG_LR, RETURN), (UC_ARM_REG_SP, 0x600ffc)):
         uc.reg_write(register, val)
     trace, reads, writes = [], [], []
     def on_code(emu, pc, size, ignored):
