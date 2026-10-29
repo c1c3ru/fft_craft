@@ -1,0 +1,79 @@
+name: A04 R1 source lineage and NUL bounds
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/re-a04-r1-sources.yml'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_r1_sources.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_r1_sources.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_b6620_xrefs.py'
+      - 'FFT_Android_Mod/docs/re-results/A04_R1_SOURCE_PROVENANCE.md'
+      - 'FFT_Android_Mod/src/lib/armeabi/libgl2jni.so'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  r1-per-subsystem:
+    strategy:
+      fail-fast: false
+      matrix:
+        lane: [file-io, shader, other]
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original ARM ELF tools
+        run: python3 -m pip install capstone pyelftools
+      - name: Trace R1 origin in original ELF for lane
+        env:
+          LANE: ${{ matrix.lane }}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/a04-r1
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_r1_sources.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --lane "$LANE" --checkpoint /tmp/a04-r1/lineage.json --report /tmp/a04-r1/lineage.md
+          cp /tmp/a04-r1/lineage.json /tmp/a04-r1/first.json
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_r1_sources.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --lane "$LANE" --checkpoint /tmp/a04-r1/lineage.json --report /tmp/a04-r1/lineage.md
+          cmp /tmp/a04-r1/first.json /tmp/a04-r1/lineage.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: a04-r1-${{ matrix.lane }}
+          path: /tmp/a04-r1/
+          retention-days: 30
+
+  r1-all-fail-closed-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python3 -m pip install capstone pyelftools
+      - name: Unit tests and original ELF 48-callsite aggregate
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/a04-r1-all
+          PYTHONPATH=FFT_Android_Mod/docs/re-tools python3 -m unittest -v test_semantic_a04_r1_sources
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_r1_sources.py --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so --lane all --checkpoint /tmp/a04-r1-all/lineage.json --report /tmp/a04-r1-all/lineage.md
+          python3 - <<'PY'
+          import json
+          with open("/tmp/a04-r1-all/lineage.json", encoding="utf-8") as fh:
+              d=json.load(fh)
+          assert d["total_a32_direct_calls"]==48, d
+          assert sum(d["lanes"].values())==48, d
+          assert len(d["callsites"])==48, d
+          assert all(x["status"]=="unresolved" for x in d["callsites"]), "Unexpected unproved safety promotion"
+          assert all(x["nul_within_first_260_bytes_proven"] is False for x in d["callsites"])
+          assert d["bounded_nul_sources_proven"]==0 and d["new_certificates"]==0
+          print("A04_R1_STATIC_SAFETY_PROMOTIONS=0")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: a04-r1-aggregate-48
+          path: /tmp/a04-r1-all/
+          retention-days: 30
