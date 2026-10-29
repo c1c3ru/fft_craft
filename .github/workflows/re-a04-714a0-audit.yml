@@ -16,6 +16,8 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_b942c_strlen.py'
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_b8be4_audit.py'
       - 'FFT_Android_Mod/docs/re-tools/test_semantic_a04_b8be4_audit.py'
+      - 'FFT_Android_Mod/docs/re-tools/semantic_a04_sjis_differential.py'
+      - 'FFT_Android_Mod/docs/re-tools/c-models/a04_sjis_lead.c'
       - 'FFT_Android_Mod/docs/re-tools/semantic_a04_callee_cfg.py'
       - 'FFT_Android_Mod/src/lib/armeabi/libgl2jni.so'
   workflow_dispatch:
@@ -90,6 +92,10 @@ jobs:
           python3 FFT_Android_Mod/docs/re-tools/semantic_a04_b8be4_audit.py \
             --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
             --output /tmp/fft-a04-714a0/nested-b8be4.json
+      - name: Differential original ARM Shift-JIS lead classifier against independent C
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/semantic_a04_sjis_differential.py
       - uses: actions/upload-artifact@v4
         with:
           name: a04-714a0-original-cfg
