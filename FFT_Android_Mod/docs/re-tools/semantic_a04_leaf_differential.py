@@ -42,7 +42,12 @@ def execute(code, index, value, initial_flags):
     uc.hook_add(UC_HOOK_CODE, on_code)
     uc.hook_add(UC_HOOK_MEM_READ, lambda emu, access, addr, size, val, ignored: reads.append((addr, size)))
     uc.hook_add(UC_HOOK_MEM_WRITE, lambda emu, access, addr, size, val, ignored: writes.append((addr, size)))
-    uc.emu_start(ENTRY, RETURN + 4, timeout=1000000, count=24)
+    try:
+        uc.emu_start(ENTRY, RETURN + 4, timeout=1000000, count=24)
+    except Exception as exc:
+        raise AssertionError(f"ARM fetch failure: pc={uc.reg_read(UC_ARM_REG_PC):08x}, "
+                             f"lr={uc.reg_read(UC_ARM_REG_LR):08x}, trace={trace}, "
+                             f"index={index}, value={value:08x}, flags={initial_flags:08x}") from exc
     assert trace == list(range(ENTRY, ENTRY + 36, 4)) + [RETURN], trace
     assert uc.reg_read(UC_ARM_REG_PC) == RETURN
     assert reads == [(BASE + offset, 4)] and not writes, (reads, writes)
