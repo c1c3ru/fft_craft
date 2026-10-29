@@ -42,7 +42,21 @@ jobs:
             --checkpoint /tmp/fft-a04-callees/callee-cfg.json \
             --report /tmp/fft-a04-callees/callee-cfg.md
           cmp /tmp/fft-a04-callees/first.json /tmp/fft-a04-callees/callee-cfg.json
-      - name: Surface callee evidence in CI logs\n        run: |\n          python3 - <<'PY'\n          import json\n          from pathlib import Path\n          state = json.loads(Path('/tmp/fft-a04-callees/callee-cfg.json').read_text())\n          for row in state['callees']:\n              print('CALLEE=' + row['entry'])\n              for ins in row['instructions'][:28]:\n                  print(ins['pc'] + ': ' + ins['mnemonic'] + ' ' + ins['operands'])\n              print('CALLS=' + json.dumps(row['calls']))\n              print('MEMORY=' + json.dumps(row['memory_candidates'][:24]))\n              print('UNRESOLVED=' + json.dumps(row['unresolved']))\n          PY\n      - uses: actions/upload-artifact@v4
+      - name: Surface callee evidence in CI logs
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          state = json.loads(Path('/tmp/fft-a04-callees/callee-cfg.json').read_text())
+          for row in state['callees']:
+              print('CALLEE=' + row['entry'])
+              for ins in row['instructions'][:28]:
+                  print(ins['pc'] + ': ' + ins['mnemonic'] + ' ' + ins['operands'])
+              print('CALLS=' + json.dumps(row['calls']))
+              print('MEMORY=' + json.dumps(row['memory_candidates'][:24]))
+              print('UNRESOLVED=' + json.dumps(row['unresolved']))
+          PY
+      - uses: actions/upload-artifact@v4
         with:
           name: a04-callee-original-elf-cfg
           path: /tmp/fft-a04-callees/
