@@ -178,11 +178,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #477 — feat(re): auditoria B01 de inventário único, aliases e proveniência APK/OBB](https://github.com/c1c3ru/fft_craft/pull/477)
+- [PR #479 — chore(re): automated structural batch 41078352652](https://github.com/c1c3ru/fft_craft/pull/479)
 - [PR #476 — Re/b01 inventory proof and overlap audit 20261030](https://github.com/c1c3ru/fft_craft/pull/476)
 - [PR #475 — chore(re): automated structural batch 41076255153](https://github.com/c1c3ru/fft_craft/pull/475)
 - [PR #473 — test(re): validar evidências observacionais A04 com CI leve e testes negativos](https://github.com/c1c3ru/fft_craft/pull/473)
-- [PR #474 — chore(re): automated structural batch 41074961128](https://github.com/c1c3ru/fft_craft/pull/474)
-- [PR #471 — test(re): contrato versionado para traces observacionais A04 do jogo original](https://github.com/c1c3ru/fft_craft/pull/471)
 
 ## Atualização automática e fontes
 
