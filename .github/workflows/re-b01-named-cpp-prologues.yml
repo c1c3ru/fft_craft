@@ -1,0 +1,91 @@
+name: B01 named C++ reconstruction and prologue/edge triage
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/re-b01-named-cpp-prologues.yml'
+      - 'FFT_Android_Mod/docs/re-tools/c-models/b01_named_cpp_methods.cpp'
+      - 'FFT_Android_Mod/docs/re-tools/b01_named_cpp_differential.py'
+      - 'FFT_Android_Mod/docs/re-tools/b01_prologue_external_audit.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_b01_named_cpp_prologues.py'
+      - 'FFT_Android_Mod/docs/re-results/B01_NAMED_CPP_PROLOGUE_GATES.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  b01-named-cpp-and-prologues:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned original ARM proof tooling
+        run: python -m pip install --disable-pip-version-check 'capstone==5.0.6' 'pyelftools==0.32' 'unicorn==2.1.3'
+      - name: Compile independent named C++ and run negative regression fixtures
+        run: |
+          set -euo pipefail
+          c++ -std=c++17 -O2 -Wall -Wextra -Werror -pedantic -fPIC -shared \
+            FFT_Android_Mod/docs/re-tools/c-models/b01_named_cpp_methods.cpp \
+            -o /tmp/b01-named-cpp.so
+          python -m py_compile FFT_Android_Mod/docs/re-tools/b01_named_cpp_differential.py \
+            FFT_Android_Mod/docs/re-tools/b01_prologue_external_audit.py
+          python -m unittest discover -s FFT_Android_Mod/docs/re-tools \
+            -p 'test_b01_named_cpp_prologues.py' -v
+      - name: Original 12-byte ARM bodies vs independent named C++ methods
+        run: |
+          set -euo pipefail
+          python FFT_Android_Mod/docs/re-tools/b01_named_cpp_differential.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --inventory FFT_Android_Mod/docs/RE_FUNCTION_INVENTORY.csv \
+            --output /tmp/b01-named-cpp-vs-elf.json
+      - name: Audit 14 unique stack returns and ten unresolved direct external boundaries
+        run: |
+          set -euo pipefail
+          python FFT_Android_Mod/docs/re-tools/b01_prologue_external_audit.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --inventory FFT_Android_Mod/docs/RE_FUNCTION_INVENTORY.csv \
+            --output /tmp/b01-prologues-external-edges.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path('/tmp/b01-named-cpp-vs-elf.json').read_text())
+          e=json.loads(Path('/tmp/b01-prologues-external-edges.json').read_text())
+          assert c['unique_methods']==7
+          assert c['original_elf_vs_named_cpp_differentials']==672
+          assert c['cpp_invalid_size_and_entry_cases_rejected']==43
+          assert all(x['nominal_Cpp_method_implemented'] for x in c['entries'])
+          assert not c['cpp_class_layout_proven'] and not c['whole_program_call_context_proven']
+          assert c['new_semantic_certificates']==0 and c['B01_done'] is False
+          assert e['stack_return_occurrences']==28
+          assert e['unique_stack_return_sites']==14
+          assert e['external_boundary_occurrences']==10
+          assert e['external_boundary_kinds']['out_of_group_direct_edge']==6
+          assert e['external_boundary_kinds']['callee_effects_and_return_unknown']==4
+          assert not e['stack_frames_verified'] and not e['external_callees_verified']
+          assert e['new_semantic_certificates']==0 and e['B01_done'] is False
+          assert all(not row['caller_frame_and_pc_restoration_proven'] for row in e['stack_returns'])
+          print('B01_NAMED_CPP_PROLOGUES_GATE=PASS')
+          print('B01_NAMED_CPP_DIFFERENTIALS='+str(c['original_elf_vs_named_cpp_differentials']))
+          print('B01_STACK_UNIQUE_SITES='+str(e['unique_stack_return_sites']))
+          print('B01_EXTERNAL_EDGES_UNRESOLVED='+str(e['external_boundary_occurrences']))
+          print('B01_SEMANTIC_CERTIFICATES_ISSUED=0')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: b01-named-cpp-prologue-edge-evidence
+          path: |
+            /tmp/b01-named-cpp-vs-elf.json
+            /tmp/b01-prologues-external-edges.json
+          if-no-files-found: warn
+          retention-days: 30
