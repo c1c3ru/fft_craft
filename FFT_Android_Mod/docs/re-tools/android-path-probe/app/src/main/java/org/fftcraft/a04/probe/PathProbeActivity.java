@@ -59,7 +59,7 @@ public final class PathProbeActivity extends Activity {
         super.onCreate(savedInstanceState);
         try {
             JSONObject result = new JSONObject();
-            result.put("schema", 1);
+            result.put("schema", 2);
             result.put("android_sdk", Build.VERSION.SDK_INT);
             result.put("package_identity", getPackageName());
             result.put("same_package_name_as_original_game",
@@ -73,6 +73,19 @@ public final class PathProbeActivity extends Activity {
             result.put("GetIntPath", measure("Context.getFilesDir.getPath", internal));
             result.put("GetExt1Path", measure(
                 "Context.getExternalFilesDir_null.getPath", external));
+
+            // Synthetic null exercises the JNI sentinel and absent-path contract.
+            // It is NOT evidence that either Android getter returned null.
+            JSONObject syntheticNull = measure("synthetic_null_path", null);
+            if (syntheticNull.getBoolean("present")
+                    || !syntheticNull.isNull("jni_mutf8_byte_length")
+                    || !syntheticNull.isNull("within_242_bytes")
+                    || !syntheticNull.isNull("bounded_c_model_accepted")) {
+                throw new IllegalStateException("Null path was treated as a real string");
+            }
+            result.put("diagnostic_synthetic_null_path", syntheticNull);
+            result.put("native_null_length_sentinel", getJniModifiedUtf8ByteLength(null));
+            result.put("bounded_c_null_sentinel", safeBuildPathWithinBound(null));
 
             result.put("native_ascii_242", getJniModifiedUtf8ByteLength(
                     new String(new char[242]).replace('\0', 'x')));
