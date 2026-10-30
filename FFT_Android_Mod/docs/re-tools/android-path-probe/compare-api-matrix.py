@@ -12,6 +12,10 @@ from pathlib import Path
 PACKAGE="com.square_enix.android_googleplay.FFT_en2"
 BOUND=242
 METHODS=("GetIntPath","GetExt1Path")
+SOURCE_LABELS={
+    "GetIntPath":"Context.getFilesDir.getPath",
+    "GetExt1Path":"Context.getExternalFilesDir_null.getPath",
+}
 
 
 def consolidate(files, expected_apis):
@@ -25,13 +29,25 @@ def consolidate(files, expected_apis):
         sdk=source.get("android_sdk")
         if type(sdk) is not int or sdk not in expected_apis or sdk in records:
             raise ValueError("Unexpected, missing, or duplicate API measurement")
-        if (source.get("status")!="sampled_not_a_global_bound"
+        if (type(source.get("schema")) is not int or source["schema"]!=2
+                or source.get("status")!="sampled_not_a_global_bound"
                 or source.get("running_original_game_apk") is not False
                 or source.get("original_strcpy_executed") is not False
                 or source.get("same_package_name_as_original_game") is not True
                 or source.get("package_identity")!=PACKAGE
                 or source.get("native_method")!="JNI GetStringUTFLength"):
             raise ValueError("Incomplete diagnostic APK provenance")
+        if (source.get("native_null_length_sentinel") != -1
+                or source.get("bounded_c_null_sentinel") != -1):
+            raise ValueError("Synthetic JNI null-sentinel gate absent")
+        absent=source.get("diagnostic_synthetic_null_path")
+        if (not isinstance(absent,dict)
+                or absent.get("source")!="synthetic_null_path"
+                or absent.get("present") is not False
+                or any(absent.get(k) is not None for k in (
+                    "jni_mutf8_byte_length","within_242_bytes",
+                    "bounded_c_model_accepted","java_utf16_length"))):
+            raise ValueError("Synthetic null must remain an absent path")
         if source.get("native_ascii_242")!=242 or source.get("native_ascii_243")!=243:
             raise ValueError("JNI boundary counters absent")
         if (source.get("bounded_c_ascii_242")!=1
@@ -46,11 +62,15 @@ def consolidate(files, expected_apis):
         observations={}
         for method in METHODS:
             row=source.get(method)
-            if not isinstance(row,dict) or type(row.get("present")) is not bool:
+            if (not isinstance(row,dict) or type(row.get("present")) is not bool
+                    or row.get("source")!=SOURCE_LABELS[method]):
                 raise ValueError("Malformed method measurement: "+method)
             if row["present"]:
                 n=row.get("jni_mutf8_byte_length")
-                if type(n) is not int or n<0 or row.get("within_242_bytes")!=(n<=BOUND):
+                if (type(n) is not int or n<0
+                        or type(row.get("java_utf16_length")) is not int
+                        or row["java_utf16_length"]<0
+                        or row.get("within_242_bytes") is not (n<=BOUND)):
                     raise ValueError("Inconsistent JNI count: "+method)
                 if row.get("bounded_c_model_accepted") is not (n<=BOUND):
                     raise ValueError("JNI length and safe C builder result disagree")
@@ -58,6 +78,8 @@ def consolidate(files, expected_apis):
                                       "remaining_budget_bytes":BOUND-n,
                                       "observed_within_budget":n<=BOUND}
             else:
+                if row.get("within_242_bytes") is not None or row.get("java_utf16_length") is not None:
+                    raise ValueError("Absent Java path must have no length or bound result")
                 if row.get("bounded_c_model_accepted") is not None:
                     raise ValueError("Absent Java path must not claim C execution")
                 if row.get("jni_mutf8_byte_length") is not None:
@@ -68,7 +90,7 @@ def consolidate(files, expected_apis):
         records[sdk]=observations
 
     return {
-        "schema":1,
+        "schema":2,
         "source":"independent_test_only_APK_same_package_ID",
         "expected_api_levels":sorted(expected_apis),
         "diagnostic_apk_path_samples":len(records),
@@ -85,6 +107,7 @@ def consolidate(files, expected_apis):
         "java_jni_path_safety_certificates":0,
         "path_contents_retained":False,
         "bounded_reference_c_builder_executed_on_android_art":True,
+        "diagnostic_synthetic_null_gate_verified":True,
     }
 
 
