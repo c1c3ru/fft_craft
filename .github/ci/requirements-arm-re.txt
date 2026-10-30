@@ -1,0 +1,6 @@
+# CI dependencies for ARM reverse engineering jobs.
+# Preserve the dependency set used before this change; versions are intentionally
+# not changed by this caching-only PR. Pin versions in a separate validated PR.
+capstone
+pyelftools
+unicorn
