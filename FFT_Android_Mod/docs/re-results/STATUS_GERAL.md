@@ -178,11 +178,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #471 — test(re): contrato versionado para traces observacionais A04 do jogo original](https://github.com/c1c3ru/fft_craft/pull/471)
+- [PR #472 — chore(re): automated structural batch 41073691102](https://github.com/c1c3ru/fft_craft/pull/472)
 - [PR #467 — ci(a04): gate JNI null seguro e isolamento de CI ARM pesado](https://github.com/c1c3ru/fft_craft/pull/467)
 - [PR #470 — ci(re-batches): aumentar agendamento para seis execuções diárias](https://github.com/c1c3ru/fft_craft/pull/470)
 - [PR #469 — chore(re): automated structural batch 41072864961](https://github.com/c1c3ru/fft_craft/pull/469)
-- [PR #466 — ci: reutilizar cache pip nos pipelines de engenharia reversa ARM](https://github.com/c1c3ru/fft_craft/pull/466)
-- [PR #465 — ci(cost): preservar matriz Android completa e cancelar execuções obsoletas](https://github.com/c1c3ru/fft_craft/pull/465)
 
 ## Atualização automática e fontes
 
