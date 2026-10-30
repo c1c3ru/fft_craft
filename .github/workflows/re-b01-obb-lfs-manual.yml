@@ -1,0 +1,105 @@
+name: B01 OBB Git LFS opt-in integrity verification
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/re-b01-obb-lfs-manual.yml'
+  workflow_dispatch:
+    inputs:
+      confirm_download:
+        description: 'Transferir 815622218 bytes (~816 MB) via Git LFS? Pode gerar custos.'
+        type: choice
+        required: true
+        default: NO
+        options:
+          - NO
+          - DOWNLOAD_815622218_BYTES
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  pointer-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+      - name: Verify committed LFS pointer without downloading OBB
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('FFT_Android_Mod/obb-data/main.202000.com.square_enix.android_googleplay.FFT_en2.obb')
+          raw=p.read_bytes()
+          m=re.fullmatch(
+              rb'version https://git-lfs.github.com/spec/v1\r?\n'
+              rb'oid sha256:([a-f0-9]{64})\r?\n'
+              rb'size ([0-9]+)\r?\n?', raw)
+          assert m is not None, 'OBB is not the expected LFS pointer: inspect before transfer'
+          assert m.group(1) == b'ca56bc16ab20f0f395bf1bdb7651b0073698090d395ac76687dc1aabcca370e3'
+          assert int(m.group(2)) == 815622218
+          print('B01_OBB_POINTER_VALID=1')
+          print('B01_OBB_CONTENT_VERIFIED=0')
+          PY
+
+  download-and-verify-on-explicit-request:
+    if: github.event_name == 'workflow_dispatch' && inputs.confirm_download == 'DOWNLOAD_815622218_BYTES'
+    needs: pointer-integrity
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+      - name: Pull only authorized OBB LFS object and validate exact content
+        run: |
+          set -euo pipefail
+          command -v git-lfs >/dev/null || { echo "git-lfs unavailable" >&2; exit 1; }
+          FILE='FFT_Android_Mod/obb-data/main.202000.com.square_enix.android_googleplay.FFT_en2.obb'
+          git lfs install --local
+          git lfs pull --include="$FILE" --exclude=""
+          test "$(stat -c%s "$FILE")" -eq 815622218
+          echo "ca56bc16ab20f0f395bf1bdb7651b0073698090d395ac76687dc1aabcca370e3  $FILE" | sha256sum -c -
+          python3 - <<'PY'
+          import hashlib,json,zipfile
+          from pathlib import Path
+          path=Path('FFT_Android_Mod/obb-data/main.202000.com.square_enix.android_googleplay.FFT_en2.obb')
+          result={'schema':1,'stage':'B01','kind':'local_private_obb_integrity_probe',
+                  'expected_size_bytes':815622218,
+                  'expected_sha256':'ca56bc16ab20f0f395bf1bdb7651b0073698090d395ac76687dc1aabcca370e3',
+                  'materialized_size_bytes':path.stat().st_size,
+                  'sha256_verified':True,'contains_binary_or_filenames':False,
+                  'entries_extracted':False,'semantic_certificates_issued':0,
+                  'B01_done':False}
+          if zipfile.is_zipfile(path):
+              with zipfile.ZipFile(path) as z:
+                  entries=z.infolist()
+                  if len(entries)>200000:
+                      raise RuntimeError('Too many OBB entries to audit safely')
+                  result.update(container='zip_directory_only',
+                                entry_count=len(entries),
+                                uncompressed_bytes_declared=sum(e.file_size for e in entries),
+                                crc_or_data_verified=False)
+          else:
+              result.update(container='unknown_not_zip',entry_count=None,
+                            crc_or_data_verified=False)
+          dest=Path('/tmp/b01-obb-integrity-only.json')
+          dest.write_text(json.dumps(result,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          print('B01_OBB_SHA256_VERIFIED=1')
+          print('B01_OBB_CONTAINER='+result['container'])
+          print('B01_OBB_CONTENT_EXTRACTION_PERFORMED=0')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: b01-obb-integrity-only
+          path: /tmp/b01-obb-integrity-only.json
+          retention-days: 14
+          if-no-files-found: error
