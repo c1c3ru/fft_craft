@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/c1c3ru/fft_craft/blob/main/FFT_Android_Mod/docs/re-tools/a04-original-runtime-evidence.schema.json",
+  "title": "A04 original game Android read-only JNI trace evidence",
+  "description": "Evidence only; acceptance never constitutes proof of global length bound, security, semantic equivalence, or execution of original strcpy.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_kind",
+    "elf_sha256",
+    "apk_sha256",
+    "instrumentation_sha256",
+    "android_api",
+    "scenario",
+    "events",
+    "original_strcpy_executed",
+    "contains_path_contents",
+    "semantic_certificates_issued"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "source_kind": {
+      "const": "authorized_original_game_observational_trace"
+    },
+    "elf_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "apk_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "instrumentation_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "android_api": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "scenario": {
+      "enum": [
+        "normal_launch",
+        "external_storage_unavailable",
+        "permission_denied",
+        "getter_exception",
+        "other_observed"
+      ]
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "event_id",
+          "getter",
+          "outcome",
+          "jni_to_r1_correlated",
+          "pre_copy_observed",
+          "r1_nul_termination",
+          "jni_byte_length",
+          "within_242_bytes"
+        ],
+        "properties": {
+          "event_id": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "getter": {
+            "enum": [
+              "GetIntPath",
+              "GetExt1Path"
+            ]
+          },
+          "outcome": {
+            "enum": [
+              "present",
+              "null",
+              "exception",
+              "not_reached",
+              "unresolved"
+            ]
+          },
+          "jni_to_r1_correlated": {
+            "type": "boolean"
+          },
+          "pre_copy_observed": {
+            "type": "boolean"
+          },
+          "r1_nul_termination": {
+            "enum": [
+              "verified_bounded",
+              "not_verified",
+              "not_applicable"
+            ]
+          },
+          "jni_byte_length": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "within_242_bytes": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "outcome": {
+                  "const": "present"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "jni_byte_length": {
+                  "type": "integer"
+                },
+                "within_242_bytes": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "outcome": {
+                  "enum": [
+                    "null",
+                    "exception",
+                    "not_reached",
+                    "unresolved"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "jni_byte_length": {
+                  "type": "null"
+                },
+                "within_242_bytes": {
+                  "type": "null"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "original_strcpy_executed": {
+      "const": false
+    },
+    "contains_path_contents": {
+      "const": false
+    },
+    "semantic_certificates_issued": {
+      "const": 0
+    }
+  }
+}
