@@ -1,0 +1,62 @@
+name: B01 read-only inventory integrity audit
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/re-b01-inventory-audit.yml'
+      - 'FFT_Android_Mod/docs/re-tools/b01_inventory_audit.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_b01_inventory_audit.py'
+      - 'FFT_Android_Mod/docs/RE_FUNCTION_INVENTORY.csv'
+      - 'FFT_Android_Mod/docs/alvos_prioritarios_nucleo.csv'
+      - 'FFT_Android_Mod/docs/re-results/B01_INVENTORY_BASELINE_AUDIT.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  b01-host-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile and validate B01 inventory regression tests
+        run: |
+          set -euo pipefail
+          python -m py_compile FFT_Android_Mod/docs/re-tools/b01_inventory_audit.py
+          python -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_b01_inventory_audit.py' -v
+      - name: Audit tracked ELF / function CSV / Smali / APK / OBB (no emulator)
+        run: |
+          set -euo pipefail
+          python FFT_Android_Mod/docs/re-tools/b01_inventory_audit.py --root . --output /tmp/b01-inventory-report.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/b01-inventory-report.json').read_text())
+          x=r['elf_function_inventory']
+          p=r['priority_subset']
+          assert (x['declared_entries'],x['unique_entrypoints'],x['duplicate_address_entries']) == (6455,6329,126), 'Canonical inventory drift: review and update evidence'
+          assert x['overlap_pair_count'] == 15, 'Unexpected change in overlap pairs'
+          assert p['rows'] == 4591 and p['all_subset_of_canonical'] and p['sizes_agree']
+          assert r['android_artifacts']['native_elf'].get('matches_expected_sha256') is True, 'Original ARM ELF SHA mismatch'
+          assert r['android_artifacts']['native_elf'].get('valid_arm_elf32_le_header') is True, 'Invalid ELF architecture'
+          assert r['task_state'] == 'in_progress' and r['ready_to_mark_B01_done'] is False
+          assert r['semantic_certificates_added'] == 0
+          print('B01_READ_ONLY_BASELINE_AUDIT=PASS')
+          print('B01_OVERLAP_CLASSIFICATION_PENDING='+str(x['overlap_pair_count']))
+          print('B01_INVENTORY_COMPLETE=0')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: b01-inventory-baseline-audit
+          path: /tmp/b01-inventory-report.json
+          if-no-files-found: warn
+          retention-days: 14
