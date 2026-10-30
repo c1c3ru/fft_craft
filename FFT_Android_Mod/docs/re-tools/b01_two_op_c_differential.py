@@ -113,7 +113,7 @@ def differential_two(addr, code, contract, model, seed, flags):
     for page in pages:
         emu.mem_map(page, 0x1000, UC_PROT_ALL)
     emu.mem_write(addr, code)
-    emu.mem_write(DATA_BASE, memory)
+    emu.mem_write(DATA_BASE, bytes(memory))
     emu.reg_write(UC_ARM_REG_CPSR, 0x10 | flags)
     for register, value in zip(REGS, regs):
         emu.reg_write(register, value)
