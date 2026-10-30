@@ -50,7 +50,7 @@
       "status": "in_progress",
       "depends_on": [],
       "title": "Consolidar inventario unico ELF (ARM/Thumb)",
-      "next_action": "B01: 15 pares/9 grupos ARM co-terminais desmontados (CFG e reachability pendentes); 123 Smali inspecionados e 12/12 exports JNI candidatos sem vínculo runtime certificado. OBB LFS de 815622218 bytes só pode ser materializado mediante execução manual opt-in, hash real e inventário privado; concluir correlação antes de liberar A03/R01/R02.",
+      "next_action": "B01: 9 grupos/15 pares co-terminais e 21 entradas A32 com xrefs/caminhos CFG modelados apenas como candidatos; validar origens BL e saltos indiretos, código vs dados e reachability no ELF. Smali 12/12 JNI só estáticos; aguardar captura A04. OBB de 815622218 bytes depende de opt-in LFS (#482). Não liberar A03/R01/R02 antes de evidências completas.",
       "acceptance": "Relatorio de inventario com total unico, cobertura de bytes e origem de cada entrada, sem dupla contagem.",
       "evidence": [
         "FFT_Android_Mod/docs/re-results/B01_INVENTORY_BASELINE_AUDIT.md",
@@ -59,7 +59,9 @@
         "FFT_Android_Mod/docs/re-tools/b01_overlap_elf_evidence.py",
         "FFT_Android_Mod/docs/re-tools/b01_smali_jni_obb_audit.py",
         "FFT_Android_Mod/docs/re-results/B01_OBB_LFS_HANDOFF.md",
-        ".github/workflows/re-b01-obb-lfs-manual.yml"
+        ".github/workflows/re-b01-obb-lfs-manual.yml",
+        "FFT_Android_Mod/docs/re-results/B01_CFG_CALLER_TRIAGE.md",
+        "FFT_Android_Mod/docs/re-tools/b01_overlap_cfg_callers.py"
       ]
     },
     {
