@@ -178,11 +178,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #498 — feat(re): reimplementar sete métodos ARM em C++ e auditar PUSH/POP e callees B01](https://github.com/c1c3ru/fft_craft/pull/498)
+- [PR #497 — chore(re): automated structural batch 41096772018](https://github.com/c1c3ru/fft_craft/pull/497)
 - [PR #496 — test(re): contratos ABI de sete corpos ARM e retorno POP PC do ELF original](https://github.com/c1c3ru/fft_craft/pull/496)
 - [PR #495 — chore(re): automated structural batch 41094465380](https://github.com/c1c3ru/fft_craft/pull/495)
 - [PR #493 — test(re): investigar CFG recursivo dos 9 grupos ARM e diferencial C11 de 3 opcodes](https://github.com/c1c3ru/fft_craft/pull/493)
-- [PR #492 — chore(re): automated structural batch 41092378096](https://github.com/c1c3ru/fft_craft/pull/492)
-- [PR #491 — test(re): classificar fontes A32 por ELF e validar ALU→memória original vs C11](https://github.com/c1c3ru/fft_craft/pull/491)
 
 ## Atualização automática e fontes
 
