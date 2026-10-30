@@ -50,7 +50,7 @@
       "status": "in_progress",
       "depends_on": [],
       "title": "Consolidar inventario unico ELF (ARM/Thumb)",
-      "next_action": "B01: inspecionar recursivamente os 9 grupos co-terminais (21 entradas) com limites, preservar BL/BLX/BX, LDR PC, relocações e efeitos externos não resolvidos. Testar somente prefixos originais ALU→memória→ALU/BX LR contra modelo C11 independente com trace, flags, memória e canários. Fechar #478/#489 apenas com CFG/alcance/calls comprovados; A04 JNI runtime e OBB LFS #482 ainda pendentes, B01 in_progress e A03/R01/R02 bloqueados.",
+      "next_action": "B01: extrair contratos ABI provisórios de 7 corpos ARM de 12 bytes/9 símbolos C++ (aliases C1/C2) e confrontar campos R0+offset, flags, memory e BX LR com C11 sob bases/retornos variados (#494); validar isoladamente POP {...,PC} na pilha, preservando 28 ocorrências e prólogos/callees ainda desconhecidos (#478/#489). Não promover layouts/callers/retorno global sem prova. A04 JNI e OBB LFS #482 pendentes; B01 in_progress, A03/R01/R02 bloqueados.",
       "acceptance": "Relatorio de inventario com total unico, cobertura de bytes e origem de cada entrada, sem dupla contagem.",
       "evidence": [
         "FFT_Android_Mod/docs/re-results/B01_INVENTORY_BASELINE_AUDIT.md",
@@ -72,7 +72,11 @@
         "FFT_Android_Mod/docs/re-results/B01_RECURSIVE_THREE_OP.md",
         "FFT_Android_Mod/docs/re-tools/b01_recursive_group_paths.py",
         "FFT_Android_Mod/docs/re-tools/b01_three_op_c_differential.py",
-        "FFT_Android_Mod/docs/re-tools/c-models/b01_three_op.c"
+        "FFT_Android_Mod/docs/re-tools/c-models/b01_three_op.c",
+        "FFT_Android_Mod/docs/re-results/B01_CPP_ABI_STACK_CONTRACTS.md",
+        "FFT_Android_Mod/docs/re-tools/b01_seven_cpp_contracts.py",
+        "FFT_Android_Mod/docs/re-tools/b01_pop_pc_differential.py",
+        "FFT_Android_Mod/docs/re-tools/c-models/b01_pop_pc.c"
       ]
     },
     {
