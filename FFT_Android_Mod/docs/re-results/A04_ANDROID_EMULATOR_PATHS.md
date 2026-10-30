@@ -1,5 +1,13 @@
 # A04 — amostragem do caminho Android por JNI, sem executar o jogo original
 
+## Atualização operacional de 30/10/2026 — gates baratos e evidência preservada
+
+- O PR [#451](https://github.com/c1c3ru/fft_craft/pull/451) foi integrado, com cinco checks aprovados no commit final. O PR [#465](https://github.com/c1c3ru/fft_craft/pull/465) também foi integrado, com execução *host-regression* aprovada no [run #41069324236](https://github.com/c1c3ru/fft_craft/actions/runs/41069324236). Nesse run, APK e emuladores **não foram executados**: seus jobs constam como *skipped*. A matriz API 23/29/35 continua disponível via `workflow_dispatch`, não está certificada pelas regressões Python.
+- O formato de evidência do probe passa à versão **schema 2**, que exige um caso **sintético** de `null` no JNI e no modelo C, além de verificar se `null` não foi promovido a string presente. Esse teste **não** demonstra que `GetExt1Path` ou `GetIntPath` retorna `null` em um sistema real. O agregador passa a rejeitar ausência de sentinelas, rótulos de getter incorretos, comprimentos inválidos e flags não booleanas. A validação em ART das novas sentinelas depende de uma execução manual posterior do APK.
+- O gatilho de `re-batches.yml` passa a excluir alterações restritas ao projeto `android-path-probe/**`, evitando gastar minutos de análise ARM em modificações do APK de diagnóstico. O workflow host do A04 continua cobrindo o parser Python no PR, e a matriz Android não foi substituída por resultados sintéticos.
+- Os runs [#41037722216](https://github.com/c1c3ru/fft_craft/actions/runs/41037722216) e [#41065143692](https://github.com/c1c3ru/fft_craft/actions/runs/41065143692) do lote ARM falharam **antes de iniciar qualquer etapa ou obter runner**; a causa de inicialização ainda não está determinada. Não se deve classificá-los como regressões de engenharia reversa nem reexecutá-los automaticamente sem diagnóstico da plataforma.
+- **Estado:** A04 `in_progress`, nenhum novo certificado; 61/81 bytes permanecem apenas observações válidas do emulador API 29 anterior, sem prova de limite universal. **Próximo gate caro e explicitamente manual:** matriz real API 23/29/35 com evidências JSON schema 2; depois execução autorizada no processo do jogo.
+
 A cadeia original de `CAPP_INFO::Init` obtém `GetIntPath` ou `GetExt1Path` da classe `StorageUtil`, copiando o resultado para um buffer de caminho sem limite de comprimento. O limite necessário para `/base/fftpack.bin\0` dentro dos 260 bytes observados é **B <= 242 bytes UTF modificado**, sendo B o comprimento efetivo do caminho Java no JNI.
 
 ## O que o APK de diagnóstico mede
