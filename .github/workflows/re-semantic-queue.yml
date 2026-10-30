@@ -12,6 +12,7 @@ on:
         default: '5'
   pull_request:
     paths:
+      - '.github/ci/requirements-arm-re.txt'
       - '.github/workflows/re-semantic-queue.yml'
       - 'FFT_Android_Mod/docs/re-tools/**'
       - 'FFT_Android_Mod/docs/re-results/semantic-certificates.json'
@@ -38,8 +39,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: '.github/ci/requirements-arm-re.txt'
       - name: Install ARM analysis dependencies
-        run: python3 -m pip install capstone pyelftools unicorn
+        run: python3 -m pip install -r .github/ci/requirements-arm-re.txt
       - name: Compile all ARM tools and run all regressions
         run: |
           python3 -m compileall -q FFT_Android_Mod/docs/re-tools
