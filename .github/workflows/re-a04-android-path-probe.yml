@@ -18,7 +18,19 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  host-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run API matrix parser regression tests without Android SDK or emulator
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools/android-path-probe -p 'test_compare_api_matrix.py' -v
+          python3 -m py_compile FFT_Android_Mod/docs/re-tools/android-path-probe/compare-api-matrix.py
+
   build-test-only-probe-apk:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -51,6 +63,7 @@ jobs:
           retention-days: 7
 
   measure-on-emulator:
+    if: github.event_name == 'workflow_dispatch'
     needs: build-test-only-probe-apk
     strategy:
       fail-fast: false
@@ -85,6 +98,7 @@ jobs:
           retention-days: 30
 
   compare-api-measurements:
+    if: github.event_name == 'workflow_dispatch'
     needs: measure-on-emulator
     runs-on: ubuntu-latest
     timeout-minutes: 10
