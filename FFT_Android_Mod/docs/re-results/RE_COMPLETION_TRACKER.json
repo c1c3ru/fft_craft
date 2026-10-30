@@ -50,7 +50,7 @@
       "status": "in_progress",
       "depends_on": [],
       "title": "Consolidar inventario unico ELF (ARM/Thumb)",
-      "next_action": "B01: extrair contratos ABI provisórios de 7 corpos ARM de 12 bytes/9 símbolos C++ (aliases C1/C2) e confrontar campos R0+offset, flags, memory e BX LR com C11 sob bases/retornos variados (#494); validar isoladamente POP {...,PC} na pilha, preservando 28 ocorrências e prólogos/callees ainda desconhecidos (#478/#489). Não promover layouts/callers/retorno global sem prova. A04 JNI e OBB LFS #482 pendentes; B01 in_progress, A03/R01/R02 bloqueados.",
+      "next_action": "B01: reimplementar nominalmente em C++ os sete corpos ARM de 12 bytes com efeitos de campo R0+offset verificados e bounds checking, comparar buffers e BX LR contra ELF original; cruzar 14 POP PC únicos com prólogos PUSH por máscaras e catalogar 6 transferências fora dos grupos/4 callees sem efeitos modelados (#494/#489). Ligações de chamador/layout e stack-frame reais seguem pendentes; A04 JNI original e OBB LFS (#482) não concluídos. B01 in_progress, A03/R01/R02 ainda bloqueados.",
       "acceptance": "Relatorio de inventario com total unico, cobertura de bytes e origem de cada entrada, sem dupla contagem.",
       "evidence": [
         "FFT_Android_Mod/docs/re-results/B01_INVENTORY_BASELINE_AUDIT.md",
@@ -76,7 +76,11 @@
         "FFT_Android_Mod/docs/re-results/B01_CPP_ABI_STACK_CONTRACTS.md",
         "FFT_Android_Mod/docs/re-tools/b01_seven_cpp_contracts.py",
         "FFT_Android_Mod/docs/re-tools/b01_pop_pc_differential.py",
-        "FFT_Android_Mod/docs/re-tools/c-models/b01_pop_pc.c"
+        "FFT_Android_Mod/docs/re-tools/c-models/b01_pop_pc.c",
+        "FFT_Android_Mod/docs/re-results/B01_NAMED_CPP_PROLOGUE_GATES.md",
+        "FFT_Android_Mod/docs/re-tools/c-models/b01_named_cpp_methods.cpp",
+        "FFT_Android_Mod/docs/re-tools/b01_named_cpp_differential.py",
+        "FFT_Android_Mod/docs/re-tools/b01_prologue_external_audit.py"
       ]
     },
     {
