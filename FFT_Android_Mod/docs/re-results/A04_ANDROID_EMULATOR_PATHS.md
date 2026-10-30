@@ -72,3 +72,12 @@ Em todos os cenários:
 - `A04=in_progress` e o número de certificados novos permanece **zero**.
 
 **Próximo gate depois da matriz:** investigar diferenças legítimas entre perfil/usuário/armazenamento, testar retornos nulos e exceções, e medir no próprio processo do jogo em ambiente autorizado, sem provocar `strcpy` excessiva.
+
+### Validação funcional com bytes do ART (sem executar o jogo)
+
+O APK de diagnóstico passa também os bytes fornecidos por `GetStringUTFChars` para **`a04_rootpath_safe.c`**, a reconstrução independente que valida limite e capacidade antes de escrever. O código foi incorporado à biblioteca do APK, e **não** recebe nem chama qualquer instrução do ELF original ou sua `strcpy`.
+
+O gate verifica aceitação em **242 bytes**, rejeição em **243 bytes**, aceitação de exemplos de NUL Java e emoji após codificação efetiva pelo ART, e canários após a região de 260 bytes. Para os caminhos `GetIntPath` e `GetExt1Path`, a aceitação do modelo C deve coincidir com a comparação `B <= 242`. O agregador valida a consistência desses resultados, mas não reporta dados de caminho.
+
+Isso comprova apenas o funcionamento da **implementação independente delimitada** sob JNI real nos emuladores testados. Não estabelece equivalência com a biblioteca original para entradas inválidas nem substitui instrumentação do jogo em Android.
+

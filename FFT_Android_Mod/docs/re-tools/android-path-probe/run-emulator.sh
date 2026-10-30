@@ -31,7 +31,7 @@ for attempt in $(seq 1 20); do
   fi
   sleep 1
 done
-python3 - "$OUT" <<'PY'
+python3 - "$OUT" "$EXPECTED_API" <<'PY'
 import json
 import sys
 with open(sys.argv[1], encoding="utf-8") as stream:
@@ -47,6 +47,10 @@ assert r["native_method"] == "JNI GetStringUTFLength", r
 assert r["original_strcpy_executed"] is False, r
 assert r["native_ascii_242"] == 242, r
 assert r["native_ascii_243"] == 243, r
+assert r["bounded_c_ascii_242"] == 1, r
+assert r["bounded_c_ascii_243"] == 0, r
+assert r["bounded_c_nul_java"] == 1, r
+assert r["bounded_c_emoji_one"] == 1, r
 assert r["native_emoji_one"] == 4, r
 assert r["native_emoji_utf_bytes_hex"] == "f09f9880", r
 assert r["native_nul_utf_bytes_hex"] == "61c08062", r
@@ -57,8 +61,10 @@ for key in ("GetIntPath","GetExt1Path"):
         n=data["jni_mutf8_byte_length"]
         assert isinstance(n,int) and n >= 0, data
         assert data["within_242_bytes"] == (n <= 242), data
+        assert data["bounded_c_model_accepted"] == (n <= 242), data
     else:
         assert data["jni_mutf8_byte_length"] is None, data
+        assert data["bounded_c_model_accepted"] is None, data
 assert r["GetIntPath"]["present"] is True, r
 print("A04_ANDROID_EMULATOR_MEASUREMENT="+json.dumps(r,sort_keys=True))
 print("A04_ANDROID_ORIGINAL_GAME_ELF_EXECUTED=0")

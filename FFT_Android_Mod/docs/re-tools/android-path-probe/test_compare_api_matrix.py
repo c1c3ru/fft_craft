@@ -16,6 +16,7 @@ def measurement(api, internal=61, external=81):
         return {"present":n is not None,
                 "jni_mutf8_byte_length":n,
                 "within_242_bytes":n<=242 if n is not None else None,
+                "bounded_c_model_accepted":n<=242 if n is not None else None,
                 "path_contents":"sensitive-do-not-retain"}
     return {"schema":1,"android_sdk":api,"package_identity":module.PACKAGE,
             "status":"sampled_not_a_global_bound",
@@ -24,6 +25,8 @@ def measurement(api, internal=61, external=81):
             "same_package_name_as_original_game":True,
             "native_method":"JNI GetStringUTFLength",
             "native_ascii_242":242,"native_ascii_243":243,
+            "bounded_c_ascii_242":1,"bounded_c_ascii_243":0,
+            "bounded_c_nul_java":1,"bounded_c_emoji_one":1,
             "native_nul_utf_bytes_hex":"61c08062",
             "native_emoji_utf_bytes_hex":"f09f9880",
             "GetIntPath":row(internal),"GetExt1Path":row(external)}
@@ -81,6 +84,11 @@ class AggregationTests(unittest.TestCase):
         wrong["GetIntPath"]["within_242_bytes"]=False
         with self.assertRaises(ValueError):
             module.consolidate(self.files(wrong),[29])
+
+    def test_emulator_script_supplies_expected_sdk_to_python(self):
+        source=Path(__file__).with_name("run-emulator.sh").read_text(encoding="utf-8")
+        self.assertIn('python3 - "$OUT" "$EXPECTED_API" <<', source)
+        self.assertIn("expected_api=sys.argv[2]", source)
 
     def test_missing_api_is_rejected(self):
         with self.assertRaises(ValueError):
