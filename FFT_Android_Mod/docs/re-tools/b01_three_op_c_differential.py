@@ -164,13 +164,13 @@ def audit(binary, inventory, base_model, extra_model, limit=MAX_ENTRIES):
                 continue
             contract=eligible_three(raw,row["start"],md)
             if contract:
-                selected.append((row["start"],raw,contract,offset))
+                selected.append((row["start"],raw,contract,offset,row["size"]))
             if len(selected)==limit:
                 break
     with tempfile.TemporaryDirectory(prefix="b01-three-op-") as temp:
         model=build_model(base_model,extra_model,Path(temp)/"model.so")
         results=[]
-        for address,raw,contract,off in selected:
+        for address,raw,contract,off,declared_size in selected:
             samples=0
             for seed in SEEDS:
                 for flags in FLAGS:
@@ -179,6 +179,8 @@ def audit(binary, inventory, base_model, extra_model, limit=MAX_ENTRIES):
             results.append({
                 "entry":f"{address:08x}","file_offset":off,
                 "original_12_bytes":raw.hex(),
+                "declared_entry_size_bytes":declared_size,
+                "prefix_spans_declared_interval":declared_size==12,
                 "modelled_return":contract["third_kind"]=="bx_lr",
                 "contract":contract,"samples_passed":samples,
                 "complete_original_function_contract":False,
@@ -189,6 +191,8 @@ def audit(binary, inventory, base_model, extra_model, limit=MAX_ENTRIES):
             "unique_entries_scanned":len(entries),
             "three_opcode_eligible":len(results),
             "return_prefix_candidates":sum(x["modelled_return"] for x in results),
+            "bounded_return_prefixes_covering_declared_interval":sum(
+                x["modelled_return"] and x["prefix_spans_declared_interval"] for x in results),
             "samples_passed":sum(x["samples_passed"] for x in results),
             "entries":results,"whole_function_certificates":0,
             "indirect_non_lr_paths_executed":0,"B01_done":False}
@@ -208,6 +212,8 @@ def main():
     print("B01_ELF_ENTRIES_SCANNED="+str(r["unique_entries_scanned"]))
     print("B01_THREE_OPCODE_CANDIDATES="+str(r["three_opcode_eligible"]))
     print("B01_THREE_OPCODE_BXLR_CANDIDATES="+str(r["return_prefix_candidates"]))
+    print("B01_BXLR_PREFIXES_COVERING_DECLARED_INTERVAL="+str(r["bounded_return_prefixes_covering_declared_interval"]))
+    print("B01_THREE_OPCODE_ADDRESSES="+",".join(x["entry"] for x in r["entries"]))
     print("B01_THREE_OPCODE_DIFFERENTIAL_SAMPLES="+str(r["samples_passed"]))
     print("B01_WHOLE_FUNCTION_CERTIFICATES=0")
 
