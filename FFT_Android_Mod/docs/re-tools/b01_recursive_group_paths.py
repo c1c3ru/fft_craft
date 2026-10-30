@@ -8,14 +8,14 @@ call effects remain explicitly unknown. No semantic certificates are issued.
 import argparse
 import hashlib
 import json
-from collections import deque, defaultdict
+from collections import deque, defaultdict, Counter
 from pathlib import Path
 
 from capstone import Cs, CS_ARCH_ARM, CS_MODE_ARM
 from capstone.arm import (
     ARM_INS_B, ARM_INS_BL, ARM_INS_BLX, ARM_INS_BX, ARM_INS_LDR,
     ARM_INS_MOV, ARM_INS_ADD, ARM_INS_POP, ARM_OP_IMM, ARM_CC_AL,
-    ARM_CC_INVALID,
+    ARM_CC_INVALID, ARM_REG_PC,
 )
 from elftools.elf.elffile import ELFFile
 from elftools.elf.relocation import RelocationSection
@@ -157,9 +157,15 @@ def walk(elf, stream, base, end, entry, md, reloc_sites):
             if conditional:
                 fall("conditional_transfer_not_taken")
         else:
-            # If an exotic opcode can write PC, the whitelist above may miss
-            # it. Do not claim this walk proves a complete control-flow graph.
-            fall()
+            # Fail closed for unrecognized PC-writing opcodes.
+            _reads, written = ins.regs_access()
+            if ARM_REG_PC in written:
+                unknown.append({"at":h(pc),"reason":"unmodeled_pc_write",
+                                "operands":ins.op_str})
+                if conditional:
+                    fall("conditional_transfer_not_taken")
+            else:
+                fall()
         for target,kind in successors:
             if len(edges) >= MAX_OUT_EDGES:
                 unknown.append({"at":h(pc),"reason":"edge_budget_exceeded"})
@@ -210,6 +216,7 @@ def audit(binary, inventory):
                 "group_runtime_reachability_proven":False
             })
     paths=[p for g in output for p in g["entry_witnesses"]]
+    boundary_counts=Counter(u["reason"] for p in paths for u in p["unresolved_boundaries"])
     return {"schema":1,"stage":"B01","elf_sha256":baseline.PINNED_ELF_SHA,
             "inventory_sha256":baseline.sha256(inventory),
             "groups":output,"group_count":len(output),"entrypoint_count":len(paths),
@@ -218,6 +225,8 @@ def audit(binary, inventory):
                 "indirect" in u["reason"] or "pc_write" in u["reason"]
                 for p in paths for u in p["unresolved_boundaries"]),
             "unknown_boundary_count":sum(len(p["unresolved_boundaries"]) for p in paths),
+            "boundary_reason_counts":dict(sorted(boundary_counts.items())),
+            "candidate_return_count":sum(len(p["candidate_returns"]) for p in paths),
             "all_groups_cfg_proven":False,"all_indirect_edges_resolved":False,
             "new_semantic_certificates":0,"B01_done":False}
 
@@ -236,6 +245,8 @@ def main():
     print("B01_RECURSIVE_ENTRIES="+str(state["entrypoint_count"]))
     print("B01_RECURSIVE_UNKNOWN_BOUNDARIES="+str(state["unknown_boundary_count"]))
     print("B01_RECURSIVE_INDIRECT_UNRESOLVED="+str(state["indirect_unresolved_count"]))
+    print("B01_RECURSIVE_BOUNDARY_REASONS="+json.dumps(state["boundary_reason_counts"],sort_keys=True))
+    print("B01_RECURSIVE_CANDIDATE_RETURNS="+str(state["candidate_return_count"]))
     print("B01_FULL_CFG_CERTIFICATES=0")
 
 
