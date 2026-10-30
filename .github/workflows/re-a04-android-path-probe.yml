@@ -5,7 +5,6 @@ on:
     paths:
       - '.github/workflows/re-a04-android-path-probe.yml'
       - 'FFT_Android_Mod/docs/re-tools/android-path-probe/**'
-      - 'FFT_Android_Mod/docs/re-results/A04_ANDROID_EMULATOR_PATHS.md'
       - 'FFT_Android_Mod/docs/re-tools/android-path-probe/compare-api-matrix.py'
       - 'FFT_Android_Mod/docs/re-tools/android-path-probe/test_compare_api_matrix.py'
   workflow_dispatch:
@@ -13,8 +12,26 @@ on:
 permissions:
   contents: read
 
+# Cancel only superseded PR checks. Never cancel an explicitly requested
+# emulator matrix, which produces independent empirical JNI evidence.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
+  # Cheap PR gate: validates the aggregation logic on every code change.
+  # Full Android/JNI measurements are explicitly triggered by workflow_dispatch.
+  host-regression:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate host-only API matrix aggregation and fail-closed cases
+        run: python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools/android-path-probe -p 'test_compare_api_matrix.py' -v
+
   build-test-only-probe-apk:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -47,6 +64,7 @@ jobs:
           retention-days: 7
 
   measure-on-emulator:
+    if: github.event_name == 'workflow_dispatch'
     needs: build-test-only-probe-apk
     strategy:
       fail-fast: false
@@ -81,6 +99,7 @@ jobs:
           retention-days: 30
 
   compare-api-measurements:
+    if: github.event_name == 'workflow_dispatch'
     needs: measure-on-emulator
     runs-on: ubuntu-latest
     timeout-minutes: 10
