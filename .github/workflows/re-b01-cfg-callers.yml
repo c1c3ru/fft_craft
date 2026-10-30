@@ -1,0 +1,62 @@
+name: B01 nine-group A32 caller and CFG triage
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/re-b01-cfg-callers.yml'
+      - 'FFT_Android_Mod/docs/re-tools/b01_overlap_cfg_callers.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_b01_overlap_cfg_callers.py'
+      - 'FFT_Android_Mod/docs/re-results/B01_CFG_CALLER_TRIAGE.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  b01-cfg-caller-triage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned A32 and ELF readers
+        run: python -m pip install --disable-pip-version-check 'capstone==5.0.6' 'pyelftools==0.32'
+      - name: Compile modules and run bounded synthetic regressions
+        run: |
+          set -euo pipefail
+          python -m py_compile FFT_Android_Mod/docs/re-tools/b01_overlap_cfg_callers.py FFT_Android_Mod/docs/re-tools/test_b01_overlap_cfg_callers.py
+          python -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_b01_overlap_cfg_callers.py' -v
+      - name: Scan fixed original ARM ELF entrypoints and incoming candidate edges
+        run: |
+          set -euo pipefail
+          python FFT_Android_Mod/docs/re-tools/b01_overlap_cfg_callers.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --inventory FFT_Android_Mod/docs/RE_FUNCTION_INVENTORY.csv \
+            --output /tmp/b01-cfg-caller-evidence.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('/tmp/b01-cfg-caller-evidence.json').read_text())
+          assert (x['group_count'],x['pair_count']) == (9,15)
+          assert not x['all_groups_cfg_proven'] and not x['original_process_executed']
+          assert x['semantic_certificates_issued'] == 0 and x['B01_done'] is False
+          assert x['a32_linear_sweep_may_decode_inline_data']
+          assert sum(len(g['entrypoint_routes']) for g in x['groups']) == 21
+          assert all(not g['all_edges_executed_or_verified'] for g in x['groups'])
+          assert all(not e['entrypoint_proven_by_real_control_flow']
+                     for g in x['groups'] for e in g['entrypoint_routes'])
+          print("B01_CFG_CALLER_CANDIDATE_GATE=PASS")
+          print("B01_ORIGINAL_RUNTIME_PROVEN=0")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: b01-cfg-caller-triage-evidence
+          path: /tmp/b01-cfg-caller-evidence.json
+          retention-days: 30
+          if-no-files-found: error
