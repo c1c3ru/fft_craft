@@ -107,7 +107,7 @@ public final class PathProbeActivity extends Activity {
             Log.e(TAG, "A04 probe failed", failure);
             try {
                 JSONObject err = new JSONObject();
-                err.put("schema", 1);
+                err.put("schema", 2);
                 err.put("status", "error");
                 err.put("error_type", failure.getClass().getName());
                 persist(err);
