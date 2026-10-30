@@ -50,7 +50,7 @@
       "status": "in_progress",
       "depends_on": [],
       "title": "Consolidar inventario unico ELF (ARM/Thumb)",
-      "next_action": "B01: 2.126 fontes A32 classificadas por seção ELF, função vizinha e checkpoint sem promover execução; 962 gaps de inventário e 1.164 origens sem prova permanecem pendentes (#489). Ampliar prefixos ALU→memória de 2 opcodes para diferencial ELF original vs C11 com canários e 12 cenários por candidato. Confirmar CFG/indireções e contratos inteiros; A04 JNI runtime e OBB LFS opt-in seguem pendentes. B01 in_progress, A03/R01/R02 aguardam.",
+      "next_action": "B01: inspecionar recursivamente os 9 grupos co-terminais (21 entradas) com limites, preservar BL/BLX/BX, LDR PC, relocações e efeitos externos não resolvidos. Testar somente prefixos originais ALU→memória→ALU/BX LR contra modelo C11 independente com trace, flags, memória e canários. Fechar #478/#489 apenas com CFG/alcance/calls comprovados; A04 JNI runtime e OBB LFS #482 ainda pendentes, B01 in_progress e A03/R01/R02 bloqueados.",
       "acceptance": "Relatorio de inventario com total unico, cobertura de bytes e origem de cada entrada, sem dupla contagem.",
       "evidence": [
         "FFT_Android_Mod/docs/re-results/B01_INVENTORY_BASELINE_AUDIT.md",
@@ -68,7 +68,11 @@
         "FFT_Android_Mod/docs/re-results/B01_TWO_OP_C_EVIDENCE.md",
         "FFT_Android_Mod/docs/re-tools/b01_source_section_partition.py",
         "FFT_Android_Mod/docs/re-tools/b01_two_op_c_differential.py",
-        "FFT_Android_Mod/docs/re-tools/c-models/b01_two_op.c"
+        "FFT_Android_Mod/docs/re-tools/c-models/b01_two_op.c",
+        "FFT_Android_Mod/docs/re-results/B01_RECURSIVE_THREE_OP.md",
+        "FFT_Android_Mod/docs/re-tools/b01_recursive_group_paths.py",
+        "FFT_Android_Mod/docs/re-tools/b01_three_op_c_differential.py",
+        "FFT_Android_Mod/docs/re-tools/c-models/b01_three_op.c"
       ]
     },
     {
