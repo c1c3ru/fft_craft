@@ -178,11 +178,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #483 — ci(re): permitir validação manual do OBB LFS com confirmação de 815 MB](https://github.com/c1c3ru/fft_craft/pull/483)
+- [PR #484 — chore(re): automated structural batch 41080478615](https://github.com/c1c3ru/fft_craft/pull/484)
 - [PR #481 — feat(re): evidência ELF dos nove grupos B01 e inventário estático JNI/OBB](https://github.com/c1c3ru/fft_craft/pull/481)
 - [PR #480 — chore(re): automated structural batch 41078930379](https://github.com/c1c3ru/fft_craft/pull/480)
 - [PR #477 — feat(re): auditoria B01 de inventário único, aliases e proveniência APK/OBB](https://github.com/c1c3ru/fft_craft/pull/477)
-- [PR #479 — chore(re): automated structural batch 41078352652](https://github.com/c1c3ru/fft_craft/pull/479)
-- [PR #476 — Re/b01 inventory proof and overlap audit 20261030](https://github.com/c1c3ru/fft_craft/pull/476)
 
 ## Atualização automática e fontes
 
