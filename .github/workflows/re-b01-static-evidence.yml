@@ -1,0 +1,75 @@
+name: B01 ELF overlap and static JNI evidence
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/re-b01-static-evidence.yml'
+      - 'FFT_Android_Mod/docs/re-tools/b01_overlap_elf_evidence.py'
+      - 'FFT_Android_Mod/docs/re-tools/b01_smali_jni_obb_audit.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_b01_static_links.py'
+      - 'FFT_Android_Mod/docs/re-results/B01_STATIC_LINKS_EVIDENCE.md'
+      - 'FFT_Android_Mod/docs/re-results/RE_COMPLETION_TRACKER.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  b01-original-elf-and-jni:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install read-only disassembler and ELF parser
+        run: |
+          python -m pip install --disable-pip-version-check 'capstone==5.0.6' 'pyelftools==0.32'
+      - name: Validate B01 host-only regression tests
+        run: |
+          set -euo pipefail
+          python -m py_compile FFT_Android_Mod/docs/re-tools/b01_overlap_elf_evidence.py FFT_Android_Mod/docs/re-tools/b01_smali_jni_obb_audit.py
+          python -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_b01_static_links.py' -v
+      - name: Audit overlap pairs and static Smali/ELF JNI linkage
+        run: |
+          set -euo pipefail
+          python FFT_Android_Mod/docs/re-tools/b01_overlap_elf_evidence.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --inventory FFT_Android_Mod/docs/RE_FUNCTION_INVENTORY.csv \
+            --output /tmp/b01-overlap-disposition.json
+          python FFT_Android_Mod/docs/re-tools/b01_smali_jni_obb_audit.py \
+            --root . --output /tmp/b01-static-jni-and-obb.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('/tmp/b01-overlap-disposition.json').read_text())
+          b=json.loads(Path('/tmp/b01-static-jni-and-obb.json').read_text())
+          assert (a['overlap_pairs_count'],a['co_terminal_groups_count']) == (15,9)
+          assert a['semantic_certificates_issued'] == 0 and a['B01_done'] is False
+          assert a['all_pairs_cfg_certified'] is False
+          assert len({(p['first'],p['second']) for p in a['pairs']}) == 15
+          assert all(p['needs_review'] for p in a['pairs'])
+          assert b['native_method_count'] >= 1 and b['smali_files_scanned'] >= 1
+          assert b['new_semantic_certificates'] == 0 and b['b01_complete'] is False
+          assert b['original_game_runtime_observed'] is False
+          print('B01_OVERLAP_JNI_GATE=PASS (classification candidates only)')
+          print('B01_ARM_DECODED_INTERVALS='+str(sum(e['decoded_full_interval'] for e in a['entries'].values())))
+          print('B01_JNI_STATIC_CANDIDATES='+str(b['native_export_candidates_count']))
+          print('B01_OBB_STATE='+b['obb']['state'])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: b01-original-elf-jni-static-evidence
+          path: |
+            /tmp/b01-overlap-disposition.json
+            /tmp/b01-static-jni-and-obb.json
+          if-no-files-found: warn
+          retention-days: 30
