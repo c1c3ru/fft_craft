@@ -178,11 +178,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #486 — feat(re): mapear arestas CFG e origens de chamada dos nove grupos B01 no ELF](https://github.com/c1c3ru/fft_craft/pull/486)
+- [PR #485 — chore(re): automated structural batch 41081043334](https://github.com/c1c3ru/fft_craft/pull/485)
 - [PR #483 — ci(re): permitir validação manual do OBB LFS com confirmação de 815 MB](https://github.com/c1c3ru/fft_craft/pull/483)
 - [PR #484 — chore(re): automated structural batch 41080478615](https://github.com/c1c3ru/fft_craft/pull/484)
 - [PR #481 — feat(re): evidência ELF dos nove grupos B01 e inventário estático JNI/OBB](https://github.com/c1c3ru/fft_craft/pull/481)
-- [PR #480 — chore(re): automated structural batch 41078930379](https://github.com/c1c3ru/fft_craft/pull/480)
-- [PR #477 — feat(re): auditoria B01 de inventário único, aliases e proveniência APK/OBB](https://github.com/c1c3ru/fft_craft/pull/477)
 
 ## Atualização automática e fontes
 
