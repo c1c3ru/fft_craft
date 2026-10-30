@@ -49,7 +49,7 @@ def bounded_reachable(successors, entry):
     return reached
 
 
-def candidate_callers(elf, stream, targets, md):
+def candidate_callers(elf, stream, targets, md, max_witnesses=MAX_CALLER_WITNESSES):
     """Linear-sweep A32 candidate XREFs; no claim of correct code/data split."""
     result = {entry: {"total": 0, "witnesses": []} for entry in targets}
     scanned = 0
@@ -81,7 +81,7 @@ def candidate_callers(elf, stream, targets, md):
                 continue
             evidence = result[target]
             evidence["total"] += 1
-            if len(evidence["witnesses"]) < MAX_CALLER_WITNESSES:
+            if len(evidence["witnesses"]) < max_witnesses:
                 evidence["witnesses"].append({
                     "source": fmt(insn.address), "instruction_hex": insn.bytes.hex(),
                     "mnemonic": insn.mnemonic, "target": fmt(target),
