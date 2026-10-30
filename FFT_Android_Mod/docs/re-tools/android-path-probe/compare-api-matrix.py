@@ -37,13 +37,18 @@ def consolidate(files, expected_apis):
                 or source.get("package_identity")!=PACKAGE
                 or source.get("native_method")!="JNI GetStringUTFLength"):
             raise ValueError("Incomplete diagnostic APK provenance")
-        if (source.get("native_null_length_sentinel") != -1
-                or source.get("bounded_c_null_sentinel") != -1):
+        if (type(source.get("native_null_length_sentinel")) is not int
+                or source["native_null_length_sentinel"] != -1
+                or type(source.get("bounded_c_null_sentinel")) is not int
+                or source["bounded_c_null_sentinel"] != -1):
             raise ValueError("Synthetic JNI null-sentinel gate absent")
         absent=source.get("diagnostic_synthetic_null_path")
         if (not isinstance(absent,dict)
                 or absent.get("source")!="synthetic_null_path"
                 or absent.get("present") is not False
+                or any(k not in absent for k in (
+                    "jni_mutf8_byte_length","within_242_bytes",
+                    "bounded_c_model_accepted","java_utf16_length"))
                 or any(absent.get(k) is not None for k in (
                     "jni_mutf8_byte_length","within_242_bytes",
                     "bounded_c_model_accepted","java_utf16_length"))):
