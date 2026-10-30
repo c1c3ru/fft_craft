@@ -178,11 +178,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #493 — test(re): investigar CFG recursivo dos 9 grupos ARM e diferencial C11 de 3 opcodes](https://github.com/c1c3ru/fft_craft/pull/493)
+- [PR #492 — chore(re): automated structural batch 41092378096](https://github.com/c1c3ru/fft_craft/pull/492)
 - [PR #491 — test(re): classificar fontes A32 por ELF e validar ALU→memória original vs C11](https://github.com/c1c3ru/fft_craft/pull/491)
 - [PR #490 — chore(re): automated structural batch 41088213371](https://github.com/c1c3ru/fft_craft/pull/490)
 - [PR #488 — test(re): filtrar fontes ARM por v3 e comparar prefixos ALU do ELF no Unicorn](https://github.com/c1c3ru/fft_craft/pull/488)
-- [PR #487 — chore(re): automated structural batch 41083748189](https://github.com/c1c3ru/fft_craft/pull/487)
-- [PR #486 — feat(re): mapear arestas CFG e origens de chamada dos nove grupos B01 no ELF](https://github.com/c1c3ru/fft_craft/pull/486)
 
 ## Atualização automática e fontes
 
