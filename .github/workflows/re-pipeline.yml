@@ -4,6 +4,9 @@ on:
   pull_request:
     paths:
       - 'FFT_Android_Mod/docs/re-tools/**'
+      # A04 diagnostic APK has its own purpose-built PR regression gate;
+      # unrelated ARM suites remain enabled for shared reverse-engineering tools.
+      - '!FFT_Android_Mod/docs/re-tools/android-path-probe/**'
       - 'FFT_Android_Mod/docs/RE_COMPLETION_PLAN.md'
       - 'FFT_Android_Mod/docs/re-results/RE_COMPLETION_TRACKER.json'
       - 'FFT_Android_Mod/docs/re-results/semantic-certificates.json'

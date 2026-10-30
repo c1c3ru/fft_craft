@@ -15,6 +15,9 @@ on:
       - '.github/ci/requirements-arm-re.txt'
       - '.github/workflows/re-semantic-queue.yml'
       - 'FFT_Android_Mod/docs/re-tools/**'
+      # A04 diagnostic APK has its own purpose-built PR regression gate;
+      # unrelated ARM suites remain enabled for shared reverse-engineering tools.
+      - '!FFT_Android_Mod/docs/re-tools/android-path-probe/**'
       - 'FFT_Android_Mod/docs/re-results/semantic-certificates.json'
       - 'FFT_Android_Mod/docs/re-results/SEMANTIC_BXLR_REVIEW_REQUEST*.json'
       - 'FFT_Android_Mod/docs/RE_FUNCTION_INVENTORY.csv'

@@ -7,6 +7,9 @@ on:
       - '.github/ci/requirements-arm-re.txt'
       - '.github/workflows/re-batches.yml'
       - 'FFT_Android_Mod/docs/re-tools/**'
+      # Independent Android diagnostics use their own cheap PR gate; do not
+      # launch costly structural ARM batches for changes only to that probe.
+      - '!FFT_Android_Mod/docs/re-tools/android-path-probe/**'
       - 'FFT_Android_Mod/docs/RE_COMPLETION_PLAN.md'
       - 'FFT_Android_Mod/docs/re-results/RE_COMPLETION_TRACKER.json'
       - 'FFT_Android_Mod/docs/re-results/semantic-certificates.json'

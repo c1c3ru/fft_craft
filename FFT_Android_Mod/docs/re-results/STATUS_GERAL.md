@@ -22,6 +22,8 @@ O histórico CSV contém **5,932** registros de análise anterior, que podem se 
 
 ## Fluxo de reconstrução funcional
 
+**Nota de CI A04 (30/10/2026):** os PRs [#451](https://github.com/c1c3ru/fft_craft/pull/451) e [#465](https://github.com/c1c3ru/fft_craft/pull/465) foram integrados; o último CI de #465 validou somente regressões Python, com emuladores pulados. Dois runs agendados/por push de lotes ARM falharam antes de obter runner, por causa ainda desconhecida. A matriz JNI API 23/29/35 continua manual; o novo gate sintético de `null` exige validação posterior no Android real. [Registro detalhado](A04_ANDROID_EMULATOR_PATHS.md). **A04 permanece em andamento; nenhuma nova certificação.**
+
 A prioridade é reconstruir comportamento verificável (estrutura, semântica, C/C++, diferencial), não aumentar certificados.
 [Etapas, gates e prioridades](../RECONSTRUCTION_WORKFLOW.md)
 

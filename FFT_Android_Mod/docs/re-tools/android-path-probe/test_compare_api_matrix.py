@@ -12,24 +12,31 @@ spec.loader.exec_module(module)
 
 
 def measurement(api, internal=61, external=81):
-    def row(n):
-        return {"present":n is not None,
+    def row(n, name):
+        return {"source":module.SOURCE_LABELS[name], "present":n is not None,
                 "jni_mutf8_byte_length":n,
                 "within_242_bytes":n<=242 if n is not None else None,
                 "bounded_c_model_accepted":n<=242 if n is not None else None,
+                "java_utf16_length":n,
                 "path_contents":"sensitive-do-not-retain"}
-    return {"schema":1,"android_sdk":api,"package_identity":module.PACKAGE,
+    return {"schema":2,"android_sdk":api,"package_identity":module.PACKAGE,
             "status":"sampled_not_a_global_bound",
             "running_original_game_apk":False,
             "original_strcpy_executed":False,
             "same_package_name_as_original_game":True,
             "native_method":"JNI GetStringUTFLength",
+            "native_null_length_sentinel":-1,"bounded_c_null_sentinel":-1,
+            "diagnostic_synthetic_null_path":{
+                "source":"synthetic_null_path","present":False,
+                "jni_mutf8_byte_length":None,"within_242_bytes":None,
+                "bounded_c_model_accepted":None,"java_utf16_length":None},
             "native_ascii_242":242,"native_ascii_243":243,
             "bounded_c_ascii_242":1,"bounded_c_ascii_243":0,
             "bounded_c_nul_java":1,"bounded_c_emoji_one":1,
             "native_nul_utf_bytes_hex":"61c08062",
             "native_emoji_utf_bytes_hex":"f09f9880",
-            "GetIntPath":row(internal),"GetExt1Path":row(external)}
+            "GetIntPath":row(internal,"GetIntPath"),
+            "GetExt1Path":row(external,"GetExt1Path")}
 
 
 class AggregationTests(unittest.TestCase):
@@ -56,6 +63,7 @@ class AggregationTests(unittest.TestCase):
         self.assertEqual([r["android_api"] for r in data["api_observations"]],[23,29,35])
         self.assertFalse(data["global_maximum_proven"])
         self.assertFalse(data["original_game_apk_executed"])
+        self.assertTrue(data["diagnostic_synthetic_null_gate_verified"])
         self.assertNotIn("sensitive-do-not-retain",json.dumps(data))
 
     def test_missing_external_is_not_a_validated_string(self):
@@ -89,6 +97,49 @@ class AggregationTests(unittest.TestCase):
         source=Path(__file__).with_name("run-emulator.sh").read_text(encoding="utf-8")
         self.assertIn('python3 - "$OUT" "$EXPECTED_API" <<', source)
         self.assertIn("expected_api=sys.argv[2]", source)
+
+    def test_null_is_synthetic_only_and_does_not_claim_getter_null(self):
+        data=module.consolidate(self.files(measurement(29,61,None)),[29])
+        self.assertTrue(data["diagnostic_synthetic_null_gate_verified"])
+        self.assertIsNone(data["api_observations"][0]["methods"]["GetExt1Path"]
+                          ["observed_within_budget"])
+        self.assertFalse(data["original_game_apk_executed"])
+
+    def test_invalid_null_evidence_rejected(self):
+        for field, invalid in (
+            ("native_null_length_sentinel",0),
+            ("bounded_c_null_sentinel",1),
+            ("diagnostic_synthetic_null_path",{"present":True}),
+        ):
+            with self.subTest(field=field):
+                wrong=measurement(29)
+                wrong[field]=invalid
+                with self.assertRaises(ValueError):
+                    module.consolidate(self.files(wrong),[29])
+
+    def test_mislabeled_methods_or_non_boolean_boundary_rejected(self):
+        wrong=measurement(29)
+        wrong["GetIntPath"]["source"]=module.SOURCE_LABELS["GetExt1Path"]
+        with self.assertRaises(ValueError):
+            module.consolidate(self.files(wrong),[29])
+        wrong=measurement(29)
+        wrong["GetIntPath"]["within_242_bytes"]=1  # 1 == True, but not bool
+        with self.assertRaises(ValueError):
+            module.consolidate(self.files(wrong),[29])
+
+    def test_absent_path_cannot_have_length_or_budget(self):
+        for field, invalid in (("java_utf16_length",0),("within_242_bytes",False)):
+            with self.subTest(field=field):
+                wrong=measurement(29,61,None)
+                wrong["GetExt1Path"][field]=invalid
+                with self.assertRaises(ValueError):
+                    module.consolidate(self.files(wrong),[29])
+
+    def test_outdated_schema_rejected(self):
+        wrong=measurement(29)
+        wrong["schema"]=1
+        with self.assertRaises(ValueError):
+            module.consolidate(self.files(wrong),[29])
 
     def test_missing_api_is_rejected(self):
         with self.assertRaises(ValueError):
