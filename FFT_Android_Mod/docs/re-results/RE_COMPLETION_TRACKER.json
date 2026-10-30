@@ -50,11 +50,14 @@
       "status": "in_progress",
       "depends_on": [],
       "title": "Consolidar inventario unico ELF (ARM/Thumb)",
-      "next_action": "B01 em andamento: validar SHA e ELF32 ARM no CI; deduplicar 6.455 registros em 6.329 entrypoints (126 aliases), classificar 15 pares de sobreposições; correlacionar Smali/JNI, APK e OBB real. O arquivo OBB versionado é ponteiro Git LFS; não assumir conteúdo materializado. Não marcar done até inventário único de código/dados/artefatos e lacunas verificadas.",
+      "next_action": "B01: auditar nove grupos de sobreposições co-terminais do ELF original com A32 e CFG sem certificar rotas; cruzar métodos native Smali com exports JNI, preservar RegistroNatives sem prova; inventariar OBB materializado por SHA. Pendente: classificar entradas, mapeamento JNI real, OBB Git LFS e reachability. Manter B01 in_progress.",
       "acceptance": "Relatorio de inventario com total unico, cobertura de bytes e origem de cada entrada, sem dupla contagem.",
       "evidence": [
         "FFT_Android_Mod/docs/re-results/B01_INVENTORY_BASELINE_AUDIT.md",
-        "FFT_Android_Mod/docs/re-tools/b01_inventory_audit.py"
+        "FFT_Android_Mod/docs/re-tools/b01_inventory_audit.py",
+        "FFT_Android_Mod/docs/re-results/B01_STATIC_LINKS_EVIDENCE.md",
+        "FFT_Android_Mod/docs/re-tools/b01_overlap_elf_evidence.py",
+        "FFT_Android_Mod/docs/re-tools/b01_smali_jni_obb_audit.py"
       ]
     },
     {
