@@ -178,11 +178,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #466 — ci: reutilizar cache pip nos pipelines de engenharia reversa ARM](https://github.com/c1c3ru/fft_craft/pull/466)
+- [PR #465 — ci(cost): preservar matriz Android completa e cancelar execuções obsoletas](https://github.com/c1c3ru/fft_craft/pull/465)
+- [PR #462 — test(re): fechar gate JNI ART→C com canários e relatório multi-API sem dados de caminho](https://github.com/c1c3ru/fft_craft/pull/462)
+- [PR #463 — chore(re): automated structural batch 40930440924](https://github.com/c1c3ru/fft_craft/pull/463)
 - [PR #461 — test(re): ampliar provas Android JNI de caminhos às APIs 23/29/35](https://github.com/c1c3ru/fft_craft/pull/461)
-- [PR #460 — chore(re): automated structural batch 40929258228](https://github.com/c1c3ru/fft_craft/pull/460)
-- [PR #459 — docs(re): consolidar gate Android API29 JNI e manter fronteiras A04 explícitas](https://github.com/c1c3ru/fft_craft/pull/459)
-- [PR #458 — chore(re): automated structural batch 40923873878](https://github.com/c1c3ru/fft_craft/pull/458)
-- [PR #457 — fix(re): validar bytes UTF reais do Android ART no probe A04](https://github.com/c1c3ru/fft_craft/pull/457)
 
 ## Atualização automática e fontes
 
