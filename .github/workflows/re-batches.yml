@@ -18,8 +18,11 @@ on:
         description: 'New functions (100 to 250)'
         required: false
         default: '100'
+  # Six UTC triggers per day (00:17, 04:17, 08:17, 12:17, 16:17, 20:17 America/Fortaleza).
+  # The existing workflow concurrency group serializes batches without cancelling a running job.
+  # Preserve the original 03:17 UTC trigger; retain workflow_dispatch and automatic continuation.
   schedule:
-    - cron: '17 3 * * *'
+    - cron: '17 3,7,11,15,19,23 * * *'
 
 permissions:
   contents: write
