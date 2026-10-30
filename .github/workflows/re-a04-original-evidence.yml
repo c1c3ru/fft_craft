@@ -6,7 +6,7 @@ on:
       - '.github/workflows/re-a04-original-evidence.yml'
       - 'FFT_Android_Mod/docs/re-tools/a04-original-runtime-evidence.py'
       - 'FFT_Android_Mod/docs/re-tools/a04-original-runtime-evidence.schema.json'
-      - 'FFT_Android_Mod/docs/re-tools/test_a04_original_runtime_evidence.py'
+      - 'FFT_Android_Mod/docs/re-tools/a04_original_runtime_evidence_tests.py'
   workflow_dispatch:
 
 permissions:
@@ -31,4 +31,4 @@ jobs:
         run: |
           set -euo pipefail
           python -m py_compile FFT_Android_Mod/docs/re-tools/a04-original-runtime-evidence.py
-          python -m unittest discover -s FFT_Android_Mod/docs/re-tools -p test_a04_original_runtime_evidence.py -v
+          python -m unittest discover -s FFT_Android_Mod/docs/re-tools -p a04_original_runtime_evidence_tests.py -v
