@@ -22,8 +22,6 @@ O histórico CSV contém **5,932** registros de análise anterior, que podem se 
 
 ## Fluxo de reconstrução funcional
 
-**Nota de CI A04 (30/10/2026):** os PRs [#451](https://github.com/c1c3ru/fft_craft/pull/451) e [#465](https://github.com/c1c3ru/fft_craft/pull/465) foram integrados; o último CI de #465 validou somente regressões Python, com emuladores pulados. Dois runs agendados/por push de lotes ARM falharam antes de obter runner, por causa ainda desconhecida. A matriz JNI API 23/29/35 continua manual; o novo gate sintético de `null` exige validação posterior no Android real. [Registro detalhado](A04_ANDROID_EMULATOR_PATHS.md). **A04 permanece em andamento; nenhuma nova certificação.**
-
 A prioridade é reconstruir comportamento verificável (estrutura, semântica, C/C++, diferencial), não aumentar certificados.
 [Etapas, gates e prioridades](../RECONSTRUCTION_WORKFLOW.md)
 
@@ -180,11 +178,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #467 — ci(a04): gate JNI null seguro e isolamento de CI ARM pesado](https://github.com/c1c3ru/fft_craft/pull/467)
+- [PR #470 — ci(re-batches): aumentar agendamento para seis execuções diárias](https://github.com/c1c3ru/fft_craft/pull/470)
+- [PR #469 — chore(re): automated structural batch 41072864961](https://github.com/c1c3ru/fft_craft/pull/469)
 - [PR #466 — ci: reutilizar cache pip nos pipelines de engenharia reversa ARM](https://github.com/c1c3ru/fft_craft/pull/466)
 - [PR #465 — ci(cost): preservar matriz Android completa e cancelar execuções obsoletas](https://github.com/c1c3ru/fft_craft/pull/465)
-- [PR #462 — test(re): fechar gate JNI ART→C com canários e relatório multi-API sem dados de caminho](https://github.com/c1c3ru/fft_craft/pull/462)
-- [PR #463 — chore(re): automated structural batch 40930440924](https://github.com/c1c3ru/fft_craft/pull/463)
-- [PR #461 — test(re): ampliar provas Android JNI de caminhos às APIs 23/29/35](https://github.com/c1c3ru/fft_craft/pull/461)
 
 ## Atualização automática e fontes
 
