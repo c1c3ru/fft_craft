@@ -20,6 +20,8 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "docs/re-results"
 REPO = "c1c3ru/fft_craft"
 MILESTONES = (
+    ("B01_BOUNDED_CALLER_EXECUTION.md",
+     "B01: duas chamadas BL originais executadas em Unicorn até retorno BX LR e comparadas ao C++ sob memória sintética; callers completos não certificados"),
     ("CI_RELIABILITY_2026-10-28.md",
      "CI auditado: falhas históricas de fixture e Unicorn separadas do HEAD verde; cancelar apenas runs obsoletos de PR"),
     ("SEMANTIC_SOUND_GLOBAL_SLOT.md",
