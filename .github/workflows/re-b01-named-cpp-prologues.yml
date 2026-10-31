@@ -7,6 +7,9 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/c-models/b01_named_cpp_methods.cpp'
       - 'FFT_Android_Mod/docs/re-tools/b01_named_cpp_differential.py'
       - 'FFT_Android_Mod/docs/re-tools/b01_prologue_external_audit.py'
+      - 'FFT_Android_Mod/docs/re-tools/b01_seven_caller_triage.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_b01_seven_caller_triage.py'
+      - 'FFT_Android_Mod/docs/re-results/B01_SEVEN_CALLSITE_TRIAGE.md'
       - 'FFT_Android_Mod/docs/re-tools/test_b01_named_cpp_prologues.py'
       - 'FFT_Android_Mod/docs/re-results/B01_NAMED_CPP_PROLOGUE_GATES.md'
   workflow_dispatch:
@@ -48,6 +51,27 @@ jobs:
             --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
             --inventory FFT_Android_Mod/docs/RE_FUNCTION_INVENTORY.csv \
             --output /tmp/b01-named-cpp-vs-elf.json
+      - name: Triage direct callsite candidates into the seven C++ methods
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s FFT_Android_Mod/docs/re-tools \
+            -p 'test_b01_seven_caller_triage.py' -v
+          python FFT_Android_Mod/docs/re-tools/b01_seven_caller_triage.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --inventory FFT_Android_Mod/docs/RE_FUNCTION_INVENTORY.csv \
+            --results FFT_Android_Mod/docs/re-results \
+            --output /tmp/b01-seven-caller-candidates.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('/tmp/b01-seven-caller-candidates.json').read_text())
+          assert len(x['targets'])==7
+          assert sum(x['by_target'].values())==x['linear_sweep_candidate_callsites']
+          assert x['verified_original_callers']==0
+          assert x['verified_object_layouts']==0 and not x['B01_done']
+          assert x['semantic_certificates_added']==0
+          print('B01_SEVEN_CALLER_CANDIDATES_GATE=PASS')
+          PY
       - name: Audit 14 unique stack returns and ten unresolved direct external boundaries
         run: |
           set -euo pipefail
@@ -87,5 +111,6 @@ jobs:
           path: |
             /tmp/b01-named-cpp-vs-elf.json
             /tmp/b01-prologues-external-edges.json
+            /tmp/b01-seven-caller-candidates.json
           if-no-files-found: warn
           retention-days: 30
