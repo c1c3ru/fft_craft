@@ -120,7 +120,7 @@ Evidências geradas e verificadas nesta execução do pipeline.
 | Cobertura semântica por bytes únicos | 0.07% |
 | Registros parciais no ledger | 0 |
 | Endereços com evidência parcial no lote de referência | 11 |
-| Documentos semânticos históricos do mesmo ELF | 26 |
+| Documentos semânticos históricos do mesmo ELF | 27 |
 | Documentos históricos com testes declarados | 13 |
 | Candidatas BX LR verificadas, pendentes de revisão | 303 |
 | Contratos BX LR preparados para revisão humana (não certificados) | 0 |
@@ -178,11 +178,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #503 — feat(re): medir produtividade semântica real por lote e dependências B01/A04](https://github.com/c1c3ru/fft_craft/pull/503)
+- [PR #502 — chore(re): automated structural batch 41189539411](https://github.com/c1c3ru/fft_craft/pull/502)
 - [PR #501 — chore(re): automated structural batch 41159780088](https://github.com/c1c3ru/fft_craft/pull/501)
 - [PR #500 — chore(re): automated structural batch 41119231069](https://github.com/c1c3ru/fft_craft/pull/500)
 - [PR #499 — chore(re): automated structural batch 41099284815](https://github.com/c1c3ru/fft_craft/pull/499)
-- [PR #498 — feat(re): reimplementar sete métodos ARM em C++ e auditar PUSH/POP e callees B01](https://github.com/c1c3ru/fft_craft/pull/498)
-- [PR #497 — chore(re): automated structural batch 41096772018](https://github.com/c1c3ru/fft_craft/pull/497)
 
 ## Atualização automática e fontes
 
@@ -195,3 +195,7 @@ O workflow `re-pipeline.yml` testa a geração em PRs sem publicar as alteraçõ
 - [GitHub Actions](https://github.com/c1c3ru/fft_craft/actions) — execução e eventuais falhas de CI.
 
 **Limitação:** o painel não é um contador de reconstrução semântica completa. Uma certificação desse tipo exigiria contratos e testes integrais por função; os registros parciais não constituem tais certificações.
+
+
+### Produtividade real por lote
+[Histórico de novos certificados e dependências](SEMANTIC_VELOCITY.md). Este indicador não certifica contratos e não equivale ao percentual funcional do aplicativo.
