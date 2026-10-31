@@ -216,6 +216,8 @@ jobs:
             --contracts-dir /tmp/fft-semantic/contract-pilot \
             --manifests-dir /tmp/fft-semantic/manifests \
             --output FFT_Android_Mod/docs/re-results/SEMANTIC_RUN_SNAPSHOT.json
+      - name: Measure ledger growth and dependency bottlenecks
+        run: python3 FFT_Android_Mod/docs/re-tools/semantic_velocity.py
       - name: Update central FFT Craft dashboard
         env:
           GH_TOKEN: ${{ github.token }}

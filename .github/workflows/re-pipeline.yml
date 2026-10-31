@@ -60,6 +60,17 @@ jobs:
           # Roadmap task count grows as gaps are discovered.
           test "$(sed -n 's/^RE_COMPLETION_TRACKER_TASKS=//p' /tmp/re-plan-check.log)" -ge 1
 
+      - name: Smoke certificate velocity using real original ELF inventory
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/semantic_velocity.py \
+            --history "${RUNNER_TEMP}/semantic-velocity-history.json" \
+            --report "${RUNNER_TEMP}/semantic-velocity.md" \
+            --run-id "ci-${GITHUB_RUN_ID}" | tee /tmp/semantic-velocity-ci.log
+          grep -q '^SEMANTIC_VELOCITY_CERTIFIED=' /tmp/semantic-velocity-ci.log
+          test -s "${RUNNER_TEMP}/semantic-velocity.md"
+
+
   structural-smoke:
     # Bounded smoke tests run on PRs as well as manual dispatches.
     needs: unit-tests
