@@ -111,9 +111,13 @@ def execute_one(case, caller, callee, c_fn):
     uc.mem_write(STACK, bytes((i * 7 + 19) % 256 for i in range(STACK_SIZE)))
     for idx, reg in enumerate(REGS):
         uc.reg_write(reg, START_R0 if idx == 0 else DATA + 0x1000 + idx * 0x80)
+    # Set CPU mode before banked SP/LR. A later CPSR mode switch would
+    # replace the visible stack pointer and lead to unmapped PUSH writes.
+    uc.reg_write(UC_ARM_REG_CPSR, 0x10)
     uc.reg_write(UC_ARM_REG_SP, START_SP)
     uc.reg_write(UC_ARM_REG_LR, 0x720000)
-    uc.reg_write(UC_ARM_REG_CPSR, 0x10)
+    if uc.reg_read(UC_ARM_REG_SP) != START_SP:
+        raise AssertionError("ARM user-mode stack initialization failed")
 
     state = {"phase": "prefix", "trace": [], "writes": [], "problem": None}
     allowed = {case["site"], case["site"] + 4} | {
