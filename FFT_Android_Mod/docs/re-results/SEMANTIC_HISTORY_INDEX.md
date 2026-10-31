@@ -2,9 +2,9 @@
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-- Relatórios históricos vinculados a este ELF: **26**
+- Relatórios históricos vinculados a este ELF: **27**
 - Documentos com contagens de microexecuções declaradas: **13**
-- Documentos de auditoria estática / limites: **13**
+- Documentos de auditoria estática / limites: **14**
 - Documentos com outro SHA-256 excluídos: **0**
 
 **Importante:** os relatórios abaixo foram gerados em etapas anteriores. Suas contagens podem se sobrepor e não são somadas às microexecuções deste lote. A presença de um relatório e um texto PASS não é certificação integral nem reexecução do teste.
@@ -37,3 +37,4 @@ ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 | [ARM V2Icon BL and caller return-value branch microexecution](SEMANTIC_V2ICON_CALL_FLOW.md) | microexecution_report | 1 |
 | [V2Icon caller — three post-return destinations and state effects](SEMANTIC_V2ICON_DESTINATIONS.md) | microexecution_report | 1 |
 | [Isolated ARM V2Icon getter — machine-executed contract](SEMANTIC_V2ICON_EXECUTION.md) | microexecution_report | 1 |
+| [Produtividade verificável por execução — FFT Craft](SEMANTIC_VELOCITY.md) | static_or_boundary_audit | 0 |
