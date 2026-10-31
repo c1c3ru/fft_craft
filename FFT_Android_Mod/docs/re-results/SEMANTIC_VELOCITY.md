@@ -2,7 +2,7 @@
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Último run: `41210092677` · 2026-10-31T14:28:35Z
+Último run: `41210990229` · 2026-10-31T14:40:10Z
 
 | Indicador | Valor |
 |---|---:|
@@ -14,7 +14,12 @@ ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
 ## Variação da última execução
 
-Primeira medição: **linha de base, sem crescimento atribuível a este run**.
+- Novos endereços certificados: **0**.
+- Certificados removidos: **0**.
+- Variação de bytes certificados: **+0**.
+- Variação de aprovação estrutural: **+0**.
+- Variação de revisões pendentes: **+0**.
+- Atividades concluídas adicionais: **+0**.
 
 ## Janela móvel de sete dias
 
