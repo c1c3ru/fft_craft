@@ -8,6 +8,9 @@ on:
       - 'FFT_Android_Mod/docs/re-tools/b01_named_cpp_differential.py'
       - 'FFT_Android_Mod/docs/re-tools/b01_prologue_external_audit.py'
       - 'FFT_Android_Mod/docs/re-tools/b01_seven_caller_triage.py'
+      - 'FFT_Android_Mod/docs/re-tools/b01_bounded_caller_execution.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_b01_bounded_caller_execution.py'
+      - 'FFT_Android_Mod/docs/re-results/B01_BOUNDED_CALLER_EXECUTION.md'
       - 'FFT_Android_Mod/docs/re-tools/test_b01_seven_caller_triage.py'
       - 'FFT_Android_Mod/docs/re-results/B01_SEVEN_CALLSITE_TRIAGE.md'
       - 'FFT_Android_Mod/docs/re-tools/test_b01_named_cpp_prologues.py'
@@ -72,6 +75,28 @@ jobs:
           assert x['semantic_certificates_added']==0
           print('B01_SEVEN_CALLER_CANDIDATES_GATE=PASS')
           PY
+      - name: Run original ARM caller BL through complete 12-byte C++-modeled callee
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s FFT_Android_Mod/docs/re-tools \
+            -p 'test_b01_bounded_caller_execution.py' -v
+          python FFT_Android_Mod/docs/re-tools/b01_bounded_caller_execution.py \
+            --output /tmp/b01-bounded-caller-returns.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('/tmp/b01-bounded-caller-returns.json').read_text())
+          assert x['bounded_caller_to_callee_returns']==2
+          assert x['real_caller_objects_proven']==0
+          assert x['full_function_certificates_added']==0
+          assert not x['B01_done']
+          for row in x['synthetic_controlled_reconstructions']:
+              assert row['same_synthetic_memory_as_independent_cpp']
+              assert row['original_bl_to_bx_lr_return_executed']
+              assert not row['full_original_caller_body_executed']
+              assert not row['whole_function_semantically_certified']
+          print('B01_BOUNDED_CALLERS_GATE=PASS')
+          PY
       - name: Audit 14 unique stack returns and ten unresolved direct external boundaries
         run: |
           set -euo pipefail
@@ -112,5 +137,6 @@ jobs:
             /tmp/b01-named-cpp-vs-elf.json
             /tmp/b01-prologues-external-edges.json
             /tmp/b01-seven-caller-candidates.json
+            /tmp/b01-bounded-caller-returns.json
           if-no-files-found: warn
           retention-days: 30
