@@ -178,11 +178,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #508 — chore(re): automated structural batch 41218000838](https://github.com/c1c3ru/fft_craft/pull/508)
 - [PR #506 — chore(re): automated structural batch 41210990229](https://github.com/c1c3ru/fft_craft/pull/506)
 - [PR #505 — B01: rastrear candidatas a chamadas dos sete métodos C++ no ELF original](https://github.com/c1c3ru/fft_craft/pull/505)
 - [PR #504 — chore(re): automated structural batch 41210092677](https://github.com/c1c3ru/fft_craft/pull/504)
 - [PR #503 — feat(re): medir produtividade semântica real por lote e dependências B01/A04](https://github.com/c1c3ru/fft_craft/pull/503)
-- [PR #502 — chore(re): automated structural batch 41189539411](https://github.com/c1c3ru/fft_craft/pull/502)
 
 ## Atualização automática e fontes
 
