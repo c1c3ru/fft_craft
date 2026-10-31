@@ -274,6 +274,11 @@ def render(data, results, prs=None, semantic=None):
                   "desse tipo exigiria contratos e testes integrais "
                   "por função; os registros parciais não constituem tais certificações.",
                   ""])
+    if (results / "SEMANTIC_VELOCITY.md").is_file():
+        lines.extend(["", "### Produtividade real por lote",
+                      "[Histórico de novos certificados e dependências](SEMANTIC_VELOCITY.md). "
+                      "Este indicador não certifica contratos e não equivale "
+                      "ao percentual funcional do aplicativo."])
     return "\n".join(lines)
 
 
