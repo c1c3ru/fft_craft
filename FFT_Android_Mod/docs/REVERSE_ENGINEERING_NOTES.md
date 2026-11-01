@@ -25826,3 +25826,49 @@ independentemente.
 **Status CSV: `read_full`** — 89/89 instruções reais, 19/19 `bl`
 já documentados, tabela de salto reconferida caso a caso (100%
 correta).
+
+## 658. `copy_entry_coord(BWORK*, EDATA*)` — leitura completa: primeira evidência de campo para `EDATA`, confirma `BWORK+0x184/+0x186` como coordenada de entrada (2026-10-31, T08 do `RE_COMPLETUDE_TASKS.md`)
+
+`copy_entry_coord(BWORK* r0, EDATA* r1)` (`0x1d9ee0`, 120 B) —
+disassembly linear completo via Capstone, sem `bl`, sem branch: 30 de
+30 instruções reais, 100% de cobertura, `jtable.py` confirma zero
+tabela de salto.
+
+```c
+void copy_entry_coord(BWORK* unit, EDATA* e) {
+    unit->byte_0x4f = e->byte_0x19;
+    unit->byte_0x50 = e->byte_0x1a;
+
+    // +0x51 e bit-empacotado a partir de e->byte_0x1b em 3 passos:
+    unit->byte_0x51 = (unit->byte_0x51 & ~0x80) | (e->byte_0x1b & 0x80);           // bit 7
+    unit->byte_0x51 = (unit->byte_0x51 & ~0x0f) | (e->byte_0x1b & 0x03);           // bits 0-1 (bits 2-3 zeram)
+    unit->byte_0x51 = (unit->byte_0x51 & ~0x30) | (e->byte_0x1b & 0x30);           // bits 4-5
+
+    unit->coord_x_0x184 = (uint16_t)e->byte_0x1e;   // zero-estendido de byte pra halfword
+    unit->byte_0x186    = e->byte_0x1f;
+}
+```
+
+Esta é a primeira evidência de campo já obtida para `EDATA` — a seção
+72 já tinha identificado o papel ("template de dados de inimigo") mas
+registrado explicitamente que o layout não estava mapeado campo a
+campo. Os 5 campos lidos aqui (`+0x19`, `+0x1a`, `+0x1b`, `+0x1e`,
+`+0x1f`) e os novos campos de `BWORK` (`+0x4f`, `+0x50`, `+0x51`,
+`+0x184`, `+0x186`) estão consolidados com citação em
+`docs/re-baseline/types/bwork.h` e `docs/re-baseline/types/edata.h`
+(T08), verificados por compilação com `offsetof`/`sizeof`.
+
+**Achado**: `+0x184`/`+0x186` em `BWORK` e `+0x1e`/`+0x1f` em `EDATA`
+são, pelo nome da função, as coordenadas X/Y de posição de entrada no
+mapa de batalha — `+0x184` é halfword (16 bits) mas só recebe um byte
+zero-estendido aqui, então o byte alto desse campo não é tocado por
+esta função especificamente (pode ser escrito por outro caminho, não
+investigado).
+
+**Lacuna aceita**: bit 6 de `BWORK+0x51` é preservado (nem lido nem
+escrito a partir de `EDATA`) — origem desse bit não investigada;
+`sizeof(EDATA)` segue desconhecido, só os 5 campos lidos foram
+confirmados.
+
+**Status CSV: `read_full`** — 30/30 instruções reais, 0 `bl`, 0 tabela
+de salto.

@@ -2245,7 +2245,7 @@ address,size,mangled,demangled,status,section_ref
 001a47e0,120,_Z24pspAbilityCompareSupportss,"pspAbilityCompareSupport(short, short)",read_structural,NOTES §615
 001ab104,120,_Z13IsUntauchablei,IsUntauchable(int),read_structural,NOTES §611
 001e4e94,120,_Z11get_step_noP5BWORK,get_step_no(BWORK*),read_structural,NOTES §615
-001d9ee0,120,_Z16copy_entry_coordP5BWORKP5EDATA,"copy_entry_coord(BWORK*, EDATA*)",read_structural,NOTES §611
+001d9ee0,120,_Z16copy_entry_coordP5BWORKP5EDATA,"copy_entry_coord(BWORK*, EDATA*)",read_full,NOTES §658
 001ee5fc,120,_Z19initializeExpNumberP13tag_animation,initializeExpNumber(tag_animation*),read_full,NOTES §568
 001ef4e8,120,_Z19requestDefaultColorP13tag_animationii,"requestDefaultColor(tag_animation*, int, int)",read_full,NOTES §564
 001efa60,120,_Z21requestCast2AnimationP13tag_animationS0_,"requestCast2Animation(tag_animation*, tag_animation*)",read_full,NOTES §564
