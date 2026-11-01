@@ -24650,16 +24650,25 @@ validador estrito `structural_v3` (100% code_coverage_pct,
 `unexplained_count: 0`, `tables_safe: true` onde aplicável), sem
 necessidade de releitura manual adicional.
 
-## 637. `houkoku_talkunit(int)` — leitura completa: escolhe o "orador" da tela de relatório comparando um stat de prioridade (`byte_0x1e`/`0x1f`) entre participantes, modo de comparação vem de um campo global `+0x26` (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614)
+## 637. `houkoku_talkunit(int)` — leitura completa, **corrigida em 2026-10-26**: escolhe o "orador" da tela de relatório comparando `byte_0x1e`/`0x1f` entre participantes, os 4 casos da tabela são exatamente simétricos (2 stats × 2 direções) — sem caso "sem comparação" (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614)
+
+> **Nota de correção**: a primeira versão desta seção (committada em
+> `751fbc3`) tinha o mapeamento caso→alvo da tabela de salto deslocado
+> em uma posição — um erro sistemático encontrado nesta sessão em
+> vários forks que derivaram a tabela manualmente sem cruzar contra o
+> endereço exato `dispatch+8` (convenção do pipeline ARM pro operando
+> `pc` do `ADDLS`). Reconferido aqui via disassembly direto dos 4
+> alvos reportados pelo `jtable.py`.
 
 `houkoku_talkunit(int id)` (`0x25b78c`, 236 B) — disassembly linear
 completo via Capstone. 56 de 56 instruções reais lidas e atribuídas
 (código termina em `0x25b86c`); os 3 words finais (12 B) são literal
-pool — total exato de 236 B. Tabela de salto confirmada e validada
-manualmente: `cmp r3,#3; addls pc,pc,r3,lsl#2` em `0x25b7ec`, 4 casos
-+ default, todos os alvos dentro da função (o mesmo idiom `ADDLS`
-que o validador `structural_v3` rejeita automaticamente, mas que é
-seguro — a checagem de limite é o próprio `addls`).
+pool — total exato de 236 B. Tabela de salto confirmada: `cmp r3,#3;
+addls pc,pc,r3,lsl#2` em `0x25b7ec`, **4 casos, sem caso default
+distinto** (os 4 cobrem toda a faixa `flagField∈{0,1,2,3}`), todos os
+alvos dentro da função (o mesmo idiom `ADDLS` que o validador
+`structural_v3` rejeita automaticamente, mas que é seguro — a
+checagem de limite é o próprio `addls`).
 
 ```c
 int houkoku_talkunit(int id) {
@@ -24678,27 +24687,29 @@ int houkoku_talkunit(int id) {
     for (int i = 0; i < count; i++) {
         uint8_t pid = *idList++;
         void* rec = get_unitwork_add_wld(pid);     // bl, §565
-        switch (flagField - 1) {                    // bounded, 4 casos + default
-            case 0: /* entra sem comparar stat */          goto join;
-            case 1: val = rec->byte_0x1e; cmp = val > best;  break;
-            case 2: val = rec->byte_0x1e; cmp = val < best;  break;
-            case 3: val = rec->byte_0x1f; cmp = val > best;  break;
-            default: val = rec->byte_0x1f; cmp = val >= best; break;
+        int val;
+        switch (flagField) {                        // bounded 0..3, sem default distinto
+            case 0: val = rec->byte_0x1e; if (val > best) { bestId=pid; best=val; } break;
+            case 1: val = rec->byte_0x1e; if (val < best) { bestId=pid; best=val; } break;
+            case 2: val = rec->byte_0x1f; if (val > best) { bestId=pid; best=val; } break;
+            case 3: val = rec->byte_0x1f; if (val < best) { bestId=pid; best=val; } break;
         }
-        if (cmp) { bestId = pid; best = val; }
-    join: ;
     }
     return bestId;
 }
 ```
 
-Confirma e refina a nota em bloco do §614 ("fecha mais um elo do
-cluster houkoku"): escolhe a unidade "oradora" da tela de relatório
-comparando um stat de prioridade (`byte_0x1e` ou `byte_0x1f` do
-registro de trabalho de cada participante, via `get_unitwork_add_wld`
-§565) entre todos os participantes, com o modo de comparação (qual
-stat, qual direção) selecionado por um campo global de config `+0x26`
-— provável seletor de dificuldade/time/modo de ordenação.
+Padrão completamente simétrico, confirmado por disassembly direto
+dos 4 alvos (`0x25b844`/`0x25b834`/`0x25b854`/`0x25b808`): 2 stats
+(`byte_0x1e`/`byte_0x1f`) × 2 direções de comparação (maior/menor)
+= as 4 combinações exatas. Não existe um 5º caso "sem comparar" —
+essa leitura da versão anterior foi um artefato do deslocamento de
+índice. Confirma e refina a nota em bloco do §614 ("fecha mais um
+elo do cluster houkoku"): escolhe a unidade "oradora" da tela de
+relatório comparando um stat de prioridade entre todos os
+participantes, com o modo de comparação (qual stat, qual direção)
+selecionado por um campo global de config `+0x26` — provável
+seletor de dificuldade/time/modo de ordenação.
 
 **Lacunas aceitas**: constante exata do literal pool usada como
 sentinela alternativa (`LITERAL_R7`); identidade simbólica do struct
@@ -24706,8 +24717,8 @@ global em `g_cfgPtr`/`+0x26` e dos dois stats `byte_0x1e`/`byte_0x1f`
 (provavelmente dois eixos de "peso de fala" distintos).
 
 **Status CSV: `read_full`** — 56/56 instruções reais, 1 `bl` já
-documentado, tabela de salto verificada manualmente (4 casos +
-default, todos dentro dos limites).
+documentado, tabela de salto reconferida por disassembly direto dos
+4 alvos (sem default distinto).
 
 ## 638. `pspMsgGet(unsigned int)` — leitura completa: getter puro de ponteiro por categoria (9 casos, 0 `bl`), confirma exatamente 9 categorias de mensagem, 2 delas via indireção dupla (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614)
 
@@ -24751,40 +24762,53 @@ resolver contra a seção de dados pra nomear cada categoria).
 **Status CSV: `read_full`** — 49/49 instruções reais, função-folha
 sem `bl`, tabela de salto verificada manualmente (9 casos + default).
 
-## 639. `getNextSENo(int)` — leitura completa: sequenciador de efeito sonoro por-id com contador de chamadas e modo de seleção (flat/cíclico/alternado/"1ª chamada diferente") (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614)
+## 639. `getNextSENo(int)` — leitura completa, **corrigida em 2026-10-26**: sequenciador de efeito sonoro por-id, mapeamento de caso corrigido por disassembly direto (o caso "flat" é único, não duplicado; "1ª chamada diferente" e "default" estavam trocados de posição) (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614)
+
+> **Nota de correção**: a primeira versão desta seção (committada em
+> `751fbc3`) tinha o mapeamento caso→conteúdo embaralhado pelo mesmo
+> erro sistemático de offset documentado em §637. Reconferido via
+> disassembly completo das 5 instruções de guarda + 5 corpos de caso.
 
 `getNextSENo(int id)` (`0x21d544`, 220 B) — disassembly linear
 completo via Capstone. 52 de 52 instruções reais lidas e atribuídas
 (código termina em `0x21d614`); os 3 words finais (12 B) são literal
 pool — total exato de 220 B. Função-folha pura (0 `bl`). Tabela de
-salto confirmada manualmente: `cmp r2,#4; addls pc,pc,r2,lsl#2`, 5
-casos + default, todos dentro da função.
+salto confirmada por disassembly direto dos 5 alvos: `cmp r2,#4;
+addls pc,pc,r2,lsl#2` em `0x21d574`/`0x21d578`, 5 casos (índices
+0-4), com um 6º caminho default físico em `dispatch+4` (`0x21d57c`,
+`b 0x21d60c: mov r0,#0; return 0` — alcançado só quando `mode>4`).
 
 ```c
 int getNextSENo(int id) {
-    uint8_t* table = *g_senoTableBase;
-    uint8_t callCount = table[id];                 // contador de chamadas por id
-    SeEntry* e = &table_base2[id];                  // stride 4, struct paralela
-    uint8_t mode = e->byte8;                          // seletor de modo 0..4/default
-    table[id] = callCount + 1;
+    uint8_t* callCountTable = *g_senoCallCountPtr;     // array de 1 byte por id
+    uint8_t callCount = callCountTable[id];
+    callCountTable[id] = callCount + 1;                 // incrementa sempre, antes do switch
+    void* base = *g_senoRecordBasePtr;                   // base de uma 2ª tabela
+    void* rec = (char*)base + (id << 2);                   // offset id*4 dentro dela
+    uint8_t mode = *((uint8_t*)rec + 8);                    // byte na posição +8
 
-    switch (mode) {                                   // bounded, 5 casos + default
-        case 0: case 1: return e->byte9;                // flat: sempre o mesmo SE
-        case 2: {                                        // cíclico por período
-            int phase = callCount % PERIOD;              // smull-based
-            return table_base[id + phase].byte9;
-        }
-        case 3: {                                        // alterna a cada chamada
+    switch (mode) {                                          // 5 casos (0-4), default em mode>4
+        case 0:                                                // flat, único caso sem condição
+            return *((uint8_t*)rec + 9);
+        case 1: {                                               // alterna a cada chamada
             int phase = callCount & 1;
-            return table_base[id + phase].byte9;
+            return *((uint8_t*)rec + phase + 9);
         }
-        case 4:                                           // 1ª chamada diferente
-            if (callCount == 0) return e->byte9;
-            return table_base[id].byteA;                   // campo SE secundário
-        default:
-            if (callCount == 0) return e->byte9;
-            phase = callCount & 1;
-            return table_base[id + phase].byteA;
+        case 2:                                                  // "1ª chamada diferente", campo +0xA
+            if (callCount == 0) return *((uint8_t*)rec + 9);
+            return *((uint8_t*)rec + 0xa);
+        case 3: {                                                 // como o caso 2, mas com fase alternada no campo +0xA
+            if (callCount == 0) return *((uint8_t*)rec + 9);
+            int phase = callCount & 1;
+            return *((uint8_t*)rec + phase + 0xa);
+        }
+        case 4: {                                                  // cíclico por período (smull-based mod)
+            int period = LITERAL_PERIOD;                            // constante do pool, não decodificada numericamente
+            int phase = callCount - (callCount / period) * period;   // callCount % period
+            return *((uint8_t*)rec + phase + 9);
+        }
+        default:                                                    // mode > 4
+            return 0;
     }
 }
 ```
@@ -24792,46 +24816,56 @@ int getNextSENo(int id) {
 Confirma a menção pontual já existente ("`getNextSENo`,
 `Ssd_PlayEffect`" — sequência sonora de cinemática/transição) e a
 nota em bloco do §614 ("próximo efeito sonoro"): não é um lookup
-plano — cada id tem um contador de chamadas incrementado a cada
-chamada e um "modo" por-id que escolhe entre estratégias de seleção
-(flat/cíclico-por-período/alternado/"1ª chamada diferente"), lendo o
-número de efeito sonoro real de um campo byte (`+9` ou `+0xA`) de
-uma tabela paralela de stride 4, opcionalmente deslocado por
-`±phase` entradas. Explica por que chamadas repetidas com o mesmo
-`id` podem retornar efeitos sonoros diferentes (ex. variações de som
-de passo).
+plano — cada id tem um contador de chamadas incrementado
+incondicionalmente a cada chamada e um "modo" por-id que escolhe
+entre 5 estratégias de seleção (flat/alternado/"1ª chamada
+diferente"/"1ª chamada diferente com fase"/cíclico-por-período),
+lendo o número de efeito sonoro real de um campo byte (`+9` ou
+`+0xA`) dentro do registro do próprio id, opcionalmente deslocado
+por `±phase` entradas numa tabela vizinha. Modos fora de `[0,4]`
+retornam 0. Explica por que chamadas repetidas com o mesmo `id`
+podem retornar efeitos sonoros diferentes.
 
-**Lacunas aceitas**: constante divisora exata do `smull` do caso 2
-(período não decodificado numericamente); nomes simbólicos de
-`g_senoTableBase`/da struct paralela de stride 4 além de `byte8`
-(modo)/`byte9`/`byteA` (números de SE).
+**Lacunas aceitas**: constante divisora exata do `smull` do caso 4
+(período não decodificado numericamente); nomes simbólicos das duas
+globais (`g_senoCallCountPtr`/`g_senoRecordBasePtr`) e layout exato
+do registro de id (campos `+8`/`+9`/`+0xA` confirmados
+mecanicamente, sem nome semântico).
 
 **Status CSV: `read_full`** — 52/52 instruções reais, função-folha
-sem `bl`, tabela de salto verificada manualmente (5 casos + default).
+sem `bl`, tabela de salto reconferida por disassembly direto dos 5
+alvos + o caminho default físico.
 
-## 640. `onGotoNextMode(int)` — leitura completa: confirma o enum de 8 módulos de tela de topo (1=Boot...7=Link) por simetria posicional + 2 endereços cruzados (`Boot_Init`/`Logo_Init`) (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614.1)
+## 640. `onGotoNextMode(int)` — leitura completa, **corrigida em 2026-10-26**: enum é 0-indexado (0=Boot...6=Link), caso 7 é reservado/no-op nos dois lados, caso 8=Error (Uninit) — mapeamento reconferido por disassembly direto dos 18 alvos (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614.1)
+
+> **Nota de correção**: a primeira versão desta seção (committada em
+> `751fbc3`) tinha as duas tabelas deslocadas em uma posição (mesmo
+> erro sistemático de §637/§639) — atribuía "sem uninit" a 2 casos
+> (0 e 8) quando na realidade só o caso 7 é no-op, e chamava
+> `Error_Uninit` de "default" quando é literalmente o caso 8.
+> Reconferido via disassembly completo dos 9+9 alvos de ambas as
+> tabelas.
 
 `onGotoNextMode(int newMode)` (`0x2b20f4`, 324 B) — disassembly
 linear completo via Capstone. 78 de 78 instruções reais lidas e
 atribuídas (código termina em `0x2b2238`); os 3 words finais (12 B)
-são literal pool — total exato de 324 B. 2 tabelas de salto
-confirmadas manualmente (9 casos cada, idiom `ADDLS` seguro), já
-citadas em §614.1 pelo lado "Uninit"; esta leitura confirma também o
-lado "Init" (tail-calls).
+são literal pool — total exato de 324 B. 2 tabelas de 9 casos cada
+(índices 0-8, sem caso fora da faixa testado nesta passada), idiom
+`ADDLS` seguro.
 
 ```c
 int onGotoNextMode(int newMode) {
     int oldMode = *g_currentMode;
     switch (oldMode) {                              // 1ª tabela: desliga a tela atual
-        case 1: Boot_Uninit();        break;
-        case 2: Main_Uninit();        break;
-        case 3: Movie_Uninit();       break;
-        case 4: Logo_Uninit();        break;
-        case 5: Settings_Uninit();    break;
-        case 6: SettingsWnd_Uninit(); break;
-        case 7: Link_Uninit();        break;
-        case 0: case 8: break;                        // nenhum uninit necessário
-        default: Error_Uninit();      break;
+        case 0: Boot_Uninit();        break;
+        case 1: Main_Uninit();        break;
+        case 2: Movie_Uninit();       break;
+        case 3: Logo_Uninit();        break;
+        case 4: Settings_Uninit();    break;
+        case 5: SettingsWnd_Uninit(); break;
+        case 6: Link_Uninit();        break;
+        case 7: break;                                // reservado/não-usado: nenhum uninit
+        case 8: Error_Uninit();       break;
     }
     int reloaded = *g_currentMode;
     *g_currentMode = newMode;
@@ -24839,32 +24873,37 @@ int onGotoNextMode(int newMode) {
     *g_previousMode = reloaded;
 
     switch (newMode) {                                // 2ª tabela: liga a nova tela (tail-call)
-        case 1: return Boot_Init();            // 0x2b3464 — confirma endereço já fechado nesta sessão
-        case 2: return Main_Init_0x2bf3e8();     // inferido, sem bl/símbolo direto aqui
-        case 3: return Movie_Init_0x2c53e8();    // inferido
-        case 4: return Logo_Init();             // 0x2b582c — confirma §619, fechada nesta sessão
-        case 5: return Settings_Init_0x2c562c(); // inferido
-        case 6: return SettingsWnd_Init_0x2c718c(); // inferido
-        case 7: return Link_Init_0x2b3f34();     // inferido
-        case 0: case 8: return;                    // sem init
-        default: return unresolved_0x2b36bc();     // alvo não resolvido, provavelmente inalcançável
+        case 0: return Boot_Init();             // 0x2b3464 — confirma endereço já fechado nesta sessão
+        case 1: return Main_Init_0x2bf3e8();      // inferido, sem bl/símbolo direto aqui
+        case 2: return Movie_Init_0x2c53e8();     // inferido
+        case 3: return Logo_Init();              // 0x2b582c — confirma §619, fechada nesta sessão
+        case 4: return Settings_Init_0x2c562c();  // inferido
+        case 5: return SettingsWnd_Init_0x2c718c(); // inferido
+        case 6: return Link_Init_0x2b3f34();      // inferido
+        case 7: return;                             // reservado/não-usado: retorno puro, sem tail-call
+        case 8: return unresolved_0x2b36bc();        // não resolvido nesta passada
     }
 }
 ```
 
-**Achado de alta confiança**: o enum dos 8 módulos de tela de topo
-(1=Boot, 2=Main, 3=Movie, 4=Logo, 5=Settings, 6=SettingsWnd, 7=Link)
-é confirmado por simetria posicional entre as duas tabelas **mais
-dois endereços cruzados independentes** — `Boot_Init`=`0x2b3464` e
-`Logo_Init`=`0x2b582c`, ambos já fechados em outro lugar (`Boot_Init`
-já citado no §614.2, `Logo_Init` fechado nesta sessão como §619). Os
-outros 4 alvos de tail-call (`0x2bf3e8`/`0x2c53e8`/`0x2c562c`/
-`0x2c718c`) são portanto muito provavelmente `Main_Init`/
-`Movie_Init`/`Settings_Init`/`SettingsWnd_Init`, mas sem evidência de
-`bl`/símbolo direto dentro desta função — marcado como inferido, não
-confirmado. O alvo `default` (`0x2b36bc`, próximo mas distinto de
-`Boot_Uninit`=`0x2b36b8`) não foi resolvido e é provavelmente
-inalcançável na prática.
+**Achado de alta confiança**: o enum dos 9 módulos (0-8) de tela de
+topo é 0-indexado: `0=Boot, 1=Main, 2=Movie, 3=Logo, 4=Settings,
+5=SettingsWnd, 6=Link, 7=reservado/não-usado, 8=Error` — confirmado
+por disassembly direto dos 18 alvos das duas tabelas (não por
+simetria posicional assumida) **mais dois endereços cruzados
+independentes**: `Boot_Init`=`0x2b3464` e `Logo_Init`=`0x2b582c`,
+ambos já fechados em outro lugar (`Boot_Init` já citado no §614.2,
+`Logo_Init` fechado nesta sessão como §619). O caso 7 é
+genuinamente um no-op nos **dois** lados (retorno puro, sem `bl`
+nem tail-call) — não é "0 e 8" como a versão anterior afirmava; o
+caso 8 realmente chama `Error_Uninit()` no lado Uninit, mas no lado
+Init tail-chama um endereço (`0x2b36bc`) que não é `Error_Init` por
+nome conhecido — próximo mas distinto de `Boot_Uninit`=`0x2b36b8`,
+não resolvido nesta passada (pode ser um handler de erro genérico,
+não confirmado). Os outros 4 alvos de tail-call do lado Init
+(`0x2bf3e8`/`0x2c53e8`/`0x2c562c`/`0x2c718c`) continuam sem
+evidência de `bl`/símbolo direto dentro desta função — inferidos
+por posição, não confirmados.
 
 **bl targets (1ª tabela, todos já documentados)**: `Boot_Uninit`
 (0x2b36b8), `Main_Uninit` (0x2b6b38), `Movie_Uninit` (0x2c54ac),
@@ -24873,17 +24912,25 @@ inalcançável na prática.
 `Error_Uninit` (0x2b3758).
 
 **Status CSV: `read_full`** — 78/78 instruções reais, 2 tabelas de
-salto verificadas manualmente (9 casos + default cada); 4 alvos de
-tail-call da 2ª tabela ficam como inferência de alta confiança, não
-confirmação direta.
+salto reconferidas por disassembly direto dos 18 alvos; 4 alvos de
+tail-call do lado Init ficam como inferência de alta confiança
+(posição), não confirmação direta; alvo do caso 8 do lado Init
+(`0x2b36bc`) não resolvido.
 
-## 641. `pspFftDelete(int*)` — leitura completa: máquina de estados de 3 fases assíncronas sobre `xpLibapiSave{Start,Check,End}`, mesmo primitivo compartilhado com `pspFftSave` (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614.2)
+## 641. `pspFftDelete(int*)` — leitura completa, **retificada em 2026-10-26**: máquina de 3 estados sobre `xpLibapiSave{Start,Check,End}`, correção sobre os limites exatos de caso no estado 1 e sobre quando o estado reseta (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614.2)
+
+> **Nota de retificação**: a versão original (committada em
+> `751fbc3`) tinha a ideia geral certa (máquina de 3 fases sobre
+> `xpLibapiSave*`), mas simplificou demais os limites exatos de caso
+> do estado 1 e errou ao afirmar que o estado volta a 0 depois dele —
+> na realidade **só o estado 2 reseta o estado** pra 0; o estado 1
+> sempre retorna com o estado inalterado (continua 1).
 
 `pspFftDelete(int* outParam)` (`0x289c1c`, 320 B) — disassembly
 linear completo via Capstone. 72 de 72 instruções reais lidas e
 atribuídas (código termina em `0x289d3c`); os 8 words finais (32 B)
-são literal pool — total exato de 320 B. Tabela de salto confirmada
-manualmente: 16 casos, `ADDLS` seguro, 3 handlers distintos.
+são literal pool — total exato de 320 B. Tabela de 16 casos
+reconferida por disassembly direto dos alvos.
 
 ```c
 int pspFftDelete(int* outParam) {
@@ -24891,21 +24938,23 @@ int pspFftDelete(int* outParam) {
     if (state == 0) {
         xpLibapiSaveStart(2);        // op=2 = "delete"
         g_fftSaveState = 1;
-        g_saveStatusWord = 0;
-        return;
+        g_cachedArg = 0;              // estado antigo (0) vira o valor cacheado inicial
+        return 1;
     }
     if (state == 1) {
-        int status = xpLibapiSaveCheck();
-        if (status == 0)      return 1;
-        else if (status == 1) { g_saveStatusWord = 2; return 1; }
-        else { g_saveStatusWord = status; g_otherFlag = 2; return 1; }  // "ainda pendente"
+        int result = xpLibapiSaveCheck();
+        int idx = result + 0xd;        // bounded 0..0xf (16 casos exatos, sem default separado)
+        if (idx == 13)      return 1;                       // result==0: no-op total, sem tocar nada
+        else if (idx == 14) { g_otherFlag = 2; return result; }  // result==1: só seta a flag, retorna o result bruto
+        else { g_cachedArg = result; g_otherFlag = 2; return 1; }  // demais (incl. fora da faixa): cacheia + flag
+        // estado NÃO muda aqui — continua 1 até a próxima chamada cair em state==2
     }
     // state == 2: finaliza
     xpLibapiSaveEnd();
     g_fftSaveState = 0;
-    int status = g_saveStatusWord;
-    *outParam = status;
-    return status >> 31;    // bit de sinal como 0/-1
+    int cached = g_cachedArg;
+    *outParam = cached;
+    return cached >> 31;    // bit de sinal como 0/-1
 }
 ```
 
@@ -24913,22 +24962,28 @@ int pspFftDelete(int* outParam) {
 (0x28e010), `xpLibapiSaveEnd` (0x28e0a4), `xpLibapiSaveCheck`
 (0x28e0c8). **Elo de cluster**: compartilha exatamente este mesmo
 primitivo assíncrono de 3 fases `xpLibapiSave{Start,Check,End}` com
-`pspFftSave` (`0x2899a0`, lida num fork irmão deste mesmo lote) —
-mesma máquina de estados, só muda o valor do op inicial.
+`pspFftSave` (`0x2899a0`, §651) — mesma máquina de estados, só muda
+o valor do op inicial.
 
 **Status CSV: `read_full`** — 72/72 instruções reais, 3 `bl` já
-documentados, tabela de salto verificada manualmente (16 casos, 3
-handlers distintos).
+documentados, tabela de salto (16 casos) reconferida por disassembly
+direto.
 
-## 642. `setCursorByTouch(int, int, int)` — leitura completa: edge-detect de posição + dispatch condicional por modo pra 2 helpers locais sem símbolo, função vizinha imediata de `iOSsetCursorByTouch` na memória (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614.2)
+## 642. `setCursorByTouch(int, int, int)` — leitura completa, **corrigida em 2026-10-26**: dispatch corrigido pra `{0,13,32}`→`sub_202ff0`, não `{1,13,32}` — mesmo erro sistemático de deslocamento encontrado em outras seções deste lote (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614.2)
+
+> **Nota de correção**: a primeira versão desta seção (committada em
+> `751fbc3`) atribuía o caso 0 ao caso 1 por engano (mesmo erro
+> sistemático de §637/§639/§640). Reconferido por disassembly direto
+> dos 3 handlers distintos da tabela de 33 casos.
 
 `setCursorByTouch(int p0, int p1, int p2)` (`0x203070`, 308 B) —
 disassembly linear completo via Capstone. 72 de 72 instruções reais
 lidas e atribuídas (código termina em `0x203184`); os 5 words finais
 (20 B) são literal pool — total exato de 308 B. Termina exatamente
 em `0x2031a4` — **vizinha imediata, sem gap, de `iOSsetCursorByTouch`**
-(lida num fork irmão deste mesmo lote). Tabela de salto confirmada
-manualmente: 33 casos, `ADDLS` seguro, 3 handlers distintos.
+(§646). Tabela de salto reconferida por disassembly direto: 33
+casos, 3 handlers distintos — `{0,13,32}`→`sub_202ff0`, `{23}`→
+`sub_1fba1c`, os outros 30 casos→no-op.
 
 ```c
 int setCursorByTouch(int p0, int p1, int p2) {
@@ -24942,9 +24997,9 @@ int setCursorByTouch(int p0, int p1, int p2) {
 
     int mode = *g_modePtr;          // faixa 0..32
     switch (mode) {                  // cmp #0x20; addls pc,pc,mode,lsl#2
+        case 0: case 13: case 32:    sub_202ff0(); return 1;
         case 23:                      sub_1fba1c(); return 1;
-        case 1: case 13: case 32:     sub_202ff0(); return 1;
-        default:                       return 1;
+        default:                       return 1;         // os outros 30 modos: sem ação
     }
 }
 ```
@@ -24952,21 +25007,21 @@ int setCursorByTouch(int p0, int p1, int p2) {
 Edge-detect de mudança de posição de toque (compara contra 3
 globais, nota a ordem não trivial dos parâmetros: `p1→g_posA`,
 `p2→g_posB`, `p0→g_posC`), seguido de um dispatch condicional por
-modo que só dispara callback em 3 dos 32 modos possíveis — os outros
-30 só retornam sem ação.
+modo que só dispara callback em 4 dos 33 modos possíveis (3 pra
+`sub_202ff0`, 1 pra `sub_1fba1c`) — os outros 29 só retornam sem
+ação. Mesma estrutura de dispatch (mesmos 2 helpers locais, mesmos
+3 valores de modo em cada grupo) confirmada byte a byte na irmã
+`iOSsetCursorByTouch` (§646, vizinha imediata de memória).
 
 **Lacunas aceitas**: `sub_1fba1c`/`sub_202ff0` são locais sem símbolo
 dinâmico, ambos posicionados antes desta função na memória —
 provavelmente callbacks de movimento de cursor específicos de certos
 modos de UI. Identidade exata dos eixos de `g_posA/B/C` não
-confirmada independentemente. Relação com `iOSsetCursorByTouch`
-(mesmo formato de dispatch de 33 casos, posicionada logo depois na
-memória) não confirmada por evidência de chamada direta dentro desta
-função — ver §643/644 pra a leitura da irmã.
+confirmada independentemente.
 
 **Status CSV: `read_full`** — 72/72 instruções reais, tabela de
-salto verificada manualmente (33 casos, 3 handlers); 2 `bl` locais
-sem símbolo ficam como lacuna aceita.
+salto reconferida por disassembly direto (33 casos, 3 handlers); 2
+`bl` locais sem símbolo ficam como lacuna aceita.
 
 ## 643. `getMovieEventNum(int)` — leitura completa: lookup linear numa tabela de 17 ids + switch de categoria pra `setEventStatus`, mecânica completa resolvida (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614)
 
@@ -25091,3 +25146,683 @@ save de uma vez, não um randomizador.
 
 **Status CSV: `read_full`** — 30/30 words contabilizados, 0 `bl` a
 verificar, tabela de salto verificada manualmente.
+
+## 646. `iOSsetCursorByTouch(int,int,int,int,int)` — leitura completa: som de confirmação só toca em 2 dos 32 modos possíveis, confirmado byte a byte contra o falso-negativo do validador v3 (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614)
+
+`iOSsetCursorByTouch(int x,int y,int z,int skipUpdate,int playSound)`
+(`0x2031a4`, 392 B) — disassembly linear completo via Capstone. 90
+de 90 instruções reais lidas e atribuídas (código termina em
+`0x203308`); os 8 words finais (32 B) são literal pool — total
+exato de 392 B. Tabela de 33 casos (guarda `cmp r3,#0x20`, `addls
+pc,pc,r3,lsl#2`) verificada manualmente caso a caso: todos os 33
+alvos resolvem a exatamente 3 handlers (`0x2032cc` casos 0/13/32,
+`0x2032ec` caso 23, `0x2032dc` os outros 29, no-op puro). Mesmo
+idiom `ADDLS` que o `structural_v3` rejeita como falso-negativo
+(achado documentado nesta sessão) — tabela de fato segura.
+
+```c
+int iOSsetCursorByTouch(int x, int y, int z, int skipUpdate, int playSound) {
+    int oldX = *pG1; *pG2 = oldX;
+    int oldY = *pG3; *pG4 = oldY;
+    int oldZ = *pG5; *pG6 = oldZ;
+
+    int changed = !(oldZ == z && oldY == y) || (oldX != x);
+    if (!changed) return 0;              // nada mudou: saída antecipada
+    if (skipUpdate != 0) return 1;       // chamador pediu pra suprimir update visual
+
+    *pG1 = x; *pG3 = y; *pG5 = z;
+    int mode = *pG7;                      // seletor de modo de exibição, 0..32
+    switch (mode) {
+        case 0: case 13: case 32:
+            sub_202ff0(x, y, z);
+            if (playSound != 0) iOSSoundSESet(3);
+            return 1;
+        case 23:
+            sub_1fba1c(x, y, z);
+            if (playSound == 0) return 1;
+            iOSSoundSESet(3);
+            return 1;
+        default:                           // os outros 29 modos
+            return 1;                        // *** sem update visual nem checagem de som ***
+    }
+}
+```
+
+**Achado não trivial**: o efeito sonoro (`iOSSoundSESet(3)`) só toca
+nos 2 modos "especiais" (0/13/32 e 23) que também disparam um
+helper de update visual — os outros 29 modos retornam sucesso em
+silêncio, sem checagem de som alguma (não é condicional, é
+estruturalmente ausente nesse caminho).
+
+**bl**: `iOSSoundSESet(int)` (já documentada). `sub_202ff0`/
+`sub_1fba1c` são locais sem símbolo, compartilhados com a irmã
+`setCursorByTouch` (§642, já fechada).
+
+**Lacuna aceita**: identidade das 7 globais GOT; ligação forte mas
+não confirmada com a família `siOS_TCurPosGet`/`siOS_TCurSucCheck`
+(§644).
+
+**Status CSV: `read_full`** — 90/90 instruções reais, tabela de
+salto verificada manualmente (override do falso-negativo da
+ferramenta).
+
+## 647. `Savedata_Load(unsigned char*, int*)` — leitura completa: confirma pilha `CFILE`, acha lacuna semântica honesta no caminho de corrida de sequência (último `bl` sem retorno visível antes do literal pool) (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614)
+
+`Savedata_Load(unsigned char* outBuf, int* outParam)` (`0x27fe84`,
+384 B) — disassembly linear completo via Capstone. 90 de 90
+instruções reais lidas e atribuídas; os 6 words finais (24 B) são
+literal pool, confirmados como alvos reais de `ldr r3,[pc,#N]` no
+corpo — total exato de 384 B.
+
+```c
+int Savedata_Load(uint8_t* outBuf, int* outParam) {
+    int seq0 = *g_saveSeqCounter;
+    scratch.seq = seq0;
+    *outParam = 0;
+    void* cfftState = CFFT_STATE::GetParam(...);
+    char path[260];
+    if (!cfftState) {
+        strcpy(path, CAPP_INFO::GetStoragePath());
+        int len = strlen(path);                      // sub_71494, strlen-shaped
+        memcpy(path + len, &g_saveFileNameLiteral, 0xc);
+    } else {
+        sub_718cc(path, CAPP_INFO::GetRootPath(), cfftState);  // path-join/seletor de variante
+    }
+retry:
+    void* mem = operator_new(0x10c);
+    CFILE* f = CFILE::CFILE(mem, path);
+    if (CFILE::Open(f, 1) != 1) {
+        if (CFILE::GetSize(f) == pspGetFftPspSaveDataSize()) goto do_read;
+    }
+    if (f) { CFILE::~CFILE(f); operator_delete(f); }
+    goto finish;   // "ok" sem leitura real
+
+do_read:
+    int expected = pspGetFftPspSaveDataSize();
+    sub_714c4(outBuf, 0, expected);                     // helper local, 13+ outros call sites
+    CFILE::Read(f, outBuf, 0, expected, &dummy0);
+    if (f) { CFILE::~CFILE(f); operator_delete(f); }
+    *outParam = sz;
+    return 0;
+
+finish:
+    if (scratch.seq == *g_saveSeqCounter) return 1;       // sem corrida: ok
+    sub_715cc(...);   // "invalida/recarrega cache" (mesmo padrão §105/387/396)
+    // *** sem instrução visível depois deste bl antes do literal pool ***
+}
+```
+
+**Lacuna honesta (não mascarada)**: no caminho "contador de
+sequência mudou durante o load" (corrida detectada), a última
+instrução visível da função é `bl sub_715cc`, seguida direto de
+literal pool — sem `pop {...,pc}` próprio depois dessa chamada. A
+contabilização de bytes continua exata (90+6=96 slots=384B), então
+nada falta mecanicamente; a questão é puramente semântica: ou
+`sub_715cc` não retorna nesse formato de chamada (consistente com
+ser um helper tipo cache-reload/longjmp-adjacente, mesmo padrão dos
+vernizes pthread/longjmp achados em `TE_asmTaskEntry` §578), ou o
+controle realmente cai em algo que parece dado literal (mereceria
+reconferência contra um trace real, não afirmado aqui como fato).
+
+**bl resolvidos**: `CFFT_STATE::GetParam`, `CAPP_INFO::GetRootPath`/
+`GetStoragePath`, `pspGetFftPspSaveDataSize` (×2), `CFILE::CFILE`/
+`Open`/`Read`/`GetSize`/`~CFILE` (×2), `operator new`/`operator
+delete` (§554), `strcpy`(0x714a0)/`memcpy`(0x714b8). **Locais sem
+símbolo**: `sub_71494` (formato de `strlen`, primeira ocorrência
+sob este endereço), `sub_714c4` (já citado em 13+ locais), `sub_715cc`
+(candidato cache-reload, §105/387/396), `sub_718cc` (primeira
+ocorrência, formato path-join/seletor, 3 args).
+
+**Status CSV: `read_full`** com uma lacuna semântica sinalizada
+(não de contabilização de bytes) no caminho de corrida detectada.
+
+## 648. `CdControl` — leitura completa: dispatcher real de 27 comandos `libcd` do PS1, confirma `CdlSetloc` (cmd 2) pela aritmética clássica MM:SS:FF→setor linear (×60,×75,<<11) (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614)
+
+`CdControl` (`0x28e2e4`, 384 B) — disassembly linear completo via
+Capstone. 94 de 94 instruções reais lidas e atribuídas; os 2 words
+finais (8 B) são literal pool, confirmados como alvos exatos dos
+`ldr r3,[pc,#N]` do corpo — total exato de 384 B. 0 `bl` (dispatcher
+puro de dado/branch). Tabela de 27 casos (`cmp r3,#0x1a; addls
+pc,pc,r3,lsl#2`) verificada manualmente, caso a caso.
+
+```c
+int CdControl(int cmd, uint8_t* param, uint8_t* result) {
+    if (result == NULL) {
+        if (cmd == 14) { *g_cdStatusGlobal = param[0]; return 1; }
+        if (cmd == 27) return 1;
+        if (cmd == 2)  goto setloc_calc;
+        return 0;
+    }
+    int idx = cmd - 1;                 // faixa válida: 1..27
+    if (idx > 0x1a) goto fallback;
+    switch (idx) {                      // 27 casos
+        /* grupo A (7 casos): */ result[0] = 2; return 0;             // "não suportado", ack genérico
+        case 1:  result[0] = 2; goto setloc_calc;
+        case 2:  result[0] = ~0x7f; return 0;                          // 0x80, flag de erro
+        case 13: result[0] = 2; *g_cdStatusGlobal = param[0]; return 1;
+        case 15: result[1..5] = 0; return 0;
+        case 16: result[6]=result[7]=0; result[1..5]=0; return 0;
+        case 18: result[0]=2; result[1]=0; result[2]=0; return 0;
+        case 26: result[0] = 2; return 1;
+        /* grupo B (vários casos): no-op, ack */
+    }
+setloc_calc:  // cmd==2 (CdlSetloc)
+    int sector = ((param[0]*0x3c + param[1]) * 0x4b + param[2]) << 0xb;
+    *g_cdLocGlobal = sector;
+    return 1;
+}
+```
+
+Mapeia claramente pro conjunto real de comandos `CdControl` da
+`libcd` do PS1 — `CdlSetloc`=2 é inequívoco: a aritmética BCD
+MM:SS:setor→endereço linear (`×60, ×75, <<11`, usando `0x3c`=60 e
+`0x4b`=75 — a fórmula clássica de endereço de setor de CD-ROM)
+confirma isso não é suposição. `cmd 14` e `27` só recebem
+tratamento especial na entrada "sem buffer de resultado".
+
+**Lacuna aceita**: qual enum `CdlXxx` do PS1 pertence a cada um dos
+26 outros slots numéricos (os de ack/erro/limpeza de buffer) — a
+aritmética confirma `cmd==2`=`CdlSetloc`, mas os outros não são
+nomeáveis sem as constantes originais de `libcd.h`.
+
+**Status CSV: `read_full`** — 94/94 instruções reais, 0 `bl` a
+verificar, tabela de salto verificada manualmente (mesmo
+falso-negativo do validador que §646/642).
+
+## 649. `get_mapid(int, int, int, int)` — leitura completa: getter puro de 14 campos empacotados de um registro de "célula de mapa" de 8 bytes (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614)
+
+`get_mapid(int field, int p1, int p2, int p3)` (`0x1d67a8`, 304 B) —
+disassembly linear completo via Capstone. 74 de 74 instruções reais
+lidas e atribuídas; os 2 words finais (8 B) são literal pool — total
+exato de 304 B. 0 `bl` (dispatcher puro de dado, confirma o
+catálogo do §614.2).
+
+```c
+int get_mapid(int field, int p1, int p2, int p3) {
+    uint8_t key = **(GOT_byte_ptr);           // byte do andar/área atual
+    void* table_base = *GOT_table_ptr;         // base da tabela, stride 8 B
+    int idx = key*p2 + (p3<<8) + p1;
+    uint8_t* rec = (uint8_t*)table_base + idx*8;
+
+    if ((unsigned)field > 13) return 0xff;      // bounds via addls
+    switch (field) {                             // 14 campos empacotados
+        case 0:  return rec[0] & 0x3f;
+        case 1:  return rec[1];
+        case 2:  return rec[2];
+        case 3:  return rec[3] & 0x1f;
+        case 4:  return rec[3] >> 5;
+        case 5:  return rec[4];
+        case 6:  return rec[5] & 0x1f;
+        case 7:  return rec[6] & 1;
+        case 8:  return (rec[6]>>1) & 1;
+        case 9:  return (rec[6]>>2) & 3;
+        case 10: return (rec[6]>>4) & 7;
+        case 11: return rec[7] & 0xf;
+        case 12: return (rec[5]>>5) & 1;
+        case 13: return (rec[5]>>6) & 1;
+    }
+}
+```
+
+Getter puro de extração de bitfield sobre uma tabela de registros
+"célula de mapa" de stride 8 B — 14 campos empacotados distintos
+entre os offsets 0-7, cada um uma faixa de bits específica.
+
+**Lacuna aceita**: identidade exata das duas globais GOT (o byte do
+andar/área atual e a base da tabela de registros) e nome semântico
+de cada um dos 14 campos (plausivelmente altura/tipo de
+terreno/bits de passabilidade, não confirmado independentemente).
+
+**Status CSV: `read_full`** — 74/74 instruções reais, 0 `bl` a
+verificar.
+
+## 650. `Boot_Init()` — leitura completa: tenta 3 caminhos candidatos de arquivo de arquivo-projeto, abre o primeiro que funciona via `CFILE_DAT::Open`, libera os outros 2, dispara I/O assíncrono (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614.2)
+
+`Boot_Init()` (`0x2b3464`, 300 B) — disassembly linear completo via
+Capstone. 68 de 68 instruções reais lidas e atribuídas; os 7 words
+finais (28 B) são literal pool — total exato de 300 B. Todos os 12
+`bl` resolvidos (confirma o "12 bl" do §614.2), incluindo 3 vernizes
+PLT resolvidos via `.rel.plt` (`strcpy`=0x714a0, `strcat`=0x714ac,
+`__stack_chk_fail`=0x715cc) e 2 stubs locais identificados como
+`operator new`/`operator delete` (0x2cdf6c/0x2cdf9c).
+
+```c
+void Boot_Init(void) {
+    int canary = *__stack_chk_guard;    // prólogo padrão GCC stack-protector
+    void* slots[3] = {0,0,0};
+    for (int mode = 0; mode < 3; mode++) {
+        char* path = CAPP_INFO::GetRootPath();
+        strcpy(pathBuf, path);
+        char* archiveName = Project_Archive_GetFile(mode);
+        strcat(pathBuf, archiveName);
+        void* obj = operator_new(0x18c);
+        CFILE_DAT::CFILE_DAT(obj);
+        slots[mode] = obj;
+        if (CFILE_DAT::Open(obj, pathBuf, 0, mode) == 1) goto FOUND;
+    }
+    NowLoading_Init();
+    CTHREAD::Register(&bootThreadFunc, slots[0]);     // dispara load assíncrono do arquivo-projeto
+    *g_someBootFlag = 0;
+    goto EPILOGUE;
+
+FOUND:
+    for (int i = 0; i < 3; i++) {
+        if (slots[i]) { CFILE_DAT::~CFILE_DAT(slots[i]); operator_delete(slots[i]); }
+        slots[i] = 0;
+    }
+EPILOGUE:
+    if (canary != *__stack_chk_guard) __stack_chk_fail();
+}
+```
+
+Confirma e refina exatamente o resumo do §614.2: o boot tenta 3
+caminhos candidatos de arquivo de arquivo-projeto (montados via
+`strcpy`+`strcat` a partir da raiz + nome de arquivo por-modo), abre
+o primeiro que funciona via `CFILE_DAT::Open`, libera as outras 2
+alocações especulativas, depois dispara `NowLoading_Init`+
+`CTHREAD::Register` pra I/O assíncrono. Sem lacunas abertas — os 12
+callees todos resolvidos.
+
+**Status CSV: `read_full`** — 68/68 instruções reais, 12/12 `bl`
+resolvidos.
+
+## 651. `pspFftSave(int, FFT_SAVE_DATA*, int*)` — leitura completa: confirma máquina de 3 estados sobre `xpLibapiSave*`, dispatch de 16 vias por código de status (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614.2)
+
+`pspFftSave(int a, FFT_SAVE_DATA* data, int* outErr)` (`0x2899a0`,
+288 B) — disassembly linear completo via Capstone. 66 de 66
+instruções reais lidas e atribuídas; os 6 words finais (24 B) são
+literal pool — total exato de 288 B. Tabela de 16 casos (guarda
+`cmp r3,#0xf`) verificada manualmente, mesmo idiom `ADDLS` seguro.
+
+```c
+int pspFftSave(int a, FFT_SAVE_DATA* data, int* outErr) {
+    int mode = g_saveMode;
+    if (mode == 0) {
+        sub_2898e0(data, a, 0);           // helper local, escreve buffer do slot de save
+        xpLibapiSaveStart(1);
+        g_saveMode = 1;
+        g_cachedArg = a;
+        return 1;
+    }
+    if (mode == 1) {
+        int result = xpLibapiSaveCheck();
+        switch (clamp(result + 0xd, 0, 0xf)) {   // dispatch de 16 vias
+            case 13: case 14: case 15: break;       // pula o cache pra estes 3 códigos terminais
+            default: g_cachedArg = result; break;     // casos 0-12 e fora-de-faixa: cacheia o status
+        }
+        g_saveMode = 0;
+        return 1;
+    }
+    // mode == 2
+    xpLibapiSaveEnd();
+    int ret = g_cachedArg;
+    if (ret != 0) { *outErr = ret; return -1; }
+    return 0;
+}
+```
+
+Confirma o catálogo §42.1/§614.2 (fachada `xpLibapiSaveStart`/
+`SaveEnd`/`SaveCheck` sobre `pspSaveBase`) com o dispatch exato de 3
+estados e a classificação de 16 vias por código de status. **Elo de
+cluster**: compartilha exatamente o mesmo primitivo assíncrono de 3
+fases com `pspFftDelete` (§641, fechada nesta sessão).
+
+**Lacuna aceita**: `sub_2898e0` (local, sem símbolo) é um helper de
+3 modos que chama um stub tipo-memcpy (`0x714b8`) sobre uma tabela
+de stride `0x2a3c` e outro local (`0x289898`) — provavelmente o
+primitivo real de leitura/escrita do buffer do slot, não resolvido
+nesta passada (fora do escopo das 3 funções designadas).
+
+**Status CSV: `read_full`** — 66/66 instruções reais, tabela de
+salto verificada manualmente.
+
+## 652. `MessageDataSet(int)` — leitura completa: grava em 9 campos de um struct de cache de mensagem compartilhado, kinds 4 e 5 convergem no mesmo campo de destino (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614)
+
+`MessageDataSet(int kind)` (`0x1a6410`, 284 B) — disassembly linear
+completo via Capstone. 69 de 69 instruções reais lidas e atribuídas;
+os 2 words finais (8 B) são literal pool — total exato de 284 B. 1
+`bl`: `pspMsgGet(unsigned int)` (×9, já documentada, §638).
+
+```c
+void MessageDataSet(int kind) {
+    static GlobalMsgCache* g = GOT_RESOLVE(...);
+    if (kind > 8) return;                           // fora de faixa: no-op
+    int offset;
+    switch (kind) {
+        case 0: offset = 0x58; break;
+        case 1: offset = 0x18; break;
+        case 2: offset = 0x38; break;
+        case 3: offset = 0x60; break;
+        case 4: offset = 0x74; break;   // *** mesmo destino do caso 5 ***
+        case 5: offset = 0x74; break;   // *** mesmo destino do caso 4 ***
+        case 6: offset = 0x70; break;
+        case 7: offset = 0x6c; break;
+        case 8: offset = 0x7c; break;
+    }
+    *(int*)((char*)g + offset) = pspMsgGet(kind);
+}
+```
+
+Achado: `kind` é passado direto como o id de mensagem de
+`pspMsgGet` (sem remapeamento). Os kinds 4 e 5 escrevem no *mesmo*
+campo de destino (0x74) — provavelmente duas variantes de mensagem
+(ex. texto por gênero) alimentando um único slot de exibição
+compartilhado. Todos os outros 7 kinds escrevem em campos distintos
+sem colisão.
+
+**Status CSV: `read_full`** — 69/69 instruções reais, 1 `bl` já
+documentado.
+
+## 653. `set_casting_status(BWORK*, unsigned char)` — leitura completa: máscara de 4 bits de estágio de conjuração, diff de bits dispara `_changeAnimationStatus_` por bit mudado (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614)
+
+`set_casting_status(BWORK* unit, unsigned char status)` (`0x1dc944`,
+272 B) — disassembly linear completo via Capstone. 68 de 68
+instruções reais lidas e atribuídas, 0 literal pool (código puro) —
+total exato de 272 B.
+
+```c
+void set_casting_status(BWORK* unit, unsigned char status) {
+    uint8_t origByte61 = unit->byte_0x61, origByte1ac = unit->byte_0x1ac;
+    int r2val, r5val;
+    if (status == 0xff) {
+        if (unit->byte_0x61 & 1) {
+            set_cco_SD(unit);
+            unit->byte_0x17d = unit->byte_0x1ad;
+            r2val = 1; r5val = 0xe;
+        } else {
+            unit->byte_0x17d = 0xff;
+            r2val = 0; r5val = 0xf;
+        }
+    } else if (status > 8) {
+        r2val = 0; r5val = 0xf;
+    } else switch (status) {
+        case 0:               unit->byte_0x17d = 0xff; r2val = 0; r5val = 0xf; break;
+        case 1: case 2: case 3: case 4:                  r2val = 0; r5val = 0xf; break;
+        case 5:  r2val = 8; r5val = 7;  break;
+        case 6:  r2val = 4; r5val = 0xb; break;
+        case 7:  unit->byte_0x17d = 0xff; r2val = 2; r5val = 0xd; break;
+        case 8:  /* só alcançável via caminho 0xff+bit0 acima */ break;
+    }
+    set_temp_status(unit, 0, r2val, 0);     // limpa bit de estágio antigo
+    set_temp_status(unit, 0, r5val, 1);     // seta bit de estágio novo
+
+    uint8_t changed = origByte61 ^ unit->byte_0x61;
+    uint8_t mask = 8;
+    for (int idx = 5; idx != 9; idx++, mask >>= 1) {
+        if (!(changed & mask)) continue;
+        int dir = (origByte61 & mask) ? 0 : 1;
+        _changeAnimationStatus_(idx, dir, origByte1ac);
+    }
+}
+```
+
+As constantes r2val/r5val (0xf,7,0xb,0xd,0xe) são cada uma "todos os
+4 bits setados exceto o bit N" — uma máscara de 4 bits de estágio de
+conjuração consumida por `set_temp_status`. Depois disso, um diff de
+bits sobre `byte_0x61` dispara `_changeAnimationStatus_` uma vez pra
+cada bit que mudou (até 4), com direção (setado/limpo) derivada do
+valor original.
+
+**bl**: `set_temp_status` (×2), `_changeAnimationStatus_` (0-4×),
+`set_cco_SD` (só no caminho `status==8`/`0xff`+bit0).
+
+**Lacuna aceita**: significado exato dos 4 bits de estágio e por
+que `status==8` só é alcançável pelo caminho especial, não por valor
+normal (confirmado mecanicamente, não nomeado semanticamente).
+
+**Status CSV: `read_full`** — 68/68 instruções reais, todos os `bl`
+resolvidos.
+
+## 654. `set_ct_weapon(ACT*)` — leitura completa: resolve a arma equipada pra uma ação de combate via tabela de subtipo de 16 vias, acha possível polaridade invertida em `pspItemIsEmpty` (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614)
+
+`set_ct_weapon(ACT* act)` (`0x1caa10`, 248 B) — disassembly linear
+completo via Capstone. 59 de 59 instruções reais lidas e atribuídas;
+os 3 words finais (12 B) são literal pool — total exato de 248 B. 1
+`bl`: `pspItemIsEmpty` (já documentada, sem assinatura visível).
+
+```c
+void set_ct_weapon(ACT* act) {
+    GlobalCtCtx* g = GOT_RESOLVE(...);           // contexto "turno atual" compartilhado
+    int r5 = (g->byte_0x2 > 2 || g->byte_0x3 == 0) ? g->field_0x4 : g->field_0x6;
+
+    uint8_t cls = g_itemSubtypeTable[act->byte_0x1];   // resolve classe de arma
+    switch (cls) {                                       // bounded 0-15 via addls
+        case 0: case 3: case 4: case 6: {
+            int16_t id = act->field_0x2;
+            if (id < 0x170) {
+                ItemRecord* rec = &g_itemRecordTable[id];   // stride 14 B
+                if (!(rec->byte_0x3 & 0x24) && id != 0x165) r5 = 0;
+            }
+            break;
+        }
+        case 1: case 7:  r5 = act->field_0x8; break;
+        case 9: case 15: r5 = 0; break;
+        // casos 2,5,8,10,11,12,13,14 e cls>15 (default): r5 inalterado
+    }
+    bool flag = pspItemIsEmpty(r5);
+    if (flag) r5 = 0;         // *** nonzero limpa r5 — ver nota de polaridade abaixo ***
+    g->halfword_0x1a = (uint16_t)r5;
+}
+```
+
+**Achado a conferir**: o nome `pspItemIsEmpty` sugere "está vazio",
+mas o uso aqui ("retorno não-zero ⇒ zera r5") lê mais como "tem um
+item real" do que "está vazio" — pode ser uma inversão de polaridade
+no nome documentado em outro lugar, sinalizado aqui pra quem for
+conferir a assinatura canônica dessa função.
+
+**Lacuna aceita**: identidade de `GlobalCtCtx` (`byte_0x2/0x3`,
+`field_0x4/0x6`), `g_itemSubtypeTable`/`g_itemRecordTable` (stride
+14 B); polaridade de `pspItemIsEmpty` não confirmada contra outras
+seções.
+
+**Status CSV: `read_full`** — 59/59 instruções reais, 1 `bl` já
+documentado.
+
+## 655. `get_shape2(BWORK*, unsigned char*)` — leitura completa: normalizador de "tipo de forma/trapaça bruto → id canônico", valores <0x80 passam intactos, faixa 0x80-0xa9 remapeada (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614)
+
+`get_shape2(BWORK* obj, unsigned char* out)` (`0x1d972c`, 380 B) —
+disassembly linear completo via Capstone. 95 de 95 instruções reais
+lidas e atribuídas, 0 literal pool — total exato de 380 B. 0 `bl`
+(dispatcher puro de dado). Tabela de 42 casos (`cmp r2,#0x29;
+addls pc,pc,r2,lsl#2`) reconferida cruzando contra a própria ordem
+de casos emitida pelo `jtable.py` (a convenção de pipeline ARM
+`pc`-como-operando lê como `endereço_da_instrução+8`, deslocando o
+índice lógico 0 uma posição depois do slot que seguiria
+imediatamente o `addls` — esse slot imediato é sempre o *default*,
+não o índice 0; achado confirmado cruzando contra a ordem de casos
+do `jtable.py`).
+
+```c
+void get_shape2(BWORK* obj, unsigned char* out) {
+    *out = 0;
+    uint8_t r3 = obj->byte_3;
+    uint8_t ip = obj->byte_0;
+    if ((uint8_t)(r3 - 0x5c) <= 1)          // r3 em {0x5c,0x5d}
+        r3 = (r3 - 1) & 0xff;
+
+    uint8_t idx = ip - 0x80;
+    if (idx > 0x29) {                        // ip<0x80 ou ip>0xa9: default
+        if (ip <= 0x80) return ip;            // ip em [0,0x7f]: eco de identidade
+        return (r3 + 0x28) & 0xff;            // ip>0xa9: remapeia via r3
+    }
+    switch (idx) {                            // ip em [0x80,0xa9]
+      case 0: case 1:                         // ip==0x80 ou 0x81
+        if (r3==0xa1 || r3==0xa4) return (ip + 0x21) & 0xff;
+        if (r3==0xa0)             return (ip + 0x1f) & 0xff;
+        return (ip + r3*2 - 0xb4) & 0xff;
+      case 2:                                 // ip==0x82
+        r3 = obj->byte_0x180; *out = r3;
+        return obj->byte_0x17f;
+      case 34:  return 0xa3;                  // ip==0xa2
+      case 35:  return 0xa4;                  // ip==0xa3
+      case 37:  return 0xa5;                  // ip==0xa5 (identidade)
+      case 38:  return 0xa6;                  // ip==0xa6 (identidade)
+      case 39:  return 0xa7;                  // ip==0xa7 (identidade)
+      case 40:  return 0xa8;                  // ip==0xa8 (identidade)
+      case 41:  return 0xa9;                  // ip==0xa9 (identidade)
+      default:                                // ip em [0x83,0xa1]∪{0xa4}
+        return (r3 + 0x28) & 0xff;
+    }
+}
+```
+
+Lê como um normalizador de "tipo bruto de forma/trapaça → id
+canônico de forma": valores abaixo de 0x80 passam sem alteração; a
+faixa estreita 0x80–0xa9 é remapeada (majoritariamente `r3+0x28`,
+com fórmulas especiais pra 0x80/0x81 e busca direta de campo pra
+0x82); `*out` só é gravado no caminho 0x82. `obj->byte_0`/`byte_3`
+são provavelmente um par de código-tipo primário/secundário em
+`BWORK`.
+
+**Lacunas aceitas**: nomes semânticos exatos de `byte_0`/`byte_3`/
+`byte_0x17f`/`byte_0x180` em `BWORK`; por que 0x5c/0x5d são
+pré-decrementados; por que 0xa2/0xa3 avançam em 1 mas 0xa5-0xa9 não.
+
+**Status CSV: `read_full`** — 95/95 instruções reais, função-folha
+sem `bl`, tabela de salto reconferida contra a ordem de casos do
+`jtable.py`.
+
+## 656. `_ReadTMD(TMD_PRIM*)` — leitura completa: leitor real da lista de primitivas do formato TMD do PS1, tipo base 0x31 (F3/FT3/G3/GT3/F4/FT4/G4/GT4), avança o cursor pelo tamanho exato do pacote (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614)
+
+`_ReadTMD(TMD_PRIM* out)` (`0x22a6a4`, 380 B) — disassembly linear
+completo via Capstone. 90 de 90 instruções reais lidas e atribuídas
+(360 B) + 5 words finais (20 B) de literal pool — total exato de
+380 B. 0 `bl`. Tabela de 9 casos (`cmp ip,#8; addls pc,pc,ip,lsl#2`)
+reconferida cruzando contra a ordem de casos do `jtable.py` (mesma
+correção de offset `+8` do `pc`-como-operando documentada no §655).
+
+```c
+void _ReadTMD(TMD_PRIM* out) {
+    uint32_t* table = /* base resolvida via GOT */;
+    uint32_t idx = *cursor;                       // cursor corrente na lista de primitivas
+    uint32_t word0 = table[idx];
+    uint32_t* rec = &table[idx];
+    uint8_t type = (word0 >> 24) - 0x31;            // código de tipo de primitiva, base 0x31
+    out->word0 = word0;
+
+    switch (type) {
+      case 0:                                       // código 0x31 — tipo F3-like (tri plano)
+        out->f4=rec[1]; out->f8=rec[2]; out->fc=rec[3];
+        out->f0x68=rec[4]; out->f0x6c=rec[5];
+        *cursor = idx + 6;
+        return;
+      case 4: case 6:                               // códigos 0x35/0x37 — tipo GT4-like (quad texturizado)
+        out->f4=rec[4]; out->f8=rec[5]; out->f0xc=rec[6]; out->f0x68=rec[7];
+        out->f0x6c=rec[8]; out->f0x14=(uint16_t)(rec[2]>>16);
+        out->f0x16=(uint16_t)rec[1]; out->f0x18=(uint16_t)(rec[1]>>16);
+        out->f0x1a=(uint16_t)rec[2]; out->f0x1c=(uint16_t)(rec[3]>>16);
+        *cursor = idx + 9;
+        return;
+      case 8:                                       // código 0x39
+        out->f4=rec[1]; out->f8=rec[2]; out->fc=rec[3];
+        out->f0x68=rec[4]; out->f0x6c=rec[5];
+        *cursor = idx + 7;
+        return;
+      default:                                       // códigos 0x32/33/34/36/38, ou >0x39
+        out->f4 = (word0 << 16) | ???;
+        *cursor = idx + 1 + (word0 >> 24);            // avança pelo tamanho do pacote codificado no próprio header
+        return;
+    }
+}
+```
+
+É o leitor real da lista de primitivas do formato TMD do PS1: o
+byte alto de cada word de cabeçalho é um código de tipo (base
+**0x31**, batendo com a faixa real de opcode TMD do PS1 pras
+primitivas classe F3/FT3/G3/GT3/F4/FT4/G4/GT4) — copia um número
+fixo de words de 32 bits pro struct de saída e avança um cursor
+compartilhado pelo tamanho exato do pacote (hardcoded 6/7/9 pros 3
+tipos explícitos, ou lido do próprio header como fallback pros
+demais). Confirma e refina a nota do §108 sobre `dispPolygonObject`/
+`_OpenTMD` serem a família real do loader TMD.
+
+**Lacunas aceitas**: nomes de campo exatos em `TMD_PRIM` além dos
+offsets; qual primitivo literal do PS1 corresponde a cada um dos 3
+códigos explícitos (0x31/0x35-0x37/0x39) por nome; identidade das 2
+globais GOT (`table`/`cursor`).
+
+**Status CSV: `read_full`** — 90/90 instruções reais, função-folha
+sem `bl`, tabela de salto reconferida contra a ordem de casos do
+`jtable.py`.
+
+## 657. `initMap(int, int)` — leitura completa: confirma a máquina de 13 estados (0-12) já inferida pelo lado chamador em `battle()` §32, 1º parâmetro morto, estado 7 tem um spin síncrono real (2026-10-26, revisão byte a byte sobre o painel v3, substitui o tratamento em bloco do §614.2)
+
+`initMap(int /*não usado*/, int mode)` (`0x210eac`, 368 B) —
+disassembly linear completo via Capstone. 89 de 89 instruções reais
+lidas e atribuídas (356 B) + 3 words finais (12 B) de literal pool —
+total exato de 368 B. Todos os 19 `bl` distintos já documentados.
+Tabela de 13 casos (`cmp r1,#0xc; addls pc,pc,r1,lsl#2`) reconferida
+caso a caso por disassembly direto dos 13 alvos — mapeamento
+confirmado 100% correto, sem deslocamento.
+
+**O 1º parâmetro é morto** — nunca lido no corpo da função, apesar
+da assinatura `(int,int)`.
+
+```c
+int initMap(int /*não usado*/, int mode) {
+    switch ((unsigned)mode) {
+      default:        return mode;                      // mode fora de [0,12]: passthrough
+      case 0:
+        stopEffect(0); sub_2109a4(); initChangeClut();
+        loadClutData(gGotA, 2, 0, 0);
+        *gGotB = 0;
+        request_startextend();
+        return 1;
+      case 1:
+        return extend_endornot()==0 ? 2 : 1;
+      case 2:
+        return ASHURA_GNS_Garage(_, 0x75)!=0 ? 3 : 2;
+      case 3:
+        return ASHURA_GNS_Garage(_, 0x76)==0 ? 4 : 3;
+      case 4:
+        return sub_210ae8()!=0 ? 5 : 4;
+      case 5:
+        return sub_210bb0()==0 ? 6 : 5;
+      case 6:
+        initEntryEnemyAnimations(); return 7;
+      case 7:
+        while (entryAnimations()==2) {}                   // spin síncrono real dentro do corpo
+        return entryAnimations_result==0 ? 8 : 7;
+      case 8:
+        set_playerwork(gGotC, 0); return 9;
+      case 9:  return 10;
+      case 10: return 11;
+      case 11: return 12;
+      case 12:
+        ASHURA_on_disp();
+        loadBackGradation(); loadAnbient(); loadFlatColor(); transferClutData();
+        time_flies(1);
+        BattleRoutineInit();
+        return 13;                                        // sentinela "load de mapa completo"
+    }
+}
+```
+
+Confirma exatamente a máquina de estados de carregamento em fases
+já inferida pelo lado chamador em `battle()`/§32/§614.2 (chamada uma
+vez por quadro com o retorno anterior como `mode`, avançando 0→13):
+estado 0 reseta CLUT/efeitos e dispara um pedido de extend em
+background; 1-5 fazem poll de conclusão assíncrona de
+`GNS_Garage`/extend/2 helpers locais; 6-7 montam a animação de
+entrada de inimigos (7 tem um spin síncrono genuíno enquanto a
+chamada de animação retorna 2); 8 grava dados de trabalho do
+jogador; 9-11 são delays de um tick cada; 12 faz o bootstrap real de
+CLUT/background/timer de animação e `BattleRoutineInit()`,
+retornando **13** — confirma o sentinela "estado 13 == initMap
+concluído" sobre o qual os estados 54/57 de `battle()` ramificam.
+
+**Lacunas aceitas**: identidade de `sub_210ae8`/`sub_210bb0` (locais
+sem símbolo) e das 3 globais GOT; semântica exata do 2º argumento de
+`ASHURA_GNS_Garage` (0x75/0x76 — provavelmente dois ids de grupo de
+recurso GNS diferentes).
+
+**Nota metodológica**: esta função foi reconferida por disassembly
+direto dos 13 alvos justamente por causa do erro sistemático de
+offset encontrado em outras seções deste lote (§637/§639/§640/§642)
+— aqui o mapeamento original já estava correto, confirmado
+independentemente.
+
+**Status CSV: `read_full`** — 89/89 instruções reais, 19/19 `bl`
+já documentados, tabela de salto reconferida caso a caso (100%
+correta).
