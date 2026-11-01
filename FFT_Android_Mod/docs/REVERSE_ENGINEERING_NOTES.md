@@ -26268,3 +26268,62 @@ investigada; os outros ~42 membros da família `Mdl00XX` ainda
 
 **Status CSV: `read_full`** — 28/28 instruções reais (+2 literal
 pool), 1 `bl` tratado como caixa-preta.
+
+## 666. `iOSUnitListWinOnOff(int)` — leitura completa, fatia vertical de T20 (menus): primeira função desta sessão com `TAIL CALL` real (branch, não `bl`), expõe e corrige um bug real no harness de T10 (2026-11-01, T20 do `RE_COMPLETUDE_TASKS.md`)
+
+`iOSUnitListWinOnOff(int offFlag)` (`0x15ef7c`, 88 B) — disassembly
+linear completo via Capstone, 86% de cobertura por `jtable.py` (19/22
+slots, 3 literal pool); 1 `bl`: `iOSdisp_personalWinPosGet()` (ainda
+não lida, caixa-preta).
+
+```c
+uint32_t iOSUnitListWinOnOff(int offFlag) {
+    if (offFlag != 0) {
+        return iOSUnitListWinOnOff_otherPath();  // *** TAIL CALL real: pop{r4,lr}; b 0x15ee2c ***
+    }
+    g_windowActive = 1;
+    int posFlag = iOSdisp_personalWinPosGet();
+    g_windowXOffset = (posFlag == 0) ? -0x78 : 0x78;
+    return posFlag;   // r0 nunca é reatribuído após o bl -- o retorno É posFlag, não 0
+}
+```
+
+**Achado estrutural**: o caminho `offFlag!=0` não usa `bl` — usa
+`pop {r4, lr}` seguido de um `b` incondicional direto pra `0x15ee2c`
+(uma função completamente diferente). É uma **tail call** de verdade:
+a função devolve seu próprio quadro de pilha antes de desviar, então
+o retorno de `0x15ee2c` vai direto pro chamador ORIGINAL de
+`iOSUnitListWinOnOff`, nunca voltando pra esta função. `jtable.py`
+contabiliza esse `b` como "1 branch de retrocesso" (heurística de
+"endereço do alvo < endereço de origem"), mas não é um laço — é o
+primeiro caso real de tail call encontrado nesta sessão.
+
+**Achado no harness de T10, corrigido nesta tarefa**:
+`differential_harness.py` só conferia "`pc` chegou no sentinela de
+retorno" **depois** de uma chamada a `emu_start` — mas o caminho de
+`stub_calls` escreve `PC` diretamente (fora de `emu_start`) ao
+redirecionar uma chamada stubada pro endereço salvo em `LR`. Quando
+esse `LR` já é o próprio sentinela (exatamente o caso de uma tail
+call, cujo `LR` é o do chamador original) a próxima iteração do laço
+executava **uma instrução de verdade na página do sentinela** (bytes
+zerados decodificam como `andeq r0,r0,r0`, um no-op que ainda assim
+avança `PC` em 4) antes de qualquer checagem perceber o sentinela —
+resultando em `PC = SENTINELA+4` e um erro de "sem stub" nesse
+endereço deslocado. Corrigido conferindo o sentinela imediatamente
+após o redirecionamento do `stub_calls`, sem esperar a próxima volta
+do laço. Teste de regressão:
+`docs/re-tools/test_differential_harness_tail_call_stub.py`.
+
+**Confirmado por execução real sob Unicorn** (harness já corrigido)
+para os 3 cenários: `offFlag=0,posFlag=0` (`g_windowActive=1`,
+`g_windowXOffset=-0x78`), `offFlag=0,posFlag≠0`
+(`g_windowXOffset=+0x78`), `offFlag≠0` (tail call, retorno = o valor
+que a função-destino retornaria).
+
+**Lacuna aceita**: `iOSdisp_personalWinPosGet`/a função-destino da
+tail call (`0x15ee2c`) não foram lidas; identidade exata de
+`g_windowActive`/`g_windowXOffset` (nomes inferidos pelo padrão de
+uso, não confirmados por struct) não investigada além do necessário.
+
+**Status CSV: `read_full`** — 19/19 instruções reais (+3 literal
+pool), 1 `bl` tratado como caixa-preta, 1 tail call.

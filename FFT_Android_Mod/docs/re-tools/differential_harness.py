@@ -13,6 +13,16 @@ exact inputs/memory tested, nothing more. A failed emulation (crash,
 unmapped-memory fault, step-limit hit) is always reported as FAIL, never
 silently treated as a pass -- there is no code path that turns an
 execution error into ExecutionResult(ok=True).
+
+Known Unicorn quirk when writing a synthetic test (not an issue against
+the real ELF, where .text is already broadly mapped): a branch whose
+target lands on a wholly unmapped page can fault during the very
+`emu_start(..., count=1)` call that executes the branch itself, even
+though that single step never actually runs an instruction AT the
+target. If a test builds its own minimal ELF and branches/calls to an
+address outside it (e.g. a stub target), map that address's page too
+(an empty MemoryBuffer is enough) -- see
+test_differential_harness_tail_call_stub.py.
 """
 from __future__ import annotations
 
@@ -172,6 +182,15 @@ def run_original(so_path: Path, start: int, end: int,
                     stubbed.append(real_pc)
                     calls_outside.append(real_pc)
                     pc = uc.reg_read(UC_ARM_REG_PC)
+                    # The sentinel check above only runs after emu_start;
+                    # a stub-induced jump sets PC directly, so a tail
+                    # call whose LR already equals the sentinel (the
+                    # stub itself was the function's last action) must
+                    # be caught here too, or the next loop iteration
+                    # would execute one garbage instruction AT the
+                    # sentinel page before ever seeing it.
+                    if pc in (RETURN_SENTINEL, RETURN_SENTINEL | 1):
+                        break
                     continue
                 state["error"] = f"control left [{hex(start)},{hex(end)}) at {hex(real_pc)} with no stub -- FAIL"
                 break

@@ -2643,7 +2643,7 @@ address,size,mangled,demangled,status,section_ref
 001351c0,88,_Z16Witemmenu_uvclutPsi,"Witemmenu_uvclut(short*, int)",read_structural,NOTES §611
 0014be6c,88,_Z16Citemmenu_uvclutPsi,"Citemmenu_uvclut(short*, int)",read_structural,NOTES §611
 001eab8c,88,_Z22searchCurrentAnimationv,searchCurrentAnimation(),read_full,NOTES §563
-0015ef7c,88,_Z19iOSUnitListWinOnOffi,iOSUnitListWinOnOff(int),read_structural,NOTES §555
+0015ef7c,88,_Z19iOSUnitListWinOnOffi,iOSUnitListWinOnOff(int),read_full,NOTES §666
 00161710,88,_Z15iOSTgaIconClearv,iOSTgaIconClear(),read_full,NOTES §556
 00294dbc,88,xpLibgpuOffScreenRectGet,xpLibgpuOffScreenRectGet,read_full,NOTES §554
 00187658,88,_Z21pspWindowCommonIsType11WINOBJ_TYPEhhhh,"pspWindowCommonIsType(WINOBJ_TYPE, unsigned char, unsigned char, unsigned char, unsigned char)",read_structural,NOTES §611
