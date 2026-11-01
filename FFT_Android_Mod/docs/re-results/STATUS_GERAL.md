@@ -110,7 +110,7 @@ Os relatórios abaixo apresentam **efeitos locais testados sob estados sintétic
 
 Os números certificados representam **registros formais válidos para este ELF**, não aprovação estrutural. Evidências parciais não certificam equivalência.
 
-Evidências do **último CI verificado** para este ELF, [execução 41261667942](https://github.com/c1c3ru/fft_craft/actions/runs/41261667942); os testes não foram reexecutados nesta geração do painel.
+Evidências geradas e verificadas nesta execução do pipeline.
 
 | Indicador | Resultado |
 |---|---:|
@@ -179,11 +179,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #515 — chore(re): automated structural batch 41262478869](https://github.com/c1c3ru/fft_craft/pull/515)
 - [PR #514 — chore(re): automated structural batch 41261667942](https://github.com/c1c3ru/fft_craft/pull/514)
 - [PR #513 — chore(re): automated structural batch 41261298128](https://github.com/c1c3ru/fft_craft/pull/513)
 - [PR #512 — chore(re): automated structural batch 41261060320](https://github.com/c1c3ru/fft_craft/pull/512)
 - [PR #511 — chore(re): automated structural batch 41259143862](https://github.com/c1c3ru/fft_craft/pull/511)
-- [PR #510 — chore(re): automated structural batch 41256539904](https://github.com/c1c3ru/fft_craft/pull/510)
 
 ## Atualização automática e fontes
 
