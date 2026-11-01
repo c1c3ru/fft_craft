@@ -26620,3 +26620,83 @@ intocados.
 
 **Status CSV: `read_full`** — 9/9 instruções reais (+1 literal pool),
 0 `bl`, 1 tail call.
+
+## 671. `evt_get_flgdt(int*, int*)` + `evt_flag()` — leitura completa do par, fatia vertical de T19 (mundo/progressão): `evt_flag` não é um predicado puro, cruza por endereço com o próprio `evt_get_flgdt` (2026-11-01, T19 do `RE_COMPLETUDE_TASKS.md`)
+
+`evt_get_flgdt(int* out1, int* out2)` (`0x2591d4`, 80 B, 0 `bl`) e
+`evt_flag()` (`0x259224`, 72 B, 2 `bl`) — disassembly linear completo
+via Capstone, 94%/94% de cobertura por `jtable.py` (só literal pool
+faltando). Achadas via busca de nome na família `evt_flag*`
+(`evt_flag`, `evt_flag_high`, `evt_flag_low`, `evt_flagset`, todas
+`mentioned_unverified`, todas chamam `evt_get_flgdt`), relacionada a
+"flags de história" de T19. `evt_flag_high`/`evt_flag_low`/
+`evt_flagset` seguem intocadas nesta fatia; os alvos nominais de T19
+(seleção/transição de mapas, recrutamento, capítulos) também.
+
+```c
+void evt_get_flgdt(int* out1, int* out2) {
+    uint16_t v1 = g_vmCtx->buf[g_vmCtx->pos];
+    g_vmCtx->pos += 1;                          // *** gravação intermediária, não só no final ***
+    uint16_t v2 = g_vmCtx->buf[g_vmCtx->pos];
+    *out1 = v1;
+    *out2 = v2;
+    g_vmCtx->pos += 2;   // soma final a partir do pos ORIGINAL, não +1 do passo intermediário
+}
+
+int32_t evt_flag(void) {
+    int flagIndex, expectedValue;
+    evt_get_flgdt(&flagIndex, &expectedValue);
+    int32_t actualValue = Wread_eventflag(flagIndex);
+    if (actualValue != expectedValue) {
+        g_vmCtx->status |= 2;
+    }
+    return actualValue;   // *** r0 NUNCA é reescrito depois do bl -- mesmo valor nos dois ramos ***
+}
+```
+
+**Achado estrutural #1 (`evt_get_flgdt`):** lê dois tokens `uint16`
+consecutivos de um buffer de script a partir do cursor de leitura
+atual (`+0xc`, 16 bits) e avança o cursor em 2 — mas a gravação do
+cursor acontece **duas vezes** (uma vez em `pos+1`, intermediária,
+antes de ler o segundo token; outra em `pos+2`, final), não uma única
+vez ao final como uma simplificação assumiria. O truncamento pra 16
+bits é explícito nos bytes (`lsl #0x10; lsr #0x10`), confirmado por
+injeção de falha com `pos=0xffff` (`pos+1` vira `0`, não `0x10000`).
+
+**Achado estrutural #2 (`evt_flag`), a parte não-óbvia:** não é um
+predicado puro de "a flag bate com o esperado?" — `r0` nunca é
+reescrito depois do `bl Wread_eventflag`, nos dois ramos (bate ou não
+bate), então o **retorno real é sempre o valor lido de verdade da
+flag**, não um booleano `0`/`1`. O efeito de "bate/não bate" é só um
+bit (`0x2`) marcado condicionalmente num status global, sem afetar o
+retorno. Um modelo que assumisse "função de verificação, retorna
+booleano" teria sido pego pelo teste de injeção de falha.
+
+**Achado de cruzamento por endereço, não por nome:** o status global
+que `evt_flag` escreve (`+0x0`) e o buffer/cursor que `evt_get_flgdt`
+usa (`+0x8`/`+0xc`) resolvem pro **mesmo** slot GOT (`0x347a80`) e
+pro **mesmo** endereço base (`0x67b35c`) — confirmado calculando as
+duas cadeias independentemente. É uma struct de contexto de VM antes
+não identificada; **não** se afirma que é a mesma struct de
+`event_call`/`worldmap_call` (seção 66/80), que recebem `script`/`pc`
+como argumentos explícitos, não por este global.
+
+**Reconstrução C + teste diferencial:**
+`docs/re-tools/c-models/t19_evt_get_flgdt.c` + `test_t19_evt_get_flgdt.py`
+(3 cenários + 1 injeção de falha confirmando o truncamento de 16
+bits) e `docs/re-tools/c-models/t19_evt_flag.c` +
+`test_t19_evt_flag.py` (`evt_get_flgdt`/`Wread_eventflag` stubados,
+4 cenários + 2 injeções de falha: retorno não é booleano; bit de
+status sobrevive quando os valores batem). Suíte completa de
+`docs/re-tools`: de 583 pra **588 testes** (1.871 → **1.878
+subtestes**), todas passando (confirmado 2×).
+
+**Lacuna aceita:** `Wread_eventflag`/`Wwrite_eventflag` (I/O real da
+tabela de flags) tratadas como caixa-preta; `evt_flag_high`,
+`evt_flag_low`, `evt_flagset` (mesma família, mesmo padrão) não
+lidas; identidade semântica do global de contexto não estendida além
+dos 3 campos usados aqui; alvos nominais de T19 intocados.
+
+**Status CSV: `read_full`** — `evt_get_flgdt`: 17/17 instruções reais
+(+1 literal pool), 0 `bl`. `evt_flag`: 15/15 instruções reais (+1
+literal pool), 2 `bl` tratados como caixa-preta.

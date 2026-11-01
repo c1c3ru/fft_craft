@@ -2819,7 +2819,7 @@ address,size,mangled,demangled,status,section_ref
 0025396c,80,_Z15ctlmap_deactiveP7CTLINFO,ctlmap_deactive(CTLINFO*),read_structural,NOTES §615
 002912f8,80,LoadClut,LoadClut,read_structural,NOTES §611
 002a30b0,80,xpMallocAlign,xpMallocAlign,read_structural,NOTES §611
-002591d4,80,_Z13evt_get_flgdtPiS_,"evt_get_flgdt(int*, int*)",read_structural,NOTES §611
+002591d4,80,_Z13evt_get_flgdtPiS_,"evt_get_flgdt(int*, int*)",read_full,NOTES §671
 0029b4f4,80,GsDefDispBuff,GsDefDispBuff,read_structural,NOTES §611
 00269820,80,_Z11snpl_picclrv,snpl_picclr(),read_structural,NOTES §615
 00269c80,80,_Z16snpl_selparacalcv,snpl_selparacalc(),mentioned_unverified,
@@ -2994,7 +2994,7 @@ address,size,mangled,demangled,status,section_ref
 00249a38,72,_Z14vOpn_month2dayii,"vOpn_month2day(int, int)",read_structural,NOTES §615
 0025e840,72,_Z12month_to_dayii,"month_to_day(int, int)",read_structural,NOTES §615
 0026b64c,72,_Z15wldmusic_changei,wldmusic_change(int),mentioned_unverified,
-00259224,72,_Z8evt_flagv,evt_flag(),mentioned_unverified,
+00259224,72,_Z8evt_flagv,evt_flag(),read_full,NOTES §671
 0025926c,72,_Z13evt_flag_highv,evt_flag_high(),mentioned_unverified,
 002592b4,72,_Z12evt_flag_lowv,evt_flag_low(),mentioned_unverified,
 002594a0,72,_Z14evt_brave_highv,evt_brave_high(),mentioned_unverified,
