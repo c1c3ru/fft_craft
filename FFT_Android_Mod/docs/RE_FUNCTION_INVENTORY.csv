@@ -1688,7 +1688,7 @@ address,size,mangled,demangled,status,section_ref
 0018feec,188,_Z14eGetBitStream2j,eGetBitStream2(unsigned int),read_full,NOTES §549
 00196fac,188,_Z14jGetBitStream2j,jGetBitStream2(unsigned int),read_full,NOTES §549
 002859cc,188,pspItemGetItemData,pspItemGetItemData,read_structural,NOTES §556
-001ce950,188,_Z21setskillresult_casteri,setskillresult_caster(int),mentioned_unverified,
+001ce950,188,_Z21setskillresult_casteri,setskillresult_caster(int),read_full,NOTES §662
 0027f830,188,_Z22iOS_ResumeBeforeBattlev,iOS_ResumeBeforeBattle(),read_full,NOTES §565
 0020c19c,188,_Z16fftVSyncCallbackv,fftVSyncCallback(),read_structural,NOTES §615
 0020c628,188,_Z14mallocForSoundj,mallocForSound(unsigned int),read_structural,NOTES §611

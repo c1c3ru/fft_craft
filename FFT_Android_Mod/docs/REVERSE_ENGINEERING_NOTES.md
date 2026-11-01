@@ -26042,3 +26042,60 @@ print(res.final_buffers['s'][0xbab940-0xbab000:0xbab940-0xbab000+4].hex(), 'expe
 **Status CSV: inalterado (`read_full`)** — a contagem mecânica já
 estava certa; esta seção corrige a descrição semântica de §641, que
 permanece no histórico como registro do erro original.
+
+## 662. `setskillresult_caster(int)` — leitura completa, primeira passagem pela fatia vertical de combate (T16), 3 campos novos de `BWORK` confirmados por execução real (2026-10-31/2026-11-01, T16 do `RE_COMPLETUDE_TASKS.md`)
+
+`setskillresult_caster(int casterId)` (`0x1ce950`, 188 B) — disassembly
+linear completo via Capstone, 46/47 slots (os 6 bytes finais são
+literal pool); 2 `bl`: `setskillresult(int)` (`0x1cda4c`, 3.844 B,
+ainda `read_structural` — tratado como caixa-preta aqui) e
+`copy_struct_data(void const*, void*, int)` (já documentada).
+
+```c
+int setskillresult_caster(int casterId) {
+    BWORK* bw = &g_bworkArray[casterId];        // stride 0x1e6=486, confirmado de novo
+    g_currentCasterBwork = bw;
+    if (casterId > 20) return -1;
+    uint8_t flag = bw->caster_ready_flag_0x1;    // *** campo novo: BWORK+0x1 ***
+    g_currentCasterId.byte_at_1 = (uint8_t)casterId;
+    void* resultSlot = &bw->skill_result_kind_0x1ae;  // *** campo novo: BWORK+0x1ae ***
+    g_currentResultSlotPtr = resultSlot;
+    if (flag == 0xff) return -1;
+    copy_struct_data(&g_defaultSkillResultTemplate, resultSlot, 0x2e);  // reseta 46 B
+    setskillresult(casterId);
+    uint8_t* r = (uint8_t*)resultSlot;
+    if (r[0] == 0) r[2] = 8;      // skill_result_fallback_0x1b0 = 8
+    return 0;
+}
+```
+
+**Confirmado por execução real sob Unicorn** (`differential_harness.py`,
+T10), não só leitura manual — os 5 globais resolvidos via GOT (base
+compartilhada em `0x347d58`) foram verificados byte a byte:
+`g_bworkArray` ponteiro em `0x346d04`, `g_currentCasterBwork` em
+`0x347368`, `g_currentCasterId` em `0x347370`, `g_currentResultSlotPtr`
+em `0x347374`, `g_defaultSkillResultTemplate` em `0x347394`. Testado
+com `casterId∈{3,20,21}` e `flag∈{5,0xff}`: `casterId=20` (limite,
+inclusive) segue pro sucesso, `21` retorna `-1`; `flag=0xff` retorna
+`-1`, qualquer outro valor segue. Endereços escritos para `casterId=3`
+batem exatamente com a aritmética prevista
+(`&BWORK[3]=0x6005b2`, `&BWORK[3]+0x1ae=0x600760`).
+
+**Três campos novos de `BWORK` confirmados** (consolidados em
+`docs/re-baseline/types/bwork.h`, verificado por `offsetof`):
+`+0x1` (`caster_ready_flag_0x1`, sentinela `0xff`="não pode conjurar"),
+`+0x1ae` (`skill_result_kind_0x1ae`, byte "tipo de resultado", 0 ⇒
+fallback), `+0x1b0` (`skill_result_fallback_0x1b0`, valor fixo `8`). O
+intervalo `+0x1ae`–`+0x1db` (46 B) é exatamente o "slot de resultado de
+habilidade" resetado por `copy_struct_data` — coincide em tamanho e
+posição com o que já estava marcado `_unknown` em `bwork.h`, sem
+sobreposição com `byte_0x1ac`/`byte_0x1ad` (seção 653).
+
+**Lacuna aceita**: `setskillresult` (3.844 B) em si não foi lida —
+tratada como caixa-preta nesta tarefa; os outros 44 bytes do slot de
+resultado (além de `+0x1ae` e `+0x1b0`) seguem desconhecidos;
+`g_defaultSkillResultTemplate` (o conteúdo dos 46 bytes padrão) não foi
+inspecionado.
+
+**Status CSV: `read_full`** — 46/46 instruções reais (+1 literal pool),
+2 `bl` já documentados.

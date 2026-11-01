@@ -1,6 +1,7 @@
 /* BWORK -- partial layout recovered from field-access evidence.
- * Source: docs/REVERSE_ENGINEERING_NOTES.md sections 349, 355, 653, and
- * copy_entry_coord (0x1d9ee0) read directly for T08 (2026-10-31).
+ * Source: docs/REVERSE_ENGINEERING_NOTES.md sections 349, 355, 653, 662,
+ * and copy_entry_coord (0x1d9ee0, T08) / setskillresult_caster
+ * (0x1ce950, T16 slice) read directly in this project.
  * sizeof(BWORK) confirmed = 0x1e6 (486) bytes, from set_status_all's
  * r8 = idx*0x1e6 indexing of a global BWORK[] array (section 349).
  *
@@ -24,7 +25,9 @@
 #define SIZEOF_BWORK 0x1e6  /* 486 bytes; confirmed, see header comment */
 
 typedef struct BWORK {
-    uint8_t _unknown_0x00_0x22[0x23];        /* not mapped in this pass */
+    uint8_t _unknown_0x00;
+    uint8_t caster_ready_flag_0x1;           /* 0xff = "not castable" (setskillresult_caster returns -1); any other value proceeds (NOTES sec. 662) */
+    uint8_t _unknown_0x02_0x22[0x21];        /* not mapped in this pass */
 
     uint8_t net_sync_pending_flag_0x23;      /* bit 0x40: network sync pending flag (NOTES sec. 349) */
     uint8_t _unknown_0x24_0x2d[0x0a];
@@ -74,7 +77,14 @@ typedef struct BWORK {
 
     uint8_t byte_0x1ac;                      /* origByte1ac in set_casting_status (NOTES sec. 653); feeds `dir` into _changeAnimationStatus_ */
     uint8_t byte_0x1ad;                      /* copied into ui_dirty_flag_0x17d on one set_casting_status path (NOTES sec. 653) */
-    uint8_t _unknown_0x1ae_0x1db[0x2e];
+    /* +0x1ae..+0x1db (46 B): "skill result" sub-struct, reset by
+     * setskillresult_caster via copy_struct_data from a global default
+     * template before calling setskillresult(casterId) (NOTES sec. 662).
+     * Only 2 of the 46 bytes are understood: */
+    uint8_t skill_result_kind_0x1ae;         /* if 0 after setskillresult() runs, forced to a fallback (NOTES sec. 662) */
+    uint8_t _unknown_0x1af;
+    uint8_t skill_result_fallback_0x1b0;     /* set to 8 when skill_result_kind_0x1ae == 0 (NOTES sec. 662) */
+    uint8_t _unknown_0x1b1_0x1db[0x2b];
 
     uint8_t status_secondary_0x1dc;          /* tested against mask 0xa in change_status_adjust (NOTES sec. 349/355) */
     uint8_t status_secondary_0x1dd;          /* secondary status byte (NOTES sec. 349) */
