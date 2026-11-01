@@ -2251,7 +2251,7 @@ address,size,mangled,demangled,status,section_ref
 001efa60,120,_Z21requestCast2AnimationP13tag_animationS0_,"requestCast2Animation(tag_animation*, tag_animation*)",read_full,NOTES §564
 001fd200,120,_Z12setTurnOrderv,setTurnOrder(),read_structural,NOTES §611
 002b71f0,120,_Z20iOS_ResumeByAutoSavei,iOS_ResumeByAutoSave(int),read_full,NOTES §565
-0023c6b0,120,_Z7Mdl0016siii,"Mdl0016(short, int, int, int)",read_structural,NOTES §101
+0023c6b0,120,_Z7Mdl0016siii,"Mdl0016(short, int, int, int)",read_full,NOTES §665
 0021e760,120,_Z10doSequences,doSequence(short),read_structural,NOTES §615
 00245aa8,120,_Z14o_GetCardEventv,o_GetCardEvent(),read_structural,NOTES §611
 00245b78,120,_Z16o_GetCardEvent_Xv,o_GetCardEvent_X(),read_structural,NOTES §611

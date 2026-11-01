@@ -26217,3 +26217,54 @@ o mecanismo de busca.
 
 **Status CSV: `read_full`** — 22/22 instruções reais (+2 literal
 pool), 0 `bl`, 0 tabela de salto.
+
+## 665. `Mdl0016(short, int, int, int)` — leitura completa, fatia vertical de T24 (modelos/animação): máquina de 4 estados sobre um byte de efeito de "neve", 2 dos 4 parâmetros declarados nunca são lidos (2026-11-01, T24 do `RE_COMPLETUDE_TASKS.md`)
+
+`Mdl0016(short modelId, int p1, int p2, int p3)` (`0x23c6b0`, 120 B) —
+disassembly linear completo via Capstone, 93% de cobertura por
+`jtable.py` (28/30 slots, 2 literal pool); 1 `bl`:
+`ASHURA_snowMatrix(long, long)` (ainda não lida, tratada como
+caixa-preta).
+
+```c
+uint8_t Mdl0016(short modelId, int p1, int p2, int p3) {
+    // p2 e p3 nunca sao lidos neste corpo
+    uint8_t* entry = &g_mdlArray[modelId];      // stride 0xf8=248 B, confirmado
+    uint8_t* sub = entry + p1 + 0x20;
+    uint8_t state = sub[2];
+    if (state == 3) { sub[2] = 0; return 0; }
+    if (state != 1) { return state; }            // 0, 2, 4+: só relata o estado atual
+    // state == 1:
+    int16_t myField = *(int16_t*)(entry + 0x28);  // relativo a `entry`, NAO a `sub`
+    int16_t globalField = *(int16_t*)(*(void**)g + 2);  // dupla indireção, mesmo padrão de T18
+    ASHURA_snowMatrix(0x96, globalField - myField);
+    sub[2] = 2;
+    return 2;
+}
+```
+
+**Confirmado por execução real sob Unicorn** (`differential_harness.py`,
+T10) para os 3 estados com efeito (`1`→transição com chamada real,
+argumentos exatos `r0=0x96, r1=globalField-myField` confirmados
+byte a byte; `3`→reset; `0`→passagem direta) — sem nenhuma tentativa
+falha desta vez, porque a leitura já tinha identificado corretamente
+que o campo em `+0x28` é relativo a `entry` (antes de somar `p1`),
+não a `sub` (depois de somar `p1`) — uma distinção que, se invertida,
+teria repetido o tipo de erro já visto em T18/T26.
+
+**Achado**: dos 4 parâmetros declarados na assinatura (`short, int,
+int, int`), **só os 2 primeiros são usados** neste corpo —
+`p2`/`p3` nunca são lidos. Isso é esperado pra uma família
+`Mdl0001`..`Mdl00XX` com assinatura C++ uniforme onde cada membro
+implementa só o subconjunto de parâmetros que sua lógica
+específica precisa — não é um indício de erro de leitura, mas vale
+registrar explicitamente pra quem for fechar outros membros da
+família não presumir que todos os 4 parâmetros sempre importam.
+
+**Lacuna aceita**: `ASHURA_snowMatrix` em si não foi lida (caixa-preta);
+identidade de `g`/a struct global (câmera? posição de referência?) não
+investigada; os outros ~42 membros da família `Mdl00XX` ainda
+`read_structural`/`mentioned_unverified`.
+
+**Status CSV: `read_full`** — 28/28 instruções reais (+2 literal
+pool), 1 `bl` tratado como caixa-preta.
