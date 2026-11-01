@@ -2673,7 +2673,7 @@ address,size,mangled,demangled,status,section_ref
 00256490,88,_Z16ctlsthelp_activeP7CTLINFO,ctlsthelp_active(CTLINFO*),read_structural,NOTES §331
 0025f63c,88,_Z10wldlop_chkv,wldlop_chk(),mentioned_unverified,
 0026b31c,88,_Z16snplread_parcalcv,snplread_parcalc(),read_structural,NOTES §615
-00270b04,88,_Z15pagenext_cursorP11PAGEWININFO,pagenext_cursor(PAGEWININFO*),read_structural,NOTES §615
+00270b04,88,_Z15pagenext_cursorP11PAGEWININFO,pagenext_cursor(PAGEWININFO*),read_full,NOTES §669
 00273cc8,88,_Z16IsAlmostNullUniti,IsAlmostNullUnit(int),mentioned_unverified,
 002815e8,88,_Z19iOS_RESUME_SET_SUBRP20IOS_RESUME_DATA_SUBR24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_SUBR(IOS_RESUME_DATA_SUBR*, IOS_RESUME_DATACOPY_MODE)",read_full,NOTES §555
 0028b844,88,_Z13uninitTaskEmuv,uninitTaskEmu(),read_structural,NOTES §615

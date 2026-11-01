@@ -26494,3 +26494,66 @@ não confirmada além do cruzamento de endereço com `Boot_Init`.
 
 **Status CSV: `read_full`** — 29/29 instruções reais (+3 literal
 pool), 3 `bl` tratados como caixa-preta.
+
+## 669. `pagenext_cursor(PAGEWININFO*)` — leitura completa, fatia vertical de T21 (texto/janelas): fecha um callee já citado por nome no framework `PAGEWININFO` (seção 381) (2026-11-01, T21 do `RE_COMPLETUDE_TASKS.md`)
+
+`pagenext_cursor(PAGEWININFO* info)` (`0x270b04`, 88 B) — disassembly
+linear completo via Capstone, 91% de cobertura por `jtable.py` (20/22
+slots, 2 literal pool), **0 `bl`** — toda a lógica num corpo
+auto-contido. Já citada por nome na seção 381 como callee de
+`pagewin_main`/`iOSpagewin_main` ("navegação de página"), mas nunca
+lida individualmente até agora; os alvos nominais de T21
+(`mesputmain`, `Wmesputmain`, variantes de janela A/C/D/E/W) seguem
+intocados.
+
+```c
+void pagenext_cursor(PAGEWININFO* info) {
+    uint32_t* entry = &g_cursorFlags[info->field_0x38];   // array real, stride 0x24
+    if (info->field_0x54 >= info->field_0x50) {            // curPage >= maxPage: última página
+        *entry |= 0x10;
+    } else {
+        *entry &= ~0x10;
+    }
+}
+```
+
+**Achado estrutural:** os três campos de `PAGEWININFO` que esta função
+toca (`+0x38` índice, `+0x50` "página máxima", `+0x54` "página atual")
+não têm offset confirmado em nenhuma tabela de campos existente —
+`PAGEWININFO` ainda não tem um header de struct (não é um dos tipos
+priorizados em T08). Lidos diretamente dos bytes reais desta função,
+sem herdar suposição de outra fonte. O limite é **inclusivo**
+(`curPage >= maxPage`, não `>`) — confirmado por execução real com
+`curPage == maxPage` exatamente, não assumido pela leitura do `bge`.
+
+**Achado de cruzamento por endereço:** os dois ramos (página ainda
+restante vs. última página) leem o **mesmo** slot GOT (`0x3479a4`,
+resolvido à mão nos dois ramos independentemente) para o **mesmo**
+array global (base `0x67e390`, stride `0x24`=36 B por entrada,
+indexado por `info->field_0x38`) — confirma que não são dois arrays
+coincidentemente parecidos, é literalmente o mesmo armazenamento
+compartilhado entre os dois caminhos. Só os primeiros 4 bytes de cada
+entrada (um campo de flags de 32 bits) são tocados por esta função; os
+outros 32 bytes da entrada são opacos aqui.
+
+**Reconstrução C + teste diferencial:**
+`docs/re-tools/c-models/t21_pagenext_cursor.c` +
+`test_t21_pagenext_cursor.py`: sem `bl` pra stubar, só o array global
+é passado ao modelo como ponteiro nativo já resolvido (mesmo recurso
+de T14/T25). 4 cenários batem exatamente (não-última-página com flag
+já setada, última página por igualdade, última página por excesso,
+não-última-página preservando outros bits), mais 2 injeções de falha:
+uma confirma que os outros bits do campo de flags sobrevivem (não é
+uma atribuição direta `=0x10`/`=0`, é `|=`/`&=~`); outra confirma que
+o limite é inclusivo. Suíte completa de `docs/re-tools`: de 578 pra
+**581 testes** (1.867 → **1.871 subtestes**), todas passando
+(confirmado 2×).
+
+**Lacuna aceita:** os alvos nominais de T21 (`mesputmain`,
+`Wmesputmain`, variantes A/C/D/E/W) não tocados; `PAGEWININFO` ainda
+sem header de struct (campos `+0x38`/`+0x50`/`+0x54` confirmados só
+pra esta função, não consolidados numa tabela compartilhada);
+`pageupdown_cursor` (citada junto na seção 381) não lida.
+
+**Status CSV: `read_full`** — 20/20 instruções reais (+2 literal
+pool), 0 `bl`.
