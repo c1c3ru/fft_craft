@@ -26413,3 +26413,84 @@ por nenhuma outra função que os escreva com um nome já estabelecido.
 **Status CSV: `read_full`** — 22/22 instruções reais, 0 `bl`, 1
 chamada virtual tratada como caixa-preta (stubada nos dois lados do
 teste diferencial).
+
+## 668. `Boot_FrameMove()` — leitura completa, fatia vertical de T14 (boot e ciclo principal): cruza por endereço, não por nome, com `Boot_Init()` já lida (2026-11-01, T14 do `RE_COMPLETUDE_TASKS.md`)
+
+`Boot_FrameMove()` (`0x2b3590`, 128 B) — disassembly linear completo
+via Capstone, 29/32 slots reais (91%, os outros 3 são literal pool de
+3 words = 12 B, função termina exatamente em `0x2b3610`, sem lacuna).
+3 `bl`: `CTHREAD::Sync()`, `CEGL2_IF::ClearBackdrop(float,float,float)`
+e `onGotoNextMode(int)` — todos já citados por nome na tabela de
+checkpoint existente (`0x002b3590` na seção "revisão §614"), nenhum
+lido aqui por completo (tratados como caixa-preta no teste
+diferencial). Achada no cluster nominal de T14 (`Boot_Init`,
+`Main_Init`, `Main_FrameMove`, `Main_FrameRender`): é o par
+`FrameMove` de `Boot_Init` (já `read_full`, seção 650), pequena o
+bastante (128 B) para reconstrução completa nesta fatia, enquanto os
+4 alvos nominais de T14 (300 B–variam, não medidos aqui) seguem
+intocados.
+
+```c
+int32_t Boot_FrameMove(void) {
+    if (*g_bootFlag != 0) {          // mesmo endereço GOT de Boot_Init, ver achado abaixo
+        return 0;
+    }
+    int32_t syncResult = CTHREAD::Sync(g_bootThread);   // *g_bootThread, cache global
+    if (syncResult != 0) {
+        if (syncResult == 1) return -1;
+        return 0;
+    }
+    CEGL2_IF::ClearBackdrop(g_glIf, 0.0f, 0.0f, 0.0f);   // *g_glIf, cache global
+    onGotoNextMode(3);   // 3 = Logo, confirmado NOTES §640
+    return 1;
+}
+```
+
+**Achado estrutural, cruzado por endereço com `Boot_Init()`
+(seção 650), não por nome:** a primeira guarda desta função lê o
+mesmo GOT indiretamente até a MESMA variável `.bss` que `Boot_Init()`
+escreve `0` logo depois de `CTHREAD::Register()`, no caminho em que
+nenhum dos 3 arquivos-projeto candidatos abriu sincronamente. Resolvido
+à mão (literal pool → slot GOT → endereço do global → valor) para os
+dois lados: `Boot_FrameMove` resolve o slot GOT em `0x347cb4`
+apontando pra `0x19db208`; `Boot_Init` (usando `r7` como base de GOT
+cacheada no próprio prólogo, offset relativo `-0xa4`) resolve pro
+**mesmo** slot `0x347cb4`/`0x19db208`. É a primeira confirmação
+cruzada por endereço (não por nome/semelhança) entre duas funções
+`Boot_*` nesta sessão. **Nome do campo não inventado**: a identidade
+exata do flag (ex.: "ainda carregando"?) seria consistente com os dois
+usos observados, mas como `Boot_Init` o zera e o BSS já começa zerado
+por padrão, essa hipótese não está confirmada — mantido como
+`g_bootFlag` só como rótulo de conveniência, não como nome
+semanticamente certificado. Os outros dois globais (`g_bootThread`,
+`g_glIf`) não foram cruzados contra nenhuma outra função nesta
+sessão — permanecem sem identidade além de "ponteiro cacheado".
+
+**Reconstrução C + teste diferencial:**
+`docs/re-tools/c-models/t14_boot_framemove.c` +
+`test_t14_boot_framemove.py`: os 3 globais são passados ao modelo já
+resolvidos (mesmo recurso de largura de ponteiro de T25/T24, já que a
+cadeia GOT→endereço→valor é boilerplate PIC genérico, não lógica desta
+função), `CTHREAD::Sync`/`ClearBackdrop`/`onGotoNextMode` stubados via
+`callable` nos dois lados — os stubs do lado ELF real **gravam os
+registradores observados** na própria chamada, confirmando que
+`ClearBackdrop` é chamada com `(this, 0.0f, 0.0f, 0.0f)` e
+`onGotoNextMode` com `(3)` exatamente como os bytes mostram, não só
+que "alguma chamada aconteceu". 4 cenários batem exatamente (saída
+antecipada, sync "ainda rodando" nem 0 nem 1, sync erro=1, sync
+sucesso=0 com as duas chamadas finais), mais 1 injeção de falha
+confirmando que um resultado de sync "nem 0 nem 1" retorna `0`, não
+`-1` como uma simplificação ingênua assumiria. Suíte completa de
+`docs/re-tools`: de 576 pra **578 testes** (1.863 → **1.867
+subtestes**), todas passando (confirmado 2×, incluindo após uma falha
+transitória isolada já descartada por reexecução).
+
+**Lacuna aceita:** `CTHREAD::Sync`, `CEGL2_IF::ClearBackdrop` e
+`onGotoNextMode` tratadas como caixa-preta; os 4 alvos nominais de T14
+(`Boot_Init` já fechado em outra sessão, `Main_Init`,
+`Main_FrameMove`, `Main_FrameRender`) seguem intocados por esta
+fatia; identidade semântica de `g_bootFlag`/`g_bootThread`/`g_glIf`
+não confirmada além do cruzamento de endereço com `Boot_Init`.
+
+**Status CSV: `read_full`** — 29/29 instruções reais (+3 literal
+pool), 3 `bl` tratados como caixa-preta.

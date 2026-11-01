@@ -2173,7 +2173,7 @@ address,size,mangled,demangled,status,section_ref
 0028defc,128,_ZN8xpApiEnv10_card_infoEl,xpApiEnv::_card_info(long),read_full,NOTES §566
 00291b40,128,xpLibgpuEndRender,xpLibgpuEndRender,read_full,NOTES §554
 002b102c,128,_ZN11CDebugPrint7AddLineEffffhhhh,"CDebugPrint::AddLine(float, float, float, float, unsigned char, unsigned char, unsigned char, unsigned char)",read_full,NOTES §567
-002b3590,128,_Z14Boot_FrameMovev,Boot_FrameMove(),read_structural,NOTES §615
+002b3590,128,_Z14Boot_FrameMovev,Boot_FrameMove(),read_full,NOTES §668
 000791a8,124,gzflush,gzflush,read_structural,NOTES §611
 00085154,124,vorbis_block_clear,vorbis_block_clear,read_structural,NOTES §336
 00085f2c,124,vorbis_synthesis_restart,vorbis_synthesis_restart,read_structural,NOTES §336
