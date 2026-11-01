@@ -177,11 +177,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #518 — chore(re): automated structural batch 41297560178](https://github.com/c1c3ru/fft_craft/pull/518)
 - [PR #517 — chore(re): automated structural batch 41264294118](https://github.com/c1c3ru/fft_craft/pull/517)
 - [PR #516 — chore(re): automated structural batch 41263271694](https://github.com/c1c3ru/fft_craft/pull/516)
 - [PR #515 — chore(re): automated structural batch 41262478869](https://github.com/c1c3ru/fft_craft/pull/515)
 - [PR #514 — chore(re): automated structural batch 41261667942](https://github.com/c1c3ru/fft_craft/pull/514)
-- [PR #513 — chore(re): automated structural batch 41261298128](https://github.com/c1c3ru/fft_craft/pull/513)
 
 ## Atualização automática e fontes
 
