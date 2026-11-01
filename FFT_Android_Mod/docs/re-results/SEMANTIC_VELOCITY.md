@@ -2,14 +2,14 @@
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Último run: `41259143862` · 2026-11-01T01:01:54Z
+Último run: `41261060320` · 2026-11-01T01:28:42Z
 
 | Indicador | Valor |
 |---|---:|
 | Certificados do ledger | 303/6329 |
 | Bytes certificados | 1212/1826552 |
-| Checkpoints aprovados estruturalmente | 2952 |
-| Checkpoints a revisar | 50 |
+| Checkpoints aprovados estruturalmente | 2949 |
+| Checkpoints a revisar | 53 |
 | Atividades concluídas | 2/17 |
 
 ## Variação da última execução
@@ -17,8 +17,8 @@ ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 - Novos endereços certificados: **0**.
 - Certificados removidos: **0**.
 - Variação de bytes certificados: **+0**.
-- Variação de aprovação estrutural: **+0**.
-- Variação de revisões pendentes: **+0**.
+- Variação de aprovação estrutural: **-3**.
+- Variação de revisões pendentes: **+3**.
 - Atividades concluídas adicionais: **+0**.
 
 ## Janela móvel de sete dias

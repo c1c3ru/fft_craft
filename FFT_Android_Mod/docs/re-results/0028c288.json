@@ -9,7 +9,7 @@
   "tables_resolved": 1,
   "tables_unresolved": 0,
   "bl_targets": [],
-  "log": "=== jtable.py: 0x28c288..0x28c2c0 (56 bytes) ===\ncoverage: 8 of ~14 instruction slots (57%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0x28c28c, dispatch @0x28c290: 5 cases, 1 distinct handlers\n    targets: ['0x28c2ac', '0x28c2ac', '0x28c2ac', '0x28c2ac', '0x28c2ac']\n\n-- bl targets: 0 distinct --\n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "log": "=== jtable.py: 0x28c288..0x28c2c0 (56 bytes, ARM mode) ===\ncoverage: 8 of ~14 instruction slots (57%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0x28c28c, dispatch @0x28c290: 5 cases, 1 distinct handlers\n    targets: ['0x28c2ac', '0x28c2ac', '0x28c2ac', '0x28c2ac', '0x28c2ac']\n\n-- bl targets: 0 distinct --\n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
   "v2_structural_status": "needs_review",
   "structural_v3": {
     "status": "needs_review",
@@ -44,9 +44,8 @@
     "candidate_literal_data_not_proven": true
   },
   "structural_version": 3,
-  "structural_fingerprint": "f5c979fa06fbd650af1c",
+  "structural_fingerprint": "3ff8b8e6cea3388010f6",
   "review_attempts": 1,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2,
-  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/0028c288.json"
+  "pipeline_version": 2
 }

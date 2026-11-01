@@ -3,7 +3,7 @@
 Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
 Analyzed in current binary: 3002
-Automatically triaged: 299,868 bytes / 944 inventory bytes (31765.68%); **this is newly triaged coverage, not total project coverage**.
+Automatically triaged: 299,868 bytes / 1,837,392 inventory bytes (16.32%); **this is newly triaged coverage, not total project coverage**.
 
 | Address | Function | Size (B) | Coverage | Status |
 |---|---|---:|---:|---|
@@ -15,7 +15,7 @@ Automatically triaged: 299,868 bytes / 944 inventory bytes (31765.68%); **this i
 | `00090e08` | mdct_init | 732 | 97.81% | auto_structural |
 | `00076ef8` | deflateInit2_ | 724 | 97.79% | auto_structural |
 | `002ca8a0` | __subdf3 | 688 | 28.49% | needs_review |
-| `002ca8a4` | __adddf3 | 684 | 28.07% | needs_review |
+| `002ca8a4` | __aeabi_dadd | 684 | 28.07% | needs_review |
 | `00088978` | _ve_envelope_search | 636 | 100.0% | auto_structural |
 | `002cac50` | __muldf3 | 620 | 72.9% | needs_review |
 | `000ba9c8` | CSOUND_IF::Load(int, char*, unsigned char*, unsigned int, unsigned int, int, int, int, int, int, int) | 612 | 100.0% | auto_structural |

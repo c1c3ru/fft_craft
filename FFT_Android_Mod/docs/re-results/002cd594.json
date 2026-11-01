@@ -20,7 +20,7 @@
     "2cd9b8",
     "2cd9cc"
   ],
-  "log": "=== jtable.py: 0x2cd594..0x2cd8ec (856 bytes) ===\ncoverage: 208 of ~214 instruction slots (97%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0x2cd5a4, dispatch @0x2cd5a8: 5 cases, 5 distinct handlers\n    targets: ['0x2cd5c4', '0x2cd60c', '0x2cd8d8', '0x2cd7f0', '0x2cd870']\n\n-- bl targets: 10 distinct --\n  0x2cd900 x1   __gnu_Unwind_Restore_VFP \n  0x2cd908 x2   __gnu_Unwind_Save_VFP \n  0x2cd910 x1   __gnu_Unwind_Restore_VFP_D \n  0x2cd918 x2   __gnu_Unwind_Save_VFP_D \n  0x2cd920 x1   __gnu_Unwind_Restore_VFP_D_16_to_31 \n  0x2cd928 x2   __gnu_Unwind_Save_VFP_D_16_to_31 \n  0x2cd930 x1   __gnu_Unwind_Restore_WMMXD \n  0x2cd974 x2   __gnu_Unwind_Save_WMMXD \n  0x2cd9b8 x1   __gnu_Unwind_Restore_WMMXC \n  0x2cd9cc x2   __gnu_Unwind_Save_WMMXC \n\n-- branches: 38 total, 5 backward (loop candidates) --\n",
+  "log": "=== jtable.py: 0x2cd594..0x2cd8ec (856 bytes, ARM mode) ===\ncoverage: 208 of ~214 instruction slots (97%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0x2cd5a4, dispatch @0x2cd5a8: 5 cases, 5 distinct handlers\n    targets: ['0x2cd5c4', '0x2cd60c', '0x2cd8d8', '0x2cd7f0', '0x2cd870']\n\n-- bl targets: 10 distinct --\n  0x2cd900 x1   __gnu_Unwind_Restore_VFP \n  0x2cd908 x2   __gnu_Unwind_Save_VFP \n  0x2cd910 x1   __gnu_Unwind_Restore_VFP_D \n  0x2cd918 x2   __gnu_Unwind_Save_VFP_D \n  0x2cd920 x1   __gnu_Unwind_Restore_VFP_D_16_to_31 \n  0x2cd928 x2   __gnu_Unwind_Save_VFP_D_16_to_31 \n  0x2cd930 x1   __gnu_Unwind_Restore_WMMXD \n  0x2cd974 x2   __gnu_Unwind_Save_WMMXD \n  0x2cd9b8 x1   __gnu_Unwind_Restore_WMMXC \n  0x2cd9cc x2   __gnu_Unwind_Save_WMMXC \n\n-- branches: 38 total, 5 backward (loop candidates) --\n",
   "v2_structural_status": "needs_review",
   "structural_v3": {
     "status": "needs_review",
@@ -55,9 +55,8 @@
     "candidate_literal_data_not_proven": true
   },
   "structural_version": 3,
-  "structural_fingerprint": "f5c979fa06fbd650af1c",
+  "structural_fingerprint": "3ff8b8e6cea3388010f6",
   "review_attempts": 1,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2,
-  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/002cd594.json"
+  "pipeline_version": 2
 }

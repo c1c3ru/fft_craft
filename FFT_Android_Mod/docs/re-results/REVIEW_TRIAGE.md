@@ -1,12 +1,12 @@
 # ARM semantic review triage
 
-Unverified checkpoints: **50**; core targets: **34**.
+Unverified checkpoints: **53**; core targets: **36**.
 
 These are structural observations, not semantic equivalence proofs.
 
 | Review reason | Total | Core |
 |---|---:|---:|
-| coverage_below_95 | 16 | 9 |
+| coverage_below_95 | 19 | 11 |
 | resolved_jump_table_check | 34 | 25 |
 
 ## Highest priority evidence collection
@@ -19,7 +19,7 @@ These are structural observations, not semantic equivalence proofs.
 | `00159aac` | asm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long) | 80.2% | resolved_jump_table_check | Verify guard, all cases and default path |
 | `00162080` | wasm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long) | 80.2% | resolved_jump_table_check | Verify guard, all cases and default path |
 | `002031a4` | iOSsetCursorByTouch(int, int, int, int, int) | 57.14% | resolved_jump_table_check | Verify guard, all cases and default path |
-| `002c9b11` | __gxx_personality_v0 | 7.22% | coverage_below_95 | Disassemble uncovered blocks and side effects |
+| `002c9b11` | __gxx_personality_v0 | 90.21% | coverage_below_95 | Disassemble uncovered blocks and side effects |
 | `0027fe84` | Savedata_Load(unsigned char*, int*) | 94.79% | coverage_below_95 | Disassemble uncovered blocks and side effects |
 | `0028e2e4` | CdControl | 68.75% | resolved_jump_table_check | Verify guard, all cases and default path |
 | `001d972c` | get_shape2(BWORK*, unsigned char*) | 54.74% | resolved_jump_table_check | Verify guard, all cases and default path |

@@ -9,7 +9,7 @@
   "tables_resolved": 2,
   "tables_unresolved": 0,
   "bl_targets": [],
-  "log": "=== jtable.py: 0x271ba4..0x271da0 (508 bytes) ===\ncoverage: 114 of ~127 instruction slots (90%)\n\n-- jump tables resolved: 2 --\n  guard cmp @0x271c1c, dispatch @0x271c20: 4 cases, 4 distinct handlers\n    targets: ['0x271ca4', '0x271c8c', '0x271c60', '0x271c38']\n  guard cmp @0x271cfc, dispatch @0x271d00: 4 cases, 4 distinct handlers\n    targets: ['0x271d84', '0x271d6c', '0x271d40', '0x271d18']\n\n-- bl targets: 0 distinct --\n\n-- branches: 26 total, 10 backward (loop candidates) --\n",
+  "log": "=== jtable.py: 0x271ba4..0x271da0 (508 bytes, ARM mode) ===\ncoverage: 114 of ~127 instruction slots (90%)\n\n-- jump tables resolved: 2 --\n  guard cmp @0x271c1c, dispatch @0x271c20: 4 cases, 4 distinct handlers\n    targets: ['0x271ca4', '0x271c8c', '0x271c60', '0x271c38']\n  guard cmp @0x271cfc, dispatch @0x271d00: 4 cases, 4 distinct handlers\n    targets: ['0x271d84', '0x271d6c', '0x271d40', '0x271d18']\n\n-- bl targets: 0 distinct --\n\n-- branches: 26 total, 10 backward (loop candidates) --\n",
   "v2_structural_status": "needs_review",
   "structural_v3": {
     "status": "needs_review",
@@ -59,9 +59,8 @@
     "candidate_literal_data_not_proven": true
   },
   "structural_version": 3,
-  "structural_fingerprint": "f5c979fa06fbd650af1c",
+  "structural_fingerprint": "3ff8b8e6cea3388010f6",
   "review_attempts": 1,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2,
-  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/00271ba4.json"
+  "pipeline_version": 2
 }

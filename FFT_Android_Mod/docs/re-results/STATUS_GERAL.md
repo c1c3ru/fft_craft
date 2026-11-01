@@ -10,12 +10,12 @@
 |---|---:|---|
 | Funções no inventário | 6,455 | Inventário ARM |
 | Checkpoints JSON válidos para este ELF | 3,002 | Status acompanhados |
-| Aprovados estruturalmente | 2,952 | Aprovação automática de estrutura, não de comportamento |
-| Precisam de revisão | 50 | Status `needs_review` |
-| Aprovação estrutural entre checkpoints | **98.3%** | 2,952/3,002, **não** percentual de engenharia reversa completa |
+| Aprovados estruturalmente | 2,949 | Aprovação automática de estrutura, não de comportamento |
+| Precisam de revisão | 53 | Status `needs_review` |
+| Aprovação estrutural entre checkpoints | **98.2%** | 2,949/3,002, **não** percentual de engenharia reversa completa |
 | Checkpoints pendentes de criação | 0 | Não incluem funções cobertas apenas pelo histórico CSV |
-| Metas de núcleo em revisão | 34 | De 2,345 checkpoints do núcleo |
-| v3: checkpoints / aprovados / revisão | 1,258 / 1,208 / 50 | Subconjunto já analisado pelas regras v3 |
+| Metas de núcleo em revisão | 36 | De 2,345 checkpoints do núcleo |
+| v3: checkpoints / aprovados / revisão | 1,261 / 1,208 / 53 | Subconjunto já analisado pelas regras v3 |
 | Equivalência semântica integral registrada | **303** | Certificados revisáveis vinculados ao ELF; microexecuções não são certificados |
 
 O histórico CSV contém **5,932** registros de análise anterior, que podem se sobrepor aos checkpoints. **Não somamos esses conjuntos para criar um percentual global fictício.**
@@ -64,7 +64,7 @@ A prioridade é reconstruir comportamento verificável (estrutura, semântica, C
 
 ## Evidência e testes semânticos
 
-50/50 relatórios estáticos de evidências. **Relatórios não são equivalência semântica certificada.**
+53/53 relatórios estáticos de evidências. **Relatórios não são equivalência semântica certificada.**
 
 Os relatórios abaixo apresentam **efeitos locais testados sob estados sintéticos** e seus limites. Testes passando não significam que a função inteira foi reconstruída:
 
@@ -179,11 +179,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #511 — chore(re): automated structural batch 41259143862](https://github.com/c1c3ru/fft_craft/pull/511)
 - [PR #510 — chore(re): automated structural batch 41256539904](https://github.com/c1c3ru/fft_craft/pull/510)
 - [PR #507 — B01: executar BL e retorno ARM original em dois chamadores C++](https://github.com/c1c3ru/fft_craft/pull/507)
 - [PR #509 — chore(re): automated structural batch 41248393749](https://github.com/c1c3ru/fft_craft/pull/509)
 - [PR #508 — chore(re): automated structural batch 41218000838](https://github.com/c1c3ru/fft_craft/pull/508)
-- [PR #506 — chore(re): automated structural batch 41210990229](https://github.com/c1c3ru/fft_craft/pull/506)
 
 ## Atualização automática e fontes
 
