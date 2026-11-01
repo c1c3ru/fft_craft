@@ -1,0 +1,20 @@
+# Dependências de desenvolvimento local para docs/re-tools/*.py, pinadas às
+# versões validadas em T03 (RE_COMPLETUDE_TASKS.md) nesta sessão: toda a
+# suíte de testes (528 testes / 1812 subtestes) passou com estas versões em
+# Python 3.14.4, num virtualenv limpo.
+#
+# Uso (dentro de FFT_Android_Mod/, Python 3 moderno em distro com PEP 668
+# ativo — `pip install` direto no Python do sistema falha com
+# "externally-managed-environment"):
+#   python3 -m venv .venv-re-tools
+#   .venv-re-tools/bin/pip install -r docs/re-tools/requirements-dev.txt
+#   .venv-re-tools/bin/python3 -m pytest docs/re-tools -q
+#
+# Este arquivo é independente de .github/ci/requirements-arm-re.txt (que
+# deixa as versões intencionalmente sem pin, conforme comentário nesse
+# arquivo — "Pin versions in a separate validated PR"). Não alterar aquele
+# arquivo aqui; ele é escopo da CI, não do ambiente de dev local.
+capstone==5.0.7
+pyelftools==0.33
+unicorn==2.1.4
+pytest==9.2.0
