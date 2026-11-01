@@ -20,8 +20,11 @@ from pathlib import Path
 import semantic_coverage
 import semantic_evidence
 import semantic_bxlr_contract_pilot as bxlr
+import semantic_leaf_copy_contract as leaf_copy
 
 SCOPE = "original_a32_bxlr_normal_return_v1"
+LEAF_COPY_SCOPE = leaf_copy.SCOPE
+LEAF_COPY_CONTROL_FLOW = (leaf_copy.CONTROL_FLOW_CLAIM,)
 PR_RE = re.compile(r"^https://github\.com/c1c3ru/fft_craft/pull/[1-9][0-9]*$")
 PRECONDITIONS = (
     "ARM state at entry", "executable mapped 4-byte instruction",
@@ -93,6 +96,85 @@ def verify_one(record, row, binary, digest, reader=None, executor=None):
         raise ValueError("insufficient independent ARM/Thumb differential tests")
     return True
 
+
+LEAF_COPY_REQUIRED_FIELDS = (
+    "preconditions", "postconditions", "memory_effects",
+    "control_flow", "test_evidence",
+)
+
+
+def verify_leaf_copy(record, row, binary, digest, reader=None, differ=None):
+    """Second proof class (RE_COMPLETUDE_TASKS.md T12): a bounded,
+    branch-free, call-free field read/write ("getter/setter" in T12's
+    wording), proved by live structural re-check plus a live differential
+    re-run against an independently-derived reference -- never by trusting
+    a stored JSON count, and never by reusing the BX LR validator's own
+    instruction-level contract on a multi-instruction function.
+    """
+    if record.get("status") != "certified":
+        raise ValueError("gate only validates explicitly certified records")
+    if (record.get("proof_class") != LEAF_COPY_SCOPE
+            or record.get("scope") != LEAF_COPY_SCOPE
+            or record.get("binary_sha256") != digest
+            or record.get("size") != row["size"]):
+        raise ValueError("unsupported semantic proof class or invalid ELF binding")
+    for field in LEAF_COPY_REQUIRED_FIELDS:
+        value = record.get(field)
+        if not isinstance(value, list) or not value or any(
+                not isinstance(item, str) or not item.strip() for item in value):
+            raise ValueError(f"approved leaf-copy proof missing complete '{field}'")
+    if record["control_flow"] != list(LEAF_COPY_CONTROL_FLOW):
+        raise ValueError("leaf-copy proof must match the fixed no-branch/no-call control-flow claim")
+    review = record.get("reviewer")
+    if not isinstance(review, dict) or any(
+            not isinstance(review.get(k), str) or not review[k].strip()
+            for k in REVIEW_REQUIRED):
+        raise ValueError("independent reviewer metadata is missing")
+    import semantic_review_protocol as protocol
+    if review["review_protocol"] != protocol.PROTOCOL:
+        raise ValueError("unsupported independent human review protocol")
+    if (review["type"] != "human" or review["decision"] != "approved"
+            or not PR_RE.fullmatch(review["approval_pr"])
+            or review["github_login"].strip().lower().endswith("[bot]")
+            or review["github_login"].strip().lower() in
+            {"bot", "ci", "automated", "pending", "unknown"}):
+        raise ValueError("not an explicit recorded human review")
+
+    reader = reader or semantic_evidence.read_function
+    address = int(row["address"], 16)
+    is_thumb = bool(address & 1)
+    original = reader(binary, address, row["size"])
+    # Re-derive the structural shape from the CURRENT bytes -- a proof
+    # written for one function, or for a function that grew a callee or a
+    # branch since, must fail here rather than being accepted on an old
+    # claim. This is also what rejects "BX LR proof applied to another
+    # function": the BX LR scope literally cannot appear here (checked
+    # above), and this check independently rejects anything that is not
+    # actually a pure leaf copy, regardless of which proof_class string
+    # was written in the record.
+    if not leaf_copy.is_pure_leaf_copy(original, address, is_thumb=is_thumb):
+        raise ValueError("ELF body is not a pure branch-free, call-free leaf copy")
+    if record.get("instruction_sha256") != hashlib.sha256(original).hexdigest():
+        raise ValueError("body digest does not match original ELF")
+
+    # Machine observations are deliberately checked live, via the T10
+    # differential harness, never trusted from a stored report alone.
+    differ = differ or _default_leaf_copy_differ
+    report = differ(binary, address, row["size"], record)
+    if not isinstance(report, dict) or not report.get("match"):
+        raise ValueError("live differential re-run did not match the declared reference")
+    return True
+
+
+def _default_leaf_copy_differ(binary, address, size, record):
+    """Real (non-test) differential re-run: delegates to whatever harness
+    module the record declares, so the gate never hardcodes one function's
+    buffers/inputs. Kept separate from verify_leaf_copy so tests can inject
+    a fake `differ` without importing differential_harness at all.
+    """
+    raise NotImplementedError(
+        "no default live differential runner wired up yet -- callers must "
+        "pass an explicit `differ`; see T13 for a per-function integration")
 
 
 def github_json(path):
