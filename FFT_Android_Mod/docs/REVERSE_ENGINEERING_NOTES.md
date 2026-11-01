@@ -26327,3 +26327,89 @@ uso, não confirmados por struct) não investigada além do necessário.
 
 **Status CSV: `read_full`** — 19/19 instruções reais (+3 literal
 pool), 1 `bl` tratado como caixa-preta, 1 tail call.
+
+## 667. `CSOUND_IF_SL::Stop(int)` — leitura completa, fatia vertical de T25 (áudio): primeira função da família `CSOUND_IF`/`CSOUND_IF_SL` lida por completo fora do ciclo de vida já fechado em 2026-10-16 (2026-11-01, T25 do `RE_COMPLETUDE_TASKS.md`)
+
+`CSOUND_IF_SL::Stop(int channel)` (`0xbb838`, 88 B) — disassembly linear
+completo via Capstone, 100% de cobertura por `jtable.py` (22/22 slots),
+0 `bl` (único efeito externo é uma chamada virtual via vtable, não uma
+`bl` direta). Achada via busca no cluster `CSOUND_IF*`/`CSOUND_IF_SL*`
+(seções 13/16/17); os alvos nominais de T25 (BGM/SE completo, mixer,
+canais, codecs, vídeo/filme) seguem intocados — esta é a única função
+pequena e isolada desse cluster citada nominalmente ("stop e pausa")
+no próprio texto de T25.
+
+```c
+int32_t CSOUND_IF_SL::Stop(int channel) {
+    Channel* entry = &this->channelData[channel];   // +0x10, stride 0x88 (NOTES §17.1)
+    if (entry->field_0x04 != 0 || entry->field_0x3c != 0) {
+        SLPlayItf playItf = entry->playItf;          // +0x78 (NOTES §17.3)
+        if (playItf != NULL) {
+            entry->field_0x48 = 1;
+            int32_t result = (*playItf)->SetPlayState(playItf, 1 /* SL_PLAYSTATE_STOPPED */);
+            if (result == 0) entry->field_0x50 = 1;
+            return result;
+        }
+        return 0;   // playItf nulo: r0 é reescrito por esse próprio load, não fica "limpo"
+    }
+    return (int32_t)(intptr_t)this;   // *** r0 NUNCA é reescrito neste caminho -- devolve `this` ***
+}
+```
+
+**Achado estrutural, a primeira coisa que uma leitura apressada
+erraria:** a função tem **três** retornos observáveis, não dois. Nos
+dois casos em que a condição de guarda é falsa ou `playItf` é nulo,
+`r0` é escrito explicitamente com o valor carregado de `entry->playItf`
+(`0` quando nulo) — mas no caminho em que **nem** `field_0x04` **nem**
+`field_0x3c` estão marcados, `r0` nunca é tocado depois da entrada na
+função, e o valor de entrada em `r0` é o próprio `this` (convenção ARM
+EABI de método de instância, primeiro argumento). O retorno real desse
+caminho é portanto **o ponteiro `this`**, não `0` como um modelo
+"sensato" assumiria — confirmado lendo a ausência de qualquer `mov`/`ldr`
+pra `r0` nesse branch antes do `pop {r3,r4,r5,pc}`, e exercitado por
+execução real sob Unicorn antes de escrever o modelo C (teste de
+injeção de falha dedicado).
+
+**Reaproveita, sem reler, dois campos já confirmados no ciclo de vida
+fechado em 2026-10-16:** `this+0x10` = base do array `channelData`,
+stride `0x88` (`EngineInit`, seção 17.1); `Channel+0x78` = `playItf`
+(`SLPlayItf`), confirmado em `Play()` (seção 17.3) e agora também em
+`Stop()` chamando a mesma API real `SetPlayState` — o literal `1`
+passado como segundo argumento é lido direto dos bytes (`mov r5,#1` /
+`mov r1,r5`), e coincide com `SL_PLAYSTATE_STOPPED` da especificação
+OpenSL ES, mas a leitura não presume a constante, só confirma que
+bate. `Channel+0x4`, `+0x3c` (usados só como guarda não-nulo, nunca
+desreferenciados aqui), `+0x48` e `+0x50` não têm nome semântico
+confirmado — mantidos como `field_0xNN`, sem inventar identidade de
+campo só para preencher a reconstrução.
+
+**Reconstrução C + teste diferencial:**
+`docs/re-tools/c-models/t25_csoundifsl_stop.c` +
+`test_t25_csoundifsl_stop.py`: compila o modelo e executa a
+implementação original real via `differential_harness.py`
+(`stub_calls` com `callable`, extensão de T26) para 7 cenários —
+caminho de saída antecipada, `playItf` nulo, sucesso e falha da
+chamada virtual, e índice de canal não-zero validando a aritmética
+`MLA` de stride — **tudo bate exatamente**; como ponteiros de 64 bits
+do host não cabem nos campos de 4 bytes da struct ARM real,
+`channel_data`/`playItf` são passados ao modelo como parâmetros
+nativos já resolvidos (mesmo recurso já usado em `g` de
+`c-models/t24_mdl0016.c` e no callback de indireção dupla de T26), e a
+comparação de memória fica restrita aos dois campos `int32` simples
+(`+0x48`/`+0x50`) em vez do stride inteiro. Mais 2 testes de injeção
+de falha: um confirma que o retorno do caminho de saída antecipada não
+é `0`; outro confirma que `field_0x48` é marcado mesmo quando a chamada
+virtual falha (não é um "sucesso implícito"). Suíte completa de
+`docs/re-tools`: de 573 pra **576 testes** (1.856 → **1.863
+subtestes**), todas passando.
+
+**Lacuna aceita:** o restante do cluster `CSOUND_IF`/`CSOUND_IF_SL`
+(`Pause`, `StopAll`, `GetPlaySample`, `ClearSavedata`, `Static_Load`,
+`Unload` e ~125 funções `Stream_*`/`Static_Delete*`/`EngineUninit`/
+`CSOUND_LOADER_*` já citadas na seção 17.5) segue intocado; nomes
+semânticos de `Channel+0x4`/`+0x3c`/`+0x48`/`+0x50` não confirmados
+por nenhuma outra função que os escreva com um nome já estabelecido.
+
+**Status CSV: `read_full`** — 22/22 instruções reais, 0 `bl`, 1
+chamada virtual tratada como caixa-preta (stubada nos dois lados do
+teste diferencial).

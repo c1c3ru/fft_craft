@@ -2628,7 +2628,7 @@ address,size,mangled,demangled,status,section_ref
 000af3cc,88,_ZN16CEGL2_TEX_HYBRID9GL_UnloadEii,"CEGL2_TEX_HYBRID::GL_Unload(int, int)",read_full,NOTES §546
 000b3f38,88,_ZN15CINPUT_IF_TOUCH6EndAllEi,CINPUT_IF_TOUCH::EndAll(int),read_full,NOTES §538
 000b942c,88,_ZN9CSTR_UTIL4ConvEccPc,"CSTR_UTIL::Conv(char, char, char*)",mentioned_unverified,
-000bb838,88,_ZN12CSOUND_IF_SL4StopEi,CSOUND_IF_SL::Stop(int),mentioned_unverified,
+000bb838,88,_ZN12CSOUND_IF_SL4StopEi,CSOUND_IF_SL::Stop(int),read_full,NOTES §667
 0028c768,88,_ZN10CFFT_STATE27AttackTeamFaceIDToUnitATFIDEi,CFFT_STATE::AttackTeamFaceIDToUnitATFID(int),mentioned_unverified,
 002916b8,88,SetDrawArea,SetDrawArea,read_structural,NOTES §611
 0027f1ac,88,_Z14iOS_SetRectHitiiiiii,"iOS_SetRectHit(int, int, int, int, int, int)",read_full,NOTES §548
