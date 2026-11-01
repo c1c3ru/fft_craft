@@ -110,7 +110,7 @@ Os relatórios abaixo apresentam **efeitos locais testados sob estados sintétic
 
 Os números certificados representam **registros formais válidos para este ELF**, não aprovação estrutural. Evidências parciais não certificam equivalência.
 
-Evidências geradas e verificadas nesta execução do pipeline.
+Evidências do **último CI verificado** para este ELF, [execução 41261667942](https://github.com/c1c3ru/fft_craft/actions/runs/41261667942); os testes não foram reexecutados nesta geração do painel.
 
 | Indicador | Resultado |
 |---|---:|
