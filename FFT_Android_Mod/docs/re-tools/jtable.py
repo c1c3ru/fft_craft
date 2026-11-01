@@ -15,7 +15,7 @@ catalog (resolved against .dynsym + demangled).
 """
 import sys, subprocess
 from elftools.elf.elffile import ELFFile
-from capstone import Cs, CS_ARCH_ARM, CS_MODE_ARM
+from capstone import Cs, CS_ARCH_ARM, CS_MODE_ARM, CS_MODE_THUMB
 
 
 def load_sections(path):
@@ -160,8 +160,14 @@ def resolve_jump_table(md, data, start, insns, jt_addr):
 
 def main():
     path, start_s, end_s = sys.argv[1], sys.argv[2], sys.argv[3]
-    start = int(start_s, 16)
-    end = start + int(end_s[1:], 0) if end_s.startswith('+') else int(end_s, 16)
+    raw_start = int(start_s, 16)
+    # ARM/Thumb interworking convention: bit 0 of a function address marks
+    # Thumb state and is never a real byte offset. Strip it before touching
+    # the ELF, and pick the matching Capstone mode for the whole body (a
+    # function does not change interworking state via plain branches).
+    is_thumb = bool(raw_start & 1)
+    start = raw_start & ~1
+    end = start + int(end_s[1:], 0) if end_s.startswith('+') else int(end_s, 16) & ~1
     secs = load_sections(path)
     off, _ = va_to_off(secs, start)
     length = end - start
@@ -169,7 +175,7 @@ def main():
         f.seek(off)
         data = f.read(length)
 
-    md = Cs(CS_ARCH_ARM, CS_MODE_ARM)
+    md = Cs(CS_ARCH_ARM, CS_MODE_THUMB if is_thumb else CS_MODE_ARM)
     addr2name = load_dynsyms(path)
 
     all_insns = {}
@@ -204,8 +210,14 @@ def main():
             break
 
     n_insns = len(all_insns)
-    expected = length // 4
-    print(f"=== jtable.py: 0x{start:x}..0x{end:x} ({length} bytes) ===")
+    # Thumb mixes 2- and 4-byte encodings; using the 2-byte minimum as the
+    # slot width only ever overestimates how many slots could exist, which
+    # underestimates coverage% in the conservative direction rather than
+    # reporting an inflated score.
+    instr_width = 2 if is_thumb else 4
+    expected = max(length // instr_width, 1)
+    print(f"=== jtable.py: 0x{raw_start:x}..0x{end:x} ({length} bytes, "
+          f"{'Thumb' if is_thumb else 'ARM'} mode) ===")
     print(f"coverage: {n_insns} of ~{expected} instruction slots ({100*n_insns/max(expected,1):.0f}%)\n")
 
     print(f"-- jump tables resolved: {len(all_tables)} --")

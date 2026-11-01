@@ -2,14 +2,29 @@
   "address": "002c9a25",
   "name": "operator new[](unsigned int)",
   "size": 20,
-  "previous_status": "unread",
-  "status": "auto_structural",
-  "coverage_pct": 100.0,
-  "distinct_bl": 0,
+  "previous_status": "read_structural",
+  "status": "needs_review",
+  "coverage_pct": 30.0,
+  "distinct_bl": 1,
   "tables_resolved": 0,
   "tables_unresolved": 0,
-  "bl_targets": [],
-  "log": "=== jtable.py: 0x2c9a25..0x2c9a39 (20 bytes) ===\ncoverage: 5 of ~5 instruction slots (100%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 0 distinct --\n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "bl_targets": [
+    "2c99b4"
+  ],
+  "log": "=== jtable.py: 0x2c9a25..0x2c9a38 (20 bytes, Thumb mode) ===\ncoverage: 3 of ~10 instruction slots (30%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 1 distinct --\n  0x2c99b4 x1   sub_2c99b4 LOCAL(no-dynsym)\n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "v2_structural_status": "needs_review",
+  "structural_v3": {
+    "status": "needs_review",
+    "reason": "non_arm_aligned_or_empty",
+    "code_slots": 0,
+    "literal_slots": [],
+    "unexplained_slots": [],
+    "tables_safe": false,
+    "tables": []
+  },
+  "structural_version": 3,
+  "structural_fingerprint": "3ff8b8e6cea3388010f6",
+  "review_attempts": 1,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

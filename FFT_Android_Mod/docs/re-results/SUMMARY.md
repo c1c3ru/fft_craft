@@ -3,7 +3,7 @@
 Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
 Analyzed in current binary: 3002
-Automatically triaged: 300,012 bytes / 1,837,392 inventory bytes (16.33%); **this is newly triaged coverage, not total project coverage**.
+Automatically triaged: 299,868 bytes / 944 inventory bytes (31765.68%); **this is newly triaged coverage, not total project coverage**.
 
 | Address | Function | Size (B) | Coverage | Status |
 |---|---|---:|---:|---|
@@ -161,7 +161,7 @@ Automatically triaged: 300,012 bytes / 1,837,392 inventory bytes (16.33%); **thi
 | `001b6c00` | MakeTextureMessage2(unsigned char*, short*, RECT16*, int) | 388 | 100.0% | auto_structural |
 | `00201798` | setActionDirection(tag_animation*, tag_animation*) | 388 | 100.0% | auto_structural |
 | `0025c928` | ctlshogou_main(CTLINFO*) | 388 | 95.88% | auto_structural |
-| `002c9b11` | __gxx_personality_v0 | 388 | 7.22% | needs_review |
+| `002c9b11` | __gxx_personality_v0 | 388 | 90.21% | needs_review |
 | `00094cd4` | _vp_noisemask | 384 | 100.0% | auto_structural |
 | `00102504` | Wcalceffectangle(int, int) | 384 | 96.88% | auto_structural |
 | `001cced8` | get_ma_result(BWORK*) | 384 | 95.83% | auto_structural |
@@ -349,7 +349,7 @@ Automatically triaged: 300,012 bytes / 1,837,392 inventory bytes (16.33%); **thi
 | `0026c12c` | townbtl_check(int, int*) | 268 | 95.52% | auto_structural |
 | `0028b738` | initTaskEmu() | 268 | 92.54% | auto_structural |
 | `002b7050` | Main_Novel_GetBtnRect(int*, int*, int*, int*, int*, int*) | 268 | 98.51% | auto_structural |
-| `002ca215` | __cxa_call_unexpected | 268 | 0.0% | needs_review |
+| `002ca215` | __cxa_call_unexpected | 268 | 73.88% | needs_review |
 | `0007f138` | _tr_init | 264 | 98.48% | auto_structural |
 | `0007fc50` | _tr_tally | 264 | 95.45% | auto_structural |
 | `00088bf4` | _ve_envelope_mark | 264 | 100.0% | auto_structural |
@@ -938,7 +938,7 @@ Automatically triaged: 300,012 bytes / 1,837,392 inventory bytes (16.33%); **thi
 | `002a1798` | gteMIMefunc | 112 | 100.0% | auto_structural |
 | `002a23bc` | RotColorDpq3_nom | 112 | 96.43% | auto_structural |
 | `002a3240` | pspSaveAuto::pspSaveAuto() | 112 | 96.43% | auto_structural |
-| `002ca125` | __cxa_type_match | 112 | 100.0% | auto_structural |
+| `002ca125` | __cxa_type_match | 112 | 91.07% | needs_review |
 | `00095668` | _vp_ampmax_decay | 108 | 96.3% | auto_structural |
 | `00096eb4` | res0_inverse | 108 | 96.3% | auto_structural |
 | `00096f20` | res1_inverse | 108 | 96.3% | auto_structural |
@@ -1268,7 +1268,7 @@ Automatically triaged: 300,012 bytes / 1,837,392 inventory bytes (16.33%); **thi
 | `0029ad6c` | xpSetDrawOffset | 76 | 100.0% | auto_structural |
 | `0029ae00` | xpLibGetOffset(int*, int*) | 76 | 94.74% | auto_structural |
 | `002a257c` | RotNclip3_nom | 76 | 94.74% | auto_structural |
-| `002c99b5` | operator new(unsigned int) | 76 | 5.26% | needs_review |
+| `002c99b5` | operator new(unsigned int) | 76 | 76.32% | needs_review |
 | `0007744c` | gztell64 | 72 | 100.0% | auto_structural |
 | `00077b38` | gzclearerr | 72 | 100.0% | auto_structural |
 | `00079010` | gzputs | 72 | 100.0% | auto_structural |
@@ -1479,7 +1479,7 @@ Automatically triaged: 300,012 bytes / 1,837,392 inventory bytes (16.33%); **thi
 | `0029b618` | iOSGsSwapDispBuff() | 60 | 93.33% | auto_structural |
 | `002ab5cc` | GuEmu_Clear() | 60 | 86.67% | auto_structural |
 | `002b6fe0` | iOSReleaseButtonAreaCheck() | 60 | 93.33% | auto_structural |
-| `002ca195` | __cxa_begin_cleanup | 60 | 66.67% | needs_review |
+| `002ca195` | __cxa_begin_cleanup | 60 | 80.0% | needs_review |
 | `000724b0` | _JNIEnv::NewObject(_jclass*, _jmethodID*, ...) | 56 | 100.0% | auto_structural |
 | `00072638` | _JNIEnv::CallStaticObjectMethod(_jclass*, _jmethodID*, ...) | 56 | 100.0% | auto_structural |
 | `00072670` | _JNIEnv::CallStaticIntMethod(_jclass*, _jmethodID*, ...) | 56 | 100.0% | auto_structural |
@@ -2383,7 +2383,7 @@ Automatically triaged: 300,012 bytes / 1,837,392 inventory bytes (16.33%); **thi
 | `002b87e8` | iOS_isInGameArea() | 20 | 80.0% | auto_structural |
 | `002c53c0` | Main_GetPauseFlag() | 20 | 80.0% | auto_structural |
 | `002c53d4` | Main_SetPauseFlag(int) | 20 | 80.0% | auto_structural |
-| `002c9a25` | operator new[](unsigned int) | 20 | 100.0% | auto_structural |
+| `002c9a25` | operator new[](unsigned int) | 20 | 30.0% | needs_review |
 | `002cb174` | __aeabi_cdcmple | 20 | 100.0% | auto_structural |
 | `002cb188` | __aeabi_dcmpeq | 20 | 100.0% | auto_structural |
 | `002cb19c` | __aeabi_dcmplt | 20 | 100.0% | auto_structural |
@@ -2503,7 +2503,7 @@ Automatically triaged: 300,012 bytes / 1,837,392 inventory bytes (16.33%); **thi
 | `002a142c` | SetFogNear | 12 | 100.0% | auto_structural |
 | `002b2cf8` | SysSE_PlayDef(int) | 12 | 100.0% | auto_structural |
 | `002b2d04` | SysSE_PlayUI(int) | 12 | 100.0% | auto_structural |
-| `002c9115` | operator delete(void*) | 12 | 100.0% | auto_structural |
+| `002c9115` | operator delete(void*) | 12 | 83.33% | needs_review |
 | `000823e4` | zlibCompileFlags | 8 | 100.0% | auto_structural |
 | `00082404` | zcalloc | 8 | 100.0% | auto_structural |
 | `0008240c` | zcfree | 8 | 100.0% | auto_structural |
@@ -2713,7 +2713,7 @@ Automatically triaged: 300,012 bytes / 1,837,392 inventory bytes (16.33%); **thi
 | `002b3454` | iCloud_GetSlotCount() | 8 | 100.0% | auto_structural |
 | `002b36d4` | Error_FrameMove() | 8 | 100.0% | auto_structural |
 | `002b7a2c` | GetPanelCursorMode() | 8 | 100.0% | auto_structural |
-| `002c9121` | operator delete[](void*) | 8 | 0.0% | needs_review |
+| `002c9121` | operator delete[](void*) | 8 | 75.0% | needs_review |
 | `002cce38` | _Unwind_GetCFA | 8 | 100.0% | auto_structural |
 | `002cd57c` | __aeabi_unwind_cpp_pr0 | 8 | 100.0% | auto_structural |
 | `002cd584` | __aeabi_unwind_cpp_pr1 | 8 | 100.0% | auto_structural |

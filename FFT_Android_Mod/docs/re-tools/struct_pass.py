@@ -8,7 +8,7 @@ Usage: struct_pass.py <so_path> <start_hex> <end_hex_or_+len>
 """
 import sys, subprocess, re
 from elftools.elf.elffile import ELFFile
-from capstone import Cs, CS_ARCH_ARM, CS_MODE_ARM
+from capstone import Cs, CS_ARCH_ARM, CS_MODE_ARM, CS_MODE_THUMB
 
 
 def load_sections(path):
@@ -47,8 +47,14 @@ def demangle(names):
 
 def main():
     path, start_s, end_s = sys.argv[1], sys.argv[2], sys.argv[3]
-    start = int(start_s, 16)
-    end = start + int(end_s[1:], 0) if end_s.startswith('+') else int(end_s, 16)
+    raw_start = int(start_s, 16)
+    # ARM/Thumb interworking convention: bit 0 of a function address marks
+    # Thumb state and is never a real byte offset. Strip it before touching
+    # the ELF, and pick the matching Capstone mode for the whole body (a
+    # function does not change interworking state via plain branches).
+    is_thumb = bool(raw_start & 1)
+    start = raw_start & ~1
+    end = start + int(end_s[1:], 0) if end_s.startswith('+') else int(end_s, 16) & ~1
     secs = load_sections(path)
     off, _ = va_to_off(secs, start)
     length = end - start
@@ -56,7 +62,7 @@ def main():
         f.seek(off)
         data = f.read(length)
 
-    md = Cs(CS_ARCH_ARM, CS_MODE_ARM)
+    md = Cs(CS_ARCH_ARM, CS_MODE_THUMB if is_thumb else CS_MODE_ARM)
     md.detail = True
 
     addr2name = load_dynsyms(path)
@@ -99,7 +105,10 @@ def main():
 
     insns = [insns_by_addr[a] for a in sorted(insns_by_addr)]
     n_insns = len(insns)
-    expected = length // 4
+    # Thumb mixes 2- and 4-byte encodings; using the 2-byte minimum as the
+    # slot width only ever overestimates how many slots could exist.
+    instr_width = 2 if is_thumb else 4
+    expected = max(length // instr_width, 1)
     print(f"[recursive-descent reached {n_insns} of ~{expected} possible instruction slots; "
           f"gaps are literal pools/data or unresolved computed jumps]")
     if unresolved_computed:
@@ -131,7 +140,8 @@ def main():
         elif m in ('add', 'ldr') and 'pc' in o and ('pc, pc' in f"{m} {o}" or o.strip().startswith('pc, [pc')):
             computed_jumps.append((a, m, o))
 
-    print(f"=== Structural pass: 0x{start:x}..0x{end:x} ({length} bytes, {n_insns} instructions) ===\n")
+    print(f"=== Structural pass: 0x{raw_start:x}..0x{end:x} ({length} bytes, "
+          f"{n_insns} instructions, {'Thumb' if is_thumb else 'ARM'} mode) ===\n")
 
     print(f"-- bl targets: {len(bl_targets)} distinct --")
     mangled_list = []

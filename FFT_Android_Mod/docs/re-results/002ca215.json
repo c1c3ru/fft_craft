@@ -2,14 +2,28 @@
   "address": "002ca215",
   "name": "__cxa_call_unexpected",
   "size": 268,
-  "previous_status": "unread",
+  "previous_status": "mentioned_unverified",
   "status": "needs_review",
-  "coverage_pct": 0.0,
-  "distinct_bl": 0,
+  "coverage_pct": 73.88,
+  "distinct_bl": 13,
   "tables_resolved": 0,
   "tables_unresolved": 0,
-  "bl_targets": [],
-  "log": "=== jtable.py: 0x2ca215..0x2ca321 (268 bytes) ===\ncoverage: 0 of ~67 instruction slots (0%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 0 distinct --\n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "bl_targets": [
+    "2c8da0",
+    "2c8ee4",
+    "2c8f60",
+    "2c8f90",
+    "2c8fd4",
+    "2c9044",
+    "2c9438",
+    "2c9ddc",
+    "2c9e2c",
+    "2ca114",
+    "2ca124",
+    "2ca4d8",
+    "2ce1dc"
+  ],
+  "log": "=== jtable.py: 0x2ca215..0x2ca320 (268 bytes, Thumb mode) ===\ncoverage: 99 of ~134 instruction slots (74%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 13 distinct --\n  0x2c8da0 x1   sub_2c8da0 LOCAL(no-dynsym)\n  0x2c8ee4 x1   sub_2c8ee4 LOCAL(no-dynsym)\n  0x2c8f60 x1   sub_2c8f60 LOCAL(no-dynsym)\n  0x2c8f90 x1   sub_2c8f90 LOCAL(no-dynsym)\n  0x2c8fd4 x5   sub_2c8fd4 LOCAL(no-dynsym)\n  0x2c9044 x5   sub_2c9044 LOCAL(no-dynsym)\n  0x2c9438 x1   sub_2c9438 LOCAL(no-dynsym)\n  0x2c9ddc x2   sub_2c9ddc LOCAL(no-dynsym)\n  0x2c9e2c x1   sub_2c9e2c LOCAL(no-dynsym)\n  0x2ca114 x2   sub_2ca114 LOCAL(no-dynsym)\n  0x2ca124 x1   sub_2ca124 LOCAL(no-dynsym)\n  0x2ca4d8 x1   sub_2ca4d8 LOCAL(no-dynsym)\n  0x2ce1dc x2   sub_2ce1dc LOCAL(no-dynsym)\n\n-- branches: 8 total, 3 backward (loop candidates) --\n",
   "v2_structural_status": "needs_review",
   "structural_v3": {
     "status": "needs_review",
@@ -21,9 +35,8 @@
     "tables": []
   },
   "structural_version": 3,
-  "structural_fingerprint": "f5c979fa06fbd650af1c",
-  "review_attempts": 1,
+  "structural_fingerprint": "3ff8b8e6cea3388010f6",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2,
-  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/002ca215.json"
+  "pipeline_version": 2
 }

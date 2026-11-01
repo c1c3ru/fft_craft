@@ -7,12 +7,12 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | Inventory total | 6,455 functions / 1,837,392 bytes |
 | Previously analyzed in CSV | 5,932 functions / 1,777,044 bytes |
 | JSON checkpoints (all statuses) | 3,002 |
-| Newly accepted structurally | 2,952 functions / 300,012 bytes |
-| Needs review | 50 functions |
+| Newly accepted structurally | 2,949 functions / 299,868 bytes |
+| Needs review | 53 functions |
 | Core targets in inventory | 4,642 functions |
 | Core targets checkpointed | 2,345 functions |
-| Core accepted structurally | 2,311 functions |
-| Core needs review | 34 functions |
+| Core accepted structurally | 2,309 functions |
+| Core needs review | 36 functions |
 | Core not yet checkpointed | 0 functions |
 | Not yet checkpointed | 0 functions / 0 bytes |
 
@@ -20,8 +20,8 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 
 | Status | Functions |
 |---|---:|
-| auto_structural | 2,952 |
-| needs_review | 50 |
+| auto_structural | 2,949 |
+| needs_review | 53 |
 
 ## Review queue (largest first)
 
@@ -41,7 +41,7 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | `00162080` | wasm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long) (needs_review) | 404 | 80.2 | 2 | 0 |
 | `00159aac` | asm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long) (needs_review) | 404 | 80.2 | 2 | 0 |
 | `002031a4` | iOSsetCursorByTouch(int, int, int, int, int) (needs_review) | 392 | 57.14 | 1 | 0 |
-| `002c9b11` | __gxx_personality_v0 (needs_review) | 388 | 7.22 | 0 | 0 |
+| `002c9b11` | __gxx_personality_v0 (needs_review) | 388 | 90.21 | 0 | 0 |
 | `0028e2e4` | CdControl (needs_review) | 384 | 68.75 | 1 | 0 |
 | `0027fe84` | Savedata_Load(unsigned char*, int*) (needs_review) | 384 | 94.79 | 0 | 0 |
 | `0022a6a4` | _ReadTMD(TMD_PRIM*) (needs_review) | 380 | 84.21 | 1 | 0 |
@@ -56,7 +56,7 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | `002899a0` | pspFftSave(int, FFT_SAVE_DATA*, int*) (needs_review) | 288 | 63.89 | 1 | 0 |
 | `001a6410` | MessageDataSet(int) (needs_review) | 284 | 83.1 | 1 | 0 |
 | `001dc944` | set_casting_status(BWORK*, unsigned char) (needs_review) | 272 | 85.29 | 1 | 0 |
-| `002ca215` | __cxa_call_unexpected (needs_review) | 268 | 0.0 | 0 | 0 |
+| `002ca215` | __cxa_call_unexpected (needs_review) | 268 | 73.88 | 0 | 0 |
 | `001caa10` | set_ct_weapon(ACT*) (needs_review) | 248 | 67.74 | 1 | 0 |
 | `0025b78c` | houkoku_talkunit(int) (needs_review) | 236 | 86.44 | 1 | 0 |
 | `00285e50` | pspMsgGet(unsigned int) (needs_review) | 232 | 63.79 | 1 | 0 |
@@ -69,14 +69,17 @@ Binary SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850b
 | `000d7e00` | load_replaceitems(int, int) (needs_review) | 120 | 56.67 | 1 | 0 |
 | `002cb830` | __gesf2 (needs_review) | 116 | 89.66 | 0 | 0 |
 | `002cabdc` | __aeabi_ul2d (needs_review) | 116 | 75.86 | 0 | 0 |
+| `002ca125` | __cxa_type_match (needs_review) | 112 | 91.07 | 0 | 0 |
 | `002cd03c` | _Unwind_VRS_Set (needs_review) | 92 | 73.91 | 1 | 0 |
 | `002ccfb8` | _Unwind_VRS_Get (needs_review) | 92 | 73.91 | 1 | 0 |
-| `002c99b5` | operator new(unsigned int) (needs_review) | 76 | 5.26 | 0 | 0 |
-| `002ca195` | __cxa_begin_cleanup (needs_review) | 60 | 66.67 | 0 | 0 |
+| `002c99b5` | operator new(unsigned int) (needs_review) | 76 | 76.32 | 0 | 0 |
+| `002ca195` | __cxa_begin_cleanup (needs_review) | 60 | 80.0 | 0 | 0 |
 | `0028c288` | CFFT_STATE::GetBackdropColor(float*, float*, float*) (needs_review) | 56 | 57.14 | 1 | 0 |
 | `002cb484` | __floatunsisf (needs_review) | 40 | 80.0 | 0 | 0 |
 | `002ccf98` | _Unwind_DeleteException (needs_review) | 32 | 62.5 | 0 | 0 |
-| `002c9121` | operator delete[](void*) (needs_review) | 8 | 0.0 | 0 | 0 |
+| `002c9a25` | operator new[](unsigned int) (needs_review) | 20 | 30.0 | 0 | 0 |
+| `002c9115` | operator delete(void*) (needs_review) | 12 | 83.33 | 0 | 0 |
+| `002c9121` | operator delete[](void*) (needs_review) | 8 | 75.0 | 0 | 0 |
 
 > Structural acceptance does not establish semantic equivalence.
 > Counts distinguish historical CSV statuses, new accepted checkpoints, and review cases.

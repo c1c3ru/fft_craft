@@ -4,12 +4,20 @@
   "size": 76,
   "previous_status": "mentioned_unverified",
   "status": "needs_review",
-  "coverage_pct": 5.26,
-  "distinct_bl": 0,
+  "coverage_pct": 76.32,
+  "distinct_bl": 7,
   "tables_resolved": 0,
   "tables_unresolved": 0,
-  "bl_targets": [],
-  "log": "=== jtable.py: 0x2c99b5..0x2c9a01 (76 bytes) ===\ncoverage: 1 of ~19 instruction slots (5%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 0 distinct --\n\n-- branches: 0 total, 0 backward (loop candidates) --\n",
+  "bl_targets": [
+    "2c8ee4",
+    "2c8f60",
+    "2c9954",
+    "2c99a0",
+    "2ca114",
+    "2ca214",
+    "2ce06c"
+  ],
+  "log": "=== jtable.py: 0x2c99b5..0x2c9a00 (76 bytes, Thumb mode) ===\ncoverage: 29 of ~38 instruction slots (76%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 7 distinct --\n  0x2c8ee4 x1   sub_2c8ee4 LOCAL(no-dynsym)\n  0x2c8f60 x1   sub_2c8f60 LOCAL(no-dynsym)\n  0x2c9954 x1   sub_2c9954 LOCAL(no-dynsym)\n  0x2c99a0 x1   sub_2c99a0 LOCAL(no-dynsym)\n  0x2ca114 x1   sub_2ca114 LOCAL(no-dynsym)\n  0x2ca214 x1   sub_2ca214 LOCAL(no-dynsym)\n  0x2ce06c x1   sub_2ce06c LOCAL(no-dynsym)\n\n-- branches: 4 total, 1 backward (loop candidates) --\n",
   "v2_structural_status": "needs_review",
   "structural_v3": {
     "status": "needs_review",
@@ -21,9 +29,8 @@
     "tables": []
   },
   "structural_version": 3,
-  "structural_fingerprint": "f5c979fa06fbd650af1c",
-  "review_attempts": 1,
+  "structural_fingerprint": "3ff8b8e6cea3388010f6",
+  "review_attempts": 2,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2,
-  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/002c99b5.json"
+  "pipeline_version": 2
 }
