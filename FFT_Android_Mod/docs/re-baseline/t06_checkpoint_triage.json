@@ -1,0 +1,466 @@
+{
+  "task": "T06 (RE_COMPLETUDE_TASKS.md)",
+  "total_needs_review": 50,
+  "categories": {
+    "A_already_read_full_history": 26,
+    "B_thumb_mode_tool_bug": 5,
+    "C_genuine_partial_coverage": 19
+  },
+  "additional_finding_false_positive_auto_structural_thumb": [
+    "002c9115 operator delete(void*)",
+    "002c9a25 operator new[](unsigned int)",
+    "002ca125 __cxa_type_match"
+  ],
+  "entries": [
+    {
+      "address": "000a7ec4",
+      "name": "CEGL2_IF::SetBlendMode(int)",
+      "size": 308,
+      "category": "C_genuine_partial_coverage",
+      "coverage_pct": 88.31,
+      "tables_unresolved": 0,
+      "distinct_bl": 2
+    },
+    {
+      "address": "000ab4b0",
+      "name": "CEGL2_FBO::ErrorGL(char const*, char const*, unsigned int)",
+      "size": 420,
+      "category": "C_genuine_partial_coverage",
+      "coverage_pct": 89.52,
+      "tables_unresolved": 0,
+      "distinct_bl": 3
+    },
+    {
+      "address": "000aecb8",
+      "name": "CEGL2_SPRITE::ErrorGL(char const*, char const*, unsigned int)",
+      "size": 420,
+      "category": "C_genuine_partial_coverage",
+      "coverage_pct": 86.67,
+      "tables_unresolved": 0,
+      "distinct_bl": 3
+    },
+    {
+      "address": "000d7e00",
+      "name": "load_replaceitems(int, int)",
+      "size": 120,
+      "category": "C_genuine_partial_coverage",
+      "coverage_pct": 56.67,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "000ff9ec",
+      "name": "Wload_replaceitems(int, int)",
+      "size": 120,
+      "category": "A_already_read_full_history",
+      "coverage_pct": 56.67,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "0015813c",
+      "name": "unittoface(int)",
+      "size": 496,
+      "category": "A_already_read_full_history",
+      "coverage_pct": 69.35,
+      "tables_unresolved": 0,
+      "distinct_bl": 2
+    },
+    {
+      "address": "00159aac",
+      "name": "asm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)",
+      "size": 404,
+      "category": "A_already_read_full_history",
+      "coverage_pct": 80.2,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "0015a65c",
+      "name": "siOS_TCurSucCheck(unsigned int)",
+      "size": 208,
+      "category": "A_already_read_full_history",
+      "coverage_pct": 78.85,
+      "tables_unresolved": 0,
+      "distinct_bl": 1
+    },
+    {
+      "address": "00162080",
+      "name": "wasm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)",
+      "size": 404,
+      "category": "A_already_read_full_history",
+      "coverage_pct": 80.2,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "001a6410",
+      "name": "MessageDataSet(int)",
+      "size": 284,
+      "category": "A_already_read_full_history",
+      "coverage_pct": 83.1,
+      "tables_unresolved": 0,
+      "distinct_bl": 1
+    },
+    {
+      "address": "001caa10",
+      "name": "set_ct_weapon(ACT*)",
+      "size": 248,
+      "category": "A_already_read_full_history",
+      "coverage_pct": 67.74,
+      "tables_unresolved": 0,
+      "distinct_bl": 1
+    },
+    {
+      "address": "001ccc3c",
+      "name": "getTrapResultDamage(BWORK*, int)",
+      "size": 496,
+      "category": "A_already_read_full_history",
+      "coverage_pct": 88.71,
+      "tables_unresolved": 0,
+      "distinct_bl": 2
+    },
+    {
+      "address": "001d67a8",
+      "name": "get_mapid(int, int, int, int)",
+      "size": 304,
+      "category": "A_already_read_full_history",
+      "coverage_pct": 75.0,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "001d972c",
+      "name": "get_shape2(BWORK*, unsigned char*)",
+      "size": 380,
+      "category": "A_already_read_full_history",
+      "coverage_pct": 54.74,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "001dc944",
+      "name": "set_casting_status(BWORK*, unsigned char)",
+      "size": 272,
+      "category": "A_already_read_full_history",
+      "coverage_pct": 85.29,
+      "tables_unresolved": 0,
+      "distinct_bl": 3
+    },
+    {
+      "address": "00203070",
+      "name": "setCursorByTouch(int, int, int)",
+      "size": 308,
+      "category": "A_already_read_full_history",
+      "coverage_pct": 49.35,
+      "tables_unresolved": 0,
+      "distinct_bl": 2
+    },
+    {
+      "address": "002031a4",
+      "name": "iOSsetCursorByTouch(int, int, int, int, int)",
+      "size": 392,
+      "category": "A_already_read_full_history",
+      "coverage_pct": 57.14,
+      "tables_unresolved": 0,
+      "distinct_bl": 3
+    },
+    {
+      "address": "00210eac",
+      "name": "initMap(int, int)",
+      "size": 368,
+      "category": "A_already_read_full_history",
+      "coverage_pct": 81.52,
+      "tables_unresolved": 0,
+      "distinct_bl": 19
+    },
+    {
+      "address": "0021d544",
+      "name": "getNextSENo(int)",
+      "size": 220,
+      "category": "A_already_read_full_history",
+      "coverage_pct": 80.0,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "0022a6a4",
+      "name": "_ReadTMD(TMD_PRIM*)",
+      "size": 380,
+      "category": "A_already_read_full_history",
+      "coverage_pct": 84.21,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "0025b78c",
+      "name": "houkoku_talkunit(int)",
+      "size": 236,
+      "category": "A_already_read_full_history",
+      "coverage_pct": 86.44,
+      "tables_unresolved": 0,
+      "distinct_bl": 1
+    },
+    {
+      "address": "00271ba4",
+      "name": "SetBaseTargetGroup(int, int)",
+      "size": 508,
+      "category": "C_genuine_partial_coverage",
+      "coverage_pct": 89.76,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "0027207c",
+      "name": "GetNearestUnit(int)",
+      "size": 472,
+      "category": "C_genuine_partial_coverage",
+      "coverage_pct": 92.37,
+      "tables_unresolved": 0,
+      "distinct_bl": 4
+    },
+    {
+      "address": "0027fe84",
+      "name": "Savedata_Load(unsigned char*, int*)",
+      "size": 384,
+      "category": "A_already_read_full_history",
+      "coverage_pct": 94.79,
+      "tables_unresolved": 0,
+      "distinct_bl": 17
+    },
+    {
+      "address": "00285e50",
+      "name": "pspMsgGet(unsigned int)",
+      "size": 232,
+      "category": "A_already_read_full_history",
+      "coverage_pct": 63.79,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "002867a8",
+      "name": "getMovieEventNum(int)",
+      "size": 216,
+      "category": "A_already_read_full_history",
+      "coverage_pct": 68.52,
+      "tables_unresolved": 0,
+      "distinct_bl": 1
+    },
+    {
+      "address": "002899a0",
+      "name": "pspFftSave(int, FFT_SAVE_DATA*, int*)",
+      "size": 288,
+      "category": "A_already_read_full_history",
+      "coverage_pct": 63.89,
+      "tables_unresolved": 0,
+      "distinct_bl": 4
+    },
+    {
+      "address": "00289c1c",
+      "name": "pspFftDelete(int*)",
+      "size": 320,
+      "category": "A_already_read_full_history",
+      "coverage_pct": 57.5,
+      "tables_unresolved": 0,
+      "distinct_bl": 3
+    },
+    {
+      "address": "0028c288",
+      "name": "CFFT_STATE::GetBackdropColor(float*, float*, float*)",
+      "size": 56,
+      "category": "C_genuine_partial_coverage",
+      "coverage_pct": 57.14,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "0028e2e4",
+      "name": "CdControl",
+      "size": 384,
+      "category": "A_already_read_full_history",
+      "coverage_pct": 68.75,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "002b20f4",
+      "name": "onGotoNextMode(int)",
+      "size": 324,
+      "category": "A_already_read_full_history",
+      "coverage_pct": 71.6,
+      "tables_unresolved": 0,
+      "distinct_bl": 8
+    },
+    {
+      "address": "002b2448",
+      "name": "EnvSE_Play(int)",
+      "size": 508,
+      "category": "A_already_read_full_history",
+      "coverage_pct": 77.17,
+      "tables_unresolved": 0,
+      "distinct_bl": 7
+    },
+    {
+      "address": "002b3464",
+      "name": "Boot_Init()",
+      "size": 300,
+      "category": "A_already_read_full_history",
+      "coverage_pct": 92.0,
+      "tables_unresolved": 0,
+      "distinct_bl": 12
+    },
+    {
+      "address": "002c9121",
+      "name": "operator delete[](void*)",
+      "size": 8,
+      "category": "B_thumb_mode_tool_bug",
+      "coverage_pct": 0.0,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "002c99b5",
+      "name": "operator new(unsigned int)",
+      "size": 76,
+      "category": "B_thumb_mode_tool_bug",
+      "coverage_pct": 5.26,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "002c9b11",
+      "name": "__gxx_personality_v0",
+      "size": 388,
+      "category": "B_thumb_mode_tool_bug",
+      "coverage_pct": 7.22,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "002ca195",
+      "name": "__cxa_begin_cleanup",
+      "size": 60,
+      "category": "B_thumb_mode_tool_bug",
+      "coverage_pct": 66.67,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "002ca215",
+      "name": "__cxa_call_unexpected",
+      "size": 268,
+      "category": "B_thumb_mode_tool_bug",
+      "coverage_pct": 0.0,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "002ca8a0",
+      "name": "__subdf3",
+      "size": 688,
+      "category": "C_genuine_partial_coverage",
+      "coverage_pct": 28.49,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "002ca8a4",
+      "name": "__adddf3",
+      "size": 684,
+      "category": "C_genuine_partial_coverage",
+      "coverage_pct": 28.07,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "002cabdc",
+      "name": "__aeabi_ul2d",
+      "size": 116,
+      "category": "C_genuine_partial_coverage",
+      "coverage_pct": 75.86,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "002cac50",
+      "name": "__muldf3",
+      "size": 620,
+      "category": "C_genuine_partial_coverage",
+      "coverage_pct": 72.9,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "002cb0c0",
+      "name": "__gedf2",
+      "size": 152,
+      "category": "C_genuine_partial_coverage",
+      "coverage_pct": 92.11,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "002cb484",
+      "name": "__aeabi_ui2f",
+      "size": 40,
+      "category": "C_genuine_partial_coverage",
+      "coverage_pct": 80.0,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "002cb4ac",
+      "name": "__aeabi_ul2f",
+      "size": 140,
+      "category": "C_genuine_partial_coverage",
+      "coverage_pct": 82.86,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "002cb830",
+      "name": "__gesf2",
+      "size": 116,
+      "category": "C_genuine_partial_coverage",
+      "coverage_pct": 89.66,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "002ccf98",
+      "name": "_Unwind_DeleteException",
+      "size": 32,
+      "category": "C_genuine_partial_coverage",
+      "coverage_pct": 62.5,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "002ccfb8",
+      "name": "_Unwind_VRS_Get",
+      "size": 92,
+      "category": "C_genuine_partial_coverage",
+      "coverage_pct": 73.91,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "002cd03c",
+      "name": "_Unwind_VRS_Set",
+      "size": 92,
+      "category": "C_genuine_partial_coverage",
+      "coverage_pct": 73.91,
+      "tables_unresolved": 0,
+      "distinct_bl": 0
+    },
+    {
+      "address": "002cd594",
+      "name": "_Unwind_VRS_Pop",
+      "size": 856,
+      "category": "C_genuine_partial_coverage",
+      "coverage_pct": 97.2,
+      "tables_unresolved": 0,
+      "distinct_bl": 10
+    }
+  ]
+}
