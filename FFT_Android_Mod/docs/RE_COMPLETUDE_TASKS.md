@@ -196,7 +196,13 @@ Não estimar prazo ou porcentagem global a partir de número de símbolos: uma f
 
 > Leia `RE_COMPLETUDE_TASKS.md`, a política de certificação e as instruções locais aplicáveis. Preserve alterações existentes. Comece pela primeira tarefa pendente cujas dependências estejam atendidas. Confira versão, ABI e SHA-256 antes de reutilizar qualquer endereço ou evidência. Produza os entregáveis, implemente quando a tarefa exigir e execute validação proporcional. Registre comandos e resultados reais, limitações e próximos passos. Atualize somente os estados sustentados pela evidência. Não trate análise estrutural, semelhança, microexecução parcial ou reempacotamento do ELF original como reconstrução completa. Não simule revisão humana. Se depender de recurso indisponível, registre o bloqueio exato e avance nas tarefas independentes. Termine com matriz de aceite e evidências, sem declarar 100% enquanto houver lacuna obrigatória.
 
-## 7. Referências locais principais
+## 7. Registro de execução por IA executora
+
+Formato por entrada: ID — estado — evidência. Estados seguem a seção 3 (`pending`, `in_progress`, `blocked`, `ready_for_review`, `done`). Nenhuma entrada aqui pode ser promovida a `done` sem satisfazer o critério de aceite da tarefa por completo.
+
+- **T01 — `ready_for_review` (parcial, não `done`).** Executada em 2026-10-31. Evidência completa em [`re-baseline/T01_BASELINE_REPORT.md`](re-baseline/T01_BASELINE_REPORT.md), [`re-baseline/artifacts.json`](re-baseline/artifacts.json) e [`re-baseline/native_lib_patch_diff.json`](re-baseline/native_lib_patch_diff.json). Resumo: os seis hashes de identidade citados na seção 1 foram recalculados e confirmados; o diff byte a byte completo (181 bytes, seção `.data`) entre `libgl2jni.so` atual e `.so.orig_backup` foi extraído e é reproduzível com [`re-baseline/apply_native_lib_patch.py`](re-baseline/apply_native_lib_patch.py) para ARM e x86; os dois APKs de referência foram comparados membro a membro, confirmando que são builds distintos. **Pendências que bloqueiam `done`:** motivo semântico do patch binário de 181 bytes não identificado; `obb-data/*.obb` e o OBB embutido em `com.square_enix.android_googleplay.FFT_en2.zip` têm o mesmo tamanho mas SHA-256/CRC32 diferentes (achado novo, não explicado); não há backup pré-patch do `classes.dex`/smali para diff direto dos patches de licenciamento e `OBB_VERSION`; procedência de `obb-data/*.obb` e do `.zip` não documentada. T02–T05 permanecem `pending`.
+
+## 8. Referências locais principais
 
 - [Status geral](re-results/STATUS_GERAL.md), [progresso estrutural](re-results/PROGRESS.md) e [cobertura semântica](re-results/SEMANTIC_COVERAGE.md).
 - [Política de certificação](re-results/SEMANTIC_CERTIFICATION_POLICY.md) e [ledger](re-results/semantic-certificates.json).

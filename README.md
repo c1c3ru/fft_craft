@@ -4,6 +4,8 @@
 
 **[Plano de conclusão do app — etapas, gates e próximas atividades](FFT_Android_Mod/docs/RE_COMPLETION_PLAN.md)**
 
+**[Auditoria de completude e backlog detalhado para IA — 40 tarefas](FFT_Android_Mod/docs/RE_COMPLETUDE_TASKS.md)**
+
 O painel é regenerado pelo GitHub Actions após cada lote validado e distingue
 aprovação estrutural de evidência semântica e de equivalência integral.
 

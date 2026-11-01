@@ -1,0 +1,216 @@
+{
+  "audit_date": "2026-10-31",
+  "generated_by": "T01 (RE_COMPLETUDE_TASKS.md) — execução em sessão Claude Code, hashes recalculados nesta sessão por leitura em streaming (chunks de 1 MiB), sem carregar arquivos grandes inteiros na memória",
+  "hash_algorithm": "sha256",
+  "artifacts": [
+    {
+      "path": "FFT_Android_Mod/original/FFT_By_MortalGx.apk",
+      "size": 4256495,
+      "sha256": "d4478f550c59e1cd4e1bdc35cfbcca934432bf4b9b57d055554646ab2363586d",
+      "origin": "Download de terceiros (mod 'MortalGx'), origem exata da distribuição não verificada nesta auditoria",
+      "role": "APK de referência primária usado pelo projeto (src/ foi decodificado a partir deste arquivo via apktool)",
+      "abi": [
+        "armeabi",
+        "x86"
+      ],
+      "package": "com.square_enix.android_googleplay.FFT_en2",
+      "version_code": 1002,
+      "version_name": "1.0.0",
+      "notes": "Idêntico byte a byte ao arquivo na raiz do repositório 'FFT By MortalGx.apk' (mesmo SHA-256). classes.dex de 247.332 bytes, 19 membros no ZIP."
+    },
+    {
+      "path": "FFT By MortalGx.apk",
+      "size": 4256495,
+      "sha256": "d4478f550c59e1cd4e1bdc35cfbcca934432bf4b9b57d055554646ab2363586d",
+      "origin": "Mesma origem do arquivo em original/",
+      "role": "Cópia duplicada do APK de referência na raiz do repositório",
+      "abi": [
+        "armeabi",
+        "x86"
+      ],
+      "notes": "sha256 idêntico a FFT_Android_Mod/original/FFT_By_MortalGx.apk — arquivo redundante, não uma segunda versão."
+    },
+    {
+      "path": "com.square_enix.android_googleplay.FFT_en2_2.2.0-APK_Award-Mod.apk",
+      "size": 2972402,
+      "sha256": "31bb102e0b9457115a051c9fb1bc9f52bfabde6ec1e98004c090668e0dfb92be",
+      "origin": "Download de terceiros, nome de arquivo sugere versão '2.2.0'; origem e autenticidade não verificadas",
+      "role": "Artefato alternativo/posterior, NÃO usado pelo projeto para decodificação; tratado como alvo de comparação separado (ver T02)",
+      "abi": [
+        "armeabi-v7a"
+      ],
+      "notes": "71 membros no ZIP vs 19 no MortalGx; apenas 8 membros em comum. classes.dex de 1.457.440 bytes (vs 247.332), lib/armeabi-v7a/libgl2jni.so de 4.587.956 bytes (ABI e tamanho diferentes do lib/armeabi/libgl2jni.so do MortalGx — não é a mesma biblioteca). Contém recursos de Google Play Services / Sign-In ausentes no MortalGx (play-services-base.properties, res/color/common_google_signin_*, res/drawable-*/common_google_signin_*, res/drawable-*/googleg_*). AndroidManifest.xml, META-INF/CERT.SF, META-INF/MANIFEST.MF, resources.arsc e res/layout/licensing.xml têm tamanhos diferentes dos homônimos no MortalGx. Confirma a advertência do RE_COMPLETUDE_TASKS.md §1: são alvos diferentes, não duas cópias do mesmo build."
+    },
+    {
+      "path": "FFT_Android_Mod/src/lib/armeabi/libgl2jni.so",
+      "size": 4463112,
+      "sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+      "origin": "Extraído do APK MortalGx, depois modificado em-place dentro de src/lib/armeabi/ pelo pipeline de build/apktool deste projeto",
+      "role": "Biblioteca nativa ARM atualmente embutida no projeto de rebuild (alvo de toda a engenharia reversa registrada em RE_FUNCTION_INVENTORY.csv e docs/re-results)",
+      "abi": [
+        "armeabi"
+      ],
+      "notes": "Difere de libgl2jni.so.orig_backup em exatamente 181 bytes (ver native_lib_patch_diff.json) — patch binário ainda sem motivo semântico documentado."
+    },
+    {
+      "path": "FFT_Android_Mod/src/lib/armeabi/libgl2jni.so.orig_backup",
+      "size": 4463112,
+      "sha256": "82dad2ca3d161e64ee05fd9be03304eef236ff0b4cc106cec50323f4c3b4a7c0",
+      "origin": "Backup preservado da biblioteca tal como extraída do APK MortalGx, antes de qualquer patch",
+      "role": "Linha de base para diff byte a byte contra o .so atualmente em uso",
+      "abi": [
+        "armeabi"
+      ],
+      "notes": "sha256 igual ao citado no RE_COMPLETUDE_TASKS.md como 'ARM backup, igual aos bytes da biblioteca no APK MortalGx' — confirmado nesta auditoria."
+    },
+    {
+      "path": "FFT_Android_Mod/src/lib/x86/libgl2jni.so",
+      "size": 4988572,
+      "sha256": "dc8531074c90dc3e01cd3531ac73a40c338c3e5c2f45bf5c95eaf729400d1da4",
+      "origin": "Extraído do APK MortalGx, depois modificado em-place dentro de src/lib/x86/",
+      "role": "Biblioteca nativa x86 atualmente embutida no projeto de rebuild",
+      "abi": [
+        "x86"
+      ],
+      "notes": "Difere de libgl2jni.so.orig_backup em exatamente 181 bytes, no mesmo padrão estrutural do patch ARM (ver native_lib_patch_diff.json)."
+    },
+    {
+      "path": "FFT_Android_Mod/src/lib/x86/libgl2jni.so.orig_backup",
+      "size": 4988572,
+      "sha256": "676dbd57fc39590d465caeeefff57b9f9c22a886e87401920cd318c99e79e761",
+      "origin": "Backup preservado da biblioteca x86 tal como extraída do APK MortalGx",
+      "role": "Linha de base para diff byte a byte contra o .so x86 atualmente em uso",
+      "abi": [
+        "x86"
+      ],
+      "notes": "sha256 igual ao citado no RE_COMPLETUDE_TASKS.md como 'x86 backup, igual aos bytes da biblioteca no APK MortalGx' — confirmado nesta auditoria."
+    },
+    {
+      "path": "FFT_Android_Mod/obb-data/main.202000.com.square_enix.android_googleplay.FFT_en2.obb",
+      "size": 815622218,
+      "sha256": "ca56bc16ab20f0f395bf1bdb7651b0073698090d395ac76687dc1aabcca370e3",
+      "origin": "Não documentada nesta auditoria — não há nota sobre onde este arquivo específico foi obtido",
+      "role": "Arquivo de expansão (imagem FAT32) usado pelo motor nativo para ler fftpack.bin/g2d.dat/music.dat/etc.",
+      "abi": null,
+      "notes": "ATENÇÃO (achado desta auditoria, ver T01_BASELINE_REPORT.md): tem o MESMO TAMANHO (815.622.218 bytes) que o membro OBB embutido em com.square_enix.android_googleplay.FFT_en2.zip, mas SHA-256 e CRC32 diferentes. 206 de 778 blocos de 1 MiB diferem entre os dois. Não presumir que são a mesma imagem."
+    },
+    {
+      "path": "FFT_Android_Mod/com.square_enix.android_googleplay.FFT_en2.zip",
+      "size": 624053887,
+      "sha256": "b63e50e0f1b043effaa66be9bfaddb55e07247264dcfb39cf5483bc8be8d8038",
+      "origin": "Não documentada nesta auditoria",
+      "role": "Contêiner ZIP com um único membro: a mesma imagem FAT32 do arquivo de expansão, sob outro caminho interno",
+      "abi": null,
+      "notes": "Membro interno 'com.square_enix.android_googleplay.FFT_en2/main.202000.com.square_enix.android_googleplay.FFT_en2.obb' tem sha256=978ea22b49df7fc4605e4847734f0a57b055c859aa27bf0d20471f6e18821357 — DIFERENTE do arquivo obb-data/*.obb standalone apesar do mesmo tamanho declarado. Ver achado acima."
+    },
+    {
+      "path": "FFT_Android_Mod/build/FFT_Android_Mod-unsigned.apk",
+      "size": 8350347,
+      "sha256": "a5b3b0fdcf7cc548f7f274502902c1668317008505687a497bb1f0b8761a9b0b",
+      "origin": "Gerado por scripts/build.sh (apktool b) a partir de src/ nesta árvore de trabalho",
+      "role": "Artefato de build intermediário (pré-zipalign, pré-assinatura) — não é fonte, é saída reproduzível a partir de src/",
+      "abi": [
+        "armeabi",
+        "x86"
+      ],
+      "notes": "Não faz parte da linha de base de identidade; incluído apenas para rastreabilidade do pipeline de build existente."
+    },
+    {
+      "path": "FFT_Android_Mod/build/FFT_Android_Mod-aligned.apk",
+      "size": 8350361,
+      "sha256": "6102b347b5f3c4ddfe612ebae595ae2fe5849f32c84c38bf13a299134807b557",
+      "origin": "Gerado por scripts/build.sh (zipalign) a partir do -unsigned.apk",
+      "role": "Artefato de build intermediário (pós zipalign, pré-assinatura)",
+      "abi": [
+        "armeabi",
+        "x86"
+      ],
+      "notes": "Artefato de pipeline, não de identidade/baseline."
+    },
+    {
+      "path": "FFT_Android_Mod/build/FFT_Android_Mod-signed.apk",
+      "size": 8357436,
+      "sha256": "65d9bd60255308086bf5c203b2c463a669e63493a45af57e8f4cb13785d7be80",
+      "origin": "Gerado por scripts/build.sh (apksigner, chave em keystore/) a partir do -aligned.apk",
+      "role": "Artefato de build final instalável desta árvore de trabalho — reflete o estado atual de src/, não congelado como linha de base",
+      "abi": [
+        "armeabi",
+        "x86"
+      ],
+      "notes": "Muda a cada rebuild local; não usar seu hash como identidade estável em outras tarefas."
+    }
+  ],
+  "apk_member_comparison_mortalgx_vs_2_2_0": {
+    "mortalgx_member_count": 19,
+    "v2_2_0_member_count": 71,
+    "common_member_count": 8,
+    "only_in_mortalgx_count": 11,
+    "only_in_2_2_0_count": 63,
+    "common_members_with_different_size": [
+      {
+        "member": "AndroidManifest.xml",
+        "mortalgx_size": 4352,
+        "v2_2_0_size": 4692
+      },
+      {
+        "member": "META-INF/CERT.SF",
+        "mortalgx_size": 1440,
+        "v2_2_0_size": 7270
+      },
+      {
+        "member": "META-INF/MANIFEST.MF",
+        "mortalgx_size": 1398,
+        "v2_2_0_size": 7162
+      },
+      {
+        "member": "classes.dex",
+        "mortalgx_size": 247332,
+        "v2_2_0_size": 1457440
+      },
+      {
+        "member": "res/layout/licensing.xml",
+        "mortalgx_size": 872,
+        "v2_2_0_size": 372
+      },
+      {
+        "member": "resources.arsc",
+        "mortalgx_size": 7176,
+        "v2_2_0_size": 153464
+      }
+    ],
+    "conclusion": "Confirma que os dois APKs são builds distintos (ABI diferente — armeabi vs armeabi-v7a —, DEX muito maior, dependências de Google Play Services ausentes no MortalGx). Tratar como alvos separados (T02); não transferir endereços/conclusões entre eles."
+  },
+  "native_lib_patches_summary": {
+    "detail_file": "docs/re-baseline/native_lib_patch_diff.json",
+    "reproduction_script": "docs/re-baseline/apply_native_lib_patch.py",
+    "reproduction_verified": true,
+    "armeabi_diff_bytes": 181,
+    "x86_diff_bytes": 181,
+    "elf_section": ".data",
+    "semantic_reason": "NÃO DETERMINADO NESTA AUDITORIA — pendência explícita, não inventar motivo"
+  },
+  "known_documented_patches_not_in_native_so": [
+    {
+      "name": "LVL always-true (licenciamento)",
+      "file": "src/smali/com/google/android/vending/licensing/ServerManagedPolicy.smali",
+      "method": "allowAccess()",
+      "documented_in": "docs/REVERSE_ENGINEERING_NOTES.md §3",
+      "status": "documentado previamente; não há backup do smali original para diff byte a byte (apktool decodifica só o estado atual) — reproduzido aqui apenas por leitura do smali patcheado, sem comparação binária"
+    },
+    {
+      "name": "Correção de versão do OBB",
+      "file": "src/smali/com/square_enix/FFT_Android/BuildSettings.smali",
+      "field": "OBB_VERSION / OBB_VERSION_STR",
+      "observed_value": "0x31510 (202000) / \"202000\"",
+      "expected_original_value_per_notes": "1002 (versionCode do APK original, citado em docs/REVERSE_ENGINEERING_NOTES.md linha 5)",
+      "documented_in": "docs/REVERSE_ENGINEERING_NOTES.md (versionCode) — valor patcheado confirmado nesta auditoria lendo BuildSettings.smali",
+      "status": "valor atual confirmado; valor original (1002) é inferido do versionCode citado nas notas, não comparado byte a byte contra um smali-baseline (não existe backup do DEX/smali original neste repositório)"
+    }
+  ],
+  "open_findings_blocking_t01_done": [
+    "Motivo semântico do patch binário de 181 bytes em libgl2jni.so (ARM e x86, região .data) não identificado.",
+    "obb-data/main.202000...obb e o membro OBB embutido em com.square_enix.android_googleplay.FFT_en2.zip têm o mesmo tamanho mas SHA-256/CRC32 diferentes (206/778 blocos de 1 MiB diferem) — não se sabe qual, se algum, é a imagem correta/atual, nem a causa da divergência.",
+    "Não existe backup do classes.dex/smali original (pré-patch) para diff byte a byte do patch de licenciamento e do patch de OBB_VERSION — a confirmação desses dois patches depende de leitura do estado atual + referências textuais nas notas antigas, não de comparação binária direta como foi feito para o .so.",
+    "Origem/procedência de obb-data/*.obb e do .zip não documentada (quem gerou, quando, a partir de que fonte)."
+  ]
+}
