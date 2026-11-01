@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import dataclasses
 from pathlib import Path
+from typing import Callable
 
 from elftools.elf.elffile import ELFFile
 from unicorn import (Uc, UC_ARCH_ARM, UC_MODE_ARM, UC_MODE_THUMB, UC_PROT_ALL,
@@ -57,7 +58,7 @@ class ExecutionResult:
 def run_original(so_path: Path, start: int, end: int,
                   initial_regs: dict[str, int],
                   buffers: list[MemoryBuffer],
-                  stub_calls: dict[int, int] | None = None,
+                  stub_calls: dict[int, int | Callable[[Uc], int]] | None = None,
                   max_instructions: int = 20000) -> ExecutionResult:
     """Execute the real bytes at [start, end) from the ELF, under Unicorn.
 
@@ -160,7 +161,13 @@ def run_original(so_path: Path, start: int, end: int,
                 # sentinel -- only acceptable if it is a stubbed call site
                 # the caller explicitly whitelisted.
                 if real_pc in stub_calls:
-                    uc.reg_write(_reg_const("r0"), stub_calls[real_pc])
+                    stub = stub_calls[real_pc]
+                    # A callable receives the Uc engine (so it can read the
+                    # call's own input registers, e.g. r0, and vary its
+                    # return value accordingly -- the same real address
+                    # called twice with different arguments is common).
+                    r0_value = stub(uc) if callable(stub) else stub
+                    uc.reg_write(_reg_const("r0"), r0_value)
                     uc.reg_write(UC_ARM_REG_PC, uc.reg_read(UC_ARM_REG_LR))
                     stubbed.append(real_pc)
                     calls_outside.append(real_pc)

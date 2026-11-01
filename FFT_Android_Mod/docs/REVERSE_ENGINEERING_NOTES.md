@@ -26099,3 +26099,66 @@ inspecionado.
 
 **Status CSV: `read_full`** — 46/46 instruções reais (+1 literal pool),
 2 `bl` já documentados.
+
+## 663. `pspNetPadRead()` — leitura completa, fatia vertical de T26 (integrações legadas): apesar do nome, não é rede — é leitura de pad combinando dois buffers duplo-indireto (2026-11-01, T26 do `RE_COMPLETUDE_TASKS.md`)
+
+`pspNetPadRead()` (`0x28e5e0`, 140 B) — disassembly linear completo via
+Capstone, 97% de cobertura por `jtable.py` (35/36 slots, 1 literal
+pool); 3 `bl`: `xpPadKeyBufGet` (`0x2a2a4c`, ×2, ainda `read_structural`
+— tratada como caixa-preta), `iOSTutoCheck()` (`0x26d798`, já
+`read_full`), `iOS_getTutorialPad()` (`0x2b7c44`, ×2, já `read_full`).
+
+```c
+uint32_t pspNetPadRead(void) {
+    void** ptrSlot0 = xpPadKeyBufGet(0);   // retorna o ENDEREÇO de uma variável-ponteiro
+    void** ptrSlot1 = xpPadKeyBufGet(1);
+    uint8_t* buf1 = *ptrSlot1;               // *** dupla indireção — confirmado por execução ***
+    uint8_t* buf0 = *ptrSlot0;
+    uint16_t v0 = buf0[3] | (buf0[2] << 8);
+    uint16_t v1 = buf1[3] | (buf1[2] << 8);
+    uint32_t combined = v0 | (v1 << 16);
+    combined &= ~g_padMask;                  // g_padMask: máscara de bits "desabilitados", um-tiro
+    g_padMask = 0;                            // consumida/zerada a cada leitura
+    int tutorialActive = iOSTutoCheck();
+    combined = ~combined;                     // inverte polaridade (bruto 0=pressionado -> 1=pressionado)
+    if (!tutorialActive) return combined;
+    if (iOS_getTutorialPad() != 0) combined |= iOS_getTutorialPad();  // chamada repetida 2x de propósito
+    return combined;
+}
+```
+
+**Confirmado por execução real sob Unicorn** (`differential_harness.py`,
+T10, estendido nesta tarefa — ver seção abaixo). A primeira tentativa
+de reprodução, sem a dupla indireção, falhou com acesso a memória não
+mapeada — o que revelou o erro: `xpPadKeyBufGet(n)` **não retorna o
+buffer diretamente**, retorna o endereço de uma variável-ponteiro que
+precisa ser desreferenciada de novo (`ldr r1,[r0]` logo após a
+chamada). Testado com 4 cenários (sem tutorial; tutorial ativo com pad
+zero; tutorial ativo com bit de pad setado; `g_padMask` não-zero) —
+todos batem exatamente com a aritmética prevista.
+
+**Achado principal para T26**: apesar do nome `pspNet*`, esta função
+**não tem nenhuma relação com rede** — é um combinador de leitura de
+pad local (dois buffers de botões + máscara + overlay de tutorial).
+Confirma a cautela já registrada no próprio `RE_COMPLETUDE_TASKS.md`
+T26: "distinguir caminhos ativos no Android, stubs, símbolos herdados
+... símbolo de rede isolado não vira afirmação de funcionalidade
+ativa" — aqui o prefixo `pspNet` é resíduo de nomenclatura do módulo
+de rede original, reaproveitado para uma função que hoje é só
+processamento de input local.
+
+**Extensão do harness de T10**: `stub_calls` agora aceita um
+`callable(uc) -> int` além de um `int` fixo, porque esta função chama
+o mesmo endereço (`xpPadKeyBufGet`) duas vezes com argumentos
+diferentes (`r0=0` depois `r0=1`) e precisa de retornos diferentes por
+chamada — o mecanismo anterior só suportava um valor fixo por
+endereço. Testado com `docs/re-tools/test_differential_harness_stub_callable.py`
+(2 testes: valor fixo continua funcionando; `callable` vê o `r0` real
+de cada chamada).
+
+**Lacuna aceita**: `xpPadKeyBufGet` em si não foi lida (caixa-preta);
+semântica exata de `g_padMask` (quem o define antes desta função
+rodar) não investigada.
+
+**Status CSV: `read_full`** — 35/35 instruções reais (+1 literal
+pool), 3 `bl` já documentados ou tratados como caixa-preta.

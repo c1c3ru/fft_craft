@@ -2035,7 +2035,7 @@ address,size,mangled,demangled,status,section_ref
 000bb570,140,_ZN12CSOUND_IF_SL13CB_for_StaticEPKPK30SLAndroidSimpleBufferQueueItf_Pv,"CSOUND_IF_SL::CB_for_Static(SLAndroidSimpleBufferQueueItf_ const* const*, void*)",read_full,NOTES §545
 00216154,140,_Z15loadMusicBufferii,"loadMusicBuffer(int, int)",mentioned_unverified,
 000dfb50,140,_Z15recover_chrnamev,recover_chrname(),read_structural,NOTES §611
-0028e5e0,140,pspNetPadRead,pspNetPadRead,mentioned_unverified,
+0028e5e0,140,pspNetPadRead,pspNetPadRead,read_full,NOTES §663
 000da9c4,140,_Z10checkpara1i,checkpara1(int),read_structural,NOTES §611
 000ff718,140,_Z16Wsttsback_normalP14STTSWINDOWBACK,Wsttsback_normal(STTSWINDOWBACK*),read_structural,NOTES §615
 00102e14,140,_Z14Wenvvolcontrolv,Wenvvolcontrol(),read_structural,NOTES §611
