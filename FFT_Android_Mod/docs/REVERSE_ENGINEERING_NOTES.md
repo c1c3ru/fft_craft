@@ -25902,3 +25902,143 @@ histórico, não uma restrição de domínio.
 
 **Status CSV: `read_full`** — 6/6 instruções reais, 1 `bl` já
 documentado (`iOS_getV2Icon`, `NOTES §559`).
+
+## 660. `Savedata_Load` — correção de §647: a "lacuna honesta" era o epílogo padrão de stack canary, não lógica de corrida de sequência (2026-10-31, T14 do `RE_COMPLETUDE_TASKS.md`, fatia vertical de persistência)
+
+> **Nota de retificação de §647**: a leitura original identificou
+> corretamente a contagem de bytes (90+6=96 slots, 384 B exatos) mas
+> **atribuiu incorretamente** o `bl #0x715cc` final ao caminho
+> semântico "contador de sequência mudou durante o load". A
+> desmontagem completa (repetida nesta tarefa) mostra que é o
+> **epílogo padrão de stack canary** do GCC, não lógica de jogo.
+
+Releitura completa de `Savedata_Load` (`0x27fe84`, 384 B): no prólogo
+(`0x27fe88`–`0x27feb0`), a função resolve via GOT o ponteiro pro
+canary global (`__stack_chk_guard`), lê o valor atual e grava uma
+cópia em `[sp, #0x10c]`. No epílogo (`0x27ff60`–`0x27ff74`), recarrega
+o canary global e compara com a cópia salva: se baterem, retorna
+normalmente (`pop {...,pc}` em `0x27ff74`); **se não baterem**,
+`0x27ff6c: bne #0x27ffe8` desvia pra `0x27ffe8: bl #0x715cc` —
+`0x715cc` já está confirmado como o stub PLT de `__stack_chk_fail`
+(ver T09, `call_graph_analysis.json`, e a nota original que o associa
+a `sub_275e3c`). É exatamente o padrão clássico
+`prólogo: salvar canary` / `epílogo: comparar canary, chamar
+__stack_chk_fail se divergir` inserido pelo compilador em qualquer
+função com buffer local vulnerável (aqui, `char path[260]` na pilha) —
+**não tem relação com `g_saveSeqCounter` nem com corrida de
+sequência**. A variável que §647 chamou de "contador de sequência"
+("`scratch.seq`"/`*g_saveSeqCounter`") é, na really, o valor do canary;
+o "`seq0 == *g_saveSeqCounter`" do pseudocódigo original é, na
+realidade, a comparação do canary.
+
+**Isso fecha a "lacuna honesta" de §647 de forma diferente da
+hipotetizada**: não há bytes nem controle de fluxo faltando — o `bl`
+final realmente não tem instrução depois porque `__stack_chk_fail`
+**não retorna** (aborta o processo), então o compilador não precisa de
+um retorno ali. Mecanicamente tudo bate; semanticamente, a seção 647
+precisa ter essa frase removida do pseudocódigo de negócio.
+
+**Pendência nova, não resolvida aqui**: a reconstrução completa e
+correta do restante de `Savedata_Load` (polaridade exata de
+`CFILE::Open`, qual ramo é sucesso vs. falha, papel de `sb`/`r5` em
+cada caminho) não foi refeita nesta tarefa — só a correção pontual do
+canary. `Savedata_Load` permanece `read_full` no CSV (a contagem de
+bytes/instruções está correta), mas a seção 647 deveria ser lida como
+"estrutura confirmada, um elemento semântico específico corrigido",
+não como pseudocódigo de negócio 100% confiável de ponta a ponta.
+
+## 661. `pspFftDelete` — correção de §641, verificada por execução real (Unicorn): o estado muda para 2 na mesma chamada, não existe `g_otherFlag` separado (2026-10-31, T14 do `RE_COMPLETUDE_TASKS.md`, fatia vertical de persistência)
+
+> **Nota de retificação de §641**: a contagem de bytes/instruções e o
+> catálogo de `bl` continuam corretos (72/72, 3 `bl`, tabela de 16
+> casos). O que estava errado é a afirmação **"o estado NÃO muda
+> aqui — continua 1 até a próxima chamada cair em state==2"** e a
+> existência de um `g_otherFlag` separado de `g_fftSaveState`.
+> Confirmado por **execução real sob Unicorn** (`differential_harness.py`,
+> T10) contra os bytes originais do ELF, não só releitura manual —
+> ver comandos de reprodução abaixo.
+
+Endereços reais confirmados por execução (GOT resolvido em tempo de
+emulação, binário `bf913415...`):
+
+- `g_fftSaveState`: `0xbab940` — **compartilhado** entre `pspFftSave`
+  e `pspFftDelete` (confirmado nas duas funções).
+- `g_cachedArg` de `pspFftDelete`: `0xbd5e50`.
+- `g_cachedArg` de `pspFftSave`: `0xbd3308` — **endereço diferente**
+  do de `pspFftDelete`; apesar de compartilharem `g_fftSaveState` e o
+  mesmo trio `xpLibapiSave{Start,Check,End}`, cada operação tem seu
+  próprio slot de valor cacheado, não um único global compartilhado
+  entre save e delete.
+
+Comportamento real de `pspFftDelete` no estado 1 (`result =
+xpLibapiSaveCheck(); idx = result + 0xd`), confirmado por execução
+com `result` em `{-13, 0, 1, 2, 5}`:
+
+| `idx` | `result` | Escreve `cachedArg` (`0xbd5e50`)? | Escreve `g_fftSaveState` (`0xbab940`)? | Retorno |
+|---|---|---|---|---|
+| 13 | 0 | não | não (**permanece 1**) | `1` |
+| 14 | 1 | não | sim, **`= 2`** | `result` (sempre `1` neste caso) |
+| 0–12, 15, fora da faixa | outros | sim, `= result` | sim, **`= 2`** | `1` |
+
+```c
+int pspFftDelete(int* outParam) {
+    int state = g_fftSaveState;
+    if (state == 0) {
+        xpLibapiSaveStart(2);
+        g_fftSaveState = 1;
+        g_cachedArg = 0;
+        return 1;
+    }
+    if (state == 1) {
+        int result = xpLibapiSaveCheck();
+        int idx = result + 0xd;
+        if (idx == 13) {
+            return 1;                    // estado permanece 1, nada escrito
+        } else if (idx == 14) {
+            g_fftSaveState = 2;           // *** estado muda AQUI, na mesma chamada ***
+            return result;                 // == 1 sempre, por construção de idx==14
+        } else {                           // idx 0-12, 15, e fora de [0,15]
+            g_cachedArg = result;
+            g_fftSaveState = 2;           // *** idem — não é "g_otherFlag" ***
+            return 1;
+        }
+    }
+    // state == 2
+    xpLibapiSaveEnd();
+    g_fftSaveState = 0;
+    int cached = g_cachedArg;
+    *outParam = cached;
+    return cached >> 31;
+}
+```
+
+Isso significa que, na prática, uma chamada em `state==1` quase
+sempre já deixa a máquina pronta para finalizar na **próxima**
+chamada (`state==2`) — exceto exatamente no caso `idx==13`
+(`result==0`), que é o único que realmente faz a função "esperar"
+sem avançar o estado. A leitura original (`state nunca muda em
+state==1`) subestimava a velocidade real de transição da máquina.
+
+**Reprodução** (usa o harness de T10, sem modificar o binário):
+
+```bash
+cd FFT_Android_Mod
+python3 -c "
+import sys; sys.path.insert(0, 'docs/re-tools')
+import differential_harness as dh
+from pathlib import Path
+SO = Path('src/lib/armeabi/libgl2jni.so')
+buf = bytearray(8192)
+buf[0xbab940-0xbab000:0xbab940-0xbab000+4] = (1).to_bytes(4,'little')
+res = dh.run_original(SO, 0x289c1c, 0x289c1c+320, {'r0': 0x600000},
+    [dh.MemoryBuffer('s', 0xbab000, bytes(buf)),
+     dh.MemoryBuffer('c', 0xbd5000, bytes(4096)),
+     dh.MemoryBuffer('o', 0x600000, bytes(4))],
+    stub_calls={0x28e0c8: 2})   # xpLibapiSaveCheck -> 2 (idx=15)
+print(res.final_buffers['s'][0xbab940-0xbab000:0xbab940-0xbab000+4].hex(), 'expect 02000000 (state=2)')
+"
+```
+
+**Status CSV: inalterado (`read_full`)** — a contagem mecânica já
+estava certa; esta seção corrige a descrição semântica de §641, que
+permanece no histórico como registro do erro original.
