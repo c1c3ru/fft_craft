@@ -161,8 +161,6 @@ O restante da fila permanece nos manifestos e no `SEMANTIC_COVERAGE.md`. Observa
 ### Lacunas semânticas conhecidas
 
 - `0x34615c`: Investigar a inicialização/relocação em tempo de execução do slot de som; o ELF estático não prova seu valor em memória do processo.
-- `0x2bf008`: Investigar o próximo BL de SysSE_Play depois do desvio condicionado.
-- `0x0a7034`: Investigar o próximo BL de iOS_SetIconPosition com os argumentos já observados.
 
 Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a descrição deve ser atualizada no mesmo PR de análise.
 
@@ -179,11 +177,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #516 — chore(re): automated structural batch 41263271694](https://github.com/c1c3ru/fft_craft/pull/516)
 - [PR #515 — chore(re): automated structural batch 41262478869](https://github.com/c1c3ru/fft_craft/pull/515)
 - [PR #514 — chore(re): automated structural batch 41261667942](https://github.com/c1c3ru/fft_craft/pull/514)
 - [PR #513 — chore(re): automated structural batch 41261298128](https://github.com/c1c3ru/fft_craft/pull/513)
 - [PR #512 — chore(re): automated structural batch 41261060320](https://github.com/c1c3ru/fft_craft/pull/512)
-- [PR #511 — chore(re): automated structural batch 41259143862](https://github.com/c1c3ru/fft_craft/pull/511)
 
 ## Atualização automática e fontes
 
