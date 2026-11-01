@@ -26557,3 +26557,66 @@ pra esta função, não consolidados numa tabela compartilhada);
 
 **Status CSV: `read_full`** — 20/20 instruções reais (+2 literal
 pool), 0 `bl`.
+
+## 670. `InitCamera()` — leitura completa, fatia vertical de T23 (renderização/câmera): segunda tail call real desta sessão, confirmada por endereço exato (2026-11-01, T23 do `RE_COMPLETUDE_TASKS.md`)
+
+`InitCamera()` (`0x218dcc`, 40 B) — disassembly linear completo via
+Capstone, 90% de cobertura por `jtable.py` (9/10 slots, 1 literal
+pool), **0 `bl`**. Achada por busca de nome literal no cluster
+"câmera"/T23; os alvos nominais de T23 (`GuEmu_libgu_to_gl`,
+`CEGL2_*`, picking de toque) seguem intocados.
+
+```c
+void InitCamera(void) {
+    g_camera->field_0xa0 = 0;
+    g_camera->field_0xa4 = 0;
+    g_camera->field_0xa8 = 0;
+    g_camera->field_0xac = 0;
+    g_camera->field_0xb0 = 0;
+    SetDefaultCamera();   // *** TAIL CALL: `b`, não `bl` -- sem prólogo, sem push ***
+}
+```
+
+**Achado estrutural, a segunda tail call real desta sessão (depois de
+T20/`iOSUnitListWinOnOff`):** `InitCamera` não tem prólogo algum (0
+`push`) e termina num `b` incondicional direto, não `bl`. O endereço
+de destino (`0x218cf4`) não é uma suposição por heurística de "branch
+pra trás" — é **exatamente** o início de `SetDefaultCamera()`, uma
+função já catalogada por nome e tamanho (`0x218cf4`, 216 B): `0x218cf4
++ 216 = 0x218dcc`, o próprio endereço de início de `InitCamera`. As
+duas funções são vizinhas contíguas no `.text`, e a tail call aponta
+pro início exato da vizinha, não pro meio dela. `jtable.py` registrou
+esse `b` como "1 branch de retrocesso (candidato a loop)" pela mesma
+heurística posicional de T20 — não é um loop.
+
+`g_camera` é um endereço direto (`0x60593c`), resolvido à mão a partir
+do literal PC-relative da própria instrução — sem indireção via GOT
+(consistente com um símbolo de dado local/estático, não um dado que
+precise suportar interposição). Só os 5 campos que esta função
+realmente escreve (`+0xa0`, `+0xa4`, `+0xa8`, `+0xac`, `+0xb0`) foram
+confirmados; o `sizeof` completo da struct não é conhecido e não é
+reivindicado aqui.
+
+**Reconstrução C + teste diferencial:**
+`docs/re-tools/c-models/t23_initcamera.c` + `test_t23_initcamera.py`:
+`SetDefaultCamera` tratada como caixa-preta via `stub_calls`, mesmo
+tratamento de tail-call-como-stub já validado em T20 (e, ao contrário
+de um ELF sintético, sem necessidade de mapear página vazia extra no
+alvo — mesma lição de T14, já que `0x218cf4` cai dentro do mesmo
+`.text` real já mapeado). Confirma que os 5 campos são zerados e que
+nenhum outro byte da struct (testado 1 byte antes do primeiro campo e
+1 byte depois do último) é tocado, mais confirma que a tail call é
+alcançada exatamente uma vez. Suíte completa de `docs/re-tools`: de
+581 pra **583 testes** (1.871 subtestes, sem subtestes novos nesta
+fatia — os 2 testes não usam `subTest`), todas passando (confirmado
+2×).
+
+**Lacuna aceita:** `SetDefaultCamera()` (já citada com 98% de
+cobertura estrutural, 3 `bl` — `getMapScrollXYZ`/`getMapScale`/
+`getMapAngle`) não lida nesta fatia; identidade semântica dos 5 campos
+e `sizeof` completo de `g_camera` não confirmados; os alvos nominais
+de T23 (`GuEmu_libgu_to_gl`, `CEGL2_*`, picking de toque) seguem
+intocados.
+
+**Status CSV: `read_full`** — 9/9 instruções reais (+1 literal pool),
+0 `bl`, 1 tail call.

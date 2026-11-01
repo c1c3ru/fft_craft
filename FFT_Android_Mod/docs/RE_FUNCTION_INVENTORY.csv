@@ -3926,7 +3926,7 @@ address,size,mangled,demangled,status,section_ref
 0028e66c,40,PadInit,PadInit,read_structural,NOTES §612
 0024adc4,40,_Z8endEntryv,endEntry(),read_structural,NOTES §616
 002b2404,40,_Z12Music_SetVolii,"Music_SetVol(int, int)",read_structural,NOTES §616
-00218dcc,40,_Z10InitCamerav,InitCamera(),read_structural,NOTES §616
+00218dcc,40,_Z10InitCamerav,InitCamera(),read_full,NOTES §670
 0022a994,40,_Z27EqualRShift12VECTORToVECTORP6VECTORS0_,"EqualRShift12VECTORToVECTOR(VECTOR*, VECTOR*)",read_structural,NOTES §612
 0022a9bc,40,_Z27EqualLShift12VECTORToVECTORP6VECTORS0_,"EqualLShift12VECTORToVECTOR(VECTOR*, VECTOR*)",read_structural,NOTES §612
 0022a9e4,40,_Z29EqualAnd0xfffSVECTORToSVECTORP7SVECTORS0_,"EqualAnd0xfffSVECTORToSVECTOR(SVECTOR*, SVECTOR*)",read_structural,NOTES §612
