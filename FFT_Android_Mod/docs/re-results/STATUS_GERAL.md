@@ -68,6 +68,7 @@ A prioridade é reconstruir comportamento verificável (estrutura, semântica, C
 
 Os relatórios abaixo apresentam **efeitos locais testados sob estados sintéticos** e seus limites. Testes passando não significam que a função inteira foi reconstruída:
 
+- [B01: duas chamadas BL originais executadas em Unicorn até retorno BX LR e comparadas ao C++ sob memória sintética; callers completos não certificados](B01_BOUNDED_CALLER_EXECUTION.md)
 - [CI auditado: falhas históricas de fixture e Unicorn separadas do HEAD verde; cancelar apenas runs obsoletos de PR](CI_RELIABILITY_2026-10-28.md)
 - [Som: slot global do ELF em 0x34615c, relocação e 512 leituras ARM com memória sintética](SEMANTIC_SOUND_GLOBAL_SLOT.md)
 - [Corpo comum 0x2b2b7c: cinco instruções ARM e 128 testes diferenciais C com pilha e literal originais](SEMANTIC_SOUND_COMMON_PROLOGUE.md)
@@ -178,11 +179,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #507 — B01: executar BL e retorno ARM original em dois chamadores C++](https://github.com/c1c3ru/fft_craft/pull/507)
+- [PR #509 — chore(re): automated structural batch 41248393749](https://github.com/c1c3ru/fft_craft/pull/509)
 - [PR #508 — chore(re): automated structural batch 41218000838](https://github.com/c1c3ru/fft_craft/pull/508)
 - [PR #506 — chore(re): automated structural batch 41210990229](https://github.com/c1c3ru/fft_craft/pull/506)
 - [PR #505 — B01: rastrear candidatas a chamadas dos sete métodos C++ no ELF original](https://github.com/c1c3ru/fft_craft/pull/505)
-- [PR #504 — chore(re): automated structural batch 41210092677](https://github.com/c1c3ru/fft_craft/pull/504)
-- [PR #503 — feat(re): medir produtividade semântica real por lote e dependências B01/A04](https://github.com/c1c3ru/fft_craft/pull/503)
 
 ## Atualização automática e fontes
 
