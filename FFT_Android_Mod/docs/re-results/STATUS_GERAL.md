@@ -18,7 +18,7 @@
 | v3: checkpoints / aprovados / revisão | 1,261 / 1,208 / 53 | Subconjunto já analisado pelas regras v3 |
 | Equivalência semântica integral registrada | **303** | Certificados revisáveis vinculados ao ELF; microexecuções não são certificados |
 
-O histórico CSV contém **5,932** registros de análise anterior, que podem se sobrepor aos checkpoints. **Não somamos esses conjuntos para criar um percentual global fictício.**
+O histórico CSV contém **5,933** registros de análise anterior, que podem se sobrepor aos checkpoints. **Não somamos esses conjuntos para criar um percentual global fictício.**
 
 ## Fluxo de reconstrução funcional
 
@@ -177,11 +177,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #519 — chore(re): automated structural batch 41310520114](https://github.com/c1c3ru/fft_craft/pull/519)
 - [PR #518 — chore(re): automated structural batch 41297560178](https://github.com/c1c3ru/fft_craft/pull/518)
 - [PR #517 — chore(re): automated structural batch 41264294118](https://github.com/c1c3ru/fft_craft/pull/517)
 - [PR #516 — chore(re): automated structural batch 41263271694](https://github.com/c1c3ru/fft_craft/pull/516)
 - [PR #515 — chore(re): automated structural batch 41262478869](https://github.com/c1c3ru/fft_craft/pull/515)
-- [PR #514 — chore(re): automated structural batch 41261667942](https://github.com/c1c3ru/fft_craft/pull/514)
 
 ## Atualização automática e fontes
 
