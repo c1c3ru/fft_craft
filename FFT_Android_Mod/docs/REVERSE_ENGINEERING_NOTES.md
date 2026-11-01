@@ -26162,3 +26162,58 @@ rodar) não investigada.
 
 **Status CSV: `read_full`** — 35/35 instruções reais (+1 literal
 pool), 3 `bl` já documentados ou tratados como caixa-preta.
+
+## 664. `op_search(int, int)` — leitura completa, fatia vertical de T18 (VM de eventos): busca linear numa lista de entradas por tag de byte, com sentinela e limite de 1024 bytes (2026-11-01, T18 do `RE_COMPLETUDE_TASKS.md`)
+
+`op_search(int eventId, int searchTag)` (`0x26a674`, 96 B) — disassembly
+linear completo via Capstone, 92% de cobertura por `jtable.py` (22/24
+slots, os 2 restantes são literal pool); **zero `bl`, zero tabela de
+salto, 1 laço real** (a única das fatias verticais desta sessão sem
+nenhuma chamada externa — toda a lógica é auto-contida).
+
+```c
+uint32_t op_search(int eventId, int searchTag) {
+    void** g = *table_ptr_slot;             // 1º GOT: ponteiro para g
+    void** eventTable = *g;                   // g[0] = tabela real por evento
+    uint32_t packed = ((uint32_t*)eventTable)[eventId + 1];
+    void* base = *base_val_slot;              // 2º GOT: base de relocação
+    uint8_t* entryList = (uint8_t*)((packed & ~3) + (uintptr_t)base);
+    for (uint32_t offset = 0; offset < 0x400; offset += 4) {
+        uint32_t word = *(uint32_t*)(entryList + offset);
+        uint8_t tag = (uint8_t)word;            // byte baixo = tag
+        if (tag == (uint8_t)searchTag) return word;  // achou: retorna a ENTRADA, não um booleano
+        if (tag == 1) break;                     // sentinela: fim da lista
+    }
+    return 0;                                   // não encontrado (sentinela ou limite)
+}
+```
+
+**Confirmado por execução real sob Unicorn** (`differential_harness.py`,
+T10). A primeira tentativa de reprodução usou só dois níveis de
+indireção e falhou com acesso não mapeado — a desmontagem já mostrava
+dois `ldr` consecutivos (`ldr r3,[pc,r3]` seguido de `ldr r3,[r3]`),
+mas a leitura inicial não percebeu que isso são **dois saltos de
+indireção distintos** (`table_ptr_slot → g`, depois `g[0] →
+eventTable`), não um único ponteiro resolvido direto. Corrigido com
+três níveis (`table_ptr_slot`, `g`, `eventTable`), a execução bateu
+exatamente com a entrada esperada para `eventId=3`,
+`searchTag∈{5,9}` (achadas, retornam a palavra completa), `searchTag=7`
+(não encontrado, para no sentinela `tag==1`), e uma lista sem
+sentinela (para no limite de `0x400` **bytes**, ou seja, 256 entradas
+de 4 bytes, não 1024 entradas como a leitura por byte poderia sugerir
+antes de conferir o incremento de `+4` por iteração).
+
+**Achado**: a entrada marcada com `packed & ~3` confirma o padrão já
+visto noutras fatias (bits baixos reservados pra flags, mascarados
+antes de somar à base de relocação) — mesma técnica de `BWORK`/`EDATA`
+mas aqui aplicada a um ponteiro de tabela de script de evento, não a
+uma struct de unidade.
+
+**Lacuna aceita**: a identidade de `g`/`eventTable`/o formato completo
+de uma entrada de 4 bytes (só o byte baixo "tag" é entendido; os 3
+bytes superiores, usados como payload nos testes, têm papel real
+desconhecido) não foram investigados além do necessário pra confirmar
+o mecanismo de busca.
+
+**Status CSV: `read_full`** — 22/22 instruções reais (+2 literal
+pool), 0 `bl`, 0 tabela de salto.

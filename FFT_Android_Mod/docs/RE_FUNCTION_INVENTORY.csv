@@ -2564,7 +2564,7 @@ address,size,mangled,demangled,status,section_ref
 00258da8,96,_Z14evt_rute_erasev,evt_rute_erase(),mentioned_unverified,
 0025c49c,96,_Z15houkokuinf_initi,houkokuinf_init(int),read_structural,NOTES §615
 0025d20c,96,_Z10world_exitv,world_exit(),read_structural,NOTES §615
-0026a674,96,_Z9op_searchii,"op_search(int, int)",read_structural,NOTES §615
+0026a674,96,_Z9op_searchii,"op_search(int, int)",read_full,NOTES §664
 002854bc,96,_Z25iOS_RESUME_SET_PSP_BATTLEP26IOS_RESUME_DATA_PSP_BATTLE24IOS_RESUME_DATACOPY_MODE,"iOS_RESUME_SET_PSP_BATTLE(IOS_RESUME_DATA_PSP_BATTLE*, IOS_RESUME_DATACOPY_MODE)",read_full,NOTES §555
 002ab88c,96,sceGuBlendFunc,sceGuBlendFunc,read_structural,NOTES §615
 002a251c,96,RotNclip3,RotNclip3,read_structural,NOTES §611
