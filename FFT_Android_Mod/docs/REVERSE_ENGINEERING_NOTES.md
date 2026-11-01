@@ -25872,3 +25872,33 @@ confirmados.
 
 **Status CSV: `read_full`** — 30/30 instruções reais, 0 `bl`, 0 tabela
 de salto.
+
+## 659. `chkSeDouble()` — leitura completa, fecha a fronteira "próximo BL de `SysSE_Play`" citada em `STATUS_GERAL.md` (2026-10-31, T13 do `RE_COMPLETUDE_TASKS.md`)
+
+`chkSeDouble()` (`0x2bf008`, 24 B) — disassembly linear completo via
+Capstone, sem tabela de salto, 1 `bl`: 6 de 6 instruções reais lidas e
+atribuídas.
+
+```c
+bool chkSeDouble() {
+    int v = iOS_getV2Icon(0xc8);   // consulta o slot de estado genérico 200
+    return v != 0;
+}
+```
+
+O único `bl` é `iOS_getV2Icon(V2ICON_DATA)` (`0x2b7ccc`), **já lida por
+completo** (`NOTES §559`). Isso fecha a fronteira sem deixar nenhum
+callee desconhecido: `chkSeDouble` é um booleano puro sobre o resultado
+de uma consulta já documentada.
+
+**Achado**: `iOS_getV2Icon` já é usado em `REVERSE_ENGINEERING_NOTES.md`
+dezenas de vezes como uma tabela de estado genérica consultada por ID
+pequeno (`0x13`, `0xc9`, `0xca`, `0xcb`, `5`, etc. — ver linhas 4393,
+4398, 4538), não só para ícones de UI apesar do nome. O uso aqui
+(`0xc8`=200, "double"/duplicata de efeito sonoro) confirma essa
+hipótese: a mesma tabela genérica é reaproveitada pelo subsistema de som
+como um flag/contador, não é exclusiva de ícones — nome "V2Icon" é
+histórico, não uma restrição de domínio.
+
+**Status CSV: `read_full`** — 6/6 instruções reais, 1 `bl` já
+documentado (`iOS_getV2Icon`, `NOTES §559`).

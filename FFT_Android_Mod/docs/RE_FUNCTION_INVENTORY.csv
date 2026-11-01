@@ -4816,7 +4816,7 @@ address,size,mangled,demangled,status,section_ref
 002b376c,24,_Z14Error_SetErroriPc,"Error_SetError(int, char*)",read_structural,NOTES §616
 002b36bc,24,_Z10Error_Initv,Error_Init(),read_structural,NOTES §616
 002c53e8,24,_Z10Movie_Initv,Movie_Init(),read_structural,NOTES §616
-002bf008,24,_Z11chkSeDoublev,chkSeDouble(),read_structural,NOTES §612
+002bf008,24,_Z11chkSeDoublev,chkSeDouble(),read_full,NOTES §659
 002b7c84,24,_Z16iOS_setTutoBeginii,"iOS_setTutoBegin(int, int)",read_full,NOTES §560
 002b7cb4,24,_Z14iOS_setTutoNowii,"iOS_setTutoNow(int, int)",read_full,NOTES §560
 002bef4c,24,_Z21iOS_isExistResumeDatav,iOS_isExistResumeData(),read_structural,NOTES §616

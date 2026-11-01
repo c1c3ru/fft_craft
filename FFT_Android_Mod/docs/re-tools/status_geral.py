@@ -97,8 +97,9 @@ MILESTONES = (
 )
 CURRENT_SEMANTIC_BOUNDARIES = (
     ("0x34615c", "Investigar a inicialização/relocação em tempo de execução do slot de som; o ELF estático não prova seu valor em memória do processo"),
-    ("0x2bf008", "Investigar o próximo BL de SysSE_Play depois do desvio condicionado"),
-    ("0x0a7034", "Investigar o próximo BL de iOS_SetIconPosition com os argumentos já observados"),
+    # 0x2bf008 (chkSeDouble) e 0x0a7034 (CGX_SCREEN_CORRECT::GetOffset_1X)
+    # fechados em T13 (RE_COMPLETUDE_TASKS.md, 2026-10-31) -- ver NOTES §659
+    # e §537; removidos desta lista por não terem mais callee desconhecido.
 )
 EVIDENCE_RE = re.compile(r"Evidence collected:\s*\*\*(\d+)/(\d+)\*\*")
 SHA_RE = re.compile(r"ELF SHA-256:\s*`([a-f0-9]{64})`")
