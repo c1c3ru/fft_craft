@@ -13,7 +13,7 @@
     "718c0",
     "718cc"
   ],
-  "log": "=== jtable.py: 0xaecb8..0xaee5c (420 bytes) ===\ncoverage: 91 of ~105 instruction slots (87%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0xaed3c, dispatch @0xaed40: 6 cases, 5 distinct handlers\n    targets: ['0xaee08', '0xaede8', '0xaedc0', '0xaee1c', '0xaee1c', '0xaed60']\n\n-- bl targets: 3 distinct --\n  0x715cc x1   sub_715cc LOCAL(no-dynsym)\n  0x718c0 x2   sub_718c0 LOCAL(no-dynsym)\n  0x718cc x1   sub_718cc LOCAL(no-dynsym)\n\n-- branches: 7 total, 5 backward (loop candidates) --\n",
+  "log": "=== jtable.py: 0xaecb8..0xaee5c (420 bytes, ARM mode) ===\ncoverage: 91 of ~105 instruction slots (87%)\n\n-- jump tables resolved: 1 --\n  guard cmp @0xaed3c, dispatch @0xaed40: 6 cases, 5 distinct handlers\n    targets: ['0xaee08', '0xaede8', '0xaedc0', '0xaee1c', '0xaee1c', '0xaed60']\n\n-- bl targets: 3 distinct --\n  0x715cc x1   sub_715cc LOCAL(no-dynsym)\n  0x718c0 x2   sub_718c0 LOCAL(no-dynsym)\n  0x718cc x1   sub_718cc LOCAL(no-dynsym)\n\n-- branches: 7 total, 5 backward (loop candidates) --\n",
   "v2_structural_status": "needs_review",
   "structural_v3": {
     "status": "needs_review",
@@ -57,9 +57,8 @@
     "candidate_literal_data_not_proven": true
   },
   "structural_version": 3,
-  "structural_fingerprint": "f5c979fa06fbd650af1c",
+  "structural_fingerprint": "3ff8b8e6cea3388010f6",
   "review_attempts": 1,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
-  "pipeline_version": 2,
-  "archived_previous_checkpoint": "FFT_Android_Mod/docs/re-results/structural-v2/000aecb8.json"
+  "pipeline_version": 2
 }

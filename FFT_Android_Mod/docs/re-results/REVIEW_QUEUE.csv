@@ -5,7 +5,7 @@ address,name,size,core_priority,coverage_pct,review_reason,tables_resolved,table
 00159aac,"asm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)",404,1,80.2,resolved_jump_table_check,2,0,1,FFT_Android_Mod/docs/re-results/00159aac.json
 00162080,"wasm_function(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)",404,1,80.2,resolved_jump_table_check,2,0,1,FFT_Android_Mod/docs/re-results/00162080.json
 002031a4,"iOSsetCursorByTouch(int, int, int, int, int)",392,1,57.14,resolved_jump_table_check,1,0,1,FFT_Android_Mod/docs/re-results/002031a4.json
-002c9b11,__gxx_personality_v0,388,1,7.22,coverage_below_95,0,0,1,FFT_Android_Mod/docs/re-results/002c9b11.json
+002c9b11,__gxx_personality_v0,388,1,90.21,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002c9b11.json
 0027fe84,"Savedata_Load(unsigned char*, int*)",384,1,94.79,coverage_below_95,0,0,1,FFT_Android_Mod/docs/re-results/0027fe84.json
 0028e2e4,CdControl,384,1,68.75,resolved_jump_table_check,1,0,1,FFT_Android_Mod/docs/re-results/0028e2e4.json
 001d972c,"get_shape2(BWORK*, unsigned char*)",380,1,54.74,resolved_jump_table_check,1,0,1,FFT_Android_Mod/docs/re-results/001d972c.json
@@ -32,7 +32,9 @@ address,name,size,core_priority,coverage_pct,review_reason,tables_resolved,table
 002cabdc,__aeabi_ul2d,116,1,75.86,coverage_below_95,0,0,1,FFT_Android_Mod/docs/re-results/002cabdc.json
 002cb830,__gesf2,116,1,89.66,coverage_below_95,0,0,1,FFT_Android_Mod/docs/re-results/002cb830.json
 002cb484,__floatunsisf,40,1,80.0,coverage_below_95,0,0,1,FFT_Android_Mod/docs/re-results/002cb484.json
-002c9121,operator delete[](void*),8,1,0.0,coverage_below_95,0,0,1,FFT_Android_Mod/docs/re-results/002c9121.json
+002c9a25,operator new[](unsigned int),20,1,30.0,coverage_below_95,0,0,1,FFT_Android_Mod/docs/re-results/002c9a25.json
+002c9115,operator delete(void*),12,1,83.33,coverage_below_95,0,0,1,FFT_Android_Mod/docs/re-results/002c9115.json
+002c9121,operator delete[](void*),8,1,75.0,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002c9121.json
 002cd594,_Unwind_VRS_Pop,856,0,97.2,resolved_jump_table_check,1,0,1,FFT_Android_Mod/docs/re-results/002cd594.json
 002ca8a0,__subdf3,688,0,28.49,coverage_below_95,0,0,1,FFT_Android_Mod/docs/re-results/002ca8a0.json
 002ca8a4,__adddf3,684,0,28.07,coverage_below_95,0,0,1,FFT_Android_Mod/docs/re-results/002ca8a4.json
@@ -42,10 +44,11 @@ address,name,size,core_priority,coverage_pct,review_reason,tables_resolved,table
 000ab4b0,"CEGL2_FBO::ErrorGL(char const*, char const*, unsigned int)",420,0,89.52,resolved_jump_table_check,1,0,1,FFT_Android_Mod/docs/re-results/000ab4b0.json
 000aecb8,"CEGL2_SPRITE::ErrorGL(char const*, char const*, unsigned int)",420,0,86.67,resolved_jump_table_check,1,0,1,FFT_Android_Mod/docs/re-results/000aecb8.json
 000a7ec4,CEGL2_IF::SetBlendMode(int),308,0,88.31,resolved_jump_table_check,1,0,1,FFT_Android_Mod/docs/re-results/000a7ec4.json
-002ca215,__cxa_call_unexpected,268,0,0.0,coverage_below_95,0,0,1,FFT_Android_Mod/docs/re-results/002ca215.json
+002ca215,__cxa_call_unexpected,268,0,73.88,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002ca215.json
+002ca125,__cxa_type_match,112,0,91.07,coverage_below_95,0,0,1,FFT_Android_Mod/docs/re-results/002ca125.json
 002ccfb8,_Unwind_VRS_Get,92,0,73.91,resolved_jump_table_check,1,0,1,FFT_Android_Mod/docs/re-results/002ccfb8.json
 002cd03c,_Unwind_VRS_Set,92,0,73.91,resolved_jump_table_check,1,0,1,FFT_Android_Mod/docs/re-results/002cd03c.json
-002c99b5,operator new(unsigned int),76,0,5.26,coverage_below_95,0,0,1,FFT_Android_Mod/docs/re-results/002c99b5.json
-002ca195,__cxa_begin_cleanup,60,0,66.67,coverage_below_95,0,0,1,FFT_Android_Mod/docs/re-results/002ca195.json
+002c99b5,operator new(unsigned int),76,0,76.32,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002c99b5.json
+002ca195,__cxa_begin_cleanup,60,0,80.0,coverage_below_95,0,0,2,FFT_Android_Mod/docs/re-results/002ca195.json
 0028c288,"CFFT_STATE::GetBackdropColor(float*, float*, float*)",56,0,57.14,resolved_jump_table_check,1,0,1,FFT_Android_Mod/docs/re-results/0028c288.json
 002ccf98,_Unwind_DeleteException,32,0,62.5,coverage_below_95,0,0,1,FFT_Android_Mod/docs/re-results/002ccf98.json

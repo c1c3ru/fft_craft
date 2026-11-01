@@ -4,7 +4,7 @@ Static ARM-mode disassembly only. Reachability is heuristic; unvisited slots may
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Evidence collected: **50/50** pending functions.
+Evidence collected: **53/53** pending functions.
 Evidence schema: v2
 
 These reports do not constitute semantic verification.
@@ -44,6 +44,8 @@ These reports do not constitute semantic verification.
 | `002cabdc` | __aeabi_ul2d | [Evidence](semantic-evidence/002cabdc.md) |
 | `002cb830` | __gesf2 | [Evidence](semantic-evidence/002cb830.md) |
 | `002cb484` | __floatunsisf | [Evidence](semantic-evidence/002cb484.md) |
+| `002c9a25` | operator new[](unsigned int) | [Evidence](semantic-evidence/002c9a25.md) |
+| `002c9115` | operator delete(void*) | [Evidence](semantic-evidence/002c9115.md) |
 | `002c9121` | operator delete[](void*) | [Evidence](semantic-evidence/002c9121.md) |
 | `002cd594` | _Unwind_VRS_Pop | [Evidence](semantic-evidence/002cd594.md) |
 | `002ca8a0` | __subdf3 | [Evidence](semantic-evidence/002ca8a0.md) |
@@ -55,6 +57,7 @@ These reports do not constitute semantic verification.
 | `000aecb8` | CEGL2_SPRITE::ErrorGL(char const*, char const*, unsigned int) | [Evidence](semantic-evidence/000aecb8.md) |
 | `000a7ec4` | CEGL2_IF::SetBlendMode(int) | [Evidence](semantic-evidence/000a7ec4.md) |
 | `002ca215` | __cxa_call_unexpected | [Evidence](semantic-evidence/002ca215.md) |
+| `002ca125` | __cxa_type_match | [Evidence](semantic-evidence/002ca125.md) |
 | `002ccfb8` | _Unwind_VRS_Get | [Evidence](semantic-evidence/002ccfb8.md) |
 | `002cd03c` | _Unwind_VRS_Set | [Evidence](semantic-evidence/002cd03c.md) |
 | `002c99b5` | operator new(unsigned int) | [Evidence](semantic-evidence/002c99b5.md) |

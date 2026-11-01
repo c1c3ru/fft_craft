@@ -9,7 +9,7 @@
   "tables_resolved": 0,
   "tables_unresolved": 0,
   "bl_targets": [],
-  "log": "=== jtable.py: 0x2cac50..0x2caebc (620 bytes) ===\ncoverage: 113 of ~155 instruction slots (73%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 0 distinct --\n\n-- branches: 14 total, 3 backward (loop candidates) --\n",
+  "log": "=== jtable.py: 0x2cac50..0x2caebc (620 bytes, ARM mode) ===\ncoverage: 113 of ~155 instruction slots (73%)\n\n-- jump tables resolved: 0 --\n\n-- bl targets: 0 distinct --\n\n-- branches: 14 total, 3 backward (loop candidates) --\n",
   "v2_structural_status": "needs_review",
   "structural_v3": {
     "status": "needs_review",
@@ -72,7 +72,7 @@
     "candidate_literal_data_not_proven": true
   },
   "structural_version": 3,
-  "structural_fingerprint": "f5c979fa06fbd650af1c",
+  "structural_fingerprint": "3ff8b8e6cea3388010f6",
   "review_attempts": 1,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2

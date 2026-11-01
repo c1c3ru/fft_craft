@@ -4,11 +4,11 @@ Automatic structural acceptance checks all ARM instruction slots, candidate PC-r
 
 | Metric | Count |
 |---|---:|
-| v3 checkpoints | 1258 |
-| Legacy checkpoint records unchanged | 1744 |
+| v3 checkpoints | 1261 |
+| Legacy checkpoint records unchanged | 1741 |
 | v3 structurally accepted | 1208 |
-| v3 still under review | 50 |
-| Archived v2 originals | 1244 |
+| v3 still under review | 53 |
+| Archived v2 originals | 1232 |
 | Referenced candidate literal words | 3171 |
 | Unexplained instruction slots | 841 |
 | Independently checked jump tables | 0 |
