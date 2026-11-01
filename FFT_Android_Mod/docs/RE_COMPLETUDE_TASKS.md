@@ -1,0 +1,207 @@
+# Auditoria e tarefas para completar a engenharia reversa do FFT Android
+
+Data da auditoria: 2026-10-31. Todas as tarefas abaixo começam pendentes; a análise e a criação deste plano não executam a reconstrução.
+
+## 1. Diagnóstico baseado no workspace
+
+O projeto permite modificar e remontar um APK, contém um grande acervo de análise nativa e possui ferramentas de análise estrutural e microexecução. Isso ainda não demonstra reconstrução integral nem equivalência funcional do aplicativo.
+
+Métricas recalculadas nesta auditoria com `progress_report.summarize`, leitura do CSV e do ledger, sem regenerar relatórios:
+
+| Indicador | Observado | Limite da interpretação |
+|---|---:|---|
+| Entradas no inventário ARM | 6.455 | Inventário baseado em símbolos dinâmicos; não é todo o código executável |
+| Endereços únicos no inventário | 6.329 | Aliases não devem contar como implementações distintas |
+| CSV `read_full` | 2.353 | Classificação histórica, não certificado de equivalência |
+| CSV `read_structural` | 3.579 | Descreve estrutura, não implementação completa |
+| CSV `mentioned_unverified` | 523 | Menção não é análise concluída |
+| Checkpoints válidos para o ELF corrente | 3.002 | Conjunto sobreposto ao CSV |
+| Checkpoints `auto_structural` | 2.952 | 98,3% dos checkpoints, não do aplicativo |
+| Checkpoints `needs_review` | 50 | 34 associados ao núcleo |
+| Registros semânticos `partial` | 5 | Não certificam a função inteira |
+| Registros semânticos `certified` | 0 | Não significa ausência de conhecimento; significa ausência de certificação registrada |
+| Classes smali no diretório `src/smali` | 123 arquivos | Inclui classes auxiliares; documentação antiga fala em 57 classes |
+| Bibliotecas em `src/lib` | ARM `armeabi` e x86 | São bibliotecas binárias; rebuild via apktool não recompila o motor |
+
+`pending_count=0` no relatório estrutural significa que as entradas foram cobertas por histórico OU checkpoints. O código de `progress_report.py` aceita histórico `read_structural` nessa conta. Portanto, esse zero não demonstra análise semântica completa.
+
+### Identidade e versões: lacuna prioritária
+
+| Artefato | SHA-256 observado |
+|---|---|
+| `FFT By MortalGx.apk` e `original/FFT_By_MortalGx.apk` | `d4478f550c59e1cd4e1bdc35cfbcca934432bf4b9b57d055554646ab2363586d` |
+| APK com nome `...2.2.0-APK_Award-Mod.apk` | `31bb102e0b9457115a051c9fb1bc9f52bfabde6ec1e98004c090668e0dfb92be` |
+| ARM corrente `src/lib/armeabi/libgl2jni.so` | `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc` |
+| ARM backup, igual aos bytes da biblioteca no APK MortalGx | `82dad2ca3d161e64ee05fd9be03304eef236ff0b4cc106cec50323f4c3b4a7c0` |
+| x86 corrente `src/lib/x86/libgl2jni.so` | `dc8531074c90dc3e01cd3531ac73a40c338c3e5c2f45bf5c95eaf729400d1da4` |
+| x86 backup, igual aos bytes da biblioteca no APK MortalGx | `676dbd57fc39590d465caeeefff57b9f9c22a886e87401920cd318c99e79e761` |
+
+O APK MortalGx contém `classes.dex` de 247.332 bytes, ARM de 4.463.112 bytes e x86 de 4.988.572 bytes. O APK denominado 2.2.0 contém DEX de 1.457.440 bytes e ARM `armeabi-v7a` de 4.587.956 bytes. São alvos diferentes; nome de arquivo não comprova origem oficial. Não transferir endereços ou conclusões entre eles sem comparação.
+
+Os certificados atuais vinculam o ARM corrente, que difere do ARM distribuído no APK de referência. Essa diferença precisa ser explicada por um manifesto de patches, inclusive para separar fonte/tradução de mudanças na lógica.
+
+### Evidências e limites desta auditoria
+
+- Inspecionados: README raiz e do mod; planos anteriores; política de certificação; CSV; checkpoints; ledger; scripts de build e análise; workflows; manifesto; declarações JNI; inventário ZIP dos dois APKs; hashes das bibliotecas; progresso da tradução.
+- A tentativa REA `inspect_android_package` retornou `capability_unavailable`: falta configurar `REA_JADX_MCP_JAR` com o JAR `jadx-headless-mcp 0.7.1`. Não houve nova decompilação via JADX.
+- Não foram executados o jogo, instalação, campanha, benchmark, rebuild ou a suíte completa nesta auditoria. Resultados de CI citados nos relatórios são históricos.
+- A documentação de tradução declara teste em dispositivo pendente. Isso não prova que nenhum teste posterior ocorreu; exige localizar uma evidência posterior reproduzível.
+- A busca por fontes e build nativo não identificou um projeto C/C++ próprio para recompilar integralmente `libgl2jni.so`; o fluxo inspecionado empacota as bibliotecas existentes. Confirmar esse limite na tarefa T03.
+- Há alterações preexistentes nas notas, inventário e lista de prioridades. Preservá-las e não usar regeneração em massa como parte da auditoria.
+
+## 2. Definição verificável de “100%”
+
+Usar dois marcos distintos:
+
+1. **RE completa dentro de um escopo declarado:** todos os componentes, funções descobertas, dados, interfaces e fluxos têm especificação rastreável, comportamento explicado e nenhuma lacuna obrigatória aberta.
+2. **Reconstrução funcional completa:** uma implementação mantida em fonte substitui o código proprietário no escopo acordado, é compilável e passa comparação diferencial e cenários integrais. Reempacotar a `.so` original não satisfaz esse marco.
+
+O segundo marco é incluído porque o pedido exige tarefas para uma IA desenvolver a completude. Se o objetivo final for somente documentação, reportar o primeiro marco separadamente, mantendo a reconstrução como não executada.
+
+“100%” é sempre relativo à versão, às ABIs, aos recursos e ao domínio de entradas declarados. Testes finitos não provam equivalência universal. Se houver ambiente indisponível, caminho desconhecido ou recurso excluído, registrar isso expressamente; não declarar completude de todo o app.
+
+Tradução completa e suporte novo a 64 bits são extensões de produto, não requisitos intrínsecos da engenharia reversa da versão existente. Os patches já presentes devem ser explicados e validados; recursos novos têm metas próprias.
+
+## 3. Protocolo obrigatório para a IA executora
+
+Cada tarefa deve ter: ID, estado, dependências, artefato/ABI/hash, entradas, alterações, comando de reprodução, resultados, evidências e lacunas. Estados: `pending`, `in_progress`, `blocked`, `ready_for_review`, `done`. Uma tarefa bloqueada deve apontar o recurso exato que falta.
+
+Para cada função/subfunção, produzir um pacote com:
+
+- Identidade: endereço virtual normalizado, offset no arquivo, modo ARM/Thumb quando aplicável, tamanho, aliases e hashes do ELF e dos bytes.
+- CFG e separação entre instruções, tabelas, literais, padding e regiões ainda inexplicadas; entradas alternativas e tail calls.
+- Assinatura/ABI: argumentos, retorno, registradores preservados, pilha, alinhamento, floats e signedness.
+- Pré/pós-condições, globais lidas/escritas, estruturas, efeitos externos, callbacks, erros e condições de término.
+- Pseudocódigo legível e, para reconstrução, código compilável com teste de contrato.
+- Vetores diferenciais: estado inicial, entradas, sementes, memória observável, saída, chamadas e estado final.
+- Cobertura dos caminhos e domínio testado; qualquer stub, hipótese ou chamada não resolvida impede certificar o comportamento que depende dela.
+- Referência aos relatórios existentes reutilizados e revisão independente exigida pelo gate aplicável.
+
+Não promover status por número de testes, similaridade de nomes, porcentagem estrutural ou repetição de padrão. Não inventar aprovações humanas. A política atual exige revisão humana independente no GitHub para os certificados BX LR; a IA pode preparar o material e deve deixá-lo aguardando essa revisão real.
+
+Todos os caminhos abaixo são relativos a `FFT_Android_Mod/`, salvo `.github/`. Os nomes de novos entregáveis são propostas de implementação.
+
+## 4. Backlog detalhado
+
+### P0 — Fixar identidade, universo e critérios
+
+- [ ] **T01 — Congelar baseline e explicar todos os patches.** Dependências: nenhuma. Ler APKs, backups, `src`, OBB e scripts de tradução. Gerar `docs/re-baseline/artifacts.json` com tamanho/hash/origem/papel/ABI; comparar membros dos APKs e diferenças byte a byte das `.so`; registrar patches com offset, bytes antes/depois, motivo e script que os reproduz. Incluir smali, manifesto, fontes e dados do OBB. **Aceite:** cada diferença entre baseline e mod é reproduzível e identificada; bytes sem explicação ficam pendentes. Hash do OBB calculado por streaming; não alterar imagens originais.
+
+- [ ] **T02 — Declarar matriz de escopo.** Depende de T01. Criar `docs/re-baseline/scope.md` com versão-alvo primária MortalGx usada pelo projeto, ARM e x86, componentes Android, motor, assets, idiomas e integrações. Tratar APK denominado 2.2.0 em coluna própria; definir se a comparação dele é objetivo adicional. Diferenciar comportamento original, comportamento modificado e melhorias desejadas. **Aceite:** nenhum resultado mistura hash/ABI/versão; recursos excluídos aparecem no relatório final e impedem a alegação de cobertura irrestrita.
+
+- [ ] **T03 — Auditar capacidade de reconstrução e ambiente.** Depende de T02. Inventariar ferramentas existentes, versões, bases de análise e bibliotecas de terceiros. Confirmar fontes nativas próprias disponíveis e o que `build.sh` realmente compila. Preparar ambiente fixado para Capstone, pyelftools, Unicorn, decompilador nativo, JADX quando necessário e NDK para a reconstrução. **Aceite:** comandos de análise e compilação reproduzíveis em checkout limpo; pré-requisitos ausentes registrados por capacidade. Não instalar ferramentas não relacionadas.
+
+- [ ] **T04 — Expandir inventário além de `.dynsym`.** Depende de T01–T03. Cruzar `.symtab` se presente, relocations, `.init_array`/`.fini_array`, unwind, JNI, alvos de branch/call, tabelas de callbacks, vtables e referências de dados em regiões executáveis. Investigar também código sem chamada direta e entradas alternativas. Gerar inventário por intervalo e modo, classificando código/dados/PLT/padding/desconhecido. **Aceite:** todos os intervalos executáveis classificados ou explicitamente pendentes; funções locais como `sub_275e3c` e `sub_277f78` reconciliadas com as notas, sem assumir que a lista exportada é completa.
+
+- [ ] **T05 — Reconciliar histórico, checkpoints e cobertura.** Depende de T04. Unificar identidades sem somar conjuntos sobrepostos; preservar proveniência dos 2.353 `read_full`, 3.579 `read_structural` e 523 `mentioned_unverified`. Detectar aliases, sobreposições, tamanhos conflitantes, hash obsoleto, entradas só em notas e funções sem evidência rastreável. **Aceite:** ledger canônico com uma identidade executável por ABI/hash/endereço/modo e métricas separadas por símbolos, funções e união de bytes. `pending=0` estrutural não aparece como completude semântica.
+
+### P1 — Fechar estrutura e criar contratos que possam escalar
+
+- [ ] **T06 — Resolver os 50 checkpoints em revisão.** Depende de T04–T05. Gerar fila a partir dos JSON válidos, sem limitar aos 30 exibidos na triagem. Priorizar 34 do núcleo. Para cada item, explicar slots descobertos/não explicados, guards, todos os cases, default, limites e efeitos. **Aceite:** cada pendência recebe evidência de instruções e decisão fundamentada; baixar limiar de cobertura não é solução.
+
+  Primeiros alvos: `EnvSE_Play` `0x2b2448`; `unittoface` `0x15813c`; `getTrapResultDamage` `0x1ccc3c`; `asm_function` `0x159aac`; `wasm_function` `0x162080`; `iOSsetCursorByTouch` `0x2031a4`; `pspFftSave` `0x2899a0`; `Savedata_Load` `0x27fe84`. Endereços são do ARM corrente e precisam de T01 para comparação com outras variantes.
+
+- [ ] **T07 — Corrigir tratamento ARM/Thumb e runtimes.** Depende de T04. Investigar especialmente endereços ímpares como `__gxx_personality_v0` `0x2c9b11`, `__cxa_call_unexpected` `0x2ca215` e `operator delete[]` `0x2c9121`. Confirmar bit de estado versus endereço físico antes de interpretar baixa cobertura. Cobrir interworking, trampolins, PLT/GOT, unwind e helpers de ponto flutuante. **Aceite:** decodificação validada pelos bytes e por um segundo método; bibliotecas não são descartadas como boilerplate sem identificação e contrato.
+
+- [ ] **T08 — Recuperar tipos e modelo de memória.** Depende de T04. Priorizar `BWORK`, `ACT`, `EDATA`, `_Object`, `ActionRequest`, `FFT_SAVE_DATA`, `CARD_HEADER`, `CFFT_STATE`, tabelas de mensagens e estruturas gráficas. Inferir tamanho, offsets, alinhamento, ownership, unions, ponteiros, enums e flags a partir dos acessos reais. **Aceite:** headers ou schemas compartilhados, evidência por campo, testes de layout e nenhuma estrutura inventada para fazer o teste passar.
+
+- [ ] **T09 — Resolver dispatch indireto e grafo de dependências.** Depende de T07–T08. Mapear callbacks, vtables, tabelas de função, máquinas de estado, schedulers `asm/wasm`, JNI e chamadas Java de retorno. Tratar ciclos por componentes fortemente conectados. **Aceite:** todo call site tem alvo/conjunto justificado ou pendência explícita; caminho não observado em runtime não é declarado impossível.
+
+- [ ] **T10 — Construir harness diferencial reutilizável.** Depende de T03, T08–T09. Executar corpo original e implementação de referência com o mesmo estado inicial; observar retorno, registradores relevantes, memória, chamadas e erros. Modelar relógio, RNG, arquivos e entradas de maneira controlada; registrar limites de cada modelo e evitar um oráculo que copie a implementação testada. **Aceite:** divergências injetadas em retorno, flag, escrita e chamada são detectadas; falha de emulação nunca vira aprovação; stubs são identificados no resultado.
+
+- [ ] **T11 — Concluir o lote BX LR com revisão real.** Depende de T01, T05 e T10. Reutilizar as 303 candidatas e os cinco contratos preparados. Revalidar corpo/tamanho/aliases/hash, os 32 estados previstos por endereço e retorno ARM/Thumb; preparar registros e revisão conforme `SEMANTIC_CERTIFICATION_POLICY.md`. **Aceite:** `semantic_certificate_gate.py` passa com aprovação independente verificável, ou o lote permanece `partial` aguardando revisão. Isso certifica somente o contrato estreito descrito.
+
+- [ ] **T12 — Implementar classes de prova para funções não triviais.** Depende de T08–T10. Adicionar contratos e validadores para getters, setters, aritmética, buffers, switches, loops, funções com chamadas e efeitos externos. Incluir limites, overflow, signedness e float quando presentes. **Aceite:** gate rejeita prova BX LR aplicada a outra função, certificado incompleto, callee desconhecido relevante e evidência de outro ELF; nenhum contador sobe apenas por satisfazer o schema.
+
+- [ ] **T13 — Fechar as cadeias semânticas já iniciadas.** Depende de T08–T12. Reutilizar relatórios `SEMANTIC_*`: `houkoku_okng`, V2Icon, `sound_request`, `SysSE_Play`, `GetParam`, `GetScale` e `iOS_SetIconPosition`. Investigar próximos BL `0x2bf008` e `0x0a7034`, preservando a distinção entre endereço do call site e do callee. Estender contratos da entrada até todas as saídas e efeitos. **Aceite:** sem fronteiras de parada desconhecidas no escopo certificado; confirmar áudio real e posicionamento real na integração, além de microexecuções.
+
+### P2 — Reconstruir sistemas do jogo, com fatias verticais
+
+Para T14–T26: entregar especificação, código no marco de reconstrução, fixtures e teste diferencial por função mais integração por subsistema. Priorizar dependências de uma fatia jogável; não consumir toda a fila de funções pequenas antes de fechar um fluxo real.
+
+- [ ] **T14 — Boot e ciclo principal.** Depende de T08–T10. Fechar `Boot_Init` `0x2b3464`, `Main_Init` `0x2bf3e8`, `Main_FrameMove` `0x2bbb74` e `Main_FrameRender` `0x2c141c`. Recuperar transições externas/internas, inicialização, shutdown, timing, loading, settings, pausa e renderização. **Aceite:** cada estado/guard/efeito tem teste ou justificativa de inacessibilidade; replay inicializa, chega ao título, entra no jogo e encerra sem depender de bloco desconhecido.
+
+- [ ] **T15 — Máquina de estados de batalha.** Depende de T14 e dos contratos necessários de T16–T19. Revisitar `battle` `0x207e10`: plano histórico aponta 102 estados e 70 destinos distintos; revalidar antes de usar. Criar uma subtarefa por handler com entrada, transição, chamadas, memória e saída; representar espera/cancelamento/erro. **Aceite:** tabela completa de estados, todos os handlers reais explicados, início/turnos/vitória/derrota/recompensa cobertos. Resolver a aparente dependência circular com T16–T19 por contratos de interfaces, depois validar o conjunto integrado.
+
+- [ ] **T16 — Regras de combate.** Depende de T08–T10. Especificar dano, acerto, alcance, direção, altura, afinidades, equipamento, status, reações, armadilhas, CT, cast, morte, revive e efeitos persistentes. Priorizar `calc_result`, `getskillrange`, `getskilleffect`, `setskillresult`, `getTrapResultDamage`. Extrair fórmulas e tabelas do binário/dados. **Aceite:** casos normais, limites e combinações relevantes batem com o original; resultado determinístico com a mesma sequência RNG.
+
+- [ ] **T17 — IA de batalha e movimento.** Depende de T16. Reconciliar `AI_DIFFICULTY_RESEARCH.md` com contratos de `BattleRoutine` `0x274764`, `FundamentalRoutine` `0x278f84`, seleção de alvos, prioridades, desempates, pathfinding e ações inválidas. **Aceite:** mesma decisão e trilha de avaliação para estados representativos, empates e ausência de ação; mudanças de dificuldade ficam separadas da fidelidade original.
+
+- [ ] **T18 — VM de eventos e scheduler.** Depende de T08–T10. Catalogar opcodes de `event_call`, `worldmap_call`, `asm_function`, `wasm_function`, tasks e `op_attackteam` `0xc5148`; recuperar operandos, PC, stack, waits, callbacks, spawn e cancelamento. **Aceite:** especificação de cada opcode alcançável e replay de scripts reais incluindo cutscenes e espera por UI; opcode desconhecido gera falha explícita.
+
+- [ ] **T19 — Mapas, mundo e progressão.** Depende de T18. Reconstruir seleção/transição de mapas, movimento no mundo, encontros, flags de história, recrutamento, capítulos, missões e condições de desbloqueio identificadas nos dados. **Aceite:** fixtures de estados de progressão e uma rota documentada por capítulo, com transições e efeitos persistentes comparados.
+
+- [ ] **T20 — Menus, unidades, jobs, habilidades e economia.** Depende de T08, T14 e T16. Fechar `ItemMenu` `0x1aeda0`, `eItemMenu` `0x18aeec`, `AbilityMenu` `0x1a486c`, `JobChange` `0x1b2ea8`, `UnitTable` `0x1bde2c`, `UnitList` `0x1c0930`, `BattleUnitList` `0x17c27c`, shops e equipamento automático. **Aceite:** seleção, navegação, confirmação, cancelamento, limites de inventário, custo, pré-requisitos e mutações de stats conferidos; callbacks da `UnitList` resolvidos.
+
+- [ ] **T21 — Texto, janelas e fontes.** Depende de T08 e T20. Fechar `mesputmain` `0xe88c4`, `Wmesputmain` `0x11173c` e variantes de janelas com prefixos A/C/D/E/W; recuperar controles, encoding, largura, paginação e buffers. Não herdar a antiga hipótese de idioma sem confirmação; notas posteriores apontam contexto/tela. **Aceite:** corpus cobre controle, nomes, números, escolhas, quebras, glifos e textos longos; nenhuma variante é marcada concluída por semelhança nominal.
+
+- [ ] **T22 — Persistência, autosave e retomada.** Depende de T08–T10 e T20. Fechar `CardAccess` `0x184670`, `BattleCardAccess` `0x16fc90`, `pspFftSave`, `pspFftLoad`, `Savedata_Load`, `CAUTOSAVE` e `iOS_RESUME_*`. Documentar formato, versão, checksums, slots e pontos seguros de gravação. **Aceite:** saves cruzados original/reconstrução preservam estado definido; arquivo truncado, corrompido, falha de escrita e retomada após morte do processo têm comportamento especificado. Testes usam cópias descartáveis dos saves.
+
+- [ ] **T23 — Renderização, câmera e toque no mapa.** Depende de T08, T14. Mapear PS1 `Gs*`/GTE, PSP `sceGu*`, `GuEmu_libgu_to_gl` `0x2ae900`, `CEGL2_*`, buffers, ordenação, blending, textura/CLUT, clipping, câmera e `CGX_SCREEN_CORRECT`. **Aceite:** cenas comparadas com mesma câmera, resolução e estado; diferença de pixels e tolerância de GPU justificadas, picking e coordenadas de toque conferidos em múltiplas proporções.
+
+- [ ] **T24 — Modelos, animações, partículas e efeitos.** Depende de T23. Fechar `ASHURA_addPrim` `0x16a6a4`, `ASHURA_*`, `Mdl*`, `CreateObjectWithTable` `0x225ac8`, `NewAnimation`, `executeShape`, mudança de paleta e ciclo de vida dos objetos. **Aceite:** mesma sequência temporal e RNG produz quantidade, posição, cor, duração e liberação compatíveis; famílias recebem análise das divergências, não aprovação coletiva por overlap de chamadas.
+
+- [ ] **T25 — Áudio e vídeo.** Depende de T13–T14. Mapear BGM/SE, `CSOUND_IF`, carregamento, codecs, mixer, canais, ganho, pitch, loop, stop e pausa; mapear comando JNI e player de filmes. **Aceite:** eventos de áudio, parâmetros, duração e transições comparados, incluindo filme pulado, retorno do background e asset ausente. Chamar a função de áudio em emulador não prova reprodução audível.
+
+- [ ] **T26 — Integrações herdadas e bibliotecas embutidas.** Depende de T09. Verificar uso real de funções `pspNet*`, `NetBattleJudge`, `iCloud_*`, helpers C++ e codecs. Distinguir caminhos ativos no Android, stubs, símbolos herdados e modos inacessíveis. **Aceite:** cada recurso tem trilha de alcançabilidade e contrato; símbolo de rede/iCloud isolado não vira afirmação de funcionalidade ativa. Terceiros têm versão/proveniência ou equivalência documentada.
+
+### P3 — Cobrir o aplicativo Android e seus dados
+
+- [ ] **T27 — Mapear integralmente Java/smali e JNI.** Depende de T01–T03, T09. Inventariar classes/métodos reais, corrigindo a contagem antiga de 57 versus 123 arquivos smali observados. Cobrir launcher/licença, `FileChkActivity`, downloader, alarm receiver, `GL2JNIActivity`, view/renderer e handlers. Especificar os 12 métodos nativos declarados em `GL2JNILib`, inclusive `getCommand`, `dialogOnClose`, `init`, `step`, toque, teclas, bateria, acelerômetro e lifecycle. **Aceite:** mapa bidirecional Java ↔ JNI ↔ memória/efeito, sem fila/comando conhecido sem consumidor explicado.
+
+- [ ] **T28 — Lifecycle e serviços Android.** Depende de T14, T22, T25 e T27. Testar Activity recriada, foco, pause/resume/destroy, bloqueio de tela, multitouch, botão voltar, interrupção de filme, perda/recriação de contexto GL e processo encerrado. Revisar manifesto, orientação e acesso a arquivos conforme o comportamento observado nas versões de Android escolhidas. **Aceite:** cenários reproduzíveis sem corrupção de save, duplicação de áudio, travamento ou estado perdido fora do contrato declarado.
+
+- [ ] **T29 — Especificar OBB e formatos de assets.** Depende de T01 e T08. Documentar imagem FAT32, diretórios, `fftpack.bin`, tabela de entries, compressão, alinhamento, índices e ponteiros. Classificar mapas, modelos, texturas, CLUT, efeitos, som, vídeo, scripts e texto; desenvolver parsers por formato descoberto. **Aceite:** cada entry tem tipo identificado ou pendência explícita; extrair e remontar sem edição preserva bytes quando o formato permite, ou semântica com diferenças justificadas. Comparar todas as entries, não apenas amostras.
+
+- [ ] **T30 — Validar patches e pipeline de tradução existentes.** Depende de T21 e T29. Auditar correção de limites de `entry41`, compressão/backreferences, `sanitize_markers`, passthrough, offsets e alterações de glifos ARM/x86. Distinguir tradução concluída de domínio de formato conhecido; listar textos ainda originais e conteúdo de dados que não é prosa. **Aceite:** round-trip integral, comparação de todas as entries não editadas, nenhuma alteração opaca não explicada e verificação visual dos glifos/textos modificados em aparelho. Não exigir tradução total para certificar RE do formato.
+
+- [ ] **T31 — Fechar equivalência ARM/x86.** Depende de T04–T12 e dos subsistemas correspondentes. Criar inventário independente x86 e mapeamento um-para-um, um-para-muitos ou sem correspondência por função/semântica; cobrir ABI, float, helpers, layout, bibliotecas e diferenças reais. O plano anterior relata apenas uma função comparada; auditar evidência posterior antes de contar progresso. **Aceite:** todas as identidades x86 e divergências relevantes têm contrato/teste; comparação por nome não certifica comportamento. ARMv7 do outro APK requer mapeamento de versão próprio se incluído em T02.
+
+### P4 — Transformar o conhecimento em implementação mantida
+
+- [ ] **T32 — Criar projeto de build nativo e fronteiras de módulos.** Depende de T03, T08–T10, T14 e T27. Criar fonte e build NDK/CMake ou equivalente, API JNI compatível, modelos de dados compartilhados e adaptadores Android/arquivo/GL/áudio. Definir substituição incremental e rastreabilidade função original → módulo/função nova. **Aceite:** `.so` compilada do fonte próprio inicializa com o app; regiões delegadas ao binário original ficam contabilizadas como não reconstruídas.
+
+- [ ] **T33 — Migrar o motor por fatias validadas.** Depende de T32 e T14–T26; executar incrementalmente assim que cada fatia estiver pronta. Ordem inicial: boot/título, carregar estado, render/toque, um turno, batalha completa, mundo/menus, progressão. Substituir chamadas e dados gradualmente, mantendo comparação com o oráculo. **Aceite:** cada função/intervalo do escopo tem implementação ou dependência de terceiro justificada; ausência de stubs de sucesso, TODOs funcionais e fallback oculto ao motor original na build final.
+
+- [ ] **T34 — Build completo reproduzível do app e OBB.** Depende de T29–T33. Integrar smali/Java, bibliotecas compiladas, fontes/patches e empacotamento de dados; validar manifest, ABI, alinhamento e assinatura. Fixar versões e hashes de entrada; separar chaves e material sensível do artefato de evidências. **Aceite:** checkout limpo produz artefato instalável com conteúdo reproduzível; variações de timestamp/assinatura são explicadas. O pipeline prova recompilação nativa, além de `apktool b`.
+
+### P5 — Validar e encerrar com evidência auditável
+
+- [ ] **T35 — Criar corpus de cenários e replays do original.** Depende de T02, T10 e T27–T29; começar antes do fim da reconstrução. Registrar dispositivo, Android, ABI, GPU, APK/OBB hash, save inicial, inputs, RNG, relógio, frames, logs, áudio e estado final. Cobrir título, tutorial, menus, jobs, loja, mapa, combate, scripts, save/load, pausa e finalização. **Aceite:** cada requisito do escopo aponta para pelo menos um cenário adequado e seus casos de falha; replay reproduz estados controlados ou explicita o não determinismo restante.
+
+- [ ] **T36 — Executar comparação funcional e de campanha.** Depende de T33–T35. Rodar original e reconstrução com os mesmos dados; comparar estado de batalha, inventário, progressão, saves, eventos e saídas audiovisuais. Usar rota de campanha por capítulos e finais/conteúdo adicional presentes na versão, complementada com saves para caminhos alternativos. **Aceite:** nenhuma divergência inexplicada; diferenças intencionais do mod são vinculadas a T01/T02. Uma batalha ou campanha linear sozinha não demonstra todos os caminhos.
+
+- [ ] **T37 — Testar formatos, limites e falhas.** Depende de T16, T18, T22 e T29. Aplicar testes por propriedades e fuzzing limitado a parsers e interfaces relevantes: truncamento, índices, tamanhos, texto inválido, saves danificados, OBB ausente/incompatível, interrupção de I/O e limites do domínio de combate. **Aceite:** comportamento conhecido para entradas no domínio; crashes/rejeições e diferenças em entradas inválidas são classificados sem alterar silenciosamente a compatibilidade do original.
+
+- [ ] **T38 — Validar dispositivos e desempenho.** Depende de T28 e T34–T36. Definir matriz factível das ABIs originais, versões Android e GPUs; medir frame time, memória, carregamento, áudio e estabilidade com cenários fixos. Identificar aparelhos somente 64 bits como limite das libs atuais; eventual port 64 bits recebe projeto e testes próprios. **Aceite:** metas medidas e justificadas frente ao original, testes prolongados e lifecycle aprovados; dispositivo ausente permanece como cobertura não verificada.
+
+- [ ] **T39 — Expandir CI e proteger métricas.** Depende de T05, T10–T12 e T34. Manter testes existentes; incluir contratos, parsers, build nativo e APK, replays quando ambiente disponível e detecção de fontes alteradas sem evidência atualizada. Rever filtros de paths: `re-pipeline.yml` atualmente cobre ferramentas, certificados e alguns workflows, sem abranger toda mudança do app. **Aceite:** alteração em código nativo, smali, assets, inventários e contratos dispara checks pertinentes; CI distingue sucesso local de execução histórica, skips e ambiente indisponível.
+
+- [ ] **T40 — Auditoria de fechamento e pacote final.** Depende de todas as tarefas obrigatórias de T02. Gerar matriz requisito → artefato/função/dado → fonte reconstruída → contrato → teste → revisão. Conferir intervalos desconhecidos, chamadas indiretas, funções locais, ABIs, formatos, TODOs funcionais e dependência residual da `.so` original. **Aceite:** zero lacunas obrigatórias; ledger sem certificado obsoleto; relatório de limitações honesto; build e testes reproduzíveis por terceiro. Só então marcar cada marco da seção 2 concluído.
+
+## 5. Ordem de execução e subdivisão
+
+1. Executar T01–T05 para impedir trabalho em versão errada e medir o universo real.
+2. Executar T06–T12; iniciar captura de cenários T35 assim que o baseline estiver definido.
+3. Fechar T13 como piloto não trivial; iniciar T14 e uma fatia T15/T16/T23/T27 com contratos explícitos.
+4. Introduzir T32 cedo e migrar T33 por fatia, em vez de deixar toda a compilação para o fim.
+5. Completar sistemas, dados e x86; integrar build, cenários e CI conforme cada módulo ficar pronto.
+6. Executar validação integral e T40 sem converter ausência de evidência em aprovação.
+
+Cada T14–T26 deve ser expandida em subtarefas por função real descoberta, por handler para máquinas de estado e por formato de dado. Cada subtarefa usa o pacote de evidência da seção 3. Manter o backlog gerado a partir do inventário canônico, sem colar apenas as 6.329 entradas conhecidas e tratá-las como universo definitivo.
+
+Não estimar prazo ou porcentagem global a partir de número de símbolos: uma função BX LR não tem o mesmo custo que `battle()`. Medir entregas em eixos separados: estrutura, contratos, funções reconstruídas, bytes únicos reconstruídos, formatos, JNI, cenários e plataformas validadas.
+
+## 6. Instrução pronta para outra IA
+
+> Leia `RE_COMPLETUDE_TASKS.md`, a política de certificação e as instruções locais aplicáveis. Preserve alterações existentes. Comece pela primeira tarefa pendente cujas dependências estejam atendidas. Confira versão, ABI e SHA-256 antes de reutilizar qualquer endereço ou evidência. Produza os entregáveis, implemente quando a tarefa exigir e execute validação proporcional. Registre comandos e resultados reais, limitações e próximos passos. Atualize somente os estados sustentados pela evidência. Não trate análise estrutural, semelhança, microexecução parcial ou reempacotamento do ELF original como reconstrução completa. Não simule revisão humana. Se depender de recurso indisponível, registre o bloqueio exato e avance nas tarefas independentes. Termine com matriz de aceite e evidências, sem declarar 100% enquanto houver lacuna obrigatória.
+
+## 7. Referências locais principais
+
+- [Status geral](re-results/STATUS_GERAL.md), [progresso estrutural](re-results/PROGRESS.md) e [cobertura semântica](re-results/SEMANTIC_COVERAGE.md).
+- [Política de certificação](re-results/SEMANTIC_CERTIFICATION_POLICY.md) e [ledger](re-results/semantic-certificates.json).
+- [Inventário histórico](RE_FUNCTION_INVENTORY.csv), [plano fase 3](RE_BACKLOG_PLAN_PHASE3.md) e [triagem](re-results/REVIEW_TRIAGE.md).
+- [Notas de engenharia reversa](REVERSE_ENGINEERING_NOTES.md), [pesquisa de IA](AI_DIFFICULTY_RESEARCH.md) e [tradução](TRANSLATION_PTBR_PROGRESS.md).
+- [Build atual](../scripts/build.sh), [ferramentas](re-tools/README.md), [cálculo estrutural](re-tools/progress_report.py) e [cálculo semântico](re-tools/semantic_coverage.py).
+
+Este plano complementa os documentos históricos. Em caso de divergência de números, recalcular a partir dos artefatos vinculados ao hash correto; em caso de divergência de significado, manter separadas leitura, estrutura, evidência parcial, certificação e reconstrução.
