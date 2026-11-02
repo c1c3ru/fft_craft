@@ -1652,7 +1652,7 @@ address,size,mangled,demangled,status,section_ref
 001a8508,196,_Z14GetCommandListsPs,"GetCommandList(short, short*)",read_structural,NOTES §611
 00200f44,196,_Z16startFukanChangev,startFukanChange(),read_structural,NOTES §615
 0020d088,196,_Z19requestMapScrollXYZP6VECTORt,"requestMapScrollXYZ(VECTOR*, unsigned short)",read_structural,NOTES §564
-0022599c,196,_Z13DisposeObjectsP7_Object,"DisposeObject(short, _Object*)",read_structural,NOTES §566
+0022599c,196,_Z13DisposeObjectsP7_Object,"DisposeObject(short, _Object*)",read_full,NOTES §677
 00242268,196,_Z16vOpn_arzpic_initi,vOpn_arzpic_init(int),read_structural,NOTES §615
 0026ffc8,196,_Z10wldwin_seti6RECT16iPm,"wldwin_set(int, RECT16, int, unsigned long*)",mentioned_unverified,
 002507d0,196,_Z14ctlwork_activeP7CTLINFO,ctlwork_active(CTLINFO*),read_structural,NOTES §567

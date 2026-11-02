@@ -26996,3 +26996,89 @@ estado) não afirmado além do que os bytes mostram.
 
 **Status CSV: `read_full`** — 11/11 instruções reais, 1 `bl` tratado
 como caixa-preta.
+
+## 677. `DisposeObject(short, _Object*)` — leitura completa: primeira evidência de campo para `_Object`, o quarto e último tipo sem evidência de T08 (2026-11-02, T08 do `RE_COMPLETUDE_TASKS.md`)
+
+`DisposeObject(short tableId, _Object* obj)` (`0x22599c`, 196 B, 94%
+de cobertura por `jtable.py`, 2 `bl`) — disassembly linear completo
+via Capstone. Achada por busca de nome pelo tipo `_Object*`; fecha o
+último dos quatro tipos que T08 (2026-10-31) listou como "sem nenhuma
+evidência de campo confiável" (`_Object`, `ActionRequest` — fatia
+anterior —, `FFT_SAVE_DATA` — duas fatias atrás —, `CARD_HEADER`
+ainda sem evidência).
+
+```c
+void DisposeObject(int16_t tableId, _Object* obj) {
+    ObjTableEntry* entry = &g_objTable[tableId];   // stride 0xf8, base já confirmado em outra seção
+
+    if (obj->next != NULL) {
+        obj->next->prev = obj->prev;
+    }
+    if (obj->prev != NULL) {
+        obj->prev->next = obj->next;
+    } else {
+        entry->headPtr = obj->next;   // obj ERA a cabeça da lista do slot
+    }
+
+    int16_t category = obj->categoryFlags & 0xf000;
+    entry->liveCount -= 1;
+
+    if (category == 0x4000) {
+        Free(obj->payload);
+    } else if (category == 0 || category == 0x1000 || category == 0x2000 || category == 0x3000) {
+        DisposeEffectAnimation(obj->payload);
+    }
+    // qualquer outra categoria (ex.: 0x5000+): nem Free nem DisposeEffectAnimation são chamadas
+
+    g_liveObjCount -= 1;
+    obj->next = g_freeListHead;   // reaproveita o campo `next` como link da free-list
+    g_freeListHead = obj;
+}
+```
+
+**Achado principal — lista duplamente encadeada intrusiva, confirma
+4 campos de `_Object` de uma vez:** `+0x00` = `prev`, `+0x04` = `next`
+(dentro da lista do slot da tabela; reaproveitado depois como link da
+free-list global), `+0x4c` = `categoryFlags` (int16, nibble alto
+seleciona o caminho de descarte), `+0x54` = `payload` (ponteiro
+opaco, repassado pra `Free()` ou `DisposeEffectAnimation()` conforme
+a categoria). Também dá a primeira evidência de 2 campos da entrada
+da tabela de objetos por slot (stride `0xf8`, já confirmado em outra
+seção): `+0x1c` = contador de objetos vivos do slot (uint16,
+decrementado), `+0xd0` = ponteiro de cabeça de lista do slot (só
+escrito quando o objeto descartado **não** tinha `prev`, ou seja,
+quando ele PRÓPRIO era a cabeça).
+
+**Achado secundário:** duas chamadas já conhecidas por nome
+(`Free(void*)`, `DisposeEffectAnimation(effectAnimation*)`) tratadas
+como caixa-preta — nenhuma das duas lida nesta fatia.
+
+**Reconstrução C + teste diferencial:**
+`docs/re-tools/c-models/t08_disposeobject.c` +
+`test_t08_disposeobject.py`: `next`/`prev` são passados ao modelo
+como ponteiros nativos já resolvidos (mesmo recurso de largura de
+ponteiro de T14/T21/T25), a entrada da tabela e os globais
+`g_liveObjCount`/`g_freeListHead` são construídos como memória real
+nos endereços resolvidos via GOT à mão. 6 cenários cobrem as 5
+categorias (`0`/`0x1000`/`0x2000`/`0x3000`→`DisposeEffectAnimation`,
+`0x4000`→`Free`, `0x5000`→nenhuma) cruzadas com presença/ausência de
+`next`/`prev`, todos batendo exatamente — inclusive a decisão de
+`g_freeListHead` virar o próprio `obj` (verificada contra o próprio
+espaço de endereço de cada lado, não por igualdade numérica
+cross-side, já que um endereço ARM real de 32 bits e um endereço
+`ctypes` do host de 64 bits não são o mesmo tipo de valor comparável
+bit a bit). Mais 2 injeções de falha: confirma que a escrita da
+cabeça de lista depende de `prev` ausente, não de `next` ausente; e
+que o valor de `obj->next` propaga corretamente pra `prev->next`
+mesmo quando `next` em si está ausente. Suíte completa de
+`docs/re-tools`: de 602 pra **604 testes** (1.923 → **1.929
+subtestes**), todas passando (confirmado 2×).
+
+**Lacuna aceita:** `Free()`/`DisposeEffectAnimation()` não lidas;
+`CARD_HEADER` segue sem nenhuma evidência de campo; `sizeof(_Object)`
+completo não conhecido, só os 4 campos usados aqui confirmados; nome
+exato de `categoryFlags`/`payload` não afirmado além do que os bytes
+mostram.
+
+**Status CSV: `read_full`** — 46/46 instruções reais (+3 literal
+pool), 2 `bl` tratados como caixa-preta.
