@@ -3941,7 +3941,7 @@ address,size,mangled,demangled,status,section_ref
 0026a1a4,40,_Z11snpl_sndreqv,snpl_sndreq(),mentioned_unverified,
 0026b0b8,40,_Z13snpl_musicreqv,snpl_musicreq(),mentioned_unverified,
 00273b10,40,_Z19SetSafePanelInRangei,SetSafePanelInRange(int),read_structural,NOTES §612
-0027383c,40,_Z9ClearMoveP4MOVE,ClearMove(MOVE*),mentioned_unverified,
+0027383c,40,_Z9ClearMoveP4MOVE,ClearMove(MOVE*),read_full,NOTES §672
 0027e710,40,_ZN22iOS_CMenuTouchSaveLoad12setXIconRectEhiiii,"iOS_CMenuTouchSaveLoad::setXIconRect(unsigned char, int, int, int, int)",read_structural,NOTES §359
 0027fbc8,40,_Z25iOS_WorldMapResumeGetDataPPhPj,"iOS_WorldMapResumeGetData(unsigned char**, unsigned int*)",mentioned_unverified,
 00295520,40,xpLibgpuDispListSetFromEdram,xpLibgpuDispListSetFromEdram,read_full,NOTES §554
@@ -4696,7 +4696,7 @@ address,size,mangled,demangled,status,section_ref
 00280858,24,_Z16iOS_setTransFaceii,"iOS_setTransFace(int, int)",read_full,NOTES §560
 0029add0,24,xpLibgpuExVramSet,xpLibgpuExVramSet,read_full,NOTES §554
 001fd2ac,24,_Z14resetTurnOrderv,resetTurnOrder(),read_structural,NOTES §616
-00279ed4,24,_Z21ClearForBattleRoutinev,ClearForBattleRoutine(),mentioned_unverified,
+00279ed4,24,_Z21ClearForBattleRoutinev,ClearForBattleRoutine(),read_full,NOTES §672
 002b7a74,24,_Z20ClearDisableMapTouchv,ClearDisableMapTouch(),read_structural,NOTES §616
 002b7a5c,24,_Z18SetDisableMapTouchv,SetDisableMapTouch(),read_structural,NOTES §616
 0020dbbc,24,_Z23requestWalkingAnimationj,requestWalkingAnimation(unsigned int),read_full,NOTES §564

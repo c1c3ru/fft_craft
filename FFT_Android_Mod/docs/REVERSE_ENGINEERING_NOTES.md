@@ -26700,3 +26700,69 @@ dos 3 campos usados aqui; alvos nominais de T19 intocados.
 **Status CSV: `read_full`** — `evt_get_flgdt`: 17/17 instruções reais
 (+1 literal pool), 0 `bl`. `evt_flag`: 15/15 instruções reais (+1
 literal pool), 2 `bl` tratados como caixa-preta.
+
+## 672. `ClearMove(MOVE*)` + `ClearForBattleRoutine()` — leitura completa do par, fatia vertical de T17 (IA de batalha e movimento): terceira tail call real desta sessão (2026-11-02, T17 do `RE_COMPLETUDE_TASKS.md`)
+
+`ClearMove(MOVE* move)` (`0x27383c`, 40 B, 0 `bl`) e
+`ClearForBattleRoutine()` (`0x279ed4`, 24 B, 0 `bl` real, 1 tail
+call) — disassembly linear completo via Capstone, 100%/83% de
+cobertura por `jtable.py` (só literal pool faltando na segunda).
+`ClearForBattleRoutine` achada por busca de nome direta ("Routine" +
+"Battle", cluster de T17); `BattleRoutine`/`FundamentalRoutine`
+(alvos nominais de T17, 0x274764/0x278f84) seguem intocados.
+
+```c
+void ClearMove(MOVE* move) {
+    move->field_0x1 = 0;
+    move->field_0x3 = 5;
+    move->field_0x1c = 0;
+    move->field_0x1d = 0;
+    move->field_0x1e = 0x8001;   // halfword -- provável sentinela de "sem direção"
+    // field_0x0, field_0x2 e tudo a partir de +0x4 NÃO são tocados
+}
+
+void ClearForBattleRoutine(void) {
+    MOVE* m = (MOVE*)(g_someBase + 0x17c0 + 0x3c);
+    ClearMove(m);   // *** TAIL CALL: `b`, não `bl` -- sem prólogo ***
+}
+```
+
+**Achado estrutural #1 (`ClearMove`):** é um reset **parcial**, não
+total — só 5 bytes do struct são escritos (`+0x1`, `+0x3`, `+0x1c`,
+`+0x1d`, e a meia-palavra `+0x1e`); `+0x0`, `+0x2` e todo o resto a
+partir de `+0x4` ficam intocados. Confirmado por injeção de falha
+(bytes sentinela distintos em cada posição do struct de teste, os de
+`+0x0`/`+0x2` sobrevivem exatamente).
+
+**Achado estrutural #2 (`ClearForBattleRoutine`), terceira tail call
+real desta sessão** (depois de T20/`iOSUnitListWinOnOff` e
+T23/`InitCamera`): a função não tem prólogo (0 `push`) e termina num
+`b` incondicional direto pra `0x27383c` — o início exato de
+`ClearMove`. Calcula o ponteiro `MOVE*` a partir de um global
+resolvido via GOT (`0x347bb8`) somado a `+0x17c0+0x3c`, e passa esse
+ponteiro em `r0` pra `ClearMove` sem alterar pilha/registradores —
+consistente com "esta função só existe pra fixar QUAL `MOVE*` dentro
+de uma struct maior de contexto de batalha é limpo, delegando a
+lógica de limpeza em si pra `ClearMove`".
+
+**Reconstrução C + teste diferencial:**
+`docs/re-tools/c-models/t17_clearmove.c` + `test_t17_clearmove.py`
+(sem `bl`, 1 cenário + 1 injeção de falha confirmando que
+`+0x0`/`+0x2` sobrevivem) e
+`docs/re-tools/c-models/t17_clearforbattleroutine.c` +
+`test_t17_clearforbattleroutine.py` (`ClearMove` tratada como
+caixa-preta via o mesmo tratamento de tail-call-como-stub de T20/T23,
+confirma que o endereço exato `g_someBase+0x17fc` é passado e que a
+chamada ocorre exatamente uma vez). Suíte completa de `docs/re-tools`:
+de 588 pra **591 testes** (1.878 subtestes, sem subtestes novos — os
+3 testes desta fatia não usam `subTest`), todas passando (confirmado
+2×).
+
+**Lacuna aceita:** `BattleRoutine`/`FundamentalRoutine` (alvos
+nominais de T17) não tocados; identidade semântica dos 5 campos de
+`MOVE` e do global de contexto (`g_someBase`) não confirmada;
+`sizeof(MOVE)` completo não conhecido.
+
+**Status CSV: `read_full`** — `ClearMove`: 10/10 instruções reais, 0
+`bl`. `ClearForBattleRoutine`: 5/5 instruções reais (+1 literal
+pool), 0 `bl`, 1 tail call.
