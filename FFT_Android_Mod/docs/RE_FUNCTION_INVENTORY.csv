@@ -5674,7 +5674,7 @@ address,size,mangled,demangled,status,section_ref
 0010fb6c,8,_Z20Wcheck_eventtoolmainii,"Wcheck_eventtoolmain(int, int)",read_structural,NOTES §612
 0027d480,8,_ZN17iOS_CMenuTouchNum9setAddNumEi,iOS_CMenuTouchNum::setAddNum(int),read_structural,NOTES §536
 0027b5b0,8,_Z16getClutScrollBarv,getClutScrollBar(),read_full,NOTES §559
-002884cc,8,_Z17getNetBattleJudgev,getNetBattleJudge(),read_structural,NOTES §612
+002884cc,8,_Z17getNetBattleJudgev,getNetBattleJudge(),read_full,NOTES §674
 00286af4,8,_Z21pspNetDisconnectOrderv,pspNetDisconnectOrder(),read_full,NOTES §557
 00287270,8,_Z20GetgTrapCancelResultv,GetgTrapCancelResult(),read_structural,NOTES §612
 0028724c,8,_Z23pspNetTrapGetCommandNumv,pspNetTrapGetCommandNum(),read_full,NOTES §557
@@ -5705,7 +5705,7 @@ address,size,mangled,demangled,status,section_ref
 0016f89c,8,_Z10cCardLoad2iPhm,"cCardLoad2(int, unsigned char*, unsigned long)",read_full,NOTES §552
 0016f8a4,8,_Z10cCardSave2iPhm,"cCardSave2(int, unsigned char*, unsigned long)",read_full,NOTES §552
 00216274,8,_Z14checkLoadMusicv,checkLoadMusic(),read_structural,NOTES §612
-002b3454,8,_Z19iCloud_GetSlotCountv,iCloud_GetSlotCount(),read_structural,NOTES §612
+002b3454,8,_Z19iCloud_GetSlotCountv,iCloud_GetSlotCount(),read_full,NOTES §674
 0027b5c0,8,_Z10getClutNumv,getClutNum(),read_full,NOTES §559
 0027c0cc,8,_ZN14iOS_CMenuTouch10setMaxNumYEi,iOS_CMenuTouch::setMaxNumY(int),read_structural,NOTES §536
 0027c0d4,8,_ZN14iOS_CMenuTouch11setDispNumYEi,iOS_CMenuTouch::setDispNumY(int),read_structural,NOTES §536
@@ -5813,7 +5813,7 @@ address,size,mangled,demangled,status,section_ref
 0027e6d0,8,_ZN22iOS_CMenuTouchSaveLoad11setDispNumYEi,iOS_CMenuTouchSaveLoad::setDispNumY(int),read_structural,NOTES §359
 0027efe4,8,_ZN22iOS_CMenuTouchSaveLoad7setModeE28IOS_MENU_TOUCH_SAVELOAD_MODE,iOS_CMenuTouchSaveLoad::setMode(IOS_MENU_TOUCH_SAVELOAD_MODE),read_structural,NOTES §359
 002b0508,8,_ZN9CAPP_INFO14GetStoragePathEv,CAPP_INFO::GetStoragePath(),mentioned_unverified,
-002b344c,8,_Z14iCloud_Receivev,iCloud_Receive(),read_structural,NOTES §612
+002b344c,8,_Z14iCloud_Receivev,iCloud_Receive(),read_full,NOTES §674
 00280530,8,_ZN8cSaveFFT7GetModeEv,cSaveFFT::GetMode(),read_structural,NOTES §612
 00280538,8,_ZN8cSaveFFT7SetModeE7SAVEFFT,cSaveFFT::SetMode(SAVEFFT),mentioned_unverified,
 0028084c,8,_Z19iOS_hook_mesputmainv,iOS_hook_mesputmain(),read_full,NOTES §559
@@ -5955,7 +5955,7 @@ address,size,mangled,demangled,status,section_ref
 002b0710,8,_ZN11CDebugPrint11SetFontSizeEf,CDebugPrint::SetFontSize(float),read_full,NOTES §567
 002b0f68,8,_ZN11CDebugPrint8IsActiveEv,CDebugPrint::IsActive(),read_full,NOTES §567
 002b36d4,8,_Z15Error_FrameMovev,Error_FrameMove(),read_structural,NOTES §612
-002b3444,8,_Z11iCloud_Sendv,iCloud_Send(),read_structural,NOTES §612
+002b3444,8,_Z11iCloud_Sendv,iCloud_Send(),read_full,NOTES §674
 002b7a2c,8,_Z18GetPanelCursorModev,GetPanelCursorMode(),read_structural,NOTES §612
 002c0ae0,8,_Z19GX_GetScreenOffsetYv,GX_GetScreenOffsetY(),read_full,NOTES §568
 002c0b20,8,_Z22GX_GetScreenOffsetY_1Xv,GX_GetScreenOffsetY_1X(),read_full,NOTES §568
@@ -6146,7 +6146,7 @@ address,size,mangled,demangled,status,section_ref
 00288508,4,_Z12CalcRewardLvv,CalcRewardLv(),read_structural,NOTES §612
 0028850c,4,_Z19CalcMissionPayPointi,CalcMissionPayPoint(int),read_structural,NOTES §613
 0028856c,4,_Z13init_AnimListv,init_AnimList(),read_structural,NOTES §613
-002884c8,4,_Z14NetBattleJudgev,NetBattleJudge(),read_structural,NOTES §612
+002884c8,4,_Z14NetBattleJudgev,NetBattleJudge(),read_full,NOTES §674
 0027b398,4,_Z19numa_fileAllocateCDmm,"numa_fileAllocateCD(unsigned long, unsigned long)",read_structural,NOTES §612
 00155708,4,_Z14story_faceloadv,story_faceload(),read_structural,NOTES §612
 002806b0,4,_Z22iOS_hook_worldhelpmenuv,iOS_hook_worldhelpmenu(),read_full,NOTES §559

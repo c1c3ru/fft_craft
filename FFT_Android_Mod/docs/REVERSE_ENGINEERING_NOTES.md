@@ -26824,3 +26824,48 @@ bytes mostram.
 **Status CSV: `read_full`** — `nextTurnOrder`: 8/8 instruções reais
 (+1 literal pool), 0 `bl`. `resetTurnOrder`: 5/5 instruções reais (+1
 literal pool), 0 `bl`.
+
+## 674. `NetBattleJudge()`/`getNetBattleJudge()`/`iCloud_Send()`/`iCloud_Receive()`/`iCloud_GetSlotCount()` — leitura completa das 5, fatia vertical de T26 (integrações herdadas): confirmação byte a byte de que são stubs constantes, não funcionalidade ativa (2026-11-02, T26 do `RE_COMPLETUDE_TASKS.md`)
+
+5 funções minúsculas (4–8 B cada, 0 `bl`, 0 branch, 0 acesso a
+memória) do cluster `pspNet*`/`NetBattle`/`iCloud` — achadas por
+busca de nome direta, exatamente o tipo de símbolo que o critério de
+aceite de T26 pede pra não tratar como "funcionalidade ativa" sem
+evidência:
+
+```c
+void NetBattleJudge(void) { /* bx lr isolado -- literalmente nada */ }
+int32_t getNetBattleJudge(void)   { return 3; }
+int32_t iCloud_Send(void)          { return 1; }
+int32_t iCloud_Receive(void)       { return 1; }
+int32_t iCloud_GetSlotCount(void)  { return 0; }
+```
+
+**Achado, confirmado pelos bytes, não assumido:** todas as cinco são
+retornos constantes incondicionais, independentes de qualquer entrada
+— nenhuma lê `r0`–`r3`, nenhuma acessa memória, nenhuma chama outra
+função. `NetBattleJudge` é o caso mais extremo: um único `bx lr`, sem
+nenhuma instrução antes — **nunca escreve `r0`**, então seu "valor de
+retorno" é literalmente o que já estava em `r0` ao entrar, não uma
+constante como as outras quatro (confirmado por injeção de falha com
+dois valores de entrada distintos, ambos preservados exatamente).
+**Isso não afirma que nenhuma das cinco é chamada no build Android**
+— só que o CORPO de cada uma, isoladamente, é um stub inerte.
+
+**Reconstrução C + teste diferencial:**
+`docs/re-tools/c-models/t26_netbattle_icloud_stubs.c` +
+`test_t26_netbattle_icloud_stubs.py`: as 5 funções testadas com 5
+valores de entrada distintos cada (25 subtestes) batem exatamente com
+o ELF original, mais 1 injeção de falha confirmando que
+`NetBattleJudge` não é "mais uma constante" do grupo. Suíte completa
+de `docs/re-tools`: de 594 pra **596 testes** (1.890 → **1.915
+subtestes**), todas passando (confirmado 2×).
+
+**Lacuna aceita:** alcançabilidade real (se alguma das cinco é
+chamada em runtime no build Android) não investigada — fora do
+escopo desta leitura estrutural; restante do cluster `pspNet*`
+(`xpPadKeyBufGet` já visto em T26/pspNetPadRead) e helpers C++/codecs
+não tocados.
+
+**Status CSV: `read_full`** — todas as 5: cobertura total de
+instruções reais (1–2 cada), 0 `bl`.
