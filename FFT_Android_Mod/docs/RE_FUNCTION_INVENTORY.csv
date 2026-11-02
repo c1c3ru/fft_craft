@@ -4262,7 +4262,7 @@ address,size,mangled,demangled,status,section_ref
 0016f820,32,_Z15cCardEventClosev,cCardEventClose(),read_structural,NOTES §548
 00173380,32,_Z11cFadeInInitv,cFadeInInit(),read_full,NOTES §550
 00289bc8,32,_Z26pspSaveDataEnableSystemFlg17FFTPSP_SYSTEM_FLG,pspSaveDataEnableSystemFlg(FFTPSP_SYSTEM_FLG),read_full,NOTES §557
-00289ba8,32,_Z26pspSaveDataMissionRateSaveP13FFT_SAVE_DATA,pspSaveDataMissionRateSave(FFT_SAVE_DATA*),read_full,NOTES §557
+00289ba8,32,_Z26pspSaveDataMissionRateSaveP13FFT_SAVE_DATA,pspSaveDataMissionRateSave(FFT_SAVE_DATA*),read_full,NOTES §675
 001733a0,32,_Z12cFadeOutInitv,cFadeOutInit(),read_full,NOTES §549
 00173c58,32,_Z16cDrawMessageKilli,cDrawMessageKill(int),read_full,NOTES §549
 002ca77c,32,__aeabi_uidivmod,__aeabi_uidivmod,read_structural,NOTES §613
@@ -4480,7 +4480,7 @@ address,size,mangled,demangled,status,section_ref
 0018378c,28,_Z9fileclosej,fileclose(unsigned int),read_structural,NOTES §616
 001b87b4,28,_Z12SetBitStreamPh,SetBitStream(unsigned char*),read_full,NOTES §549
 001b87d0,28,_Z13SetBitStream2Ph,SetBitStream2(unsigned char*),read_full,NOTES §552
-00289b8c,28,_Z26pspSaveDataMissionRateLoadP13FFT_SAVE_DATA,pspSaveDataMissionRateLoad(FFT_SAVE_DATA*),read_full,NOTES §557
+00289b8c,28,_Z26pspSaveDataMissionRateLoadP13FFT_SAVE_DATA,pspSaveDataMissionRateLoad(FFT_SAVE_DATA*),read_full,NOTES §675
 0018fdfc,28,_Z13eSetBitStreamPh,eSetBitStream(unsigned char*),read_full,NOTES §549
 001898d4,28,_Z12eCopyChrSttsss,"eCopyChrStts(short, short)",read_full,NOTES §549
 001898f0,28,_Z8eNitoryus,eNitoryu(short),read_full,NOTES §551
@@ -5054,7 +5054,7 @@ address,size,mangled,demangled,status,section_ref
 0016f80c,20,_Z10cGetCardNov,cGetCardNo(),read_full,NOTES §551
 00175620,20,_Z18cWindowPrioritySeti,cWindowPrioritySet(int),read_full,NOTES §550
 001757bc,20,_Z15cGetWindowColorv,cGetWindowColor(),read_full,NOTES §551
-00289b64,20,_Z17pspSaveDataGetOneiP13FFT_SAVE_DATA,"pspSaveDataGetOne(int, FFT_SAVE_DATA*)",read_full,NOTES §557
+00289b64,20,_Z17pspSaveDataGetOneiP13FFT_SAVE_DATA,"pspSaveDataGetOne(int, FFT_SAVE_DATA*)",read_full,NOTES §675
 001836b8,20,_Z24iOS_setDispCursor_windowh,iOS_setDispCursor_window(unsigned char),read_full,NOTES §560
 001836d0,20,_Z24iOS_getScrollType_windowv,iOS_getScrollType_window(),read_full,NOTES §559
 0027c11c,20,_ZN14iOS_CMenuTouch22setDisableHeightAdjustEhs,"iOS_CMenuTouch::setDisableHeightAdjust(unsigned char, short)",read_structural,NOTES §536

@@ -26869,3 +26869,77 @@ não tocados.
 
 **Status CSV: `read_full`** — todas as 5: cobertura total de
 instruções reais (1–2 cada), 0 `bl`.
+
+## 675. `pspSaveDataMissionRateSave`/`Load`/`GetOne` — releitura individual rigorosa de 3 funções do lote 75 (§557): primeira evidência de campo confiável para `FFT_SAVE_DATA`, fatia vertical de T08 (recuperação de tipos) (2026-11-02, T08 do `RE_COMPLETUDE_TASKS.md`)
+
+As três já estavam `read_full` desde o lote 75 (§557, fechamento em
+massa por prefixo de subsistema, sem pseudocódigo individual nem
+teste diferencial). Esta fatia relê cada uma por disassembly direto e
+produz o pacote de evidência completo que faltava — primeira vez que
+`FFT_SAVE_DATA` ganha um campo com offset confirmado desde T08
+(2026-10-31), que listou o tipo como "sem nenhuma evidência de campo
+confiável".
+
+```c
+void pspSaveDataMissionRateSave(FFT_SAVE_DATA* save) {
+    void* missionBuffer = pspNetEntranceDataMissionBufferGet();
+    memcpy(save->field_0x60, missionBuffer, 0x20);   // *** TAIL CALL pro memcpy real ***
+}
+
+void pspSaveDataMissionRateLoad(FFT_SAVE_DATA* save) {
+    void* missionBuffer = pspNetEntranceDataMissionBufferGet();
+    memcpy(missionBuffer, save->field_0x60, 0x20);   // *** direção INVERTIDA — TAIL CALL ***
+}
+
+int32_t pspSaveDataGetOne(int slot, FFT_SAVE_DATA* save) {
+    return GetOne_0x2898e0(save, slot, 1);   // *** TAIL CALL, reordena os argumentos ***
+}
+```
+
+**Achado principal — primeira evidência de campo de `FFT_SAVE_DATA`:**
+`Save`/`Load` terminam em tail call direto pro **`memcpy` real**
+(`0x714b8`, já confirmado em outras seções das notas — tabela da
+seção correspondente lista `0x714b8` como `memcpy`, não um helper
+customizado). `Save` chama `memcpy(dest=save+0x60, src=missionBuffer,
+0x20)`; `Load` chama `memcpy(dest=missionBuffer, src=save+0x60,
+0x20)` — as direções são **exatamente invertidas** entre as duas,
+confirmado pelos registradores em cada ponto de tail call, não
+assumido pelo nome das funções. Isso dá `FFT_SAVE_DATA+0x60` (32 B) =
+um blob de "taxa de missão", com direção save/load simétrica e
+confirmada.
+
+**Achado secundário — sexto tail call confirmado nesta sessão:**
+`pspSaveDataGetOne` não tem prólogo e é puramente um shim de
+reordenação de argumentos: troca `(slot, save)` por `(save, slot)`,
+adiciona uma terceira constante (`1`), e desvia direto (`b`, não
+`bl`) pra uma função local sem símbolo em `0x2898e0` — não lida nem
+reivindicada aqui, só tratada como ponteiro de função opaco de 3
+argumentos.
+
+**Reconstrução C + teste diferencial:**
+`docs/re-tools/c-models/t08_mission_rate_save_load.c` +
+`test_t08_mission_rate_save_load.py`: `pspNetEntranceDataMissionBufferGet`
+(já `read_full`) e o `memcpy` real são stubados via `callable` — o
+stub de `memcpy` executa a cópia de bytes de verdade dentro da
+memória do Unicorn, reproduzindo o efeito exato sem reexecutar código
+de libc. Confirma as duas direções e que nenhum outro byte de `save`
+é tocado, mais 1 injeção de falha confirmando que inverter as
+direções produziria resultados diferentes (não são intercambiáveis).
+`docs/re-tools/c-models/t08_pspsavedatagetone.c` +
+`test_t08_pspsavedatagetone.py`: confirma a reordenação exata de
+argumentos e que o valor de retorno é propagado sem alteração (3
+cenários). Suíte completa de `docs/re-tools`: de 596 pra **600
+testes** (1.915 → **1.918 subtestes**), todas passando (confirmado
+2×).
+
+**Lacuna aceita:** `GetOne_0x2898e0` não lida; `sizeof(FFT_SAVE_DATA)`
+completo não conhecido, só o campo `+0x60` confirmado; os outros ~28
+campos de `FFT_SAVE_DATA` citados em `ConvTutoData`/`pspFftSave`/
+`pspFftLoad` (read_structural, não cruzados com este achado) seguem
+sem offset confirmado.
+
+**Status CSV: `read_full`** (releitura individual, upgrade de
+evidência) — `pspSaveDataMissionRateSave`: 8/8 instruções reais, 0
+`bl`, 1 tail call. `pspSaveDataMissionRateLoad`: 7/7 instruções
+reais, 0 `bl`, 1 tail call. `pspSaveDataGetOne`: 5/5 instruções
+reais, 0 `bl`, 1 tail call.
