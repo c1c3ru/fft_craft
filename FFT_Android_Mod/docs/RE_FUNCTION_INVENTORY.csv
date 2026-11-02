@@ -2475,7 +2475,7 @@ address,size,mangled,demangled,status,section_ref
 000ba020,100,_Z12timeGetTimeMv,timeGetTimeM(),read_structural,NOTES §611
 000ba5ac,100,_ZN9CSOUND_IF6UnloadEi,CSOUND_IF::Unload(int),mentioned_unverified,
 000bd220,100,_ZN14COggMemMapFile12CallbackSeekEPvxi,"COggMemMapFile::CallbackSeek(void*, long long, int)",read_structural,NOTES §613
-000d6e48,100,_Z8initsprtP7tagSPRT,initsprt(tagSPRT*),read_structural,NOTES §611
+000d6e48,100,_Z8initsprtP7tagSPRT,initsprt(tagSPRT*),read_full,NOTES §679
 002bf174,100,_Z19iOS_setFaceDataCLUTii,"iOS_setFaceDataCLUT(int, int)",read_full,NOTES §560
 000cbab8,100,_Z19createEndModeWindowv,createEndModeWindow(),read_structural,NOTES §615
 000cbd90,100,_Z15iOS_ResumeMusicv,iOS_ResumeMusic(),read_structural,NOTES §565
@@ -4060,7 +4060,7 @@ address,size,mangled,demangled,status,section_ref
 0029128c,36,MoveImage,MoveImage,read_structural,NOTES §616
 0029a834,36,ClearImage,ClearImage,mentioned_unverified,
 00291450,36,SetPolyG4,SetPolyG4,read_full,NOTES §567
-002914e4,36,SetSprt,SetSprt,read_structural,NOTES §612
+002914e4,36,SetSprt,SetSprt,read_full,NOTES §679
 000d8710,36,_Z13getanimpos3dliPl,"getanimpos3dl(int, long*)",read_structural,NOTES §612
 0020f550,36,_Z15changeFlameRatei,changeFlameRate(int),read_full,NOTES §563
 000da7e4,36,_Z16readed_mapchangev,readed_mapchange(),read_structural,NOTES §616
@@ -4115,8 +4115,8 @@ address,size,mangled,demangled,status,section_ref
 0029164c,36,SetTile1,SetTile1,read_structural,NOTES §612
 00291694,36,SetTile8,SetTile8,read_structural,NOTES §612
 00291670,36,SetTile16,SetTile16,read_structural,NOTES §612
-0029152c,36,SetSprt8,SetSprt8,read_structural,NOTES §612
-00291508,36,SetSprt16,SetSprt16,read_structural,NOTES §612
+0029152c,36,SetSprt8,SetSprt8,read_full,NOTES §679
+00291508,36,SetSprt16,SetSprt16,read_full,NOTES §679
 002b02c8,36,_Z18TexHybrid_Registeri,TexHybrid_Register(int),read_full,NOTES §568
 001789bc,36,_Z25iOS_getMasaCdbOt_graphicsl,iOS_getMasaCdbOt_graphics(long),read_full,NOTES §559
 00181d98,36,_Z12bWindowInit2PsiiPh,"bWindowInit2(short*, int, int, unsigned char*)",read_full,NOTES §551
@@ -4605,8 +4605,8 @@ address,size,mangled,demangled,status,section_ref
 000bdd84,24,_ZN5CSTEP7GetEndFEv,CSTEP::GetEndF(),read_full,NOTES §562
 000be428,24,_ZN11CSTEP_BATCH18GetProgressInverseEv,CSTEP_BATCH::GetProgressInverse(),read_full,NOTES §562
 002b7ccc,24,_Z13iOS_getV2Icon11V2ICON_DATA,iOS_getV2Icon(V2ICON_DATA),read_full,NOTES §559
-00291a6c,24,SetSemiTrans,SetSemiTrans,mentioned_unverified,
-00291a84,24,SetShadeTex,SetShadeTex,read_structural,NOTES §612
+00291a6c,24,SetSemiTrans,SetSemiTrans,read_full,NOTES §679
+00291a84,24,SetShadeTex,SetShadeTex,read_full,NOTES §679
 000e0fa0,24,_Z8loadcdstii,"loadcdst(int, int)",read_structural,NOTES §616
 00284b9c,24,_Z17pspBattleCheckFlgj,pspBattleCheckFlg(unsigned int),read_full,NOTES §563
 0020f8a0,24,_Z22finishAttackTeamSelectv,finishAttackTeamSelect(),read_structural,NOTES §616

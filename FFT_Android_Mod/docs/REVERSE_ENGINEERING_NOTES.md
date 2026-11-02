@@ -27191,3 +27191,78 @@ do que os bytes mostram; `sizeof(CARD_HEADER)` real pode exceder
 **Status CSV: `read_full`** — 164/164 instruções reais (+8 literal
 pool), 6 `bl` tratados como caixa-preta (comportamento confirmado por
 sondagem empírica, não assumido).
+
+## 679. `initsprt(tagSPRT*)` + `SetSprt`/`SetSprt8`/`SetSprt16`/`SetSemiTrans`/`SetShadeTex` — leitura completa das 6, primeira evidência de campo para `tagSPRT`: byte de código de primitiva GPU estilo PS1, sétima tail call desta sessão (2026-11-02, T23 do `RE_COMPLETUDE_TASKS.md`)
+
+6 funções do cluster de sprites PS1/PSX (`tagSPRT*`) — `initsprt`
+(`0xd6e48`, 100 B, 2 `bl` + 1 tail call), `SetSprt`/`SetSprt8`/
+`SetSprt16` (`0x2914e4`/`0x29152c`/`0x291508`, 36 B cada, 0 `bl`),
+`SetSemiTrans`/`SetShadeTex` (`0x291a6c`/`0x291a84`, 24 B cada, 0
+`bl`) — disassembly linear completo via Capstone, 100% de cobertura
+em todas. Achadas por busca de nome no cluster `SPRT`; `initsprt`
+chama/desvia pras outras cinco, dando um fechamento natural do grupo
+inteiro numa só fatia.
+
+```c
+void SetSprt(tagSPRT* s)   { s->field_0x4=4; s->field_0xb=0x64; s->field_0x5=s->field_0x6=s->field_0x7=0; }
+void SetSprt16(tagSPRT* s) { s->field_0x4=3; s->field_0xb=0x7c; s->field_0x5=s->field_0x6=s->field_0x7=0; }
+void SetSprt8(tagSPRT* s)  { s->field_0x4=3; s->field_0xb=0x74; s->field_0x5=s->field_0x6=s->field_0x7=0; }
+
+void SetSemiTrans(tagSPRT* s, int flag) {
+    if (flag) s->field_0xb |= 2; else s->field_0xb &= ~2;
+}
+void SetShadeTex(tagSPRT* s, int flag) {
+    if (flag) s->field_0xb |= 1; else s->field_0xb &= ~1;
+}
+
+void initsprt(tagSPRT* s) {
+    SetSprt(s);
+    SetShadeTex(s, 1);
+    s->field_0x8 = s->field_0x9 = s->field_0xa = 0x80;   // RGB cinza médio (128,128,128) -- sem modulação de cor
+    s->field_0x10 = s->field_0x11 = 0;
+    s->field_0xc  = 0x200;   // halfword
+    s->field_0x12 = 0x7c3c;  // halfword
+    s->field_0x14 = s->field_0x16 = s->field_0xe = 0;  // halfwords
+    SetSemiTrans(s, 1);   // *** TAIL CALL: `b`, não `bl` ***
+}
+```
+
+**Achado principal: `+0xb` é o byte de código de primitiva GPU estilo
+PS1, confirmado por endereço, não por convenção assumida.**
+`SetSprt`/`SetSprt8`/`SetSprt16` escrevem `+0xb` com um valor base
+fixo (`0x64`/`0x74`/`0x7c`) cujos 2 bits baixos já vêm zerados;
+`SetSemiTrans`/`SetShadeTex` leem-modificam-escrevem O MESMO `+0xb`
+via `|=`/`&=~` nos bits 1 e 0 respectivamente. Isso é exatamente o
+formato clássico do byte de código de primitiva da GPU do PS1 (código
+base + bits de atributo de semi-transparência/textura sombreada
+sobrepostos) — confirmado porque as duas funções de flag tocam o
+MESMO offset que as três de inicialização, não por se parecer com a
+convenção do hardware real.
+
+**Achado secundário, sétima tail call confirmada nesta sessão:**
+`initsprt` não tem prólogo residual no fim (usa `push`/`pop` só em
+volta das 2 chamadas `bl`, mas o retorno final é um `b` direto pra
+`SetSemiTrans(s, 1)`) — confirma mais uma vez o padrão já visto em
+T20/T23/T17/T08 desta sessão.
+
+**Reconstrução C + teste diferencial:**
+`docs/re-tools/c-models/t23_sprt_setters.c` +
+`test_t23_sprt_setters.py` (5 funções, variações de valor inicial e
+flag, mais injeção de falha confirmando que só o bit próprio é
+tocado, nunca o byte inteiro nem outro offset) e
+`docs/re-tools/c-models/t23_initsprt.c` + `test_t23_initsprt.py`
+(`SetSprt`/`SetShadeTex`/`SetSemiTrans` stubadas, confirma ordem e
+argumentos exatos das 3 chamadas, mais os campos escritos
+diretamente). Suíte completa de `docs/re-tools`: de 607 pra **612
+testes** (1.933 → **1.946 subtestes**), todas passando (confirmado
+2×).
+
+**Lacuna aceita:** identidade semântica exata de `tagSPRT+0x4`
+("código de tipo de primitiva"), `+0x8`/`+0x9`/`+0xa` ("RGB"),
+`+0xc`/`+0x12`/`+0x14`/`+0x16`/`+0xe` (coordenadas/dimensões?) não
+confirmada além do que os bytes mostram; `sizeof(tagSPRT)` não
+conhecido além de `0x20` (maior offset tocado, com margem).
+
+**Status CSV: `read_full`** — todas as 6, cobertura total de
+instruções reais, 2 `bl` (em `initsprt`) + 1 tail call tratados como
+caixa-preta nas próprias funções que os chamam.
