@@ -27266,3 +27266,62 @@ conhecido além de `0x20` (maior offset tocado, com margem).
 **Status CSV: `read_full`** — todas as 6, cobertura total de
 instruções reais, 2 `bl` (em `initsprt`) + 1 tail call tratados como
 caixa-preta nas próprias funções que os chamam.
+
+## 680. `addlocalprim2(tagPOLY_FT4*)` — leitura completa: inserção clássica de primitiva PS1 na ordering table (OT), confirma o campo `tag` universal de primitivas GPU, byte a byte (2026-11-02, T23 do `RE_COMPLETUDE_TASKS.md`)
+
+`addlocalprim2(tagPOLY_FT4* prim)` (`0xe05bc`, 112 B, 0 `bl`) —
+disassembly linear completo via Capstone, 96% de cobertura por
+`jtable.py` (só literal pool faltando). Achada por busca de nome no
+cluster `addlocalprim*`/`POLY_FT4`.
+
+```c
+void addlocalprim2(tagPOLY_FT4* prim) {
+    uint32_t oldTag = ctx->otHead[0] | (ctx->otHead[1]<<8) | (ctx->otHead[2]<<16) | (ctx->otHead[3]<<24);
+    prim->tagByte0 = (uint8_t)(oldTag);
+    prim->tagByte1 = (uint8_t)(oldTag>>8);
+    prim->tagByte2 = (uint8_t)(oldTag>>16);
+    prim->tagByte3 = (uint8_t)(oldTag>>24);
+
+    uint32_t primAddr = (uint32_t)(uintptr_t)prim;
+    ctx->otHead[0] = (uint8_t)(primAddr);
+    ctx->otHead[1] = (uint8_t)(primAddr>>8);
+    ctx->otHead[2] = (uint8_t)(primAddr>>16);
+    ctx->otHead[3] = (uint8_t)(primAddr>>24);
+}
+```
+
+**Achado: é a inserção clássica de PS1 numa ordering table (OT),
+feita byte a byte, não por `ldr`/`str` de 32 bits** — os 4 `ldrb`
+seguidos de 4 `strb` (em cada direção) são deliberados, não um
+artefato de alinhamento. Apesar do parâmetro ser tipado
+`tagPOLY_FT4*`, só os primeiros 4 bytes são tocados — o campo `tag`
+universal compartilhado por QUALQUER primitiva da GPU do PS1 (link
+pra próxima primitiva na OT), não algo específico de `POLY_FT4`.
+Confirma: `prim->tag = *otHead; *otHead = prim;` (inserção na cabeça
+da lista), exatamente o padrão `addPrim` clássico da PSYQ/libgpu.
+
+**Achado de metodologia:** a escrita final (`ctx->otHead` virando o
+próprio endereço de `prim`) não é comparável como número bruto entre
+o lado ELF real (endereço ARM de 32 bits) e o lado do modelo
+(endereço `ctypes` do host, possivelmente de 64 bits) — mesmo
+tratamento já usado em T08 (`DisposeObject`'s `free_list_head`): cada
+lado é verificado contra o PRÓPRIO endereço de `prim`, não um contra
+o outro.
+
+**Reconstrução C + teste diferencial:**
+`docs/re-tools/c-models/t23_addlocalprim2.c` +
+`test_t23_addlocalprim2.py`: 5 cenários (incluindo `oldTag=0`,
+`0xffffffff`, um valor coincidindo com o próprio endereço de teste)
+batem exatamente, mais 1 injeção de falha confirmando que os 4 bytes
+não são trocados de ordem (little-endian preservado). Suíte completa
+de `docs/re-tools`: de 612 pra **614 testes** (1.946 → **1.951
+subtestes**), todas passando (confirmado 2×).
+
+**Lacuna aceita:** identidade exata do contexto (`ctx`, resolvido via
+GOT) não confirmada além de "tem um campo em `+0x8` usado como cabeça
+de OT"; `addlocalprim`/`add_anmpac`/`add_winpac` (família citada em
+seções anteriores) não lidas; campos reais de `tagPOLY_FT4` alem do
+`tag` universal não tocados por esta função, não confirmados.
+
+**Status CSV: `read_full`** — 27/27 instruções reais (+1 literal
+pool), 0 `bl`.

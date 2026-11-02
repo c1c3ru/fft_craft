@@ -2328,7 +2328,7 @@ address,size,mangled,demangled,status,section_ref
 000db77c,112,_Z15write_eventflagii,"write_eventflag(int, int)",read_structural,NOTES §615
 002821f8,112,_Z12iOS_dispOkNgii,"iOS_dispOkNg(int, int)",read_full,NOTES §563
 000d7880,112,_Z18allocatememoryinitv,allocatememoryinit(),read_structural,NOTES §615
-000e05bc,112,_Z13addlocalprim2P11tagPOLY_FT4,addlocalprim2(tagPOLY_FT4*),read_structural,NOTES §611
+000e05bc,112,_Z13addlocalprim2P11tagPOLY_FT4,addlocalprim2(tagPOLY_FT4*),read_full,NOTES §680
 0015d900,112,_Z22iOSBtlUnitMoveCheckSubv,iOSBtlUnitMoveCheckSub(),read_full,NOTES §563
 001eb0b4,112,_Z22raiseAnimationPriorityi,raiseAnimationPriority(int),read_structural,NOTES §611
 0020e040,112,_Z14eventMapFadeIni,eventMapFadeIn(int),read_structural,NOTES §568
