@@ -2478,7 +2478,7 @@ address,size,mangled,demangled,status,section_ref
 000d6e48,100,_Z8initsprtP7tagSPRT,initsprt(tagSPRT*),read_full,NOTES §679
 002bf174,100,_Z19iOS_setFaceDataCLUTii,"iOS_setFaceDataCLUT(int, int)",read_full,NOTES §560
 000cbab8,100,_Z19createEndModeWindowv,createEndModeWindow(),read_structural,NOTES §615
-000cbd90,100,_Z15iOS_ResumeMusicv,iOS_ResumeMusic(),read_structural,NOTES §565
+000cbd90,100,_Z15iOS_ResumeMusicv,iOS_ResumeMusic(),read_full,NOTES §682
 000d8648,100,_Z10getanimposi,getanimpos(int),read_structural,NOTES §611
 000db440,100,_Z10eventenvsev,eventenvse(),read_structural,NOTES §611
 0020e4fc,100,_Z26setOffsetAnimationPositioniP7SVECTOR,"setOffsetAnimationPosition(int, SVECTOR*)",read_structural,NOTES §611

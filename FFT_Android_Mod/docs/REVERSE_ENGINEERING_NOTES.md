@@ -27374,3 +27374,63 @@ individualmente; `iOS_ResumeMusic()` (outro item ainda
 
 **Status CSV: `read_full`** — 6/6 instruções reais (+2 literal
 pool), 0 `bl`.
+
+## 682. `iOS_ResumeMusic()` — leitura completa: resultados de `GetMusicBuffer` descartados antes de serem lidos, oitava tail call desta sessão, fecha o cluster `iOS_Resume*` de T22 (2026-11-02, T22 do `RE_COMPLETUDE_TASKS.md`)
+
+`iOS_ResumeMusic()` (`0xcbd90`, 100 B, 2 `bl` + 1 tail call) —
+disassembly linear completo via Capstone, 88% de cobertura por
+`jtable.py` (só literal pool faltando). Compõe duas funções já
+`read_full` (`CFFT_STATE::GetMusicBuffer(int)`, `iOS_SetLastBGMFromResumeData
+(unsigned short*, unsigned short*)`) e termina com tail call pra um
+alvo local sem símbolo. Com esta, os dois itens remanescentes do
+cluster `iOS_Resume*` de T22 ficam fechados (`iOS_ResumeGetData` na
+fatia anterior, `iOS_ResumeMusic` aqui).
+
+```c
+void iOS_ResumeMusic(void) {
+    g_lastBgm0 = (uint16_t)CFFT_STATE::GetMusicBuffer(g_cfftState, 0);
+    g_lastBgm1 = (uint16_t)CFFT_STATE::GetMusicBuffer(g_cfftState, 1);
+
+    iOS_SetLastBGMFromResumeData(&g_lastBgm0, &g_lastBgm1);  // *** SOBRESCREVE os dois, incondicional ***
+
+    tailTarget_0xbebec(g_lastBgm0, g_lastBgm1);   // *** TAIL CALL: `b`, não `bl` ***
+}
+```
+
+**Achado estrutural: os resultados de `GetMusicBuffer` são
+descartados antes de serem lidos.** Disassembly de
+`iOS_SetLastBGMFromResumeData` (seção própria, já `read_full`)
+confirma que ela **sempre** sobrescreve os dois parâmetros de saída
+com valores lidos de offsets fixos de uma struct de dados de resume
+(`+0x47c`/`+0x47e`), sem checar nem misturar com o que já estava lá —
+então os dois valores que `GetMusicBuffer` calculou são
+imediatamente substituídos, nunca chegando ao tail call final. Os
+valores realmente passados pro alvo da tail call vêm inteiramente da
+struct de resume, não do estado atual de `CFFT_STATE`. Confirmado por
+injeção de falha com valores de `GetMusicBuffer` e de resume
+deliberadamente diferentes.
+
+**Achado secundário, oitava tail call confirmada nesta sessão:**
+`iOS_ResumeMusic` termina com `b` direto pra uma função local sem
+símbolo (`0xbebec`) — mais uma confirmação do padrão já visto em
+T20/T23/T17/T08/T22 (`iOS_ResumeGetData` da fatia anterior não tinha
+tail call, mas o padrão geral da sessão se mantém).
+
+**Reconstrução C + teste diferencial:**
+`docs/re-tools/c-models/t22_ios_resumemusic.c` +
+`test_t22_ios_resumemusic.py`: as duas chamadas e o alvo da tail
+call stubados via `callable`, confirmando ordem exata (`GetMusicBuffer(0)`,
+`GetMusicBuffer(1)`, `SetLastBGMFromResumeData`, tail call),
+argumentos de cada uma, e que os valores finais vêm de
+`SetLastBGMFromResumeData`, não de `GetMusicBuffer`. 3 cenários batem
+exatamente, mais 1 injeção de falha. Suíte completa de
+`docs/re-tools`: de 616 pra **618 testes** (1.951 → **1.954
+subtestes**), todas passando (confirmado 2×).
+
+**Lacuna aceita:** alvo da tail call (`0xbebec`) não lido —
+tratado como caixa-preta; por que `GetMusicBuffer` é chamada se seu
+resultado é descartado (efeito colateral relevante na própria
+`CFFT_STATE`? não investigado).
+
+**Status CSV: `read_full`** — 22/22 instruções reais (+3 literal
+pool), 2 `bl` + 1 tail call tratados como caixa-preta.
