@@ -27082,3 +27082,112 @@ mostram.
 
 **Status CSV: `read_full`** — 46/46 instruções reais (+3 literal
 pool), 2 `bl` tratados como caixa-preta.
+
+## 678. `MakeHeader(int,int,CARD_HEADER*)` — leitura completa: primeira e única evidência de campo para `CARD_HEADER`, o quarto e último tipo sem evidência de T08, confirmada por sondagem empírica contra o ELF real (2026-11-02, T08 do `RE_COMPLETUDE_TASKS.md`)
+
+`MakeHeader(int a0, int a1, CARD_HEADER* out)` (`0x187264`, 688 B,
+95% de cobertura por `jtable.py`, 6 `bl`) — achada na seção 437 (já
+citada desde a seção 45), nunca lida linha a linha até agora porque
+`CARD_HEADER` não tinha layout confirmado. Fecha o quarto e último
+tipo que T08 (2026-10-31) listou sem evidência nenhuma (`_Object`,
+`ActionRequest` e `FFT_SAVE_DATA` já fechados nas três fatias
+anteriores).
+
+**Método, honestidade sobre o que foi e não foi decodificado à mão:**
+esta função tem divisão por constante (`/10`, `%10`) gerada pelo GCC
+via o idioma clássico `smull`+`asr`+`rsb` (multiplicação por um
+"reciprocal" mais ajuste de sinal), repetido 4 vezes para 4 valores
+diferentes, mais 2 chamadas reais a `__divsi3`/`__aeabi_idivmod`
+dentro de um laço de 2 iterações de passo fixo. Decodificar esse
+idioma manually, instrução a instrução, levou a pelo menos uma
+atribuição errada de registrador (a suposição inicial de que a 2ª
+iteração do laço geraria sempre um dígito "0" estava errada). Em vez
+de insistir na leitura manual, o efeito NETO de cada bloco foi
+**confirmado por sondagem empírica**: executar o ELF real via
+Unicorn com valores de entrada distintos e reconhecíveis (ex.:
+`loopsrc=78`→"59" clampado, `g3rd=29`→"29") e ler os bytes de saída
+reais, comparando contra a hipótese `/10, %10` em C simples — que
+bate exatamente. Essa é a mesma prática de "sondagem em vez de
+releitura manual repetida" já usada nesta sessão para os bugs de
+dupla indireção de T18/T26.
+
+```c
+void MakeHeader(int32_t a0, int32_t a1 /* NUNCA lido pelo corpo real */, CARD_HEADER* out) {
+    out->magic0 = 'S'; out->magic1 = 'C'; out->magic2 = 0x11; out->magic3 = 1;
+    memset(&out->reserved_0x44, 0, 0x1c);
+    memcpy(&out->title, TITLE_TEMPLATE_SHIFTJIS, 22);   // "ＦＦＴ　ＦＩＬＥ　　　" ("FFT FILE" + 3 espaços largos)
+
+    write_2digit_fullwidth(&out->field_0x14, a0 + 1);    // NÃO clampado -- sobrescreve 2 dos 3 espaços do template
+
+    int32_t hours = min(g_playTime.hours, 99);           // clamp INCLUSIVO (movge, não movgt)
+    write_2digit_fullwidth(&out->field_0x1a, hours);
+    out->field_0x1e_colon = FULLWIDTH_COLON;
+
+    int32_t minutes = min(g_playTime.minutes, 59);
+    write_2digit_fullwidth(&out->field_0x20, minutes);
+    out->field_0x24_colon = FULLWIDTH_COLON;
+
+    int32_t seconds = min(g_playTime.seconds, 59);
+    write_2digit_fullwidth(&out->field_0x26, seconds);
+    out->field_0x2a_space = FULLWIDTH_SPACE;              // espaço, NÃO dois-pontos, ao final
+
+    int32_t flagResult = read_eventflag(0x31);             // 49, constante literal
+    memcpy(&out->field_0x2c, &g_eventFlagTable[flagResult], 20);  // stride 20
+
+    memcpy(&out->field_0x80, (uint8_t*)g_externalBlock + 0x20, 0x80);  // 128 B, struct externa não identificada
+}
+```
+
+**Layout confirmado de `CARD_HEADER`** (tudo que não está listado
+NÃO é escrito por esta função; `sizeof(CARD_HEADER)` não é conhecido
+além de `0x100`, o maior offset tocado):
+
+| Offset | Tamanho | Conteúdo |
+|---|---|---|
+| `+0x00`–`+0x03` | 4 B | `"SC"` + `0x11` + `0x01` (assinatura mágica) |
+| `+0x04`–`+0x19` | 22 B | Template fixo Shift-JIS: "ＦＦＴ　ＦＩＬＥ　　　" |
+| `+0x14`–`+0x17` | 4 B | Sobrescreve 2 dos 3 espaços do template: `a0+1`, 2 dígitos largos, **NÃO clampado** |
+| `+0x1a`–`+0x1f` | 6 B | "HH：" — `min(horas,99)`, 2 dígitos + dois-pontos largo |
+| `+0x20`–`+0x25` | 6 B | "MM：" — `min(minutos,59)`, 2 dígitos + dois-pontos largo |
+| `+0x26`–`+0x2b` | 6 B | "SS␣" — `min(segundos,59)`, 2 dígitos + **espaço** largo (não dois-pontos) |
+| `+0x2c`–`+0x3f` | 20 B | Cópia verbatim de `eventFlagTable[read_eventflag(0x31)]`, stride 20 |
+| `+0x44`–`+0x5f` | 28 B | Zerado explicitamente (`memset`) |
+| `+0x80`–`+0xff` | 128 B | Cópia verbatim de `(struct externa)+0x20` |
+
+**Achado: os três valores de tempo são campos contíguos de um único
+global** (`horas`, `minutos`, `segundos`, stride 4, base `0x56a904`)
+— confirma um "tempo de jogo decorrido" `HH:MM:SS`, não três globais
+desconectados. **Achado: `a1` nunca é lido** pelo corpo real (ausência
+total de qualquer uso do registrador original de `a1` depois da
+entrada), confirmado também pelo teste diferencial (dois valores de
+`a1` distintos produzem bytes idênticos). **Achado: o índice de flag
+de evento é uma constante literal** (`0x31`=49), lido diretamente dos
+bytes, não inferido.
+
+**Reconstrução C + teste diferencial:**
+`docs/re-tools/c-models/t08_makeheader.c` + `test_t08_makeheader.py`:
+`memcpy`/`memset`/`__divsi3`/`__aeabi_idivmod` stubados via
+`callable` executando a operação real em Python (não a codificação
+GCC, mas a semântica padrão — o lado ELF real continua exercitando
+seu próprio controle de fluxo e layout de bytes verdadeiro);
+`__stack_chk_fail` stubado para abortar o teste se alcançado (nunca
+deve ser); `read_eventflag` stubado via `callable`. 4 cenários batem
+exatamente byte a byte (incluindo um caso com os três valores bem
+além dos limites de clamp), mais 2 injeções de falha: limite de
+clamp é inclusivo (99/59 exatos já clampados, não só valores acima);
+`a1` realmente não afeta o resultado. Suíte completa de
+`docs/re-tools`: de 604 pra **607 testes** (1.929 → **1.933
+subtestes**), todas passando (confirmado 2×).
+
+**Lacuna aceita:** os 6 `bl` (`memcpy`×3, `memset`, `__stack_chk_fail`,
+`read_eventflag`) e os dois runtime helpers (`__divsi3`,
+`__aeabi_idivmod`) não lidos em si — tratados como primitivos padrão
+confirmados por comportamento, não por leitura de corpo; identidade
+semântica exata de `g_eventFlagTable`/`struct externa em
+0x541330`/`a0` (ex.: "número do slot de save"?) não confirmada além
+do que os bytes mostram; `sizeof(CARD_HEADER)` real pode exceder
+`0x100`.
+
+**Status CSV: `read_full`** — 164/164 instruções reais (+8 literal
+pool), 6 `bl` tratados como caixa-preta (comportamento confirmado por
+sondagem empírica, não assumido).

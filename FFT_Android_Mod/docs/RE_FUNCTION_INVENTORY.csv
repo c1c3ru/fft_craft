@@ -533,7 +533,7 @@ address,size,mangled,demangled,status,section_ref
 00162e94,692,_Z18ASHURA_LightSwitchl,ASHURA_LightSwitch(long),read_structural,NOTES §427
 0029b134,692,_Z17xpLib_DebugImportv,xpLib_DebugImport(),read_full,NOTES §531
 002ca8a0,688,__aeabi_dsub,__aeabi_dsub,mentioned_unverified,NOTES §569
-00187264,688,_Z10MakeHeaderiiP11CARD_HEADER,"MakeHeader(int, int, CARD_HEADER*)",read_structural,NOTES §437
+00187264,688,_Z10MakeHeaderiiP11CARD_HEADER,"MakeHeader(int, int, CARD_HEADER*)",read_full,NOTES §678
 0026883c,688,_Z9rute_findii,"rute_find(int, int)",read_structural,NOTES §422
 002ca8a0,688,__subdf3,__subdf3,mentioned_unverified,NOTES §569
 002ca8a4,684,__aeabi_dadd,__aeabi_dadd,mentioned_unverified,NOTES §569
