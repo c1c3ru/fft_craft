@@ -27325,3 +27325,52 @@ seções anteriores) não lidas; campos reais de `tagPOLY_FT4` alem do
 
 **Status CSV: `read_full`** — 27/27 instruções reais (+1 literal
 pool), 0 `bl`.
+
+## 681. `iOS_ResumeGetData(unsigned char**, unsigned int*)` — leitura completa: tamanho real do snapshot de "resume" de batalha confirmado numericamente por primeira vez (2026-11-02, T22 do `RE_COMPLETUDE_TASKS.md`)
+
+`iOS_ResumeGetData(unsigned char** outBuf, unsigned int* outSize)`
+(`0x27f620`, 32 B, 0 `bl`, 0 branch) — disassembly linear completo
+via Capstone, 75% de cobertura por `jtable.py` (só literal pool
+faltando). Já citada por nome desde a leitura de `CAUTOSAVE::Save`
+(`iOS_ResumeGetData(&buf,&size); memcpy(scratch+0x20,buf,size);` —
+snapshot de "resume" de BATALHA usado no autosave), mas nunca lida
+individualmente — o tamanho real do buffer nunca tinha sido
+confirmado numericamente.
+
+```c
+void iOS_ResumeGetData(unsigned char** outBuf, unsigned int* outSize) {
+    *outBuf = (unsigned char*)g_battleResumeBuffer;   // endereço fixo, PC-relative direto
+    *outSize = 0x84558;                                 // 542.040 B (~529,9 KiB), constante fixa
+}
+```
+
+**Achado: tamanho exato do snapshot de resume de batalha, nunca
+documentado numericamente antes.** `g_battleResumeBuffer` é um
+endereço fixo resolvido por literal PC-relative direto (sem GOT,
+consistente com dado local/estático), e o tamanho é uma constante
+`0x84558` = 542.040 bytes. Isso é consistente com a matemática já
+vista em `CAUTOSAVE::Save`: `memcpy(scratch+0x20, buf, size)` seguido
+de `CFFT_STATE::Suspend(..., scratch+0xc0020)` — a diferença
+(`0xc0020-0x20=0xc0000`=786.432 B reservados vs. `0x84558`=542.040 B
+copiados) deixa margem de ~244 KB de headroom, consistente com uma
+alocação conservadora.
+
+**Reconstrução C + teste diferencial:**
+`docs/re-tools/c-models/t22_ios_resumegetdata.c` +
+`test_t22_ios_resumegetdata.py`: confirma que a função sempre
+retorna o endereço fixo e o tamanho fixo (`0x84558`), independente de
+qualquer entrada, mais 1 injeção de falha executando a função duas
+vezes com ponteiros de saída completamente diferentes e confirmando
+que os VALORES escritos são idênticos (não dependem de estado do
+chamador). Suíte completa de `docs/re-tools`: de 614 pra **616
+testes** (1.951 subtestes, sem novos — os 2 testes desta fatia não
+usam `subTest`), todas passando (confirmado 2×).
+
+**Lacuna aceita:** layout interno do buffer de 542.040 bytes não
+investigado (opaco além do tamanho); `iOS_WorldMapResumeGetData`
+(par citado na mesma seção de `CAUTOSAVE::Save`) não lida
+individualmente; `iOS_ResumeMusic()` (outro item ainda
+`read_structural` do cluster `iOS_Resume*`) não tocada nesta fatia.
+
+**Status CSV: `read_full`** — 6/6 instruções reais (+2 literal
+pool), 0 `bl`.

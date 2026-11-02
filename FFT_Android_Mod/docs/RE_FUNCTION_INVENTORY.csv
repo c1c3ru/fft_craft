@@ -4313,7 +4313,7 @@ address,size,mangled,demangled,status,section_ref
 0027b628,32,_Z22iOS_getPanelCursorRectP6RECT16,iOS_getPanelCursorRect(RECT16*),read_full,NOTES §559
 0028080c,32,_Z13IOS_PSP2IOS_Xi,IOS_PSP2IOS_X(int),read_structural,NOTES §616
 0028082c,32,_Z13IOS_PSP2IOS_Yi,IOS_PSP2IOS_Y(int),read_structural,NOTES §616
-0027f620,32,_Z17iOS_ResumeGetDataPPhPj,"iOS_ResumeGetData(unsigned char**, unsigned int*)",mentioned_unverified,
+0027f620,32,_Z17iOS_ResumeGetDataPPhPj,"iOS_ResumeGetData(unsigned char**, unsigned int*)",read_full,NOTES §681
 00280770,32,_Z19iOS_chkclipoffNoFT4i,iOS_chkclipoffNoFT4(int),read_full,NOTES §565
 00280790,32,_Z19iOS_chkclipoffNoFT3i,iOS_chkclipoffNoFT3(int),read_full,NOTES §565
 00280890,32,_Z17iOS_getTransFace2i,iOS_getTransFace2(int),read_full,NOTES §559
