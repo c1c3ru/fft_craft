@@ -26943,3 +26943,56 @@ evidência) — `pspSaveDataMissionRateSave`: 8/8 instruções reais, 0
 `bl`, 1 tail call. `pspSaveDataMissionRateLoad`: 7/7 instruções
 reais, 0 `bl`, 1 tail call. `pspSaveDataGetOne`: 5/5 instruções
 reais, 0 `bl`, 1 tail call.
+
+## 676. `iOSCurSameProcs(ActionRequest*)` — leitura completa, segunda evidência de campo para `ActionRequest`, cruzada com a pesquisa de IA independente (2026-11-02, T08/T17 do `RE_COMPLETUDE_TASKS.md`)
+
+`iOSCurSameProcs(ActionRequest* req)` (`0x15da34`, 44 B, 100% de
+cobertura por `jtable.py`, 1 `bl`) — disassembly linear completo via
+Capstone. Achada por busca de nome direta (tipo `ActionRequest*`);
+`iOSCurSameOK()` (`0x15d748`, 272 B, chamada por esta função) não é
+lida nesta fatia.
+
+```c
+void iOSCurSameProcs(ActionRequest* req) {
+    if (req->field_0x0 != 0xfe) {
+        return;
+    }
+    if (iOSCurSameOK() != 0) {
+        req->field_0x0 = 7;
+    }
+}
+```
+
+**Achado de cruzamento com pesquisa independente, não desta sessão:**
+`AI_DIFFICULTY_RESEARCH.md` seção 14.4 (fechamento do dispatcher de
+`BattleRoutine`, outra linha de investigação) já tinha observado que
+o bloco de finalização de `BattleRoutine` "grava um código em `*out`
+(valores `0` ou `2` observados)" — uma escrita no MESMO offset
+(`ActionRequest+0x0`) que esta função lê e condicionalmente
+sobrescreve. As duas leituras, feitas em sessões/linhas de
+investigação diferentes, confirmam **independentemente** que
+`ActionRequest+0x0` é um código de status/requisição, agora com um
+conjunto mais amplo de valores observados (`0`, `2` por
+`BattleRoutine`; `0xfe`, `7` por esta função) — nenhum dos dois lados
+assumiu o significado do outro.
+
+**Reconstrução C + teste diferencial:**
+`docs/re-tools/c-models/t08_ioscursameprocs.c` +
+`test_t08_ioscursameprocs.py`: `iOSCurSameOK` stubada via `callable`.
+5 cenários batem exatamente (inclui os códigos `0`/`2`/`7` da
+pesquisa de IA, confirmando que são ignorados por esta função — só
+`0xfe` dispara o caminho), mais 1 injeção de falha confirmando que
+`iOSCurSameOK` **nunca é chamada** para nenhum código diferente de
+`0xfe` (uma guarda frouxa chamaria a função e poderia sobrescrever
+códigos que pertencem a `BattleRoutine`). Suíte completa de
+`docs/re-tools`: de 600 pra **602 testes** (1.918 → **1.923
+subtestes**), todas passando (confirmado 2×).
+
+**Lacuna aceita:** `iOSCurSameOK()` não lida; `sizeof(ActionRequest)`
+e os demais campos (preenchidos pelo bloco de finalização de
+`BattleRoutine`, seção 14.4 da pesquisa de IA — "pacote de 24 bytes")
+não confirmados; significado semântico exato de `0xfe`/`7` (nomes de
+estado) não afirmado além do que os bytes mostram.
+
+**Status CSV: `read_full`** — 11/11 instruções reais, 1 `bl` tratado
+como caixa-preta.

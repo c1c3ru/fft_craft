@@ -3747,7 +3747,7 @@ address,size,mangled,demangled,status,section_ref
 0015a498,44,_Z20iOSUnitAutoModeCheckv,iOSUnitAutoModeCheck(),read_full,NOTES §555
 0015d238,44,_Z17iOSstartRightTurni,iOSstartRightTurn(int),read_full,NOTES §565
 0015d970,44,_Z16iOSStatusConfGetv,iOSStatusConfGet(),read_full,NOTES §565
-0015da34,44,_Z15iOSCurSameProcsP13ActionRequest,iOSCurSameProcs(ActionRequest*),read_structural,NOTES §612
+0015da34,44,_Z15iOSCurSameProcsP13ActionRequest,iOSCurSameProcs(ActionRequest*),read_full,NOTES §676
 0015df10,44,_Z15iOSGT4_MapT9Getm,iOSGT4_MapT9Get(unsigned long),read_structural,NOTES §616
 0015ef50,44,_Z24iOSUnitListMovOtherCheckv,iOSUnitListMovOtherCheck(),read_full,NOTES §555
 00183650,44,_Z12bDrawWindow2Phmi,"bDrawWindow2(unsigned char*, unsigned long, int)",read_full,NOTES §549
