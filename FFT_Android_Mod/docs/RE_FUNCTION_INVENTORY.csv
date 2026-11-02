@@ -4136,7 +4136,7 @@ address,size,mangled,demangled,status,section_ref
 001eb2d8,36,_Z14vramDeleteUsedv,vramDeleteUsed(),read_structural,NOTES §616
 001f4a64,36,_Z24initEntryEnemyAnimationsi,initEntryEnemyAnimations(int),read_structural,NOTES §616
 001f5be4,36,_Z18terminateAnimationi,terminateAnimation(int),read_structural,NOTES §612
-001fd1dc,36,_Z13nextTurnOrderv,nextTurnOrder(),read_structural,NOTES §616
+001fd1dc,36,_Z13nextTurnOrderv,nextTurnOrder(),read_full,NOTES §673
 001fea14,36,_Z21changeWeaponEquipmentii,"changeWeaponEquipment(int, int)",read_full,NOTES §563
 002bf084,36,_Z19iOS_setFaceDataModei,iOS_setFaceDataMode(int),read_full,NOTES §560
 0021eb8c,36,_Z8DoEffectv,DoEffect(),read_structural,NOTES §612
@@ -4695,7 +4695,7 @@ address,size,mangled,demangled,status,section_ref
 0027f5f0,24,_Z30Resume_Get_WORK_MU_BWorkFontIDv,Resume_Get_WORK_MU_BWorkFontID(),read_structural,NOTES §616
 00280858,24,_Z16iOS_setTransFaceii,"iOS_setTransFace(int, int)",read_full,NOTES §560
 0029add0,24,xpLibgpuExVramSet,xpLibgpuExVramSet,read_full,NOTES §554
-001fd2ac,24,_Z14resetTurnOrderv,resetTurnOrder(),read_structural,NOTES §616
+001fd2ac,24,_Z14resetTurnOrderv,resetTurnOrder(),read_full,NOTES §673
 00279ed4,24,_Z21ClearForBattleRoutinev,ClearForBattleRoutine(),read_full,NOTES §672
 002b7a74,24,_Z20ClearDisableMapTouchv,ClearDisableMapTouch(),read_structural,NOTES §616
 002b7a5c,24,_Z18SetDisableMapTouchv,SetDisableMapTouch(),read_structural,NOTES §616

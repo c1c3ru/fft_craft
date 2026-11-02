@@ -26766,3 +26766,61 @@ nominais de T17) não tocados; identidade semântica dos 5 campos de
 **Status CSV: `read_full`** — `ClearMove`: 10/10 instruções reais, 0
 `bl`. `ClearForBattleRoutine`: 5/5 instruções reais (+1 literal
 pool), 0 `bl`, 1 tail call.
+
+## 673. `nextTurnOrder()` + `resetTurnOrder()` — leitura completa do par, fatia vertical de T15 (máquina de estados de batalha): mesmo global confirmado por endereço (2026-11-02, T15 do `RE_COMPLETUDE_TASKS.md`)
+
+`nextTurnOrder()` (`0x1fd1dc`, 36 B, 0 `bl`) e `resetTurnOrder()`
+(`0x1fd2ac`, 24 B, 0 `bl`) — disassembly linear completo via
+Capstone, 89%/83% de cobertura por `jtable.py` (só literal pool
+faltando). Achadas por busca de nome no cluster de turnos de T15
+("início/turnos/vitória/derrota"); `setTurnOrder()` (120 B, mesma
+família, não lida) e os alvos nominais de T15 (`battle()`, 102
+estados) seguem intocados.
+
+```c
+void nextTurnOrder(void) {
+    int32_t next = *g_turnIndex + 1;
+    if (next > 39) {       // *** comparação é sobre o valor NOVO, não o antigo ***
+        next = 0;
+    }
+    *g_turnIndex = next;
+}
+
+void resetTurnOrder(void) {
+    *g_turnIndex = 0;
+}
+```
+
+**Achado estrutural:** o limite é checado sobre o valor **novo**
+(`old+1`), com `movgt` (estritamente maior que, não `movge`) — então
+o laço vira de `39` pra `0` diretamente (quando `old=39`, `new=40`,
+`40>39`), nunca passando por `40` como valor armazenado; `old=38`
+avança normalmente pra `39` sem resetar. Um modelo que comparasse o
+valor antigo, ou usasse `>=39` sobre o novo, teria resetado um passo
+adiantado (em `old=38`) — confirmado por injeção de falha testando
+exatamente essa transição.
+
+**Achado de cruzamento por endereço:** as duas funções resolvem,
+independentemente, o mesmo slot GOT (`0x3475dc`) pro mesmo endereço
+global (`0x5dd8e0`) — confirmado calculando as duas cadeias em
+separado, não por semelhança de nome. `setTurnOrder()` (120 B) não foi
+verificada se usa o mesmo global nesta fatia.
+
+**Reconstrução C + teste diferencial:**
+`docs/re-tools/c-models/t15_nextturnorder.c` +
+`test_t15_nextturnorder.py` (7 cenários + 1 injeção de falha no limite
+exato) e `docs/re-tools/c-models/t15_resetturnorder.c` +
+`test_t15_resetturnorder.py` (5 cenários, incluindo valor negativo e
+`INT32_MAX` de entrada). Suíte completa de `docs/re-tools`: de 591
+pra **594 testes** (1.878 → **1.890 subtestes**), todas passando
+(confirmado 2×).
+
+**Lacuna aceita:** `setTurnOrder()` não lida; `battle()` (102 estados
+declarados, não revalidados nesta fatia) e os demais alvos nominais
+de T15 intocados; identidade semântica de `g_turnIndex` (ex.: ordem
+de iniciativa vs. simples round-robin) não confirmada além do que os
+bytes mostram.
+
+**Status CSV: `read_full`** — `nextTurnOrder`: 8/8 instruções reais
+(+1 literal pool), 0 `bl`. `resetTurnOrder`: 5/5 instruções reais (+1
+literal pool), 0 `bl`.
