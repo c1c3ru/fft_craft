@@ -1,0 +1,53 @@
+name: T39 40-task ARM evidence audit
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/re-t39-task-orchestrator.yml'
+      - 'FFT_Android_Mod/docs/re-tools/re_40_task_orchestrator.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_re_40_task_orchestrator.py'
+      - 'FFT_Android_Mod/docs/RE_COMPLETUDE_TASKS.md'
+      - 'FFT_Android_Mod/docs/re-baseline/**'
+      - 'FFT_Android_Mod/docs/re-results/*.json'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/re-t39-task-orchestrator.yml'
+      - 'FFT_Android_Mod/docs/re-tools/re_40_task_orchestrator.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_re_40_task_orchestrator.py'
+      - 'FFT_Android_Mod/docs/RE_COMPLETUDE_TASKS.md'
+      - 'FFT_Android_Mod/docs/re-baseline/**'
+      - 'FFT_Android_Mod/docs/re-results/*.json'
+  workflow_dispatch:
+  schedule:
+    - cron: '29 2,8,14,20 * * *'
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test the audit's fail-closed behavior
+        run: python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_re_40_task_orchestrator.py' -v
+      - name: Generate 40-task and ARM triage report
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/re_40_task_orchestrator.py --run-id "$GITHUB_RUN_ID" --json-output "$RUNNER_TEMP/task40-triage.json" --md-output "$RUNNER_TEMP/task40-triage.md" | tee "$RUNNER_TEMP/task40-gates.txt"
+          grep -qx 'TASK40_AUTO_APPROVALS=0' "$RUNNER_TEMP/task40-gates.txt"
+          test -s "$RUNNER_TEMP/task40-triage.json"
+          test -s "$RUNNER_TEMP/task40-triage.md"
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: t39-arm-triage
+          path: |
+            ${{ runner.temp }}/task40-triage.json
+            ${{ runner.temp }}/task40-triage.md
+          retention-days: 14
+          if-no-files-found: error
