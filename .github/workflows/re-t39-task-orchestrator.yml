@@ -5,6 +5,9 @@ on:
       - '.github/workflows/re-t39-task-orchestrator.yml'
       - 'FFT_Android_Mod/docs/re-tools/re_40_task_orchestrator.py'
       - 'FFT_Android_Mod/docs/re-tools/test_re_40_task_orchestrator.py'
+      - 'FFT_Android_Mod/docs/re-tools/t39_craft_anything_bridge.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_t39_craft_anything_bridge.py'
+      - 'FFT_Android_Mod/docs/re-baseline/T39_CRAFT_ANYTHING_BRIDGE.md'
       - 'FFT_Android_Mod/docs/RE_COMPLETUDE_TASKS.md'
       - 'FFT_Android_Mod/docs/re-baseline/**'
       - 'FFT_Android_Mod/docs/re-results/*.json'
@@ -14,6 +17,9 @@ on:
       - '.github/workflows/re-t39-task-orchestrator.yml'
       - 'FFT_Android_Mod/docs/re-tools/re_40_task_orchestrator.py'
       - 'FFT_Android_Mod/docs/re-tools/test_re_40_task_orchestrator.py'
+      - 'FFT_Android_Mod/docs/re-tools/t39_craft_anything_bridge.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_t39_craft_anything_bridge.py'
+      - 'FFT_Android_Mod/docs/re-baseline/T39_CRAFT_ANYTHING_BRIDGE.md'
       - 'FFT_Android_Mod/docs/RE_COMPLETUDE_TASKS.md'
       - 'FFT_Android_Mod/docs/re-baseline/**'
       - 'FFT_Android_Mod/docs/re-results/*.json'
@@ -35,6 +41,8 @@ jobs:
           python-version: '3.11'
       - name: Test the audit's fail-closed behavior
         run: python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_re_40_task_orchestrator.py' -v
+      - name: Test opt-in external evidence mapping without running foreign code
+        run: python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools -p 'test_t39_craft_anything_bridge.py' -v
       - name: Generate 40-task and ARM triage report
         run: |
           set -euo pipefail
