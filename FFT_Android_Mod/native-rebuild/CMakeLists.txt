@@ -17,11 +17,9 @@ set_target_properties(fftcraft_stage_models PROPERTIES
   CXX_STANDARD 17 CXX_STANDARD_REQUIRED YES
   POSITION_INDEPENDENT_CODE YES
 )
-if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang" AND
+   CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
   target_compile_options(fftcraft_stage_models PRIVATE -Wall -Wextra -Werror -Wpedantic)
-endif()
-if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-  target_compile_options(fftcraft_stage_models PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-Wall;-Wextra;-Werror;-Wpedantic>)
 endif()
 
 if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
