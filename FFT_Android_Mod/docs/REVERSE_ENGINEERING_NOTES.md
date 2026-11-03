@@ -27434,3 +27434,50 @@ resultado é descartado (efeito colateral relevante na própria
 
 **Status CSV: `read_full`** — 22/22 instruções reais (+3 literal
 pool), 2 `bl` + 1 tail call tratados como caixa-preta.
+
+## 683. `Winitsprt(tagSPRT*)` — leitura completa: byte-idêntica a `initsprt` exceto por um único argumento, confirmado por diff de disassembly, nona tail call desta sessão (2026-11-02, T23 do `RE_COMPLETUDE_TASKS.md`)
+
+`Winitsprt(tagSPRT* sprt)` (`0xfe96c`, 100 B, 2 `bl` + 1 tail call,
+100% de cobertura por `jtable.py`) — achada por busca de nome no
+mesmo cluster `tagSPRT` de `initsprt` (seção 679). Disassembly
+linear completo via Capstone confirma que é **byte-idêntica a
+`initsprt`** em toda a estrutura (mesmos campos escritos, mesma
+sequência de chamadas, mesma tail call final), com **uma única
+diferença**: `SetShadeTex(sprt, 0)` em vez de `SetShadeTex(sprt, 1)`.
+
+```c
+void Winitsprt(tagSPRT* sprt) {
+    SetSprt(sprt);
+    SetShadeTex(sprt, 0);   // *** única diferença de initsprt: 0, não 1 ***
+    sprt->field_0x8 = sprt->field_0x9 = sprt->field_0xa = 0x80;
+    sprt->field_0x10 = sprt->field_0x11 = 0;
+    sprt->field_0xc  = 0x200;
+    sprt->field_0x12 = 0x7c3c;
+    sprt->field_0x14 = sprt->field_0x16 = sprt->field_0xe = 0;
+    SetSemiTrans(sprt, 1);   // *** TAIL CALL, idêntica à de initsprt ***
+}
+```
+
+**Achado: a diferença é confirmada por diff de disassembly, não
+assumida pela convenção de nome "W".** Não se trata de uma suposição
+de que o prefixo "W" sempre implica uma variante menor — o diff real,
+instrução a instrução, mostra exatamente um `mov r1,#0` (aqui) vs.
+`mov r1,#1` (`initsprt`) no argumento de `SetShadeTex`, e nada mais
+muda.
+
+**Reconstrução C + teste diferencial:** reaproveita
+`docs/re-tools/c-models/t23_initsprt.c` (fatoração num helper comum
+`initsprt_common` parametrizado pela flag de `SetShadeTex`, sem
+alterar o comportamento já testado de `initsprt_model`) +
+`test_t23_winitsprt.py`: confirma ordem e argumentos exatos das 3
+chamadas (incluindo a flag `0`), mais 1 injeção de falha confirmando
+que a flag não é `1` (não é uma cópia desatenta de `initsprt`).
+Suíte completa de `docs/re-tools`: de 618 pra **620 testes** (1.954
+subtestes, sem novos), todas passando (confirmado 2×).
+
+**Lacuna aceita:** nenhuma nova além das já registradas pra
+`initsprt`/`SetSprt`/`SetShadeTex`/`SetSemiTrans` (seção 679).
+
+**Status CSV: `read_full`** — 25/25 instruções reais, 2 `bl` + 1
+tail call tratados como caixa-preta nas próprias funções já
+confirmadas na seção 679.

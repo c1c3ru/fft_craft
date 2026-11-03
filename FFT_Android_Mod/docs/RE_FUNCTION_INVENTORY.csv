@@ -2483,7 +2483,7 @@ address,size,mangled,demangled,status,section_ref
 000db440,100,_Z10eventenvsev,eventenvse(),read_structural,NOTES §611
 0020e4fc,100,_Z26setOffsetAnimationPositioniP7SVECTOR,"setOffsetAnimationPosition(int, SVECTOR*)",read_structural,NOTES §611
 000f15a0,100,_Z22disp_backtotitle_yesnov,disp_backtotitle_yesno(),read_structural,NOTES §615
-000fe96c,100,_Z9WinitsprtP7tagSPRT,Winitsprt(tagSPRT*),read_structural,NOTES §611
+000fe96c,100,_Z9WinitsprtP7tagSPRT,Winitsprt(tagSPRT*),read_full,NOTES §683
 00102ea0,100,_Z11Weventenvsev,Weventenvse(),read_structural,NOTES §611
 0010638c,100,_Z23Wdisp_backtotitle_yesnov,Wdisp_backtotitle_yesno(),read_structural,NOTES §615
 002bf020,100,_Z20iOS_isInCursorRotatev,iOS_isInCursorRotate(),read_structural,NOTES §611

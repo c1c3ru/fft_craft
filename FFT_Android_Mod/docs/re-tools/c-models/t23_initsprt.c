@@ -1,11 +1,16 @@
-/* Reconstruction of initsprt(tagSPRT*) (0xd6e48, 100 B), per
- * docs/REVERSE_ENGINEERING_NOTES.md section 679.
+/* Reconstruction of initsprt(tagSPRT*) (0xd6e48, 100 B) and
+ * Winitsprt(tagSPRT*) (0xfe96c, 100 B), per
+ * docs/REVERSE_ENGINEERING_NOTES.md sections 679/683.
  *
- * Composes SetSprt and SetShadeTex (both real calls, `bl`) with a
- * block of direct field writes, then ends in a genuine ARM tail call
- * (`b`, not `bl`) into SetSemiTrans(sprt, 1) -- the seventh tail call
- * confirmed this session. SetSprt/SetShadeTex/SetSemiTrans are
- * independently differential-tested in
+ * The two functions are byte-identical except for ONE difference:
+ * Winitsprt calls SetShadeTex(sprt, 0) where initsprt calls
+ * SetShadeTex(sprt, 1) -- confirmed by disassembly diff, not
+ * assumed from the "W" naming convention alone. Both compose SetSprt
+ * and SetShadeTex (real calls, `bl`) with a block of direct field
+ * writes, then end in a genuine ARM tail call (`b`, not `bl`) into
+ * SetSemiTrans(sprt, 1) -- the seventh (initsprt) and ninth
+ * (Winitsprt) tail calls confirmed this session. SetSprt/
+ * SetShadeTex/SetSemiTrans are independently differential-tested in
  * c-models/t23_sprt_setters.c; here they are opaque function
  * pointers, this file makes no further claim about them.
  */
@@ -15,11 +20,11 @@ typedef void (*set_sprt_fn)(void *sprt);
 typedef void (*set_shade_tex_fn)(void *sprt, int32_t flag);
 typedef void (*set_semi_trans_fn)(void *sprt, int32_t flag);
 
-void initsprt_model(
+static void initsprt_common(
     uint8_t *sprt, set_sprt_fn SetSprt, set_shade_tex_fn SetShadeTex,
-    set_semi_trans_fn SetSemiTrans) {
+    set_semi_trans_fn SetSemiTrans, int32_t shade_tex_flag) {
     SetSprt(sprt);
-    SetShadeTex(sprt, 1);
+    SetShadeTex(sprt, shade_tex_flag);
 
     sprt[0x8] = 0x80;
     sprt[0x9] = 0x80;
@@ -42,4 +47,16 @@ void initsprt_model(
     sprt[0xf] = (uint8_t)(zero16 >> 8);
 
     SetSemiTrans(sprt, 1);
+}
+
+void initsprt_model(
+    uint8_t *sprt, set_sprt_fn SetSprt, set_shade_tex_fn SetShadeTex,
+    set_semi_trans_fn SetSemiTrans) {
+    initsprt_common(sprt, SetSprt, SetShadeTex, SetSemiTrans, 1);
+}
+
+void Winitsprt_model(
+    uint8_t *sprt, set_sprt_fn SetSprt, set_shade_tex_fn SetShadeTex,
+    set_semi_trans_fn SetSemiTrans) {
+    initsprt_common(sprt, SetSprt, SetShadeTex, SetSemiTrans, 0);
 }
