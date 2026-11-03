@@ -1,0 +1,68 @@
+name: T27 T29 Android JNI and OBB static handoff
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/re-t27-t29-android-bridge.yml'
+      - 'FFT_Android_Mod/docs/re-tools/t27_t29_android_inventory.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_t27_t29_android_inventory.py'
+      - 'FFT_Android_Mod/docs/re-tools/b01_smali_jni_obb_audit.py'
+      - 'FFT_Android_Mod/src/smali/**'
+      - 'FFT_Android_Mod/src/AndroidManifest.xml'
+      - 'FFT_Android_Mod/src/lib/armeabi/libgl2jni.so'
+      - 'FFT_Android_Mod/obb-data/*.obb'
+      - 'FFT_Android_Mod/docs/re-baseline/T27_T29_AUTOMATION.md'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/re-t27-t29-android-bridge.yml'
+      - 'FFT_Android_Mod/docs/re-tools/t27_t29_android_inventory.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_t27_t29_android_inventory.py'
+      - 'FFT_Android_Mod/docs/re-tools/b01_smali_jni_obb_audit.py'
+      - 'FFT_Android_Mod/src/smali/**'
+      - 'FFT_Android_Mod/src/AndroidManifest.xml'
+      - 'FFT_Android_Mod/src/lib/armeabi/libgl2jni.so'
+      - 'FFT_Android_Mod/obb-data/*.obb'
+      - 'FFT_Android_Mod/docs/re-baseline/T27_T29_AUTOMATION.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  static-android-bridge-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install bounded ELF metadata reader
+        run: python -m pip install --disable-pip-version-check 'pyelftools==0.32'
+      - name: Check negative cases and source manifest parsing
+        run: |
+          python -m unittest discover -s FFT_Android_Mod/docs/re-tools \
+            -p 'test_t27_t29_android_inventory.py' -v
+      - name: Audit JNI static source, ARM exports and OBB pointer without LFS
+        run: |
+          set -euo pipefail
+          python FFT_Android_Mod/docs/re-tools/t27_t29_android_inventory.py \
+            --output "${RUNNER_TEMP}/t27-t29-static-handoff.json" \
+            | tee "${RUNNER_TEMP}/t27-t29-summary.txt"
+          grep -qx 'T27_JNI_DECLARED=12' "${RUNNER_TEMP}/t27-t29-summary.txt"
+          grep -qx 'T27_RUNTIME_BRIDGE_CERTIFIED=0' "${RUNNER_TEMP}/t27-t29-summary.txt"
+          grep -qx 'T29_ASSETS_CLASSIFIED=0' "${RUNNER_TEMP}/t27-t29-summary.txt"
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: t27-t29-static-bridge-metadata
+          path: ${{ runner.temp }}/t27-t29-static-handoff.json
+          retention-days: 14
+          if-no-files-found: error
