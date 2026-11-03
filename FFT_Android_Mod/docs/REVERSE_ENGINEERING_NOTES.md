@@ -27604,3 +27604,59 @@ intocados.
 
 **Status CSV: `read_full`** — 26/26 instruções reais (+2 literal
 pool), 0 `bl`.
+
+## 686. `getFontIDFormBattleWork(int)` — leitura completa: cruza por endereço com `BWORK+0x1ac`, já confirmado em outra sessão (T08/seção 653) (2026-11-02, T16 do `RE_COMPLETUDE_TASKS.md`)
+
+`getFontIDFormBattleWork(int target)` (`0x20e880`, 64 B, 0 `bl`) —
+disassembly linear completo via Capstone, 94% de cobertura por
+`jtable.py` (só literal pool faltando). Achada por busca de nome no
+cluster de batalha de T16.
+
+```c
+int32_t getFontIDFormBattleWork(int target) {
+    Node* node = g_listHead;             // GOT, dupla indireção padrão
+    while (node != NULL) {
+        BWORK* bwork = node->bwork;       // +0x134, pode ser NULL
+        if (bwork != NULL && bwork->byte_0x1ac == target) {
+            return node->fontId;          // +0x5, byte zero-extendido
+        }
+        node = node->next;                 // +0x0
+    }
+    return -1;
+}
+```
+
+**Achado de cruzamento por endereço, não por suposição:** esta
+função lê `BWORK+0x1ac`, um campo **já confirmado** em
+`docs/re-baseline/types/bwork.h` (T08, NOTES §653 —
+"`origByte1ac` em `set_casting_status`, alimenta `dir` em
+`_changeAnimationStatus_`"). Isso confirma independentemente, numa
+sessão/função totalmente diferente, que `BWORK+0x1ac` é um campo
+real e significativo (não um offset inventado pra esta leitura) —
+sem assumir o significado da outra leitura, só reaproveitando o
+offset já estabelecido. Não se afirma que o parâmetro `target` desta
+função seja literalmente uma "direção" — só que ele é comparado
+contra o mesmo campo já confirmado como tal em outro contexto.
+
+**Achado estrutural:** percorre uma lista ligada simples global
+(cabeça resolvida via GOT, dupla indireção padrão), cada nó com
+`next` em `+0x0`, `fontId` (byte) em `+0x5`, e um ponteiro `BWORK*`
+em `+0x134` — primeira evidência de campo pra essa struct de nó (sem
+nome próprio ainda). Nós com `bwork==NULL` são pulados sem comparar
+nada. Se a lista se esgota sem bater, retorna `-1`.
+
+**Reconstrução C + teste diferencial:**
+`docs/re-tools/c-models/t16_getfontidformbattlework.c` +
+`test_t16_getfontidformbattlework.py`: 5 cenários (nó único, segundo
+nó bate, nenhum bate, primeiro nó sem `BWORK`, lista vazia) batem
+exatamente, mais 1 injeção de falha confirmando que nós sem `BWORK`
+nunca batem (não comparam um byte "zero" por acidente). Suíte
+completa de `docs/re-tools`: de 626 pra **628 testes** (1.968 →
+**1.973 subtestes**), todas passando (confirmado 2×).
+
+**Lacuna aceita:** nome/sizeof real da struct de nó não conhecido
+(usado só como "Node" de conveniência); identidade exata de
+`target`/`fontId` não confirmada além do cruzamento com `BWORK+0x1ac`.
+
+**Status CSV: `read_full`** — 15/15 instruções reais (+1 literal
+pool), 0 `bl`.

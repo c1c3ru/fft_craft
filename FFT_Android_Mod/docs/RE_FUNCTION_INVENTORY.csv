@@ -3130,7 +3130,7 @@ address,size,mangled,demangled,status,section_ref
 002a3028,64,xpFree,xpFree,read_structural,NOTES §615
 000fb554,64,_Z16chkMessagepacketv,chkMessagepacket(),read_structural,NOTES §615
 0020e840,64,_Z28getAnimationIDFormBattleWorki,getAnimationIDFormBattleWork(int),read_full,NOTES §559
-0020e880,64,_Z23getFontIDFormBattleWorki,getFontIDFormBattleWork(int),read_structural,NOTES §615
+0020e880,64,_Z23getFontIDFormBattleWorki,getFontIDFormBattleWork(int),read_full,NOTES §686
 000d9a80,64,_Z16send_sttslinecolPc,send_sttslinecol(char*),read_structural,NOTES §615
 000d9eec,64,_Z15extend_endornotv,extend_endornot(),read_structural,NOTES §615
 000f1560,64,_Z17disp_resume_yesnov,disp_resume_yesno(),read_structural,NOTES §615
