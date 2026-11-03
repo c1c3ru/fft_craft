@@ -42,3 +42,12 @@ jobs:
           grep -qx 'TASK40_AUTO_APPROVALS=0' "$RUNNER_TEMP/task40-gates.txt"
           test -s "$RUNNER_TEMP/task40-triage.json"
           test -s "$RUNNER_TEMP/task40-triage.md"
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: t39-arm-triage
+          path: |
+            ${{ runner.temp }}/task40-triage.json
+            ${{ runner.temp }}/task40-triage.md
+          retention-days: 14
+          if-no-files-found: error
