@@ -27715,3 +27715,71 @@ intocados.
 **Status CSV: `read_full`** — 19/19 instruções reais (+3 literal
 pool), 1 `bl` tratado como caixa-preta (já confirmado em outro
 lugar).
+
+## 688. `dmyFnc`/`CreateObjectWithTableWithParentData`/`system_error`/`objectLG2`/`dmyFnc2` — leitura completa das 5: duas categorias de "placeholder" distintas (uma delas chama `system_error`, que por sua vez também é um no-op), não a mesma coisa (2026-11-02, T24 do `RE_COMPLETUDE_TASKS.md`)
+
+5 funções do cluster de callbacks `_EffectTCB`/`_Object` —
+`dmyFnc(_EffectTCB*)` (`0x21c214`, 24 B, 1 `bl`),
+`CreateObjectWithTableWithParentData(short,int,int,int,_Object*)`
+(`0x228c44`, 24 B, 1 `bl`), `system_error(int,int)` (`0x20c5d0`, 4
+B), `objectLG2(_EffectTCB*,_Object*)` (`0x225a60`, 4 B),
+`dmyFnc2(_EffectTCB*,_Object*)` (`0x225a64`, 4 B) — disassembly
+linear completo via Capstone, cobertura total em todas. Achadas por
+busca de nome no cluster de callbacks de objeto/efeito de T24.
+
+```c
+void system_error(int category, int code) { /* bx lr isolado -- nada */ }
+
+int32_t dmyFnc(_EffectTCB* tcb) {
+    system_error(1, 0x22);   // ignora completamente tcb
+    return 0;
+}
+
+int32_t CreateObjectWithTableWithParentData(short a0, int a1, int a2, int a3, _Object* obj) {
+    system_error(1, 0x50);   // ignora completamente todos os parâmetros
+    return 0;
+}
+
+void objectLG2(_EffectTCB* tcb, _Object* obj) { /* bx lr isolado -- nada */ }
+void dmyFnc2(_EffectTCB* tcb, _Object* obj)   { /* bx lr isolado -- nada */ }
+```
+
+**Achado, confirmado pelos bytes, não pelo nome: existem DUAS
+categorias de "placeholder" genuinamente diferentes aqui, não a
+mesma coisa com nomes diferentes.** `objectLG2`/`dmyFnc2` são `bx lr`
+isolados — no-ops puros, idênticos em espírito aos 5 stubs de
+NetBattle/iCloud da seção 674. `dmyFnc`/
+`CreateObjectWithTableWithParentData`, apesar do nome sugerir a
+mesma categoria, **ignoram os próprios parâmetros e chamam
+`system_error(1, código)` antes de retornar `0`** — com um código
+fixo DIFERENTE pra cada uma (`0x22` pra `dmyFnc`, `0x50` pra
+`CreateObjectWithTableWithParentData`), confirmado por injeção de
+falha. Só que `system_error` em si é TAMBÉM um `bx lr` isolado,
+ignorando os dois argumentos — ou seja, todo o mecanismo de "reportar
+um erro" está, neste build, completamente inerte. O efeito
+observável final das 5 funções acaba sendo o mesmo (nada, mais um
+retorno `0` nas duas primeiras), mas por DUAS formas de código
+genuinamente distintas — uma reivindicação honesta não colapsaria
+"placeholder com reporte de erro" em "no-op puro" sem essa distinção.
+
+**Reconstrução C + teste diferencial:**
+`docs/re-tools/c-models/t24_stub_callbacks.c` +
+`test_t24_stub_callbacks.py`: `system_error` stubada via `callable`
+pra confirmar os argumentos exatos de cada chamador, mais os 3
+no-ops puros testados diretamente (confirmando que `r0` nunca é
+escrito, mesmo teste de dois valores de entrada distintos já usado
+pra `NetBattleJudge` na seção 674), mais 1 injeção de falha
+confirmando que os dois códigos de erro (`0x22`/`0x50`) são
+distintos, não o mesmo valor reaproveitado. Suíte completa de
+`docs/re-tools`: de 630 pra **634 testes** (1.978 subtestes, sem
+novos — os 4 testes desta fatia não usam `subTest`), todas passando
+(confirmado 2×).
+
+**Lacuna aceita:** alcançabilidade real (se `dmyFnc`/
+`CreateObjectWithTableWithParentData` são chamadas em runtime, e com
+que frequência o erro "silenciosamente perdido" ocorreria se
+`system_error` fosse implementado) não investigada.
+
+**Status CSV: `read_full`** — todas as 5, cobertura total de
+instruções reais, 1 `bl` (em 2 delas) tratado como caixa-preta (a
+própria `system_error`, também fechada nesta fatia).

@@ -4715,9 +4715,9 @@ address,size,mangled,demangled,status,section_ref
 0021b908,24,_Z13PopAirDensityv,PopAirDensity(),read_structural,NOTES §616
 0021c1e4,24,_Z20s2c_samplingMSQFrameP10_EffectTCB,s2c_samplingMSQFrame(_EffectTCB*),read_structural,NOTES §612
 0021c1fc,24,_Z20s2d_samplingSQLFrameP10_EffectTCB,s2d_samplingSQLFrame(_EffectTCB*),read_structural,NOTES §612
-0021c214,24,_Z6dmyFncP10_EffectTCB,dmyFnc(_EffectTCB*),read_structural,NOTES §612
+0021c214,24,_Z6dmyFncP10_EffectTCB,dmyFnc(_EffectTCB*),read_full,NOTES §688
 00228c5c,24,_Z9OgataInitv,OgataInit(),read_structural,NOTES §612
-00228c44,24,_Z35CreateObjectWithTableWithParentDatasiiiP7_Object,"CreateObjectWithTableWithParentData(short, int, int, int, _Object*)",read_structural,NOTES §612
+00228c44,24,_Z35CreateObjectWithTableWithParentDatasiiiP7_Object,"CreateObjectWithTableWithParentData(short, int, int, int, _Object*)",read_full,NOTES §688
 002885a0,24,_Z15pspOpenCheckFlg12PSP_OPEN_FLG,pspOpenCheckFlg(PSP_OPEN_FLG),read_structural,NOTES §616
 00245a40,24,_Z9strKickCDP6CdlLOC,strKickCD(CdlLOC*),read_structural,NOTES §612
 00248598,24,_Z12iOS_TestDrawPm,iOS_TestDraw(unsigned long*),read_structural,NOTES §616
@@ -6075,7 +6075,7 @@ address,size,mangled,demangled,status,section_ref
 000da334,4,_Z17request_effectmesiiii,"request_effectmes(int, int, int, int)",read_full,NOTES §557
 000da338,4,_Z15request_warnmesiiii,"request_warnmes(int, int, int, int)",read_full,NOTES §557
 0028e5c0,4,VSync,VSync,mentioned_unverified,
-0020c5d0,4,_Z12system_errorii,"system_error(int, int)",read_structural,NOTES §613
+0020c5d0,4,_Z12system_errorii,"system_error(int, int)",read_full,NOTES §688
 002168e4,4,_Z15callSoundEffecti,callSoundEffect(int),mentioned_unverified,
 002806b8,4,_Z20iOS_hook_movetopanelv,iOS_hook_movetopanel(),read_full,NOTES §559
 00215db4,4,_Z8resetFFTv,resetFFT(),mentioned_unverified,
@@ -6228,8 +6228,8 @@ address,size,mangled,demangled,status,section_ref
 002712c4,4,_Z21Ssd_DisposeEffectDataPv,Ssd_DisposeEffectData(void*),read_structural,NOTES §613
 0021ebb0,4,_Z5errorcl,"error(char, long)",read_structural,NOTES §613
 00225310,4,_Z16iOS_CheckPEffectPKci,"iOS_CheckPEffect(char const*, int)",read_structural,NOTES §612
-00225a60,4,_Z9objectLG2P10_EffectTCBP7_Object,"objectLG2(_EffectTCB*, _Object*)",read_structural,NOTES §613
-00225a64,4,_Z7dmyFnc2P10_EffectTCBP7_Object,"dmyFnc2(_EffectTCB*, _Object*)",read_structural,NOTES §612
+00225a60,4,_Z9objectLG2P10_EffectTCBP7_Object,"objectLG2(_EffectTCB*, _Object*)",read_full,NOTES §688
+00225a64,4,_Z7dmyFnc2P10_EffectTCBP7_Object,"dmyFnc2(_EffectTCB*, _Object*)",read_full,NOTES §688
 0022a614,4,_Z10DumpMemoryiPv,"DumpMemory(int, void*)",read_structural,NOTES §612
 0028b540,4,CdFlush,CdFlush,read_structural,NOTES §612
 0028b498,4,StUnSetRing,StUnSetRing,read_structural,NOTES §612
