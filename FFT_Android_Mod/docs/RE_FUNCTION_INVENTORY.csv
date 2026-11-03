@@ -2332,7 +2332,7 @@ address,size,mangled,demangled,status,section_ref
 0015d900,112,_Z22iOSBtlUnitMoveCheckSubv,iOSBtlUnitMoveCheckSub(),read_full,NOTES §563
 001eb0b4,112,_Z22raiseAnimationPriorityi,raiseAnimationPriority(int),read_structural,NOTES §611
 0020e040,112,_Z14eventMapFadeIni,eventMapFadeIn(int),read_structural,NOTES §568
-000feeb4,112,_Z20Wdisposewindowbytaski,Wdisposewindowbytask(int),read_structural,NOTES §615
+000feeb4,112,_Z20Wdisposewindowbytaski,Wdisposewindowbytask(int),read_full,NOTES §685
 001026c4,112,_Z14Wchecktaskkindi,Wchecktaskkind(int),read_structural,NOTES §615
 00103340,112,_Z16Wwrite_eventflagii,"Wwrite_eventflag(int, int)",read_structural,NOTES §615
 0010e0e4,112,_Z14Waddlocalprim2P11tagPOLY_FT4,Waddlocalprim2(tagPOLY_FT4*),read_structural,NOTES §611

@@ -27549,3 +27549,58 @@ reais (+1 literal pool), 2 `bl`. `evt_flag_low`: 18/18 instruções
 reais (+1 literal pool), 2 `bl`. `evt_flagset`: 10/10 instruções
 reais, 2 `bl`. Todos tratados como caixa-preta (já confirmados em
 outro lugar).
+
+## 685. `Wdisposewindowbytask(int)` — leitura completa: primeira evidência de struct de slots de janela (stride 0x1c0) e de 3 rastreadores de "task dono do slot", fatia vertical de T21 (texto/janelas) (2026-11-02, T21 do `RE_COMPLETUDE_TASKS.md`)
+
+`Wdisposewindowbytask(int taskId)` (`0xfeeb4`, 112 B, 0 `bl`) —
+disassembly linear completo via Capstone, 93% de cobertura por
+`jtable.py` (só literal pool faltando). Achada por busca de nome no
+cluster de janelas de T21.
+
+```c
+void Wdisposewindowbytask(int taskId) {
+    int slotPair;
+    if (g_base->ownerTask0 == taskId)      slotPair = 0;   // +0x5e8
+    else if (g_base->ownerTask1 == taskId) slotPair = 2;   // +0x968
+    else if (g_base->ownerTask2 == taskId) slotPair = 4;   // +0xce8
+    else return;                                            // nenhum bate: no-op real
+
+    g_base->slots[slotPair].field_0x5e4     = 0;   // stride 0x1c0 por slot
+    g_base->slots[slotPair + 1].field_0x5e4 = 0;
+}
+```
+
+**Achado: as duas cadeias de literal PC-relative (sem GOT) resolvem
+pro MESMO endereço base** (`0x4711fc`), confirmado calculando as duas
+separadamente — não são duas globais coincidentemente parecidas, é
+literalmente a mesma struct contendo tanto os 3 rastreadores de
+"task dono" (`+0x5e8`/`+0x968`/`+0xce8`, 0x380 bytes entre si) quanto
+o array de slots de janela (stride `0x1c0`=448 B, indexado em pares:
+0&1, 2&3, 4&5). Primeira evidência de campo pra esse array de slots
+(campo `+0x5e4` de cada entrada, zerado no descarte) e pros 3
+rastreadores.
+
+**Achado estrutural: se `taskId` não bate com nenhum dos três
+rastreadores, a função é um no-op real** — confirmado pelo `bxne lr`
+direto na terceira comparação, não assumido. Um modelo que
+"limpasse por padrão" o par 0 nesse caso teria divergido.
+
+**Reconstrução C + teste diferencial:**
+`docs/re-tools/c-models/t21_wdisposewindowbytask.c` +
+`test_t21_wdisposewindowbytask.py`: 4 cenários (um pra cada
+rastreador batendo, mais um que não bate com nenhum) batem
+exatamente, mais 2 injeções de falha: confirma que o caso
+"não bate com nenhum" é um no-op completo (nenhum byte tocado); e
+que AMBOS os slots do par são zerados, não só um. Suíte completa de
+`docs/re-tools`: de 623 pra **626 testes** (1.964 → **1.968
+subtestes**), todas passando (confirmado 2×).
+
+**Lacuna aceita:** identidade semântica exata dos 3 rastreadores e do
+campo `field_0x5e4` não confirmada além do que os bytes mostram;
+`sizeof` real da struct de slot (`0x1c0`) e do número total de slots
+não conhecido além do mínimo exigido (índices 0-5); alvos nominais de
+T21 (`mesputmain`, `Wmesputmain`, variantes A/C/D/E/W) seguem
+intocados.
+
+**Status CSV: `read_full`** — 26/26 instruções reais (+2 literal
+pool), 0 `bl`.
