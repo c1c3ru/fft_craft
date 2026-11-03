@@ -27481,3 +27481,71 @@ subtestes, sem novos), todas passando (confirmado 2×).
 **Status CSV: `read_full`** — 25/25 instruções reais, 2 `bl` + 1
 tail call tratados como caixa-preta nas próprias funções já
 confirmadas na seção 679.
+
+## 684. `evt_flag_high()` + `evt_flag_low()` + `evt_flagset()` — leitura completa, fecha a família `evt_flag*` de T19 por completo: "high" dispara sob `<`, "low" dispara sob `>`, confirmado por diff das condicionais, não pelo nome (2026-11-02, T19 do `RE_COMPLETUDE_TASKS.md`)
+
+`evt_flag_high()` (`0x25926c`, 72 B), `evt_flag_low()` (`0x2592b4`,
+72 B) e `evt_flagset()` (`0x2592fc`, 40 B) — disassembly linear
+completo via Capstone, 100% de cobertura nas três. Mesma estrutura
+de `evt_flag()` (seção 671, já `read_full`): leem `(flagIndex,
+valorEsperado)` via `evt_get_flgdt` e usam `Wread_eventflag`/
+`Wwrite_eventflag`. Com esta fatia, **toda a família `evt_flag*`
+citada desde a seção 671 está fechada**.
+
+```c
+int32_t evt_flag_high(void) {
+    int flagIndex, expectedValue;
+    evt_get_flgdt(&flagIndex, &expectedValue);
+    int32_t actualValue = Wread_eventflag(flagIndex);
+    if (actualValue < expectedValue) g_vmCtx->status |= 2;   // bge pula o OR
+    return actualValue;
+}
+
+int32_t evt_flag_low(void) {
+    int flagIndex, expectedValue;
+    evt_get_flgdt(&flagIndex, &expectedValue);
+    int32_t actualValue = Wread_eventflag(flagIndex);
+    if (actualValue > expectedValue) g_vmCtx->status |= 2;   // ble pula o OR
+    return actualValue;
+}
+
+void evt_flagset(void) {
+    int flagIndex, value;
+    evt_get_flgdt(&flagIndex, &value);
+    Wwrite_eventflag(flagIndex, value);   // sem condição, sem bit de status
+}
+```
+
+**Achado: a condição exata que dispara o bit de status é confirmada
+pela instrução condicional real (`bge`/`ble`), não pelo nome da
+função.** `evt_flag_high` marca o bit quando `atual < esperado`
+(`bge` pula o `orr`); `evt_flag_low` marca quando `atual > esperado`
+(`ble` pula o `orr`) — ou seja, "high" checa se o valor atual está
+**no mínimo** tão alto quanto o esperado (marca mismatch se estiver
+abaixo), "low" checa se está **no máximo** tão alto (marca mismatch
+se estiver acima). Na igualdade exata, NENHUMA das duas marca o bit
+— confirmado testando as três relações (`<`, `==`, `>`) nas duas
+funções e cruzando os resultados. `evt_flagset` não tem condição
+nenhuma — grava direto, sem tocar no bit de status.
+
+**Reconstrução C + teste diferencial:**
+`docs/re-tools/c-models/t19_evt_flag_high_low.c` +
+`test_t19_evt_flag_high_low.py` (3 relações × 2 funções, mais 1
+injeção de falha cruzando as duas funções nas três relações pra
+confirmar que elas disparam em lados opostos, não o mesmo) e
+`docs/re-tools/c-models/t19_evt_flagset.c` +
+`test_t19_evt_flagset.py` (4 valores, incluindo negativo e
+`INT32_MAX`). Suíte completa de `docs/re-tools`: de 620 pra **623
+testes** (1.954 → **1.964 subtestes**), todas passando (confirmado
+2×).
+
+**Lacuna aceita:** nenhuma nova além das já registradas pra
+`evt_get_flgdt`/`evt_flag` (seção 671) — `Wread_eventflag`/
+`Wwrite_eventflag` seguem caixa-preta; identidade semântica do global
+de contexto não estendida.
+
+**Status CSV: `read_full`** — `evt_flag_high`: 18/18 instruções
+reais (+1 literal pool), 2 `bl`. `evt_flag_low`: 18/18 instruções
+reais (+1 literal pool), 2 `bl`. `evt_flagset`: 10/10 instruções
+reais, 2 `bl`. Todos tratados como caixa-preta (já confirmados em
+outro lugar).

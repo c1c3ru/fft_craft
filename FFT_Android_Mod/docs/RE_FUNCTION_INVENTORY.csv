@@ -2995,8 +2995,8 @@ address,size,mangled,demangled,status,section_ref
 0025e840,72,_Z12month_to_dayii,"month_to_day(int, int)",read_structural,NOTES §615
 0026b64c,72,_Z15wldmusic_changei,wldmusic_change(int),mentioned_unverified,
 00259224,72,_Z8evt_flagv,evt_flag(),read_full,NOTES §671
-0025926c,72,_Z13evt_flag_highv,evt_flag_high(),mentioned_unverified,
-002592b4,72,_Z12evt_flag_lowv,evt_flag_low(),mentioned_unverified,
+0025926c,72,_Z13evt_flag_highv,evt_flag_high(),read_full,NOTES §684
+002592b4,72,_Z12evt_flag_lowv,evt_flag_low(),read_full,NOTES §684
 002594a0,72,_Z14evt_brave_highv,evt_brave_high(),mentioned_unverified,
 002594e8,72,_Z13evt_brave_lowv,evt_brave_low(),read_structural,NOTES §615
 00259530,72,_Z14evt_faith_highv,evt_faith_high(),mentioned_unverified,
@@ -3935,7 +3935,7 @@ address,size,mangled,demangled,status,section_ref
 00246360,40,_Z16ctlstartmov_mainP7CTLINFO,ctlstartmov_main(CTLINFO*),read_structural,NOTES §616
 0028b3f0,40,_Z19pspWorldDataRectSetP6RECT16,pspWorldDataRectSet(RECT16*),read_structural,NOTES §616
 00267340,40,_Z18iOS_add_anmpac_maxi,iOS_add_anmpac_max(int),read_structural,NOTES §616
-002592fc,40,_Z11evt_flagsetv,evt_flagset(),mentioned_unverified,
+002592fc,40,_Z11evt_flagsetv,evt_flagset(),read_full,NOTES §684
 0025bc50,40,_Z14jobnumber_convi,jobnumber_conv(int),read_structural,NOTES §612
 0026a64c,40,_Z12snplinf_initi,snplinf_init(int),read_structural,NOTES §616
 0026a1a4,40,_Z11snpl_sndreqv,snpl_sndreq(),mentioned_unverified,
