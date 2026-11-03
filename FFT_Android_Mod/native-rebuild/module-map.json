@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "stage": "T32_host_only_staging",
+  "reference_elf_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
+  "modules": [
+    {
+      "name": "b01_cpp_nominal_methods",
+      "source": "docs/re-tools/c-models/b01_named_cpp_methods.cpp",
+      "original_entries": [
+        "000b3518",
+        "000b9f7c",
+        "000b9fac",
+        "000b9fb8",
+        "000bdb60",
+        "000be1dc",
+        "0028de9c"
+      ],
+      "complete_function_equivalence": false
+    },
+    {
+      "name": "t14_boot_frame_move_slice",
+      "source": "docs/re-tools/c-models/t14_boot_framemove.c",
+      "original_entries": [
+        "002b3590"
+      ],
+      "complete_function_equivalence": false
+    },
+    {
+      "name": "t19_evt_flag_high_low_slice",
+      "source": "docs/re-tools/c-models/t19_evt_flag_high_low.c",
+      "original_entries": [
+        "0025926c",
+        "002592b4"
+      ],
+      "complete_function_equivalence": false
+    },
+    {
+      "name": "t19_evt_flagset_slice",
+      "source": "docs/re-tools/c-models/t19_evt_flagset.c",
+      "original_entries": [
+        "002592fc"
+      ],
+      "complete_function_equivalence": false
+    },
+    {
+      "name": "t22_resume_data_slice",
+      "source": "docs/re-tools/c-models/t22_ios_resumegetdata.c",
+      "original_entries": [
+        "0027f620"
+      ],
+      "complete_function_equivalence": false
+    }
+  ],
+  "android_shared_object_built": false,
+  "jni_bindings_implemented": false,
+  "original_game_elf_linked": false,
+  "app_integration_proven": false,
+  "t32_done": false
+}
