@@ -51,9 +51,9 @@ def validate(data, cmake, root=ROOT):
     for path in sources:
         if cmake.count("../" + path) != 1:
             raise ValueError("CMake source not tracked exactly once: " + path)
-    active = "\\n".join(line.split("#", 1)[0] for line in cmake.splitlines())
+    active = "\n".join(line.split("#", 1)[0] for line in cmake.splitlines())
     if "libgl2jni.so" in active or re.search(
-            r"add_library\\s*\\(\\s*fftcraft_stage_models\\s+SHARED\\b", active):
+            r"add_library\s*\(\s*fftcraft_stage_models\s+SHARED\b", active):
         raise ValueError("Never link or replace original game ELF in host stage")
     return len(owners)
 
