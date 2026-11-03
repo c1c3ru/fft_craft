@@ -177,11 +177,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #557 — T39: automatizar rastreamento T01–T40 e triagem priorizada T04/T06](https://github.com/c1c3ru/fft_craft/pull/557)
+- [PR #556 — chore(re): automated structural batch 41668689893](https://github.com/c1c3ru/fft_craft/pull/556)
 - [PR #555 — T27/T29: automatizar inventário JNI/Smali e integridade OBB sem LFS](https://github.com/c1c3ru/fft_craft/pull/555)
 - [PR #554 — T32: automatizar compilação C/C++ modular com CI e rastreabilidade ARM](https://github.com/c1c3ru/fft_craft/pull/554)
 - [PR #553 — chore(re): automated structural batch 41660531183](https://github.com/c1c3ru/fft_craft/pull/553)
-- [PR #552 — chore(re): automated structural batch 41575079211](https://github.com/c1c3ru/fft_craft/pull/552)
-- [PR #551 — chore(re): automated structural batch 41559147334](https://github.com/c1c3ru/fft_craft/pull/551)
 
 ## Atualização automática e fontes
 
