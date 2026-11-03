@@ -1,0 +1,74 @@
+name: T04 T06 original ELF Craft pilot reference
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/re-t39-craft-pilot.yml'
+      - 'FFT_Android_Mod/docs/re-tools/t39_craft_pilot_reference.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_t39_craft_pilot_reference.py'
+      - 'FFT_Android_Mod/docs/re-tools/re_40_task_orchestrator.py'
+      - 'FFT_Android_Mod/docs/re-tools/t39_craft_anything_bridge.py'
+      - 'FFT_Android_Mod/docs/re-baseline/T39_CRAFT_PILOT.md'
+      - 'FFT_Android_Mod/docs/re-baseline/text_coverage_gaps.json'
+      - 'FFT_Android_Mod/docs/re-results/*.json'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/re-t39-craft-pilot.yml'
+      - 'FFT_Android_Mod/docs/re-tools/t39_craft_pilot_reference.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_t39_craft_pilot_reference.py'
+      - 'FFT_Android_Mod/docs/re-baseline/T39_CRAFT_PILOT.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t39-craft-pilot-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  reference-crosscheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: .github/ci/requirements-arm-re.txt
+      - name: Install existing ARM evidence dependencies
+        run: python3 -m pip install --disable-pip-version-check -r .github/ci/requirements-arm-re.txt
+      - name: Test disassembly boundaries, baseline and trust separation
+        run: |
+          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools \
+            -p 'test_t39_craft_pilot_reference.py' -v
+      - name: Build current T39 ARM queue
+        run: |
+          python3 FFT_Android_Mod/docs/re-tools/re_40_task_orchestrator.py \
+            --run-id "$GITHUB_RUN_ID" \
+            --json-output "$RUNNER_TEMP/task40.json" \
+            --md-output "$RUNNER_TEMP/task40.md"
+      - name: Verify original ELF references in A32 and Thumb modes
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/t39_craft_pilot_reference.py \
+            --queue "$RUNNER_TEMP/task40.json" \
+            --json-output "$RUNNER_TEMP/craft-pilot-reference.json" \
+            --md-output "$RUNNER_TEMP/craft-pilot-reference.md" \
+            | tee "$RUNNER_TEMP/craft-pilot-gates.txt"
+          grep -qx 'T39_CRAFT_PILOT_ORIGINAL_WINDOWS=4' "$RUNNER_TEMP/craft-pilot-gates.txt"
+          grep -qx 'T39_CRAFT_PILOT_EXTERNAL_ANALYSIS_EXECUTED=0' "$RUNNER_TEMP/craft-pilot-gates.txt"
+          grep -qx 'T39_CRAFT_PILOT_NEW_CERTIFICATES=0' "$RUNNER_TEMP/craft-pilot-gates.txt"
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: t39-craft-pilot-original-elf-reference
+          path: |
+            ${{ runner.temp }}/craft-pilot-reference.json
+            ${{ runner.temp }}/craft-pilot-reference.md
+          retention-days: 21
+          if-no-files-found: error
