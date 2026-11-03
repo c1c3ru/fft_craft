@@ -1,0 +1,11 @@
+name: T39 40-task audit
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 FFT_Android_Mod/docs/re-tools/re_40_task_orchestrator.py --json-output /tmp/t39.json --md-output /tmp/t39.md
