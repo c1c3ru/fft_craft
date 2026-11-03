@@ -27660,3 +27660,58 @@ completa de `docs/re-tools`: de 626 pra **628 testes** (1.968 →
 
 **Status CSV: `read_full`** — 15/15 instruções reais (+1 literal
 pool), 0 `bl`.
+
+## 687. `wldlop_chk()` — leitura completa: re-leitura real pós-chamada confirmada por bytes, não assumida, fatia vertical de T18 (VM de eventos) (2026-11-02, T18 do `RE_COMPLETUDE_TASKS.md`)
+
+`wldlop_chk()` (`0x25f63c`, 88 B, 1 `bl`) — disassembly linear
+completo via Capstone, 86% de cobertura por `jtable.py` (só literal
+pool faltando). Achada por busca de nome no cluster `wld*`/`op_*` de
+T18; `frmbuf_get()` (já `read_full`, 496 B) tratada como caixa-preta.
+
+```c
+void wldlop_chk(void) {
+    int32_t src = g_srcFlags;
+    if ((src & 2) == 0) {
+        int32_t dst = g_dstFlags;
+        if ((dst & 2) != 0) {
+            frmbuf_get();
+            src = g_srcFlags;    // *** RE-LEITURA real após a chamada ***
+        }
+    }
+    g_dstFlags = src;
+}
+```
+
+**Achado estrutural: a releitura de `g_srcFlags` após `frmbuf_get()`
+é confirmada pelos bytes reais** (`ldr r2,[r5]` aparece DUAS vezes no
+disassembly — antes do `tst` inicial e de novo depois do `bl` — não é
+o mesmo valor reaproveitado do registrador). Isso significa que o
+efeito final só usa o valor PRÉ-chamada de `g_srcFlags` quando o
+`bl` não acontece; quando acontece, usa o valor PÓS-chamada — uma
+distinção que só importa se `frmbuf_get()` (caixa-preta aqui) tiver
+efeito colateral sobre `g_srcFlags`, o que esta leitura não confirma
+nem descarta. Em todos os casos, o efeito NETO visível (ignorando o
+`bl`) é `g_dstFlags = g_srcFlags` (uma "sincronização" condicional de
+bit).
+
+**Reconstrução C + teste diferencial:**
+`docs/re-tools/c-models/t18_wldlop_chk.c` +
+`test_t18_wldlop_chk.py`: `frmbuf_get` stubada via `callable` capaz
+de mutar `g_srcFlags` durante a chamada. 5 cenários (cobrindo as
+combinações de bit de `src`/`dst`, com e sem mutação) batem
+exatamente, mais 1 injeção de falha confirmando que a mutação durante
+`frmbuf_get()` É observada no resultado final (um modelo que
+reaproveitasse o valor pré-chamada divergiria). Suíte completa de
+`docs/re-tools`: de 628 pra **630 testes** (1.973 → **1.978
+subtestes**), todas passando (confirmado 2×).
+
+**Lacuna aceita:** `frmbuf_get()` não relida nesta fatia (já
+`read_full` em outro lugar, comportamento real não re-verificado
+aqui); identidade semântica de `g_srcFlags`/`g_dstFlags`/bit 2 não
+confirmada além do que os bytes mostram; `event_call`,
+`worldmap_call`, `op_attackteam` (alvos nominais de T18) seguem
+intocados.
+
+**Status CSV: `read_full`** — 19/19 instruções reais (+3 literal
+pool), 1 `bl` tratado como caixa-preta (já confirmado em outro
+lugar).

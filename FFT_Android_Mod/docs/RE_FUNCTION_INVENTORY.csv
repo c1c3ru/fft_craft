@@ -2671,7 +2671,7 @@ address,size,mangled,demangled,status,section_ref
 0029b678,88,GsSetDrawBuffClip,GsSetDrawBuffClip,read_structural,NOTES §611
 00253a10,88,_Z13wldctl_activev,wldctl_active(),read_structural,NOTES §615
 00256490,88,_Z16ctlsthelp_activeP7CTLINFO,ctlsthelp_active(CTLINFO*),read_structural,NOTES §331
-0025f63c,88,_Z10wldlop_chkv,wldlop_chk(),mentioned_unverified,
+0025f63c,88,_Z10wldlop_chkv,wldlop_chk(),read_full,NOTES §687
 0026b31c,88,_Z16snplread_parcalcv,snplread_parcalc(),read_structural,NOTES §615
 00270b04,88,_Z15pagenext_cursorP11PAGEWININFO,pagenext_cursor(PAGEWININFO*),read_full,NOTES §669
 00273cc8,88,_Z16IsAlmostNullUniti,IsAlmostNullUnit(int),mentioned_unverified,
