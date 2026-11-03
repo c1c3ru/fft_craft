@@ -1,0 +1,49 @@
+name: T32 independent native reconstruction stage
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/re-t32-native-stage.yml'
+      - 'FFT_Android_Mod/native-rebuild/**'
+      - 'FFT_Android_Mod/docs/re-tools/c-models/b01_named_cpp_methods.cpp'
+      - 'FFT_Android_Mod/docs/re-tools/c-models/t14_boot_framemove.c'
+      - 'FFT_Android_Mod/docs/re-tools/c-models/t19_evt_flag_high_low.c'
+      - 'FFT_Android_Mod/docs/re-tools/c-models/t19_evt_flagset.c'
+      - 'FFT_Android_Mod/docs/re-tools/c-models/t22_ios_resumegetdata.c'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/re-t32-native-stage.yml'
+      - 'FFT_Android_Mod/native-rebuild/**'
+      - 'FFT_Android_Mod/docs/re-tools/c-models/b01_named_cpp_methods.cpp'
+      - 'FFT_Android_Mod/docs/re-tools/c-models/t14_boot_framemove.c'
+      - 'FFT_Android_Mod/docs/re-tools/c-models/t19_evt_flag_high_low.c'
+      - 'FFT_Android_Mod/docs/re-tools/c-models/t19_evt_flagset.c'
+      - 'FFT_Android_Mod/docs/re-tools/c-models/t22_ios_resumegetdata.c'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  host-native-stage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+      - name: Audit traceability and prohibit linking original binaries
+        run: python3 FFT_Android_Mod/native-rebuild/verify_stage.py
+      - name: Build bounded independent C/C++ modules
+        run: |
+          set -euo pipefail
+          cmake -S FFT_Android_Mod/native-rebuild -B "${RUNNER_TEMP}/fftcraft-stage" \
+            -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
+          cmake --build "${RUNNER_TEMP}/fftcraft-stage" --parallel 2
+      - name: Execute native boundary tests
+        run: ctest --test-dir "${RUNNER_TEMP}/fftcraft-stage" --output-on-failure
