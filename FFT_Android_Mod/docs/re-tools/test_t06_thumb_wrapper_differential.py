@@ -65,7 +65,7 @@ class OriginalWrapperTests(unittest.TestCase):
         self.assertEqual(value["external_call_count"], 1)
         self.assertEqual(value["external_r0_argument"], 0x12345678)
         self.assertEqual(value["external_callee"], "0x002ce07c")
-        self.assertTrue(value["returned_to_original_caller"])
+        self.assertTrue(value["returned_to_controlled_sentinel"])
 
     def test_new_array_forwards_input_and_mock_return(self):
         item = contracts.SLICES[1]
