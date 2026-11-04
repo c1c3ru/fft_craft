@@ -6,6 +6,8 @@ on:
       - '.github/workflows/re-t39-craft-runtime.yml'
       - 'FFT_Android_Mod/docs/re-tools/t39_craft_runtime_compare.py'
       - 'FFT_Android_Mod/docs/re-tools/test_t39_craft_runtime_compare.py'
+      - 'FFT_Android_Mod/docs/re-tools/t39_thumb_branch_gate.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_t39_thumb_branch_gate.py'
       - 'FFT_Android_Mod/docs/re-baseline/T39_CRAFT_ACTUAL_CROSSCHECK.md'
   workflow_dispatch:
 
@@ -80,6 +82,16 @@ jobs:
             --md-output "$RUNNER_TEMP/t39-craft-compared.md" \
             | tee "$RUNNER_TEMP/t39-craft-gates.txt"
           grep -qx 'CRAFT_ACTUAL_NEW_CERTIFICATES=0' "$RUNNER_TEMP/t39-craft-gates.txt"
+      - name: Execute original Thumb branches and verify PC LR with Unicorn
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools \
+            -p 'test_t39_thumb_branch_gate.py' -v
+          python3 FFT_Android_Mod/docs/re-tools/t39_thumb_branch_gate.py \
+            --output "$RUNNER_TEMP/t06-original-thumb-branches.json" \
+            | tee "$RUNNER_TEMP/t06-unicorn-gates.txt"
+          grep -qx 'T06_THUMB_BRANCH_ORIGINAL_EMULATION_PASSED=4' "$RUNNER_TEMP/t06-unicorn-gates.txt"
+          grep -qx 'T06_THUMB_NEW_CERTIFICATES=0' "$RUNNER_TEMP/t06-unicorn-gates.txt"
       - name: Publish only sanitized comparison metadata
         if: always()
         uses: actions/upload-artifact@v4
@@ -88,5 +100,6 @@ jobs:
           path: |
             ${{ runner.temp }}/t39-craft-compared.json
             ${{ runner.temp }}/t39-craft-compared.md
+            ${{ runner.temp }}/t06-original-thumb-branches.json
           retention-days: 10
           if-no-files-found: warn
