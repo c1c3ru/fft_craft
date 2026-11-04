@@ -11,6 +11,7 @@ import json
 import os
 import re
 import subprocess
+import struct
 import tempfile
 from pathlib import Path
 
@@ -103,6 +104,33 @@ def call_cli(cli, binary, project, operation, param, timeout_sec):
         return "success", parse_tool(doc, operation)
     except (ValueError, TypeError, KeyError):
         return "unparseable_output", []
+
+
+
+def make_thumb_mode_probe(binary, entry, folder):
+    """Change ONLY ELF32 e_entry in a private copy to select upstream T32.
+
+    Craft Anything 0.3.0 chooses one Image.mode from ELF's entry-point bit,
+    even when the real ELF mixes A32/T32. The returned file MUST NOT be
+    confused with or certified as the original ELF.
+    """
+    if original.sha256(binary) != original.PINNED_ELF_SHA or not (entry & 1):
+        raise ValueError("Expected pinned original ELF and a Thumb entry")
+    contents = bytearray(binary.read_bytes())
+    if (len(contents) < 52 or contents[:4] != b"\x7fELF"
+            or contents[4] != 1 or contents[5] != 1
+            or struct.unpack_from("<H", contents, 18)[0] != 40):
+        raise ValueError("Not original 32-bit little-endian ARM ELF")
+    if struct.unpack_from("<I", contents, 24)[0] == entry:
+        raise ValueError("Alternative must change only e_entry")
+    struct.pack_into("<I", contents, 24, entry)
+    output = folder / ("forced-thumb-%08x.so" % entry)
+    output.write_bytes(contents)
+    if original.sha256(output) == original.PINNED_ELF_SHA:
+        raise ValueError("Derived probe accidentally equals original ELF")
+    # No target instruction or PT_LOAD bytes are altered: only the 4-byte
+    # header field at e_entry changes (offset 0x18..0x1b).
+    return output
 
 
 def reference_branch_targets(binary, target):
@@ -231,7 +259,32 @@ def report(binary, ref, cli, per_target_timeout=120):
                     status, insns = "first_instruction_only", items
                 else:
                     status, insns = "unavailable_" + status + "_" + fallback, []
-            outcomes.append(compare_target(target, insns, branch, status))
+            selected = compare_target(target, insns, branch, status)
+            if target["entry_isa"] == "thumb" and not selected[
+                    "matched_instruction_boundaries_and_bytes"]:
+                # Explicitly isolated diagnostic, not the real ELF identity:
+                # upstream mode_for() selects T32 using its ELF e_entry bit.
+                alt = make_thumb_mode_probe(
+                    binary, int(target["declared_entry"], 16), study)
+                alt_status, alt_rows = call_cli(
+                    cli, alt, study / "study.cany",
+                    "native_function_instructions_list", physical,
+                    per_target_timeout)
+                if alt_status != "success" or not alt_rows:
+                    alt_fallback, alt_items = call_cli(
+                        cli, alt, study / "study.cany",
+                        "native_instruction_show", physical, per_target_timeout)
+                    if alt_fallback == "success" and alt_items:
+                        alt_status, alt_rows = "first_instruction_only", alt_items
+                    else:
+                        alt_status, alt_rows = "unavailable_" + alt_status + "_" + alt_fallback, []
+                forced = compare_target(target, alt_rows, branch, alt_status)
+                forced["derived_elf_sha256"] = original.sha256(alt)
+                forced["original_code_bytes_unchanged"] = True
+                forced["only_modified_header_field"] = "e_entry_0x18_0x1b"
+                forced["not_original_elf_analysis"] = True
+                selected["forced_global_thumb_mode_diagnostic"] = forced
+            outcomes.append(selected)
     return {
         "schema": 1, "elf_sha256": original.PINNED_ELF_SHA,
         "craft_anything_version": CLI_VERSION,
@@ -242,6 +295,9 @@ def report(binary, ref, cli, per_target_timeout=120):
             t["matched_instruction_boundaries_and_bytes"] > 0 for t in outcomes),
         "matched_instruction_count": sum(
             t["matched_instruction_boundaries_and_bytes"] for t in outcomes),
+        "forced_thumb_diagnostic_matches": sum(
+            t.get("forced_global_thumb_mode_diagnostic", {}).get(
+                "matched_instruction_boundaries_and_bytes", 0) for t in outcomes),
         "new_semantic_certificates": 0, "new_structural_approvals": 0,
         "tasks_closed": [], "comparisons_are_not_certifications": True,
     }
@@ -259,6 +315,14 @@ def render_md(data):
         lines.append("| " + row["name"] + " | " + row["cli_status"] +
                      " | " + str(row["third_party_instructions_in_window"]) +
                      " | " + str(row["matched_instruction_boundaries_and_bytes"]) + " |")
+    lines += ["", "## Diagnóstico opcional de modo Thumb global", ""]
+    for row in data["targets"]:
+        diag = row.get("forced_global_thumb_mode_diagnostic")
+        if diag:
+            lines.append("- " + row["name"] +
+                         ": " + str(diag["matched_instruction_boundaries_and_bytes"]) +
+                         " instruções coincidentes na cópia derivada com e_entry Thumb; " +
+                         "os bytes executáveis originais são idênticos, mas o cabeçalho NÃO é.")
     lines += ["", "## Limites", "",
               "Desmontagem e destinos de saltos são indícios técnicos, não",
               "prova de chamadores reais, contratos de memória ou equivalência.",
@@ -291,6 +355,8 @@ def main():
     print("CRAFT_ACTUAL_TARGETS_WITH_COMPARABLE_INSTRUCTIONS=" +
           str(data["targets_with_at_least_one_comparable_instruction"]))
     print("CRAFT_ACTUAL_MATCHING_INSTRUCTIONS=" + str(data["matched_instruction_count"]))
+    print("CRAFT_FORCED_THUMB_DIAGNOSTIC_MATCHES=" +
+          str(data["forced_thumb_diagnostic_matches"]))
     print("CRAFT_ACTUAL_NEW_CERTIFICATES=0")
     if not data["targets_with_at_least_one_comparable_instruction"]:
         raise SystemExit("No comparable third-party instruction was produced; review pilot output")
