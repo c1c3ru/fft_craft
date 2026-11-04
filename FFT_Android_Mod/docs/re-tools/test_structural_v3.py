@@ -68,6 +68,45 @@ class StructuralV3Tests(unittest.TestCase):
         self.assertEqual(result["status"], "needs_review")
         self.assertFalse(result["tables_safe"])
 
+    def test_thumb_short_return_has_byte_coverage_without_auto_approval(self):
+        # push {r3,lr}; pop {r3,pc}: both Thumb halfwords are executable.
+        data = bytes.fromhex("08b5 08bd")
+        result = structural_v3.inspect_thumb(data, 0x1001)
+        self.assertEqual(result["isa"], "thumb")
+        self.assertEqual(result["status"], "needs_review")
+        self.assertEqual(result["bytes_reached"], 4)
+        self.assertEqual(result["unexplained_bytes"], 0)
+        self.assertTrue(result["requires_manual_review"])
+        self.assertFalse(result["semantic_equivalence"])
+
+    def test_thumb_trailing_bytes_after_return_not_claimed(self):
+        data = bytes.fromhex("08b5 08bd 0120 7047")
+        result = structural_v3.inspect_thumb(data, 0x1001)
+        self.assertEqual(result["status"], "needs_review")
+        self.assertEqual(result["bytes_reached"], 4)
+        self.assertEqual(result["unexplained_bytes"], 4)
+        self.assertIn("trailing_bytes", result["reason"])
+
+    def test_odd_thumb_binary_original_elf_records_correct_mode(self):
+        from pathlib import Path
+        binary = Path(__file__).resolve().parents[2] / "src/lib/armeabi/libgl2jni.so"
+        deletion = structural_v3.inspect_binary(binary, 0x002c9115, 12)
+        alloc_array = structural_v3.inspect_binary(binary, 0x002c9a25, 20)
+        self.assertEqual(deletion["isa"], "thumb")
+        self.assertEqual(deletion["bytes_reached"], 12)
+        self.assertEqual(deletion["unexplained_bytes"], 0)
+        self.assertEqual(deletion["external_callee_candidates"][0]["target"],
+                         "0x2ce07c")
+        self.assertEqual(deletion["branch_candidates"][0]["target"],
+                         "0x2c911e")
+        self.assertEqual(alloc_array["isa"], "thumb")
+        self.assertEqual(alloc_array["bytes_reached"], 8)
+        self.assertEqual(alloc_array["unexplained_bytes"], 12)
+        self.assertEqual(alloc_array["external_callee_candidates"][0]["target"],
+                         "0x2c99b4")
+        self.assertEqual(deletion["status"], "needs_review")
+        self.assertEqual(alloc_array["status"], "needs_review")
+
     def test_stale_rules_only_reprocess_review_of_same_binary(self):
         current = {"status": "needs_review", "binary_sha256": "sha",
                    "pipeline_version": 2, "size": 12,
