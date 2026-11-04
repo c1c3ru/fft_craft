@@ -1,6 +1,9 @@
 """Third-party ARM disassembly must be compared without raw evidence leakage."""
 import hashlib
+import struct
+import tempfile
 import unittest
+from pathlib import Path
 
 import t39_craft_runtime_compare as compare
 
@@ -134,6 +137,26 @@ class RuntimeCompareTests(unittest.TestCase):
         rendered=compare.render_md(data)
         self.assertIn("Sem certificados novos", rendered)
         self.assertNotIn("0220a0e3", rendered)
+
+
+    def test_derived_thumb_probe_only_rewrites_elf_header_entry(self):
+        binary = compare.pilot.ROOT / "src/lib/armeabi/libgl2jni.so"
+        baseline = binary.read_bytes()
+        with tempfile.TemporaryDirectory() as tmp:
+            alt = compare.make_thumb_mode_probe(binary, 0x002c9115, Path(tmp))
+            new = alt.read_bytes()
+        self.assertEqual(len(new), len(baseline))
+        self.assertEqual(baseline[:24], new[:24])
+        self.assertEqual(baseline[28:], new[28:])
+        self.assertEqual(struct.unpack_from("<I", new, 24)[0], 0x002c9115)
+        self.assertNotEqual(hashlib.sha256(new).digest(),
+                            hashlib.sha256(baseline).digest())
+
+    def test_derived_thumb_probe_rejects_even_entry(self):
+        binary = compare.pilot.ROOT / "src/lib/armeabi/libgl2jni.so"
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaisesRegex(ValueError, "Thumb entry"):
+                compare.make_thumb_mode_probe(binary, 0x002c9114, Path(tmp))
 
 
 if __name__ == "__main__":
