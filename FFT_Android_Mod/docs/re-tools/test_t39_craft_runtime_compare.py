@@ -67,6 +67,28 @@ class RuntimeCompareTests(unittest.TestCase):
         report = compare.compare_target(target(), rows, {}, "success")
         self.assertEqual(report["matched_instruction_boundaries_and_bytes"], 1)
 
+    def test_thumb_bl_w_spelling_is_equivalent_only_with_exact_opcode(self):
+        t = target()
+        t["entry_isa"] = "thumb"
+        t["first_instructions"] = [{
+            "address": "0x000b9f7c", "size": 4,
+            "mnemonic": "bl", "instruction_bytes_sha256": h("0220a0e3"),
+        }]
+        data = output()
+        data["result"]["instructions"] = [{
+            "address": "0xb9f7c", "length": 4, "bytes": "0220a0e3",
+            "mnemonic": "bl.w", "flow": {"kind": "call", "target": 0x2000}
+        }]
+        rows = compare.parse_tool(data, "native_function_instructions_list")
+        result = compare.compare_target(t, rows, {}, "success")
+        self.assertEqual(result["matched_instruction_boundaries_and_bytes"], 1)
+        self.assertEqual(len(result["equivalent_thumb_width_mnemonic_aliases"]), 1)
+        data["result"]["instructions"][0]["bytes"] = "0000a0e1"
+        mismatch = compare.compare_target(
+            t, compare.parse_tool(data, "native_function_instructions_list"),
+            {}, "success")
+        self.assertEqual(mismatch["matched_instruction_boundaries_and_bytes"], 0)
+
     def test_foreign_operation_rejected(self):
         with self.assertRaisesRegex(ValueError, "requested evidence"):
             compare.parse_tool(output(), "native_instruction_show")
