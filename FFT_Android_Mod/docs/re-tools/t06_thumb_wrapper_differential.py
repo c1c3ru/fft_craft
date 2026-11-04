@@ -160,7 +160,8 @@ def execute_wrapper(item, code, input_r0, mocked_result):
 
     u.hook_add(UC_HOOK_CODE, on_code)
     u.hook_add(UC_HOOK_MEM_WRITE, on_write)
-    u.emu_start(item["start"] | 1, RETURN_PC, timeout=2_000_000, count=20)
+    # The return sentinel is observed by the code hook, not by emu_start(until).
+    u.emu_start(item["start"] | 1, 0xffffffff, timeout=2_000_000, count=20)
     expected_calls = (1 if (item["model"] == "new_array" or input_r0 != 0)
                       else 0)
     if not record["returned"] or record["unexpected_pc"]:
