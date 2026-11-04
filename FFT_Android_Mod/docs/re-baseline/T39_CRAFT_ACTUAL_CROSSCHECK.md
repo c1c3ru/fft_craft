@@ -76,3 +76,30 @@ Essa contraprova separa dois problemas: capacidade do decodificador Thumb
 e incapacidade de alternar ISA dentro do mesmo ELF. Mesmo se os opcodes
 coincidirem, o endereço/CFG da cópia não prova alcançabilidade do código
 no aplicativo Android original.
+
+## Segunda observação e próximo teste independente
+
+A análise global Thumb forçada em cópias privadas do ELF reconheceu
+dois prefixos de funções. O upstream chama saltos de quatro bytes
+`bl.w`, enquanto Capstone usa `bl`: a comparação aceita essa diferença
+de notação **somente quando tamanho e bytes do opcode forem idênticos**.
+
+As instruções de desvio resultaram nas seguintes divergências entre
+Capstone no ELF original e Craft Anything na cópia Thumb:
+
+| Local | Capstone | Craft Anything |
+|---|---|---|
+| BEQ `0x002c9118` | `0x002c911e` | `0x002c911c` |
+| BL `0x002c911a` | `0x002ce07c` | `0x002ce078` |
+| BL `0x002c9a26` | `0x002c99b4` | `0x002c99b0` |
+
+O gate `t39_thumb_branch_gate.py` agora executa esses opcodes originais
+uma instrução por vez no Unicorn em modo Thumb, com flags Z controladas,
+e verifica os registradores PC/LR e o retorno por fallthrough.
+Esse teste está limitado a comportamento local de instruções e não
+comprova a semântica completa de `operator delete` ou `operator new[]`.
+
+A hipótese atual é que a diferença de modo global provoca a primeira
+falha, e um cálculo impreciso de PC relativo na ferramenta externa
+provoca as diferenças de destinos. A hipótese de PC deve ser comparada
+ao resultado efetivo do Unicorn antes de ser considerada confirmada.
