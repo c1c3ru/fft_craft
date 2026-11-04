@@ -196,7 +196,7 @@ def execute_wrapper(item, code, input_r0, mocked_result):
         "external_callee": "0x%08x" % item["callee"] if record["calls"] else None,
         "external_r0_argument": record["r0_arg"],
         "returned_r0": u.reg_read(UC_ARM_REG_R0) if item["model"] == "new_array" else None,
-        "returned_to_original_caller": record["returned"],
+        "returned_to_controlled_sentinel": record["returned"],
         "original_stack_and_r3_restored": True,
         "observed_stack_write_events": len(writes),
         "observed_wrapper_instructions": len(path),
