@@ -24,16 +24,167 @@
   "v2_structural_status": "needs_review",
   "structural_v3": {
     "status": "needs_review",
-    "reason": "non_arm_aligned_or_empty",
-    "code_slots": 0,
-    "literal_slots": [],
-    "unexplained_slots": [],
-    "tables_safe": false,
-    "tables": []
+    "reason": "thumb_trailing_bytes_or_partial_cfg",
+    "isa": "thumb",
+    "marked_entry": "0x2c9b11",
+    "physical_entry": "0x2c9b10",
+    "declared_bytes": 388,
+    "bytes_reached": 378,
+    "instruction_count": 175,
+    "unexplained_bytes": 10,
+    "branch_candidates": [
+      {
+        "site": "0x2c9b2c",
+        "target": "0x2c9bee"
+      },
+      {
+        "site": "0x2c9b30",
+        "target": "0x2c9bba"
+      },
+      {
+        "site": "0x2c9b4e",
+        "target": "0x2c9c12"
+      },
+      {
+        "site": "0x2c9b64",
+        "target": "0x2c9bce"
+      },
+      {
+        "site": "0x2c9b6c",
+        "target": "0x2c9bc0"
+      },
+      {
+        "site": "0x2c9b74",
+        "target": "0x2c9c40"
+      },
+      {
+        "site": "0x2c9b7a",
+        "target": "0x2c9b7e"
+      },
+      {
+        "site": "0x2c9b7c",
+        "target": "0x2c9c60"
+      },
+      {
+        "site": "0x2c9c72",
+        "target": "0x2c9ba2"
+      },
+      {
+        "site": "0x2c9c88",
+        "target": "0x2c9bc0"
+      },
+      {
+        "site": "0x2c9bb8",
+        "target": "0x2c9bc0"
+      },
+      {
+        "site": "0x2c9c56",
+        "target": "0x2c9c7a"
+      },
+      {
+        "site": "0x2c9c5e",
+        "target": "0x2c9bc0"
+      },
+      {
+        "site": "0x2c9be0",
+        "target": "0x2c9c16"
+      },
+      {
+        "site": "0x2c9bec",
+        "target": "0x2c9bc0"
+      },
+      {
+        "site": "0x2c9c1a",
+        "target": "0x2c9bc0"
+      },
+      {
+        "site": "0x2c9c3e",
+        "target": "0x2c9bc0"
+      },
+      {
+        "site": "0x2c9c14",
+        "target": "0x2c9bc0"
+      },
+      {
+        "site": "0x2c9bbe",
+        "target": "0x2c9be2"
+      },
+      {
+        "site": "0x2c9c0a",
+        "target": "0x2c9b3a"
+      },
+      {
+        "site": "0x2c9c10",
+        "target": "0x2c9b3a"
+      }
+    ],
+    "external_callee_candidates": [
+      {
+        "site": "0x2c9b48",
+        "target": "0x2ce16c"
+      },
+      {
+        "site": "0x2c9c6a",
+        "target": "0x2c94a0"
+      },
+      {
+        "site": "0x2c9c76",
+        "target": "0x2c942c"
+      },
+      {
+        "site": "0x2c9c7c",
+        "target": "0x2c97cc"
+      },
+      {
+        "site": "0x2c9c82",
+        "target": "0x2c9874"
+      },
+      {
+        "site": "0x2c9ba8",
+        "target": "0x2c97cc"
+      },
+      {
+        "site": "0x2c9bb2",
+        "target": "0x2c987c"
+      },
+      {
+        "site": "0x2c9b9e",
+        "target": "0x2c9860"
+      },
+      {
+        "site": "0x2c9c4a",
+        "target": "0x2c94a0"
+      },
+      {
+        "site": "0x2c9c58",
+        "target": "0x2c9824"
+      },
+      {
+        "site": "0x2c9bd8",
+        "target": "0x2c94a0"
+      },
+      {
+        "site": "0x2c9be6",
+        "target": "0x2c9824"
+      },
+      {
+        "site": "0x2c9c3a",
+        "target": "0x2c9834"
+      },
+      {
+        "site": "0x2c9bfe",
+        "target": "0x2ce14c"
+      }
+    ],
+    "uncertain_transfers": [],
+    "model_assumes_calls_return": true,
+    "requires_manual_review": true,
+    "semantic_equivalence": false,
+    "original_process_execution": false
   },
   "structural_version": 3,
-  "structural_fingerprint": "3ff8b8e6cea3388010f6",
-  "review_attempts": 2,
+  "structural_fingerprint": "97ef3aabba935e1a898c",
+  "review_attempts": 1,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

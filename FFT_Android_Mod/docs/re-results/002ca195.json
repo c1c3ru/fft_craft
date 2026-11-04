@@ -15,16 +15,47 @@
   "v2_structural_status": "needs_review",
   "structural_v3": {
     "status": "needs_review",
-    "reason": "non_arm_aligned_or_empty",
-    "code_slots": 0,
-    "literal_slots": [],
-    "unexplained_slots": [],
-    "tables_safe": false,
-    "tables": []
+    "reason": "thumb_trailing_bytes_or_partial_cfg",
+    "isa": "thumb",
+    "marked_entry": "0x2ca195",
+    "physical_entry": "0x2ca194",
+    "declared_bytes": 60,
+    "bytes_reached": 50,
+    "instruction_count": 24,
+    "unexplained_bytes": 10,
+    "branch_candidates": [
+      {
+        "site": "0x2ca1a4",
+        "target": "0x2ca1ac"
+      },
+      {
+        "site": "0x2ca1b2",
+        "target": "0x2ca1a6"
+      },
+      {
+        "site": "0x2ca1bc",
+        "target": "0x2ca1a8"
+      },
+      {
+        "site": "0x2ca1c4",
+        "target": "0x2ca1a8"
+      }
+    ],
+    "external_callee_candidates": [
+      {
+        "site": "0x2ca19a",
+        "target": "0x2c8da0"
+      }
+    ],
+    "uncertain_transfers": [],
+    "model_assumes_calls_return": true,
+    "requires_manual_review": true,
+    "semantic_equivalence": false,
+    "original_process_execution": false
   },
   "structural_version": 3,
-  "structural_fingerprint": "3ff8b8e6cea3388010f6",
-  "review_attempts": 2,
+  "structural_fingerprint": "97ef3aabba935e1a898c",
+  "review_attempts": 1,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

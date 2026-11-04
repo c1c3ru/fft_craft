@@ -177,11 +177,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #569 — T06: analisar CFG Thumb 2/4 bytes e validar wrappers com Unicorn × C++](https://github.com/c1c3ru/fft_craft/pull/569)
+- [PR #568 — chore(re): automated structural batch 41828615496](https://github.com/c1c3ru/fft_craft/pull/568)
 - [PR #567 — T39/T06: executar Craft Anything CLI real e comparar desmontagem ARM/Thumb no ELF](https://github.com/c1c3ru/fft_craft/pull/567)
 - [PR #566 — chore(re): automated structural batch 41817446288](https://github.com/c1c3ru/fft_craft/pull/566)
 - [PR #565 — chore(re): automated structural batch 41764331581](https://github.com/c1c3ru/fft_craft/pull/565)
-- [PR #564 — chore(re): automated structural batch 41717528677](https://github.com/c1c3ru/fft_craft/pull/564)
-- [PR #563 — chore(re): automated structural batch 41697919708](https://github.com/c1c3ru/fft_craft/pull/563)
 
 ## Atualização automática e fontes
 

@@ -15,7 +15,7 @@ Automatically triaged: 299,868 bytes / 1,837,392 inventory bytes (16.32%); **thi
 | `00090e08` | mdct_init | 732 | 97.81% | auto_structural |
 | `00076ef8` | deflateInit2_ | 724 | 97.79% | auto_structural |
 | `002ca8a0` | __subdf3 | 688 | 28.49% | needs_review |
-| `002ca8a4` | __aeabi_dadd | 684 | 28.07% | needs_review |
+| `002ca8a4` | __adddf3 | 684 | 28.07% | needs_review |
 | `00088978` | _ve_envelope_search | 636 | 100.0% | auto_structural |
 | `002cac50` | __muldf3 | 620 | 72.9% | needs_review |
 | `000ba9c8` | CSOUND_IF::Load(int, char*, unsigned char*, unsigned int, unsigned int, int, int, int, int, int, int) | 612 | 100.0% | auto_structural |

@@ -27,16 +27,155 @@
   "v2_structural_status": "needs_review",
   "structural_v3": {
     "status": "needs_review",
-    "reason": "non_arm_aligned_or_empty",
-    "code_slots": 0,
-    "literal_slots": [],
-    "unexplained_slots": [],
-    "tables_safe": false,
-    "tables": []
+    "reason": "thumb_trailing_bytes_or_partial_cfg",
+    "isa": "thumb",
+    "marked_entry": "0x2ca215",
+    "physical_entry": "0x2ca214",
+    "declared_bytes": 268,
+    "bytes_reached": 246,
+    "instruction_count": 99,
+    "unexplained_bytes": 22,
+    "branch_candidates": [
+      {
+        "site": "0x2ca22e",
+        "target": "0x2ca23a"
+      },
+      {
+        "site": "0x2ca240",
+        "target": "0x2ca230"
+      },
+      {
+        "site": "0x2ca272",
+        "target": "0x2ca2c4"
+      },
+      {
+        "site": "0x2ca296",
+        "target": "0x2ca2b8"
+      },
+      {
+        "site": "0x2ca2aa",
+        "target": "0x2ca2b0"
+      },
+      {
+        "site": "0x2ca2b6",
+        "target": "0x2ca270"
+      },
+      {
+        "site": "0x2ca2c8",
+        "target": "0x2ca2f4"
+      },
+      {
+        "site": "0x2ca308",
+        "target": "0x2ca2bc"
+      }
+    ],
+    "external_callee_candidates": [
+      {
+        "site": "0x2ca232",
+        "target": "0x2c8fd4"
+      },
+      {
+        "site": "0x2ca236",
+        "target": "0x2c9e2c"
+      },
+      {
+        "site": "0x2ca24c",
+        "target": "0x2c8fd4"
+      },
+      {
+        "site": "0x2ca254",
+        "target": "0x2c9ddc"
+      },
+      {
+        "site": "0x2ca258",
+        "target": "0x2c8fd4"
+      },
+      {
+        "site": "0x2ca25c",
+        "target": "0x2c9ddc"
+      },
+      {
+        "site": "0x2ca262",
+        "target": "0x2c8fd4"
+      },
+      {
+        "site": "0x2ca276",
+        "target": "0x2c9438"
+      },
+      {
+        "site": "0x2ca27c",
+        "target": "0x2c8da0"
+      },
+      {
+        "site": "0x2ca290",
+        "target": "0x2ca124"
+      },
+      {
+        "site": "0x2ca2b8",
+        "target": "0x2c8f90"
+      },
+      {
+        "site": "0x2ca2bc",
+        "target": "0x2c9044"
+      },
+      {
+        "site": "0x2ca2c0",
+        "target": "0x2ca114"
+      },
+      {
+        "site": "0x2ca2ca",
+        "target": "0x2c9044"
+      },
+      {
+        "site": "0x2ca2ce",
+        "target": "0x2c9044"
+      },
+      {
+        "site": "0x2ca2d4",
+        "target": "0x2c8ee4"
+      },
+      {
+        "site": "0x2ca2da",
+        "target": "0x2ca4d8"
+      },
+      {
+        "site": "0x2ca2e8",
+        "target": "0x2c8f60"
+      },
+      {
+        "site": "0x2ca2ec",
+        "target": "0x2c9044"
+      },
+      {
+        "site": "0x2ca2f0",
+        "target": "0x2ca114"
+      },
+      {
+        "site": "0x2ca2f8",
+        "target": "0x2ce1dc"
+      },
+      {
+        "site": "0x2ca2fc",
+        "target": "0x2c8fd4"
+      },
+      {
+        "site": "0x2ca300",
+        "target": "0x2ce1dc"
+      },
+      {
+        "site": "0x2ca304",
+        "target": "0x2c9044"
+      }
+    ],
+    "uncertain_transfers": [],
+    "model_assumes_calls_return": true,
+    "requires_manual_review": true,
+    "semantic_equivalence": false,
+    "original_process_execution": false
   },
   "structural_version": 3,
-  "structural_fingerprint": "3ff8b8e6cea3388010f6",
-  "review_attempts": 2,
+  "structural_fingerprint": "97ef3aabba935e1a898c",
+  "review_attempts": 1,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }

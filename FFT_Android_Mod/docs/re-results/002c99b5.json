@@ -21,16 +21,71 @@
   "v2_structural_status": "needs_review",
   "structural_v3": {
     "status": "needs_review",
-    "reason": "non_arm_aligned_or_empty",
-    "code_slots": 0,
-    "literal_slots": [],
-    "unexplained_slots": [],
-    "tables_safe": false,
-    "tables": []
+    "reason": "thumb_trailing_bytes_or_partial_cfg",
+    "isa": "thumb",
+    "marked_entry": "0x2c99b5",
+    "physical_entry": "0x2c99b4",
+    "declared_bytes": 76,
+    "bytes_reached": 72,
+    "instruction_count": 29,
+    "unexplained_bytes": 4,
+    "branch_candidates": [
+      {
+        "site": "0x2c99b8",
+        "target": "0x2c99c4"
+      },
+      {
+        "site": "0x2c99cc",
+        "target": "0x2c99ba"
+      },
+      {
+        "site": "0x2c99c0",
+        "target": "0x2c99d0"
+      },
+      {
+        "site": "0x2c99ec",
+        "target": "0x2c99f2"
+      }
+    ],
+    "external_callee_candidates": [
+      {
+        "site": "0x2c99c6",
+        "target": "0x2ce06c"
+      },
+      {
+        "site": "0x2c99ba",
+        "target": "0x2c99a0"
+      },
+      {
+        "site": "0x2c99d2",
+        "target": "0x2c8ee4"
+      },
+      {
+        "site": "0x2c99d8",
+        "target": "0x2c9954"
+      },
+      {
+        "site": "0x2c99e6",
+        "target": "0x2c8f60"
+      },
+      {
+        "site": "0x2c99ee",
+        "target": "0x2ca114"
+      },
+      {
+        "site": "0x2c99f2",
+        "target": "0x2ca214"
+      }
+    ],
+    "uncertain_transfers": [],
+    "model_assumes_calls_return": true,
+    "requires_manual_review": true,
+    "semantic_equivalence": false,
+    "original_process_execution": false
   },
   "structural_version": 3,
-  "structural_fingerprint": "3ff8b8e6cea3388010f6",
-  "review_attempts": 2,
+  "structural_fingerprint": "97ef3aabba935e1a898c",
+  "review_attempts": 1,
   "binary_sha256": "bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc",
   "pipeline_version": 2
 }
