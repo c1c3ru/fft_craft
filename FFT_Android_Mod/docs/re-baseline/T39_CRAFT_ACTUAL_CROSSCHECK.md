@@ -49,3 +49,30 @@ Mesmo com coincidência perfeita de bytes e destinos de desvio, ainda faltam
 reconstrução do CFG, confirmação de chamadores, efeitos de memória,
 retornos condicionais e diferencial C/C++ para promover certificados.
 Este piloto altera **zero** certificados e **zero** estados das 40 tarefas.
+
+## Limitação encontrada na primeira execução (4 novembro 2026)
+
+O teste do Craft Anything 0.3.0 no ELF original concordou integralmente com
+Capstone na janela A32 da lacuna T04 (`0x00071c50`: 6/6 opcodes) e no
+controle B01 (`0x000b9f7c`: 3/3). Nos dois endereços Thumb, a análise
+original não retornou instruções equivalentes; em `0x002c9114` produziu
+`stmdahs`, indício de decodificação como A32.
+
+Ao inspecionar a fonte upstream v0.3.0 em `crates/disasm/src/image.rs`,
+`mode_for()` escolhe um modo único para toda imagem ARM, usando o bit 0
+em `bin.entry`. O binário misto ARM/Thumb não é reconfigurado por função.
+
+Para **diagnosticar a limitação sem modificar o ELF original**, o piloto
+agora gera duas cópias efêmeras e privadas, alterando exclusivamente os
+quatro bytes do campo ELF32 `e_entry` (offset 0x18). Cada cópia aponta
+para a entrada Thumb correspondente, preservando toda a seção executável.
+A CLI é executada novamente nessas cópias derivadas com o modo global Thumb.
+Os resultados são registrados à parte como
+`forced_global_thumb_mode_diagnostic`, com novo hash de arquivo e flag
+`not_original_elf_analysis=true`. Não são evidências vinculadas à identidade
+SHA-256 do ELF original e não podem ser certificados ou inseridos no ledger.
+
+Essa contraprova separa dois problemas: capacidade do decodificador Thumb
+e incapacidade de alternar ISA dentro do mesmo ELF. Mesmo se os opcodes
+coincidirem, o endereço/CFG da cópia não prova alcançabilidade do código
+no aplicativo Android original.
