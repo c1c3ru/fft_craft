@@ -8,8 +8,8 @@ unresolved/unsafe transfers. Unknowns remain needs_review.
 import hashlib
 from pathlib import Path
 
-from capstone import Cs, CS_ARCH_ARM, CS_MODE_ARM
-from capstone.arm import ARM_INS_B, ARM_INS_CMP, ARM_INS_ADD, ARM_OP_IMM, ARM_CC_AL
+from capstone import Cs, CS_ARCH_ARM, CS_MODE_ARM, CS_MODE_THUMB
+from capstone.arm import ARM_INS_B, ARM_INS_BL, ARM_INS_CMP, ARM_INS_ADD, ARM_INS_POP, ARM_INS_BX, ARM_OP_IMM, ARM_CC_AL, ARM_CC_INVALID
 
 import semantic_evidence
 
@@ -132,7 +132,106 @@ def inspect(data, start):
     }
 
 
+
+def inspect_thumb(data, marked_start):
+    """Decode a bounded Thumb prefix without approving it automatically.
+
+    The ELF symbol's size may include adjacent wrappers or embedded data.
+    Returning early with unvisited bytes is a review finding, not proof
+    that the trailing bytes belong to the same function.
+    """
+    start = marked_start & ~1
+    if not (marked_start & 1) or not data or len(data) % 2:
+        return {"status": "needs_review", "reason": "thumb_invalid_alignment_or_empty",
+                "isa": "thumb", "instruction_count": 0, "bytes_reached": 0,
+                "unexplained_bytes": len(data), "semantic_equivalence": False}
+    end = start + len(data)
+    disassembler = Cs(CS_ARCH_ARM, CS_MODE_THUMB)
+    disassembler.detail = True
+    work = [start]
+    visited = {}
+    candidate_calls = []
+    candidate_branches = []
+    unknown = []
+    while work and len(visited) < 512:
+        here = work.pop()
+        if here in visited or here < start or here >= end:
+            continue
+        for insn in disassembler.disasm(data[here - start:], here):
+            if insn.address in visited:
+                break
+            if insn.address + insn.size > end:
+                unknown.append(("overrun", insn.address))
+                break
+            visited[insn.address] = insn
+            nxt = insn.address + insn.size
+            if insn.id in (ARM_INS_B, ARM_INS_BL):
+                target = (int(insn.operands[0].imm) & 0xffffffff
+                          if len(insn.operands) == 1
+                          and insn.operands[0].type == ARM_OP_IMM else None)
+                if insn.id == ARM_INS_BL:
+                    candidate_calls.append((insn.address, target))
+                    if target is None:
+                        unknown.append(("indirect_call", insn.address))
+                    continue  # Callee effects are unknown; assumed returning.
+                candidate_branches.append((insn.address, target))
+                if target is None:
+                    unknown.append(("unknown_branch", insn.address))
+                elif start <= target < end and target % 2 == 0:
+                    work.append(target)
+                else:
+                    unknown.append(("external_branch", insn.address))
+                if insn.cc in (ARM_CC_AL, ARM_CC_INVALID):
+                    break
+                # For conditional branches, linear traversal is the not-taken edge.
+                continue
+            if (insn.id == ARM_INS_POP and "pc" in insn.op_str
+                    or insn.id == ARM_INS_BX and insn.op_str.strip() == "lr"):
+                break
+            if insn.id == ARM_INS_BX or (
+                    "pc" in insn.op_str.split(",", 1)[0] and
+                    insn.mnemonic in ("mov", "ldr", "add")):
+                unknown.append(("indirect_pc", insn.address))
+                break
+            if nxt >= end:
+                break
+
+    code_bytes = set()
+    for addr, insn in visited.items():
+        code_bytes.update(range(addr, addr + insn.size))
+    total = len(data)
+    observed = len(code_bytes)
+    return {
+        # Intentionally never auto-approve solely from structural evidence.
+        "status": "needs_review",
+        "reason": ("thumb_trailing_bytes_or_partial_cfg" if observed != total
+                   else "thumb_requires_call_and_return_review"),
+        "isa": "thumb", "marked_entry": "0x%x" % marked_start,
+        "physical_entry": "0x%x" % start,
+        "declared_bytes": total, "bytes_reached": observed,
+        "instruction_count": len(visited),
+        "unexplained_bytes": total - observed,
+        "branch_candidates": [{"site": "0x%x" % at,
+                               "target": "0x%x" % dest if dest is not None else None}
+                              for at, dest in candidate_branches],
+        "external_callee_candidates": [{"site": "0x%x" % at,
+                                        "target": "0x%x" % dest if dest is not None else None}
+                                       for at, dest in candidate_calls],
+        "uncertain_transfers": [{"kind": kind, "at": "0x%x" % at}
+                                for kind, at in unknown],
+        "model_assumes_calls_return": True,
+        "requires_manual_review": True,
+        "semantic_equivalence": False,
+        "original_process_execution": False,
+    }
+
+
 def inspect_binary(binary, start, size):
+    if start & 1:
+        if size <= 0:
+            return inspect_thumb(b"", start)
+        return inspect_thumb(
+            semantic_evidence.read_function(binary, start & ~1, size), start)
     if start % 4 or size % 4 or size <= 0:
         return inspect(b"", start)
     return inspect(semantic_evidence.read_function(binary, start, size), start)
