@@ -182,7 +182,7 @@ def compare_target(target, extracted, branch_reference, cli_status):
         if addr in by_addr:
             raise ValueError("Overlapping third-party instruction evidence")
         by_addr[addr] = item
-    matches, disagreements, branch_checks = 0, [], []
+    matches, disagreements, branch_checks, aliases = 0, [], [], []
     for expected in target["first_instructions"]:
         addr = int(expected["address"], 16)
         if not low <= addr < high:
@@ -195,8 +195,15 @@ def compare_target(target, extracted, branch_reference, cli_status):
         same_bytes = got["bytes_sha256"] == expected["instruction_bytes_sha256"]
         same_size = got["length"] == expected["size"]
         same_mnemonic = got["mnemonic"] == expected["mnemonic"].lower()
-        if same_bytes and same_size and same_mnemonic:
+        width_alias = (
+            target["entry_isa"] == "thumb" and got["length"] == 4 and
+            got["mnemonic"] == expected["mnemonic"].lower() + ".w")
+        if same_bytes and same_size and (same_mnemonic or width_alias):
             matches += 1
+            if width_alias and not same_mnemonic:
+                aliases.append({"address": expected["address"],
+                                "external_mnemonic": got["mnemonic"],
+                                "capstone_mnemonic": expected["mnemonic"]})
         else:
             disagreements.append({
                 "address": expected["address"], "reason": "instruction_mismatch",
@@ -221,6 +228,7 @@ def compare_target(target, extracted, branch_reference, cli_status):
         "third_party_instructions_in_window": len([
             x for x in extracted if low <= x["address"] < high]),
         "matched_instruction_boundaries_and_bytes": matches,
+        "equivalent_thumb_width_mnemonic_aliases": aliases,
         "differences_or_not_reported": disagreements,
         "branch_target_comparison": branch_checks,
         "original_function_reachability_proven": False,
