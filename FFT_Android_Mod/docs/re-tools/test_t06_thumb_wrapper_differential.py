@@ -98,7 +98,7 @@ class OriginalWrapperTests(unittest.TestCase):
 
     def test_truncated_input_not_accepted(self):
         item = contracts.SLICES[0]
-        with self.assertRaisesRegex(ValueError, "file-backed"):
+        with self.assertRaisesRegex(ValueError, "not in executable ELF segment"):
             from unittest.mock import patch
             with patch.object(contracts.original, "read_executable",
                               return_value=(b"\x00", 0)):
