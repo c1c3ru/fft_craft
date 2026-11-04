@@ -1,0 +1,105 @@
+name: T39 Craft Anything actual ARM disassembly crosscheck
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/re-t39-craft-runtime.yml'
+      - 'FFT_Android_Mod/docs/re-tools/t39_craft_runtime_compare.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_t39_craft_runtime_compare.py'
+      - 'FFT_Android_Mod/docs/re-tools/t39_thumb_branch_gate.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_t39_thumb_branch_gate.py'
+      - 'FFT_Android_Mod/docs/re-baseline/T39_CRAFT_ACTUAL_CROSSCHECK.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t39-craft-runtime-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  third-party-arm-crosscheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: .github/ci/requirements-arm-re.txt
+      - name: Verify local parser behavior with synthetic third-party fixtures
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check -r .github/ci/requirements-arm-re.txt
+          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools \
+            -p 'test_t39_craft_runtime_compare.py' -v
+      - name: Prepare independently verified original ELF reference
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/re_40_task_orchestrator.py \
+            --run-id "$GITHUB_RUN_ID" \
+            --json-output "$RUNNER_TEMP/t39-queue.json" \
+            --md-output "$RUNNER_TEMP/t39-queue.md"
+          python3 FFT_Android_Mod/docs/re-tools/t39_craft_pilot_reference.py \
+            --queue "$RUNNER_TEMP/t39-queue.json" \
+            --json-output "$RUNNER_TEMP/t39-reference.json" \
+            --md-output "$RUNNER_TEMP/t39-reference.md"
+      - name: Download pinned upstream Linux CLI and verify SHA-256
+        run: |
+          set -euo pipefail
+          ver=0.3.0
+          asset="craft-anything-${ver}-linux-x86_64.tar.gz"
+          url="https://github.com/storytold/craft-anything/releases/download/v${ver}/${asset}"
+          curl --fail --location --show-error --silent --retry 2 \
+            --connect-timeout 15 --max-time 160 \
+            "$url" --output "$RUNNER_TEMP/$asset"
+          printf '%s  %s\n' \
+            '674ec59ffbdaefbd577917e07c9d464562043b275a3889ba4f60239a12f03d53' \
+            "$RUNNER_TEMP/$asset" | sha256sum --check --status
+          mkdir -p "$RUNNER_TEMP/craft-install"
+          tar -xzf "$RUNNER_TEMP/$asset" -C "$RUNNER_TEMP/craft-install" \
+            --no-same-owner --no-same-permissions
+          cli=$(find "$RUNNER_TEMP/craft-install" -type f -name craft-anything-cli \
+            -perm -u=x -print -quit)
+          test -n "$cli"
+          test -x "$cli"
+          "$cli" --version
+          printf 'CRAFT_CLI=%s\n' "$cli" >> "$GITHUB_ENV"
+      - name: Run real third-party ARM/Thumb comparison (bounded and sanitized)
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/t39_craft_runtime_compare.py \
+            --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+            --reference "$RUNNER_TEMP/t39-reference.json" \
+            --cli "$CRAFT_CLI" \
+            --timeout-per-target 90 \
+            --json-output "$RUNNER_TEMP/t39-craft-compared.json" \
+            --md-output "$RUNNER_TEMP/t39-craft-compared.md" \
+            | tee "$RUNNER_TEMP/t39-craft-gates.txt"
+          grep -qx 'CRAFT_ACTUAL_NEW_CERTIFICATES=0' "$RUNNER_TEMP/t39-craft-gates.txt"
+      - name: Execute original Thumb branches and verify PC LR with Unicorn
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools \
+            -p 'test_t39_thumb_branch_gate.py' -v
+          python3 FFT_Android_Mod/docs/re-tools/t39_thumb_branch_gate.py \
+            --output "$RUNNER_TEMP/t06-original-thumb-branches.json" \
+            | tee "$RUNNER_TEMP/t06-unicorn-gates.txt"
+          grep -qx 'T06_THUMB_BRANCH_ORIGINAL_EMULATION_PASSED=4' "$RUNNER_TEMP/t06-unicorn-gates.txt"
+          grep -qx 'T06_THUMB_NEW_CERTIFICATES=0' "$RUNNER_TEMP/t06-unicorn-gates.txt"
+      - name: Publish only sanitized comparison metadata
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: t39-craft-actual-arm-comparison
+          path: |
+            ${{ runner.temp }}/t39-craft-compared.json
+            ${{ runner.temp }}/t39-craft-compared.md
+            ${{ runner.temp }}/t06-original-thumb-branches.json
+          retention-days: 10
+          if-no-files-found: warn
