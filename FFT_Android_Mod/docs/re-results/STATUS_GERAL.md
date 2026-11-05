@@ -177,11 +177,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #577 — RE: automatizar T06/T12, B01, A04 e regressões T14–T26 em quatro lanes](https://github.com/c1c3ru/fft_craft/pull/577)
+- [PR #576 — chore(re): automated structural batch 42087278449](https://github.com/c1c3ru/fft_craft/pull/576)
 - [PR #575 — chore(re): automated structural batch 42014756924](https://github.com/c1c3ru/fft_craft/pull/575)
 - [PR #574 — chore(re): automated structural batch 41940862640](https://github.com/c1c3ru/fft_craft/pull/574)
 - [PR #573 — chore(re): automated structural batch 41889112089](https://github.com/c1c3ru/fft_craft/pull/573)
-- [PR #572 — chore(re): automated structural batch 41833577012](https://github.com/c1c3ru/fft_craft/pull/572)
-- [PR #571 — chore(re): automated structural batch 41832989143](https://github.com/c1c3ru/fft_craft/pull/571)
 
 ## Atualização automática e fontes
 
