@@ -1,0 +1,187 @@
+name: RE four-track evidence and native subsystem gates
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/re-four-track-automation.yml'
+      - 'FFT_Android_Mod/docs/re-tools/re_four_track_automation.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_re_four_track_automation.py'
+      - 'FFT_Android_Mod/docs/re-tools/t06_thumb_wrapper_differential.py'
+      - 'FFT_Android_Mod/docs/re-tools/b01_named_cpp_differential.py'
+      - 'FFT_Android_Mod/docs/re-tools/c-models/**'
+      - 'FFT_Android_Mod/docs/re-tools/test_t1*.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_t2*.py'
+      - 'FFT_Android_Mod/docs/re-tools/a04-original-runtime-evidence*'
+      - 'FFT_Android_Mod/native-rebuild/**'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/re-four-track-automation.yml'
+      - 'FFT_Android_Mod/docs/re-tools/re_four_track_automation.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_re_four_track_automation.py'
+      - 'FFT_Android_Mod/docs/re-tools/c-models/**'
+      - 'FFT_Android_Mod/docs/re-tools/test_t1*.py'
+      - 'FFT_Android_Mod/docs/re-tools/test_t2*.py'
+      - 'FFT_Android_Mod/native-rebuild/**'
+  workflow_dispatch:
+  schedule:
+    # Twice weekly; the original ARM batch and T39 already run more often.
+    - cron: '13 6 * * 1,4'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: re-four-track-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  proof-lanes:
+    name: Proof ${{ matrix.lane }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        lane: [t06_t12, b01, a04, t14_t26]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: .github/ci/requirements-arm-re.txt
+      - name: Install pinned host ARM and JSON schema test dependencies
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check \
+            -r .github/ci/requirements-arm-re.txt 'jsonschema==4.23.0'
+      - name: JDK 17 for A04 JNI Modified UTF-8 probe
+        if: matrix.lane == 'a04'
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Test proof policy and fail-closed artifact validation
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s FFT_Android_Mod/docs/re-tools \
+            -p 'test_re_four_track_automation.py' -v
+      - name: Run selected evidence lane
+        env:
+          TRACK: ${{ matrix.lane }}
+        run: |
+          set -euo pipefail
+          TOOLS=FFT_Android_Mod/docs/re-tools
+          mkdir -p "$RUNNER_TEMP/re-four-track"
+          case "$TRACK" in
+            t06_t12)
+              python3 -m unittest discover -s "$TOOLS" \
+                -p 'test_t06_thumb_wrapper_differential.py' -v
+              g++ -std=c++17 -O2 -Wall -Wextra -Werror -pedantic \
+                "$TOOLS/c-models/t06_thumb_wrapper_model.cpp" \
+                -o "$RUNNER_TEMP/t06-cpp-model"
+              python3 "$TOOLS/t06_thumb_wrapper_differential.py" \
+                --cpp-exe "$RUNNER_TEMP/t06-cpp-model" \
+                --output "$RUNNER_TEMP/re-four-track/t06-proof.json"
+              python3 "$TOOLS/re_four_track_automation.py" emit \
+                --lane t06_t12 --evidence "$RUNNER_TEMP/re-four-track/t06-proof.json" \
+                --output "$RUNNER_TEMP/re-four-track/t06_t12.json"
+              ;;
+            b01)
+              python3 -m unittest discover -s "$TOOLS" \
+                -p 'test_b01_named_cpp_prologues.py' -v
+              python3 -m unittest discover -s "$TOOLS" \
+                -p 'test_b01_bounded_caller_execution.py' -v
+              python3 "$TOOLS/b01_named_cpp_differential.py" \
+                --binary FFT_Android_Mod/src/lib/armeabi/libgl2jni.so \
+                --inventory FFT_Android_Mod/docs/RE_FUNCTION_INVENTORY.csv \
+                --output "$RUNNER_TEMP/re-four-track/b01-proof.json"
+              python3 "$TOOLS/re_four_track_automation.py" emit \
+                --lane b01 --evidence "$RUNNER_TEMP/re-four-track/b01-proof.json" \
+                --output "$RUNNER_TEMP/re-four-track/b01.json"
+              ;;
+            a04)
+              python3 -m unittest discover -s "$TOOLS" \
+                -p 'a04_original_runtime_evidence_tests.py' -v
+              mkdir -p "$RUNNER_TEMP/a04/classes" "$RUNNER_TEMP/a04/native"
+              gcc -std=c11 -O2 -fPIC -shared -Wall -Wextra -Werror \
+                -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux" \
+                "$TOOLS/jni-path-probe/a04_jni_probe.c" \
+                "$TOOLS/c-models/a04_rootpath_safe.c" \
+                -o "$RUNNER_TEMP/a04/native/liba04_jni_probe.so"
+              javac --release 17 -d "$RUNNER_TEMP/a04/classes" \
+                "$TOOLS/jni-path-probe/org/fftcraft/a04/A04JniByteProbe.java"
+              java -ea -Djava.library.path="$RUNNER_TEMP/a04/native" \
+                -cp "$RUNNER_TEMP/a04/classes" org.fftcraft.a04.A04JniByteProbe \
+                > "$RUNNER_TEMP/re-four-track/a04-host.txt"
+              python3 "$TOOLS/re_four_track_automation.py" emit \
+                --lane a04 --evidence "$RUNNER_TEMP/re-four-track/a04-host.txt" \
+                --output "$RUNNER_TEMP/re-four-track/a04.json"
+              ;;
+            t14_t26)
+              python3 "$TOOLS/re_four_track_automation.py" vertical \
+                --output "$RUNNER_TEMP/re-four-track/vertical-proof.json"
+              python3 FFT_Android_Mod/native-rebuild/verify_stage.py
+              cmake -S FFT_Android_Mod/native-rebuild \
+                -B "$RUNNER_TEMP/fft-stage" -DCMAKE_BUILD_TYPE=Release \
+                -DBUILD_TESTING=ON
+              cmake --build "$RUNNER_TEMP/fft-stage" --parallel 2
+              ctest --test-dir "$RUNNER_TEMP/fft-stage" --output-on-failure
+              python3 "$TOOLS/re_four_track_automation.py" emit \
+                --lane t14_t26 --ctest-passed \
+                --evidence "$RUNNER_TEMP/re-four-track/vertical-proof.json" \
+                --output "$RUNNER_TEMP/re-four-track/t14_t26.json"
+              ;;
+            *) echo "Unexpected lane" >&2; exit 2 ;;
+          esac
+          test -s "$RUNNER_TEMP/re-four-track/$TRACK.json"
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: re-four-track-${{ matrix.lane }}
+          path: ${{ runner.temp }}/re-four-track/${{ matrix.lane }}.json
+          retention-days: 14
+          if-no-files-found: error
+
+  combine-evidence:
+    needs: proof-lanes
+    if: success()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: re-four-track-*
+          path: ${{ runner.temp }}/four-lanes
+          merge-multiple: false
+      - name: Combine four gates and publish review-only dashboard
+        run: |
+          set -euo pipefail
+          python3 FFT_Android_Mod/docs/re-tools/re_four_track_automation.py combine \
+            --artifacts "$RUNNER_TEMP/four-lanes" \
+            --json-output "$RUNNER_TEMP/fft-four-track.json" \
+            --md-output "$RUNNER_TEMP/fft-four-track.md" \
+            | tee "$RUNNER_TEMP/four-track-gates.txt"
+          grep -qx 'RE_FOUR_TRACK_LANES=4' "$RUNNER_TEMP/four-track-gates.txt"
+          grep -qx 'RE_FOUR_TRACK_NEW_CERTIFICATES=0' "$RUNNER_TEMP/four-track-gates.txt"
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: re-four-track-review-dashboard
+          path: |
+            ${{ runner.temp }}/fft-four-track.json
+            ${{ runner.temp }}/fft-four-track.md
+          retention-days: 21
+          if-no-files-found: error
