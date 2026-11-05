@@ -177,11 +177,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #575 — chore(re): automated structural batch 42014756924](https://github.com/c1c3ru/fft_craft/pull/575)
 - [PR #574 — chore(re): automated structural batch 41940862640](https://github.com/c1c3ru/fft_craft/pull/574)
 - [PR #573 — chore(re): automated structural batch 41889112089](https://github.com/c1c3ru/fft_craft/pull/573)
 - [PR #572 — chore(re): automated structural batch 41833577012](https://github.com/c1c3ru/fft_craft/pull/572)
 - [PR #571 — chore(re): automated structural batch 41832989143](https://github.com/c1c3ru/fft_craft/pull/571)
-- [PR #569 — T06: analisar CFG Thumb 2/4 bytes e validar wrappers com Unicorn × C++](https://github.com/c1c3ru/fft_craft/pull/569)
 
 ## Atualização automática e fontes
 
