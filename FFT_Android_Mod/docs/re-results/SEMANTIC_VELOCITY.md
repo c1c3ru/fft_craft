@@ -2,7 +2,7 @@
 
 ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
-Último run: `42928172678` · 2026-11-11T00:05:37Z
+Último run: `43007862759` · 2026-11-11T11:00:22Z
 
 | Indicador | Valor |
 |---|---:|
@@ -23,7 +23,7 @@ ELF SHA-256: `bf913415ab9458a83b14ac8c8a0fa3430d1f5d18bfbcd7c7472d6f5e8b4850bc`
 
 ## Janela móvel de sete dias
 
-- Crescimento líquido: **0** certificados em 7.13 dias (média **0.0/dia**).
+- Crescimento líquido: **0** certificados em 7.0 dias (média **0.0/dia**).
 - **Sem ETA inferível**: ritmo líquido não positivo.
 
 ## Dependências ativas e impacto no plano
