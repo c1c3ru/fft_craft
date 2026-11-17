@@ -25,8 +25,9 @@ on:
       - 'FFT_Android_Mod/native-rebuild/**'
   workflow_dispatch:
   schedule:
-    # Twice weekly; the original ARM batch and T39 already run more often.
-    - cron: '13 6 * * 1,4'
+    # Twice daily (06:13 and 18:13 UTC; 03:13 and 15:13 America/Fortaleza).
+    # Keep heavy ARM batch execution on its separate serialized schedule.
+    - cron: '13 6,18 * * *'
 
 permissions:
   contents: read
