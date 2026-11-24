@@ -177,11 +177,11 @@ Estas prioridades são **curadas no gerador**; quando um limite for resolvido, a
 
 ## Pull requests recentes
 
+- [PR #624 — docs: introduzir protocolo Reflexion para agentes Codex](https://github.com/c1c3ru/fft_craft/pull/624)
+- [PR #632 — chore(re): automated structural batch 45246808258](https://github.com/c1c3ru/fft_craft/pull/632)
 - [PR #631 — chore(re): automated structural batch 45107640858](https://github.com/c1c3ru/fft_craft/pull/631)
 - [PR #630 — chore(re): automated structural batch 45069899895](https://github.com/c1c3ru/fft_craft/pull/630)
 - [PR #629 — chore(re): automated structural batch 45017194875](https://github.com/c1c3ru/fft_craft/pull/629)
-- [PR #628 — chore(re): automated structural batch 44963546509](https://github.com/c1c3ru/fft_craft/pull/628)
-- [PR #627 — chore(re): automated structural batch 44918805717](https://github.com/c1c3ru/fft_craft/pull/627)
 
 ## Atualização automática e fontes
 
